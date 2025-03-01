@@ -32,6 +32,7 @@ clear
 ##### Section 2: Configure  #####
 {
     log_status "  🛠️   Applying base configurations..." | lsd-print
+        sudo rm -rf /usr/share/hypr && sudo rm -rf ~/.config/hypr && cd ~/.hyprgruv && stow .config home --adopt | { log_error "Failed to replace hyprgruv configuration and run stow"; exit 1; }
         cd ~/.hyprgruv/setup   || { log_error "Failed to navigate to ~/scripts"; exit 1; }
         ./config.sh || { log_error "Failed to run config.sh"; exit 1; }
       checklist[config]=true
