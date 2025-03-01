@@ -64,17 +64,19 @@ log_error() {
 ##### Section 1: Installing Packages #####
 
 echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
-            Sit back and enjoy the ride !!   \n"  #| lsd-print
+            Sit back and enjoy the ride !!   \n"  
 {
-    echo -e "   📦️     Installing Essential Packages..." #| lsd-print
+    echo -e "   📦️     Installing Essential Packages..." 
         sudo pacman -S --noconfirm git || log_error "Failed to install git"
         git  clone https://aur.archlinux.org/yay.git || log_success "Git installed successfully"
         cd yay &&  makepkg -si --noconfirm ||   log_success "YAY installed successfully"
         yay -Syu || log_error "Failed to update yay"
 	yay -Syu stow figlet  --noconfirm || log_error "Failed to install stow and figlet"
 	yay -Syu lsd-print-git --noconfirm || log_error "Failed to install lsd-print-git"
+	yay -Syu powerpill --noconfirm || log_error "Failed to install powerpill"
+
 	PACKAGES1=(
-            eza fastfetch ghostty gsettings-qt gum hyprgraphics hyprlang hyprpaper hyprpolkitagent hyprutil hyprwayland-scanner imagemagick neovim nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 python-pywalfox python-terminaltexteffects qt5-base qt5-declarative qt5-x11extras qt5ct-kde qt6-base qt6-declarative qt6ct-kde starship stow xorg-xinit wlogout yazi xsettingsd zsh --noconfirm
+            eza fastfetch ghostty gsettings-qt gum hyprgraphics hyprlang hyprpaper hyprpolkitagent hyprutil hyprwayland-scanner imagemagick neovim nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 python-pywalfox python-terminaltexteffects qt5-base qt5-declarative qt5-x11extras qt5ct-kde qt6-base qt6-declarative qt6ct-kde starship stow xorg-xinit waypaper wlogout yazi xsettingsd zsh --noconfirm
             )
      yay -S --noconfirm "${PACKAGES1[@]}"
 
@@ -97,15 +99,17 @@ if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
 else
     echo "All essential packages are already installed."
 fi
+
+ PACKAGES2=(
+           amd-ucode archlinux-xdg-menu ark aylurs-gtk-shell bluez bluez-utils bpytop  cliphist cmake  dolphin duf  expac fortune-mod fortune-mod-archlinux fzf go  grimblast-git  gsettings-qt gst-plugin-pipewire gtk-engine-murrine haskell-colourista  hyprcursor hypridle hyprpicker hyprshade hyprutils kate konsole konsole-gruvbox kvantum less libpulse libva-intel-driver neovim-lspconfig network-manager-applet otf-font-awesome pacman-mirrorlist pavucontrol pipewire qt5-graphicaleffects ranger rofi-calc rofi-wayland smile syntax-highlighting tig tldr++ tmux tree-sitter  waybar wireplumber wl-clipboard wl-clipboard-history-git wtf wtype xclip xdg-desktop-portal-gtk  xdg-desktop-portal-hyprland xdg-desktop-portal-kde xrainbow-git xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-wayland xorg-xhost xorg-xinit xsettingsd zig zoxide gimp timeshift obs-studio gparted lsd grub-theme-vimix gruvbox-plus-icon-theme btrfs-progs ttf-sharetech-mono-nerd editorconfig-checker efibootmgr
+           )
+                yay S --noconfirm "${PACKAGES2[@]}"
      
      checklist[packages]=true
 } || checklist[packages]=false
 clear
 
- PACKAGES1=(
-           amd-ucode archlinux-xdg-menu ark aylurs-gtk-shell base-devel bluez bluez-utils bpytop btrfs-progs cliphist cmake cmatrix dolphin duf editorconfig-checker  efibootmgr expac fortune-mod fortune-mod-archlinux fzf gimp go gparted grimblast-git grub-theme-vimix gruvbox-plus-icon-theme gsettings-qt gst-plugin-pipewire gtk-engine-murrine haskell-colourista  hyprcursor hypridle hyprpicker hyprshade hyprutils kate konsole konsole-gruvbox kvantum less libpulse libva-intel-driver lsd neovim-lspconfig network-manager-applet obs-studio otf-font-awesome pacman-mirrorlist pavucontrol pipewire qt5-graphicaleffects ranger rofi-calc rofi-wayland sddm-sugar-candy-git smile syntax-highlighting tig timeshift tldr++ tmux tree-sitter ttf-nerd-fonts-symbols ttf-sharetech-mono-nerd waybar waypaper wireplumber wl-clipboard wl-clipboard-history-git wtf wtype xclip xdg-desktop-portal-gtk  xdg-desktop-portal-hyprland xdg-desktop-portal-kde xrainbow-git xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-wayland xorg-xhost xorg-xinit xsettingsd yazi zig zoxide zsh-autosuggestions-git zsh-syntax-highlighting          
-           )
-                yay S --noconfirm "${PACKAGES1[@]}"
+
 
 
 ##### Section 2: Configuration  #####
