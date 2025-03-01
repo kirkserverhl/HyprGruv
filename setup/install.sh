@@ -32,21 +32,21 @@ clear
 ##### Section 2: Configure  #####
 {
     log_status "  🛠️   Applying base configurations..." | lsd-print
-        cd ~/.dotfiles   || { log_error "Failed to navigate to ~/scripts"; exit 1; }
-        ./base_config.sh || { log_error "Failed to run base_config.sh"; exit 1; }
+        cd ~/.hyprgruv/setup   || { log_error "Failed to navigate to ~/scripts"; exit 1; }
+        ./config.sh || { log_error "Failed to run config.sh"; exit 1; }
       checklist[config]=true
 } ||  checklist[config]=false
 clear
 
 
 ##### Section 3: Shell-Configuration  #####
-{
-	log_status "󰯂  Running post-configuration scripts..."
-        cd ~/.dotfiles/ || { log_error "Failed to navigate to ~/scripts"; exit 1; }
-        ./shell.sh || { log_error "Failed to run shell.sh"; exit 1; }
-     checklist[shell]=true
-} || checklist[shell]=false
-clear
+#{
+#	log_status "󰯂  Running post-configuration scripts..."
+#        cd ~/.dotfiles/ || { log_error "Failed to navigate to ~/scripts"; exit 1; }
+#        ./shell.sh || { log_error "Failed to run shell.sh"; exit 1; }
+#     checklist[shell]=true
+#} || checklist[shell]=false
+#clear
 
 
 ##### Section 4: Checklist #####
