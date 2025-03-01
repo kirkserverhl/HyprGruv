@@ -16,7 +16,7 @@ checklist=(
     [packages]=false
     [config]=false
     [post]=false
-)a
+)
 
 # Function to print status messages
 log_status() {
