@@ -53,7 +53,7 @@ clear
 ##### Section 4: Checklist #####
 
 #rm -f ~/config_check.sh
-#print_checklist_tte
+print_checklist_tte
 
 echo -e "\n       Hyprland Gruvbox Installation is Complete !! 🫠
         A list of common helpful keybinds is below:" | lsd-print
