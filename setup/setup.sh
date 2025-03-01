@@ -11,12 +11,12 @@ GRAY="\e[38;2;60;56;54m"     	# 3c3836 ##
 BOLD="\e[1m"                 	# Bold   ##
 clear #####################################
 
- declare -A checklist
- checklist=(
-    [packages]=false
-    [config]=false
-    [shell]=false
-)
+ # declare -A checklist
+ # checklist=(
+ #    [packages]=false
+ #    [config]=false
+ #    [shell]=false
+# )
 
 # Function to print status messages
 log_status() {
@@ -38,27 +38,27 @@ log_error() {
 
 # Function to print the checklist
 
-    print_checklist_tte() {
-        checklist_file="/tmp/checklist.txt"
-        echo -e "\\n  📜   Installation Summary:\\n" > "$checklist_file"
-        for section in "${!checklist[@]}"; do
-            if [ "${checklist[$section]}" = true ]; then
-                echo " ✔️ $section" >> "$checklist_file"
-            else
-                echo " ✖️ $section" >> "$checklist_file"
-            fi
+  #   print_checklist_tte() {
+  #       checklist_file="/tmp/checklist.txt"
+  #       echo -e "\\n  📜   Installation Summary:\\n" > "$checklist_file"
+  #       for section in "${!checklist[@]}"; do
+  #           if [ "${checklist[$section]}" = true ]; then
+  #               echo " ✔️ $section" >> "$checklist_file"
+  #           else
+  #               echo " ✖️ $section" >> "$checklist_file"
+  #           fi
 
 
 # Display the checklist using tte beams
-{
-    if  command -v tte &>/dev/null; then
-        cat "$checklist_file" | tte beams
-    else
-        cat "$checklist_file"
-        fi
-    	# Clean up temporary file
-    rm "$checklist_file"
-}
+# {
+#     if  command -v tte &>/dev/null; then
+#         cat "$checklist_file" | tte beams
+#     else
+#         cat "$checklist_file"
+#         fi
+#     	# Clean up temporary file
+#     rm "$checklist_file"
+# }
 
 
 ##### Section 1: Installing Packages #####
@@ -105,8 +105,8 @@ fi
            )
                 yay S --noconfirm "${PACKAGES2[@]}"
      
-     checklist[packages]=true
-} || checklist[packages]=false
+    # checklist[packages]=true
+} # || checklist[packages]=false
 clear
 
 
@@ -118,8 +118,8 @@ clear
         sudo rm -rf /usr/share/hypr && sudo rm -rf ~/.config/hypr && cd ~/.hyprgruv && stow .config home --adopt | { log_error "Failed to replace hyprgruv configuration and run stow"; exit 1; }
         cd ~/.hyprgruv/setup   || { log_error "Failed to navigate to ~/scripts"; exit 1; }
         ./config.sh || { log_error "Failed to run config.sh"; exit 1; }
-      checklist[config]=true
-} ||  checklist[config]=false
+     # checklist[config]=true
+} # ||  checklist[config]=false
 clear
 
 ##### Section 3: Shell-Config  #####
@@ -127,14 +127,14 @@ clear
 	log_status "󰯂  Running post-configuration scripts..."
         cd ~/.hyprgruv/setup || { log_error "Failed to navigate to ~/scripts"; exit 1; }
         ./shell.sh || { log_error "Failed to run shell.sh"; exit 1; }
-     checklist[shell]=true
-} || checklist[shell]=false
+    # checklist[shell]=true
+} # || checklist[shell]=false
 clear
 
 ##### Section 4: Checklist #####
 
-#rm -f ~/config_check.sh
-print_checklist_tte
+# rm -f ~/config_check.sh
+# print_checklist_tte
 
 echo -e "\n       Hyprland Gruvbox Installation is Complete !! 🫠
         A list of common helpful keybinds is below:" | lsd-print
