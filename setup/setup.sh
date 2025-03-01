@@ -135,7 +135,7 @@ sleep 10
 
 # Launch the next script in a new terminal window.
 # Switch for ghostty
-xterm -hold -e "/.dotfiles/install.sh" &
+kitty -hold -e "/.dotfiles/install.sh" &
 
 # Optionally exit this script
 exit 0
