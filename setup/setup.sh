@@ -68,18 +68,19 @@ log_error() {
 
 
 ##### Section 1: Installing Packages #####
-yay -Syu stow lsd-print-git figlet  --noconfirm
-cp -f ~/.dotfiles/assets/hyrland.conf /.config/hypr
-clear
+# yay -Syu stow lsd-print-git figlet  --noconfirm
+# cp -f ~/.dotfiles/assets/hyrland.conf /.config/hypr
+# clear
 
 echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
-            Sit back and enjoy the ride !!   \n"  | lsd-print
+            Sit back and enjoy the ride !!   \n"  #| lsd-print
 {
-    echo -e "   📦️     Installing Essential Packages..." | lsd-print
+    echo -e "   📦️     Installing Essential Packages..." #| lsd-print
         sudo pacman -S --noconfirm git || log_error "Failed to install git"
         git  clone https://aur.archlinux.org/yay.git || log_success "Git installed successfully"
         cd yay &&  makepkg -si --noconfirm ||   log_success "YAY installed successfully"
-        PACKAGES1=(
+        yay -Syu stow lsd-print-git figlet  --noconfirm
+	PACKAGES1=(
             eza fastfetch figlet ghostty gsettings-qt gum hyprgraphics hyprlang hyprpaper hyprpolkitagent hyprutil hyprwayland-scanner imagemagick lsd-print-git neovim nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 python-pywalfox python-terminaltexteffects qt5-base qt5-declarative qt5-x11extras qt5ct-kde qt6-base qt6-declarative qt6ct-kde starship stow xorg-xinit xsettingsd zsh --noconfirm
             )
      yay -S --noconfirm "${PACKAGES1[@]}"
@@ -88,7 +89,7 @@ echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
 clear
 
 # List of essential packages
-ESSENTIAL_PACKAGES=("package1" "package2" "package3")
+ESSENTIAL_PACKAGES=("eza" "fastfetch" "figlet" "ghostty" "gum" "hyprlang" "hyprpaper" "hyprpolkitagent" "hyprutils" "hyprwayland-scanner" "imagemagick" "lsd-print-git" "neovim" "nwg-dock-hyprland" "nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "python-terminaltexteffects" "qt5-base" "qt5-declarative" "qt5-x11extras" "qt5ct-kde" "qt6-base" "qt6-declarative" "qt6ct-kde" "starship" "stow" "xorg-xinit" "xsettingsd" "zsh")
 
 # Check for missing packages
 MISSING_PACKAGES=()
