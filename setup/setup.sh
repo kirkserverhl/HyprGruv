@@ -116,7 +116,7 @@ echo "Continuing with the installation process..."
 ##### Section 2: Shell-Configuration  #####
 {
 	log_status "󰯂  Running post-configuration scripts..."
-        cd ~/.dotfiles/ || { log_error "Failed to navigate to ~/scripts"; exit 1; }
+        cd ~/.hyprgruv/setup || { log_error "Failed to navigate to ~/scripts"; exit 1; }
         ./shell.sh || { log_error "Failed to run shell.sh"; exit 1; }
      checklist[shell]=true
 } || checklist[shell]=false
@@ -136,7 +136,7 @@ sleep 10
 
 # Launch the next script in a new terminal window.
 # Switch for ghostty
-kitty -hold -e "/.dotfiles/install.sh" &
+kitty -hold -e "/.hyprgruv/setup/install.sh" &
 
 # Optionally exit this script
 exit 0
