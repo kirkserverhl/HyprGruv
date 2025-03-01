@@ -1,0 +1,36 @@
+{
+    "label" : "lock",
+    "action" : "~/scripts/power.sh lock",
+    "text" : "Lock",
+    "keybind" : "l"
+}
+{
+    "label" : "hibernate",
+    "action" : "~/scripts/power.sh hibernate",
+    "text" : "Hibernate",
+    "keybind" : "h"
+}
+{
+    "label" : "logout",
+    "action" : "~/scripts/power.sh exit",
+    "text" : "Exit",
+    "keybind" : "e"
+}
+{
+    "label" : "shutdown",
+    "action" : "~/scripts/power.sh shutdown",
+    "text" : "Shutdown",
+    "keybind" : "s"
+}
+{
+    "label" : "suspend",
+    "action" : "~/scripts/power.sh suspend",
+    "text" : "Suspend",
+    "keybind" : "u"
+}
+{
+    "label" : "reboot",
+    "action" : "~/scripts/power.sh reboot",
+    "text" : "Reboot",
+    "keybind" : "r"
+}
