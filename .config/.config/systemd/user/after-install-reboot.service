@@ -1,0 +1,13 @@
+[Unit]
+Description=Run after-install configurations
+After=multi-user.target
+
+[Service]
+ExecStart=/home/kirk/scripts/after_install_reboot.sh
+Restart=no
+Environment=DISPLAY=:0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+
+[Install]
+WantedBy=default.target
+
