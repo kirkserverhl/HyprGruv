@@ -1,11 +1,34 @@
 #!/bin/bash
-##  .__                 __         .__  .__              .__
-##  |__| ____   _______/  |______  |  | |  |        _____|  |__
-##  |  |/    \ /  ___/\   __\__  \ |  | |  |       /  ___/  |  \
-##  |  |   |  \\___ \  |  |  / __ \|  |_|  |__     \___ \|   Y  \
-##  |__|___|  /____  > |__| (____  /____/____/ /\ /____  >___|  /
-##          \/     \/            \/            \/      \/     \/
+##  Config.sh
+##
 clear ####################################################### kb
+#################################################################
+RESET="\e[0m"                # Reset  ##  Notes:
+GREEN="\e[38;2;142;192;124m" # 8ec07c ##
+CYAN="\e[38;2;69;133;136m"   # 458588 ##
+YELLOW="\e[38;2;215
+;153;33m"                # d79921 ##
+RED="\e[38;2;204;36;29m" # cc241d ##
+GRAY="\e[38;2;60;56;54m" # 3c3836 ##
+BOLD="\e[1m"             # Bold   ##
+clear                    #####################################
+
+# Function to print status messages
+log_status() {
+  echo -e "${CYAN}[INFO]${RESET} $1"
+}
+# Function to print success messages
+log_success() {
+  echo -e "${GREEN}[SUCCESS]${RESET} $1"
+}
+# Function to print warning messages
+log_warning() {
+  echo -e "${YELLOW}[WARNING]${RESET} $1"
+}
+# Function to print error messages
+log_error() {
+  echo -e "${RED}[ERROR]${RESET} $1"
+}
 
 # Function to display headers
 display_header() {
@@ -24,22 +47,30 @@ checklist=()
 
 #### SDDM Configuration  ####
 
-#display_header "SDDM"
-#echo ""
-#read -rp "   🍬     Would you like to install Sugar-Candy SDDM theme  (y/n)  ? " configure_sddm
-#if [[ "$configure_sddm" =~ ^[Yy]$ ]]; then
-#	~/.hyprgruv/setup/sddm_candy_install.sh; then
-
+display_header "SDDM" | lsd-print
+echo ""
+read -rp "   🍬     Would you like to install Sugar-Candy SDDM theme  (y/n)  ? " configure_sddm
+echo ""
+if [[ "$configure_sddm" =~ ^[Yy]$ ]]; then
+  if ~/.hyprgruv/setup/scripts/monitor.sh; then
+    track_action "SDDM setup"
+    mark_completed "SDDM Setup"
+  else
+    mark_skipped "SDDM Setup"
+  fi
+  el
+  mark_skipped "SDDM Setup"
+fi
 clear
 
-######## Moni#########################
+######## Monitors #########################
 
 display_header "Monitors" | lsd-print
 echo ""
 read -rp "   🖥️    Would you like to configure monitor setup  (y/n)  ? " configure_monitor
 echo ""
 if [[ "$configure_monitor" =~ ^[Yy]$ ]]; then
-  if ~/.hyprgruv/setup/scripts/monitor.sh; then
+  if ~/.hyprgruv/setup/monitor.sh; then
     track_action "Monitor setup"
     mark_completed "Monitor Setup"
   else
@@ -56,7 +87,6 @@ display_header "GRUB"
 echo ""
 read -rp "  🪱    Would you like to configure GRUB theme & extra packages (y/n)? " configure_grub
 echo ""
-
 if [[ "$configure_grub" =~ ^[Yy]$ ]]; then
   if sudo -v; then                 # Checks if the user has sudo privileges
     sudo ~/.hyprgruv/setup/grub.sh # Run the script with sudo
@@ -73,7 +103,7 @@ clear
 
 ######  Editors Choice #######################
 
-# display_header "Editors Choice"
+display_header "Editors Choice"
 echo ""
 read -rp "  🫠    Would you like to install Editors Choice packages  (y/n) ? " editors_choice
 echo ""
@@ -91,11 +121,11 @@ clear
 
 #########  Terminal Effects  ################
 
-# display_header "Terminal Effects"
+display_header "Terminal Effects"
 echo ""
 read -rp "   🌈    Would you like to Beautify your Terminal  (y/n) ?   " terminal_effects
 if [[ "$terminal_effects" =~ ^[Yy]$ ]]; then
-  if ~/.hyprgruv/setup/additional_pkgs.sh; then
+  if ~/.hyprgruv/setup/term_fx.sh; then
     track_action "Terminal Effects"
     mark_completed "Terminal Effects"
   else
@@ -108,7 +138,7 @@ clear
 
 ###########  Cleanup  ####################
 
-# display_header "Cleanup" | lsd-print
+display_header "Cleanup" | lsd-print
 echo ""
 read -rp "  🧹    Would you like to perform a system cleanup  (y/n) ? " perform_cleanup
 if [[ "$perform_cleanup" =~ ^[Yy]$ ]]; then
@@ -150,8 +180,6 @@ case $choice in
 
 2)
   echo -e "  🚀   Exiting..." | lsd-print
-  # Ensure ~/config_check.sh exists and set its value to "off"
-  # echo "off" >~/config_check.sh
   exit 0
   ;;
 *)

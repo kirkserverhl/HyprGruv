@@ -1,10 +1,17 @@
 #!/bin/bash
 clear
-figlet -f smslant "Shell"
 
-choose "Please select your preferred shell"
-echo
+# Function to display headers
+display_header() {
+  figlet -f ~/.fonts/Graffiti.flf "$1"
+}
+display_header "SHELL" | lsd-print
+
+echo ""
+echo "Please select your preferred shell"
+echo ""
 shell=$(gum choose "bash" "zsh" "CANCEL")
+
 # -----------------------------------------------------
 # Activate bash
 # -----------------------------------------------------
@@ -18,7 +25,7 @@ if [[ $shell == "bash" ]]; then
     echo "Shell is now bash."
 
     gum spin --spinner dot --title "Please reboot your system." -- sleep 3
-    _selectCategory
+    #_selectCategory
 
 # -----------------------------------------------------
 # Activate zsh
@@ -34,11 +41,11 @@ elif [[ $shell == "zsh" ]]; then
 
     # Installing oh-my-zsh
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        _writeMessage "Installing oh-my-zsh"
+        echo "Installing oh-my-zsh"
         sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
         cp ~/.config/ml4w/tpl/.zshrc ~/
     else
-        _writeMessage "oh-my-zsh already installed"
+        echo "oh-my-zsh already installed"
     fi
 
     # Installing zsh-autosuggestions
@@ -46,7 +53,7 @@ elif [[ $shell == "zsh" ]]; then
         echo "Installing zsh-autosuggestions"
         git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     else
-        echo "zsh-autosuggestions already installed"
+        echo "zsh-autosuggestions already installed"  
     fi
 
     # Installing zsh-syntax-highlighting
@@ -54,7 +61,7 @@ elif [[ $shell == "zsh" ]]; then
         echo "Installing zsh-syntax-highlighting"
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     else
-        _writeMessage "zsh-syntax-highlighting already installed"
+        echo "zsh-syntax-highlighting already installed"
     fi
 
     # Installing fast-syntax-highlighting
@@ -62,11 +69,11 @@ elif [[ $shell == "zsh" ]]; then
         _writeMessage "Installing fast-syntax-highlighting"
         git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
     else
-        echo "fast-syntax-highlighting already installed"
+        echo "fast-syntax-highlighting already installed" 
     fi
 
     gum spin --spinner dot --title "Please reboot your system." -- sleep 3
-    _selectCategory
+    # _selectCategory
 # -----------------------------------------------------
 # Cencel
 # -----------------------------------------------------
