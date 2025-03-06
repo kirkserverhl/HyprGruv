@@ -28,15 +28,9 @@ log_error() {
   echo -e "${RED}[ERROR]${RESET} $1"
 }
 
-# Function to track actions and their completion state
-track_action() {
-  local action="$1"
-  local status="$2" # "✔" for completed, "x" for not completed
-  checklist+=("$action,$status")
-}
+cp -r ~/.hyprgruv/assets/wal/ ~/.cache/wal/
+cp -r ~/.hyprgruv/assets/kitty.conf ~/.config/kitty/kitty.conf
 
-# Initialize checklist
-checklist=()
 
 ##### Section 1: Installing Packages #####
 echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
@@ -44,96 +38,58 @@ echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
 {
   echo -e "   📦️     Installing Essential Packages..."
   echo ""
+
   sudo pacman -S --noconfirm git || log_error "Failed to install git"
   git clone https://aur.archlinux.org/yay.git || log_success "Git installed successfully"
   cd yay && makepkg -si --noconfirm || log_success "YAY installed successfully"
-  #yay -Syu || log_error "Failed to update yay"
-  yay -Syu stow figlet --noconfirm || log_error "Failed to install stow and figlet"
-  yay -S lsd-print-git --noconfirm || log_error "Failed to install lsd-print-git"
-  yay -S powerpill --noconfirm || log_error "Failed to install powerpill"
+  yay -Syu
+  yay -S stow figlet powerpill --noconfirm || log_error "Failed to install stow, figlet, powerpill"
+  yay -S lsd-print-git --noconfirm || log_error "Failed to insall lsd-print-git"
 
   PACKAGES1=(
-    eza fastfetch ghostty gsettings-qt gum hyprgraphics hyprlang hyprpaper hyprpolkitagent hyprutil hyprwayland-scanner imagemagick neovim nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 python-pywalfox python-terminaltexteffects qt5-base qt5-declarative qt5-x11extras qt5ct-kde qt6-base qt6-declarative qt6ct-kde starship stow xorg-xinit waypaper wlogout yazi xsettingsd zsh --noconfirm
+    bluez bluez-utils btop cmake duf eza fastfetch fzf ghostty grimblast-git gsettings-qt gum hyprgraphics
+    hypridle hyprland-qt-support hyprpaper hyprpicker hyprshade iwgtk neovim neovim-lspconfig network-manager-applet
+    nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 qt5-declarative rofi-wayland smile udiskie waybar
+    waypaper wireplumber wl-clipboard wlogout xclip xorg-wayland xsettingsd yazi zig
   )
   yay -S --noconfirm "${PACKAGES1[@]}"
+  clear
+
+  PACKAGES2=(
+    archlinux-xdg-menu clipse fortune-mod-archlinux grimblast-git gtk-engine-murrine kate konsole kscreen
+    kvantum less pacman-mirrorlist pavucontrol python-pywalfox qt5-graphicaleffects qt6ct-kde ranger rofi-calc
+    tig tmux tree-sitter wl-clipboard xdg-desktop-portal-kde xorg-wayland xsettingsd zoxide
+  )
+  yay S --noconfirm "${PACKAGES2[@]}"
+  clear
+
+  # List of essential packages
+  ESSENTIAL_PACKAGES=("eza" "figlet" "lsd-print-git" "gum" "hyprpaper" "waypaper" "nwg-dock-hyprland"
+    "nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "qt5-declarative" "qt6ct-kde"
+    "starship" "stow" "yazi" "xsettingsd" "wlogout" "zsh")
+
+  # Check for missing packages
+  MISSING_PACKAGES=()
+  for pkg in "${ESSENTIAL_PACKAGES[@]}"; do
+    if ! pacman -Qq "$pkg" &>/dev/null; then
+      MISSING_PACKAGES+=("$pkg")
+    fi
+  done
+
+  # Install missing packages
+  if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
+    echo "Installing missing essential packages: ${MISSING_PACKAGES[*]}"
+    sudo pacman -Sy --noconfirm "${MISSING_PACKAGES[@]}"
+  else
+    echo "All essential packages are already installed."
+  fi
 }
-# List of essential packages
-# ESSENTIAL_PACKAGES=("eza" "fastfetch" "figlet" "ghostty" "gum" "hyprlang" "hyprpaper" "waypaper" "hyprpolkitagent" "hyprutils" "hyprwayland-scanner" "imagemagick" "lsd-print-git" "neovim" "nwg-dock-hyprland" "nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "python-terminaltexteffects" "qt5-base" "qt5-declarative" "qt5-x11extras" "qt5ct-kde" "qt6-base" "qt6-declarative" "qt6ct-kde" "starship" "stow" "xorg-xinit" "yazi" "xsettingsd" "wlogout" "zsh")
-# Check for missing packages
-# MISSING_PACKAGES=()
-# for pkg in "${ESSENTIAL_PACKAGES[@]}"; do
-#   if ! pacman -Qq "$pkg" &>/dev/null; then
-#     MISSING_PACKAGES+=("$pkg")
-#   fi
-# done
-# Install missing packages
-# if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
-#   echo "Installing missing essential packages: ${MISSING_PACKAGES[*]}"
-#   sudo pacman -Sy --noconfirm "${MISSING_PACKAGES[@]}"
-# else
-#   echo "All essential packages are already installed."
-# fi
-PACKAGES2=(
-  archlinux-xdg-menu ark aylurs-gtk-shell bluez bluez-utils bpytop cliphist cmake dolphin duf expac fortune-mod fortune-mod-archlinux fzf go grimblast-git gsettings-qt gst-plugin-pipewire gtk-engine-murrine hyprcursor hypridle hyprpicker hyprshade hyprutils kate konsole kvantum less libpulse libva-intel-driver neovim-lspconfig network-manager-applet otf-font-awesome pacman-mirrorlist pavucontrol pipewire qt5-graphicaleffects ranger rofi-calc rofi-wayland smile syntax-highlighting tig  tmux tree-sitter waybar wireplumber wl-clipboard wl-clipboard-history-git wtype xclip xdg-desktop-portal-gtk xdg-desktop-portal-hyprland xdg-desktop-portal-kde xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-wayland xorg-xhost xorg-xinit xsettingsd zig zoxide gruvbox-plus-icon-theme kscreen kde-applications-meta-slim kde-material-you-colors gruvbox-plus-icon-theme)
-yay S --noconfirm "${PACKAGES2[@]}"
 clear
 
-##### Section 2: Configuration  #####
+#### Section 2: Configuration  #####
 {
-  log_status "  🛠️   Applying base configurations..." | lsd-print
-  cd ~/.hyprgruv/setup || {
-    log_error "Failed to navigate to ~/scripts"
-    exit 1
-  }
+  log_status "  🛠️   Applying base configurations..."
+  cd ~/.hyprgruv/setup
   ./stow.sh
-  ./config.sh || {
-    log_error "Failed to run config.sh"
-    exit 1
-  }
+  ./assets.sh
 }
-clear
-
-###########   Installation Summary  ###############
-echo -e "\n Configuration Completed Successfully." | lsd-print
-
-echo -e "\n       Hyprland Gruvbox Installation is Complete !! 🫠
-        A list of common helpful keybinds is below:" | lsd-print
-
-echo -e "  ⌨️  ▏ 󰖳 + ENTER             👻   Ghostty Terminal
-  ⌨️  ▏ 󰖳 + B                     Firefox
-  ⌨️  ▏ 󰖳 + F                     Krusader Browser
-  ⌨️  ▏ 󰖳 + N                     NeoVim
-  ⌨️  ▏ 󰖳 + Q                  󰅙   Close Window
-  ⌨️  ▏ 󰖳 + SPACE              󰀻   Rofi App Launcher
-  ⌨️  ▏ 󰖳 + CTRL + Q           󰗽   Logout 
-  ⌨️  ▏ 󰖳 + Mouse Left        🪟   Move Window"
-
-echo -e "\n   Display Full list of keybinds with:  ⌨️  ▏ 󰖳 + SPACE
-   or left-click the gear icon    in the Waybar" | lsd-print
-echo -e " Restart is required to complete setup !!" | lsd-print
-echo -e "  1.   🥾    Reboot Now \n
-  2.   🔙    Rerun Installation \n
-  3.   🚀    Exit Installation \n"
-
-read -p " Enter your choice: " choice
-echo -e ""
-
-##### Check the user's input  #####
-case $choice in
-1)
-  echo " Rebooting now..." | lsd-print
-  sudo reboot
-  ;;
-2)
-  echo " Rerunning the script..." | lsd-print
-  exec "$0" # Reruns the current script
-  ;;
-3)
-  echo " Exiting. System will not reboot." | lsd-print
-  exit 0
-  ;;
-*)
-  echo " Invalid input. Exiting without reboot." | lsd-print
-  exit 0
-  ;;
-esac
