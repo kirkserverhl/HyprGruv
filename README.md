@@ -72,7 +72,7 @@ Run the following string of commands Line:
 ```sh
 sudo pacman -S git &&
 git clone https://github.com/kirkserverhl/hyprgruv.git ~/.hyprgruv &&
-cd ~/.hyprgruv  &&
+cd ~/.hyprgruv/setup  &&
 ./setup.sh
 ```
 
