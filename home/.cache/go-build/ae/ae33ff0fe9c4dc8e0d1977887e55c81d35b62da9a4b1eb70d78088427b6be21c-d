@@ -1,4 +1,0 @@
-./dotgit.go
-./dotgit_rewrite_packed_refs.go
-./dotgit_setref.go
-./writers.go

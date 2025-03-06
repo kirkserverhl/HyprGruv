@@ -1,7 +1,0 @@
-./doc.go
-./ioctl.go
-./pty.go
-./pty_linux.go
-./termios.go
-./termios_const.go
-./termios_linux.go

@@ -1,6 +1,0 @@
-./charsetconv.go
-./dateparser.go
-./extparser.go
-./parseutils.go
-./xmlbase.go
-./xmlsanitizer.go

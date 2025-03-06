@@ -1,7 +1,0 @@
-./bufferedreader.go
-./bufferedwriter.go
-./constants_common.go
-./constants_linux.go
-./keycodes.go
-./runereader.go
-./terminal.go
