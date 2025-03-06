@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define asset paths
-ASSET_DIR="$HOME/.hyprgruv/assets"
+ASSET_DIR="$HOME/.hyprgruv/assets/sddm"
 SDDM_BG_JPG="$ASSET_DIR/sddm.jpg"
 THEME_CONF="$ASSET_DIR/theme.conf"
 SDDM_CONF_DIR="$ASSET_DIR"

@@ -6,7 +6,8 @@ sleep 1s
 
 touch ~/.config/hypr/conf/hyprland.conf
 touch ~/.cache/wal/colors-hyprland.conf
-sudo cp -r ~/.hyprgruv/assets/sddm/ /usr/share/sddm/
+
+# sudo cp -r ~/.hyprgruv/assets/sddm/ /usr/share/sddm/
 
 ###  Package Customization  ##
 cd ~/.hyprgruv/setup &&
