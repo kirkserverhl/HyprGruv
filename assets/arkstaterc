@@ -1,0 +1,7 @@
+[KFileDialog Settings]
+Recent Files[$e]=file:$HOME
+Recent URLs[$e]=file:$HOME/.mozilla/firefox/default/chrome/,file:$HOME/Downloads/,file:$HOME/,file:$HOME/.dotfiles/
+
+[MainWindow]
+2 screens: Window-Maximized=true
+State=AAAA/wAAAAD9AAAAAQAAAAEAAADOAAACxPwCAAAAAfsAAAAWAGEAcgBrAF8AcwBpAGQAZQBiAGEAcgEAAAAmAAACxAAAAIoA///+AAACkAAAAsQAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAA=

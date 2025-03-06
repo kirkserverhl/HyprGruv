@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/kirk/wallpaper/space_walk.png"
+let background = "#101212"
+let foreground = "#c3c3c3"
+let cursor     = "#c3c3c3"
+
+" Colors
+let color0  = "#101212"
+let color1  = "#3F8288"
+let color2  = "#478789"
+let color3  = "#739C90"
+let color4  = "#83A598"
+let color5  = "#9EAA95"
+let color6  = "#C9D1A8"
+let color7  = "#c3c3c3"
+let color8  = "#596d6d"
+let color9  = "#3F8288"
+let color10 = "#478789"
+let color11 = "#739C90"
+let color12 = "#83A598"
+let color13 = "#9EAA95"
+let color14 = "#C9D1A8"
+let color15 = "#c3c3c3"
