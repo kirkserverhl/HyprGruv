@@ -1,0 +1,5 @@
+#!/bin/bash
+xrandr --output HDMI-A-1 --rotate left --primary
+xrandr --output DP-1 --rotate normal --right-of HDMI-1
+
+
