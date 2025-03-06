@@ -1,0 +1,4 @@
+./detector.go
+./feed.go
+./parser.go
+./translator.go

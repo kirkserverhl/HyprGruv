@@ -1,0 +1,28 @@
+{
+    "checksum": "f1a04c88d83f403e81db3fd161563507",
+    "wallpaper": "/home/kirk/wallpaper/guitar.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0f1011",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#0f1011",
+        "color1": "#6F706F",
+        "color2": "#7E807E",
+        "color3": "#83847D",
+        "color4": "#90908E",
+        "color5": "#AAAA9B",
+        "color6": "#ADAE9E",
+        "color7": "#c3c3c3",
+        "color8": "#59596d",
+        "color9": "#6F706F",
+        "color10": "#7E807E",
+        "color11": "#83847D",
+        "color12": "#90908E",
+        "color13": "#AAAA9B",
+        "color14": "#ADAE9E",
+        "color15": "#c3c3c3"
+    }
+}

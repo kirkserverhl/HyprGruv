@@ -1,0 +1,21 @@
+set $wallpaper /home/kirk/wallpaper/gruv_waves.webp
+
+set $background #0f1010
+set $foreground #c3c3c3
+
+set $color0 #0f1010
+set $color1 #777B72
+set $color2 #948B77
+set $color3 #8FC17B
+set $color4 #3E8285
+set $color5 #458588
+set $color6 #749D91
+set $color7 #c3c3c3
+set $color8 #6c5959
+set $color9 #777B72
+set $color10 #948B77
+set $color11 #8FC17B
+set $color12 #3E8285
+set $color13 #458588
+set $color14 #749D91
+set $color15 #c3c3c3

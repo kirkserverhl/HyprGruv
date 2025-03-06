@@ -1,0 +1,28 @@
+{
+    "checksum": "81526b96049823e0e00c06ef7069d734",
+    "wallpaper": "/home/kirk/wallpaper/port.png",
+    "alpha": "100",
+    "special": {
+        "background": "#191d24",
+        "foreground": "#c5c6c8",
+        "cursor": "#c5c6c8"
+    },
+    "colors": {
+        "color0": "#191d24",
+        "color1": "#5E7CA1",
+        "color2": "#708797",
+        "color3": "#7592A5",
+        "color4": "#91999E",
+        "color5": "#AFB0AE",
+        "color6": "#C3BAB1",
+        "color7": "#c5c6c8",
+        "color8": "#616a77",
+        "color9": "#5E7CA1",
+        "color10": "#708797",
+        "color11": "#7592A5",
+        "color12": "#91999E",
+        "color13": "#AFB0AE",
+        "color14": "#C3BAB1",
+        "color15": "#c5c6c8"
+    }
+}

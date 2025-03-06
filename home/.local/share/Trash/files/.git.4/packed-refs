@@ -1,0 +1,9 @@
+# pack-refs with: peeled fully-peeled sorted 
+eef8e92718b333569f302f9ab7a9e910c39274aa refs/remotes/origin/fix/broken-dl-ice
+8a5569259c316b6d05f0cb3a9f7176d6dc1481e9 refs/remotes/origin/fix/correct-logic-bug
+64653b2e54d6b5803f69bcab0d5eaa120e7efbb9 refs/remotes/origin/fix/logginf
+4aea27a2fe53d5e5ce734d577ff622e694685950 refs/remotes/origin/fix/update-logging
+ddb174be3aa308e7428691216f09aa69e8e2f94f refs/remotes/origin/main
+e1d8ade60768e8e55671705eb6d6dc688e3b2c2d refs/remotes/origin/maint/update-logging
+ab7f3ec4bd07786bc1b0b39369536a53a42f9729 refs/remotes/origin/style/logging
+abb4597998a73519ecd7e14fac1dc086a5d89e8d refs/remotes/origin/style/rename-funcs

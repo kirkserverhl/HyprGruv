@@ -1,0 +1,28 @@
+{
+    "checksum": "29f6edeef4c5d8a2210d5c6a1252c626",
+    "wallpaper": "/home/kirk/wallpaper/gruvbox_groovbox_col4.png",
+    "alpha": "100",
+    "special": {
+        "background": "#101213",
+        "foreground": "#c3c3c4",
+        "cursor": "#c3c3c4"
+    },
+    "colors": {
+        "color0": "#101213",
+        "color1": "#4D6E5E",
+        "color2": "#BD4330",
+        "color3": "#E6AA2D",
+        "color4": "#B5A544",
+        "color5": "#577B81",
+        "color6": "#3E8085",
+        "color7": "#c3c3c4",
+        "color8": "#59636e",
+        "color9": "#4D6E5E",
+        "color10": "#BD4330",
+        "color11": "#E6AA2D",
+        "color12": "#B5A544",
+        "color13": "#577B81",
+        "color14": "#3E8085",
+        "color15": "#c3c3c4"
+    }
+}

@@ -1,0 +1,11 @@
+# pack-refs with: peeled fully-peeled sorted 
+fec265ca0ca6d31def98ffc84dd7da2715179d13 refs/remotes/origin/docs/update-README.md
+a5f04cd4416dac68f908fe09fbe007bd1c9b512b refs/remotes/origin/feat/format
+1257d10977cc8a7f3903b97d753d6c3b51452267 refs/remotes/origin/fix/logic
+10f6f50cff2ffafa8261bdacb93f78b019ea50d8 refs/remotes/origin/main
+5edd64db79b41bc3331b158bfb6e1afe8c36cf57 refs/remotes/origin/style-log
+20d362179fe1418ab57e0f7349bf44a16d5023dd refs/remotes/origin/style/format-md-and-zsh
+c0ed3f3fd95dc3697b6956bacf654de11fe1b428 refs/remotes/origin/style/rename-funcs
+352d92a48cf89d8d3542bccca10b5f901fb408ff refs/remotes/origin/title
+a37859692ffb834b480e22e6e80190f8a5f03e38 refs/remotes/origin/vladdoster-patch-1
+c1ff6a10ced10f1d0eaa916f956f34d011a0a314 refs/remotes/origin/vladdoster-patch-2

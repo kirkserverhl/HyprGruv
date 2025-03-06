@@ -1,0 +1,28 @@
+{
+    "checksum": "ab6b76a1bb7ba09c52f91c847d79f005",
+    "wallpaper": "/home/kirk/wallpaper/geisha.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0c0e10",
+        "foreground": "#c2c2c3",
+        "cursor": "#c2c2c3"
+    },
+    "colors": {
+        "color0": "#0c0e10",
+        "color1": "#6B8A76",
+        "color2": "#978C76",
+        "color3": "#D6B66D",
+        "color4": "#9A7A88",
+        "color5": "#9EAA8E",
+        "color6": "#DBCAAB",
+        "color7": "#c2c2c3",
+        "color8": "#58626b",
+        "color9": "#6B8A76",
+        "color10": "#978C76",
+        "color11": "#D6B66D",
+        "color12": "#9A7A88",
+        "color13": "#9EAA8E",
+        "color14": "#DBCAAB",
+        "color15": "#c2c2c3"
+    }
+}

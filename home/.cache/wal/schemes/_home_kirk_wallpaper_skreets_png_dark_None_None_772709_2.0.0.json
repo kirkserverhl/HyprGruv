@@ -1,0 +1,28 @@
+{
+    "checksum": "5b087f69ac8e978762beb2b194a50b28",
+    "wallpaper": "/home/kirk/wallpaper/skreets.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0f1012",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#0f1012",
+        "color1": "#907A7E",
+        "color2": "#948776",
+        "color3": "#D1AA42",
+        "color4": "#3E8489",
+        "color5": "#4B8889",
+        "color6": "#84A598",
+        "color7": "#c3c3c3",
+        "color8": "#59596d",
+        "color9": "#907A7E",
+        "color10": "#948776",
+        "color11": "#D1AA42",
+        "color12": "#3E8489",
+        "color13": "#4B8889",
+        "color14": "#84A598",
+        "color15": "#c3c3c3"
+    }
+}

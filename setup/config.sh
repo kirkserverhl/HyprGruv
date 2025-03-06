@@ -1,0 +1,161 @@
+#!/bin/bash
+##  .__                 __         .__  .__              .__
+##  |__| ____   _______/  |______  |  | |  |        _____|  |__
+##  |  |/    \ /  ___/\   __\__  \ |  | |  |       /  ___/  |  \
+##  |  |   |  \\___ \  |  |  / __ \|  |_|  |__     \___ \|   Y  \
+##  |__|___|  /____  > |__| (____  /____/____/ /\ /____  >___|  /
+##          \/     \/            \/            \/      \/     \/
+clear ####################################################### kb
+
+# Function to display headers
+display_header() {
+  figlet -f ~/.fonts/Graffiti.flf "$1"
+}
+
+# Function to track actions and their completion state
+track_action() {
+  local action="$1"
+  local status="$2" # "✔" for completed, "x" for not completed
+  checklist+=("$action,$status")
+}
+
+# Initialize checklist
+checklist=()
+
+#### SDDM Configuration  ####
+
+#display_header "SDDM"
+#echo ""
+#read -rp "   🍬     Would you like to install Sugar-Candy SDDM theme  (y/n)  ? " configure_sddm
+#if [[ "$configure_sddm" =~ ^[Yy]$ ]]; then
+#	~/.hyprgruv/setup/sddm_candy_install.sh; then
+
+clear
+
+######## Moni#########################
+
+display_header "Monitors" | lsd-print
+echo ""
+read -rp "   🖥️    Would you like to configure monitor setup  (y/n)  ? " configure_monitor
+echo ""
+if [[ "$configure_monitor" =~ ^[Yy]$ ]]; then
+  if ~/.hyprgruv/setup/scripts/monitor.sh; then
+    track_action "Monitor setup"
+    mark_completed "Monitor Setup"
+  else
+    mark_skipped "Monitor Setup"
+  fi
+else
+  mark_skipped "Monitor Setup"
+fi
+clear
+
+#######  GRUB Theme and Extra Packages ##########
+
+display_header "GRUB"
+echo ""
+read -rp "  🪱    Would you like to configure GRUB theme & extra packages (y/n)? " configure_grub
+echo ""
+
+if [[ "$configure_grub" =~ ^[Yy]$ ]]; then
+  if sudo -v; then                 # Checks if the user has sudo privileges
+    sudo ~/.hyprgruv/setup/grub.sh # Run the script with sudo
+    track_action "Grub Theme"
+    mark_completed "Grub Theme"
+  else
+    echo "You need sudo privileges to configure the GRUB theme."
+    mark_skipped "Grub Theme"
+  fi
+else
+  mark_skipped "Grub Theme"
+fi
+clear
+
+######  Editors Choice #######################
+
+# display_header "Editors Choice"
+echo ""
+read -rp "  🫠    Would you like to install Editors Choice packages  (y/n) ? " editors_choice
+echo ""
+if [[ "$editors_choice" =~ ^[Yy]$ ]]; then
+  if ~/.hyprgruv/setup/scripts/editors_choice.sh; then
+    track_action "Editors Choice Packages"
+    mark_completed "Editors Choice Packages"
+  else
+    mark_skipped "Editors Choice Packages"
+  fi
+else
+  mark_skipped "Editors Choice Packages"
+fi
+clear
+
+#########  Terminal Effects  ################
+
+# display_header "Terminal Effects"
+echo ""
+read -rp "   🌈    Would you like to Beautify your Terminal  (y/n) ?   " terminal_effects
+if [[ "$terminal_effects" =~ ^[Yy]$ ]]; then
+  if ~/.hyprgruv/setup/additional_pkgs.sh; then
+    track_action "Terminal Effects"
+    mark_completed "Terminal Effects"
+  else
+    mark_skipped "Terminal Effects"
+  fi
+else
+  mark_skipped "Terminal Effects"
+fi
+clear
+
+###########  Cleanup  ####################
+
+# display_header "Cleanup" | lsd-print
+echo ""
+read -rp "  🧹    Would you like to perform a system cleanup  (y/n) ? " perform_cleanup
+if [[ "$perform_cleanup" =~ ^[Yy]$ ]]; then
+  if ~/scripts/cleanup.sh; then
+    track_action "System cleanup"
+    mark_completed "Cleanup"
+  else
+    mark_skipped "Cleanup"
+  fi
+else
+  mark_skipped "Cleanup"
+fi
+clear
+
+###########   Display Checklist Summary  ###############
+
+echo -e "\n  📜    Configuration Summary:" | lsd-print
+for section in "${!checklist[@]}"; do
+  echo -e "${checklist[$section]} $section"
+done
+echo -e "\n Configuration Completed Successfully." | lsd-print
+
+########## Options for reboot, rerun, or ###############
+
+echo -e "  ✔️   Installation is complete\n"
+echo -e " Choose an option:" | lsd-print
+echo -e " 1.  🔙  Rerun this script \n"
+echo -e " 2.  🚀   Exit \n"
+read -rp "Enter your choice: " choice
+echo -e ""
+
+# Check the user's input or proceed to the default action
+
+case $choice in
+1)
+  echo -e"  🔙  Rerunning the script..." | lsd-print
+  exec "$0" # Reruns the current script
+  ;;
+
+2)
+  echo -e "  🚀   Exiting..." | lsd-print
+  # Ensure ~/config_check.sh exists and set its value to "off"
+  # echo "off" >~/config_check.sh
+  exit 0
+  ;;
+*)
+  echo -e "❌ Invalid choice. Exiting by default." | lsd-print
+  exit 1
+  ;;
+esac

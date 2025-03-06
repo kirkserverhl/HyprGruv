@@ -1,0 +1,28 @@
+{
+    "checksum": "426a0240735e271092ff6443ae160752",
+    "wallpaper": "/home/kirk/Pictures/tiggy.mp4",
+    "alpha": "100",
+    "special": {
+        "background": "#44353b",
+        "foreground": "#d0ccce",
+        "cursor": "#d0ccce"
+    },
+    "colors": {
+        "color0": "#44353b",
+        "color1": "#E2C9A7",
+        "color2": "#F0D2B5",
+        "color3": "#B8ADC8",
+        "color4": "#CDB5C7",
+        "color5": "#D9CBCD",
+        "color6": "#F1D9CA",
+        "color7": "#d0ccce",
+        "color8": "#8c737d",
+        "color9": "#E2C9A7",
+        "color10": "#F0D2B5",
+        "color11": "#B8ADC8",
+        "color12": "#CDB5C7",
+        "color13": "#D9CBCD",
+        "color14": "#F1D9CA",
+        "color15": "#d0ccce"
+    }
+}

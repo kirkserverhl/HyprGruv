@@ -1,0 +1,57 @@
+!_TAG_FILE_ENCODING	utf-8	//
+cmp-path-cmp-path	cmp-path.md	/# cmp-path
+cmp-path-configuration	cmp-path.md	/## Configuration
+cmp-path-get-cwd-type-function	cmp-path.md	/### get_cwd (type: function)
+cmp-path-label-trailing-slash-type-boolean	cmp-path.md	/### label_trailing_slash (type: boolean)
+cmp-path-setup	cmp-path.md	/# Setup
+cmp-path-trailing-slash-type-boolean	cmp-path.md	/### trailing_slash (type: boolean)
+emacs-bindings.nvim-emacs-bindings-modes	emacs-bindings.nvim.md	/### `emacs_bindings_modes`
+emacs-bindings.nvim-emacs-bindings-nvim	emacs-bindings.nvim.md	/# emacs-bindings.nvim
+emacs-bindings.nvim-emacs-bindings-wordchars	emacs-bindings.nvim.md	/### `emacs_bindings_wordchars`
+emacs-bindings.nvim-installation	emacs-bindings.nvim.md	/## Installation
+emacs-bindings.nvim-options	emacs-bindings.nvim.md	/## Options
+emacs-bindings.nvim-packer-nvim-https-github-com-wbthomason-packer-nvim	emacs-bindings.nvim.md	/### \[packer.nvim\](https:\/\/github.com\/wbthomason\/packer.nvim)
+emacs-bindings.nvim-vim-plug-https-github-com-junegunn-vim-plug	emacs-bindings.nvim.md	/### \[vim-plug\](https:\/\/github.com\/junegunn\/vim-plug)
+goerz-colors.nvim-a-personal-neovim-colorscheme	goerz-colors.nvim.md	/# A Personal Neovim Colorscheme
+mason-tool-installer.nvim-commands	mason-tool-installer.nvim.md	/## Commands
+mason-tool-installer.nvim-configuration	mason-tool-installer.nvim.md	/## Configuration
+mason-tool-installer.nvim-events	mason-tool-installer.nvim.md	/## Events
+mason-tool-installer.nvim-installation	mason-tool-installer.nvim.md	/## Installation
+mason-tool-installer.nvim-mason-tool-installer	mason-tool-installer.nvim.md	/# mason-tool-installer
+mason-tool-installer.nvim-requirements	mason-tool-installer.nvim.md	/## Requirements
+mason-tool-installer.nvim-suggestions-complaints-help	mason-tool-installer.nvim.md	/## Suggestions \/ Complaints \/ Help
+telescope-fzf-native.nvim-benchmark	telescope-fzf-native.nvim.md	/## Benchmark
+telescope-fzf-native.nvim-c-interface	telescope-fzf-native.nvim.md	/### C Interface
+telescope-fzf-native.nvim-cmake-windows-linux-macos	telescope-fzf-native.nvim.md	/### CMake (Windows, Linux, MacOS)
+telescope-fzf-native.nvim-credit	telescope-fzf-native.nvim.md	/## Credit
+telescope-fzf-native.nvim-developer-interface	telescope-fzf-native.nvim.md	/## Developer Interface
+telescope-fzf-native.nvim-disclaimer	telescope-fzf-native.nvim.md	/## Disclaimer
+telescope-fzf-native.nvim-installation	telescope-fzf-native.nvim.md	/## Installation
+telescope-fzf-native.nvim-lazy-nvim	telescope-fzf-native.nvim.md	/#### lazy.nvim
+telescope-fzf-native.nvim-lua-interface	telescope-fzf-native.nvim.md	/### Lua Interface
+telescope-fzf-native.nvim-make-linux-macos-windows-with-mingw	telescope-fzf-native.nvim.md	/### Make (Linux, MacOS, Windows with MinGW)
+telescope-fzf-native.nvim-packer-nvim	telescope-fzf-native.nvim.md	/#### packer.nvim
+telescope-fzf-native.nvim-telescope-fzf-native-nvim	telescope-fzf-native.nvim.md	/# telescope-fzf-native.nvim
+telescope-fzf-native.nvim-telescope-setup-and-configuration	telescope-fzf-native.nvim.md	/## Telescope Setup and Configuration
+telescope-fzf-native.nvim-todo	telescope-fzf-native.nvim.md	/### TODO
+telescope-fzf-native.nvim-vim-plug	telescope-fzf-native.nvim.md	/#### vim-plug
+telescope-luasnip.nvim-configuration	telescope-luasnip.nvim.md	/## Configuration
+telescope-luasnip.nvim-help	telescope-luasnip.nvim.md	/## Help!
+telescope-luasnip.nvim-requirements	telescope-luasnip.nvim.md	/## Requirements
+telescope-luasnip.nvim-setup	telescope-luasnip.nvim.md	/## Setup
+telescope-luasnip.nvim-telescope-luasnip	telescope-luasnip.nvim.md	/# telescope-luasnip
+telescope-luasnip.nvim-usage	telescope-luasnip.nvim.md	/## Usage
+telescope-ui-select.nvim-installation	telescope-ui-select.nvim.md	/## Installation
+telescope-ui-select.nvim-telescope-setup-and-configuration	telescope-ui-select.nvim.md	/## Telescope Setup and Configuration:
+telescope-ui-select.nvim-telescope-ui-select-nvim	telescope-ui-select.nvim.md	/# telescope-ui-select.nvim
+vim-bbye-aliasing-to-bclose	vim-bbye.md	/### Aliasing to :Bclose
+vim-bbye-buffer-delete-vs-wipeout	vim-bbye.md	/### Buffer delete vs wipeout
+vim-bbye-closing-all-open-buffers-and-files	vim-bbye.md	/### Closing all open buffers and files
+vscode.nvim-extra-folder	vscode.nvim.md	/## 🍭 Extra folder
+vscode.nvim-installation	vscode.nvim.md	/## ⬇️ Installation
+vscode.nvim-javascript-and-typescript	vscode.nvim.md	/### JavaScript and TypeScript
+vscode.nvim-something-is-broken-but-i-know-how-to-fix-it	vscode.nvim.md	/## Something is broken but I know how to fix it!
+vscode.nvim-supported-plugins	vscode.nvim.md	/## Supported Plugins
+vscode.nvim-switching-theme	vscode.nvim.md	/## Switching theme
+vscode.nvim-usage	vscode.nvim.md	/## 🚀 Usage
+vscode.nvim-warnings	vscode.nvim.md	/## ⚠️  Warnings

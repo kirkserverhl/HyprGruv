@@ -1,0 +1,1615 @@
+/*
+(C) Copyright 1999-2015 iCIMS. Proprietary and Confidential. All rights reserved.
+This software is the intellectual property of iCIMS. The program may be used only in accordance with the terms of the license agreement you entered into with iCIMS.
+*/
+
+/**
+ * Creates a dropdown menu with the ability to type-to-search, lazy-loading, and dynamic loading.
+ * NOTE: jsTestDriver unit tests located in icimsDropdownTest.js. Please run/update these tests when making changes to this plugin.
+ *
+ * @param list
+ * 	(required) The DOM select object to initialize the ICIMS dropdown on
+ *
+ * @depends ICIMS, ICIMS.trickle
+ *
+ * @author Alex Wong (alex.wong@icims.com)
+ */
+
+var ICIMS = window.ICIMS || window.icimsUtils || {};
+
+var DEFAULT_LOCALE = 'en_US';
+
+// Store references to each dropdown
+ICIMS.dropdowns = {};
+ICIMS.dropdown = ICIMS.dropdown || function (parameters) {
+	return icimsSearchDropdown(parameters);
+};
+
+//TODO: hierachy/grouping of words is hacky right now
+function icimsSearchDropdown(parameters) {
+	"use strict";
+
+	var list = parameters.list,
+		placeholder = parameters.placeholder || resourceBundle.get('icimsdropdown.js.MakeASelection_1'),
+		placeholderAsOption = typeof parameters.placeholderAsOption === 'boolean' ? parameters.placeholderAsOption : true,
+		textSearch = parameters.textSearch || resourceBundle.get('icimsdropdown.js.TypeToSearch_2'),
+		textNoResults = parameters.textNoResults || resourceBundle.get('icimsdropdown.js.NoResults_3'),
+		textSomeResultsKey = parameters.textSomeResultsKey || 'icimsdropdown.js.ResultsFoundCount',
+		matcher = parameters.matcher || exactSegmentMatch,
+		value = parameters.value || 'value',
+		text = parameters.text || 'text',
+		parent = parameters.parent || 'parent',
+		isErrorField = parameters.isErrorField || 'isError',
+		onchange = parameters.onchange || function () { },
+		onchangefinished = parameters.onchangefinished || function () { },
+		search = typeof parameters.search === 'boolean' ? parameters.search : true,
+		prefetch = typeof parameters.prefetch === 'boolean' ? parameters.prefetch : typeof parameters.loadOnStart === 'boolean' ? parameters.loadOnStart : true,
+		bootstrap = typeof parameters.bootstrap === 'boolean' ? parameters.bootstrap : false,
+
+		formatOption = parameters.formatOption || function () { return ''; },
+		formatGroupOption = parameters.formatGroupOption || function () { return ''; },
+
+		filter = parameters.filter || function () { return true },
+
+		ajax = parameters.ajax,
+		req,
+
+		matches = [],
+		_legacyWords = [],
+		words = [],
+		parents = {},
+		enabled = typeof parameters.enabled === 'boolean' ? parameters.enabled : true,
+		open = false,
+		reset = false,
+
+		// Determine if the dropdown needs to load options when opened
+		initialized = false,
+		searchTimer, tempInputTimer,
+		inputWord = '',
+		expensive = typeof parameters.expensive === 'boolean' ? parameters.expensive : false,
+
+		limit = parameters.limit || 25,
+		page = 0,
+		lastRequestedPage = -1,
+		totalPages = -1,
+		focusIndex = 0,
+		index = 0,
+		listLength = 0,
+
+		selected = {},
+		previousSelected = {},
+		defaultSelected = {},
+
+		mobile = ICIMS.isMobile(),
+		touch = ICIMS.isTouch(),
+		locale = parameters.locale || DEFAULT_LOCALE;
+	var isDependentDropdown = list.getAttribute('data-ddd-parent-link');
+
+	const updateStatusFunc = createDebounceStatusUpdate();
+
+	// Keep track of DOM objects created
+	var fakeSelect = createFakeSelect(list),
+		fakeSelected = createSelected(fakeSelect),
+		container = createContainer(fakeSelect),
+		searchBox = createSearchBox(container),
+		ulList = createListContainer(searchBox),
+		loading = createLoadingIndicator(ulList),
+		arrow = createArrow(fakeSelect);
+
+	// Initializes the loading bar functionality
+	var trickle = typeof ICIMS.trickle === 'function' ? ICIMS.trickle({
+		element: loading,
+		ticker: 200
+	}) : { start: function () { }, finish: function () { } };
+
+	var state = function () {
+		return {
+			open: open,
+			enabled: enabled
+		};
+	};
+
+	var destroy = function () {
+		ICIMS.removeClass(list, 'dropdown-hide');
+
+		arrow.parentNode.removeChild(arrow);
+		loading.parentNode.removeChild(loading);
+		ulList.parentNode.removeChild(ulList);
+		container.parentNode.removeChild(container);
+		fakeSelected.parentNode.removeChild(fakeSelected);
+		fakeSelect.parentNode.removeChild(fakeSelect);
+
+		delete ICIMS.dropdowns[list.id];
+	};
+
+	var focus = function () {
+		if (fakeSelect && !touch) fakeSelect.focus();
+	}
+
+	var pub = {
+		params: parameters,
+		toggleList: toggleList,
+		collapseList: collapseList,
+		expandList: expandList,
+		getWords: getWords,
+		setWords: setWords,
+		addWords: addWords,
+		findWordFromValue: findWordFromValue,
+		setFilter: setFilter,
+		getMatches: getMatches,
+		resetOptions: resetOptions,
+		loadOptions: loadOptions,
+		initializeList: initializeList,
+		initializeSelected: initializeSelected,
+		repositionContainer: repositionContainer,
+		updateSelected: updateSelected,
+		optionSelected: optionSelected,
+		getSelected: getSelected,
+		getPreviousSelected: getPreviousSelected,
+		getDefaultSelected: getDefaultSelected,
+		getInput: getInput,
+		setInput: setInput,
+		getAjax: getAjax,
+		setAjax: setAjax,
+		setPlaceholder: setPlaceholder,
+		state: state,
+		enable: enable,
+		disable: disable,
+		destroy: destroy,
+		focus: focus
+	};
+
+	ICIMS.dropdowns[list.id] = pub;
+
+	initializeEvents();
+	initializeList();
+	initializeSelected();
+
+	if (!isDependentDropdown && (prefetch || !search)) {
+		resetOptions();
+	}
+
+	if (!enabled) {
+		ICIMS.addClass(fakeSelect, 'disabled');
+	}
+
+	ICIMS.addClass(list, 'dropdown-hide');
+
+	/**
+	 * If we are not using AJAX, parse through the original select element and build
+	 * our word storage from all its options.
+	 *
+	 * If we are using AJAX, still parse through the original select element, searching
+	 * for any option with a legacy attribute to push into a legacy word storage. This
+	 * is used as a "persistent" storage. Later the word storage is built through the
+	 * AJAX requests when loading the options.
+	 */
+	function initializeList() {
+		if (!ajax) {
+			setWords(getWordsList(list));
+			totalPages = Math.ceil(getWords().length / limit);
+		} else {
+			_legacyWords = getWordsList(list, true);
+		}
+
+		listLength = list.options.length;
+	}
+
+	/**
+	 * Parse the original select element or result from AJAX and get the selected option.
+	 * Update our dropdown's current text to display that option's text.
+	 */
+	function initializeSelected() {
+		if (ajax && ajax.selected) {
+			initializeSelectedAjax(ajax);
+		} else {
+			initializeSelectedLegacy();
+		}
+	}
+
+	function initializeSelectedAjax(ajax) {
+		updateSelectedText('Loading...', true);
+		getDataAjax(ajax.selected, loadSelectedAjax);
+	}
+
+	function initializeSelectedLegacy() {
+		var selectedOption = ICIMS.getSelected(list).length ? ICIMS.getSelected(list)[0] : null;
+		if (selectedOption) {
+			var wordMatchingValue = findWordFromValue(selectedOption[value]);
+
+			if (wordMatchingValue) {
+				defaultSelected = wordMatchingValue;
+			} else {
+				defaultSelected[value] = selectedOption[value];
+				defaultSelected[text] = ICIMS.getText(selectedOption);
+			}
+
+			updateSelected(defaultSelected);
+		}
+	}
+
+	/**
+	 * Initialize and attach all event handlers.
+	 */
+	function initializeEvents() {
+		var press = touch ? 'touchstart' : 'mousedown';
+
+		// Detect a click on a dropdown item
+		ICIMS.addEvent(ulList, 'click', function (e) {
+			var target = ICIMS.getTarget(e);
+			if (!ICIMS.hasClass(target, 'result-selectable')) {
+				target = ICIMS.getParent(target, 'result-selectable');
+			}
+			if (target) {
+				var itemIndex = Number(target.getAttribute('dropdown-index')),
+					word = getWordFromIndex(itemIndex);
+
+				optionSelected(word);
+				if (!touch) {
+					fakeSelect.focus();
+				}
+				setFocus(target);
+			}
+
+			ICIMS.stopEvent(e);
+		});
+
+		// Detect when to open/close the dropdown
+		ICIMS.addEvent(document, press, function (e) {
+			var target = ICIMS.getTarget(e);
+			if (enabled && (target === fakeSelect || ICIMS.getParent(target, 'dropdown-select') === fakeSelect)) {
+				if (!initialized) {
+					if (!expensive) {
+						resetOptions();
+					} else {
+						clearPage();
+					}
+				}
+
+				toggleList();
+				if (!touch) {
+					fakeSelect.focus();
+				}
+
+				if (search && !touch && open) {
+					searchBox.focus();
+				}
+
+				ICIMS.stopEvent(e);
+			} else if (open && target !== container && ICIMS.getParent(target, 'dropdown-container') !== container) {
+				collapseList();
+			}
+		});
+
+
+		// Detect user input in the search box
+		ICIMS.addEvents(searchBox, {
+			'keyup': function (e) {
+				// Only load new results if input changed
+				if (getInput() !== inputWord) {
+					inputWord = getInput();
+					// Give a half second delay before firing the request if using AJAX feature
+					if (ajax) {
+						// Clear any pending asynchronous request to start a new one
+						if (req) {
+							req.abort();
+						}
+						// Clear any pending searches waiting to be processed
+						if (searchTimer) {
+							clearTimeout(searchTimer);
+						}
+						if (!expensive || (expensive && inputWord.length >= 2)) {
+							var delay = 500;
+							if (expensive && inputWord.length < 6) {
+								// delay between 2000ms and 500ms, depending on word length
+								delay += 250 * (6 - inputWord.length);
+							}
+							searchTimer = setTimeout(function () {
+								resetOptions();
+							}, delay);
+						} else {
+							clearPage();
+						}
+					} else {
+						resetOptions();
+					}
+				}
+			},
+			'keydown': function (e) {
+				// Handle pressing Tab or Shift + Tab on the searchBox (collapse the list and focus on fakeSelect so we can smoothly Tab (or Shift + Tab) over to another Field.
+				if (e.keyCode === 9) {
+					if (open) {
+						collapseList();
+						if (!touch) {
+							fakeSelect.focus();
+						}
+						selectWordFromIndex(focusIndex);
+					}
+				}
+			},
+			'click': function (e) {
+				ICIMS.stopEvent(e);
+			}
+		});
+
+		// For dropdowns used in our pop-ups always intercept to prevent the action of pressing escape
+		// from being muddied with the semantic of closing the pop-up.
+		ICIMS.addEvent(container, 'keyup', interceptEscapeForPopUps);
+
+		// Detect keyboard interaction with the dropdown
+		ICIMS.addEvent(container, 'keydown', function (e) {
+			if (open) {
+				keyNavigation(e);
+			}
+		});
+
+		// For dropdowns used in our pop-ups always intercept to prevent the action of pressing escape
+		// from being muddied with the semantic of closing the pop-up.
+		ICIMS.addEvent(fakeSelect, 'keyup', interceptEscapeForPopUps);
+
+		// Handle toggling the menu
+		ICIMS.addEvent(fakeSelect, 'keydown', function (e) {
+			if (!initialized) {
+				if (!expensive) {
+					resetOptions();
+				} else {
+					clearPage();
+				}
+			}
+
+			if ((search && e.keyCode === 32) || e.keyCode === 13) { //space or enter
+				if (open) {
+					selectWordFromIndex(focusIndex);
+				} else {
+					expandList();
+
+					if (search && !touch) {
+						searchBox.focus();
+					} else {
+						fakeSelect.focus();
+					}
+				}
+				ICIMS.stopEvent(e);
+			} else if (e.keyCode >= 48 && e.keyCode <= 90) { // this is an alphanumeric keyCode
+				if (search) {
+					expandList();
+					// Focus on searchBox, clear any value it may already have
+					// event should bubble to the searchBox now
+					searchBox.focus();
+					searchBox.value = '';
+				} else {
+					// Find first exact match from start of string to mimic native dropdowns if search is disabled
+					if (tempInputTimer) {
+						clearTimeout(tempInputTimer);
+					}
+
+					var c = String.fromCharCode(e.keyCode);
+					fakeSelect.tempInput += c;
+
+					var toBeSelected = getMatches(fakeSelect.tempInput, function (input, text) {
+						if (text.match(new RegExp('^' + input + '.*$', 'i')) !== null) {
+							return true;
+						}
+					})[0];
+
+					if (toBeSelected) {
+						// Visually update the dropdown to current found option
+						updateSelected(toBeSelected);
+
+						// When user defocuses, actually trigger the selection of the option
+						ICIMS.removeEvent(fakeSelect, 'blur');
+						ICIMS.addEvent(fakeSelect, 'blur', function (e) {
+							optionSelected(toBeSelected);
+						});
+					}
+
+					// If user hasn't typed anything in 0.75 seconds, clear the temporary input
+					tempInputTimer = setTimeout(function () {
+						fakeSelect.tempInput = '';
+					}, 750);
+				}
+			} else if (e.keyCode === 9) { // Tabbing out
+				if (open) {
+					collapseList();
+					if (!touch) {
+						fakeSelect.focus();
+					}
+					selectWordFromIndex(focusIndex);
+				}
+			} else {
+				ICIMS.removeEvent(fakeSelect, 'blur');
+				keyNavigation(e) ;
+			}
+		});
+
+		// When the window resizes, make sure the container is also resized.
+		ICIMS.addEvent(window, 'resize', function () {
+			repositionContainer();
+		});
+
+		//------ Device specific optimizations ------//
+
+		// Detect if user is scrolling near the bottom of the dropdown, and load more results
+		if (touch) {
+			ICIMS.addEvent(ulList, 'touchmove', function () {
+				lazyLoad();
+			});
+		} else {
+			ICIMS.addEvents(ulList, {
+				'scroll': function (e) {
+					lazyLoad();
+				},
+				'mouseenter': function (e) {
+					removeFocus(findItem(focusIndex));
+				},
+				'mousewheel': function (e) {
+					// Non Gecko legacy based
+					preventOverScroll(e);
+				},
+				'DOMMouseScroll': function (e) {
+					// Gecko based
+					preventOverScroll(e);
+				}
+			});
+		}
+
+		function interceptEscapeForPopUps(event) {
+			if (ICIMS.hasClass(document.body, 'mode-popup')) {
+				if ((event.keyCode !== undefined && event.keyCode === 27)
+					|| (event.key !== undefined && event.key === 27)) {
+					event.stopPropagation();
+				}
+			}
+		}
+
+		function keyNavigation(e) {
+			if (e.keyCode === 27) { // esc
+				// remove current focus so that it doesn't get re-selected when tabbing
+				removeFocus(findItem(focusIndex));
+				focusIndex = getInput() ? -1 : -(_legacyWords.length + 1);
+
+				// hide the drop-down
+				collapseList();
+
+				// a11y - when esc is pressed, we still want the collapsed combo box to keep focus
+				// note: we focus() here instead of inside collapseList() because we DON'T want to keep focus if a different element is clicked
+				focus();
+			} else if (focusIndex >= -(_legacyWords.length + 1)) {
+				if (e.keyCode === 13) { //enter
+					selectWordFromIndex(focusIndex);
+
+					// Delay the focus on the fake select or else on key up, a click event will fire.
+					setTimeout(function () {
+						if (!touch) {
+							fakeSelect.focus();
+						}
+					}, 50);
+					ICIMS.stopEvent(e);
+				} else if (e.keyCode === 40 && !e.altKey) { //down arrow
+					// Find the next possible option that can be selected
+					var indexToFind = focusIndex + 1,
+						wordToFocus = getWordFromIndex(indexToFind),
+						item = findItem(indexToFind);
+					while (wordToFocus && (item == null || !ICIMS.hasClass(item, 'result-selectable'))) {
+						indexToFind++;
+						wordToFocus = getWordFromIndex(indexToFind);
+						item = findItem(indexToFind);
+					}
+					setFocus(item);
+					updateStatus('');
+					container.focus();
+					ICIMS.stopEvent(e);
+				} else if (e.keyCode === 38 && !e.altKey) { //up arrow
+					// Find the next possible option that can be selected
+					var indexToFind = focusIndex - 1,
+						wordToFocus = getWordFromIndex(indexToFind),
+						item = findItem(indexToFind);
+					while (wordToFocus && (item == null || !ICIMS.hasClass(item, 'result-selectable'))) {
+						indexToFind--;
+						wordToFocus = getWordFromIndex(indexToFind);
+						item = findItem(indexToFind);
+					}
+					setFocus(item);
+					if (indexToFind === -1) {
+						searchBox.scrollIntoView({ block: 'nearest' });
+					}
+					updateStatus('');
+					container.focus();
+					ICIMS.stopEvent(e);
+				}
+			}
+		}
+
+		function selectWordFromIndex(index) {
+			var word = getWordFromIndex(index);
+			if (word) {
+				setFocus(findItem(index));
+				optionSelected(word);
+			}
+		}
+
+		function lazyLoad() {
+			// Load more options if we are near the end of the dropdown (75% of the way down)
+			if (isScrollEnd(ulList.offsetHeight, ulList.scrollHeight * 0.25, ulList.scrollHeight)) {
+				loadOptions();
+			}
+		}
+
+		function preventOverScroll(e) {
+			// http://stackoverflow.com/a/16324762/2747125
+			var delta = (e.type === 'DOMMouseScroll' ? e.detail * -40 : e.wheelDelta),
+				up = delta > 0;
+
+			// Prevent the parent window from scrolling if we reach the dropdown's borders
+			if (!up && -delta > ulList.scrollHeight - ulList.offsetHeight - ulList.scrollTop) {
+				// Scrolling down, but this will take us past the bottom.
+				ulList.scrollTop = ulList.scrollHeight;
+				ICIMS.stopEvent(e);
+			} else if (up && delta > ulList.scrollTop) {
+				// Scrolling up, but this will take us past the top.
+				ulList.scrollTop = 0;
+				ICIMS.stopEvent(e);
+			}
+		}
+
+		/**
+		 * Detect if the current scroll position is near the bottom of the container.
+		 */
+		function isScrollEnd(distance, padding, threshold) {
+			return (distance + ulList.scrollTop + padding >= threshold);
+		}
+
+		function setFocus(item) {
+			// If the new index has an item, focus on that and remove the old focus
+			if (item) {
+				removeFocus(findItem(focusIndex));
+				focusIndex = Number(item.getAttribute('dropdown-index'));
+				ICIMS.addClass(item, 'result-focus');
+				item.scrollIntoView({ block: 'nearest' });
+
+				// Set the current scroll position to the new focused item
+				ulList.scrollTop = item.offsetTop;
+
+				// Set the accessibility attributes on focus set.
+				item.setAttribute('aria-selected', 'true');
+				if (search) {
+					searchBox.setAttribute('aria-activedescendant', item.getAttribute('id'));
+				} else {
+					fakeSelect.setAttribute('aria-activedescendant', item.getAttribute('id'));
+				}
+			}
+		}
+
+		function removeFocus(item) {
+			if (item) {
+				ICIMS.removeClass(item, 'result-focus');
+				item.setAttribute('aria-selected', 'false');
+			}
+		}
+
+		/**
+		 * Parses through the container finding the li object with the specific dropdown-index
+		 */
+		function findItem(findIndex) {
+			return ulList.querySelector(`[dropdown-index='${Number(findIndex)}']`);
+		}
+	}
+
+	/**
+	 * Change our dropdown's current selection display text. Modify the original select element's
+	 * current selection, then fire any onchange event attached to the dropdown
+	 */
+	function optionSelected(word) {
+		// ensure initial onchange() doesn't flag the page as dirty
+		var eraseDirtyFlag = !window.pageDirtyFlag && word && word.value === '-999';
+
+		previousSelected = selected;
+		updateSelected(word);
+		collapseList();
+		onchange(list, word);
+		//LEGACY SUPPORT: Detect if the original select has some onchange logic that modifies the regular select element
+		if (listLength !== list.options.length) {
+			listLength = list.options.length;
+			initializeSelectedLegacy();
+			resetOptions();
+		}
+
+		ICIMS.removeEvent(fakeSelect, 'blur');
+		if (eraseDirtyFlag) window.pageDirtyFlag = false;
+		onchangefinished();
+	}
+
+	function toggleList() {
+		if (open) {
+			collapseList();
+		} else {
+			expandList();
+		}
+	}
+
+	function expandList() {
+		ICIMS.addClass(fakeSelect, 'focus');
+		ICIMS.removeClass(container, 'dropdown-invisible');
+		container.setAttribute('aria-expanded', 'true');
+		fakeSelect.setAttribute('aria-expanded', 'true');
+		container.setAttribute('aria-expanded', 'true');
+		fakeSelect.setAttribute('aria-expanded', 'true');
+		open = true;
+		repositionContainer();
+		if (search) {
+			searchBox.setAttribute('aria-expanded', 'true');
+		}
+		if (!touch) {
+			searchBox.select();
+		}
+		resultStatus();
+	}
+
+	function resultStatus(additionalStatus) {
+		const statusMessageGen = additionalStatus ? (statusMessage) => statusMessage + '<br />' + additionalStatus : (statusMessage) => statusMessage;
+		const resultsCount = getSelectableResultsCount();
+		const fullMessage = resultsCount ? statusMessageGen(resourceBundle.get(textSomeResultsKey, { 'count': resultsCount })) : statusMessageGen(textNoResults);
+		updateStatus(fullMessage);
+	}
+
+	function collapseList() {
+		ICIMS.removeClass(fakeSelect, 'focus');
+		ICIMS.addClass(container, 'dropdown-invisible');
+		container.setAttribute('aria-expanded', 'false');
+		fakeSelect.setAttribute('aria-expanded', 'false');
+		searchBox.setAttribute('aria-expanded', 'false');
+		if (search) {
+			searchBox.blur();
+			searchBox.removeAttribute('aria-activedescendant');
+		} else {
+			fakeSelect.removeAttribute('aria-activedescendant');
+		}
+
+		open = false;
+		repositionContainer();
+	}
+
+	function getLocalizedText(itemText) {
+		if (typeof itemText === 'object' && itemText !== null) {
+			// for now, only support English, in future add support for passed in locale
+			switch (locale) {
+				case 'en_US':
+				default:
+					return itemText.en_US;
+			}
+		} else {
+			return itemText;
+		}
+	}
+
+	/**
+	 * If AJAX, replace the original select element's options with the one single option picked.
+	 *
+	 * If not AJAX, just change the selected index to match the picked option by comparing the
+	 * picked option's value with each option in the select element.
+	 *
+	 * Does not fire any change event on the select element
+	 *
+	 * @param item
+	 * 	The word from the word storage
+	 */
+	function updateSelected(word) {
+		if (!word) {
+			return;
+		}
+		selected = word;
+
+		var itemValue = word[value];
+
+		// handle the case where localized text strings come back in the ajax response
+		var localizedText = getLocalizedText(word[text]);
+
+		var escapedText = ICIMS.escapeHtml(localizedText);
+
+		var formatting = formatOption(word);
+		updateSelectedText(formatting + escapedText, itemValue == '-999');
+
+		if (ajax) {
+			var option = document.createElement('option'),
+				attributes = word.attr;
+
+			if (itemValue) {
+				option.setAttribute('value', itemValue);
+				option.setAttribute('selected', 'selected');
+			}
+			if (localizedText) {
+				ICIMS.setInnerHtml(option, escapedText);
+			}
+
+			list.options.length = 0;
+			list.appendChild(option);
+			list.selectedIndex = 0;
+			listLength = 1;
+
+			for (var key in attributes) {
+				if (attributes.hasOwnProperty(key)) {
+					try {
+						list.options[0].setAttribute(key, attributes[key]);
+					} catch (e) {
+						list.options[0][key] = attributes[key];
+					}
+				}
+			}
+		} else {
+			for (var i = 0; i < list.options.length; i++) {
+				if (list.options[i].value === itemValue) {
+					list.selectedIndex = i;
+				}
+			}
+		}
+	}
+
+	function updateSelectedText(text, isPlaceholder) {
+		var textToOutput = text || generatePlaceholder(placeholder);
+		var titleTextToOutput = text || placeholder;
+		// Update dependent dropdowns here
+		if (isPlaceholder && list.getAttribute('data-ddd-parent-link')) {
+			textToOutput = generatePlaceholder(text);
+			titleTextToOutput = text;
+		}
+
+		var ariaLabelledBy = list.getAttribute('aria-labelledby');
+		if (!ariaLabelledBy) {
+			var ariaLabel = list.getAttribute('aria-label');
+			var labelElement = document.getElementById('label_' + list.getAttribute('id')) || document.querySelector('label[for="' + fakeSelect.id + '"]');
+			if (ariaLabel) {
+				fakeSelect.setAttribute('aria-label', ariaLabel + ' ' + titleTextToOutput);
+			} else if (labelElement) {
+				fakeSelect.setAttribute('aria-label', labelElement.textContent + ' ' + titleTextToOutput);
+			} else {
+				fakeSelect.setAttribute('aria-label', titleTextToOutput);
+			}
+		}
+
+		ICIMS.setInnerHtml(fakeSelected, textToOutput);
+	}
+
+	/*
+	 * Returns the current selected object
+	 */
+	function getSelected() {
+		return selected;
+	}
+
+	/**
+	 * Returns the previously selected object. Defaults to defaultSelected on initialization.
+	 */
+	function getPreviousSelected() {
+		return previousSelected;
+	}
+
+	/*
+	 * Returns the initialized selected object when the dropdown loaded
+	 */
+	function getDefaultSelected() {
+		return defaultSelected;
+	}
+
+	/**
+	 * Returns an array of word objects that match the user's input constrained by the current page and size.
+	 * The default 'matcher' function is an exact segment match algorithm.
+	 */
+	function getMatches(input, mf) {
+		mf = typeof mf === 'function' ? mf : matcher;
+		var newMatches = [];
+
+		for (var i = 0; i < words.length; i++) {
+			if (mf(input, words[i][text])) {
+				newMatches.push(words[i]);
+			} else if (mf(input, words[i][value])) {
+				newMatches.push(words[i]);
+			}
+		}
+
+		return newMatches;
+	}
+
+	/**
+	 * Start from the first page and reset the state of the dropdown.
+	 */
+	function resetOptions(callback) {
+		initialized = true;
+		reset = true;
+		parents = {};
+		lastRequestedPage = -1;
+		page = 0;
+		totalPages = 1;
+		index = 0;
+		focusIndex = getInput() ? -1 : -(_legacyWords.length + 1);
+
+		if (req) {
+			req.abort();
+		}
+
+		clearPage();
+		loadOptions(callback);
+	}
+
+	function loadOptions(callback) {
+		if (page < totalPages && page > lastRequestedPage) {
+			trickle.start(true);
+			lastRequestedPage = page;
+			if (ajax) {
+				req = getDataAjax(ajax, function (response) {
+					loadPageAjax(response);
+					typeof callback === 'function' && callback(response);
+				});
+			} else {
+				matches = getMatches(getInput());
+				totalPages = Math.ceil(matches.length / limit);
+				loadPage(page);
+				page++;
+				repositionContainer();
+			}
+		}
+	}
+
+	function loadSelectedAjax(response) {
+		var responseJson = ICIMS.jsonDecode(response.response || response.responseText);
+
+		// If we receive data regarding a preselected option, update to that. Otherwise revert to placeholder.
+		if (responseJson[value]) {
+			defaultSelected = previousSelected = responseJson;
+			if (ajax.selected.onchange) {
+				optionSelected(responseJson);
+			} else {
+				updateSelected(responseJson);
+			}
+		} else {
+			// If this is a dependent dropdown, ignore resetting the value
+			if (!list.getAttribute('data-ddd-parent-link')) {
+				updateSelectedText();
+			}
+		}
+		if (ajax.selected.after) {
+			ajax.selected.after(list, responseJson);
+		}
+		if (isDependentDropdown) {
+			resetOptions();
+		}
+	}
+
+	function loadPageAjax(response) {
+		var responseJson = ICIMS.jsonDecode(response.response || response.responseText);
+
+		if (ajax.adapter) {
+			responseJson = ajax.adapter(responseJson, ajax.maskedAttrs);
+		}
+
+		var wordResponse = responseJson.options;
+		if (responseJson.total) {
+			totalPages = Math.ceil((responseJson.total) / limit);
+		}
+
+		if (reset) {
+			setWords(wordResponse);
+			if (ajax.ini) {
+				ajax.ini(wordResponse);
+			}
+		} else {
+			addWords(wordResponse);
+		}
+
+		matches = words;
+		var visibleChunk = loadPage(page);
+		page++;
+		repositionContainer();
+		reset = false;
+
+		// Keep loading the rest of the options if we want to load everything
+		if (ajax.loadAll || visibleChunk.length === 0) {
+			loadOptions();
+		}
+	}
+
+	function getTargetList() {
+		const currentListItems = ulList.children;
+		const lastItem = currentListItems.length > 0 ? currentListItems[currentListItems.length - 1] : undefined;
+		if (lastItem) {
+			const lastItemChildren = lastItem.children;
+			if (lastItemChildren.length > 0) {
+				const lastItemChildrenLastChild = lastItemChildren[lastItemChildren.length - 1];
+				if (lastItemChildrenLastChild.tagName === 'UL') {
+					//if the last element in the last list item is a list, then we should continue to append to that.
+					return lastItemChildrenLastChild;
+				}
+			}
+		}
+		return ulList;
+	}
+	/**
+	 * Generate HTML for specific page's dropdown options.
+	 */
+	function loadPage(page) {
+		const matchesChunk = matches.slice(page * limit, (page + 1) * limit);
+		const visibleChunk = matchesChunk.filter(filter);
+
+		let currentTarget = getTargetList();
+		let itemAppended = false;
+		let errorText = '';
+		for (let i = 0; i < matchesChunk.length; i++) {
+			const item = matchesChunk[i];
+			const visible = visibleChunk.filter(function (visibleItem) {
+				return visibleItem[value] === item[value];
+			});
+			const hidden = visible.length === 0;
+			const isError = item[isErrorField] === true;
+			if (item[parent] && !parents[item[parent]] && !isError) {
+				currentTarget = generateOptGroup(item, i + (page * limit), ulList);
+				parents[item[parent]] = true;
+			}
+			if (!(item[parent] && !item[text]) && !isError) {
+				currentTarget.appendChild(generateListItem(item, i + (page * limit), hidden));
+				itemAppended = itemAppended || !hidden;
+			}
+			if (isError) {
+				const currentError = item[text];
+				currentTarget.appendChild(generateUnselectableListItem({ text: currentError }, -1, hidden));
+				if (!hidden && currentError) {
+					errorText += currentError;
+				}
+			}
+		}
+
+		// update status, if relevant
+		// if no error added and selectable items added, add general status
+		if (!itemAppended && !errorText && page === 0) {
+			ulList.appendChild(generateUnselectableListItem({ text: textNoResults }, -1, false));
+		}
+		resultStatus(errorText);
+		trickle.finish();
+
+		// If this is a dependent dropdown, update the placeholder text now since it is known if there are results available or not
+		if (reset && !open &&
+			list.getAttribute('data-ddd-parent-link') &&
+			typeof updateDropdownPlaceholder === 'function' &&
+			(typeof selected[value] === 'undefined' || !selected[value] || selected[value] === '-999')) {
+			updateDropdownPlaceholder(list, words.length);
+		}
+
+		return visibleChunk;
+	}
+
+	function getSelectableResultsCount() {
+		return ulList ? ulList.querySelectorAll(`li.result-selectable[role='option']`).length : 0;
+	}
+
+	function clearPage() {
+
+		ulList.innerHTML = '';
+		for (let j = 0; j < _legacyWords.length; j++) {
+			if (_legacyWords[j][value] === '' && placeholderAsOption === false) continue;
+			ulList.appendChild(generateListItem(_legacyWords[j], - (_legacyWords.length - j)));
+		}
+		repositionContainer();
+	}
+
+	function generatePlaceholder(text) {
+		return '<span class="dropdown-placeholder">' + text + '</span>';
+	}
+
+	function generateOptGroup(item, index, target) {
+		// handle the case where localized text strings come back in the ajax response
+		const localizedParent = getLocalizedText(item[parent]);
+		const labelId = `result-group-label_${index}`;
+		const groupWrapper = document.createElement('li');
+		groupWrapper.setAttribute('role', 'group');
+
+		const group = document.createElement('ul');
+		group.id = `result-group_${list.id}_${index}`;
+		group.className = 'result-group';
+		group.setAttribute('role', 'group');
+		group.setAttribute('aria-labelledby', labelId);
+
+		const groupLabel = document.createElement('li');
+		groupLabel.id = labelId;
+		groupLabel.className = 'result-group-label';
+		groupLabel.setAttribute('role', 'presentation');
+		groupLabel.setAttribute('group-index', index);
+		groupLabel.setAttribute('aria-label', localizedParent);
+		groupLabel.innerHTML = formatGroupOption(item) + localizedParent
+
+		group.appendChild(groupLabel);
+		groupWrapper.appendChild(group);
+		if (target) {
+			target.appendChild(groupWrapper);
+		}
+		return group;
+	}
+
+	function generateListItem(item, index, hidden) {
+		return generateNormalListItem(item, index, hidden);
+	}
+
+	function generateNormalListItem(item, index, hidden) {
+		const listItem = generateBasicListItem(item, index);
+		// I think we can probably make hidden its own thing, too
+		listItem.className += ' ' + (hidden ? 'dropdown-invisible' : 'result-selectable');
+		return listItem;
+	}
+
+	function generateUnselectableListItem(item, index, hidden) {
+		const listItem = generateBasicListItem(item, index);
+		// I think we can probably make hidden its own thing, too
+		listItem.className += ' ' + (hidden ? 'dropdown-invisible' : 'result-unselectable');
+		listItem.setAttribute('role', 'presentation');
+		return listItem;
+	}
+
+	function generateBasicListItem(item, index) {
+		// handle the case where localized text strings come back in the ajax response
+		const localizedText = getLocalizedText(item[text]);
+
+		const escapedText = ICIMS.escapeHtml(localizedText);
+		const listItem = document.createElement('li');
+		listItem.id = `result-selectable_${list.id}_${index}`;
+		listItem.className = 'dropdown-result';
+		listItem.setAttribute('role', 'option');
+		listItem.setAttribute('dropdown-index', index);
+		listItem.setAttribute('title', escapedText ? escapedText : placeholder);
+		listItem.setAttribute('aria-label', escapedText ? escapedText : placeholder);
+
+		const boldifyGenerator = (text, currentIndex) => currentIndex >= 0 ? boldifyMatch(text, ICIMS.escapeHtml(getInput())) : text;
+		const generatedText = escapedText ? boldifyGenerator(escapedText, index) : generatePlaceholder(placeholder);
+		listItem.innerHTML = formatOption(item, index) + generatedText;
+
+		return listItem;
+	}
+
+	/**
+	* Bold the matching segment in the given input.If no needle is supplied, simply return the input.
+	*/
+	function boldifyMatch(input, needle) {
+		if (needle) {
+			// Escape special regex characters in the needle
+			needle = needle.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+
+			return input.replace(
+				new RegExp(
+					'(' + needle + ')',
+					'gi'
+				), function (match, p1) {
+					return '<b>' + p1 + '</b>';
+				}
+			);
+		} else {
+			return input;
+		}
+	}
+
+	function exactSegmentMatch(term, text) {
+		return text.toString().toUpperCase().indexOf(term.toString().toUpperCase()) >= 0;
+	}
+
+	/**
+	 * AJAX call to grab the list's data
+	 *
+	 * We expect a format like this to be returned:
+	 * <li>{
+	 * <li>  "options": [
+	 * <li>    { value: 123, text: wombo },
+	 * <li>    { value: 124, text: wings },
+	 * <li>    ...
+	 * <li>  ],
+	 * <li> "total" : 2
+	 * <li>}
+	 *
+	 * 'value' and 'text' hashes can be customized through the parameter options
+	 *
+	 * @param ajax
+	 *            object containing data function to create query
+	 * @param callback
+	 * 	(optional) callback function to invoke after request is completed
+	 */
+	function getDataAjax(ajax, callback) {
+		var queryData,
+			url = '',
+			input = getInput(),
+			appender = ajax.url.lastIndexOf('?') === -1 ? '?' : '&';
+
+		var q = ajax.data(input, page, ajax, parameters);
+
+		queryData = serialize(q);
+		url = ajax.url + appender + queryData;
+
+		var postData = ajax.postData ? ajax.postData : null;
+
+		var request = ICIMS.ajax(url, {
+			data: postData,
+			callback: callback,
+			dataType: 'application/json, text/javascript'
+		});
+
+		return request;
+	}
+
+	/**
+	 * Generates a query friendly parameter string given a key:value pair object
+	 */
+	function serialize(obj) {
+		var str = [];
+		for (var p in obj) {
+			if (obj.hasOwnProperty(p)) {
+				str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+			}
+		}
+		return str.join("&");
+	}
+
+	/**
+	 * Parse through the original select list element (list) and return an array of word objects.
+	 *
+	 * A word item contains value, text accessors. Also contains an attr object holding all
+	 * attributes of the original option element.
+	 */
+	function getWordsList(list, legacy) {
+		var wordList = [];
+		for (var i = 0; i < list.options.length; i++) {
+			var option = list.options[i],
+				attributes = ICIMS.getElementAttributes(option),
+				item = {
+					attr: {}
+				};
+
+			item[text] = option[text] || option.innerHTML;
+
+			item[value] = option[value] || '';
+
+			if (option.parentNode.tagName === 'OPTGROUP') {
+				item[parent] = option.parentNode.label;
+				item.parentNode = option.parentNode;
+			}
+
+			for (var key in attributes) {
+				if (attributes.hasOwnProperty(key) && key !== value && key !== text) {
+					item.attr[key] = attributes[key];
+				}
+			}
+
+			if (!legacy || (legacy && item.attr.legacy)) {
+				wordList.push(item);
+			}
+		}
+
+		return wordList;
+	}
+
+	function getLegacyWords() {
+		return _legacyWords;
+	}
+
+	function findWordFromValue(val) {
+		// Attempt to find the word in storage that matches the existing selected option and use that.
+		var allWords = getWords(true);
+		for (var i = 0; i < allWords.length; i++) {
+			if (allWords[i][value] === val || allWords[i][text] === val || (typeof allWords[i].attr !== 'undefined' && allWords[i].attr.dataid === val)) {
+				return allWords[i];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Gets the word out of the matching storage based on dropdown-index attribute
+	 */
+	function getWordFromIndex(i) {
+		if (i < 0) {
+			i = _legacyWords.length + i;
+			return _legacyWords[i];
+		} else {
+			return matches[i];
+		}
+	}
+
+	/**
+	 * @param includeLegacy
+	 * 	If true, concat legacy options to the result
+	 * @returns words
+	 * 	The current JSON array of words stored to be searched through
+	 */
+	function getWords(includeLegacy) {
+		if (includeLegacy) {
+			return _legacyWords.concat(words);
+		} else {
+			return words;
+		}
+	}
+
+	/**
+	 * Set the words to be searched through
+	 *
+	 * @param jsonWords
+	 * 	The JSON array of words to be stored
+	 *
+	 * @returns this
+	 */
+	function setWords(jsonWords) {
+		words = jsonWords;
+		return this;
+	}
+
+	/**
+	 * Add set of JSON array of words to the existing set of stored words
+	 *
+	 * @param jsonWords
+	 * 	The JSON array of words to append to the current set of words
+	 *
+	 * @returns this
+	 */
+	function addWords(jsonWords) {
+		words = words.concat(jsonWords);
+		return this;
+	}
+
+	function setFilter(filterFunction) {
+		filter = filterFunction;
+		return this;
+	}
+
+	function getInput() {
+		return searchBox.value.trim();
+	}
+
+	function setInput(value) {
+		searchBox.value = value;
+	}
+
+	function enable() {
+		enabled = true;
+		ICIMS.removeClass(fakeSelect, 'disabled');
+	}
+
+	function disable() {
+		enabled = false;
+		ICIMS.addClass(fakeSelect, 'disabled');
+	}
+
+	function getAjax() {
+		return ajax;
+	}
+
+	function setAjax(newAjax) {
+		ajax = newAjax;
+		return this;
+	}
+
+	function setPlaceholder(newPlaceholder) {
+		placeholder = newPlaceholder;
+		return this;
+	}
+
+	/****** DOM METHODS ******/
+
+	function updateContainerWidth() {
+		setWidth(container, fakeSelect.offsetWidth);
+		setWidth(searchBox, fakeSelect.clientWidth - 40);
+	}
+
+	function repositionContainer() {
+		ICIMS.removeClass(container, 'bottom');
+		ICIMS.removeAttribute(container.style, 'top');
+		//need to update width before we get the container height
+		updateContainerWidth();
+		var lines = 12;
+		ulList.style.maxHeight = (lines * 2) + 'em';
+		var windowSize = ICIMS.getWindowSize(),
+			containerRect = container.getBoundingClientRect();
+
+		if (isCutOff(windowSize.y)) {
+			// Dropdown won't fit in the space availible?  OK then, shrink it until it DOES fit...
+			while (lines > 2) {
+				lines--;
+				ulList.style.maxHeight = (lines * 2) + 'em';
+				containerRect = container.getBoundingClientRect();
+				if (windowSize.y >= containerRect.bottom) {
+					break;
+				}
+				if (container.offsetTop - container.offsetHeight - fakeSelect.clientHeight > 0) {
+					break;
+				}
+			}
+		}
+
+		if (isOnTop(windowSize.y)) {
+			// Move the dropdown right above the select element.
+			ICIMS.addClass(container, 'bottom');
+			container.style.top = container.offsetTop - container.offsetHeight - fakeSelect.clientHeight + 'px';
+		}
+
+		function isCutOff(windowHeight) {
+			return windowHeight < container.offsetHeight || (windowHeight < containerRect.bottom && containerRect.top * 0.85 < container.offsetHeight);
+		}
+
+		function isOnTop(windowHeight) {
+			var isCutOffBottomClient = windowHeight < containerRect.bottom;
+			var isCutOffTopFrame = container.offsetTop < container.offsetHeight + fakeSelect.clientHeight;
+			var isCutOffTopClient = fakeSelect.getBoundingClientRect().top < container.offsetHeight + fakeSelect.clientHeight;
+			return isCutOffBottomClient && !isCutOffTopFrame && !isCutOffTopClient;
+		}
+	}
+
+	// Create the dropdown menu to replace the original HTML select
+	function createFakeSelect(list) {
+		var fakeSelect = document.createElement('a');
+		fakeSelect.id = list.id + '_icimsDropdown';
+		fakeSelect.className = 'dropdown-select' + (bootstrap ? ' form-control' : '');
+		fakeSelect.setAttribute('aria-expanded', 'false');
+		fakeSelect.setAttribute('tabIndex', '0');
+
+		var ariaLabelledBy = list.getAttribute('aria-labelledby');
+		var ariaLabel = list.getAttribute('aria-label');
+		var labelElement = document.getElementById('label_' + list.getAttribute('id')) || document.querySelector('label[for="' + fakeSelect.id + '"]');
+		if (ariaLabelledBy) {
+			// Use the explicit aria-labelledby if it exists.
+			fakeSelect.setAttribute('aria-labelledby', ariaLabelledBy);
+			list.removeAttribute('aria-labelledby');
+		} else if (ariaLabel) {
+			// Use the explicit aria-label. If exists, set aria-label to the label
+			// and value of the dropdown to satisfy accessibility.
+			fakeSelect.setAttribute('aria-label', ariaLabel + ' ' + placeholder);
+		} else if (labelElement) {
+			// Otherwise check for the existence of a label element. If exists, set
+			// aria-label to the label and value of the dropdown to satisfy accessibility.
+			fakeSelect.setAttribute('aria-label', labelElement.textContent + ' ' + placeholder);
+		} else {
+			// Lastly just use the placeholder by itself.
+			fakeSelect.setAttribute('aria-label', placeholder);
+		}
+
+		var ariaRequired = list.getAttribute('aria-required');
+		if (ariaRequired) {
+			fakeSelect.setAttribute('aria-required', ariaRequired);
+			list.removeAttribute('aria-required');
+		}
+
+		fakeSelect.setAttribute('role', 'combobox');
+
+		addCountryAutoCompleteIfCountryField(list, fakeSelect);
+
+		addStateAutoCompleteIfStateField(list, fakeSelect);
+
+		fakeSelect.tempInput = '';
+
+		insertAfter(list, fakeSelect);
+
+		return fakeSelect;
+	}
+
+	function addCountryAutoCompleteIfCountryField(list, fakeSelect) {
+		if (list.id.includes('PersonProfileFields.AddressCountry')) {
+			fakeSelect.setAttribute('autocomplete', 'country-name')
+		}
+	}
+
+	function addStateAutoCompleteIfStateField(list, fakeSelect) {
+		if (list.id.includes('PersonProfileFields.AddressState')) {
+			fakeSelect.setAttribute('autocomplete', 'address-level1')
+		}
+	}
+
+	// Displays the placeholder or current selection
+	function createSelected(fakeSelect) {
+		var fakeSelected = document.createElement('span');
+		fakeSelected.id = list.id + '_fakeSelected_icimsDropdown';
+		fakeSelected.className = 'dropdown-text';
+		ICIMS.setInnerHtml(fakeSelected, placeholder);
+
+		fakeSelect.appendChild(fakeSelected);
+
+		return fakeSelected;
+	}
+
+	function createArrow(fakeSelect) {
+		var arrowContainer = document.createElement('div');
+		var arrow = document.createElement('i');
+
+		arrowContainer.className = 'dropdown-arrow-container';
+		arrow.className = 'dropdown-arrow';
+
+		arrowContainer.appendChild(arrow);
+		fakeSelect.appendChild(arrowContainer);
+
+		return arrow;
+	}
+
+	// Holds the expanded menu
+	function createContainer(fakeSelect) {
+		var container = document.createElement('div');
+		setWidth(container, fakeSelect.offsetWidth);
+		container.id = fakeSelect.id + '_ctnr';
+		container.className = 'dropdown-container dropdown-invisible' + (bootstrap ? ' bootstrap' : '');
+
+		container.setAttribute('aria-owns', list.id + '_dropdown-results');
+		container.setAttribute('aria-expanded', 'false');
+		insertAfter(fakeSelect, container);
+
+		return container;
+	}
+
+	// Create an input text box for user to search in.
+	function createSearchBox(container) {
+		var searchBox = document.createElement('input');
+		searchBox.type = 'text';
+		searchBox.className = 'dropdown-search';
+		setWidth(searchBox, fakeSelect.clientWidth - 40);
+		searchBox.setAttribute('autocomplete', 'off');
+		searchBox.setAttribute('placeholder', textSearch);
+		searchBox.setAttribute('title', textSearch);
+		searchBox.setAttribute('aria-label', textSearch);
+		searchBox.setAttribute('role', 'combobox');
+
+		container.appendChild(searchBox);
+		createSearchPlaceholder(searchBox);
+
+		if (!search) {
+			searchBox.className += ' dropdown-invisible';
+			searchBox.setAttribute('aria-hidden', 'true');
+		} else {
+			searchBox.setAttribute('aria-autocomplete', 'list');
+			searchBox.setAttribute('aria-controls', list.id + '_dropdown-results');
+		}
+
+		return searchBox;
+
+		//Non HTML5 browsers will need to create a fake placeholder
+		function createSearchPlaceholder(searchBox) {
+			var input = document.createElement('input'),
+				fakePlaceholder;
+			if (!('placeholder' in input)) {
+				fakePlaceholder = document.createElement('span');
+				fakePlaceholder.setAttribute('tabindex', '-1');
+				fakePlaceholder.className = 'dropdown-placeholder fake';
+				if (!search) {
+					fakePlaceholder.className += ' dropdown-invisible';
+				}
+				ICIMS.setInnerHtml(fakePlaceholder, textSearch);
+				searchBox.parentNode.insertBefore(fakePlaceholder, searchBox);
+
+				// When clicking on the placeholder, focus on the searchBox
+				ICIMS.addEvent(fakePlaceholder, 'click', function () {
+					searchBox.focus();
+				});
+
+				// When the searchBox's has text in it, hide the placeholder
+				ICIMS.addEvent(searchBox, 'keyup', function () {
+					if (getInput().length || !search) {
+						ICIMS.addClass(fakePlaceholder, 'dropdown-invisible');
+					} else {
+						ICIMS.removeClass(fakePlaceholder, 'dropdown-invisible');
+					}
+				});
+			}
+		}
+	}
+
+	function updateStatus(statusValue) {
+		updateStatusFunc(statusValue);
+	}
+
+	function debounce(func, timeout = 300) {
+		let timer;
+		return (...args) => {
+			clearTimeout(timer);
+			timer = setTimeout(() => {
+				func.apply(this, args);
+			}, timeout);
+		};
+	}
+
+	// Holds all the available select options
+	function createListContainer(searchBox) {
+		const listContainer = document.createElement('div');
+		listContainer.setAttribute('aria-live', 'polite');
+
+		const ulList = document.createElement('ul');
+		ulList.id = list.id + '_dropdown-results';
+		ulList.className = 'dropdown-results';
+		ulList.setAttribute('role', 'listbox');
+
+		listContainer.appendChild(ulList);
+		insertAfter(searchBox, listContainer);
+
+		return ulList;
+	}
+
+	function createDebounceStatusUpdate() {
+		const statusFunc = (statusValue) => {
+			const statusId = `result-summary_${list.id}`;
+			const statusLabel = document.createElement('div');
+			// explicitly visually hidden see https://web.archive.org/web/20221003214120/https://a11y-guidelines.orange.com/en/articles/autocomplete-component/#feedback-messages
+			statusLabel.setAttribute('style', 'overflow: hidden; display: block; width:0;height:0;');
+			statusLabel.setAttribute('role', 'status');
+			statusLabel.id = `result-summary_${list.id}`;
+			statusLabel.innerHTML = statusValue;
+
+			const currentStatus = document.getElementById(statusId);
+			if (currentStatus) {
+				currentStatus.replaceWith(statusLabel);
+			} else {
+				const listWrapper = ulList.parentNode;
+				listWrapper.appendChild(statusLabel);
+			}
+		}
+		return debounce(statusFunc);
+	}
+
+	// Displays loading indicator that there are more items to display
+	function createLoadingIndicator(ulList) {
+		var loading = document.createElement('div');
+		loading.className = 'dropdown-loading hide';
+		loading.style.width = '0%';
+
+		insertAfter(ulList, loading);
+		return loading;
+	}
+
+	// Helper utility function to insert newNode after referenceNode
+	function insertAfter(referenceNode, newNode) {
+		referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+	}
+
+	function setWidth(element, width) {
+		element.style.width = Math.max(width, 0) + 'px';
+	}
+
+	return pub;
+};
+
+function closeAllDropdowns() {
+	for (var id in ICIMS.dropdowns) {
+		if (ICIMS.dropdowns.hasOwnProperty(id)) {
+			var dropdown = ICIMS.dropdowns[id];
+			dropdown.collapseList();
+		}
+	}
+};
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('icims-utils')) :
+		typeof define === 'function' && define.amd ? define(['icims-utils'], factory) :
+			global.icimsDropdown = factory(global.icimsUtils);
+}(this, (function (ICIMS) {
+	return icimsSearchDropdown;
+})));
+òù5 À      gÈ®jgÈ®jGðëœgüÚ©   ¢    O^partitionKey=%28https%2Cicims.com%29,:https://cdn02.icims.com/a/images.icims.com/content/platform_166.1.1.250219-fe7928151cf-11-0/script/common/icimsDropdown.js necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/2 200 
+content-type: application/javascript
+cache-control: max-age=3419200, public
+last-modified: Wed, 19 Feb 2025 19:07:22 GMT
+accept-ranges: bytes
+date: Wed, 05 Mar 2025 20:04:57 GMT
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: no-referrer-when-downgrade
+x-robots-tag: noindex, nofollow
+expires: Mon, 14 Apr 2025 09:51:38 GMT
+x-cache: Miss from cloudfront
+via: 1.1 d77a44384491c6a449d3e41f615d0cc2.cloudfront.net (CloudFront)
+x-amz-cf-pop: ATL58-P1
+alt-svc: h3=":443"; ma=86400
+x-amz-cf-id: yHm1epjFV8lDqeGsS9wER2BuJm9UXhrGBUndms6okMElgT2pjkITSg==
+server-timing: cdn-upstream-layer;desc="REC",cdn-upstream-dns;dur=0,cdn-upstream-connect;dur=0,cdn-upstream-fbl;dur=5,cdn-cache-miss,cdn-pop;desc="ATL58-P1",cdn-rid;desc="yHm1epjFV8lDqeGsS9wER2BuJm9UXhrGBUndms6okMElgT2pjkITSg==",cdn-downstream-fbl;dur=70
+X-Firefox-Spdy: h2
+ original-response-headers content-type: application/javascript
+cache-control: max-age=3419200, public
+last-modified: Wed, 19 Feb 2025 19:07:22 GMT
+accept-ranges: bytes
+date: Wed, 05 Mar 2025 20:04:57 GMT
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: no-referrer-when-downgrade
+x-robots-tag: noindex, nofollow
+expires: Mon, 14 Apr 2025 09:51:38 GMT
+x-cache: Miss from cloudfront
+via: 1.1 d77a44384491c6a449d3e41f615d0cc2.cloudfront.net (CloudFront)
+x-amz-cf-pop: ATL58-P1
+alt-svc: h3=":443"; ma=86400
+x-amz-cf-id: yHm1epjFV8lDqeGsS9wER2BuJm9UXhrGBUndms6okMElgT2pjkITSg==
+server-timing: cdn-upstream-layer;desc="REC",cdn-upstream-dns;dur=0,cdn-upstream-connect;dur=0,cdn-upstream-fbl;dur=5,cdn-cache-miss,cdn-pop;desc="ATL58-P1",cdn-rid;desc="yHm1epjFV8lDqeGsS9wER2BuJm9UXhrGBUndms6okMElgT2pjkITSg==",cdn-downstream-fbl;dur=70
+X-Firefox-Spdy: h2
+ ctid 2 uncompressed-len 0 net-response-time-onstart 91 net-response-time-onstop 96   ·¯

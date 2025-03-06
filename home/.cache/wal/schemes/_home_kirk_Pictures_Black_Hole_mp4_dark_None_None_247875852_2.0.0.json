@@ -1,0 +1,28 @@
+{
+    "checksum": "8e32a5c979f6a5b73e01ee940e083ac8",
+    "wallpaper": "/home/kirk/Pictures/Black_Hole.mp4",
+    "alpha": "100",
+    "special": {
+        "background": "#020411",
+        "foreground": "#bfc0c3",
+        "cursor": "#bfc0c3"
+    },
+    "colors": {
+        "color0": "#020411",
+        "color1": "#8D7078",
+        "color2": "#285F95",
+        "color3": "#5B6D91",
+        "color4": "#6B94BA",
+        "color5": "#989AAD",
+        "color6": "#9BB2CD",
+        "color7": "#bfc0c3",
+        "color8": "#555768",
+        "color9": "#8D7078",
+        "color10": "#285F95",
+        "color11": "#5B6D91",
+        "color12": "#6B94BA",
+        "color13": "#989AAD",
+        "color14": "#9BB2CD",
+        "color15": "#bfc0c3"
+    }
+}

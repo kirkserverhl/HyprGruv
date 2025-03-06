@@ -1,0 +1,15 @@
+./bool.go
+./counter.go
+./duration.go
+./enum.go
+./error.go
+./generic.go
+./getopt.go
+./int.go
+./list.go
+./option.go
+./set.go
+./signed.go
+./string.go
+./unsigned.go
+./var.go

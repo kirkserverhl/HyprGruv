@@ -1,0 +1,2 @@
+[WARN] - (starship::utils): Executing command "/usr/bin/git" timed out.
+[WARN] - (starship::utils): You can set command_timeout in your config to a higher value to allow longer-running commands to keep executing.

@@ -1,0 +1,28 @@
+{
+    "checksum": "1c1dd9debaff1928e886db79cfbe6a31",
+    "wallpaper": "/home/kirk/wallpaper/arch_logo.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#121313",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#121313",
+        "color1": "#CF2322",
+        "color2": "#699C69",
+        "color3": "#B69146",
+        "color4": "#457E82",
+        "color5": "#468688",
+        "color6": "#D0C5A5",
+        "color7": "#c3c4c4",
+        "color8": "#5a6e6e",
+        "color9": "#CF2322",
+        "color10": "#699C69",
+        "color11": "#B69146",
+        "color12": "#457E82",
+        "color13": "#468688",
+        "color14": "#D0C5A5",
+        "color15": "#c3c4c4"
+    }
+}

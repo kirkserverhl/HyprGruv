@@ -1,0 +1,1559 @@
+Environment variable $XDG_DATA_DIRS not set, ignoring.
+/bin/sh: line 1: /home/kirk/scripts/ags.sh: No such file or directory
+TERM environment variable not set.
+TERM environment variable not set.
+/bin/sh: line 1: waypaper-engine: command not found
+time="2025-03-05T22:44:36-05:00" level=info msg="Using auto-detected launcher command: 'nwg-drawer'"
+WARNING: Progress bar corner radius clamped to half of progress bar height (5)
+/bin/sh: line 1: /home/kirk/.config/hypr/hpyrctl/hyprctl.sh: No such file or directory
+/bin/sh: line 1: /home/kirk/.local/bin/wpaperd: No such file or directory
+/bin/sh: line 1: kde-connect: command not found
+kbuildsycoca6 running...
+waybar: no process found
+waybar: no process found
+ln: failed to create symbolic link '/home/kirk/.local/share/konsole/colors-konsole.colorscheme': File exists
+Environment variable $XDG_DATA_DIRS not set, ignoring.
+WARNING: Could not find theme Gruvbox Plus Dark
+WARNING: Could not find theme Gruvbox-Material-Dark
+The XKEYBOARD keymap compiler (xkbcomp) reports:
+> Warning:          Could not resolve keysym XF86RefreshRateToggle
+> Warning:          Could not resolve keysym XF86Accessibility
+> Warning:          Could not resolve keysym XF86DoNotDisturb
+Errors from xkbcomp are not fatal to the X server
+
+(polkit-gnome-authentication-agent-1:924): Gtk-WARNING **: 22:44:36.353: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+2025/03/05 22:44:36 WARN Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class priority=4 code_file=../gtk/gtk/gtkcssprovider.c code_line=192 code_func=gtk_css_provider_parsing_error glib_domain=Gtk
+time="2025-03-05T22:44:36-05:00" level=info msg="Using style: /home/kirk/.config/nwg-dock-hyprland/style.css\n"
+Cannot register authentication agent: GDBus.Error:org.freedesktop.PolicyKit1.Error.Failed: An authentication agent already exists for the given subject
+The XKEYBOARD keymap compiler (xkbcomp) reports:
+> Warning:          Unsupported maximum keycode 708, clipping.
+>                   X11 cannot support keycodes above 255.
+> Warning:          Could not resolve keysym XF86RefreshRateToggle
+> Warning:          Could not resolve keysym XF86Accessibility
+> Warning:          Could not resolve keysym XF86DoNotDisturb
+Errors from xkbcomp are not fatal to the X server
+[31merror: [0mthere is no "astal" instance runnning
+[31merror: [0mno such file or directory: "[36m/home/kirk/.config/ags/app[0m"
+[35mtip: [0mvalid names are:  "[36mapp.js[0m" "[36mapp.ts[0m" "[36mapp.jsx[0m" "[36mapp.tsx[0m"
+
+(waybar:1166): Gtk-WARNING **: 22:44:36.813: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+Gdk-Message: 22:44:37.299: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:37.313: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:37.451: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:37.468: Unable to load arrow from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+/bin/sh: line 1: /home/kirk/.config/hypr/hpyrctl/hyprctl.sh: No such file or directory
+ln: failed to create symbolic link '/home/kirk/.local/share/konsole/colors-konsole.colorscheme': File exists
+[31merror: [0mthere is no "astal" instance runnning
+[31merror: [0mno such file or directory: "[36m/home/kirk/.config/ags/app[0m"
+[35mtip: [0mvalid names are:  "[36mapp.js[0m" "[36mapp.ts[0m" "[36mapp.jsx[0m" "[36mapp.tsx[0m"
+
+(waybar:1345): Gtk-WARNING **: 22:44:42.562: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+[31merror: [0mthere is no "astal" instance runnning
+[31merror: [0mno such file or directory: "[36m/home/kirk/.config/ags/app[0m"
+[35mtip: [0mvalid names are:  "[36mapp.js[0m" "[36mapp.ts[0m" "[36mapp.jsx[0m" "[36mapp.tsx[0m"
+Gdk-Message: 22:44:45.403: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:45.652: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:45.652: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:45.771: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:45.771: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:46.723: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:46.723: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:46.771: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:46.771: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:46.796: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:46.796: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:46.828: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:47.020: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:47.148: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:47.148: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:47.171: Unable to load arrow from the cursor theme
+Gdk-Message: 22:44:47.171: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:44:47.180: Unable to load arrow from the cursor theme
+Traceback (most recent call last):
+  File "/usr/bin/../lib/kitty/kitty/tab_bar.py", line 490, in load_custom_draw_tab
+    m = runpy.run_path(os.path.join(config_dir, 'tab_bar.py'))
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 254, in _get_code_from_file
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/kitty/tab_bar.py'
+[0.149] Failed to load custom draw_tab function with error: [Errno 2] No such file or directory: '/home/kirk/.config/kitty/tab_bar.py'
+[4.423] [PARSE ERROR] Escape codes to resize text area are not supported
+Gdk-Message: 22:45:24.683: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:24.749: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:24.939: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:25.051: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:25.051: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:25.099: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:25.204: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:25.211: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:25.211: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:25.532: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:25.533: Unable to load hand2 from the cursor theme
+[1769, Main Thread] WARNING: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class: 'glib warning', file /usr/src/debug/firefox/firefox-136.0/toolkit/xre/nsSigHandlers.cpp:201
+
+(firefox:1769): Gtk-WARNING **: 22:45:26.598: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+Gdk-Message: 22:45:26.726: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:27.310: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:27.326: Unable to load arrow from the cursor theme
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+*** BUG ***
+In pixman_region32_init_rect: Invalid rectangle passed
+Set a breakpoint on '_pixman_log_error' to debug
+
+Gdk-Message: 22:45:27.599: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:27.622: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:32.844: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:32.852: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:41.788: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:41.796: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:41.932: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:41.940: Unable to load arrow from the cursor theme
+Gdk-Message: 22:45:41.948: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:45:42.172: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:25.690: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:25.698: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:25.698: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:25.715: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.043: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.051: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.051: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.059: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.059: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.068: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.803: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.811: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.922: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.938: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.938: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.962: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:26.963: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:26.971: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:40.845: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:40.973: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:40.973: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:40.989: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:41.069: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:41.077: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:41.077: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:41.412: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:41.412: Unable to load hand2 from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+Gdk-Message: 22:46:41.981: Unable to load arrow from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+qt.dbus.integration: QDBusConnection: name 'org.freedesktop.UPower' had owner '' but we thought it was ':1.62'
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+Gdk-Message: 22:46:42.645: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:42.661: Unable to load arrow from the cursor theme
+Gdk-Message: 22:46:42.916: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:46:42.949: Unable to load arrow from the cursor theme
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+qt.qpa.wayland: Creating a popup with a parent, QWidgetWindow(0x5b60c73d1450, name="Dolphin#1Window") which does not match the current topmost grabbing popup, QWidgetWindow(0x5b60c7e00f20, name="DolphinContextMenuClassWindow") With some shell surface protocols, this is not allowed. The wayland QPA plugin is currently handling it by setting the parent to the topmost grabbing popup. Note, however, that this may cause positioning errors and popups closing unxpectedly. Please fix the transient parent of the popup.
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+qt.qpa.wayland: Creating a popup with a parent, QWidgetWindow(0x5b60c73d1450, name="Dolphin#1Window") which does not match the current topmost grabbing popup, QWidgetWindow(0x5b60c7e00f20, name="DolphinContextMenuClassWindow") With some shell surface protocols, this is not allowed. The wayland QPA plugin is currently handling it by setting the parent to the topmost grabbing popup. Note, however, that this may cause positioning errors and popups closing unxpectedly. Please fix the transient parent of the popup.
+qt.qpa.wayland: Creating a popup with a parent, QWidgetWindow(0x5b60c73d1450, name="Dolphin#1Window") which does not match the current topmost grabbing popup, QWidgetWindow(0x5b60c7e00f20, name="DolphinContextMenuClassWindow") With some shell surface protocols, this is not allowed. The wayland QPA plugin is currently handling it by setting the parent to the topmost grabbing popup. Note, however, that this may cause positioning errors and popups closing unxpectedly. Please fix the transient parent of the popup.
+kf.kio.widgets: Failed to check which JobView API is supported "The name is not activatable"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+ark.libzip: Failed to read parent modtime "No such file or directory"
+Gdk-Message: 22:47:07.431: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:07.440: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:09.241: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:09.255: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:09.255: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:09.272: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:12.135: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:12.143: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:12.143: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:12.152: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:21.265: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:21.329: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:21.584: Unable to load hand2 from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+Gdk-Message: 22:47:22.189: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:22.203: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:22.204: Unable to load arrow from the cursor theme
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+QThreadStorage: Thread 0x59ccbb5b21d0 exited after QThreadStorage 14 destroyed
+Gdk-Message: 22:47:48.883: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:48.891: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:48.891: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:48.899: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:48.899: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:48.908: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:51.100: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:51.116: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:51.220: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:51.228: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:58.917: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:58.924: Unable to load arrow from the cursor theme
+Gdk-Message: 22:47:58.925: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:47:58.933: Unable to load arrow from the cursor theme
+Gdk-Message: 22:48:00.829: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:48:00.845: Unable to load arrow from the cursor theme
+Gdk-Message: 22:48:00.845: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:48:00.877: Unable to load arrow from the cursor theme
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+info(gtk_systemd_cgroup): transient scope created cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-4861.scope
+info(gtk): cgroup isolation enabled base=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-4861.scope
+info(grid): loaded OpenGL 4.6
+info(font_shared_grid_set): font regular: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold: ShureTechMono Nerd Font
+info(font_shared_grid_set): font italic: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold_italic: ShureTechMono Nerd Font
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=4909
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-4861.scope/surfaces/56E31E269ED0.scope
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=ps
+warning(stream): unimplemented OSC command: change_window_icon
+info(font_codepoint_resolver): found codepoint 0x1F56E in fallback face=Font Awesome 6 Free Solid
+info(grid): reallocating GPU buffer old=38 new=3063
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=56e31e269ed0
+
+(process:4861): Gtk-CRITICAL **: 22:48:27.856: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+QThreadStorage: Thread 0x5beb9c3fb1d0 exited after QThreadStorage 14 destroyed
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+info(gtk_systemd_cgroup): transient scope created cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-5083.scope
+info(gtk): cgroup isolation enabled base=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-5083.scope
+info(grid): loaded OpenGL 4.6
+info(font_shared_grid_set): font regular: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold: ShureTechMono Nerd Font
+info(font_shared_grid_set): font italic: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold_italic: ShureTechMono Nerd Font
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=5129
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-5083.scope/surfaces/5D521DF0C280.scope
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=5d521df0c280
+
+(process:5083): Gtk-CRITICAL **: 22:48:32.496: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+[5231, Main Thread] WARNING: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class: 'glib warning', file /usr/src/debug/firefox/firefox-136.0/toolkit/xre/nsSigHandlers.cpp:201
+
+(firefox:5231): Gtk-WARNING **: 22:48:33.261: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+Gdk-Message: 22:48:53.506: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:48:53.659: Unable to load arrow from the cursor theme
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+info(gtk_systemd_cgroup): transient scope created cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-5309.scope
+info(gtk): cgroup isolation enabled base=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-5309.scope
+info(grid): loaded OpenGL 4.6
+info(font_shared_grid_set): font regular: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold: ShureTechMono Nerd Font
+info(font_shared_grid_set): font italic: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold_italic: ShureTechMono Nerd Font
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=5359
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-5309.scope/surfaces/60AF58055BC0.scope
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(grid): reallocating GPU buffer old=38 new=105
+info(grid): reallocating GPU buffer old=105 new=165
+info(grid): reallocating GPU buffer old=165 new=255
+info(stream): OSC 1 (change icon) received and ignored icon=#
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+Gdk-Message: 22:48:59.147: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:48:59.155: Unable to load arrow from the cursor theme
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=255 new=390
+info(grid): reallocating GPU buffer old=390 new=593
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(stream): OSC 1 (change icon) received and ignored icon=rm
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=nvim
+warning(stream): unimplemented OSC command: change_window_icon
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+info(grid): reallocating GPU buffer old=593 new=3063
+Gdk-Message: 22:49:25.787: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:49:25.795: Unable to load arrow from the cursor theme
+Gdk-Message: 22:49:25.795: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:49:25.812: Unable to load arrow from the cursor theme
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 32, 94 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+sudo: timed out reading password
+sudo: a password is required
+ -> exit status 1
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+Gdk-Message: 22:51:09.853: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:09.869: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:17.181: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:17.189: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:18.037: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:18.053: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:18.062: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:18.069: Unable to load arrow from the cursor theme
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=60af58055bc0
+
+(process:5309): Gtk-CRITICAL **: 22:51:26.592: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+Gdk-Message: 22:51:27.551: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:27.558: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:27.568: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.582: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.598: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.598: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.614: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.614: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.622: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.622: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.650: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.650: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.694: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.814: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.838: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.838: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.886: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.886: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:28.926: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:28.926: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.206: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.206: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.246: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.246: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.279: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.279: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.347: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.347: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.438: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.438: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.614: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.614: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:29.750: Unable to load arrow from the cursor theme
+Gdk-Message: 22:51:29.751: Unable to load hand2 from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+Gdk-Message: 22:51:30.351: Unable to load arrow from the cursor theme
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+This plugin supports grabbing the mouse only for popup windows
+This plugin supports grabbing the mouse only for popup windows
+kf.kio.filewidgets.kfilewidgets: Your 'templates' folder is set to your home folder. This is probably an error in your settings. Ignoring it. You can change the setting by running `systemsettings kcm_desktoppaths`. 
+kf.kio.widgets: Failed to check which JobView API is supported "The name is not activatable"
+qt.qpa.wayland: Creating a popup with a parent, QWidgetWindow(0x605d796465b0, name="Dolphin#1Window") which does not match the current topmost grabbing popup, QWidgetWindow(0x605d79f2a400, name="DolphinContextMenuClassWindow") With some shell surface protocols, this is not allowed. The wayland QPA plugin is currently handling it by setting the parent to the topmost grabbing popup. Note, however, that this may cause positioning errors and popups closing unxpectedly. Please fix the transient parent of the popup.
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+Gdk-Message: 22:51:52.937: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:51:52.969: Unable to load arrow from the cursor theme
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+Gdk-Message: 22:52:11.987: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:12.003: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:12.483: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:12.499: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:12.669: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:12.684: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:15.843: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:15.859: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:15.859: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:15.875: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:15.876: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:15.883: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:29.221: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:29.229: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:29.229: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:29.237: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:29.269: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:29.285: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:30.773: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:30.781: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:30.870: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:30.877: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:31.701: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:31.717: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:31.717: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:31.735: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:32.741: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:32.765: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:32.877: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:32.893: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:32.893: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:32.909: Unable to load arrow from the cursor theme
+Gdk-Message: 22:52:40.230: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:52:40.238: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:00.920: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:00.928: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:00.928: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:00.960: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:00.960: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:00.992: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:17.665: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:17.673: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:17.889: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:17.905: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:42.609: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:42.618: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:45.545: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:45.553: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:45.593: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:45.609: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:45.625: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:45.634: Unable to load arrow from the cursor theme
+QThreadStorage: Thread 0x5b60c6cb81d0 exited after QThreadStorage 14 destroyed
+Gdk-Message: 22:53:52.586: Unable to load hand2 from the cursor theme
+[9024, Main Thread] WARNING: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class: 'glib warning', file /usr/src/debug/firefox/firefox-136.0/toolkit/xre/nsSigHandlers.cpp:201
+
+(firefox:9024): Gtk-WARNING **: 22:53:52.867: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+Gdk-Message: 22:53:53.013: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:53.025: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:53.050: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:53.418: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:53.426: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:53.434: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:53.442: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:53.554: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:53:53.562: Unable to load arrow from the cursor theme
+Gdk-Message: 22:53:53.578: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:01.106: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:01.122: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:01.122: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:01.138: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:01.138: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:01.170: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:04.779: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:04.786: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:04.971: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:05.003: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:08.747: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:08.755: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:08.827: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:08.843: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:08.843: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:08.861: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:08.891: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:08.899: Unable to load arrow from the cursor theme
+Gdk-Message: 22:54:15.395: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:54:15.403: Unable to load arrow from the cursor theme
+sudo: timed out reading password
+sudo: a password is required
+ -> exit status 1
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+info(gtk_systemd_cgroup): transient scope created cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-9142.scope
+info(gtk): cgroup isolation enabled base=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-9142.scope
+info(grid): loaded OpenGL 4.6
+info(font_shared_grid_set): font regular: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold: ShureTechMono Nerd Font
+info(font_shared_grid_set): font italic: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold_italic: ShureTechMono Nerd Font
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=9190
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-9142.scope/surfaces/63FFF4D8F260.scope
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(gtk): currentTab
+info(grid): reallocating GPU buffer old=38 new=65
+info(grid): reallocating GPU buffer old=65 new=105
+info(grid): reallocating GPU buffer old=105 new=165
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(grid): reallocating GPU buffer old=165 new=255
+info(io_handler): BELL
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+Gdk-Message: 22:56:16.788: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:16.812: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:29.087: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:29.093: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:29.582: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:29.589: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:29.645: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:29.653: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:29.653: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:29.661: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:29.661: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:29.671: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:37.206: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:37.246: Unable to load arrow from the cursor theme
+Gdk-Message: 22:56:37.358: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:56:37.382: Unable to load arrow from the cursor theme
+Gdk-Message: 22:57:36.243: Unable to load hand2 from the cursor theme
+Gdk-Message: 22:57:36.252: Unable to load arrow from the cursor theme
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(grid): reallocating GPU buffer old=255 new=390
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(io_handler): BELL
+info(stream): OSC 1 (change icon) received and ignored icon=ssh-keygen
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=390 new=593
+warning(gtk): unimplemented action=apprt.action.Action.Key.secure_input
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=593 new=897
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+warning(gtk): unimplemented action=apprt.action.Action.Key.secure_input
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(stream): OSC 1 (change icon) received and ignored icon=cat
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+warning(gtk): currentTab
+warning(gtk): currentTab
+Gdk-Message: 23:00:41.294: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:00:41.301: Unable to load arrow from the cursor theme
+Gdk-Message: 23:00:41.302: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:00:41.310: Unable to load arrow from the cursor theme
+Gdk-Message: 23:00:41.310: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:00:41.317: Unable to load arrow from the cursor theme
+Gdk-Message: 23:00:41.318: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:00:41.326: Unable to load arrow from the cursor theme
+Gdk-Message: 23:01:58.956: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:01:58.980: Unable to load arrow from the cursor theme
+Gdk-Message: 23:01:59.004: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:01:59.052: Unable to load arrow from the cursor theme
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(stream): OSC 1 (change icon) received and ignored icon=eval
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(stream): OSC 1 (change icon) received and ignored icon=cat
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+Gdk-Message: 23:03:21.761: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:03:21.770: Unable to load arrow from the cursor theme
+Gdk-Message: 23:03:39.154: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:03:39.162: Unable to load arrow from the cursor theme
+info(stream): OSC 1 (change icon) received and ignored icon=yazi
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=897 new=1353
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+info(grid): reallocating GPU buffer old=1353 new=4602
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 29, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+Gdk-Message: 23:04:26.965: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:26.981: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:27.094: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:27.110: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:27.197: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:27.222: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:31.638: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:31.646: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:31.654: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:31.694: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:31.902: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:34.775: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:34.856: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:35.143: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:35.159: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:35.198: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:35.230: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:35.654: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:35.782: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:35.846: Unable to load arrow from the cursor theme
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 35, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+Gdk-Message: 23:04:58.168: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:58.176: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:58.176: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:58.184: Unable to load arrow from the cursor theme
+Gdk-Message: 23:04:58.184: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:04:58.192: Unable to load arrow from the cursor theme
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=ls
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(io_handler): BELL
+warning(gtk): currentTab
+warning(gtk): currentTab
+warning(gtk): currentTab
+warning(gtk): currentTab
+qt.qpa.wayland: Creating a popup with a parent, QWidgetWindow(0x605d796465b0, name="Dolphin#1Window") which does not match the current topmost grabbing popup, QWidgetWindow(0x605d79f24690, name="DolphinContextMenuClassWindow") With some shell surface protocols, this is not allowed. The wayland QPA plugin is currently handling it by setting the parent to the topmost grabbing popup. Note, however, that this may cause positioning errors and popups closing unxpectedly. Please fix the transient parent of the popup.
+kf.notifications: No event config could be found for event id "BellVisible" under notifyrc file for app "dolphin"
+kf.notifications: No event config could be found for event id "BellVisible" under notifyrc file for app "dolphin"
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.config.core: couldn't lock local file
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=ls
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+sh: line 1: /home/kirk/scripts/hypridle.sh: No such file or directory
+sh: line 1: /home/kirk/scripts/hypridle.sh: No such file or directory
+info(stream): OSC 1 (change icon) received and ignored icon=yazi
+warning(stream): unimplemented OSC command: change_window_icon
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+opening db: create cache dir: mkdir /home/kirk/.cache: file exists
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: No ksycoca database available! Tried running kbuildsycoca6 ?
+kf.service.services: KApplicationTrader: mimeType "inode/directory" not found
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: No ksycoca database available! Tried running kbuildsycoca6 ?
+kf.service.services: KApplicationTrader: mimeType "inode/directory" not found
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+[ERROR glean_core::database] Failed to record metric 'extensions.counters.event_page_idle_result/suspend' into metrics: Error { kind: Rkv(IoError(Os { code: 2, kind: NotFound, message: "No such file or directory" })) }
+opening db: create cache dir: mkdir /home/kirk/.cache: file exists
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+opening db: create cache dir: mkdir /home/kirk/.cache: file exists
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+opening db: create cache dir: mkdir /home/kirk/.cache: file exists
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: No ksycoca database available! Tried running kbuildsycoca6 ?
+kf.service.services: KApplicationTrader: mimeType "inode/directory" not found
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: No ksycoca database available! Tried running kbuildsycoca6 ?
+kf.service.services: KApplicationTrader: mimeType "inode/directory" not found
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+opening db: create cache dir: mkdir /home/kirk/.cache: file exists
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+org.kde.dolphin: could not save viewproperties to extended attributes for dir  "/home/kirk/.local/share/dolphin/view_properties/global" error: 1
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+opening db: create cache dir: mkdir /home/kirk/.cache: file exists
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: No ksycoca database available! Tried running kbuildsycoca6 ?
+kf.service.services: KApplicationTrader: mimeType "inode/directory" not found
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: No ksycoca database available! Tried running kbuildsycoca6 ?
+kf.service.services: KApplicationTrader: mimeType "inode/directory" not found
+qt.qpa.wayland: Creating a popup with a parent, QWidgetWindow(0x605d796465b0, name="Dolphin#1Window") which does not match the current topmost grabbing popup, QWidgetWindow(0x605d7a09c2d0, name="DolphinContextMenuClassWindow") With some shell surface protocols, this is not allowed. The wayland QPA plugin is currently handling it by setting the parent to the topmost grabbing popup. Note, however, that this may cause positioning errors and popups closing unxpectedly. Please fix the transient parent of the popup.
+Gdk-Message: 23:08:00.279: Unable to load hand2 from the cursor theme
+sh: line 1: /home/kirk/scripts/filemanager.sh: No such file or directory
+sh: line 1: /home/kirk/scripts/filemanager.sh: No such file or directory
+sh: line 1: /home/kirk/scripts/filemanager.sh: No such file or directory
+Gdk-Message: 23:08:02.167: Unable to load arrow from the cursor theme
+Gdk-Message: 23:08:02.463: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:08:02.479: Unable to load arrow from the cursor theme
+Gdk-Message: 23:08:02.719: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:08:03.095: Unable to load arrow from the cursor theme
+Gdk-Message: 23:08:03.096: Unable to load hand2 from the cursor theme
+sh: line 1: /home/kirk/scripts/filemanager.sh: No such file or directory
+Gdk-Message: 23:08:03.488: Unable to load arrow from the cursor theme
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=63fff4d8f260
+
+(process:9142): Gtk-CRITICAL **: 23:08:04.762: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+sh: line 1: /home/kirk/scripts/hypridle.sh: No such file or directory
+sh: line 1: /home/kirk/scripts/hypridle.sh: No such file or directory
+QFont::fromString: Invalid description '(empty)'
+QFont::fromString: Invalid description '(empty)'
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+kf.bookmarks: "Unable to save bookmarks in /home/kirk/.local/share/user-places.xbel. File reported the following error-code: 5."
+kf.bookmarks: "Unable to save bookmarks in /home/kirk/.local/share/user-places.xbel. File reported the following error-code: 5."
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+org.kde.dolphin: Could not load default global viewproperties
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+org.kde.dolphin: Could not create fake directory to store metadata
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+org.kde.dolphin: Unknown class  ""  in session saved data!
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+kf.service.sycoca: Couldn't create "/home/kirk/.cache"
+Could not open sycoca database, you must run kbuildsycoca first!
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+Failed to create /home/kirk/.cache/mesa_shader_cache for shader cache (No such file or directory)---disabling.
+Failed to create /home/kirk/.cache/mesa_shader_cache_db for shader cache (No such file or directory)---disabling.
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+org.kde.dolphin: Could not load default global viewproperties
+org.kde.dolphin: Could not create fake directory to store metadata
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.config.core: couldn't lock local file
+kf.config.core: couldn't lock local file
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+kf.kio.gui: Cannot read information about filesystem under path "/home/kirk/.cache/thumbnails/"
+Failed to create /home/kirk/.cache/mesa_shader_cache for shader cache (No such file or directory)---disabling.
+Failed to create /home/kirk/.cache/mesa_shader_cache_db for shader cache (No such file or directory)---disabling.
+QGestureManager::deliverEvent: could not find the target for gesture
+QGestureManager::deliverEvent: could not find the target for gesture
+Gdk-Message: 23:08:21.193: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:08:21.209: Unable to load arrow from the cursor theme
+Gdk-Message: 23:08:21.209: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:08:21.353: Unable to load arrow from the cursor theme
+Gdk-Message: 23:08:21.353: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:08:21.386: Unable to load arrow from the cursor theme
+Gdk-Message: 23:08:23.257: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:08:23.265: Unable to load arrow from the cursor theme
+Gdk-Message: 23:09:34.031: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:09:34.040: Unable to load arrow from the cursor theme
+Gdk-Message: 23:09:47.984: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:09:47.992: Unable to load arrow from the cursor theme
+Gdk-Message: 23:09:47.992: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:09:48.002: Unable to load arrow from the cursor theme
+Gdk-Message: 23:09:48.136: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:09:48.153: Unable to load arrow from the cursor theme
+Gdk-Message: 23:09:51.209: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:09:51.217: Unable to load arrow from the cursor theme
+QThreadStorage: Thread 0x605d78eca1d0 exited after QThreadStorage 14 destroyed
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+info(gtk_systemd_cgroup): transient scope created cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope
+info(gtk): cgroup isolation enabled base=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope
+info(grid): loaded OpenGL 4.6
+info(font_shared_grid_set): font regular: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold: ShureTechMono Nerd Font
+info(font_shared_grid_set): font italic: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold_italic: ShureTechMono Nerd Font
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=34837
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope/surfaces/5B908BDA5AF0.scope
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=65
+info(grid): reallocating GPU buffer old=65 new=105
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=cd
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=..yprgruv/setup
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(grid): reallocating GPU buffer old=105 new=165
+info(stream): OSC 1 (change icon) received and ignored icon=..
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(grid): reallocating GPU buffer old=165 new=255
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+Gdk-Message: 23:13:32.525: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:13:32.534: Unable to load arrow from the cursor theme
+Gdk-Message: 23:13:32.565: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:13:32.575: Unable to load arrow from the cursor theme
+Gdk-Message: 23:13:32.637: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:13:32.645: Unable to load arrow from the cursor theme
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+
+(process:35060): GLib-GIO-WARNING **: 23:14:01.936: Your application did not unregister from D-Bus before destruction. Consider using g_application_run().
+info(grid): loaded OpenGL 4.6
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=35093
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope/surfaces/5B908C697B30.scope
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=yazi
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=38 new=105
+info(grid): reallocating GPU buffer old=105 new=593
+info(grid): reallocating GPU buffer old=255 new=593
+info(grid): reallocating GPU buffer old=593 new=897
+info(grid): reallocating GPU buffer old=897 new=1353
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(grid): reallocating GPU buffer old=1353 new=2037
+info(grid): reallocating GPU buffer old=2037 new=3063
+Gdk-Message: 23:14:48.092: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:14:48.101: Unable to load arrow from the cursor theme
+Gdk-Message: 23:14:48.652: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:14:48.661: Unable to load arrow from the cursor theme
+Gdk-Message: 23:14:48.813: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:14:48.836: Unable to load arrow from the cursor theme
+Gdk-Message: 23:14:48.853: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:14:48.861: Unable to load arrow from the cursor theme
+Gdk-Message: 23:14:48.893: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:14:48.909: Unable to load arrow from the cursor theme
+Gdk-Message: 23:14:49.812: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:14:50.020: Unable to load arrow from the cursor theme
+Gdk-Message: 23:14:50.020: Unable to load hand2 from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+Gdk-Message: 23:14:50.676: Unable to load arrow from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+kf.kio.filewidgets.kfilewidgets: Your 'templates' folder is set to your home folder. This is probably an error in your settings. Ignoring it. You can change the setting by running `systemsettings kcm_desktoppaths`. 
+kf.kio.widgets: Failed to check which JobView API is supported "The name is not activatable"
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+"Could not rename file /home/kirk/.hyprgruv/home/.local/share/Trash."
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+
+(process:37855): GLib-GIO-WARNING **: 23:16:13.765: Your application did not unregister from D-Bus before destruction. Consider using g_application_run().
+info(grid): loaded OpenGL 4.6
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=37888
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope/surfaces/5B908C96EF50.scope
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=yazi
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=38 new=105
+info(grid): reallocating GPU buffer old=105 new=2037
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+info(grid): reallocating GPU buffer old=2037 new=6911
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+Gdk-Message: 23:17:33.037: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:33.052: Unable to load arrow from the cursor theme
+info(io_handler): BELL
+info(font_codepoint_resolver): found codepoint 0x2718 in fallback face=FreeSerif
+Gdk-Message: 23:17:47.030: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:47.038: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:50.158: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:50.166: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:50.166: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:50.174: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:50.223: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:50.230: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:50.238: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:50.246: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:52.078: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:52.086: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:52.110: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:17:52.190: Unable to load arrow from the cursor theme
+Gdk-Message: 23:17:52.199: Unable to load arrow from the cursor theme
+info(font_codepoint_resolver): found codepoint 0x7684 in fallback face=Noto Traditional Nushu Regular
+info(font_codepoint_resolver): found codepoint 0xFF0C in fallback face=Noto Sans Mongolian Regular
+info(font_codepoint_resolver): found codepoint 0x4E00 in fallback face=Noto Serif Tangut Regular
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(stream): ignoring CSI t with unimplemented parameter: ESC [  { 8, 60, 106 } t
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): unimplemented action=apprt.action.Action.Key.color_change
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=5b908c96ef50
+
+(process:34789): Gtk-CRITICAL **: 23:20:48.658: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+
+(process:38712): GLib-GIO-WARNING **: 23:20:49.281: Your application did not unregister from D-Bus before destruction. Consider using g_application_run().
+info(grid): loaded OpenGL 4.6
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=38745
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope/surfaces/5B908C931AC0.scope
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(grid): reallocating GPU buffer old=38 new=165
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon

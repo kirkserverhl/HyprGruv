@@ -1,0 +1,28 @@
+{
+    "checksum": "a680434b751a140e65175778f8d0cc98",
+    "wallpaper": "/home/kirk/wallpaper/waves.webp",
+    "alpha": "100",
+    "special": {
+        "background": "#111313",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#111313",
+        "color1": "#A59D89",
+        "color2": "#84A598",
+        "color3": "#BCAD92",
+        "color4": "#C7B799",
+        "color5": "#D3C5A3",
+        "color6": "#DACBA6",
+        "color7": "#c3c4c4",
+        "color8": "#5a6e6e",
+        "color9": "#A59D89",
+        "color10": "#84A598",
+        "color11": "#BCAD92",
+        "color12": "#C7B799",
+        "color13": "#D3C5A3",
+        "color14": "#DACBA6",
+        "color15": "#c3c4c4"
+    }
+}

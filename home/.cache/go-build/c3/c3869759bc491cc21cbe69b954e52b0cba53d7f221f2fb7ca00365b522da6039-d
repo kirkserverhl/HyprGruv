@@ -1,0 +1,11 @@
+./aur.go
+./commands.go
+./data.go
+./display.go
+./draw.go
+./pacman.go
+./pkgbuild.go
+./rss.go
+./setup.go
+./spinner.go
+./ui.go

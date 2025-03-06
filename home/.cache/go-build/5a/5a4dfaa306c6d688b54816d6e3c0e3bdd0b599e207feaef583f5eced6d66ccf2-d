@@ -1,0 +1,8 @@
+./domain.go
+./gotext.go
+./helper.go
+./locale.go
+./mo.go
+./po.go
+./translation.go
+./translator.go

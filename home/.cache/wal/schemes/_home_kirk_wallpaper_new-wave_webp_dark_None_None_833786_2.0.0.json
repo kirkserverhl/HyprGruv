@@ -1,0 +1,28 @@
+{
+    "checksum": "fe05234f8610338fd14c08cb31edc597",
+    "wallpaper": "/home/kirk/wallpaper/new-wave.webp",
+    "alpha": "100",
+    "special": {
+        "background": "#111212",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#111212",
+        "color1": "#3F847C",
+        "color2": "#699370",
+        "color3": "#918B77",
+        "color4": "#F4C146",
+        "color5": "#568D86",
+        "color6": "#A8A28C",
+        "color7": "#c3c3c3",
+        "color8": "#6e5959",
+        "color9": "#3F847C",
+        "color10": "#699370",
+        "color11": "#918B77",
+        "color12": "#F4C146",
+        "color13": "#568D86",
+        "color14": "#A8A28C",
+        "color15": "#c3c3c3"
+    }
+}

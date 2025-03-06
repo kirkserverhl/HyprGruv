@@ -1,0 +1,28 @@
+{
+    "checksum": "9fc60c14859f4c5eb6482cf2ace65ec1",
+    "wallpaper": "/home/kirk/wallpaper/Patterns.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0a0c0d",
+        "foreground": "#c1c2c2",
+        "cursor": "#c1c2c2"
+    },
+    "colors": {
+        "color0": "#0a0c0d",
+        "color1": "#808071",
+        "color2": "#898979",
+        "color3": "#A7A794",
+        "color4": "#C1BEA9",
+        "color5": "#CECCB5",
+        "color6": "#DDDBC4",
+        "color7": "#c1c2c2",
+        "color8": "#566969",
+        "color9": "#808071",
+        "color10": "#898979",
+        "color11": "#A7A794",
+        "color12": "#C1BEA9",
+        "color13": "#CECCB5",
+        "color14": "#DDDBC4",
+        "color15": "#c1c2c2"
+    }
+}

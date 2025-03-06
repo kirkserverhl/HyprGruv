@@ -1,0 +1,28 @@
+{
+    "checksum": "4393938b98bdf83cb6a48ff90ac699a8",
+    "wallpaper": "/home/kirk/.dotfiles/home/wallpaper/car.png",
+    "alpha": "100",
+    "special": {
+        "background": "#10141c",
+        "foreground": "#c3c4c6",
+        "cursor": "#c3c4c6"
+    },
+    "colors": {
+        "color0": "#10141c",
+        "color1": "#494857",
+        "color2": "#4A576C",
+        "color3": "#5C5A6C",
+        "color4": "#A5706A",
+        "color5": "#566D8D",
+        "color6": "#637A9D",
+        "color7": "#c3c4c6",
+        "color8": "#5c6471",
+        "color9": "#494857",
+        "color10": "#4A576C",
+        "color11": "#5C5A6C",
+        "color12": "#A5706A",
+        "color13": "#566D8D",
+        "color14": "#637A9D",
+        "color15": "#c3c4c6"
+    }
+}

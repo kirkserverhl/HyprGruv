@@ -1,0 +1,28 @@
+{
+    "checksum": "bae4322c850a5312f433c2be29971a8f",
+    "wallpaper": "/home/kirk/wallpaper/ferris_wheel.webp",
+    "alpha": "100",
+    "special": {
+        "background": "#101212",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#101212",
+        "color1": "#4C7D82",
+        "color2": "#B06786",
+        "color3": "#C87994",
+        "color4": "#3E8686",
+        "color5": "#488587",
+        "color6": "#729A90",
+        "color7": "#c3c3c3",
+        "color8": "#596d6d",
+        "color9": "#4C7D82",
+        "color10": "#B06786",
+        "color11": "#C87994",
+        "color12": "#3E8686",
+        "color13": "#488587",
+        "color14": "#729A90",
+        "color15": "#c3c3c3"
+    }
+}

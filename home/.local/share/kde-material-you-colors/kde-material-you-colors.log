@@ -1,0 +1,44 @@
+2025-03-05 22:06:00.657 [I] main: main: ###### STARTED NEW SESSION v1.10.0 ######
+2025-03-05 22:06:00.657 [D] main: main: Installed in /usr/lib/python3.13/site-packages/kde_material_you_colors
+2025-03-05 22:06:00.658 [D] config: eval_conf: Config "color": empty, using fallback: None
+2025-03-05 22:06:00.658 [D] config: eval_conf: Config "custom_colors_list": empty, using fallback: None
+2025-03-05 22:06:00.658 [D] config: eval_conf: Config "darker_window_list": empty, using fallback: None
+2025-03-05 22:06:00.658 [D] main: main: {'light': False, 'file': '/home/kirk/.cache/wallpaper-path', 'monitor': 0, 'ncolor': 0, 'iconslight': 'Papirus-Colors', 'iconsdark': 'Papirus-Colors-Dark', 'pywal': True, 'pywal_light': False, 'light_blend_multiplier': 1, 'dark_blend_multiplier': 1, 'on_change_hook': 'kde-material-you-colors --stop', 'sierra_breeze_buttons_color': False, 'disable_konsole': False, 'titlebar_opacity': 100, 'titlebar_opacity_dark': 100, 'toolbar_opacity': 100, 'toolbar_opacity_dark': 100, 'konsole_opacity': 84, 'konsole_opacity_dark': 55, 'konsole_blur': True, 'color': None, 'klassy_windeco_outline': False, 'custom_colors_list': None, 'darker_window_list': None, 'use_startup_delay': False, 'startup_delay': 0, 'plasma_follows_scheme': False, 'pywal_follows_scheme': False, 'main_loop_delay': 1.0, 'screenshot_delay': 900.0, 'once_after_change': False, 'pause_mode': False, 'screenshot_only_mode': False, 'scheme_variant': 6, 'chroma_multiplier': 1.25, 'tone_multiplier': 0.4, 'qdbus_executable': None, 'manual_fetch': False, 'fetch_colors': False}
+2025-03-05 22:06:00.660 [I] main: main: Wallpaper: file (image): /home/kirk/wallpaper/alley_gruv.jpg
+2025-03-05 22:06:00.934 [I] m3_scheme_utils: get_color_schemes: Best colors: #bac28c #809274 #d9cc92 #c3aa7d #be4d3c #e78959 #896542
+2025-03-05 22:06:00.934 [I] m3_scheme_utils: get_color_schemes: Using seed: #bac28c
+2025-03-05 22:06:01.240 [I] plasma_utils: apply_color_schemes: Successfully applied the color scheme MaterialYouDark to your current Plasma session
+2025-03-05 22:06:01.404 [I] plasma_utils: set_icons: Icon theme changed to Papirus-Colors-Dark: virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+2025-03-05 22:06:01.404 [I] kwin_utils: klassy_update_decoration_color_cache: Updating Klassy decoration color cache
+2025-03-05 22:06:01.405 [I] konsole_utils: get_default_profile: Found default profile 'Profile 1.profile'
+2025-03-05 22:06:01.405 [I] konsole_utils: create_profile: Konsole profile 'Profile 1' doesn't exist, creating it
+2025-03-05 22:06:01.406 [I] pywal_utils: apply_schemes: Setting pywal colors...
+2025-03-05 22:06:01.406 [D] pywal_sequences_timeout: send: Sending sequences to /dev/pts/1 /dev/pts/0
+2025-03-05 22:06:01.407 [I] pywal_sequences_timeout: send: Set terminal colors.
+2025-03-05 22:06:01.407 [I] export: every: Reading system templates from: /usr/lib/python3.13/site-packages/pywal/templates
+2025-03-05 22:06:01.407 [I] export: every: Reading user templates from: /home/kirk/.config/wal/templates
+2025-03-05 22:06:01.416 [I] export: every: Exported all files.
+2025-03-05 22:06:01.416 [I] export: every: Exported all user files to /home/kirk/.cache/wal
+2025-03-05 22:06:01.443 [I] reload: env: Reloaded environment.
+2025-03-05 22:06:01.443 [I] kwin_utils: reload: Reloading KWin

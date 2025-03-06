@@ -1,0 +1,48 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "zayronxio@gmail.com",
+                "Name": "zayronxio"
+            }
+        ],
+        "Category": "",
+        "ServiceTypes": [
+            "Plasma/LookAndFeel"
+        ],
+        "Description": "original theme with floating panels",
+        "Id": "Alba.P6",
+        "License": "GPLv3+",
+        "Name": "Alba Plama 6",
+        "Website": "https://store.kde.org/p/2140454"
+        },
+        "X-KPackage-Dependencies": [
+        "kns://plasmoids.knsrc/api.kde-look.org/2238525",
+        "kns://colorschemes.knsrc/api.kde-look.org/2083780",
+        "kns://plasma-themes.knsrc/api.kde-look.org/1980674",
+        "kns://plasma-themes.knsrc/api.kde-look.org/2001728",
+        "kns://lookandfeel.knsrc/api.kde-look.org/2220545",
+        "kns://plasmoids.knsrc/api.kde-look.org/2175475",
+        "kns://plasmoids.knsrc/api.kde-look.org/2136302",
+        "kns://plasmoids.knsrc/api.kde-look.org/2183258",
+        "kns://plasmoids.knsrc/api.kde-look.org/2139890",
+        "kns://plasmoids.knsrc/api.kde-look.org/2142681",
+        "kns://plasmoids.knsrc/api.kde-look.org/2161461",
+        "kns://plasmoids.knsrc/api.kde-look.org/2179317",
+        "kns://aurorae.knsrc/api.kde-look.org/2091545",
+        "kns://plasmoids.knsrc/api.kde-look.org/2136307",
+        "kns://plasmoids.knsrc/api.kde-look.org/2137418",
+        "kns://wallpaper.knsrc/api.kde-look.org/2099238",
+        "kns://plasmoids.knsrc/api.kde-look.org/2136299",
+        "kns://wallpaper.knsrc/api.kde-look.org/2106013",
+        "kns://xcursor.knsrc/api.kde-look.org/2083798",
+        "kns://icons.knsrc/api.kde-look.org/1990795",
+        "kns://plasmoids.knsrc/api.kde-look.org/2189637",
+        "kns://plasmoids.knsrc/api.kde-look.org/2186442",
+        "kns://plasmoids.knsrc/api.kde-look.org/2199942",
+        "kns://sddmtheme.knsrc/api.kde-look.org/2221986",
+        "kns://plasmoids.knsrc/api.kde-look.org/2228598",
+        "kns://plasmoids.knsrc/api.kde-look.org/2230382"
+         ]
+}

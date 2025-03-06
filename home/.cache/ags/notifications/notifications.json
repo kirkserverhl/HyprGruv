@@ -1,0 +1,12 @@
+[
+  {
+    "actions": [],
+    "appIcon": "",
+    "appName": "notify-send",
+    "body": "Your PC is about to shut down",
+    "id": 1,
+    "summary": "Critical Battery",
+    "time": 1741193306,
+    "urgency": "critical"
+  }
+]

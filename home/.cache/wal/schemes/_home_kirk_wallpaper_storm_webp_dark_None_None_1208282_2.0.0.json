@@ -1,0 +1,28 @@
+{
+    "checksum": "c8f899fae4ee82c766b37e341ede9643",
+    "wallpaper": "/home/kirk/wallpaper/storm.webp",
+    "alpha": "100",
+    "special": {
+        "background": "#101313",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#101313",
+        "color1": "#488586",
+        "color2": "#749C92",
+        "color3": "#9C9987",
+        "color4": "#87A596",
+        "color5": "#B9AC92",
+        "color6": "#D4C5A3",
+        "color7": "#c3c4c4",
+        "color8": "#596e6e",
+        "color9": "#488586",
+        "color10": "#749C92",
+        "color11": "#9C9987",
+        "color12": "#87A596",
+        "color13": "#B9AC92",
+        "color14": "#D4C5A3",
+        "color15": "#c3c4c4"
+    }
+}

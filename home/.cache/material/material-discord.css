@@ -1,0 +1,42 @@
+@import url(https://capnkitten.github.io/BetterDiscord/Themes/Material-Discord/css/source.css);
+* {
+  transition: color 0.2s ease-in-out;
+  transition-property: background-color, color;
+}
+
+.theme-dark {
+  --main-color: #0e141c;
+  --main-alt: #161c24;
+  --message-color: #080f16;
+  --message-color-hover: #1a2028;
+  --message-color-alt: #1a2028;
+  --attachment-color: #0e141c;
+  --accent-hue: 214deg;
+  --accent-saturation: 100%;
+  --accent-lightness: 81%;
+  --accent-text-color: #003259;
+  --main-textarea-color: #242a33;
+  --main-textarea-color-alt: #2f353e;
+  --status-picker-color: #242a33;
+  --tooltip-color: #1a2028;
+  --popout-color: #1a2028;
+  --popout-color-alt: #080f16;
+  --popout-header-border: #dde3ee;
+  --separator-color: #3f4753;
+  --sidebar-panel-color: #080f16;
+  --server-color: #161c24;
+}
+
+[class*=botTag_] svg path {
+  fill: #003259;
+}
+
+[class*=repliedTextContent_] {
+  padding: 0px 5px 0px 5px !important;
+}
+
+[class*=userPopoutOuter_] {
+  border-radius: 16px !important;
+}
+
+/*# sourceMappingURL=material-discord.css.map */

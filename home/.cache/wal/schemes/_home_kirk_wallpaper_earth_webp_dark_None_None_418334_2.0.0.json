@@ -1,0 +1,28 @@
+{
+    "checksum": "ec916cb5a67f50545f37808229d7f090",
+    "wallpaper": "/home/kirk/wallpaper/earth.webp",
+    "alpha": "100",
+    "special": {
+        "background": "#121313",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#121313",
+        "color1": "#749E92",
+        "color2": "#86A994",
+        "color3": "#ADAF94",
+        "color4": "#C7B899",
+        "color5": "#AEC692",
+        "color6": "#DFD6AC",
+        "color7": "#c3c4c4",
+        "color8": "#5a6e6e",
+        "color9": "#749E92",
+        "color10": "#86A994",
+        "color11": "#ADAF94",
+        "color12": "#C7B899",
+        "color13": "#AEC692",
+        "color14": "#DFD6AC",
+        "color15": "#c3c4c4"
+    }
+}

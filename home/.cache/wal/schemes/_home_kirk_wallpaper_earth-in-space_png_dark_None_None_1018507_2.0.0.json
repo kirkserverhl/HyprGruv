@@ -1,0 +1,28 @@
+{
+    "checksum": "bc5900107264645089c55f6b0af3151f",
+    "wallpaper": "/home/kirk/wallpaper/earth-in-space.png",
+    "alpha": "100",
+    "special": {
+        "background": "#10141b",
+        "foreground": "#c3c4c6",
+        "cursor": "#c3c4c6"
+    },
+    "colors": {
+        "color0": "#10141b",
+        "color1": "#80807F",
+        "color2": "#797C83",
+        "color3": "#7E8187",
+        "color4": "#8B8E92",
+        "color5": "#A5A8AE",
+        "color6": "#BABEC5",
+        "color7": "#c3c4c6",
+        "color8": "#5c6570",
+        "color9": "#80807F",
+        "color10": "#797C83",
+        "color11": "#7E8187",
+        "color12": "#8B8E92",
+        "color13": "#A5A8AE",
+        "color14": "#BABEC5",
+        "color15": "#c3c4c6"
+    }
+}

@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbel version="1.0"
+      xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"
+      xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
+>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main.zip" added="2025-03-05T13:49:55.829886Z" modified="2025-03-05T23:07:24.002763Z" visited="2025-03-05T13:49:55.829889Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T23:07:24.002759Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper" added="2025-03-05T14:10:00.670451Z" modified="2025-03-05T14:10:00.670461Z" visited="2025-03-05T14:10:00.670454Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="waypaper" exec="&apos;waypaper %u&apos;" modified="2025-03-05T14:10:00.670457Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads" added="2025-03-05T14:39:10.672000Z" modified="2025-03-05T14:39:10.672000Z" visited="2025-03-05T14:39:10.672000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="" exec="dolphin %f" modified="2025-03-05T14:39:10.672000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/NvChad-2.5.zip" added="2025-03-05T14:54:05.854023Z" modified="2025-03-05T14:54:25.825000Z" visited="2025-03-05T14:54:25.825000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T14:54:06.140422Z" count="2"/>
+          <bookmark:application name="" exec="dolphin %f" modified="2025-03-05T14:54:25.825000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///usr/share/icons" added="2025-03-05T15:17:45.185000Z" modified="2025-03-05T15:17:55.815000Z" visited="2025-03-05T15:17:55.815000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="open-as-root-kde5old" exec="dolphin %f" modified="2025-03-05T15:17:55.815000Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/dotfiles-main.zip" added="2025-03-05T15:50:02.567869Z" modified="2025-03-05T17:19:44.115235Z" visited="2025-03-05T15:50:02.567873Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T17:19:44.115230Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk" added="2025-03-05T15:50:59.768000Z" modified="2025-03-05T16:59:09.506000Z" visited="2025-03-05T16:59:09.506000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="" exec="dolphin %f" modified="2025-03-05T16:59:09.506000Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/a.zip" added="2025-03-05T15:53:56.688763Z" modified="2025-03-05T15:53:56.975184Z" visited="2025-03-05T15:53:56.688768Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T15:53:56.975179Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/btop.zip" added="2025-03-05T17:30:48.925210Z" modified="2025-03-05T17:30:49.225007Z" visited="2025-03-05T17:30:48.925213Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T17:30:49.225003Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/zsh-syntax-highlighting-20250305T184043Z-001.zip" added="2025-03-05T18:41:03.642200Z" modified="2025-03-05T18:41:03.933279Z" visited="2025-03-05T18:41:03.642203Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:41:03.933274Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/alley_gruv.jpg" added="2025-03-05T18:57:29.568449Z" modified="2025-03-06T03:14:35.607195Z" visited="2025-03-05T18:57:29.568452Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-06T03:14:35.607140Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/gruvbox_stripes_arch.png" added="2025-03-05T18:57:39.169192Z" modified="2025-03-05T18:57:39.169200Z" visited="2025-03-05T18:57:39.169194Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169197Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/battle.png" added="2025-03-05T18:57:39.169206Z" modified="2025-03-05T18:57:39.169215Z" visited="2025-03-05T18:57:39.169209Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169212Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/at_the_coffeshop.png" added="2025-03-05T18:57:39.169220Z" modified="2025-03-05T18:57:39.169229Z" visited="2025-03-05T18:57:39.169223Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169226Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/guitar.png" added="2025-03-05T18:57:39.169235Z" modified="2025-03-05T18:57:39.169243Z" visited="2025-03-05T18:57:39.169237Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169240Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/Minimal_Squares.png" added="2025-03-05T18:57:39.169249Z" modified="2025-03-05T18:57:39.169258Z" visited="2025-03-05T18:57:39.169252Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169254Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/default.jpeg" added="2025-03-05T18:57:39.169263Z" modified="2025-03-05T18:57:39.169271Z" visited="2025-03-05T18:57:39.169266Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169268Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/Lady.png" added="2025-03-05T18:57:39.169278Z" modified="2025-03-05T18:57:39.169286Z" visited="2025-03-05T18:57:39.169280Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169282Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/port.png" added="2025-03-05T18:57:39.169290Z" modified="2025-03-05T18:57:39.169298Z" visited="2025-03-05T18:57:39.169293Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169296Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/Patterns.png" added="2025-03-05T18:57:39.169303Z" modified="2025-03-05T18:57:39.169311Z" visited="2025-03-05T18:57:39.169305Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169308Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/earth-in-space.png" added="2025-03-05T18:57:39.169314Z" modified="2025-03-05T18:57:39.169322Z" visited="2025-03-05T18:57:39.169317Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169320Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/skull.png" added="2025-03-05T18:57:39.169328Z" modified="2025-03-05T18:57:39.169337Z" visited="2025-03-05T18:57:39.169330Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169333Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/space_odyssey.jpg" added="2025-03-05T18:57:39.169343Z" modified="2025-03-05T18:57:39.169351Z" visited="2025-03-05T18:57:39.169345Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169348Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/shuttle.png" added="2025-03-05T18:57:39.169357Z" modified="2025-03-05T18:57:39.169365Z" visited="2025-03-05T18:57:39.169359Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169362Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/space_walk.png" added="2025-03-05T18:57:39.169371Z" modified="2025-03-05T18:57:39.169379Z" visited="2025-03-05T18:57:39.169373Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169376Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/triangle.jpg" added="2025-03-05T18:57:39.169384Z" modified="2025-03-05T18:57:39.169392Z" visited="2025-03-05T18:57:39.169387Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169390Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/endeavor.webp" added="2025-03-05T18:57:39.169398Z" modified="2025-03-05T18:57:39.169406Z" visited="2025-03-05T18:57:39.169401Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/webp"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169403Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/fractal.webp" added="2025-03-05T18:57:39.169412Z" modified="2025-03-05T18:57:39.169420Z" visited="2025-03-05T18:57:39.169414Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/webp"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169417Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/car.png" added="2025-03-05T18:57:39.169426Z" modified="2025-03-05T18:57:39.169434Z" visited="2025-03-05T18:57:39.169429Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169431Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/wallpaper/gruv_waves.webp" added="2025-03-05T18:57:39.169441Z" modified="2025-03-05T18:57:39.169449Z" visited="2025-03-05T18:57:39.169443Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/webp"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T18:57:39.169446Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/init.lua-master.zip" added="2025-03-05T19:10:15.068785Z" modified="2025-03-05T19:10:15.401616Z" visited="2025-03-05T19:10:15.068788Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T19:10:15.401612Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-%20Resume-%202024.docx.pdf" added="2025-03-05T19:19:40.944157Z" modified="2025-03-05T19:19:55.555000Z" visited="2025-03-05T19:19:55.555000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T19:19:40.944166Z" count="1"/>
+          <bookmark:application name="" exec="dolphin %f" modified="2025-03-05T19:19:55.555000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Documents/Kirk%20Bass-%20Resume-%202024.docx.pdf" added="2025-03-05T19:22:32.398650Z" modified="2025-03-05T21:37:16.638520Z" visited="2025-03-05T19:22:32.398653Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T21:37:16.638516Z" count="19"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-%20CL-%202.7.25.pdf" added="2025-03-05T19:27:44.050288Z" modified="2025-03-05T20:01:27.584000Z" visited="2025-03-05T20:01:27.584000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T20:01:24.360644Z" count="2"/>
+          <bookmark:application name="" exec="dolphin %f" modified="2025-03-05T20:01:27.584000Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Documents/Kirk%20Bass-%20CL-%202.7.25.rtf" added="2025-03-05T19:28:40.467708Z" modified="2025-03-05T20:08:28.196039Z" visited="2025-03-05T19:28:40.467711Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/rtf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T20:08:28.196035Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-CL-Lenovo.pdf" added="2025-03-05T19:28:59.708565Z" modified="2025-03-05T19:28:59.708573Z" visited="2025-03-05T19:28:59.708567Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T19:28:59.708570Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-Resume-%202.2025.pdf" added="2025-03-05T19:37:57.840455Z" modified="2025-03-05T19:37:57.840470Z" visited="2025-03-05T19:37:57.840459Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T19:37:57.840464Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-%20CL-IQVIA.pdf" added="2025-03-05T20:02:01.318169Z" modified="2025-03-05T20:02:01.318179Z" visited="2025-03-05T20:02:01.318171Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T20:02:01.318175Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-%20Cover%20Letter.pdf" added="2025-03-05T20:08:18.371346Z" modified="2025-03-05T21:38:59.382350Z" visited="2025-03-05T20:08:18.371351Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T21:38:59.382345Z" count="8"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-%20Cover%20Letter-1.pdf" added="2025-03-05T20:15:16.576238Z" modified="2025-03-05T20:16:10.638567Z" visited="2025-03-05T20:15:16.576241Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T20:16:10.638561Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/Kirk%20Bass-%20Cover%20Letter-2.pdf" added="2025-03-05T20:18:55.993698Z" modified="2025-03-05T21:38:06.692000Z" visited="2025-03-05T21:38:06.692000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/pdf"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-05T21:38:02.554854Z" count="6"/>
+          <bookmark:application name="" exec="dolphin %f" modified="2025-03-05T21:38:06.692000Z" count="6"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main/setup/assets/environment" added="2025-03-05T23:04:33.537000Z" modified="2025-03-05T23:04:33.537000Z" visited="2025-03-05T23:04:33.537000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kate" exec="kate -b %u" modified="2025-03-05T23:04:33.537000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main/setup/assets/hyprland.conf" added="2025-03-05T23:04:42.556000Z" modified="2025-03-05T23:04:42.556000Z" visited="2025-03-05T23:04:42.556000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kate" exec="kate -b %u" modified="2025-03-05T23:04:42.556000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main/setup/assets/Xsetup" added="2025-03-05T23:05:02.510000Z" modified="2025-03-05T23:05:02.510000Z" visited="2025-03-05T23:05:02.510000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-shellscript"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kwrite" exec="kwrite %u" modified="2025-03-05T23:05:02.510000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///etc/sddm.conf.d/sddm.conf" added="2025-03-05T23:32:20.555000Z" modified="2025-03-05T23:32:20.555000Z" visited="2025-03-05T23:32:20.555000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kwrite" exec="kwrite %u" modified="2025-03-05T23:32:20.555000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main/assets/sddm.conf.d/default.conf" added="2025-03-05T23:32:57.295000Z" modified="2025-03-05T23:32:57.295000Z" visited="2025-03-05T23:32:57.295000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kate" exec="kate -b %u" modified="2025-03-05T23:32:57.295000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main/setup/setup.sh" added="2025-03-05T23:42:14.195000Z" modified="2025-03-05T23:42:14.195000Z" visited="2025-03-05T23:42:14.195000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-shellscript"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kwrite" exec="kwrite %u" modified="2025-03-05T23:42:14.195000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="https://store.kde.org/p/2138046" added="2025-03-06T00:30:55.627000Z" modified="2025-03-06T00:30:55.627000Z" visited="2025-03-06T00:30:55.627000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="firefox" exec="/usr/lib/firefox/firefox %u" modified="2025-03-06T00:30:55.627000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/gtk.zip" added="2025-03-06T00:54:01.246233Z" modified="2025-03-06T00:54:01.538772Z" visited="2025-03-06T00:54:01.246236Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-06T00:54:01.538768Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/HyprGruv1-main/setup/hyprchroma.sh" added="2025-03-06T03:07:41.336000Z" modified="2025-03-06T03:07:41.336000Z" visited="2025-03-06T03:07:41.336000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-shellscript"/>
+        <bookmark:applications>
+          <bookmark:application name="org.kde.kate" exec="kate -b %u" modified="2025-03-06T03:07:41.336000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/kirk/Downloads/lazy-20250306T034622Z-001.zip" added="2025-03-06T03:46:36.957750Z" modified="2025-03-06T03:46:53.861000Z" visited="2025-03-06T03:46:53.861000Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2025-03-06T03:46:37.240179Z" count="2"/>
+          <bookmark:application name="xarchiver" exec="xarchiver %f" modified="2025-03-06T03:46:53.861000Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+</xbel>

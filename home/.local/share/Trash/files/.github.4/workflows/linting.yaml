@@ -1,0 +1,76 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  mdlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: xt0rted/markdownlint-problem-matcher@v3
+
+      - run: npm install -g markdownlint-cli
+
+      # disabled checks:
+      # - MD013/line-length
+      # - MD033/no-inline-html
+      # - MD034/no-bare-urls
+      # - MD036/no-emphasis-as-heading
+      # - MD041/first-line-heading/first-line-h1
+      - run: |
+          markdownlint --version
+
+          # List files to lint
+          ls *.md **/*.md
+
+          markdownlint \
+            --ignore '**/CHANGELOG.md' \
+            --disable MD013 MD033 MD034 MD036 MD041 -- \
+            *.md **/*.md
+
+  zshlint:
+    name: ZSH Lint
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [zsh-noexec, zsh-zcompile]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes zsh
+
+      - name: "run lint (${{ matrix.task }})"
+        run: |
+          case "${{ matrix.task }}" in
+            zsh-noexec)
+              find . -name '*.zsh' -type f -print0 \
+                | xargs -0 -n1 -P4 zsh -n
+              ;;
+            zsh-zcompile)
+              find . -name '*.zsh' -type f \
+                -exec zsh -fc "zcompile {}" \;
+              ;;
+            *)
+              echo "ERROR: unknown task ${{ matrix.task }}" >&2
+              exit 1
+              ;;
+          esac

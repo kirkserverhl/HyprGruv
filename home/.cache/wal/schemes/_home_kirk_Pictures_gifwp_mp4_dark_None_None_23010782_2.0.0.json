@@ -1,0 +1,28 @@
+{
+    "checksum": "3436ed54618c4a98e570087d6f9446ac",
+    "wallpaper": "/home/kirk/Pictures/gifwp.mp4",
+    "alpha": "100",
+    "special": {
+        "background": "#150a07",
+        "foreground": "#c4c1c1",
+        "cursor": "#c4c1c1"
+    },
+    "colors": {
+        "color0": "#150a07",
+        "color1": "#BC9367",
+        "color2": "#7A7588",
+        "color3": "#867B89",
+        "color4": "#9B9298",
+        "color5": "#D2AF91",
+        "color6": "#E2CFB1",
+        "color7": "#c4c1c1",
+        "color8": "#6b5c57",
+        "color9": "#BC9367",
+        "color10": "#7A7588",
+        "color11": "#867B89",
+        "color12": "#9B9298",
+        "color13": "#D2AF91",
+        "color14": "#E2CFB1",
+        "color15": "#c4c1c1"
+    }
+}

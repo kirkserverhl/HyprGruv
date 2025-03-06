@@ -1,0 +1,28 @@
+{
+    "checksum": "ec78b90a9c31cc6501744ca23310d190",
+    "wallpaper": "/home/kirk/wallpaper/shuttle.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0E1318",
+        "foreground": "#c2c4c5",
+        "cursor": "#c2c4c5"
+    },
+    "colors": {
+        "color0": "#0E1318",
+        "color1": "#6C7269",
+        "color2": "#7C8375",
+        "color3": "#888A7A",
+        "color4": "#A7A992",
+        "color5": "#C0BFA3",
+        "color6": "#D6D5B4",
+        "color7": "#c2c4c5",
+        "color8": "#5a646f",
+        "color9": "#6C7269",
+        "color10": "#7C8375",
+        "color11": "#888A7A",
+        "color12": "#A7A992",
+        "color13": "#C0BFA3",
+        "color14": "#D6D5B4",
+        "color15": "#c2c4c5"
+    }
+}

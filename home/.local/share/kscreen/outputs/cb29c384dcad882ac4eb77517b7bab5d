@@ -1,0 +1,19 @@
+{
+    "id": "cb29c384dcad882ac4eb77517b7bab5d",
+    "metadata": {
+        "fullname": "xrandr-LG Electronics-LG FULL HD-103MXTC4F409",
+        "name": "DisplayPort-0"
+    },
+    "mode": {
+        "refresh": 60,
+        "size": {
+            "height": 1080,
+            "width": 1920
+        }
+    },
+    "overscan": 0,
+    "rgbrange": 0,
+    "rotation": 1,
+    "scale": 1,
+    "vrrpolicy": 2
+}
