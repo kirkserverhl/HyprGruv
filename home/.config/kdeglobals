@@ -133,7 +133,7 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [DirSelect Dialog]
-DirSelectDialog Size=834,578
+DirSelectDialog Size=872,570
 History Items[$e]=file:$HOME/wallpaper,file:$HOME/wallpaper
 
 [General]
