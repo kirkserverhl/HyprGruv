@@ -247,11 +247,3 @@ export FZF_DEFAULT_OPTS=" --layout=reverse --inline-info --height=80%"
 # End of .zshrc
 # ----------------------------------------------------------
 
-# alias vim='vim'
-# alias jel1="sudo mount.cifs //192.168.0.105/jel1 /mnt/jel1 -o username=kirk,password=123456"
-# alias jel2="sudo mount.cifs //192.168.0.105/jel2 /mnt/jel2 -o username=kirk,password=123456"
-# alias jel3="sudo mount.cifs //192.168.0.105/jel3 /mnt/jel3 -o username=kirk,password=123456"
-# alias jel="~/scripts/mount_jel.sh"
-# alias newkey='sudo rm -fr /etc/pacman.d/gnupg  && pacman-key --init && pacman-key --populate archlinux'
-# alias fgg="figlet -f ~/.fonts/Graffiti.flf"
-# COMPLETION_WAITING_DOTS="true"
