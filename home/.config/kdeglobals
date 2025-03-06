@@ -149,9 +149,13 @@ menuFont=Hurmit Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 smallestReadableFont=ShureTechMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 toolBarFont=ShureTechMono Nerd Font,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
+[Icons]
+Theme=Gruvbox-Plus-Dark
+
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
 ShowDeleteCommand=false
+widgetStyle=qt6ct-style
 
 [KFileDialog Settings]
 Allow Expansion=false

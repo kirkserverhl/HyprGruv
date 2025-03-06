@@ -1557,3 +1557,448 @@ warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_comma
 warning(stream): unimplemented OSC command: end_of_command
 info(stream): OSC 1 (change icon) received and ignored icon=git
 warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=165 new=390
+info(grid): reallocating GPU buffer old=390 new=593
+info(grid): reallocating GPU buffer old=593 new=897
+info(grid): reallocating GPU buffer old=897 new=1353
+info(grid): reallocating GPU buffer old=1353 new=2037
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+Gdk-Message: 23:21:12.051: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:12.058: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:12.059: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:12.067: Unable to load arrow from the cursor theme
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=2037 new=4602
+info(grid): reallocating GPU buffer old=4602 new=6911
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+Gdk-Message: 23:21:43.876: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:43.948: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:43.948: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:44.133: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:46.733: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:46.749: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:46.821: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:46.845: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:49.285: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:49.301: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:49.301: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:49.333: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:49.333: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:49.357: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:55.917: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:55.933: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:56.037: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:56.069: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:56.126: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:59.381: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:59.397: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:59.397: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:59.414: Unable to load arrow from the cursor theme
+Gdk-Message: 23:21:59.414: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:21:59.431: Unable to load arrow from the cursor theme
+Gdk-Message: 23:22:03.830: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:22:03.861: Unable to load arrow from the cursor theme
+Gdk-Message: 23:22:07.030: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:22:07.048: Unable to load arrow from the cursor theme
+Gdk-Message: 23:22:07.048: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:22:07.048: Unable to load arrow from the cursor theme
+Gdk-Message: 23:22:07.048: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:22:07.054: Unable to load arrow from the cursor theme
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(io_handler): BELL
+info(io_handler): BELL
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = null } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+warning(gtk): unimplemented action=apprt.action.Action.Key.secure_input
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 128 } }
+warning(stream): unimplemented OSC command: end_of_command
+warning(gtk): unimplemented action=apprt.action.Action.Key.secure_input
+warning(gtk): currentTab
+warning(gtk): currentTab
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+Gdk-Message: 23:23:22.067: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:22.083: Unable to load arrow from the cursor theme
+Gdk-Message: 23:23:22.267: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:22.307: Unable to load arrow from the cursor theme
+Gdk-Message: 23:23:32.779: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:32.795: Unable to load arrow from the cursor theme
+Gdk-Message: 23:23:32.795: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:32.803: Unable to load arrow from the cursor theme
+Gdk-Message: 23:23:32.836: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:32.843: Unable to load arrow from the cursor theme
+Gdk-Message: 23:23:40.540: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:40.548: Unable to load arrow from the cursor theme
+Gdk-Message: 23:23:40.548: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:23:40.556: Unable to load arrow from the cursor theme
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+Gdk-Message: 23:24:25.319: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:24:25.336: Unable to load arrow from the cursor theme
+Gdk-Message: 23:24:25.512: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:24:25.519: Unable to load arrow from the cursor theme
+Gdk-Message: 23:24:25.535: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:24:25.543: Unable to load arrow from the cursor theme
+Gdk-Message: 23:24:30.704: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:24:30.712: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:34.764: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:34.780: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:35.077: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:35.084: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:35.084: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:35.100: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:38.020: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:38.036: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:38.188: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:38.212: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:40.316: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:40.340: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:40.493: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:40.501: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:41.830: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:41.836: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:42.061: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:42.197: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:42.197: Unable to load hand2 from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+Gdk-Message: 23:25:42.901: Unable to load arrow from the cursor theme
+Adding a KHamburgerMenu directly to a QMenu. This will look odd. Use addToMenu() instead.
+Adding a KHamburgerMenu directly to a QMenu. This will look odd. Use addToMenu() instead.
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+Gdk-Message: 23:25:46.197: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:46.205: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:46.205: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:46.213: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:46.213: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:46.230: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:46.341: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:46.549: Unable to load arrow from the cursor theme
+Gdk-Message: 23:25:46.765: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:25:46.933: Unable to load arrow from the cursor theme
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=5b908bda5af0
+
+(process:34789): Gtk-CRITICAL **: 23:26:15.040: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+info(grid): reallocating GPU buffer old=593 new=897
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=5b908c697b30
+
+(process:34789): Gtk-CRITICAL **: 23:26:16.094: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+QThreadStorage: Thread 0x57d2899701d0 exited after QThreadStorage 14 destroyed
+Gdk-Message: 23:26:18.256: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:18.455: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:18.456: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:18.599: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:18.599: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:18.632: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:18.633: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:19.453: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:19.455: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:19.495: Unable to load arrow from the cursor theme
+time="2025-03-05T23:26:21-05:00" level=info msg=">>> Loading preferences"
+time="2025-03-05T23:26:21-05:00" level=info msg="lang: en_US"
+time="2025-03-05T23:26:21-05:00" level=info msg=">>> Loading basic lang from '/usr/share/nwg-look/langs/en_US.json'"
+time="2025-03-05T23:26:21-05:00" level=info msg=">>> Reading gsettings"
+time="2025-03-05T23:26:21-05:00" level=info msg="gtk-theme: Gruvbox-Dark"
+time="2025-03-05T23:26:21-05:00" level=info msg="icon-theme: Gruvbox-Plus-Dark"
+time="2025-03-05T23:26:21-05:00" level=info msg="font-name: ShureTechMono Nerd Font 12"
+time="2025-03-05T23:26:21-05:00" level=info msg="cursor-theme: Simp1e-Gruvbox-Light"
+time="2025-03-05T23:26:21-05:00" level=info msg="cursor-size: 24"
+time="2025-03-05T23:26:21-05:00" level=info msg="toolbar-style: both-horiz"
+time="2025-03-05T23:26:21-05:00" level=info msg="toolbar-icons-size: large"
+time="2025-03-05T23:26:21-05:00" level=info msg="font-hinting: slight"
+time="2025-03-05T23:26:21-05:00" level=info msg="font-antialiasing: grayscale"
+time="2025-03-05T23:26:21-05:00" level=info msg="font-rgba-order: rgb"
+time="2025-03-05T23:26:21-05:00" level=info msg="text-scaling-factor: 1"
+time="2025-03-05T23:26:21-05:00" level=info msg="color-scheme: prefer-dark"
+time="2025-03-05T23:26:21-05:00" level=info msg="event-sounds: true"
+time="2025-03-05T23:26:21-05:00" level=info msg="input-feedback-sounds: false"
+
+(nwg-look:40857): Gtk-WARNING **: 23:26:21.109: Theme parsing error: gtk.css:7:2: Invalid name of pseudo-class
+time="2025-03-05T23:26:21-05:00" level=info msg=">>> Parsing original /home/kirk/.config/gtk-3.0/settings.ini"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Applying gsettings"
+time="2025-03-05T23:26:28-05:00" level=info msg=">> org.gnome.desktop.interface"
+time="2025-03-05T23:26:28-05:00" level=info msg="gtk-theme: Gruvbox-Dark OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="icon-theme: Gruvbox-Plus-Dark OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="cursor-theme: Simp1e-Gruvbox-Light OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="cursor-size: 24 OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="font-name: ShureTechMono Nerd Font 12 OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="font-hinting: slight OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="font-antialiasing: grayscale OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="font-rgba-order: rgb OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="text-scaling-factor: 1 OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="toolbar-style: both-horiz OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="toolbar-icons-size: large OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="color-scheme: prefer-dark OK"
+time="2025-03-05T23:26:28-05:00" level=info msg=">> org.gnome.desktop.sound"
+time="2025-03-05T23:26:28-05:00" level=info msg="event-sounds: true OK"
+time="2025-03-05T23:26:28-05:00" level=info msg="input-feedback-sounds: false OK"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Backing up gsettings to /home/kirk/.local/share/nwg-look"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Exporting /home/kirk/.config/gtk-3.0/settings.ini"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Exporting /home/kirk/.gtkrc-2.0"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Exporting /home/kirk/.icons/default/index.theme"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Exporting /home/kirk/.config/xsettingsd/xsettingsd.conf"
+time="2025-03-05T23:26:28-05:00" level=info msg=">>> Symlinking files in /home/kirk/.config/gtk-4.0"
+Gdk-Message: 23:26:28.968: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:28.992: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:28.992: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:29.017: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:29.018: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:29.025: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:30.008: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:30.136: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:30.304: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:31.036: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:31.048: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:31.080: Unable to load arrow from the cursor theme
+Configuration path: "/home/kirk/.config/qt5ct"
+Shared QSS paths: ("/home/kirk/.local/share/qt5ct/qss", "/usr/local/share/qt5ct/qss", "/usr/share/qt5ct/qss")
+Shared color scheme paths: ("/home/kirk/.local/share/qt5ct/colors", "/usr/local/share/qt5ct/colors", "/usr/share/qt5ct/colors")
+Gdk-Message: 23:26:39.953: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:39.969: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:40.258: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:40.265: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:40.265: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:40.293: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:40.293: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:40.293: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:40.293: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:40.305: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:40.305: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:40.809: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:40.809: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:41.502: Unable to load arrow from the cursor theme
+Gdk-Message: 23:26:41.528: Unable to load hand2 from the cursor theme
+Gdk-Message: 23:26:41.553: Unable to load arrow from the cursor theme
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+Configuration path: "/home/kirk/.config/qt6ct"
+Shared QSS paths: QList("/home/kirk/.local/share/qt6ct/qss", "/usr/local/share/qt6ct/qss", "/usr/share/qt6ct/qss")
+Shared color scheme paths: QList("/home/kirk/.local/share/qt6ct/colors", "/home/kirk/.local/share/color-schemes", "/usr/local/share/qt6ct/colors", "/usr/local/share/color-schemes", "/usr/share/qt6ct/colors", "/usr/share/color-schemes")
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+
+(process:41151): GLib-GIO-WARNING **: 23:26:49.667: Your application did not unregister from D-Bus before destruction. Consider using g_application_run().
+info(grid): loaded OpenGL 4.6
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=41182
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-34789.scope/surfaces/5B908C697B30.scope
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(grid): reallocating GPU buffer old=38 new=165
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=5b908c697b30
+
+(process:34789): Gtk-CRITICAL **: 23:26:51.658: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+warning(gtk): gtkPageRemoved
+info(io_exec): pty fd closed, read thread exiting
+info(surface): surface closed addr=5b908c931ac0
+
+(process:34789): Gtk-CRITICAL **: 23:26:55.284: gtk_widget_unparent: assertion 'GTK_IS_WIDGET (widget)' failed
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::CheckBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::RadioButtonPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::HeaderPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ItemViewPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MessageBoxLabelPelette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TabBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::LabelPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::GroupBoxPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::MenuBarPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::TextLineEditPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint) const
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+The cached device pixel ratio value was stale on window update.  Please file a QTBUG which explains how to reproduce.
+QThreadStorage: Thread 0x63cac1a311d0 exited after QThreadStorage 14 destroyed
+QThreadStorage: Thread 0x5dbc1af961d0 exited after QThreadStorage 14 destroyed
+info: ghostty version=1.1.2-arch
+info: ghostty build optimize=ReleaseFast
+info: runtime=apprt.Runtime.gtk
+info: font_backend=font.main.Backend.fontconfig_freetype
+info: dependency harfbuzz=10.4.0
+info: dependency fontconfig=21600
+info: renderer=renderer.OpenGL
+info: libxev backend=main.Backend.io_uring
+info(os): setlocale from env result=en_US.UTF-8
+info(gtk): GTK version build=4.16.12 runtime=4.16.12
+info: reading configuration file path=/home/kirk/.config/ghostty/config
+info(config): default shell source=env value=/usr/bin/zsh
+warning(gtk): setting GDK_DEBUG=gl-no-fractional
+warning(gtk): setting GDK_DISABLE=gles-api,color-mgmt,vulkan
+warning(gtk): setting GSK_RENDERER=opengl
+Unrecognized value "color-mgmt". Try GDK_DISABLE=help
+info(gtk_systemd_cgroup): transient scope created cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-41857.scope
+info(gtk): cgroup isolation enabled base=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-41857.scope
+info(grid): loaded OpenGL 4.6
+info(font_shared_grid_set): font regular: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold: ShureTechMono Nerd Font
+info(font_shared_grid_set): font italic: ShureTechMono Nerd Font
+info(font_shared_grid_set): font bold_italic: ShureTechMono Nerd Font
+warning(grid): error loading custom shaders err=error.FileNotFound
+info(io_exec): found Ghostty resources dir: /usr/share/ghostty
+info(io_exec): shell integration automatically injected shell=termio.shell_integration.Shell.zsh
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): currentTab
+info(io_exec): started subcommand path=/bin/sh pid=41906
+info(io_exec): subcommand cgroup=/user.slice/user-1000.slice/user@1000.service/app.slice/app-ghostty-transient-41857.scope/surfaces/5B80E5BC0EE0.scope
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+warning(gtk): unimplemented action=apprt.action.Action.Key.key_sequence
+warning(gtk): unimplemented action=apprt.action.Action.Key.cell_size
+info(grid): reallocating GPU buffer old=0 new=8
+info(grid): reallocating GPU buffer old=8 new=38
+info(grid): reallocating GPU buffer old=38 new=165
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::SystemPalette
+virtual const QPalette* Qt6CTPlatformTheme::palette(QPlatformTheme::Palette) const QPlatformTheme::ToolTipPalette
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~
+warning(stream): unimplemented OSC command: change_window_icon
+info(grid): reallocating GPU buffer old=165 new=255
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 128 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(stream): OSC 1 (change icon) received and ignored icon=.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+info(stream): OSC 1 (change icon) received and ignored icon=~/.hyprgruv
+warning(stream): unimplemented OSC command: change_window_icon
+warning(stream): unimplemented OSC callback: terminal.osc.Command{ .end_of_command = terminal.osc.Command.Command__struct_97294{ .exit_code = 0 } }
+warning(stream): unimplemented OSC command: end_of_command
+info(grid): reallocating GPU buffer old=255 new=390
+info(stream): OSC 1 (change icon) received and ignored icon=git
+warning(stream): unimplemented OSC command: change_window_icon
