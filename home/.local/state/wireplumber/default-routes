@@ -1,4 +1,0 @@
-[default-routes]
-alsa_card.pci-0000_04_00.1:output:\oOut\c\sHDMI1={"mute":false, "channelMap":["FL", "FR"], "latencyOffsetNsec":0, "channelVolumes":[0.063997, 0.063997]}
-alsa_card.pci-0000_04_00.1:output:\oOut\c\sHDMI2={"mute":false, "channelMap":["FL", "FR"], "latencyOffsetNsec":0, "channelVolumes":[0.063997, 0.063997]}
-alsa_card.pci-0000_04_00.1:profile:HiFi=["[Out] HDMI2", "[Out] HDMI1"]
