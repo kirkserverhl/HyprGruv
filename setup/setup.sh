@@ -39,7 +39,6 @@ track_action() {
 checklist=()
 
 ##### Section 1: Installing Packages #####
-
 echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
             Sit back and enjoy the ride !!   \n"
 {
@@ -57,21 +56,16 @@ echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
     eza fastfetch ghostty gsettings-qt gum hyprgraphics hyprlang hyprpaper hyprpolkitagent hyprutil hyprwayland-scanner imagemagick neovim nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 python-pywalfox python-terminaltexteffects qt5-base qt5-declarative qt5-x11extras qt5ct-kde qt6-base qt6-declarative qt6ct-kde starship stow xorg-xinit waypaper wlogout yazi xsettingsd zsh --noconfirm
   )
   yay -S --noconfirm "${PACKAGES1[@]}"
-
 }
-
 # List of essential packages
 # ESSENTIAL_PACKAGES=("eza" "fastfetch" "figlet" "ghostty" "gum" "hyprlang" "hyprpaper" "waypaper" "hyprpolkitagent" "hyprutils" "hyprwayland-scanner" "imagemagick" "lsd-print-git" "neovim" "nwg-dock-hyprland" "nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "python-terminaltexteffects" "qt5-base" "qt5-declarative" "qt5-x11extras" "qt5ct-kde" "qt6-base" "qt6-declarative" "qt6ct-kde" "starship" "stow" "xorg-xinit" "yazi" "xsettingsd" "wlogout" "zsh")
-
 # Check for missing packages
 # MISSING_PACKAGES=()
-
 # for pkg in "${ESSENTIAL_PACKAGES[@]}"; do
 #   if ! pacman -Qq "$pkg" &>/dev/null; then
 #     MISSING_PACKAGES+=("$pkg")
 #   fi
 # done
-
 # Install missing packages
 # if [ ${#MISSING_PACKAGES[@]} -ne 0 ]; then
 #   echo "Installing missing essential packages: ${MISSING_PACKAGES[*]}"
@@ -79,11 +73,9 @@ echo -e "\n  🫠   Welcome to Hyprland Gruvbox Installation !!   🚀
 # else
 #   echo "All essential packages are already installed."
 # fi
-
 PACKAGES2=(
-  archlinux-xdg-menu ark aylurs-gtk-shell bluez bluez-utils bpytop cliphist cmake dolphin duf expac fortune-mod fortune-mod-archlinux fzf go grimblast-git gsettings-qt gst-plugin-pipewire gtk-engine-murrine haskell-colourista hyprcursor hypridle hyprpicker hyprshade hyprutils kate konsole konsole-gruvbox kvantum less libpulse libva-intel-driver neovim-lspconfig network-manager-applet otf-font-awesome pacman-mirrorlist pavucontrol pipewire qt5-graphicaleffects ranger rofi-calc rofi-wayland smile syntax-highlighting tig tldr++ tmux tree-sitter waybar wireplumber wl-clipboard wl-clipboard-history-git wtf wtype xclip xdg-desktop-portal-gtk xdg-desktop-portal-hyprland xdg-desktop-portal-kde xrainbow-git xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-wayland xorg-xhost xorg-xinit xsettingsd zig zoxide gruvbox-plus-icon-theme)
+  archlinux-xdg-menu ark aylurs-gtk-shell bluez bluez-utils bpytop cliphist cmake dolphin duf expac fortune-mod fortune-mod-archlinux fzf go grimblast-git gsettings-qt gst-plugin-pipewire gtk-engine-murrine haskell-colourista hyprcursor hypridle hyprpicker hyprshade hyprutils kate konsole konsole-gruvbox kvantum less libpulse libva-intel-driver neovim-lspconfig network-manager-applet otf-font-awesome pacman-mirrorlist pavucontrol pipewire qt5-graphicaleffects ranger rofi-calc rofi-wayland smile syntax-highlighting tig tldr++ tmux tree-sitter waybar wireplumber wl-clipboard wl-clipboard-history-git wtf wtype xclip xdg-desktop-portal-gtk xdg-desktop-portal-hyprland xdg-desktop-portal-kde xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-wayland xorg-xhost xorg-xinit xsettingsd zig zoxide gruvbox-plus-icon-theme kscreen kde-applications-meta-slim kde-material-you-colors gruvbox-plus-icon-theme)
 yay S --noconfirm "${PACKAGES2[@]}"
-
 clear
 
 ##### Section 2: Configuration  #####
@@ -102,7 +94,6 @@ clear
 clear
 
 ###########   Installation Summary  ###############
-
 echo -e "\n Configuration Completed Successfully." | lsd-print
 
 echo -e "\n       Hyprland Gruvbox Installation is Complete !! 🫠
