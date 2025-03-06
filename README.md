@@ -92,10 +92,7 @@ To close windows during install use:  Win + C
 
 ## Post-Installation
 
-The initial install will install the base packages and configure the zsh or bash shell configuration.  At this point the device will reboot to complete configurations.  
-When the device reboots the next half of the installation, configuration, will begin in which personal preferences and extras can be configured.
-
-If the script does not finish either ~/.dotfiles/install.sh or ~/.dotfiles/config.sh can be ran manually or at any time to change the original configurations.
+The initial install will install the base packages and configure the zsh or bash shell configuration.  At this point the device will need to be rebooted for full configuration to take place.
 
  > Please note that full configuration will require a restart.
 
