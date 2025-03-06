@@ -49,23 +49,23 @@ checklist=()
 
 display_header "SDDM" | lsd-print
 echo ""
-read -rp "   🍬     Would you like to install Sugar-Candy SDDM theme  (y/n)  ? " configure_sddm
+read -rp "   🍬     Would you like to install Sugar-Candy SDDM theme  (y/n)  ? " # configure_sddm
 echo ""
 if [[ "$configure_sddm" =~ ^[Yy]$ ]]; then
-  if ~/.hyprgruv/setup/scripts/monitor.sh; then
+  if ~/.hyprgruv/setup/sddm_candy_install.sh; then
     track_action "SDDM setup"
     mark_completed "SDDM Setup"
   else
     mark_skipped "SDDM Setup"
   fi
-  el
+else
   mark_skipped "SDDM Setup"
 fi
 clear
 
 ######## Monitors #########################
 
-display_header "Monitors" | lsd-print
+display_header "Monitors"
 echo ""
 read -rp "   🖥️    Would you like to configure monitor setup  (y/n)  ? " configure_monitor
 echo ""
@@ -103,38 +103,38 @@ clear
 
 ######  Editors Choice #######################
 
-display_header "Editors Choice"
-echo ""
-read -rp "  🫠    Would you like to install Editors Choice packages  (y/n) ? " editors_choice
-echo ""
-if [[ "$editors_choice" =~ ^[Yy]$ ]]; then
-  if ~/.hyprgruv/setup/scripts/editors_choice.sh; then
-    track_action "Editors Choice Packages"
-    mark_completed "Editors Choice Packages"
-  else
-    mark_skipped "Editors Choice Packages"
-  fi
-else
-  mark_skipped "Editors Choice Packages"
-fi
-clear
+#display_header "Editors Choice"
+#echo ""
+#read -rp "  🫠    Would you like to install Editors Choice packages  (y/n) ? " editors_choice
+#echo ""
+#if [[ "$editors_choice" =~ ^[Yy]$ ]]; then
+#  if ~/.hyprgruv/setup/editors_choice.sh; then
+#    track_action "Editors Choice Packages"
+#    mark_completed "Editors Choice Packages"
+#  else
+#    mark_skipped "Editors Choice Packages"
+#  fi
+#else
+#  mark_skipped "Editors Choice Packages"
+#fi
+#clear
 
 #########  Terminal Effects  ################
 
-display_header "Terminal Effects"
-echo ""
-read -rp "   🌈    Would you like to Beautify your Terminal  (y/n) ?   " terminal_effects
-if [[ "$terminal_effects" =~ ^[Yy]$ ]]; then
-  if ~/.hyprgruv/setup/term_fx.sh; then
-    track_action "Terminal Effects"
-    mark_completed "Terminal Effects"
-  else
-    mark_skipped "Terminal Effects"
-  fi
-else
-  mark_skipped "Terminal Effects"
-fi
-clear
+#display_header "Terminal Effects"
+#echo ""
+#read -rp "   🌈    Would you like to Beautify your Terminal  (y/n) ?   " terminal_effects
+#if [[ "$terminal_effects" =~ ^[Yy]$ ]]; then
+#  if ~/.hyprgruv/setup/term_fx.sh; then
+#    track_action "Terminal Effects"
+#    mark_completed "Terminal Effects"
+#  else
+#    mark_skipped "Terminal Effects"
+#  fi
+#else
+#  mark_skipped "Terminal Effects"
+#
+#clear
 
 ###########  Cleanup  ####################
 
@@ -153,37 +153,6 @@ else
 fi
 clear
 
-###########   Display Checklist Summary  ###############
+#### Confirmation Page ####
 
-echo -e "\n  📜    Configuration Summary:" | lsd-print
-for section in "${!checklist[@]}"; do
-  echo -e "${checklist[$section]} $section"
-done
-echo -e "\n Configuration Completed Successfully." | lsd-print
-
-########## Options for reboot, rerun, or ###############
-
-echo -e "  ✔️   Installation is complete\n"
-echo -e " Choose an option:" | lsd-print
-echo -e " 1.  🔙  Rerun this script \n"
-echo -e " 2.  🚀   Exit \n"
-read -rp "Enter your choice: " choice
-echo -e ""
-
-# Check the user's input or proceed to the default action
-
-case $choice in
-1)
-  echo -e"  🔙  Rerunning the script..." | lsd-print
-  exec "$0" # Reruns the current script
-  ;;
-
-2)
-  echo -e "  🚀   Exiting..." | lsd-print
-  exit 0
-  ;;
-*)
-  echo -e "❌ Invalid choice. Exiting by default." | lsd-print
-  exit 1
-  ;;
-esac
+~/.hyprgruv/setup/finished.sh
