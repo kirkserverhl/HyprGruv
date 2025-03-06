@@ -15,8 +15,6 @@ Ensure Internet Access: Wired or wireless connection for installation.
 
 Insert the Ventoy USB when the computer is off, turn on your device and you will choose the the Arch Linux ISO from the option menu.
 
-Select Normal Mode in the boot menu and then choose archinstall-medium.
-
 ## Step 2: Install Arch Linux 
 
 Launch the Arch Linux guided installer with:
