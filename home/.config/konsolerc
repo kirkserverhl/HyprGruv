@@ -4,6 +4,14 @@ DefaultProfile=Profile 1.profile
 [General]
 ConfigVersion=1
 
+[KonsoleWindow]
+FocusFollowsMouse=true
+RemoveWindowTitleBarAndFrame=true
+UseSingleInstance=true
+
+[MainWindow]
+MenuBar=Enabled
+
 [Notification Messages]
 CloseAllTabs=true
 

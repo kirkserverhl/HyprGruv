@@ -5,3 +5,14 @@ run = "plugin arrow -1"
 [[manager.prepend_keymap]]
 on = "<Down>"
 run = "plugin arrow 1"
+
+[[input.prepend_keymap]]
+on   = "<Esc>"
+run  = "close"
+desc = "Cancel input"
+
+[[manager.prepend_keymap]]
+on   = "l"
+run  = "plugin smart-enter"
+desc = "Enter the child directory, or open the file"
+

@@ -1,0 +1,32 @@
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-enter"
+rev = "a1b678d"
+hash = "7918aab6a71caf31b58411f789195677"
+
+[[plugin.deps]]
+use = "boydaihungst/mediainfo"
+rev = "f565c5a"
+hash = "15d0dbb4e9ba84eb1f2dbb8e9e249bf6"
+
+[[plugin.deps]]
+use = "boydaihungst/restore"
+rev = "a7a6e5e"
+hash = "4d6e6cc76c8ce08b5f6f344aa9413034"
+
+[[plugin.deps]]
+use = "grappas/wl-clipboard"
+rev = "c4edc4f"
+hash = "51ff959c3c26cb3889589a0f8d394f14"
+
+[[plugin.deps]]
+use = "Rolv-Apneseth/starship"
+rev = "6c639b4"
+hash = "5614c46d5de76623c283d415bfac8025"
+
+[[plugin.deps]]
+use = "AnirudhG07/custom-shell"
+rev = "6b4550a"
+hash = "43019cca17a4d7b41746c2e0a6b8f33f"
+
+[flavor]
+deps = []

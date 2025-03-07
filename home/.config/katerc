@@ -70,8 +70,8 @@ RunPrefix=
 SetEditor=false
 
 [MainWindow]
-2 screens: Height=1056
-2 screens: Width=1027
+2 screens: Height=956
+2 screens: Width=686
 2 screens: Window-Maximized=true
 
 [UiSettings]

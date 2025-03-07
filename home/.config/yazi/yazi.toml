@@ -14,7 +14,9 @@ sort_sensitive = true
 sort_translit = false
 title_format = "{cwd}"
 
+
 [preview]
+cache_dir = "~/.cache/yazi"
 image_delay = 100
 image_filter = "catmull-rom"
 image_quality = 90
@@ -27,4 +29,22 @@ wrap = "no"
 sort_by = "none"
 sort_reverse = false
 sort_sensitive = true
-sort_translit = false
+image_quality_sort_translt = false
+
+[plugin]
+  prepend_previewers = [
+    # Replace magick, image, video with mediainfo
+    { mime = "{audio,video,image}/*", run = "mediainfo"},
+    { mime = "application/subrip", run = "mediainfo" },
+    # { name = "*/", run = "eza-preview" },
+]
+
+# [plugin]
+#   prepend_previewers = [
+#     { name = "*.csv", run = "rich-preview"}, # for csv files
+#     { name = "*.md", run = "rich-preview" }, # for markdown (.md) files
+#     { name = "*.rst", run = "rich-preview"}, # for restructured text (.rst) files
+#     { name = "*.ipynb", run = "rich-preview"}, # for jupyter notebooks (.ipynb)
+#     { name = "*.json", run = "rich-preview"}, # for json (.json) files
+#  { name = "*.lang_type", run = "rich-preview"} # for particular language files eg. .py, .go., .lua, etc.
+## ]

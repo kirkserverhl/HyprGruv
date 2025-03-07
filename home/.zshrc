@@ -6,7 +6,7 @@ export SUDO_EDITOR="$EDITOR"
 export PATH="$HOME/scripts:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
-export QT_QPA_PLATFORMTHEME=qt5ct
+export QT_QPA_PLATFORMTHEME=qt6ct
 export PYWAL='~/.cache/wal/colors.sh'
 
 ### ----------------------------------------------------- ###
@@ -38,6 +38,7 @@ alias monitor='~/scripts/monitor.sh'
 alias zsh='nvim ~/.zshrc'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
 alias rg='ranger'
+alias zz='yazi'
 
 # Color
 alias diff='diff --color=auto'
@@ -82,7 +83,7 @@ alias doom='~/scripts/doom.sh'
 ###-----------------------------------------------------
 ### Plugins and Features
 ###-----------------------------------------------------
-plugins=( aliases archlinux bun cake coffee colored-man-pages colorize emoji emoji-clock eza fast-syntax-highlighting fig fzf git history history-substring-search kate kitty lol man nvm pip poetry pylint python ruby rust safe-paste shell-proxy ssh ssh-agent sudo supervisor thefuck themes tig tldr tmux vi-mode vim-interaction web-search zoxide zsh-autosuggestions zsh-navigation-tools zsh-syntax-highlighting
+plugins=( aliases archlinux bun cake coffee colored-man-pages colorize emoji emoji-clock eza fast-syntax-highlighting fig fzf git history history-substring-search kate kitty lol man nvm pip poetry pylint python ruby rust safe-paste shell-proxy ssh ssh-agent sudo supervisor thefuck themes tig tldr tmux vi-mode vim-interaction web-search zoxide  :aa::zsh-autosuggestions zsh-navigation-tools zsh-syntax-highlighting
 )
 ###-----------------------------------------------------
 ### Starship
@@ -172,7 +173,6 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
-
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -235,13 +235,12 @@ autoload -Uz _zinit
 ## Terminal Customization
 ## -----------------------------------------------------
 if [[ $TERM == "kitty" ]]; then
-      clear ff && fortune | lsd-print
+     # clear ff && fortune | lsd-print
 else
-      clear
+     # clear
  fi
 export FZF_DEFAULT_COMMAND='fdfind --type f'
 export FZF_DEFAULT_OPTS=" --layout=reverse --inline-info --height=80%"
-
 
 # ----------------------------------------------------------
 # End of .zshrc
