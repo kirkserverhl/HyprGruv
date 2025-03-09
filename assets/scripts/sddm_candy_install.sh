@@ -1,4 +1,5 @@
 #!/bin/bash
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 # Define asset paths
 ASSET_DIR="$HOME/.hyprgruv/assets/sddm"

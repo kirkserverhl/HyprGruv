@@ -1,5 +1,6 @@
 #!/bin/bash
 ##  Config.sh
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 #### SDDM Configuration  ####
 

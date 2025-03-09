@@ -1,3 +1,6 @@
+#!/bin/bash
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
+
 cp -rf ~/.hyprgruv/assets/mozilla ~/.mozilla
 cp -rf ~/.hyprgruv/assets/nvim ~/.local/nvim
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Stow configuration files module
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 # Load common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

@@ -1,5 +1,6 @@
 #!/bin/bash
 ##  Monitor.sh
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 # Path to the monitor.conf file that we want to modify
 monitor_conf="~/.dotfiles/hypr/.config/hypr/conf/monitor.conf"

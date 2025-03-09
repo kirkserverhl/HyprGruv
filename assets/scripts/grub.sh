@@ -8,6 +8,7 @@
 #          \/                          \/                \/
 #
 ################################################################ KMB2025 ##########
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 # Move Grub Package
 sudo cp -r ~/.hyprgruv/assets/grub/tartarus /usr/share/grub/themes/tartarus
