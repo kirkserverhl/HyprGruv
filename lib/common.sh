@@ -22,7 +22,7 @@ log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 
 # Display header with figlet
 display_header() {
-    figlet -f "$HOME/.local/share/fonts/Graffiti.flf" "$1" | lsd-print
+    figlet -f "$HOME/.local/share/fonts/Graffiti.flf" "$1"
     echo ""
 }
 

@@ -8,9 +8,6 @@ set -e
 sudo rm -rf /usr/share/hyprgruv
 sudo cp -r ~/.hyprgruv/assets/hypr /usr/share/hypr
 
-# Load Kitty Color Configuration file for Colrized Install
-cp -r ~/.hyprgruv/assets/wal/ ~/.cache/wal/
-cp -r ~/.hyprgruv/assets/kitty.conf ~/.config/kitty/kitty.conf
 
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
