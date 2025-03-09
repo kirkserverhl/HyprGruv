@@ -7,7 +7,7 @@ export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 	PACKAGES1=(
 		bluez bluez-utils btop cmake duf eza fastfetch fzf ghostty grimblast-git gsettings-qt gum hyprgraphics
 		hypridle hyprland-qt-support hexyl hyprpaper hyprpicker hyprshade iwgtk neovim neovim-lspconfig network-manager-applet
-		nwg-dock-hyprland nwg-drawer nwg-look pacseek python-pywal16 qt5-declarative rofi-wayland smile udiskie waybar
+		nwg-dock-hyprland nwg-drawer nwg-look otf-font-awesome pacseek python-pywal16 qt5-declarative rofi-wayland smile udiskie waybar
 		wireplumber wl-clipboard wlogout xclip xorg-wayland xsettingsd yazi zig archlinux-xdg-menu clipse
 		fortune-mod-archlinux grimblast-git gtk-engine-murrine kate konsole kscreen kvantum less pacman-mirrorlist
 		pavucontrol python-pywalfox qt5-graphicaleffects qt6ct-kde ranger rofi-calc tig tmux tree-sitter wl-clipboard
