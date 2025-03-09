@@ -5,9 +5,15 @@
 set -e
 
 # Remove original Hyprland Configuration and Wallpaper, replace
-sudo rm -rf /usr/share/hyprgruv
+sudo rm -rf /usr/share/hypr
 sudo cp -r ~/.hyprgruv/assets/hypr /usr/share/hypr
 
+sudo pacman -S --noconfirm git || log_error "Failed to install git"
+	git clone https://aur.archlinux.org/yay.git || log_success "Git installed successfully"
+	cd yay && makepkg -si --noconfirm || log_success "YAY installed successfully"
+	yay -Syu || update packages
+	yay -S stow figlet powerpill --noconfirm || log_error "Failed to install stow, figlet, powerpill"
+	yay -S lsd-print-git --noconfirm || log_error "Failed to insall lsd-print-git"
 
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

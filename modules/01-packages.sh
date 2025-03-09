@@ -4,13 +4,6 @@ export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 	echo -e "   📦️     Installing Essential Packages..."
 	echo ""
 
-	sudo pacman -S --noconfirm git || log_error "Failed to install git"
-	git clone https://aur.archlinux.org/yay.git || log_success "Git installed successfully"
-	cd yay && makepkg -si --noconfirm || log_success "YAY installed successfully"
-	yay -Syu || update packages
-	yay -S stow figlet powerpill --noconfirm || log_error "Failed to install stow, figlet, powerpill"
-	yay -S lsd-print-git --noconfirm || log_error "Failed to insall lsd-print-git"
-
 	PACKAGES1=(
 		bluez bluez-utils btop cmake duf eza fastfetch fzf ghostty grimblast-git gsettings-qt gum hyprgraphics
 		hypridle hyprland-qt-support hyprpaper hyprpicker hyprshade iwgtk neovim neovim-lspconfig network-manager-applet
@@ -24,7 +17,7 @@ export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 	clear
 
 	# List of essential packages
-	ESSENTIAL_PACKAGES=("eza" "figlet" "lsd-print-git" "gum" "hyprpaper" "waypaper" "nwg-dock-hyprland"
+	ESSENTIAL_PACKAGES=("eza" "gum" "hyprpaper" "waypaper" "nwg-dock-hyprland"
 		"nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "qt5-declarative" "qt6ct-kde"
 		"starship" "stow" "yazi" "xsettingsd" "wlogout" "zsh")
 
