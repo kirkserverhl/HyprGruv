@@ -1,6 +1,8 @@
 #!/bin/bash
 # Stow configuration files module
 export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
+source ~/.hyprgruv/lib/common.sh
+
 
 # Load common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -56,6 +58,15 @@ if ! stow -t "$USER_HOME" home --adopt; then
 	log_error "Stow failed to apply configurations"
 	exit 1
 fi
+
+# Remove original Hyprland Configuration and Wallpaper, replace
+#cp -r ~/.hyprgruv/home/.config/hypr ~/.config
+
+# Remove Default Config
+# sudo rm -rf /usr/share/hypr
+
+# Update from default Wallpaper
+waypaper --wallpaper ~/wallpaper/space_walk.png
 
 log_success "Configuration files stowed successfully"
 log_status "Backup saved to: $BACKUP_DIR"

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Main installer for Hyprgruv
+source ~/.hyprgruv/lib/common.sh
 
 # Enable error handling
 set -e
@@ -16,7 +17,6 @@ yay -Syu --noconfirm || update packages
 
 # Download Packages needed for Install
 yay -S stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git --noconfirm
-
 
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -58,9 +58,9 @@ run_module() {
 }
 
 # Run essential modules in sequence
-run_module "01-packages.sh" "Packages" || exit 1
-run_module "02-stow.sh" "Configuration" || exit 1
-run_module "03-assets.sh" "Assets" || exit 1
+run_module "01-stow.sh" "Configuration" || exit 1
+run_module "02-packages.sh" "Packages" 	|| exit 1
+run_module "03-assets.sh" "Assets" 		|| exit 1
 
 # Run the interactive configuration module
 "$SCRIPT_DIR/modules/04-config.sh"
@@ -69,7 +69,7 @@ run_module "03-assets.sh" "Assets" || exit 1
 display_header "Summary"
 log_success "Installation completed successfully!"
 echo ""
-echo "Completed steps:"
+echo "Completed steps:" | lsd-print
 if command_exists jq; then
 	jq -r '.completed_steps[]' "$STATE_FILE" | while read step; do
 		echo "  ✅ $step"

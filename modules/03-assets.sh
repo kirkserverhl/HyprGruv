@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.hyprgruv/lib/common.sh
 export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 cp -rf ~/.hyprgruv/assets/.mozilla ~/
@@ -26,6 +27,7 @@ hyprpm enable hyprexpo
 pywalfox update
 systemctl --user restart hyprpaper waybar
 
+clear
 # cd ~/scripts && ./launch.sh
 
 # touch ~/.config/hypr/conf/hyprland.conf
