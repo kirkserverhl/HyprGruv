@@ -16,7 +16,7 @@ yay -Syu --noconfirm || update packages
 
 # Download Packages needed for Install
 yay -S stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git --noconfirm
-waypaper --wallpaper ~/.config/hypr/space_walk.png
+
 
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
