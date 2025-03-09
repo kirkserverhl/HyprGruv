@@ -111,5 +111,3 @@ fi
 clear
 
 #### Confirmation Page ####
-
-# ~/.hyprgruv/setup/finished.sh

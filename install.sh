@@ -13,7 +13,7 @@ git clone https://aur.archlinux.org/yay.git
 cd yay && makepkg -si --noconfirm
 cd ~/.hyprgruv
 yay -Syu || update packages
-yay -S stow figlet powerpill hyprpaper --noconfirm
+yay -S stow figlet powerpill hyprpaper waypaper --noconfirm
 yay -S lsd-print-git --noconfirm
 
 # Load common functions and state management
