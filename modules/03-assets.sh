@@ -18,6 +18,7 @@ sudo cp -r ~/.hyprgruv/assets/pacman.conf /etc/pacman.conf
 hyprpm add https://github.com/alexhulbert/Hyprchroma
 hyprpm add https://github.com/DreamMaoMao/hycov
 hyprpm add https://github.com/hyprwm/hyprland-plugins
+hyprpm update
 hyprpm enable hyprchroma
 
 # hyprpm enable hycov

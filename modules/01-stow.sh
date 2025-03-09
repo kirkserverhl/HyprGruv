@@ -3,6 +3,8 @@
 export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 source ~/.hyprgruv/lib/common.sh
 
+# Pywal Cache
+sudo -r ~/.hyprgruv/assets/wal ~/.cache
 
 # Load common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -61,9 +63,6 @@ fi
 
 # Remove original Hyprland Configuration and Wallpaper, replace
 #cp -r ~/.hyprgruv/home/.config/hypr ~/.config
-
-# Remove Default Config
-# sudo rm -rf /usr/share/hypr
 
 # Update from default Wallpaper
 waypaper --wallpaper ~/wallpaper/space_walk.png

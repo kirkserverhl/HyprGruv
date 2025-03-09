@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ghostty -e yazi
+$(cat ~/scripts/terminal.sh) -e yazi
