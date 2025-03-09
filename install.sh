@@ -4,18 +4,6 @@
 # Enable error handling
 set -e
 
-# Remove original Hyprland Configuration and Wallpaper, replace
-cp -r ~/.hyprgruv/home/.config/hypr ~/.config
-sudo rm -rf /usr/share/hypr
-
-sudo pacman -S --noconfirm git
-git clone https://aur.archlinux.org/yay.git
-cd yay && makepkg -si --noconfirm
-cd ~/.hyprgruv
-yay -Syu || update packages
-yay -S stow figlet powerpill hyprpaper waypaper --noconfirm
-yay -S lsd-print-git --noconfirm
-
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
@@ -25,12 +13,13 @@ source "$SCRIPT_DIR/lib/state.sh"
 mkdir -p "$CONFIG_DIR/logs"
 LOGFILE="$CONFIG_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
 exec > >(tee -a "$LOGFILE") 2>&1
-
 clear
+
 display_header "Hyprgruv"
 log_status "Welcome to Hyprland Gruvbox Installation!"
 log_status "Logs will be saved to: $LOGFILE"
 echo ""
+sleep 1
 
 # Function to run a module if not already completed
 run_module() {
@@ -55,6 +44,7 @@ run_module() {
 }
 
 # Run essential modules in sequence
+run_module "00-setup.sh"
 run_module "01-packages.sh" "Packages" || exit 1
 run_module "02-stow.sh" "Configuration" || exit 1
 run_module "03-assets.sh" "Assets" || exit 1
@@ -96,7 +86,9 @@ echo "What would you like to do next?"
 echo "  1. Exit"
 echo "  2. Reboot system"
 echo "  3. Launch Hyprland"
-read -p "Enter your choice [1]: " next_choice
+echo ""
+read -p "Enter your choice : " next_choice
+echo ""
 next_choice=${next_choice:-1}
 
 case "$next_choice" in

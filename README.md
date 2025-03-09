@@ -94,3 +94,4 @@ The initial install will install the base packages and configure the zsh or bash
 
  > Please note that full configuration will require a restart.
 
+Open firefox and navigate to about:config in the URL bar. Set toolkit.legacyUserProfileCustomizations.stylesheets to true

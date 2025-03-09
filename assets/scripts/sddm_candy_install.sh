@@ -1,4 +1,4 @@
-#!/bin/bash
+2#!/bin/bash
 export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 
 # Define asset paths

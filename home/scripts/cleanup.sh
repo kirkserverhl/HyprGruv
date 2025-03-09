@@ -1,4 +1,4 @@
-#!/bin/bash  
+#!/bin/bash
 
 clear                        ###########
 RESET="\e[0m"                # Reset  ##
@@ -10,11 +10,12 @@ GRAY="\e[38;2;60;56;54m"     # 3c3836 ##
 BOLD="\e[1m"                 # Bold   ##
 
 display_header() {
-    clear
-    figlet -f ~/.fonts/Graffiti.flf "$1"
+	clear
+	figlet -f ~/.fonts/Graffiti.flf "$1"
 }
 
 aur_helper="$(cat ~/scripts/aur.sh)"
+clear
 display_header "Cleanup" | lsd-print
 echo
 $aur_helper -Scc

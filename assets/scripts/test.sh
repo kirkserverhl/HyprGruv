@@ -1,5 +1,4 @@
 #!/bin/bash
-clear
 
 # Set gum theme based on colors.css variables
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
@@ -13,38 +12,30 @@ export GUM_INPUT_CURSOR_FOREGROUND="#c3c3c3" # Using --cursor
 export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
 export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 
-# Display header with figlet
-display_header() {
-	figlet -f "$HOME/.hyprgruv/home/.fonts/Graffiti.flf" "$1" | lsd-print
-	echo ""
-}
-
 # Ask user for confirmation SDDM
-display_header "SDDM"
+display_header "Cleanup" | lsd-print
 
 if gum confirm "  🍬     Would you like to install Sugar-Candy SDDM theme?  "; then
 	echo "Configuring Shell..." | lsd-print
 
-	# Check if SDDM script exists
+	# Check if cleanup script exists
 	if [ -f ~/.hyprgruv/assets/scripts/sddm_candy_install.sh ]; then
 		# Make sure the script is executable
 		chmod +x ~/.hyprgruv/assets/scripts/sddm_candy_install.sh
 
-		# Run the SDDM script
+		# Run the cleanup script
 		~/.hyprgruv/assets/scripts/sddm_candy_install.sh
 	else
-		echo "Error:  Sugar-Candy script not found at ~/.hyprgruv/assets/scripts/sddm_candy_install.sh"
+		echo "Error: Cleanup script not found at ~/.hyprgruv/assets/scripts/sddm_candy_install.sh"
 		exit 1
 	fi
 else
 	echo "SDDM configuration cancelled." | lsd-print
 fi
-sleep 1
-
 clear
 
 # Ask user for confirmation Monitors
-display_header "Monitors"
+display_header "Monitors" | lsd-print
 
 if gum confirm "  🖥️    Would you like to configure monitor setup? "; then
 	echo "Starting monitor setup..." | lsd-print
@@ -66,7 +57,7 @@ fi
 clear
 
 # Ask user for confirmation grub setup
-display_header "Grub"
+display_header "Grub" | lsd-print
 
 if gum confirm "  🪱    Would you like to configure GRUB theme? "; then
 	echo "Starting grub setup ..." | lsd-print
@@ -74,7 +65,7 @@ if gum confirm "  🪱    Would you like to configure GRUB theme? "; then
 	# Check if grub script exists
 	if [ -f ~/.hyprgruv/assets/scripts/sddm_candy_install.sh ]; then
 		# Make sure the grub is executable
-		chmod +x ~/.hyprgruv/assets/scripts/sddm_candy_install.sh
+		chmod ~/.hyprgruv/assets/scripts/sddm_candy_install.sh
 
 		# Run the grub script
 		~/.hyprgruv/assets/scripts/grub.sh
@@ -87,9 +78,8 @@ else
 fi
 clear
 
-
 # Ask user for confirmation cleanup
-display_header "Shell"
+display_header "Shell" | lsd-print
 
 if gum confirm "  🐚    Would you like configure the Shell? "; then
 	echo "Starting Shell setup..." | lsd-print
@@ -110,9 +100,8 @@ else
 fi
 clear
 
-
 # Ask user for confirmation cleanup
-display_header "Cleanup"
+display_header "Cleanup" | lsd-print
 
 if gum confirm "  🧹    Would you like to perform a system cleanup? "; then
 	echo "Starting system cleanup..." | lsd-print

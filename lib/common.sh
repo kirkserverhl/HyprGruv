@@ -13,12 +13,25 @@ BOLD="\e[1m"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_DIR="$HOME/.config/hyprgruv"
 BACKUP_DIR="$HOME/.local/backup/hyprgruv"
+CONFIG_DIR="$HOME/.hyprgruv/assets/scripts"
 
 # Logging functions
 log_status() { echo -e "${CYAN}[INFO]${RESET} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
 log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
+
+# Set gum theme based on colors.css variables
+export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
+export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
+export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
+export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
+export GUM_CONFIRM_UNSELECTED_FOREGROUND="#c3c3c3" # Using --foreground
+
+# Set other gum colors for consistency
+export GUM_INPUT_CURSOR_FOREGROUND="#c3c3c3" # Using --cursor
+export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
+export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 
 # Display header with figlet
 display_header() {
