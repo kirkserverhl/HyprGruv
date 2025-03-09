@@ -24,7 +24,7 @@ hyprpm enable hyprexpo
 
 # Update pywal and systems
 pywalfox update
-systemctl --user restart rofi hyprpaper waybar waypaper
+systemctl --user restart hyprpaper waybar
 
 # cd ~/scripts && ./launch.sh
 
@@ -58,7 +58,6 @@ systemctl --user restart rofi hyprpaper waybar waypaper
 #@define-color selected_bg_color @theme_selected_bg_color_breeze;
 #@define-color selected_fg_color @theme_selected_fg_color_breeze;" >>"$file"
 #done
-
 
 #if [ -z "$1" ]; then
 #	wallpaper=$(find ~/wallpaper/ -type f | shuf -n 1)
