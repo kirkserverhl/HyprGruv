@@ -11,6 +11,7 @@ BOLD="\e[1m"
 
 # Base directories
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ASSETS_DIR="$HOME/.hyprgruv/assets"
 CONFIG_DIR="$HOME/.config/hyprgruv"
 BACKUP_DIR="$HOME/.local/backup/hyprgruv"
 CONFIG_DIR="$HOME/.hyprgruv/assets/scripts"
@@ -60,4 +61,4 @@ run_command() {
 }
 
 # Source this at the beginning of each script
-export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
+export SCRIPT_DIR CONFIG_DIR BACKUP_DIR ASSETS_DIR

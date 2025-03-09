@@ -1,16 +1,8 @@
 #!/bin/bash
 # Main installer for Hyprgruv
-source ~/.hyprgruv/lib/common.sh
 
 # Enable error handling
 set -e
-
-# Download Git
-# git clone https://aur.archlinux.org/yay.git
-
-# Download YAY
-# cd yay && makepkg -si --noconfirm
-# cd ~/.hyprgruv
 
 # Update Packages
 yay -Syu --noconfirm || update packages
@@ -59,8 +51,8 @@ run_module() {
 
 # Run essential modules in sequence
 run_module "01-stow.sh" "Configuration" || exit 1
-run_module "02-packages.sh" "Packages" 	|| exit 1
-run_module "03-assets.sh" "Assets" 		|| exit 1
+run_module "02-packages.sh" "Packages" || exit 1
+run_module "03-assets.sh" "Assets" || exit 1
 
 # Run the interactive configuration module
 "$SCRIPT_DIR/modules/04-config.sh"
@@ -95,7 +87,7 @@ echo -e "\n   Display Full list of keybinds with:  ⌨️  ▏ 󰖳 + SPACE
    or left-click the gear icon    in the Waybar" | lsd-print
 echo -e " Restart is required to complete setup !!" | lsd-print
 echo ""
-echo "What would you like to do next?"
+echo "What would you like to do next?" | lsd-print
 echo "  1. Exit"
 echo "  2. Reboot system"
 echo "  3. Launch Hyprland"

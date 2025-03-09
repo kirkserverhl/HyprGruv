@@ -1,5 +1,4 @@
 #!/bin/bash
-source ~/.hyprgruv/lib/common.sh
 
 # Set gum theme based on colors.css variables
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
@@ -15,7 +14,7 @@ export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 
 # Display header with figlet
 #display_header() {
-#	figlet -f "$HOME/.hyprgruv/home/.fonts/Graffiti.flf" "$1" | lsd-print
+#	figlet -f "$HOME/.fonts/Graffiti.flf" "$1" | lsd-print
 #	echo ""
 #}
 
