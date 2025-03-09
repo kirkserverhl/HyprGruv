@@ -5,11 +5,11 @@
 set -e
 
 # Download Git
-git clone https://aur.archlinux.org/yay.git
+# git clone https://aur.archlinux.org/yay.git
 
 # Download YAY
-cd yay && makepkg -si --noconfirm
-cd ~/.hyprgruv
+# cd yay && makepkg -si --noconfirm
+# cd ~/.hyprgruv
 
 # Update Packages
 yay -Syu --noconfirm || update packages
