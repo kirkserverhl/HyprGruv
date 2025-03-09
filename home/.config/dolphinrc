@@ -1,11 +1,15 @@
 MenuBar=Disabled
 
+[CompactMode]
+PreviewSize=22
+
 [FoldersPanel]
 HiddenFilesShown=true
 
 [General]
+ConfirmClosingTerminalRunningProgram=false
 Version=202
-ViewPropsTimestamp=2025,1,11,0,2,17.031
+ViewPropsTimestamp=2025,3,9,0,18,39.152
 
 [IconsMode]
 PreviewSize=80
@@ -22,6 +26,3 @@ MenuBar=Disabled
 
 [PreviewSettings]
 Plugins=appimagethumbnail,audiothumbnail,avif,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,heif,imagethumbnail,jpegthumbnail,jxl,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail,gdk-pixbuf-thumbnailer
-
-[Search]
-Location=Everywhere

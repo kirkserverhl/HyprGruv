@@ -44,3 +44,20 @@
   serviceName: 'audio.mojom.AudioService',
   name: 'Audio Service'
 }
+3/7/2025, 4:16:07 PM EST 0: 
+
+----------------------------------------------
+3/7/2025, 4:16:07 PM EST 1: Discord starting: {"releaseChannel":"stable","version":"0.0.87"}, modulepath: /home/kirk/.config/discord/0.0.87/modules
+3/7/2025, 4:16:07 PM EST 2: ✅ webContents.created web1 "index.html"
+3/7/2025, 4:16:07 PM EST 3: ✅ window.created win1 "discord"
+3/7/2025, 4:16:07 PM EST 4: ✅ webContents.did-finish-load web1
+3/7/2025, 4:16:08 PM EST 5: ✅ webContents.created web2 ""
+3/7/2025, 4:16:08 PM EST 6: ✅ window.created win2 "Discord"
+3/7/2025, 4:16:10 PM EST 7: ✅ webContents.did-finish-load web2
+3/7/2025, 4:16:10 PM EST 8: window.close win1
+3/7/2025, 4:16:10 PM EST 9: webContents.destroyed web1
+3/7/2025, 4:16:10 PM EST 10: window.closed win1
+3/7/2025, 4:20:10 PM EST 11: window.close win2
+3/7/2025, 4:30:25 PM EST 12: window.close win2
+3/7/2025, 4:47:13 PM EST 13: window.close win2
+3/7/2025, 5:42:22 PM EST 14: window.close win2

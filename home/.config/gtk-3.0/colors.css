@@ -22,11 +22,11 @@
 @define-color success_color_insensitive_backdrop_breeze #495033;
 @define-color success_color_insensitive_breeze #495033;
 @define-color theme_base_color_breeze #1d1d1d;
-@define-color theme_bg_color_breeze #252525;
-@define-color theme_button_background_backdrop_breeze #252525;
+@define-color theme_bg_color_breeze #0f1010;
+@define-color theme_button_background_backdrop_breeze #0f1010;
 @define-color theme_button_background_backdrop_insensitive_breeze #232323;
 @define-color theme_button_background_insensitive_breeze #232323;
-@define-color theme_button_background_normal_breeze #252525;
+@define-color theme_button_background_normal_breeze #0f1010;
 @define-color theme_button_decoration_focus_backdrop_breeze #cf832c;
 @define-color theme_button_decoration_focus_backdrop_insensitive_breeze #5c4326;
 @define-color theme_button_decoration_focus_breeze #cf832c;
@@ -44,9 +44,9 @@
 @define-color theme_button_foreground_insensitive_breeze #616160;
 @define-color theme_button_foreground_normal_breeze #dddfda;
 @define-color theme_fg_color_breeze #d1d3ce;
-@define-color theme_header_background_backdrop_breeze #252525;
-@define-color theme_header_background_breeze #252525;
-@define-color theme_header_background_light_breeze #252525;
+@define-color theme_header_background_backdrop_breeze #0f1010;
+@define-color theme_header_background_breeze #0f1010;
+@define-color theme_header_background_light_breeze #0f1010;
 @define-color theme_header_foreground_backdrop_breeze #d1d3ce;
 @define-color theme_header_foreground_breeze #d1d3ce;
 @define-color theme_header_foreground_insensitive_backdrop_breeze #d1d3ce;
@@ -55,15 +55,15 @@
 @define-color theme_selected_bg_color_breeze #996427;
 @define-color theme_selected_fg_color_breeze #ffffff;
 @define-color theme_text_color_breeze #d1d3ce;
-@define-color theme_titlebar_background_backdrop_breeze #252525;
-@define-color theme_titlebar_background_breeze #252525;
-@define-color theme_titlebar_background_light_breeze #252525;
+@define-color theme_titlebar_background_backdrop_breeze #0f1010;
+@define-color theme_titlebar_background_breeze #0f1010;
+@define-color theme_titlebar_background_light_breeze #0f1010;
 @define-color theme_titlebar_foreground_backdrop_breeze #d1d3ce;
 @define-color theme_titlebar_foreground_breeze #d1d3ce;
 @define-color theme_titlebar_foreground_insensitive_backdrop_breeze #d1d3ce;
 @define-color theme_titlebar_foreground_insensitive_breeze #d1d3ce;
 @define-color theme_unfocused_base_color_breeze #1d1d1d;
-@define-color theme_unfocused_bg_color_breeze #252525;
+@define-color theme_unfocused_bg_color_breeze #0f1010;
 @define-color theme_unfocused_fg_color_breeze #d1d3ce;
 @define-color theme_unfocused_selected_bg_color_alt_breeze #473118;
 @define-color theme_unfocused_selected_bg_color_breeze #473118;
@@ -82,3 +82,6 @@
 @define-color warning_color_breeze #73b1c9;
 @define-color warning_color_insensitive_backdrop_breeze #384d55;
 @define-color warning_color_insensitive_breeze #384d55;
+
+@define-color selected_bg_color @theme_selected_bg_color_breeze;
+@define-color selected_fg_color @theme_selected_fg_color_breeze;

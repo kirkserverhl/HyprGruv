@@ -22,6 +22,8 @@ Mouse forward button action=0
 Open New Tab To The Right Of Current=false
 Output History Limit=100
 Output With Date=false
+Quickopen Filter Mode=0
+Quickopen List Mode=true
 Recent File List Entry Count=10
 Restore Window Configuration=true
 SDI Mode=false
@@ -43,6 +45,9 @@ Sync section size with tab positions=false
 Tab Double Click New Document=true
 Tab Middle Click Close Document=true
 Tabbar Tab Limit=0
+
+[KDE]
+widgetStyle=qt6ct-style
 
 [KFileDialog Settings]
 detailViewIconSize=48
