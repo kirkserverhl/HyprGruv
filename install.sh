@@ -58,7 +58,6 @@ run_module() {
 }
 
 # Run essential modules in sequence
-run_module "00-setup.sh"
 run_module "01-packages.sh" "Packages" || exit 1
 run_module "02-stow.sh" "Configuration" || exit 1
 run_module "03-assets.sh" "Assets" || exit 1

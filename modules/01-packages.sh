@@ -1,5 +1,15 @@
 #!/bin/bash
 export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
+
+# Remove original Hyprland Configuration and Wallpaper, replace
+cp -r ~/.hyprgruv/home/.config/hypr ~/.config
+
+# Remove Default Config
+sudo rm -rf /usr/share/hypr
+
+# Update from default Wallpaper
+waypaper --wallpaper ~/.config/hypr/space_walk.png
+
 {
 	echo -e "   📦️     Installing Essential Packages..." | lsd-print
 	echo ""
