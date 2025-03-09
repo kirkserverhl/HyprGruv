@@ -5,7 +5,7 @@
 set -e
 
 # Remove original Hyprland Configuration and Wallpaper, replace
-cp -r ~/.hyprgruv/home/.config/hypr ~/.config/hypr
+cp -r ~/.hyprgruv/home/.config/hypr ~/.config
 sudo rm -rf /usr/share/hypr
 
 sudo pacman -S --noconfirm git

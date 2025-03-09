@@ -1,7 +1,7 @@
 #!/bin/bash
 export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 {
-	echo -e "   📦️     Installing Essential Packages..."
+	echo -e "   📦️     Installing Essential Packages..." | lsd-print
 	echo ""
 
 	PACKAGES1=(

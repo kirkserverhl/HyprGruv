@@ -34,9 +34,9 @@ sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg
 sudo cp -r ~/.hyprgruv/assets/pacman.conf /etc/pacman.conf
 
 #  Packages for Seaglass theme
-yay -Syyu lightly-qt python-haishoku
-yay -Syu ungoogled-chromium powerpill -Su && paru -Su
-yay -Syu plasma-desktop kvantum-qt6-git kvantum-qt4-git nx-plaxma-look-and-feel-git
+yay -Syyu lightly-qt python-haishoku --noconfirm
+yay -Syu ungoogled-chromium -Su && paru -Su --noconfirm
+yay -Syu plasma-desktop kvantum-qt6-git kvantum-qt4-git nx-plaxma-look-and-feel-git --noconfirm
 sudo git clone https://github.com/nx-desktop/nx-plasma-look-and-feel.git /usr/share/plasma/look-and-feel/
 
 kde-material-you-colors --file ~/.cache/wallpaper-path --iconsdark Papirus-Colors-Dark --iconslight Papirus-Colors --chroma-multiplier 1.25 -wal -ko 84 --scheme-variant 6 --on-change-hook "kde-material-you-colors --stop"

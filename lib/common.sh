@@ -22,28 +22,28 @@ log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 
 # Display header with figlet
 display_header() {
-    figlet -f "$HOME/.local/share/fonts/Graffiti.flf" "$1" | lsd-print
-    echo ""
+	figlet -f "$HOME/.hyprgruv/home/.fonts/Graffiti.flf" "$1" | lsd-print
+	echo ""
 }
 
 # Check if command exists
 command_exists() {
-    command -v "$1" >/dev/null 2>&1
+	command -v "$1" >/dev/null 2>&1
 }
 
 # Run a command with proper error handling
 run_command() {
-    local cmd="$1"
-    local description="$2"
+	local cmd="$1"
+	local description="$2"
 
-    log_status "Running: $description"
-    if eval "$cmd"; then
-        log_success "$description completed"
-        return 0
-    else
-        log_error "$description failed"
-        return 1
-    fi
+	log_status "Running: $description"
+	if eval "$cmd"; then
+		log_success "$description completed"
+		return 0
+	else
+		log_error "$description failed"
+		return 1
+	fi
 }
 
 # Source this at the beginning of each script
