@@ -13,8 +13,8 @@
   "custom/quicklink3": {
     "format": "",
     "on-click": "~/scripts/filemanager.sh",
-    "on-click-right": "~/scripts/ranger.sh",
-    "tooltip-format": "Left:    Dolphin 🐬 \nRight:  Ranger  🤠"
+    "on-click-right": "~/scripts/yazi.sh",
+    "tooltip-format": "Left:  Dolphin 🐬 \nRight:   Yazi  🦆"
   },
   "custom/quicklink4": {
     "format": "",

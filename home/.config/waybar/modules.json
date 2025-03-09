@@ -74,7 +74,7 @@
     "format": "  {}",
     "escape": true,
     "return-type": "json",
-    "exec": "~/scripts/updates.sh",
+    "exec": "~/scripts/installupdates.sh",
     "interval": 1800,
     "on-click": "$(cat ~/scripts/terminal.sh) -e ~/scripts/installupdates.sh",
     "on-click-right": "~/scripts/software.sh",

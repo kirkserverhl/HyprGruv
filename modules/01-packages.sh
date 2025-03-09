@@ -10,14 +10,14 @@ export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
 		nwg-dock-hyprland nwg-drawer nwg-look otf-font-awesome pacseek python-pywal16 qt5-declarative rofi-wayland smile udiskie waybar
 		wireplumber wl-clipboard wlogout xclip xorg-wayland xsettingsd yazi zig archlinux-xdg-menu clipse
 		fortune-mod-archlinux grimblast-git gtk-engine-murrine kate konsole kscreen kvantum less pacman-mirrorlist
-		pavucontrol python-pywalfox qt5-graphicaleffects qt6ct-kde ranger rofi-calc tig tmux tree-sitter wl-clipboard
+		pavucontrol python-pywalfox qt5-graphicaleffects qt6ct-kde rofi-calc tig tmux tree-sitter wl-clipboard
 		xdg-desktop-portal-kde xorg-wayland xsettingsd zoxide lightly-qt sudo pacman cmake extra-cmake-modules kdecoration qt5-declarative qt5-x11extras python-haishoku
 	)
 	yay -S --noconfirm "${PACKAGES1[@]}"
 	clear
 
 	# List of essential packages
-	ESSENTIAL_PACKAGES=("eza" "gum" "hyprpaper" "waypaper" "nwg-dock-hyprland"  "nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "qt5-declarative"
+	ESSENTIAL_PACKAGES=("eza" "gum" "hyprpaper" "waypaper" "nwg-dock-hyprland" "nwg-drawer" "nwg-look" "pacseek" "python-pywal16" "python-pywalfox" "qt5-declarative"
 		"starship" "stow" "yazi" "xsettingsd" "wlogout" "zsh")
 
 	# Check for missing packages
