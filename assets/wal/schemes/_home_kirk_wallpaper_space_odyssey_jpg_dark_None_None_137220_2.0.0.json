@@ -1,0 +1,28 @@
+{
+    "checksum": "bf5ecc833036067a7971b8f4817f075b",
+    "wallpaper": "/home/kirk/wallpaper/space_odyssey.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0f1111",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#0f1111",
+        "color1": "#B36543",
+        "color2": "#B7934F",
+        "color3": "#66938C",
+        "color4": "#9A9D8B",
+        "color5": "#85A597",
+        "color6": "#BCAD93",
+        "color7": "#c3c3c3",
+        "color8": "#596d6d",
+        "color9": "#B36543",
+        "color10": "#B7934F",
+        "color11": "#66938C",
+        "color12": "#9A9D8B",
+        "color13": "#85A597",
+        "color14": "#BCAD93",
+        "color15": "#c3c3c3"
+    }
+}

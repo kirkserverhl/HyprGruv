@@ -1,6 +1,6 @@
 #compdef poetry
 
-_poetry_09fe55d25dd53845_complete()
+_poetry_9ddfed27fbdc1556_complete()
 {
     local state com cur
     local -a opts
@@ -217,5 +217,5 @@ _poetry_09fe55d25dd53845_complete()
     esac
 }
 
-_poetry_09fe55d25dd53845_complete "$@"
-compdef _poetry_09fe55d25dd53845_complete /home/kirk/.hyprgruv/modules/poetry
+_poetry_9ddfed27fbdc1556_complete "$@"
+compdef _poetry_9ddfed27fbdc1556_complete /home/kirk/poetry
