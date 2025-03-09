@@ -4,6 +4,19 @@
 # Enable error handling
 set -e
 
+# Download Git
+git clone https://aur.archlinux.org/yay.git
+
+# Download YAY
+cd yay && makepkg -si --noconfirm
+cd ~/.hyprgruv
+
+# Update Packages
+yay -Syu --noconfirm || update packages
+
+# Doanload Packages needed for Install
+yay -S stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git --noconfirm
+
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
