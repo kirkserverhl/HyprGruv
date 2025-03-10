@@ -1,7 +1,7 @@
 MenuBar=Disabled
 
 [CompactMode]
-PreviewSize=22
+PreviewSize=16
 
 [FoldersPanel]
 HiddenFilesShown=true

@@ -1,18 +1,5 @@
 #!/bin/bash
 
-# Set gum theme based on colors.css variables
-#export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-#export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
-#export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
-#export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
-#export GUM_CONFIRM_UNSELECTED_FOREGROUND="#c3c3c3" # Using --foreground
-
-# Set other gum colors for consistency
-#export GUM_INPUT_CURSOR_FOREGROUND="#c3c3c3" # Using --cursor
-#export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
-#export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
-
-
 # Ask user for confirmation SDDM
 display_header "SDDM"
 
@@ -20,14 +7,14 @@ if gum confirm "  🍬     Would you like to install Sugar-Candy SDDM theme?  ";
 	echo "Configuring Shell..." | lsd-print
 
 	# Check if SDDM script exists
-	if [ -f ~/.hyprgruv/assets/scripts/sddm_candy_install.sh ]; then
+	if [ -f $CONFIG_DIR/sddm_candy_install.sh ]; then
 		# Make sure the script is executable
-		chmod +x ~/.hyprgruv/assets/scripts/sddm_candy_install.sh
+		chmod +x $CONFIG_DIR/sddm_candy_install.sh
 
 		# Run the SDDM script
-		~/.hyprgruv/assets/scripts/sddm_candy_install.sh
+		$CONFIG_DIR/sddm_candy_install.sh
 	else
-		echo "Error:  Sugar-Candy script not found at ~/.hyprgruv/assets/scripts/sddm_candy_install.sh"
+		echo "Error:  Sugar-Candy script not found at $CONFIG_DIR/sddm_candy_install.sh"
 		exit 1
 	fi
 else
@@ -42,14 +29,13 @@ if gum confirm "  🖥️    Would you like to configure monitor setup? "; then
 	echo "Starting monitor setup..." | lsd-print
 
 	# Check if monitor script exists
-	if [ -f ~/.hyprgruv/assets/scripts/monitor.sh ]; then
+	if [ -f $CONFIG_DIR/monitor.sh ]; then
 		# Make sure the script is executable
-		chmod +x ~/.hyprgruv/assets/scripts/monitor.sh
-
+		chmod +x $CONFIG_DIR/monitor.sh
 		# Run the monitor script
-		~/.hyprgruv/assets/scripts/monitor.sh
+		$CONFIG_DIR/monitor.sh
 	else
-		echo "Error: Monitor script not found at ~/.hyprgruv/assets/scripts/monitor.sh"
+		echo "Error: Monitor script not found at $CONFIG_DIR/monitor.sh"
 		exit 1
 	fi
 else
@@ -64,14 +50,14 @@ if gum confirm "  🪱    Would you like to configure GRUB theme? "; then
 	echo "Starting grub setup ..." | lsd-print
 
 	# Check if grub script exists
-	if [ -f ~/.hyprgruv/assets/scripts/sddm_candy_install.sh ]; then
+	if [ -f $CONFIG_DIR/grub.sh ]; then
 		# Make sure the grub is executable
-		chmod +x ~/.hyprgruv/assets/scripts/sddm_candy_install.sh
+		chmod +x $CONFIG_DIR/grub.sh
 
 		# Run the grub script
-		~/.hyprgruv/assets/scripts/grub.sh
+		$CONFIG_DIR/grub.sh
 	else
-		echo "Error: grub script not found at ~/.hyprgruv/assets/scripts/grub.sh"
+		echo "Error: grub script not found at $CONFIG_DIR/grub.sh"
 		exit 1
 	fi
 else

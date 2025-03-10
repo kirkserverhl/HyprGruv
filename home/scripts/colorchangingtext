@@ -1,0 +1,5 @@
+#!/bin/bash
+RED=$(tput setaf 1)
+RESET=$(tput sgr0)
+echo "${RED}This text is red${RESET}"
+

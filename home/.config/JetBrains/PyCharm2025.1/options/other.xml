@@ -1,0 +1,40 @@
+<application>
+  <component name="LangManager">
+    <option name="languageName" value="Python" />
+  </component>
+  <component name="NotRoamableUiSettings">
+    <option name="fontSize" value="16.0" />
+    <option name="presentationModeIdeScale" value="1.75" />
+  </component>
+  <component name="PropertyService"><![CDATA[{
+  "keyToString": {
+    "PyCharm.InitialConfiguration": "true",
+    "PyCharm.InitialConfiguration.V2": "true",
+    "PyCharm.InitialConfiguration.V3": "true",
+    "PyCharm.InitialConfiguration.V4": "true",
+    "PyCharm.InitialConfiguration.V5": "true",
+    "PyCharm.InitialConfiguration.V6": "true",
+    "PyCharm.InitialConfiguration.V7": "true",
+    "PyCharm.InitialConfiguration.V8": "true",
+    "ask.about.ctrl.y.shortcut.v2": "true",
+    "evlsprt3.PY-251.23536.40": "5",
+    "experimental.ui.on.first.startup": "true",
+    "experimental.ui.used.version": "251.23536.40",
+    "experimentalFeature.terminal.shell.command.handling": "false",
+    "fileTypeChangedCounter": "3",
+    "fontSizeToResetConsole": "13.0",
+    "fontSizeToResetEditor": "13.0",
+    "input.method.disabler.muted": "true",
+    "migrated.non.roamable.values.from.general.settings": "true",
+    "previousColorScheme": "_@user_Dark",
+    "registry.to.advanced.settings.migration.build": "PY-251.23536.40"
+  },
+  "keyToStringList": {
+    "fileTypeDetectors": [
+      "com.intellij.ide.scratch.ScratchFileServiceImpl$Detector",
+      "com.intellij.docker.dockerFile.DockerFileTypeDetector",
+      "org.jetbrains.plugins.textmate.TextMateFileType$TextMateFileDetector"
+    ]
+  }
+}]]></component>
+</application>

@@ -63,9 +63,6 @@ Text Font=ShuretechMono Nerd Font,9,-1,2,400,0,0,0,0,0,0,0,0,0,0,1
 Text Font Features=
 Word Wrap Marker=false
 
-[KTextEditor::Search]
-Search History=theme
-
 [Konsole]
 AutoSyncronizeMode=0
 KonsoleEscKeyBehaviour=true

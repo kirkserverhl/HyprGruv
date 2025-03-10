@@ -8,7 +8,7 @@ set -e
 yay -Syu --noconfirm || update packages
 
 # Download Packages needed for Install
-PACKAGES1=( stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git )
+PACKAGES1=(stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git)
 yay -S --noconfirm "${PACKAGES1[@]}"
 clear
 

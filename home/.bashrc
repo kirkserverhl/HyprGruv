@@ -45,7 +45,6 @@ alias shutdown='systemctl poweroff'
 
 # Miscellaneous
 alias ff='fastfetch'
-alias pf='pfetch'
 
 # Source Pywal Colors
 source "$HOME/.cache/wal/colors-tty.sh"
@@ -58,9 +57,5 @@ eval "$(starship init bash)"
 ## -----------------------------------------------------
 ## Terminal Customization
 ## -----------------------------------------------------
-if [[ $TERM == "kitty" ]]; then
-	clear
-	ff && fortune | lsd-print
-	ls
-	clear
-fi
+clear
+ff && fortune | lsd-print

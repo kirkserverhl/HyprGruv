@@ -66,5 +66,4 @@ waypaper --wallpaper ~/wallpaper/space_walk.png >/dev/null 2>&1 || true
 log_success "Configuration files stowed successfully"
 log_status "Backup saved to: $BACKUP_DIR"
 save_choice "last_backup" "$BACKUP_DIR"
-
 exit 0

@@ -100,5 +100,5 @@ echo
 echo ":: Update complete"  | lsd-print
 echo
 echo
-:echo "Press [ENTER] to close."  | lsd-print
+echo "Press [ENTER] to close."  | lsd-print
 read
