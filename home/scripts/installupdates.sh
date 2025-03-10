@@ -33,15 +33,14 @@ export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 # ------------------------------------------------------
 # Confirm Start
 # ------------------------------------------------------
-
 if gum confirm "DO YOU WANT TO START THE UPDATE NOW?"; then
 	echo
-	echo ":: Update started."
+	echo ":: Update started." | lsd-print
 elif [ $? -eq 130 ]; then
 	exit 130
 else
 	echo
-	echo ":: Update canceled."
+	echo ":: Update canceled."  | lsd-print
 	exit
 fi
 
@@ -72,10 +71,10 @@ arch)
 			echo ":: DONE. Snapshot $c created!"
 			echo
 		elif [ $? -eq 130 ]; then
-			echo ":: Snapshot skipped."
+			echo ":: Snapshot skipped." | lsd-print
 			exit 130
 		else
-			echo ":: Snapshot skipped."
+			echo ":: Snapshot skipped." | lsd-print
 		fi
 		echo
 	fi
@@ -90,17 +89,16 @@ fedora)
 	sudo dnf upgrade
 	;;
 *)
-	echo ":: ERROR - Platform not supported"
+	echo ":: ERROR - Platform not supported"  | lsd-print
 	echo "Press [ENTER] to close."
 	read
 	;;
 esac
 
-notify-send "Update complete"
+notify-send "Update complete"  | lsd-print
 echo
-echo ":: Update complete"
+echo ":: Update complete"  | lsd-print
 echo
 echo
-
-echo "Press [ENTER] to close."
+:echo "Press [ENTER] to close."  | lsd-print
 read

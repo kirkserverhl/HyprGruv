@@ -8,7 +8,9 @@ set -e
 yay -Syu --noconfirm || update packages
 
 # Download Packages needed for Install
-yay -S stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git --noconfirm
+PACKAGES1=( stow powerpill hyprpaper waypaper gum pacman figlet lsd-print-git )
+yay -S --noconfirm "${PACKAGES1[@]}"
+clear
 
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

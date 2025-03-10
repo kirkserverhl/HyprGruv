@@ -17,16 +17,16 @@ sleep 0.5
 # -----------------------------------------------------
 # Reload AGS
 # -----------------------------------------------------
-
-echo ":: Reload ags"
-ags quit &
-sleep 0.2
-ags run &
+#echo ":: Reload ags"
+#ags quit &
+#sleep 0.2
+#ags run &
 
 # -----------------------------------------------------
 # Default theme: /THEMEFOLDER;/VARIATION
 # -----------------------------------------------------
 themestyle="/gruv;/gruv/colored"
+
 # -----------------------------------------------------
 # Get current theme information from ~/scripts/waybar-theme.sh
 # -----------------------------------------------------

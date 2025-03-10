@@ -1,22 +1,17 @@
 #!/bin/bash
 
 # Set gum theme based on colors.css variables
-export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
-export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
-export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
-export GUM_CONFIRM_UNSELECTED_FOREGROUND="#c3c3c3" # Using --foreground
+#export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
+#export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
+#export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
+#export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
+#export GUM_CONFIRM_UNSELECTED_FOREGROUND="#c3c3c3" # Using --foreground
 
 # Set other gum colors for consistency
-export GUM_INPUT_CURSOR_FOREGROUND="#c3c3c3" # Using --cursor
-export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
-export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
+#export GUM_INPUT_CURSOR_FOREGROUND="#c3c3c3" # Using --cursor
+#export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
+#export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 
-# Display header with figlet
-#display_header() {
-#	figlet -f "$HOME/.fonts/Graffiti.flf" "$1" | lsd-print
-#	echo ""
-#}
 
 # Ask user for confirmation SDDM
 display_header "SDDM"
@@ -85,28 +80,6 @@ fi
 clear
 
 # Ask user for confirmation cleanup
-display_header "Shell"
-
-if gum confirm "  🐚    Would you like configure the Shell? "; then
-	echo "Starting Shell setup..." | lsd-print
-
-	# Check if shell script exists
-	if [ -f ~/scripts/shell.sh ]; then
-		# Make sure the script is executable
-		chmod +x ~/scripts/shell.sh
-
-		# Run the shell script
-		~/scripts/shell.sh
-	else
-		echo "Error:  Shell script not found at ~/scripts/shell.sh"
-		exit 1
-	fi
-else
-	echo "Shell setup cancelled." | lsd-print
-fi
-clear
-
-# Ask user for confirmation cleanup
 display_header "Cleanup"
 
 if gum confirm "  🧹    Would you like to perform a system cleanup? "; then
@@ -125,5 +98,27 @@ if gum confirm "  🧹    Would you like to perform a system cleanup? "; then
 	fi
 else
 	echo "System cleanup cancelled." | lsd-print
+fi
+clear
+
+# Ask user for Shell Config
+display_header "Shell"
+
+if gum confirm "  🐚    Would you like configure the Shell? "; then
+	echo "Starting Shell setup..." | lsd-print
+
+	# Check if shell script exists
+	if [ -f ~/scripts/shell.sh ]; then
+		# Make sure the script is executable
+		chmod +x ~/scripts/shell.sh
+
+		# Run the shell script
+		~/scripts/shell.sh
+	else
+		echo "Error:  Shell script not found at ~/scripts/shell.sh"
+		exit 1
+	fi
+else
+	echo "Shell setup cancelled." | lsd-print
 fi
 clear

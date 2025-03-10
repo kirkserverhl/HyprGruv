@@ -69,12 +69,12 @@
     "on-click-middle": "sleep 0.1 && ~/scripts/cliphist.sh w",
     "tooltip-format": " Left:  Clipboard    📋️\nRight: Screenshot 📸"
   },
-  // Updates Count
+ // Updates Count
   "custom/updates": {
     "format": "  {}",
     "escape": true,
     "return-type": "json",
-    "exec": "~/scripts/installupdates.sh",
+    "exec": "~/scripts/updates.sh",
     "interval": 1800,
     "on-click": "$(cat ~/scripts/terminal.sh) -e ~/scripts/installupdates.sh",
     "on-click-right": "~/scripts/software.sh",

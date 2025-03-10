@@ -22,8 +22,4 @@ hyprpm enable hyprchroma
 # hyprpm enable hycov
 hyprpm enable hyprexpo
 
-# Update pywal and systems
-#pywalfox update
-#systemctl --user restart hyprpaper waybar
-
 clear

@@ -1,12 +1,12 @@
 #!/bin/bash
 #     _______________________  __.
 #   /  _____/\__    ___/    |/ _|
-#  /   \  ___  |    |  |      <  
-#  \    \_\  \ |    |  |    |  \ 
+#  /   \  ___  |    |  |      <
+#  \    \_\  \ |    |  |    |  \
 #   \______  / |____|  |____|__ \
 #          \/                  \/
 #
-# config="$HOME/.config/gtk-3.0/settings.ini"
+config="$HOME/.config/gtk-3.0/settings.ini"
 
 if [ ! -f "$config" ]; then exit 1; fi
 
@@ -31,11 +31,11 @@ gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
 gsettings set "$gnome_schema" font-name "$font_name"
 gsettings set "$gnome_schema" color-scheme "prefer-dark"
 
-gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal "$terminal"
-gsettings set com.github.stunkymonkey.nautilus-open-any-terminal use-generic-terminal-name "true"
-gsettings set com.github.stunkymonkey.nautilus-open-any-terminal keybindings "<Ctrl><Alt>t"
+# gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal "$terminal"
+# gsettings set com.github.stunkymonkey.nautilus-open-any-terminal use-generic-terminal-name "true"
+# gsettings set com.github.stunkymonkey.nautilus-open-any-terminal keybindings "<Ctrl><Alt>t"
 
-if [ -f ~/.config/hypr/conf/cursor.conf ] ;then
-    echo "exec-once = hyprctl setcursor $cursor_theme $cursor_size" > ~/.config/hypr/conf/cursor.conf
-    hyprctl setcursor $cursor_theme $cursor_size
+if [ -f ~/.config/hypr/conf/cursor.conf ]; then
+	echo "exec-once = hyprctl setcursor $cursor_theme $cursor_size" >~/.config/hypr/conf/cursor.conf
+	hyprctl setcursor $cursor_theme $cursor_size
 fi

@@ -161,7 +161,7 @@ smallestReadableFont=ShureTechMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 toolBarFont=ShureTechMono Nerd Font,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
 [Icons]
-Theme=Papirus-Colors-Dark
+Theme=Gruvbox-Plus-Dark
 
 [KDE]
 LookAndFeelPackage=Base16.Dark

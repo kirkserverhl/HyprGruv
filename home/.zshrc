@@ -37,7 +37,6 @@ alias wifi='nmtui'
 alias monitor='~/scripts/monitor.sh'
 alias zsh='nvim ~/.zshrc'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
-alias rg='ranger'
 alias zz='~/scripts/yazi.sh'
 
 # Color

@@ -1,3 +1,3 @@
-kitty -e nvim
-#ghossty
-#nvim
+#!/bin/bash
+
+$(cat ~/scripts/terminal.sh) -e nvim

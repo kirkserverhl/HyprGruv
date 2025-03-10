@@ -7,4 +7,4 @@ USER=kirk
 pacman -Qqet | grep -v "$(pacman -Qqg)" | grep -v "$(pacman -Qqm)" >/home/$USER/.dotfiles/pkglist
 
 # A list of local packages (includes AUR and locally installed)
-pacman -Qm >/home/$USER/.dotfiles/home/pkglocallist
+pacman -Qm >/home/$USER/.hyprgruv/home/pkglocallist
