@@ -98,7 +98,7 @@ alias doom='~/scripts/doom.sh'
 ### Plugins and Features
 ###-----------------------------------------------------
 plugins=( 
-  aliases 
+  # aliases 
   archlinux 
   bun 
   colorize 
