@@ -25,8 +25,8 @@ archinstall
 
 ## Configure Installation:
 
-Choose mirrors: US / back
-Disk Configuration: Partitioning, Use best-effort, choose drive, btrfs (or ext4), no btrfs subvolumes, use compression, no separate home partition / back
+Choose mirrors: US/back
+Disk Configuration: Partitioning, Use best-effort, choose drive, btrfs (or ext4), no btrfs subvolumes, use compression, no separate home partition/back
 Swap: enabled
 Bootloader: grub
 Choose Hostname & Password
@@ -38,7 +38,7 @@ Additional Packages: firefox
 Choose Timezone
 Install
 
-Once installation is completed use the following commands to reboot:
+Once installation is completed, use the following commands to reboot:
 
 "Would you like to chroot?"    
 
@@ -47,7 +47,7 @@ no
 shutdown -–now
 ```
 
-When the device is powered off remove the Ventoy usb and restart the device.
+When the device is powered off, remove the Ventoy USB and restart the device.
 
 
 
@@ -55,9 +55,9 @@ When the device is powered off remove the Ventoy usb and restart the device.
 
 When Arch linux boots up you are greeted with the SDDM sign-on screen.
 
-In top left of screen choose 'Hyprland' for session, not (uwsm-managed)
+In the top left of the screen choose 'Hyprland' for session, not (uwsm-managed)
 
-Use the user credentials created durring the archinstall to login!
+Use the user credentials created during the archinstall to login!
 
 Open terminal with keybind:   
 ```sh
@@ -69,11 +69,10 @@ Run the following string of commands Line:
 
 ```sh
 sudo pacman -S git &&
-git clone https://github.com/kirkserverhl/hyprgruv.git ~/.hyprgruv &&
+git clone https://github.com/kirkserverhl/move.git ~/.hyprgruv &&
 cd ~/.hyprgruv/
 ./install.sh
-```
-
+```  
 ## Tips
 
 To move windows you can use: Win + Left Mouse
@@ -84,7 +83,7 @@ To close windows during install use:  Win + C
 
 > be careful closing unnecessary windows during install
 
-** after install a list of keydinds is available using:
+** After installing a list of keybinds is available using:
  ‘Win + K’ or by typing ‘keybinds’ in the terminal.
 
 
@@ -94,5 +93,6 @@ The initial install will install the base packages and configure the zsh or bash
 
  > Please note that full configuration will require a restart.
 
-Open firefox and navigate to about:config in the URL bar. Set toolkit.legacyUserProfileCustomizations.stylesheets to true
+Open Firefox and navigate to 'about:config' in the URL bar. 
+Set toolkit.legacyUserProfileCustomizations.stylesheets > TRUE
 # move
