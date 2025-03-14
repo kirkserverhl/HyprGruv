@@ -1,0 +1,1 @@
+sudo mkdir ~/Pictures

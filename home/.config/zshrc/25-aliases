@@ -1,0 +1,165 @@
+# -----------------------------------------------------
+# ALIASES
+# -----------------------------------------------------
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# cd into the old directory
+alias bd='cd "$OLDPWD"'
+
+# Remove a directory and all files
+alias rmd='/bin/rm  --recursive --force --verbose '
+
+# Edit this .bashrc file
+alias zsh='$EDITOR ~/.config/zshrc/'
+
+# Edit Hyprland
+alias hypr='$EDITOR ~/.config/hypr/'
+
+# alias to show the date
+alias da='date "+%Y-%m-%d %A %T %Z"'
+alias mv='mv -i'
+alias rm='rm -i'
+alias cp='cp -i'
+alias ln='ln -i'
+alias mkdir='mkdir -pv'
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../../..'
+
+# Eza-based ls aliases
+alias ls='eza -a --icons'
+alias ll='eza -al --icons'
+alias lt='eza -a --tree --level=2 --icons'
+alias la='eza -Alh --icons'                # show hidden files
+alias lx='eza -lXBh --icons'               # sort by extension
+alias lk='eza -lSrh --icons'               # sort by size
+alias lc='eza -ltcrh --icons'              # sort by change time
+alias lu='eza -lturh --icons'              # sort by access time
+alias lr='eza -lRh --icons'                # recursive ls
+alias lt='eza -ltrh --icons'               # sort by date
+alias lm='eza -alh --icons |more'          # pipe through 'more'
+alias lw='eza -xAh --icons'                # wide listing format
+alias labc='ls -lap --icons'               # alphabetical sort
+alias lf="eza -l --icons | egrep -v '^d'"  # files only
+alias ldir="eza -l --icons | egrep '^d'"   # directories only
+alias lla='eza -Al --icons'                # List and Hidden Files
+alias las='eza -A -- icons'                # Hidden Files
+alias lls='eza -l --icons'                 # List
+
+# Productivity
+alias c='clear && $SHELL'
+alias ts='~/scripts/snapshot.sh'
+alias cleanup='~/scripts/cleanup.sh'
+alias update='~/scripts/system_cleanup_and_update.sh'
+alias fig='~/scripts/figlet.sh'
+alias monitor='~/scripts/monitor.sh'
+alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
+alias zz='~/scripts/yazi.sh'
+alias python='python3'
+alias v='$EDITOR'
+alias vim='$EDITOR'
+alias vim='nvim'
+alias vi='nvim'
+alias svi='sudo nvim'
+alias vis='nvim "+set si"'
+alias shell='~/scripts/shell.sh'
+alias ps='ps auxf'
+alias less='less -R'
+alias vi='nvim'
+alias svi='sudo vi'
+alias vis='nvim "+set si"'
+alias znt='~/.local/share/zinit.zsh'
+
+# Color
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+alias ip='ip --color=auto'
+alias lsd='lsd --long --color=always --icon=always'
+alias woah='| lsd-print'
+
+# Git
+alias gs='git status'
+alias ga='git add'
+alias add='cd ~/.dotfiles && git add .'
+alias gc='git commit -m'
+alias commit='cd ~/.dotfiles && git commit -m'
+alias gp='git push'
+alias gpl=git pull'
+alias pull='git pull'
+alias gst='git stash'
+alias stash='git stash'
+alias gsp='git stash; git pull'
+alias gcheck='git checkout'
+alias gall='git add -A'
+alias gl='git log'
+alias gll='git log --oneline'
+alias push='git push origin main --force'
+
+# GitHub Titus Additions
+gcom() {
+	git add .
+	git commit -m "$1"
+}
+lazyg() {
+	git add .
+	git commit -m "$1"
+	git push
+}
+
+# System Commands
+alias shutdown='systemctl poweroff'
+alias dusage='du -sh * 2>/dev/null'
+alias ping='ping -c 5'
+alias fastping='ping -c 100 -i .2'
+
+# Miscellaneous
+alias ff='fastfetch'
+alias tm='tmux'
+alias ps='pacseek'
+alias lp='lsd-print'
+alias doom='~/scripts/doom.sh'
+
+# Search command line history
+alias h="history | grep "
+
+# Search running processes
+alias p="ps aux | grep "
+alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
+
+# Search files in the current folder
+alias f="find . | grep "
+
+# To see if a command is aliased, a file, or a built-in command
+alias checkcommand="type -t"
+
+# Show open ports
+alias openports='netstat -nape --inet'
+
+# aliases for safe and forced reboots
+alias rebootsafe='sudo shutdown -r now'
+alias rebootforce='sudo shutdown -r -n now'
+
+# aliases to show disk space and space used in a folder
+alias duf='duf -theme ansi'
+alias folders='du -h --max-depth=1'
+alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+alias tree='tree -CAhF --dirsfirst'
+alias treed='tree -CAFd'
+alias mountedinfo='df -hT'
+
+# aliases for archives
+alias mktar='tar -cvf'
+alias mkbz2='tar -cvjf'
+alias mkgz='tar -cvzf'
+alias untar='tar -xvf'
+alias unbz2='tar -xvjf'
+alias ungz='tar -xvzf'
+
+# Show all logs in /var/log
+alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"

@@ -1,0 +1,12 @@
+{
+  "completed_steps": [
+    "Install packages",
+    "Stow configuration",
+    "Setup Sysem"
+  ],
+  "user_choices": {
+    "last_backup": "/home/kirk/.local/backup/hyprgruv_2025-03-14_00-31-06"
+  },
+  "install_date": "2025-03-13 21:05:39",
+  "version": "1.0"
+}

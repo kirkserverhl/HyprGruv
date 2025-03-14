@@ -1,0 +1,40 @@
+[borders-plus-plus]
+enabled = false
+failed = false
+filename = 'borders-plus-plus.so'
+
+[csgo-vulkan-fix]
+enabled = false
+failed = false
+filename = 'csgo-vulkan-fix.so'
+
+[hyprbars]
+enabled = false
+failed = false
+filename = 'hyprbars.so'
+
+[hyprexpo]
+enabled = false
+failed = false
+filename = 'hyprexpo.so'
+
+[hyprtrails]
+enabled = false
+failed = false
+filename = 'hyprtrails.so'
+
+[hyprwinwrap]
+enabled = false
+failed = false
+filename = 'hyprwinwrap.so'
+
+[repository]
+hash = '4f48dbe12f3cbbeb4d31c91c67b21edbc5b4b451'
+name = 'hyprland-plugins'
+rev = ''
+url = 'https://github.com/hyprwm/hyprland-plugins'
+
+[xtra-dispatchers]
+enabled = false
+failed = false
+filename = 'xtra-dispatchers.so'

@@ -1,0 +1,28 @@
+{
+    "checksum": "bdf04a687bd11028247ccf7478699366",
+    "wallpaper": "/home/kirk/wallpaper/endeavor.webp",
+    "alpha": "100",
+    "special": {
+        "background": "#121414",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#121414",
+        "color1": "#DE9D1F",
+        "color2": "#D89921",
+        "color3": "#918B54",
+        "color4": "#497E81",
+        "color5": "#3A838D",
+        "color6": "#458588",
+        "color7": "#c3c4c4",
+        "color8": "#5a6f6f",
+        "color9": "#DE9D1F",
+        "color10": "#D89921",
+        "color11": "#918B54",
+        "color12": "#497E81",
+        "color13": "#3A838D",
+        "color14": "#458588",
+        "color15": "#c3c4c4"
+    }
+}

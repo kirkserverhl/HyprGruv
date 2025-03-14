@@ -1,0 +1,8 @@
+@import "colors.css";
+
+/*.nemo-places-sidebar .view { */
+.nemo-window .sidebar .view {
+  background-color: @theme_bg_color;;
+  color: @theme_fg_color;
+}:
+@import 'colors.css';

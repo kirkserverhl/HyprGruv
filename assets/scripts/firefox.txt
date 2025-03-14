@@ -1,0 +1,15 @@
+First Open firefox and navigate to about:config in the URL bar
+
+Set toolkit.legacyUserProfileCustomizations.stylesheets to "True"
+
+Next Install the Transparency Firefox theme by Double clicking to open the 'darkreader.xpi' file:"
+
+dolphin ~/.mozilla/firefox/default/chrome >/dev/null 2>&1
+
+gum spin --title "Openinng Darkreader location... " -- sleep 5
+
+echo "    Open the dark reader extension again, click Settings, go to the Advanced tab, and enable Synchronize site fixes
+
+Close and reopen firefox and the theme should be applied."
+
+echo "The final step to configure firefox is to "

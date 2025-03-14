@@ -1,0 +1,21 @@
+# Yazi layout configuration
+
+# Configure the middle panel (file list) to not display permissions
+[tabs]
+0 = [
+  { ratio = 1, min = 8 },  # Display mode
+  { ratio = 3 },           # File names only
+  { ratio = 1 },           # Size
+]
+
+[middle]
+# Define which attributes to show in the file list
+# By not including "permissions" in this list, they won't be displayed
+show = [
+  "size",
+  "mtime",
+]
+
+# Optional: Other customizations for the middle section
+style = {}
+

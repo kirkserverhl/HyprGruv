@@ -1,0 +1,7 @@
+prefix=/home/kirk/.local/share/hyprpm/headersRoot/include
+
+Name: Hyprland
+URL: https://github.com/hyprwm/Hyprland
+Description: Hyprland header files
+Version: 0.47.2
+Cflags: -I${prefix} -I${prefix}/hyprland/protocols -I${prefix}/hyprland

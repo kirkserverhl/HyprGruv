@@ -1,0 +1,19 @@
+[init]
+	defaultBranch = HyprGruv
+[user]
+	email = kirkserverhl@gmail.com
+	name = kirkserverhl
+[credential]
+	helper = store
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[http]
+	proxy = ""
+[difftool "kommitdiff"]
+	cmd = kommitdiff \"$LOCAL\" \"$REMOTE\"
+[mergetool "kommitmerge"]
+	cmd = kommitmerge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+	trustExitCode = true

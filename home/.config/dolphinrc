@@ -1,0 +1,37 @@
+MenuBar=Disabled
+
+[CompactMode]
+PreviewSize=32
+
+[DetailsMode]
+IconSize=22
+PreviewSize=32
+
+[FoldersPanel]
+HiddenFilesShown=true
+
+[General]
+CloseActiveSplitView=false
+ConfirmClosingTerminalRunningProgram=false
+Version=202
+ViewPropsTimestamp=2025,3,13,23,1,42.549
+
+[IconsMode]
+IconSize=80
+PreviewSize=48
+
+[InformationPanel]
+previewsShown=false
+
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=22
+
+[MainWindow]
+MenuBar=Disabled
+
+[Notification Messages]
+warnAboutRisksBeforeActingAsAdmin=false
+
+[PreviewSettings]
+Plugins=appimagethumbnail,audiothumbnail,avif,comicbookthumbnail,cursorthumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,directorythumbnail,fontthumbnail,heif,imagethumbnail,jpegthumbnail,jxl,kraorathumbnail,windowsexethumbnail,windowsimagethumbnail,opendocumentthumbnail,svgthumbnail,gdk-pixbuf-thumbnailer

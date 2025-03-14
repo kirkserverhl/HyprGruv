@@ -1,0 +1,5 @@
+[EmbedSettings]
+embed-application/json=false
+embed-image/jpeg=false
+embed-image/png=false
+embed-text/plain=false

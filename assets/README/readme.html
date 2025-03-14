@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+.r1 {font-weight: bold}
+.r2 {font-weight: bold; text-decoration: underline}
+.r3 {color: #808080; text-decoration-color: #808080}
+.r4 {color: #800080; text-decoration-color: #800080}
+.r5 {color: #00ffff; text-decoration-color: #00ffff}
+body {
+    color: #000000;
+    background-color: #ffffff;
+}
+</style>
+</head>
+<body>
+    <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><code style="font-family:inherit">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                       <span class="r1">HyprGruv 🚀</span>                                                       ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Hyprland Arch Linux featuring GruvBox!                                                                                     
+
+Developed by Kirk Bass                                                                                                     
+
+
+                                                      <span class="r2">Prerequisites:</span>                                                       
+
+Ventoy USB: Create a bootable USB using Ventoy and add the latest Arch Linux ISO to it.                                    
+
+Ensure Internet Access: Wired or wireless connection for installation.                                                     
+
+
+                                                <span class="r2">Step 1: Install Arch Linux</span>                                                 
+
+Insert the Ventoy USB when the computer is off, turn on your device and you will choose the the Arch Linux ISO from the    
+option menu.                                                                                                               
+
+
+                                                <span class="r2">Step 2: Install Arch Linux</span>                                                 
+
+Launch the Arch Linux guided installer with:                                                                               
+
+                                                                                                                           
+ archinstall                                                                                                               
+                                                                                                                           
+
+
+                                                  <span class="r2">Configure Installation:</span>                                                  
+
+Choose mirrors: US / back Disk Configuration: Partitioning, Use best-effort, choose drive, btrfs (or ext4), no btrfs       
+subvolumes, use compression, no separate home partition / back Swap: enabled Bootloader: grub Choose Hostname &amp; Password   
+Create User Account, password, give sudo privileges / confirm &amp; exit Profile: Type, Desktop, Hyprland, polkit / back Audio:
+Pipewire Network Configuration: Use NetworkManager Additional Packages: firefox Choose Timezone Install                    
+
+Once installation is completed use the following commands to reboot:                                                       
+
+&quot;Would you like to chroot?&quot;                                                                                                
+
+                                                                                                                           
+ no                                                                                                                        
+ shutdown<span class="r3"> </span>-–now                                                                                                            
+                                                                                                                           
+
+When the device is powered off remove the Ventoy usb and restart the device.                                               
+
+
+                                              <span class="r2">Step 3: Login and Configuration</span>                                              
+
+When Arch linux boots up you are greeted with the SDDM sign-on screen.                                                     
+
+In top left of screen choose &#x27;Hyprland&#x27; for session, not (uwsm-managed)                                                    
+
+Use the user credentials created durring the archinstall to login!                                                         
+
+Open terminal with keybind:                                                                                                
+
+                                                                                                                           
+ Win<span class="r3"> </span>+<span class="r3"> </span>Q                                                                                                                   
+                                                                                                                           
+
+<span class="r4">▌ temporary, after install   Win + ENTER                                                                                 </span>
+
+Run the following string of commands Line:                                                                                 
+
+                                                                                                                           
+ sudo<span class="r3"> </span>pacman<span class="r3"> </span>-S<span class="r3"> </span>git<span class="r3"> </span>&amp;&amp;                                                                                                     
+ git<span class="r3"> </span>clone<span class="r3"> </span>https://github.com/kirkserverhl/hyprgruv.git<span class="r3"> </span>~/.hyprgruv<span class="r3"> </span>&amp;&amp;                                                     
+ <span class="r5">cd</span><span class="r3"> </span>~/.hyprgruv/                                                                                                           
+ ./install.sh                                                                                                              
+                                                                                                                           
+
+
+                                                           <span class="r2">Tips</span>                                                            
+
+To move windows you can use: Win + Left Mouse **permanent bind, works before and after install                             
+
+To close windows during install use:  Win + C ** temporary bind, after install use:  Win + Q                               
+
+<span class="r4">▌ be careful closing unnecessary windows during install                                                                  </span>
+
+** after install a list of keydinds is available using: ‘Win + K’ or by typing ‘keybinds’ in the terminal.                 
+
+
+                                                     <span class="r2">Post-Installation</span>                                                     
+
+The initial install will install the base packages and configure the zsh or bash shell configuration.  At this point the   
+device will need to be rebooted for full configuration to take place.                                                      
+
+<span class="r4">▌ Please note that full configuration will require a restart.                                                            </span>
+
+Open firefox and navigate to about:config in the URL bar. Set toolkit.legacyUserProfileCustomizations.stylesheets to true  
+</code></pre>
+</body>
+</html>

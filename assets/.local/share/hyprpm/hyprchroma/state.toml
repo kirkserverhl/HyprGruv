@@ -1,0 +1,10 @@
+[hyprchroma]
+enabled = false
+failed = false
+filename = 'hyprchroma.so'
+
+[repository]
+hash = '0a705582590e6d8cbc75dde005ceeb546ecc36d7'
+name = 'hyprchroma'
+rev = ''
+url = 'https://github.com/alexhulbert/Hyprchroma'

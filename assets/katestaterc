@@ -1,0 +1,11 @@
+[KFileDialog Settings]
+Recent Files[$e]=file:$HOME/.config/nvim/lua/plugins/lualine.lua
+Recent URLs[$e]=file:///,file:$HOME/,file:$HOME/Documents/,file:$HOME/.dotfiles/,file:$HOME/.config/,file:$HOME/scripts/,file:///home/,file:$HOME/.config/nvim/lua/plugins/,file:$HOME/.config/nvim/lua/
+
+[MainWindow]
+2 screens: Height=1056
+2 screens: Width=1078
+2 screens: XPosition=1802
+2 screens: YPosition=348
+DisplayPort-0 HDMI-A-0=DisplayPort-0
+State=AAAA/wAAAAD9AAAAAAAABDYAAAPZAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAIAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAGABoAGEAbQBiAHUAcgBnAGUAcgBCAGEAcgEAAAKH/////wAAAAAAAAAA

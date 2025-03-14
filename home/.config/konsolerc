@@ -1,0 +1,22 @@
+[Desktop Entry]
+DefaultProfile=Profile 1.profile
+
+[FileDialogSize]
+2 screens: Window-Maximized=true
+
+[General]
+ConfigVersion=1
+
+[KonsoleWindow]
+FocusFollowsMouse=true
+RemoveWindowTitleBarAndFrame=true
+UseSingleInstance=true
+
+[MainWindow]
+MenuBar=Enabled
+
+[Notification Messages]
+CloseAllTabs=true
+
+[UiSettings]
+ColorScheme=
