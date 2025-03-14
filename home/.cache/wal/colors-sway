@@ -1,0 +1,21 @@
+set $wallpaper /home/kirk/wallpaper/Lady.png
+
+set $background #1e1d1c
+set $foreground #c6c6c6
+
+set $color0 #1e1d1c
+set $color1 #928B78
+set $color2 #A0967F
+set $color3 #9F9B86
+set $color4 #B3AC91
+set $color5 #C4BB9D
+set $color6 #BAC0A6
+set $color7 #c6c6c6
+set $color8 #767660
+set $color9 #928B78
+set $color10 #A0967F
+set $color11 #9F9B86
+set $color12 #B3AC91
+set $color13 #C4BB9D
+set $color14 #BAC0A6
+set $color15 #c6c6c6

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>name</key>
+    <string>Pywal - Generated</string>
+    <key>semanticClass</key>
+    <string>theme.dark.pywal</string>
+    <key>uuid</key>
+    <string>a4667cb8-002b-446f-b36f-b3b399f7da9c</string>
+    <key>colorSpaceName</key>
+    <string>sRGB</string>
+  </dict>
+</plist>

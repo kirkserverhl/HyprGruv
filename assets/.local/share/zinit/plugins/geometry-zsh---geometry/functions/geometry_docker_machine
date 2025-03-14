@@ -1,0 +1,4 @@
+# geometry_docker_machine - show the current docker machine name
+
+[[ -n $DOCKER_MACHINE_NAME ]] || return
+ansi ${GEOMETRY_DOCKER_MACHINE_COLOR:=blue} "(${GEOMETRY_DOCKER_MACHINE_SYMBOL:="⚓"} ${DOCKER_MACHINE_NAME})"

@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/kirk/wallpaper/gruv_waves.webp"
+let background = "#0f1010"
+let foreground = "#c3c3c3"
+let cursor     = "#c3c3c3"
+
+" Colors
+let color0  = "#0f1010"
+let color1  = "#777B72"
+let color2  = "#948B77"
+let color3  = "#8FC17B"
+let color4  = "#3E8285"
+let color5  = "#458588"
+let color6  = "#749D91"
+let color7  = "#c3c3c3"
+let color8  = "#6c5959"
+let color9  = "#777B72"
+let color10 = "#948B77"
+let color11 = "#8FC17B"
+let color12 = "#3E8285"
+let color13 = "#458588"
+let color14 = "#749D91"
+let color15 = "#c3c3c3"

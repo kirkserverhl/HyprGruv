@@ -1,0 +1,44 @@
+{
+  "custom/quicklink1": {
+    "format": "",
+    "on-click": "chromium",
+    "tooltip-format": "Open Chromium"
+  },
+  "custom/quicklink2": {
+    "format": "",
+    "on-click": "~/scripts/browser.sh",
+    "on-click-right": "~/scripts/terminal.sh",
+    "tooltip-format": "Left:   Firefox   🦊\nRight: Ghostty 👻"
+  },
+  "custom/quicklink3": {
+    "format": "",
+    "on-click": "~/scripts/filemanager.sh",
+    "on-click-right": "~/scripts/ranger.sh",
+    "tooltip-format": "Left:    Dolphin 🐬 \nRight:  Ranger  🤠"
+  },
+  "custom/quicklink4": {
+    "format": "",
+    "on-click": "xdg-open https://gmail.com",
+    "tooltip-format": "Gmail  📧"
+  },
+  "custom/quicklink5": {
+    "format": "",
+    "on-click": "~/scripts/calculator.sh",
+    "tooltip-format": "Open calculator"
+  },
+  "custom/quicklink6": {
+    "format": "",
+    "on-click": "~/scripts/emojipicker.sh",
+    "tooltip-format": " Smile 💀"
+  },
+  "custom/quicklinkempty": {},
+  "group/quicklinks": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/quicklink2",
+      "custom/quicklink3",
+      "custom/quicklink4",
+      "custom/quicklinkempty"
+    ]
+  }
+}

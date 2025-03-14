@@ -1,0 +1,206 @@
+[ColorEffects:Disabled]
+ChangeSelectionColor=
+Color=#021114
+ColorAmount=0.5
+ColorEffect=3
+ContrastAmount=0
+ContrastEffect=0
+Enable=
+IntensityAmount=0
+IntensityEffect=0
+
+[ColorEffects:Enable]
+ChangeSelectionColor=
+Color=56,56,56
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0.65
+ContrastEffect=1
+Enable=
+IntensityAmount=0.1
+IntensityEffect=2
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=#000407
+ColorAmount=0.025
+ColorEffect=0
+ContrastAmount=0.1
+ContrastEffect=0
+Enable=true
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=176,163,94
+BackgroundNormal=#06151b
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=#7f949d
+ForegroundLink=249,225,124
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#d4e5ed
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[Colors:Complementary]
+BackgroundAlternate=#D400090d
+BackgroundNormal=#D4021114
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=#7f949d
+ForegroundLink=249,225,124
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#b4cad3
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[Colors:Header]
+BackgroundAlternate=#D4021114
+BackgroundNormal=#D4021114
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=#7f949d
+ForegroundLink=249,225,124
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#b4cad3
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[Colors:Header][Inactive]
+BackgroundAlternate=#D4021114
+BackgroundNormal=#D4021114
+DecorationFocus=#005063
+DecorationHover=#005063
+ForegroundActive=#d4e5ed
+ForegroundInactive=#7f949d
+ForegroundLink=#004d77
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#b4cad3
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[Colors:Selection]
+BackgroundAlternate=174,158,87,0
+BackgroundNormal=174,158,87,0
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=0,0,0,1
+ForegroundLink=249,225,124
+ForegroundNegative=#920023
+ForegroundNeutral=#753400
+ForegroundNormal=0,0,0,1
+ForegroundPositive=#005228
+ForegroundVisited=#74009f
+
+[Colors:Tooltip]
+BackgroundAlternate=#D40b2127
+BackgroundNormal=#D4021114
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=#7f949d
+ForegroundLink=249,225,124
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#d4e5ed
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[Colors:View]
+BackgroundAlternate=#44021114
+BackgroundNormal=#4400090d
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=#7f949d
+ForegroundLink=249,225,124
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#d4e5ed
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[Colors:Window]
+BackgroundAlternate=#0f1010
+BackgroundNormal=#0f1010
+DecorationFocus=249,225,124
+DecorationHover=249,225,124
+ForegroundActive=249,225,124
+ForegroundInactive=#7f949d
+ForegroundLink=249,225,124
+ForegroundNegative=#7a3639
+ForegroundNeutral=#75380d
+ForegroundNormal=#b4cad3
+ForegroundPositive=#00582b
+ForegroundVisited=#6e2e8a
+
+[DirSelect Dialog]
+DirSelectDialog Size=986,587
+History Items[$e]=file:$HOME/Downloads/Alba,file:$HOME/Lightly/misc/kde4lightly,file:$HOME/Lightly/kstyle,file:$HOME/Lightly,file:$HOME/.local/share/plasma/look-and-feel/raWZIK-psion-aurorae-65,file:$HOME/wallpaper,file:$HOME/wallpaper,file:$HOME/wallpaper
+
+[General]
+AccentColor=249,225,124
+ColorSchemeHash=3cf1143f5759344b775412de7db67b31671e912d
+UseSystemBell=true
+XftHintStyle=hintslight
+XftSubPixel=rgb
+accentColorFromWallpaper=true
+fixed=ShureTechMono Nerd Font Mono,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+font=ShureTechMono Nerd Font Propo,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+menuFont=Hurmit Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+smallestReadableFont=ShureTechMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+toolBarFont=ShureTechMono Nerd Font,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[Icons]
+Theme=Gruvbox-Plus-Dark
+
+[KDE]
+LookAndFeelPackage=Base16.Dark
+ShowDeleteCommand=false
+widgetStyle=qt6ct-style
+
+[KFileDialog Settings]
+Allow Expansion=false
+Automatically select filename extension=true
+Breadcrumb Navigation=false
+Decoration position=0
+LocationCombo Completionmode=5
+PathCombo Completionmode=5
+Show Bookmarks=false
+Show Full Path=false
+Show Inline Previews=false
+Show Preview=false
+Show Speedbar=true
+Show hidden files=true
+Sort by=Name
+Sort directories first=true
+Sort hidden files last=false
+Sort reversed=false
+Speedbar Width=192
+View Style=Detail
+
+[KScreen]
+ScreenScaleFactors=DP-1=1;HDMI-A-1=1;
+XwaylandClientsScale=false
+
+[PreviewSettings]
+EnableRemoteFolderThumbnail=false
+MaximumRemoteSize=0
+
+[WM]
+activeBackground=10,25,32
+activeBlend=252,252,252
+activeFont=Hurmit Nerd Font Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+activeForeground=212,229,237
+inactiveBackground=0,34,53
+inactiveBlend=161,169,177
+inactiveForeground=200,230,255

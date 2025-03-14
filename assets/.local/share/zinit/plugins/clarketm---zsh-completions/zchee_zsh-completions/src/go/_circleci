@@ -1,0 +1,1847 @@
+#compdef circleci
+
+# -----------------------------------------------------------------------------
+# The BSD-3-Clause License
+#
+# Copyright (c) 2018, The zsh-completions Authors.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+#
+# * Neither the name of que nor the names of its
+#   contributors may be used to endorse or promote products derived from
+#   this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+# -----------------------------------------------------------------------------
+#
+# github.com/CircleCI-Public/circleci-cli
+#
+# -----------------------------------------------------------------------------
+
+function _circleci_all_orbs() {
+  if ( (( $+_zsh_circleci_all_orbs )) && ! _cache_invalid circleci_all_orbs ) \
+      || _retrieve_cache circleci_all_orbs; then
+    return
+  fi
+
+  typeset -a -g _zsh_circleci_all_orbs
+  typeset -a new_circleci_all_orbs
+  new_circleci_all_orbs+=($(circleci --skip-update-check orb list -u | sed 's| (|@|g' | cut -d')' -f1 | awk 'NF<3 {print}'))
+
+  if [[ $new_circleci_all_orbs ]]; then
+    _zsh_circleci_all_orbs=($new_circleci_all_orbs)
+    _store_cache circleci_all_orbs _zsh_circleci_all_orbs
+    _message "Cached all public orbs."
+  else
+    _message "Could not update package cache."
+  fi
+}
+
+function _circleci_all_namespaces() {
+  if ( (( $+_zsh_circleci_all_namespaces )) && ! _cache_invalid circleci_all_namespaces ) \
+      || _retrieve_cache circleci_all_namespaces; then
+    return
+  fi
+
+  typeset -a -g _zsh_circleci_all_namespaces
+  typeset -a new_circleci_all_namespaces
+  new_circleci_all_namespaces+=($(circleci --skip-update-check orb list -u | cut -d'/' -f1 | awk 'NF<3 {print}' | uniq))
+
+  if [[ $new_circleci_all_namespaces ]]; then
+    _zsh_circleci_all_namespaces=($new_circleci_all_namespaces)
+    _store_cache circleci_all_namespaces _zsh_circleci_all_namespaces
+    _message "Cached all public orb namespaces."
+  else
+    _message "Could not update package cache."
+  fi
+}
+
+function _circleci_orbs_caching_policy() {
+  if [[ ${1:t} == circleci_all_orbs ]]; then
+    local -a oldp
+    oldp=( "$1"(Nm+1) )
+    (( $#oldp ))
+  fi
+}
+
+function _circleci_namespaces_caching_policy() {
+  if [[ ${1:t} == circleci_all_namespaces ]]; then
+    local -a oldp
+    oldp=( "$1"(Nm+1) )
+    (( $#oldp ))
+  fi
+}
+
+function _circleci_set_cache_policy() {
+  local cache_policy
+  zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+  if [[ -z "$cache_policy" ]]; then
+    zstyle ":completion:${curcontext}:" cache-policy _circleci_orbs_caching_policy
+    zstyle ":completion:${curcontext}:" cache-policy _circleci_namespaces_caching_policy
+  fi
+}
+
+function _circleci() {
+  local context curcontext=$curcontext state line ret=1
+  declare -A opt_args
+  _circleci_orbs_caching_policy
+  _circleci_namespaces_caching_policy
+
+  local -a commands
+  commands=(
+    'admin:Administrative operations for a CircleCI Server installation.'
+    'build:Run a job in a container on the local machine'
+    'config:Operate on build config files'
+    'context:Contexts provide a mechanism for securing and sharing environment variables across projects.'
+    'diagnostic:Check the status of your CircleCI CLI.'
+    'follow:Attempt to follow the project for the current git repository.'
+    'help:Help about any command'
+    'local:Debug jobs on the local machine'
+    'namespace:Operate on namespaces'
+    'open:Open the current project in the browser.'
+    'orb:Operate on orbs'
+    'query:Query the CircleCI GraphQL API.'
+    'runner:Operate on runners'
+    'setup:Setup the CLI with your credentials'
+    'step:Execute steps'
+    'switch'
+    'tests:Collect and split tests so they may be run in parallel.'
+    'update:Update the tool to the latest version'
+    'usage:Generate usage documentation in markdown for the CLI.'
+    'version:Display version information'
+  )
+
+  local -a _global_flags
+  _global_flags=(
+    "--token[your token for using CircleCI]:token"
+    "--host[URL to your CircleCI host (default: \"https://circleci.com\")]:host"
+    "--skip-update-check[Skip the check for updates check run before every command]"
+  )
+
+  _arguments -C \
+    $_global_flags \
+    "--debug[Enable debug logging. (hidden flag)]" \
+    "--endpoint[URI to your CircleCI GraphQL API endpoint (default: https://circleci.com/graphql-unstable) )(hidden flag)]:GraphQL API endpoint" \
+    "--github-api[Change the default endpoint to  GitHub API for retrieving updates (default: https://api.github.com/) (hidden flag)]:GitHub API endpoint" \
+    {-h,--help}"[help for $words[1]]" \
+    "1: :{_describe 'circleci command' commands}" \
+    '*:: :->args' \
+    && ret=0
+
+  case $state in
+    args)
+
+      case $words[1] in
+        admin)
+          local -a admin_cmds
+          admin_cmds=(
+            "delete-namespace-alias:Delete a namespace alias"
+            "import-orb:Import an orb version from circleci.com into a CircleCI Server installation"
+            "rename-namespace:Rename a namespace"
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'admin command' admin_cmds}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $state in
+            args)
+              case $words[1] in
+                (delete-namespace-alias)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    "--no-prompt[Disable prompt to bypass interactive UI.]" \
+                    '*:name:'
+                  ;;
+
+                (import-ord)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    "--no-prompt[Disable prompt to bypass interactive UI.]" \
+                    '*:<namespace>[/<orb>[@<version>]]'
+                  ;;
+
+                (rename-namespace)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    "--no-prompt[Disable prompt to bypass interactive UI.]" \
+                    '1:old name' \
+                    '2:new name'
+                  ;;
+              esac
+              ;;
+          esac
+          ;;
+
+        build)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            '--branch[Git branch]:branch' \
+            "--checkout-key[Git Checkout key (default \"~/.ssh/id_rsa\")]:checkout key:_files" \
+            {-c,--config}"[config file (default \".circleci/config.yml\")]:config file:_files'" \
+            {-e,--env}"[Set environment variables, e.g. \-e VAR=VAL]:VAR=VAL" \
+            "--index[node index of parallelism]:num index" \
+            "--job[job to be executed (default \"build\")]:job name" \
+            "--node-total[total number of parallel nodes (default 1)]:parallel size" \
+            "--repo-url[Git Url]:Git URL" \
+            "--revision[Git Revision]:Git revision" \
+            "--skip-checkout[use local path as-is]" \
+            {-v,--volume}"[Volume bind-mounting]:mount volume path:_directories"
+          ;;
+
+        config)
+          local -a config_cmds
+          config_cmds=(
+          'migrate:Migrate a pre-release config to the official 2.0 release version'
+          'pack:Pack up your CircleCI configuration into a single file.'
+          'process:Validate config and display expanded configuration.'
+          'validate:Check that the config file is well formed.'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'config subcommand' config_cmds}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $state in
+            args)
+              case $words[1] in
+                (pack|process|validate|check)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    '*:<path> The path to your orb (use "-" for STDIN):_files'
+                  ;;
+
+                migrate)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    {-c,--config}"[path to config file (default: \".circleci/config.yml\")]:config file:_files" \
+                    {-i,--in-place}"[whether to update file in place. If false, emits to stdout]"
+                  ;;
+              esac
+              ;;
+          esac
+          ;;
+
+        context)
+          local -a context_cmds
+          context_cmds=(
+            'create:Create a new context'
+            'delete:Delete the named context'
+            'list:List contexts'
+            'remove-secret:Remove a secret from the named context'
+            'show:Show a context'
+            'store-secret:Store an new secret in the named context. The value is read from stdin.'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'context subcommand' context_cmds}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $words[1] in
+            (create|show)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '1:vcs-type:(github bitbucket)' \
+                '2:org name' \
+                '3:context name'
+              ;;
+
+            delete)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                {-f,--force}'[Delete the context without asking for confirmation.]' \
+                '1:vcs-type:(github bitbucket)' \
+                '2:org name' \
+                '3:context name'
+              ;;
+
+            list)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '1:vcs-type:(github bitbucket)' \
+                '2:org name'
+              ;;
+
+            (remove-secret|store-secret)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '1:vcs-type:(github bitbucket)' \
+                '2:org name' \
+                '3:context name' \
+                '4:secret name'
+              ;;
+          esac
+          ;;
+
+        follow)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]"
+          ;;
+
+        diagnostic)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+          ;;
+
+        local)
+          local -a local_cmds
+          local_cmds=(
+            'execute:Run a job in a container on the local machine'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'local subcommand' local_cmds}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $words[1] in
+            execute)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '--branch[Git branch]:branch' \
+                '--checkout-key[Git Checkout key \(default "~/.ssh/id_rsa"\)]:checkout key:_files' \
+                {-c,--config}'[config file \(default ".circleci/config.yml"\)]:config file:_files' \
+                {-e,--env}'[Set environment variables, e.g. \-e VAR=VAL]:VAR=VAL' \
+                '--index[node index of parallelism]:num index' \
+                '--job[job to be executed \(default "build"\)]:job name' \
+                '--node-total[total number of parallel nodes \(default 1\)]:parallel size' \
+                '--repo-url[Git Url]:Git URL' \
+                '--revision[Git Revision]:Git revision' \
+                '--skip-checkout[use local path as-is]' \
+                {-v,--volume}'[Volume bind-mounting]:mount volume path:_directories'
+              ;;
+          esac
+          ;;
+
+        namespace)
+          local -a namespace_cmds
+          namespace_cmds=(
+            'create:create an namespace'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'namespace subcommand' namespace_cmds}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $state in
+            args)
+              case $words[1] in
+                create)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    "1:name" \
+                    "2:vcs" \
+                    "3:org-name"
+              esac
+              ;;
+          esac
+          ;;
+
+        orb)
+          local -a orb_cmds
+          orb_cmds=(
+            'add-to-category:Add an orb to a category'
+            'create:Create an orb in the specified namespace'
+            'info:Show the meta-data of an orb'
+            'init:Initialize a new orb.'
+            'list:List orbs'
+            'list-categories:List orb categories'
+            'pack:Pack an Orb with local scripts.'
+            'process:Validate an orb and print its form after all pre-registration processing'
+            'publish:Publish an orb to the registry'
+            'remove-from-category:Remove an orb from a category'
+            'source:Show the source of an orb'
+            "unlist:Disable or enable an orb's listing in the registry"
+            'validate:Validate an orb.yml'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'orb subcommand' orb_cmds}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $words[1] in
+            add-to-category)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "1:<namespace>/<orb>" \
+                "2:<category-name>"
+              ;;
+
+            create)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '--integration-testing[Enable test mode to bypass interactive UI.]' \
+                "*:<namespace>/<name>"
+              ;;
+
+            # "*:namespace/orb@version:($(circleci orb list -u | sed 's| (|@|g' | cut -d')' -f1 | awk 'NF<3 {print}'))"
+            info)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "*:namespace/orb@version:->all_orbs"
+
+                case $state in
+                  all_orbs)
+                    _circleci_all_orbs
+                    _wanted all-orbs expl 'orbs' compadd -a _zsh_circleci_all_orbs && ret=0
+                  ;;
+                esac
+              ;;
+
+            init)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "*:path:_files"
+              ;;
+
+            list)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                {-d,--details}'[output all the commands, executors, and jobs, along with a tree of their parameters]' \
+                '--sort[sort of]:(builds projects orgs)' \
+                {-u,--uncertified}'[include uncertified orbs]' \
+                '--json[print output as json instead of human-readable]' \
+                "*:namespace:->all_namespaces"
+
+                case $state in
+                  all_namespaces)
+                    _circleci_all_namespaces
+                    _wanted all-namespaces expl 'namespaces' compadd -a _zsh_circleci_all_namespaces && ret=0
+                    ;;
+                esac
+              ;;
+
+            list-categories)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+              ;;
+
+            pack)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "*:path:_files"
+              ;;
+
+            process)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '*:<path> The path to your orb \(use "-" for STDIN\):_files'
+              ;;
+
+            publish)
+              local -a orb_publish_cmds
+              orb_publish_cmds=(
+                'increment:Increment a released version of an orb'
+                'promote:Promote a development version of an orb to a semantic release'
+              )
+
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "1: :{_describe 'orb publish subcommand' orb_publish_cmds}"
+
+              case $words[1] in
+                increment)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    '1:<path> The path to your orb \(use "-" for STDIN\):_files' \
+                    "2:<namespace/orb> A fully-qualified reference to an orb. This takes the form namespace/orb@version]" \
+                    "3:segment:(major minor patch)"
+                  ;;
+
+                promote)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    '1:<path> The path to your orb \(use "-" for STDIN\):path:_files' \
+                    "2:segment:segment:(major minor patch)"
+                  ;;
+
+                *)
+                  _arguments \
+                    $_global_flags \
+                    {-h,--help}"[help for $words[1]]" \
+                    '1:<path> The path to your orb \(use "-" for STDIN\):_files' \
+                    "2:<orb> A fully-qualified reference to an orb. This takes the form namespace/orb@version"
+                  ;;
+              esac
+              ;;
+
+            remove-from-category)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "1:<namespace>/<orb>" \
+                "2:<category-name>"
+              ;;
+
+            source)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "*:namespace/orb@version:->all_orbs"
+
+                case $state in
+                  all_orbs)
+                    _circleci_all_orbs
+                    _wanted all-orbs expl 'orbs' compadd -a _zsh_circleci_all_orbs && ret=0
+                  ;;
+                esac
+              ;;
+
+            unlint)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "1:<namespace>/<orb>:_wanted all-orbs expl 'orbs' compadd -a _zsh_circleci_all_orbs" \
+                "2:enable or disable the listing:(true false)"
+              ;;
+
+            validate)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                '1:The path to your orb (use "-" for STDIN):_files'
+              ;;
+          esac
+          ;;
+
+        query)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            '1:The path to your orb (use "-" for STDIN):_files' \
+            && ret=0
+          ;;
+
+        runner)
+          local -a runner_commands
+          runner_commands=(
+            'instance:Operate on runner instances'
+            'resource-class:Operate on runner resource-classes'
+            'token:Operate on runner tokens'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'runner subcommand' runner_commands}" \
+            '*:: :->args'
+
+          case $words[1] in
+            instance)
+              local -a resource_class_commands
+              resource_class_commands=(
+                {list,ls}':List resource-classes for a namespace'
+              )
+
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "1: :{_describe 'resource-class subcommand' resource_class_commands}"
+
+              case $word[1] in
+                (list|ls)
+                  _arguments \
+                    {-h,--help}"[help for $words[1]]" \
+                    "*:namespace or resource-class:->all_namespaces"
+
+                  case $state in
+                    all_namespaces)
+                      _circleci_all_namespaces
+                      _wanted all-namespaces expl 'namespaces' compadd -a _zsh_circleci_all_namespaces && ret=0
+                      ;;
+                  esac
+                  ;;
+              esac
+              ;;
+
+            resource-class)
+              local -a resource_class_commands
+              resource_class_commands=(
+                'create:Create a resource-class'
+                {delete,rm}':Delete a resource-class'
+                {list,ls}':List resource-classes for a namespace'
+              )
+
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "1: :{_describe 'resource-class subcommand' resource_class_commands}"
+
+              case $word[1] in
+                create)
+                  _arguments \
+                    {-h,--help}"[help for $words[1]]" \
+                    "1:resource-class" \
+                    "2:description>"
+                  ;;
+
+                (delete|rm)
+                  _arguments \
+                    {-h,--help}"[help for $words[1]]" \
+                    "1:resource-class"
+                  ;;
+
+                (list|ls)
+                  _arguments \
+                    {-h,--help}"[help for $words[1]]" \
+                    "*:namespace:->all_namespaces"
+
+                  case $state in
+                    all_namespaces)
+                      _circleci_all_namespaces
+                      _wanted all-namespaces expl 'namespaces' compadd -a _zsh_circleci_all_namespaces && ret=0
+                      ;;
+                  esac
+                  ;;
+              esac
+              ;;
+
+            token)
+              local -a token_commands
+              token_commands=(
+                'create:Create a token for a resource-class'
+                {delete,rm}':Delete a token'
+                {list,ls}':List tokens for a resource-class'
+              )
+
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[2]]" \
+                "1: :{_describe 'token subcommand' token_commands}" \
+                && ret=0
+
+              case $word[3] in
+                create)
+                  _arguments \
+                    {-h,--help}"[help for $words[3]]" \
+                    "--config=[true to emit a CircleCI runner config template with the token]:boolean:(true)" \
+                    "4:resource-class" \
+                    "5:nickname"
+                  ;;
+
+                (delete|rm)
+                  _arguments \
+                    {-h,--help}"[help for $words[3]]" \
+                    "*:token-id"
+                  ;;
+
+                (list|ls)
+                  _arguments \
+                    {-h,--help}"[help for $words[3]]" \
+                    "*:resource-class"
+                  ;;
+              esac
+              ;;
+          esac
+          ;;
+
+        tests)
+          local -a tests_commands
+          tests_commands=(
+            'glob:glob files using pattern]'
+            'split:return a split batch of provided files'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'tests subcommand' tests_commands}" \
+            '*:: :->args' \
+            && ret=0
+
+          case $words[1] in
+            glob)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "*:re2 regexp PATTERN" \
+                && ret=0
+              ;;
+
+            split)
+              _arguments \
+                $_global_flags \
+                {-h,--help}"[help for $words[1]]" \
+                "--index[index of node.]:index size" \
+                "--show-counts[print test file or test class counts to stderr (default false)]" \
+                "--split-by[how to weight the split. (default \"name\")]:split type:(name filesize timings)" \
+                "--timings-file[JSON file containing historical timing data.]:json file:_files" \
+                "--timings-type[lookup historical timing data (default \"autodetect\")]:timing type:(classname filename testname autodetect)" \
+                "--total[number of nodes. (default 1)]:node size" \
+                && ret=0
+              ;;
+          esac
+          ;;
+
+        update)
+          local -a update_commands
+          update_commands=(
+            'build-agent:Update the build agent to the latest version'
+            'check:Check if there are any updates available'
+            'install:Update the tool to the latest version'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'update subcommand' update_commands}" \
+            '*:: :->args' \
+            && ret=0
+          ;;
+
+        step)
+          local -a step_commands
+          step_commands=(
+            'halt:Halt the current job and treat it as successful'
+          )
+
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'step subcommand' step_commands}" \
+            && ret=0
+          ;;
+
+        setup)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            '--integration-testing[Enable test mode to bypass interactive UI.]' \
+            '--no-prompt[Disable prompt to bypass interactive UI. \(MUST supply --host and --token\)]' \
+            '--host[URL to your CircleCI host]:CircleCI host url' \
+            '--token[your token for using CircleCI]:CircleCI token' \
+          ;;
+
+        query)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            '1:The path to your query \(use "-" for STDIN\)'
+          ;;
+
+        version)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+          ;;
+
+        (help|usage)
+          _arguments \
+            $_global_flags \
+            {-h,--help}"[help for $words[1]]" \
+            "1: :{_describe 'command' commands}"
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_circleci "$*"
+
+# -----------------------------------------------------------------------------
+#
+# Use CircleCI from the command line.
+#
+# This project is the seed for CircleCI's new command-line application.
+#
+# For more help, see the documentation here: https://circleci.com/docs/2.0/local-cli/
+#
+#
+# Usage:
+#   circleci [command]
+#
+# Available Commands:
+#   admin       Administrative operations for a CircleCI Server installation.
+#   config      Operate on build config files
+#   context     Contexts provide a mechanism for securing and sharing environment variables across projects. The environment variables are defined as name/value pairs and are injected at runtime.
+#   diagnostic  Check the status of your CircleCI CLI.
+#   follow      Attempt to follow the project for the current git repository.
+#   help        Help about any command
+#   local       Debug jobs on the local machine
+#   namespace   Operate on namespaces
+#   open        Open the current project in the browser.
+#   orb         Operate on orbs
+#   query       Query the CircleCI GraphQL API.
+#   runner      Operate on runners
+#   setup       Setup the CLI with your credentials
+#   step        Execute steps
+#   switch
+#   tests       Collect and split tests so they may be run in parallel.
+#   update      Update the tool to the latest version
+#   usage       Generate usage documentation in markdown for the CLI.
+#   version     Display version information
+#
+# Flags:
+#       --debug               Enable debug logging.
+#       --endpoint string     URI to your CircleCI GraphQL API endpoint (default "graphql-unstable")
+#       --github-api string   Change the default endpoint to GitHub API for retrieving updates (default "https://api.github.com/")
+#   -h, --help                help for circleci
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Administrative operations for a CircleCI Server installation.
+#
+#
+# Usage:
+#   circleci admin [command]
+#
+# Available Commands:
+#   delete-namespace-alias Delete a namespace alias
+#   import-orb             Import an orb version from circleci.com into a CircleCI Server installation
+#   rename-namespace       Rename a namespace
+#
+# Flags:
+#   -h, --help   help for admin
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci admin [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Delete a namespace alias.
+#
+# A namespace can have multiple aliases (names). This command deletes an alias left behind by a rename. The most recent alias cannot be deleted.
+#
+# Example:
+# - namespace A is renamed to B
+# - alias B is created, coexisting with alias A
+# - after migrating config accordingly, we can delete the A alias.
+#
+#
+# Usage:
+#   circleci admin delete-namespace-alias <name> [flags]
+#
+# Args:
+#   <name>      The name of the alias to delete
+#
+#
+# Flags:
+#   -h, --help        help for delete-namespace-alias
+#       --no-prompt   Disable prompt to bypass interactive UI.
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Import an orb version from circleci.com into a CircleCI Server installation
+#
+#
+# Usage:
+#   circleci admin import-orb <namespace>[/<orb>[@<version>]] [flags]
+#
+# Flags:
+#   -h, --help        help for import-orb
+#       --no-prompt   Disable prompt to bypass interactive UI.
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Rename a namespace
+#
+#
+# Usage:
+#   circleci admin rename-namespace <old-name> <new-name> [flags]
+#
+# Args:
+#   <old-name>  The current name of the namespace
+#   <new-name>  The new name you want to give the namespace
+#
+#
+# Flags:
+#   -h, --help        help for rename-namespace
+#       --no-prompt   Disable prompt to bypass interactive UI.
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# #
+# -----------------------------------------------------------------------------
+#
+# Operate on build config files
+#
+#
+# Usage:
+#   circleci config [command]
+#
+# Available Commands:
+#   migrate     Migrate a pre-release config to the official 2.0 release version
+#   pack        Pack up your CircleCI configuration into a single file.
+#   process     Validate config and display expanded configuration.
+#   validate    Check that the config file is well formed.
+#
+# Flags:
+#   -h, --help   help for config
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci config [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Migrate a pre-release config to the official 2.0 release version
+#
+# Usage:
+#   circleci config migrate [flags]
+#
+# Flags:
+#   -h, --help       help for migrate
+#   -i, --in-place   whether to update file in place.  If false, emits to stdout
+#
+# Global Flags:
+#   -c, --config string   path to config file (default ".circleci/config.yml")
+#       --verbose         enable verbose logging output
+#
+# -----------------------------------------------------------------------------
+#
+# Pack up your CircleCI configuration into a single file.
+#
+#
+# Usage:
+#   circleci config pack <path> [flags]
+#
+# Args:
+#   <path>      The path to your config (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for pack
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Validate config and display expanded configuration.
+#
+#
+# Usage:
+#   circleci config process <path> [flags]
+#
+# Args:
+#   <path>      The path to your config (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for process
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+#
+# -----------------------------------------------------------------------------
+#
+# Check that the config file is well formed.
+#
+#
+# Usage:
+#   circleci config validate <path> [flags]
+# Aliases:
+#   validate, check
+#
+# Args:
+#   <path>      The path to your config (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for validate
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Contexts provide a mechanism for securing and sharing environment variables across projects. The environment variables are defined as name/value pairs and are injected at runtime.
+#
+#
+# Usage:
+#   circleci context [command]
+#
+# Available Commands:
+#   create        Create a new context
+#   delete        Delete the named context
+#   list          List contexts
+#   remove-secret Remove a secret from the named context
+#   show          Show a context
+#   store-secret  Store an new secret in the named context. The value is read from stdin.
+#
+# Flags:
+#   -h, --help   help for context
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci context [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Create a new context
+#
+#
+# Usage:
+#   circleci context create <vcs-type> <org-name> <context-name> [flags]
+#
+# Flags:
+#   -h, --help   help for create
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Delete the named context
+#
+#
+# Usage:
+#   circleci context delete <vcs-type> <org-name> <context-name> [flags]
+#
+# Flags:
+#   -f, --force   Delete the context without asking for confirmation.
+#   -h, --help    help for delete
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# List contexts
+#
+#
+# Usage:
+#   circleci context list <vcs-type> <org-name> [flags]
+#
+# Flags:
+#   -h, --help   help for list
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Remove a secret from the named context
+#
+#
+# Usage:
+#   circleci context remove-secret <vcs-type> <org-name> <context-name> <secret name> [flags]
+#
+# Flags:
+#   -h, --help   help for remove-secret
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Show a context
+#
+#
+# Usage:
+#   circleci context show <vcs-type> <org-name> <context-name> [flags]
+#
+# Flags:
+#   -h, --help   help for show
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Store an new secret in the named context. The value is read from stdin.
+#
+#
+# Usage:
+#   circleci context store-secret <vcs-type> <org-name> <context-name> <secret name> [flags]
+#
+# Flags:
+#   -h, --help   help for store-secret
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Pack up your CircleCI configuration into a single file.
+#
+#
+# Usage:
+#   circleci config pack <path> [flags]
+#
+# Args:
+#   <path>      The path to your config (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for pack
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI (default "7eef1e5278edbf095ba225dcee6c0a01513c26c6")
+#
+# -----------------------------------------------------------------------------
+#
+# Process the config.
+#
+#
+# Usage:
+#   circleci config process <path> [flags]
+#
+# Args:
+#   <path>      The path to your config (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for process
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI (default "7eef1e5278edbf095ba225dcee6c0a01513c26c6")
+#
+# -----------------------------------------------------------------------------
+#
+# Check that the config file is well formed.
+#
+#
+# Usage:
+#   circleci config validate <path> [flags]
+# Aliases:
+#   validate, check
+#
+# Args:
+#   <path>      The path to your config (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for validate
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI (default "7eef1e5278edbf095ba225dcee6c0a01513c26c6")
+#
+# -----------------------------------------------------------------------------
+#
+# Check the status of your CircleCI CLI.
+#
+#
+# Usage:
+#   circleci diagnostic [flags]
+#
+# Flags:
+#   -h, --help   help for diagnostic
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+#
+# -----------------------------------------------------------------------------
+#
+# Attempt to follow the project for the current git repository.
+#
+#
+# Usage:
+#   circleci follow [flags]
+#
+# Flags:
+#   -h, --help   help for follow
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Help provides help for any command in the application.
+# Simply type circleci help [path to command] for full details.
+#
+#
+# Usage:
+#   circleci help [command] [flags]
+#
+# Flags:
+#   -h, --help   help for help
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+#
+# -----------------------------------------------------------------------------
+#
+# Debug jobs on the local machine
+#
+#
+# Usage:
+#   circleci local [command]
+#
+# Available Commands:
+#   execute     Run a job in a container on the local machine
+#
+# Flags:
+#   -h, --help   help for local
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+# Use "circleci local [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Run a job in a container on the local machine
+#
+#
+# Usage:
+#   circleci local execute [flags]
+#
+# Flags:
+#       --branch string         Git branch
+#       --checkout-key string   Git Checkout key (default "~/.ssh/id_rsa")
+#   -c, --config string         config file (default ".circleci/config.yml")
+#   -e, --env -e VAR=VAL        Set environment variables, e.g. -e VAR=VAL
+#   -h, --help                  help for execute
+#       --index int             node index of parallelism
+#       --job string            job to be executed (default "build")
+#       --node-total int        total number of parallel nodes (default 1)
+#       --repo-url string       Git Url
+#       --revision string       Git Revision
+#       --skip-checkout         use local path as-is (default true)
+#   -v, --volume strings        Volume bind-mounting
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN#
+#
+# -----------------------------------------------------------------------------
+#
+# Operate on namespaces
+#
+#
+# Usage:
+#   circleci namespace [command]
+#
+# Available Commands:
+#   create      create a namespace
+#
+# Flags:
+#   -h, --help   help for namespace
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+# Use "circleci namespace [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Operate on orbs
+#
+#
+# Usage:
+#   circleci orb [command]
+#
+# Available Commands:
+#   create      Create an orb in the specified namespace
+#   info        Show the meta-data of an orb
+#   list        List orbs
+#   process     Validate an orb and print its form after all pre-registration processing
+#   publish     Publish an orb to the registry
+#   source      Show the source of an orb
+#   unlist      Disable or enable an orb's listing in the registry
+#   validate    Validate an orb.yml
+#
+# Flags:
+#   -h, --help   help for orb
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+# Use "circleci orb [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Create an orb in the specified namespace
+# Please note that at this time all orbs created in the registry are world-readable.
+#
+#
+# Usage:
+#   circleci orb create <namespace>/<orb> [flags]
+#
+# Flags:
+#   -h, --help   help for create
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Show the meta-data of an orb
+#
+#
+# Usage:
+#   circleci orb info <orb> [flags]
+#
+# Examples:
+#   circleci orb info circleci/python@0.1.4
+#   circleci orb info my-ns/foo-orb@dev:latest
+#
+# Args:
+#   <orb>       A fully-qualified reference to an orb. This takes the form namespace/orb@version
+#
+#
+# Flags:
+#   -h, --help   help for info
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# List orbs
+#
+#
+# Usage:
+#   circleci orb list <namespace> [flags]
+#
+# Args:
+#   <namespace> The namespace used for the orb (i.e. circleci) (Optional)
+#
+#
+# Flags:
+#   -d, --details       output all the commands, executors, and jobs, along with a tree of their parameters
+#   -h, --help          help for list
+#       --sort string   one of "builds"|"projects"|"orgs"
+#   -u, --uncertified   include uncertified orbs
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Validate an orb and print its form after all pre-registration processing
+#
+#
+# Usage:
+#   circleci orb process <path> [flags]
+#
+# Args:
+#   <path>      The path to your orb (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for process
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Publish an orb to the registry.
+# Please note that at this time all orbs published to the registry are world-readable.
+#
+#
+# Usage:
+#   circleci orb publish <path> <orb> [flags]
+#   circleci orb publish [command]
+#
+# Available Commands:
+#   increment   Increment a released version of an orb
+#   promote     Promote a development version of an orb to a semantic release
+#
+# Args:
+#   <path>      The path to your orb (use "-" for STDIN)
+#   <orb>       A fully-qualified reference to an orb. This takes the form namespace/orb@version
+#
+#
+# Flags:
+#   -h, --help   help for publish
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+# Use "circleci orb publish [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Increment a released version of an orb.
+# Please note that at this time all orbs incremented within the registry are world-readable.
+#
+# Example: 'circleci orb publish increment foo/orb.yml foo/bar minor' => foo/bar@1.1.0
+#
+#
+# Usage:
+#   circleci orb publish increment <path> <namespace>/<orb> <segment> [flags]
+# Aliases:
+#   increment, inc
+#
+# Args:
+#   <path>      The path to your orb (use "-" for STDIN)
+#     <segment>   "major"|"minor"|"patch"
+#
+#
+# Flags:
+#   -h, --help   help for increment
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Promote a development version of an orb to a semantic release.
+# Please note that at this time all orbs promoted within the registry are world-readable.
+#
+# Example: 'circleci orb publish promote foo/bar@dev:master major' => foo/bar@1.0.0
+#
+#
+# Usage:
+#   circleci orb publish promote <orb> <segment> [flags]
+#
+# Args:
+#   <orb>       A fully-qualified reference to an orb. This takes the form namespace/orb@version
+#   <segment>   "major"|"minor"|"patch"
+#
+#
+# Flags:
+#   -h, --help   help for promote
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Show the source of an orb
+#
+#
+# Usage:
+#   circleci orb source <orb> [flags]
+#
+# Examples:
+#   circleci orb source circleci/python@0.1.4 # grab the source at version 0.1.4
+#   circleci orb source my-ns/foo-orb@dev:latest # grab the source of dev release "latest"
+#
+# Args:
+#   <orb>       A fully-qualified reference to an orb. This takes the form namespace/orb@version
+#
+#
+# Flags:
+#   -h, --help   help for source
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Disable or enable an orb's listing in the registry.
+# This only affects whether the orb is displayed in registry search results;
+# the orb remains world-readable as long as referenced with a valid name.
+#
+# Example: Run 'circleci orb unlist foo/bar true' to disable the listing of the
+# orb in the registry and 'circleci orb unlist foo/bar false' to re-enable the
+# listing of the orb in the registry.
+#
+#
+# Usage:
+#   circleci orb unlist <namespace>/<orb> <true|false> [flags]
+#
+# Flags:
+#   -h, --help   help for unlist
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --token string   your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Validate an orb.yml
+#
+#
+# Usage:
+#   circleci orb validate <path> [flags]
+#
+# Args:
+#   <path>      The path to your orb (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for validate
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#
+# -----------------------------------------------------------------------------
+#
+# Query the CircleCI GraphQL API.
+#
+#
+# Usage:
+#   circleci query PATH [flags]
+#
+# Args:
+#   PATH        The path to your query (use "-" for STDIN)
+#
+#
+# Flags:
+#   -h, --help   help for query
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+#
+# -----------------------------------------------------------------------------
+#
+# Operate on runners
+#
+#
+# Usage:
+#   circleci runner [command]
+#
+# Available Commands:
+#   instance       Operate on runner instances
+#   resource-class Operate on runner resource-classes
+#   token          Operate on runner tokens
+#
+# Flags:
+#   -h, --help   help for runner
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci runner [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Operate on runner instances
+#
+#
+# Usage:
+#   circleci runner instance [command]
+#
+# Available Commands:
+#   list        List runner instances
+#
+# Flags:
+#   -h, --help   help for instance
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci runner instance [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# List runner instances
+#
+#
+# Usage:
+#   circleci runner instance list <namespace or resource-class> [flags]
+# Aliases:
+#   list, ls
+#
+# Examples:
+#   circleci runner instance ls my-namespace
+#   circleci runner instance ls my-namespace/my-resource-class
+#
+# Flags:
+#   -h, --help   help for list
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Operate on runner resource-classes
+#
+#
+# Usage:
+#   circleci runner resource-class [command]
+#
+# Available Commands:
+#   create      Create a resource-class
+#   delete      Delete a resource-class
+#   list        List resource-classes for a namespace
+#
+# Flags:
+#   -h, --help   help for resource-class
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+# Use "circleci runner resource-class [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+#
+# Create a resource-class
+#
+#
+# Usage:
+#   circleci runner resource-class create <resource-class> <description> [flags]
+#
+# Flags:
+#   -h, --help   help for create
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Delete a resource-class
+#
+#
+# Usage:
+#   circleci runner resource-class delete <resource-class> [flags]
+# Aliases:
+#   delete, rm
+#
+# Flags:
+#   -h, --help   help for delete
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# List resource-classes for a namespace
+#
+#
+# Usage:
+#   circleci runner resource-class list <namespace> [flags]
+# Aliases:
+#   list, ls
+#
+# Flags:
+#   -h, --help   help for list
+#
+# Global Flags:
+#       --host string         URL to your CircleCI host, also CIRCLECI_CLI_HOST (default "https://circleci.com")
+#       --skip-update-check   Skip the check for updates check run before every command. (default true)
+#       --token string        your token for using CircleCI, also CIRCLECI_CLI_TOKEN
+#
+# -----------------------------------------------------------------------------
+#
+# Setup the CLI with your credentials
+#
+#
+# Usage:
+#   circleci setup [flags]
+#
+# Flags:
+#   -h, --help   help for setup
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+#
+# -----------------------------------------------------------------------------
+#
+# Collect and split tests so they may be run in parallel.
+#
+# Usage:
+#   circleci tests [command]
+#
+# Available Commands:
+#   glob        Print files matching the glob pattern.
+#   split       Group tests into independent buckets so they can be run in parallel.
+#
+# Flags:
+#   -h, --help   help for tests
+#
+# Global Flags:
+#       --verbose   enable verbose logging output
+#
+# Use "circleci tests [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Group tests into independent buckets so they can be run in parallel.
+#
+# FILENAME is the path to a list of values, one per line, which match the
+# --timings-type flag (filenames, classnames, or testnames) . If FILENAME is omitted
+# the values will be read from stdin.
+#
+# Usage:
+#   circleci tests split [flags] [FILENAME]
+#
+# Flags:
+#   -h, --help                  help for split
+#       --index uint            index of node.
+#       --show-counts           print test file or test class counts to stderr (default false).
+#       --split-by string       how to weight the split, allowed values are "name", "filesize", and "timings". (default "name")
+#       --timings-file string   JSON file containing historical timing data.
+#       --timings-type string   lookup historical timing data by: "classname", "filename", "testname" or "autodetect" (automatically choose classname or filename). (default "autodetect")
+#       --total uint            number of nodes. (default 1)
+#
+# Global Flags:
+#       --verbose   enable verbose logging output
+#
+# -----------------------------------------------------------------------------
+#
+# Print a list of files, one per line, which match the glob pattern.
+#
+# Pattern supports the following symbols:
+#
+# *      matches any sequence of non-path-separators
+# **     matches any sequence of characters, including path separators.
+# ?      matches any single non-path-separator character
+# [...]  matches any character in the set. May use '-' for a range.
+#
+# Usage:
+#   circleci tests glob [flags] PATTERN
+#
+# Flags:
+#   -h, --help   help for glob
+#
+# Global Flags:
+#       --verbose   enable verbose logging output
+#
+# -----------------------------------------------------------------------------
+#
+# Update the tool
+#
+#
+# Usage:
+#   circleci update [command]
+#
+# Available Commands:
+#   build-agent Update the build agent to the latest version
+#   check       Check if there are any updates available
+#   install     Update the tool to the latest version
+#
+# Flags:
+#   -h, --help   help for update
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+# Use "circleci update [command] --help" for more information about a command.
+#
+# -----------------------------------------------------------------------------
+#
+# Display version information
+#
+#
+# Usage:
+#   circleci version [flags]
+#
+# Flags:
+#   -h, --help   help for version
+#
+# Global Flags:
+#       --host string    URL to your CircleCI host (default "https://circleci.com")
+#       --token string   your token for using CircleCI
+#       --verbose        Enable verbose logging.
+#
+# -----------------------------------------------------------------------------
+#
+# vim:ft=zsh:et:sts=2:sw=2

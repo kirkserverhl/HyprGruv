@@ -1,0 +1,10 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+zincs_a5 ()
+{
+  REPLY="${_zincs_a5_value}"
+}
+
+typeset -g _zincs_a5_value="init"
+
+zincs_a5 "$@"

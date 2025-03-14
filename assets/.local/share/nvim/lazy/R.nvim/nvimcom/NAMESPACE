@@ -1,0 +1,14 @@
+export("Rnvim.source", "Rnvim.selection", "Rnvim.block", "Rnvim.paragraph",
+       "Rnvim.function", "Rnvim.chunk", "nvim.list.args", "nvim.srcdir",
+       "nvim.plot", "nvim.interlace.rnoweb",
+       "nvim.print", "nvim.names", "etags2ctags", "nvim.interlace.rmd", "vi")
+
+importFrom("tools", "Rd2txt_options", "texi2dvi")
+importFrom("methods", "existsFunction", "isGeneric", "slotNames")
+importFrom("graphics", "boxplot", "hist", "par", "plot")
+importFrom("stats", "runif")
+importFrom("utils", "browseURL", "capture.output", "example", "find",
+           "getAnywhere", "getS3method", "isS3stdGeneric",
+           "installed.packages", "methods", "packageDescription",
+           "read.table", "str", "Sweave", "write.table")
+useDynLib(nvimcom, .registration = TRUE)

@@ -1,0 +1,109 @@
+# Cursor
+shell-integration-features = no-cursor,sudo,no-title
+cursor-style = block
+adjust-cell-height = 35%
+
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = 2
+
+
+# fonts
+theme = "/home/kirk/.cache/wal/colors-ghostty"
+font-family = ShureTechMono Nerd Font
+font-size = 12
+
+adjust-cell-width = -1
+
+# Window
+background-opacity = 0.9
+gtk-titlebar = false
+custom-shader = /home/chris/bloom.glsl
+gtk-single-instance = true
+gtk-wide-tabs = false
+window-padding-x = 5,5
+window-padding-y = 5,0
+window-padding-balance = true
+window-decoration = false
+window-theme = system
+confirm-close-surface = false
+resize-overlay = never
+gtk-adwaita = false
+title = "Ghostty"
+
+# theming
+# background = #222222
+# foreground = #ebdbb2
+
+#palette = 0=#3c3836
+#palette = 8=#928374
+
+#palette = 1=#cc241d
+#palette = 9=#fb4934
+
+#palette = 2=#98971a
+#palette = 10=#b8bb26
+
+#palette = 3=#d79921
+#palette = 11=#fabd2f
+
+#palette = 4=#458588
+#palette = 12=#83a598
+
+#palette = 5=#b16286
+#palette = 13=#d3869b
+
+#palette = 6=#689d6a
+#palette = 14=#8ec07c
+
+#palette = 7=#a89984
+#palette = 15=#ebdbb2
+
+#cursor-color = #928374
+#cursor-text = #ebdbb2
+
+#selection-background = #928374
+#selection-foreground = #ebdbb2
+bold-is-bright = true
+
+# keybindings
+keybind = cmd+g>r=reload_config
+keybind = cmd+g>x=close_surface
+
+keybind = cmd+g>n=new_window
+
+# tabs 
+keybind = cmd+g>c=new_tab
+keybind = cmd+g>shift+l=next_tab
+keybind = cmd+g>shift+h=previous_tab
+keybind = cmd+g>comma=move_tab:-1
+keybind = cmd+g>period=move_tab:1
+
+# quick tab switch
+keybind = cmd+g>1=goto_tab:1
+keybind = cmd+g>2=goto_tab:2
+keybind = cmd+g>3=goto_tab:3
+keybind = cmd+g>4=goto_tab:4
+keybind = cmd+g>5=goto_tab:5
+keybind = cmd+g>6=goto_tab:6
+keybind = cmd+g>7=goto_tab:7
+keybind = cmd+g>8=goto_tab:8
+keybind = cmd+g>9=goto_tab:9
+
+# split
+keybind = cmd+g>\=new_split:right
+keybind = cmd+g>-=new_split:down
+
+keybind = cmd+g>j=goto_split:bottom
+keybind = cmd+g>k=goto_split:top
+keybind = cmd+g>h=goto_split:left
+keybind = cmd+g>l=goto_split:right
+
+keybind = cmd+g>z=toggle_split_zoom
+
+keybind = cmd+g>e=equalize_splits
+
+# Other
+copy-on-select = clipboard
+shell-integration-features = no-cursor,sudo,no-title

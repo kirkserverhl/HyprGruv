@@ -1,0 +1,9 @@
+2025/03/07-16:16:07.699 162c3 Reusing MANIFEST /home/kirk/.config/discord/Local Storage/leveldb/MANIFEST-000001
+2025/03/07-16:16:07.702 162c3 Recovering log #7
+2025/03/07-16:16:07.703 162c3 Reusing old log /home/kirk/.config/discord/Local Storage/leveldb/000007.log 
+2025/03/07-16:20:52.213 162c4 Level-0 table #11: started
+2025/03/07-16:20:52.232 162c4 Level-0 table #11: 3477639 bytes OK
+2025/03/07-16:20:52.237 162c4 Delete type=0 #7
+2025/03/07-17:14:14.108 162c4 Level-0 table #13: started
+2025/03/07-17:14:14.112 162c4 Level-0 table #13: 22829 bytes OK
+2025/03/07-17:14:14.116 162c4 Delete type=0 #10

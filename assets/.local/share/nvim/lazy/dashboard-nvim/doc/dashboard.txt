@@ -1,0 +1,292 @@
+*dashboard.txt*           For Nvim 0.8.0          Last change: 2025 January 22
+
+==============================================================================
+Table of Contents                                *dashboard-table-of-contents*
+
+1. Feature                                                 |dashboard-feature|
+2. Install                                                 |dashboard-install|
+3. Configuration                                     |dashboard-configuration|
+  - Options                                  |dashboard-configuration-options|
+  - Theme config                        |dashboard-configuration-theme-config|
+4. Backers                                                 |dashboard-backers|
+5. Donate                                                   |dashboard-donate|
+6. LICENSE                                                 |dashboard-license|
+7. Links                                                     |dashboard-links|
+Fancy and Blazing Fast start screen plugin of neovim  ----------------------------------- -----------------------------------
+                                      
+
+  ----------------------------------- -----------------------------------
+
+==============================================================================
+1. Feature                                                 *dashboard-feature*
+
+- Low memory usage. dashboard does not store the all user configs in memory like header etc these string will take some memory. now it will be clean after you open a file. you can still use dashboard command to open a new one , then dashboard will read the config from cache.
+- Blazing fast
+
+
+==============================================================================
+2. Install                                                 *dashboard-install*
+
+- Lazy.nvim
+
+>lua
+    {
+      'nvimdev/dashboard-nvim',
+      event = 'VimEnter',
+      config = function()
+        require('dashboard').setup {
+          -- config
+        }
+      end,
+      dependencies = { {'nvim-tree/nvim-web-devicons'}}
+    }
+<
+
+- Packer
+
+>lua
+    use {
+      'nvimdev/dashboard-nvim',
+      event = 'VimEnter',
+      config = function()
+        require('dashboard').setup {
+          -- config
+        }
+      end,
+      requires = {'nvim-tree/nvim-web-devicons'}
+    }
+<
+
+
+==============================================================================
+3. Configuration                                     *dashboard-configuration*
+
+
+OPTIONS                                      *dashboard-configuration-options*
+
+>lua
+    theme = 'hyper'    -- theme is doom and hyper default is hyper
+    disable_move       -- default is false disable move keymap for hyper
+    shortcut_type      -- shortcut type 'letter' or 'number'
+    shuffle_letter     -- default is false, shortcut 'letter' will be randomize, set to false to have ordered letter
+    letter_list        -- default is a-z, excluding j and k
+    change_to_vcs_root -- default is false,for open file in hyper mru. it will change to the root of vcs
+    config = {},       -- config used for theme
+    hide = {
+      statusline       -- hide statusline default is true
+      tabline          -- hide the tabline
+      winbar           -- hide winbar
+    },
+    preview = {
+      command          -- preview command
+      file_path        -- preview file path
+      file_height      -- preview file height
+      file_width       -- preview file width
+    },
+<
+
+
+THEME CONFIG                            *dashboard-configuration-theme-config*
+
+the `config` field is used for theme. general field
+
+>lua
+    config = {
+      header -- type is table def
+      week_header = {
+        enable  --boolean use a week header
+        concat  --concat string after time string line
+        append  --table append after time string line
+      },
+      disable_move  -- boolean default is false disable move key
+    }
+<
+
+
+HYPER ~
+
+when use `hyper` theme the available options in `config` is
+
+>lua
+    config = {
+      shortcut = {
+        -- action can be a function type
+        { desc = string, group = 'highlight group', key = 'shortcut key', action = 'action when you press key' },
+      },
+      packages = { enable = true }, -- show how many plugins neovim loaded
+      -- limit how many projects list, action when you press key or enter it will run this action.
+      -- action can be a function type, e.g.
+      -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
+      project = { enable = true, limit = 8, icon = 'your icon', label = '', action = 'Telescope find_files cwd=' },
+      mru = { enable = true, limit = 10, icon = 'your icon', label = '', cwd_only = false },
+      footer = {}, -- footer
+    }
+<
+
+
+DOOM ~
+
+when use `doom` theme the available options in `config` is
+
+>lua
+    config = {
+      center = {
+        {
+          icon = '',
+          icon_hl = 'group',
+          desc = 'description',
+          desc_hl = 'group',
+          key = 'shortcut key in dashboard buffer not keymap !!',
+          key_hl = 'group',
+          key_format = ' [%s]', -- `%s` will be substituted with value of `key`
+          action = '',
+        },
+      },
+      footer = {},
+      vertical_center = false, -- Center the Dashboard on the vertical (from top to bottom)
+    }
+<
+
+notice if you don’t link config every highlight group. you can ignore this
+key. dashboard will use default highlight group like `DashboardKey/Icon/Desc`
+instead
+
+
+COMMANDS ~
+
+- `Dashboard` open dashboard
+- `DbProjectDelete count` delete project in cache works for hyper theme. count is number
+- `DashboardUpdateFooter` updates the content of the Footer
+
+
+HIGHLIGHT ~
+
+all highlight groups
+
+>
+    -- General
+    DashboardHeader DashboardFooter
+    -- Hyper theme
+    DashboardProjectTitle DashboardProjectTitleIcon DashboardProjectIcon
+    DashboardMruTitle DashboardMruIcon DashboardFiles DashboardShortCutIcon
+    -- Doom theme
+    DashboardDesc DashboardKey DashboardIcon DashboardShortCut
+<
+
+
+EXAMPLE CONFIG ~
+
+example config of screenshot
+
+Hyper ~
+
+>lua
+      db.setup({
+        theme = 'hyper',
+        config = {
+          week_header = {
+           enable = true,
+          },
+          shortcut = {
+            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+            {
+              icon = ' ',
+              icon_hl = '@variable',
+              desc = 'Files',
+              group = 'Label',
+              action = 'Telescope find_files',
+              key = 'f',
+            },
+            {
+              desc = ' Apps',
+              group = 'DiagnosticHint',
+              action = 'Telescope app',
+              key = 'a',
+            },
+            {
+              desc = ' dotfiles',
+              group = 'Number',
+              action = 'Telescope dotfiles',
+              key = 'd',
+            },
+          },
+        },
+      })
+<
+
+Doom ~
+
+>lua
+    db.setup({
+      theme = 'doom',
+      config = {
+        header = {}, --your header
+        center = {
+          {
+            icon = ' ',
+            icon_hl = 'Title',
+            desc = 'Find File           ',
+            desc_hl = 'String',
+            key = 'b',
+            keymap = 'SPC f f',
+            key_hl = 'Number',
+            key_format = ' %s', -- remove default surrounding `[]`
+            action = 'lua print(2)'
+          },
+          {
+            icon = ' ',
+            desc = 'Find Dotfiles',
+            key = 'f',
+            keymap = 'SPC f d',
+            key_format = ' %s', -- remove default surrounding `[]`
+            action = 'lua print(3)'
+          },
+        },
+        footer = {}  --your footer
+      }
+    })
+<
+
+</details
+
+
+CHANGED ~
+
+- Removed Session as a start screen plugin speed is first.if you want use session you can take a
+    look at glepnir/dbsession.nvim <https://github.com/glepnir/dbsession.nvim>
+- Removed Ueberzug script, as the Ueberzug author has deleted the repository.
+
+
+TODO ~
+
+- I will write a plugin to implement some popular terminal evaluators image protocol then I think
+    can make it work with dashboard
+
+
+==============================================================================
+4. Backers                                                 *dashboard-backers*
+
+@RakerZh <https://github.com/RakerZh>
+
+
+==============================================================================
+5. Donate                                                   *dashboard-donate*
+
+If you’d like to support my work financially, buy me a drink through Github
+Sponsor or <https://paypal.me/bobbyhub>
+
+
+==============================================================================
+6. LICENSE                                                 *dashboard-license*
+
+MIT
+
+==============================================================================
+7. Links                                                     *dashboard-links*
+
+1. *@RakerZh*: 
+2. **: https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white
+
+Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
+
+vim:tw=78:ts=8:noet:ft=help:norl:

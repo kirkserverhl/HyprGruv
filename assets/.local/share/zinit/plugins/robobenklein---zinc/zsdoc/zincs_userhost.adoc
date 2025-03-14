@@ -1,0 +1,58 @@
+zincs_userhost(1)
+=================
+:compat-mode!:
+
+NAME
+----
+zincs_userhost - a shell script
+
+SYNOPSIS
+--------
+
+By default replies with "user@host"
+
+Set segment argument 5 to change this to whatever you want.
+
+Ex: user:host
+zinc_opts[zincs_userhost]=";;;;%n:%m"
+
+
+FUNCTIONS
+---------
+
+ zincs_userhost
+ zincs_userhost_default_opts
+
+DETAILS
+-------
+
+Script Body
+~~~~~~~~~~~
+
+Has 1 line(s). No functions are called (may set up e.g. a hook, a Zle widget bound to a key, etc.).
+
+zincs_userhost
+~~~~~~~~~~~~~~
+
+____
+ # synopsis {{{
+ # By default replies with "user@host"
+ #
+ # Set segment argument 5 to change this to whatever you want.
+ #
+ # Ex: user:host
+ # zinc_opts[zincs_userhost]=";;;;%n:%m"
+ # }}}
+____
+
+Has 5 line(s). Doesn't call other functions.
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+
+zincs_userhost_default_opts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 1 line(s). Doesn't call other functions.
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+

@@ -1,0 +1,32 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+# synopsis {{{
+# Battery segment that displays percent charge,
+# reacts to charging/discharging/charged,
+# and has other options.
+# }}}
+
+# awaiting https://github.com/zdharma/zshelldoc/issues/8
+# update: works now
+# env-vars {{{
+typeset -gA zincs_battery
+zincs_battery[percent]=""
+# zincs_battery[verbose] -> 0/1: enables showing time until full/empty (requiress acpi)
+zincs_battery[verbose]="${zincs_battery[verbose]:-1}"
+# }}}
+
+# ZINC Battery segment
+function zincs_battery () {
+  (( ${zincs_battery[verbose]} )) && {
+    if [[ -n ${zincs_battery[time_remaining]} ]]; then
+      REPLY="${zincs_battery[percent]}%% (${zincs_battery[time_remaining]})"
+    else
+      # continue to else case below
+      false
+    fi
+  } || {
+    REPLY="${zincs_battery[percent]}%%"
+  }
+}
+
+zincs_battery "$@"

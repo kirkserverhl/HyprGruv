@@ -1,0 +1,22 @@
+current directory: /home/kirk/.local/share/zinit/plugins/colorls/gems/clocale-0.0.4/ext/clocale
+/usr/bin/ruby extconf.rb
+checking for locale.h... yes
+checking for setlocale()... yes
+checking for strcoll()... yes
+checking for strxfrm()... yes
+creating Makefile
+
+current directory: /home/kirk/.local/share/zinit/plugins/colorls/gems/clocale-0.0.4/ext/clocale
+make DESTDIR\= sitearchdir\=./.gem.20250310-398745-ceozma sitelibdir\=./.gem.20250310-398745-ceozma clean
+
+current directory: /home/kirk/.local/share/zinit/plugins/colorls/gems/clocale-0.0.4/ext/clocale
+make DESTDIR\= sitearchdir\=./.gem.20250310-398745-ceozma sitelibdir\=./.gem.20250310-398745-ceozma
+compiling clocale.c
+linking shared-object clocale/clocale.so
+
+current directory: /home/kirk/.local/share/zinit/plugins/colorls/gems/clocale-0.0.4/ext/clocale
+make DESTDIR\= sitearchdir\=./.gem.20250310-398745-ceozma sitelibdir\=./.gem.20250310-398745-ceozma install
+/usr/bin/install -c -m 0755 clocale.so ./.gem.20250310-398745-ceozma/clocale
+
+current directory: /home/kirk/.local/share/zinit/plugins/colorls/gems/clocale-0.0.4/ext/clocale
+make DESTDIR\= sitearchdir\=./.gem.20250310-398745-ceozma sitelibdir\=./.gem.20250310-398745-ceozma clean

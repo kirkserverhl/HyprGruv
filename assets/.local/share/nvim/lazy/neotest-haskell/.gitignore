@@ -1,0 +1,7 @@
+Session.vim
+.direnv
+.pre-commit-config.yaml
+result
+dist-newstyle
+.stack-work
+.luarc.json

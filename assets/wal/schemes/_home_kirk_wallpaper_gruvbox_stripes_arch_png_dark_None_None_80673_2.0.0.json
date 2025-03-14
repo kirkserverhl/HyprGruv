@@ -1,0 +1,28 @@
+{
+    "checksum": "deabf00c2d976a881f6545004cb8ddba",
+    "wallpaper": "/home/kirk/wallpaper/gruvbox_stripes_arch.png",
+    "alpha": "100",
+    "special": {
+        "background": "#181818",
+        "foreground": "#c5c5c5",
+        "cursor": "#c5c5c5"
+    },
+    "colors": {
+        "color0": "#181818",
+        "color1": "#689D6A",
+        "color2": "#D69821",
+        "color3": "#988D73",
+        "color4": "#437E80",
+        "color5": "#458588",
+        "color6": "#B9AD8F",
+        "color7": "#c5c5c5",
+        "color8": "#725d5d",
+        "color9": "#689D6A",
+        "color10": "#D69821",
+        "color11": "#988D73",
+        "color12": "#437E80",
+        "color13": "#458588",
+        "color14": "#B9AD8F",
+        "color15": "#c5c5c5"
+    }
+}

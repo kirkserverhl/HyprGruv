@@ -1,0 +1,21 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+# synopsis {{{
+# VCS segment that makes use of ZSH's vcs_info builtin autoloadable.
+#
+# Is async and will run vcs_info in worker process.
+# }}}
+
+# basic echo of _info_msg_0_
+function zincs_vcs () {
+  # _ZINC_DBG_OUT "zincs_vcs replying with: ${zincs_vcs[_info_msg_0_]}"
+  REPLY="${zincs_vcs[_info_msg_0_]}"
+}
+
+[[ "${(t)zincs_vcs}" != "association" ]] && {
+  typeset -gA zincs_vcs
+}
+zincs_vcs[_info_msg_0_]=${zincs_vcs[_info_msg_0_]:-"<async:vcs>"}
+zincs_vcs[status]=${zincs_vcs[status]:-"loading"}
+
+zincs_vcs "$@"

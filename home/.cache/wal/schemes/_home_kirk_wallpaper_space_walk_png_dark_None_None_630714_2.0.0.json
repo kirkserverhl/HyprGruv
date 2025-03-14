@@ -1,0 +1,28 @@
+{
+    "checksum": "62f048ef42dba7d0083aeeb8ecf42ac5",
+    "wallpaper": "/home/kirk/wallpaper/space_walk.png",
+    "alpha": "100",
+    "special": {
+        "background": "#101212",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#101212",
+        "color1": "#3F8288",
+        "color2": "#478789",
+        "color3": "#739C90",
+        "color4": "#83A598",
+        "color5": "#9EAA95",
+        "color6": "#C9D1A8",
+        "color7": "#c3c3c3",
+        "color8": "#596d6d",
+        "color9": "#3F8288",
+        "color10": "#478789",
+        "color11": "#739C90",
+        "color12": "#83A598",
+        "color13": "#9EAA95",
+        "color14": "#C9D1A8",
+        "color15": "#c3c3c3"
+    }
+}

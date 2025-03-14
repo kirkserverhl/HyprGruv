@@ -1,0 +1,120 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+# synopsis {{{
+# Execution time of last command
+#
+# ## Options:
+# - `$1`: FG
+# - `$2`: BG
+# - `$3`: Display Mode: see latter section.
+# - `$4`: Only async mode `notify_complete` is supported.
+# - `$5`: Optional minimum time for `CONDITIONAL` display mode.
+#
+# ### Display Mode
+#
+# This segment supports the `CONDITIONAL` display mode. (This is the default display mode.)
+#
+# The condition here is whether or not the execution time of the last command was greater than `zincs_execution_time[threshold]`, if `true` then the segment will be shown.
+#
+# You can also pass the threshold value as segment option 5, ex:
+#
+# ```shell
+# zinc_opts=(
+#   zincs_execution_time ';;;;10' # 10 seconds
+# )
+# # OR if you've already set zinc_opts:
+# zinc_opts[zincs_execution_time]=';;;;10'
+# # then do zinc setup
+# ```
+#
+# Note:
+# > `$5` is used at load-time while `zincs_execution_time[threshold]` is used during runtime.
+#
+# If you don't want the execution time to stick around after creating a newline
+# (ex. pressing enter without a command)
+# then you can use the clear_on_redraw segment config variable as shown below.
+#
+# }}}
+
+function _zincs_execution_time_preexec () {
+  # set the start time point using epoch
+  # _ZINC_DBG_OUT "_zincs_execution_time_preexec"
+  zincs_execution_time[process_started]="1"
+  zincs_execution_time[last_execution_time]="0"
+  zincs_execution_time[formatted_output]=""
+  _zincs_execution_time_process_start=$EPOCHREALTIME
+}
+
+function _zincs_execution_time_precmd () {
+  # _ZINC_DBG_OUT "_zincs_execution_time_precmd"
+  (( zincs_execution_time[process_started] )) && {
+    REPLY=""
+    zincs_execution_time[last_execution_time]="$(( EPOCHREALTIME - _zincs_execution_time_process_start ))"
+    if (( zincs_execution_time[last_execution_time] < 60 )); then
+      # number of seconds:
+      print -zf '%.2f' "${zincs_execution_time[last_execution_time]}"
+      read -rz
+    elif (( zincs_execution_time[last_execution_time] < 3600 )); then
+      # minutes and seconds:
+      print -zf '%d' "${zincs_execution_time[last_execution_time]}"
+      read -rz
+      strftime -s REPLY -- "%-M:%S" "${REPLY}"
+    elif (( zincs_execution_time[last_execution_time] < 86400 )); then
+      print -zf '%d' "${zincs_execution_time[last_execution_time]}"
+      read -rz
+      TZ=GMT strftime -s REPLY -- "%K:%M:%S" "${REPLY}"
+    else
+      # literally days:
+      print -zf '%d' "${zincs_execution_time[last_execution_time]}"
+      read -rz
+      TZ=GMT strftime -s REPLY -- '%-jd%K:%M:%S' "${REPLY}"
+    fi
+    zincs_execution_time[formatted_output]="${REPLY}${zincs_execution_time[time_icon]}"
+    # _ZINC_DBG_OUT "zincs_execution_time[formatted_output]=\"${zincs_execution_time[formatted_output]}\""
+    zincs_execution_time[process_started]="0"
+  }
+}
+
+function _zincs_execution_time_async_complete () {
+  # _ZINC_DBG_OUT "pexectime async done..."
+  if (( ${zincs_execution_time[clear_on_redraw]} )); then
+    zincs_execution_time[last_execution_time]=0
+    zincs_execution_time[formatted_output]=""
+  fi
+}
+
+function zincs_execution_time () {
+  # TODO formatting options
+  REPLY="${zincs_execution_time[formatted_output]}"
+}
+
+# float (H)ideval:
+typeset -gHF 4 _zincs_execution_time_process_start
+_zincs_execution_time_process_start=$EPOCHREALTIME
+# typeset -gH _zincs_execution_time_last_execution_time
+# integer -gH _zincs_execution_time_process_started
+
+typeset -gA zincs_execution_time
+zincs_execution_time[process_started]=0
+
+# env-vars {{{
+# zincs_execution_time[threshold] -> minimum seconds of runtime to display segment
+if ! (( ${+zincs_execution_time[threshold]} )); then
+  [[ "$5" != "" ]] && zincs_execution_time[threshold]="$5" \
+  || zincs_execution_time[threshold]="1"
+fi
+# zincs_execution_time[clear_on_redraw] -> 1 or 0 (true/false, default is false) clear the result after the async tasks are done
+if ! (( ${+zincs_execution_time[clear_on_redraw]} )); then
+  zincs_execution_time[clear_on_redraw]="0"
+fi
+# zincs_execution_time[time_icon] -> gets appended after the number
+if ! (( ${+zincs_execution_time[time_icon]} )); then
+  zincs_execution_time[time_icon]=" ⧖"
+fi
+# }}}
+
+-zinc-add-hook _zinc_preexec _zincs_execution_time_preexec
+-zinc-add-hook _zinc_precmd _zincs_execution_time_precmd
+-zinc-add-hook _zinc_async_complete _zincs_execution_time_async_complete
+
+zincs_execution_time "$@"

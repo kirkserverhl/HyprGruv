@@ -1,0 +1,11 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+zincs_a5_async ()
+{
+  # _ZINC_DBG_OUT "a5: starting some real work...."
+  sleep 5 # do some real work
+  printf '%b' 'real work done.'
+  # _ZINC_DBG_OUT 'a5: did real work'
+}
+
+zincs_a5_async "$@"

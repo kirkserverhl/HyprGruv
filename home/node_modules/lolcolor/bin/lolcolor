@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+const lolcolor = require('../lib');
+
+console.log(lolcolor(process.argv[2]));

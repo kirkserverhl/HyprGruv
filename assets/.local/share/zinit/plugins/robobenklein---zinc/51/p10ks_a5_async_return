@@ -1,0 +1,17 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+zincs_a5_async_return ()
+{
+  # $1 return code
+  # $2 resulting (stdout) output from job execution
+  # $3 execution time, floating point e.g. 0.0076138973 seconds
+  # $4 resulting (stderr) error output from job execution
+
+  # builtin printf '%b' "new out: $2"
+  _zincs_a5_value="$2"
+  _ZINC_DBG_OUT "a5: zincs_a5_async_return called with stdout: $2"
+}
+
+typeset -g _zincs_a5_value="..."
+
+zincs_a5_async_return "$@"

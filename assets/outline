@@ -1,0 +1,11 @@
+hyprgruv/
+├── install.sh             # Main entry point script
+├── lib/
+│   ├── common.sh          # Shared functions, variables, styling
+│   └── state.sh           # State management functions
+├── modules/
+│   ├── 01-packages.sh     # Package installation
+│   ├── 02-stow.sh         # Configuration file management
+│   ├── 03-assets.sh       # Assets installation
+│   └── 04-config.sh       # Interactive configuration
+└── assets/                # Static files

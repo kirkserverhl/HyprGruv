@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/kirk/wallpaper/Lady.png"
+let background = "#1e1d1c"
+let foreground = "#c6c6c6"
+let cursor     = "#c6c6c6"
+
+" Colors
+let color0  = "#1e1d1c"
+let color1  = "#928B78"
+let color2  = "#A0967F"
+let color3  = "#9F9B86"
+let color4  = "#B3AC91"
+let color5  = "#C4BB9D"
+let color6  = "#BAC0A6"
+let color7  = "#c6c6c6"
+let color8  = "#767660"
+let color9  = "#928B78"
+let color10 = "#A0967F"
+let color11 = "#9F9B86"
+let color12 = "#B3AC91"
+let color13 = "#C4BB9D"
+let color14 = "#BAC0A6"
+let color15 = "#c6c6c6"

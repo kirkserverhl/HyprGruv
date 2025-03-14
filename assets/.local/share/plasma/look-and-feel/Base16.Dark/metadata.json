@@ -1,0 +1,35 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "zayronxio@gmail.com",
+                "Name": "zayronxio"
+            }
+        ],
+        "Category": "",
+        "ServiceTypes": [
+            "Plasma/LookAndFeel"
+        ],
+        "Description": "",
+        "Id": "Base16.Dark",
+        "License": "GPLv3+",
+        "Name": "Base16 Dark",
+        "Website": "https://store.kde.org/p/2253769/"
+        },
+        "X-KPackage-Dependencies": [
+        "kns://plasmoids.knsrc/api.kde-look.org/2238525",
+        "kns://colorschemes.knsrc/api.kde-look.org/2247378",
+        "kns://plasma-themes.knsrc/api.kde-look.org/2253762",
+        "kns://icons.knsrc/api.kde-look.org/2239645",
+        "kns://aurorae.knsrc/api.kde-look.org/2253743",
+        "kns://xcursor.knsrc/api.kde-look.org/2083798",
+        "kns://wallpaper.knsrc/api.kde-look.org/2253757",
+        "kns://wallpaper.knsrc/api.kde-look.org/2246737",
+        "kns://lookandfeel.knsrc/api.kde-look.org/2220545",
+        "kns://plasmoids.knsrc/api.kde-look.org/2137418",
+        "kns://plasmoids.knsrc/api.kde-look.org/2185962",
+        "kns://plasmoids.knsrc/api.kde-look.org/2199942",
+        "kns://sddmtheme.knsrc/api.kde-look.org/2221986"
+         ]
+         }

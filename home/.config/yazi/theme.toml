@@ -1,0 +1,8 @@
+[flavor]
+dark = "pywal"
+light = "pywal"
+
+[status]
+overall = {}
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }

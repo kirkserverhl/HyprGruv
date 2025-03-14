@@ -1,0 +1,100 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Trouble-Truffle",
+      "name": "Perigord",
+      "avatar_url": "https://avatars.githubusercontent.com/u/90542764?v=4",
+      "profile": "https://github.com/Trouble-Truffle",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "saep",
+      "name": "Sebastian Witte",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1560366?v=4",
+      "profile": "https://github.com/saep",
+      "contributions": [
+        "code",
+        "infra",
+        "doc"
+      ]
+    },
+    {
+      "login": "andy-bell101",
+      "name": "Andy Bell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13719403?v=4",
+      "profile": "https://github.com/andy-bell101",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "NorfairKing",
+      "name": "Tom Sydney Kerckhove",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3521180?v=4",
+      "profile": "http://cs-syd.eu",
+      "contributions": [
+        "mentoring"
+      ]
+    },
+    {
+      "login": "shinzui",
+      "name": "Nadeem Bitar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/519?v=4",
+      "profile": "https://github.com/shinzui",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "MangoIV",
+      "name": "Mango The Fourth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40720523?v=4",
+      "profile": "https://github.com/MangoIV",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Kleidukos",
+      "name": "Hécate Moonlight",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29253044?v=4",
+      "profile": "https://glitchbra.in",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "amaanq",
+      "name": "Amaan Qureshi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29718261?v=4",
+      "profile": "https://github.com/amaanq",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bradsherman",
+      "name": "Brad Sherman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15267511?v=4",
+      "profile": "http://bitsbybrad.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "neotest-haskell",
+  "projectOwner": "mrcjkb",
+  "commitType": "docs"
+}

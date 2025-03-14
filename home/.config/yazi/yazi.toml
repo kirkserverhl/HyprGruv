@@ -1,0 +1,49 @@
+[input]
+cursor_blink = false
+
+[manager]
+linemode = "mtime"
+mouse_events = ["click", "drag", "scroll"]
+ratio = [3, 4, 4]
+scrolloff = 5
+show_hidden = true
+show_symlink = true
+sort_by = "alphabetical"
+sort_dir_first = true
+sort_sensitive = true
+sort_translit = false
+title_format = "{cwd}"
+
+
+[preview]
+cache_dir = "~/.cache/yazi"
+image_delay = 100
+image_filter = "catmull-rom"
+image_quality = 90
+sixel_fraction = 10
+tab_size = 4
+ueberzug_scale = 1.0
+wrap = "no"
+
+[which]
+sort_by = "none"
+sort_reverse = false
+sort_sensitive = true
+image_quality_sort_translt = false
+
+[plugin]
+prepend_preloaders = [
+    # Replace magick, image, video with mediainfo
+    { mime = "{audio,video,image}/*", run = "mediainfo" },
+    { mime = "application/subrip", run = "mediainfo" },
+]
+prepend_previewers = [
+    # Replace magick, image, video with mediainfo
+    { mime = "{audio,video,image}/*", run = "mediainfo"},
+    { mime = "application/subrip", run = "mediainfo" },
+    { name = "*/", run = "eza-preview" },
+    { name = "*.md", run = "glow" }, # for markdown (.md) files
+]
+append_previewers = [
+    { name = "*", run = "hexyl" },
+]

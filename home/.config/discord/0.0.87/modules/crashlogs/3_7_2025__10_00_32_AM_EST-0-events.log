@@ -1,0 +1,63 @@
+3/7/2025, 10:00:32 AM EST 0: 
+
+----------------------------------------------
+3/7/2025, 10:00:32 AM EST 1: Discord starting: {"releaseChannel":"stable","version":"0.0.87"}, modulepath: /home/kirk/.config/discord/0.0.87/modules
+3/7/2025, 10:00:32 AM EST 2: ✅ webContents.created web1 ""
+3/7/2025, 10:00:32 AM EST 3: ✅ window.created win1 "discord"
+3/7/2025, 10:00:32 AM EST 4: ✅ webContents.did-finish-load web1
+3/7/2025, 10:00:36 AM EST 5: ✅ webContents.created web2 ""
+3/7/2025, 10:00:36 AM EST 6: ✅ window.created win2 "Discord"
+3/7/2025, 10:00:39 AM EST 7: ✅ webContents.did-finish-load web2
+3/7/2025, 10:00:39 AM EST 8: window.close win1
+3/7/2025, 10:00:39 AM EST 9: webContents.destroyed web1
+3/7/2025, 10:00:39 AM EST 10: window.closed win1
+3/7/2025, 10:34:49 AM EST 11: before-quit
+3/7/2025, 10:39:01 AM EST 0: 
+
+----------------------------------------------
+3/7/2025, 10:39:01 AM EST 1: Discord starting: {"releaseChannel":"stable","version":"0.0.87"}, modulepath: /home/kirk/.config/discord/0.0.87/modules
+3/7/2025, 10:39:01 AM EST 2: ✅ webContents.created web1 ""
+3/7/2025, 10:39:01 AM EST 3: ✅ window.created win1 "discord"
+3/7/2025, 10:39:01 AM EST 4: ✅ webContents.did-finish-load web1
+3/7/2025, 10:39:01 AM EST 5: ✅ webContents.created web2 ""
+3/7/2025, 10:39:01 AM EST 6: ✅ window.created win2 "Discord"
+3/7/2025, 10:39:04 AM EST 7: ✅ webContents.did-finish-load web2
+3/7/2025, 10:39:04 AM EST 8: window.close win1
+3/7/2025, 10:39:04 AM EST 9: webContents.destroyed web1
+3/7/2025, 10:39:04 AM EST 10: window.closed win1
+3/7/2025, 10:39:13 AM EST 11: window.close win2
+3/7/2025, 10:39:31 AM EST 0: 
+
+----------------------------------------------
+3/7/2025, 10:39:31 AM EST 1: Discord starting: {"releaseChannel":"stable","version":"0.0.87"}, modulepath: /home/kirk/.config/discord/0.0.87/modules
+3/7/2025, 10:39:37 AM EST 12: window.close win2
+3/7/2025, 10:39:44 AM EST 0: 
+
+----------------------------------------------
+3/7/2025, 10:39:44 AM EST 1: Discord starting: {"releaseChannel":"stable","version":"0.0.87"}, modulepath: /home/kirk/.config/discord/0.0.87/modules
+3/7/2025, 11:08:14 AM EST 13: before-quit
+3/7/2025, 11:08:14 AM EST 14: window.close win2
+3/7/2025, 11:08:14 AM EST 15: ❌ child-process-gone {
+  type: 'Utility',
+  reason: 'killed',
+  exitCode: 15,
+  serviceName: 'audio.mojom.AudioService',
+  name: 'Audio Service'
+}
+3/7/2025, 4:16:07 PM EST 0: 
+
+----------------------------------------------
+3/7/2025, 4:16:07 PM EST 1: Discord starting: {"releaseChannel":"stable","version":"0.0.87"}, modulepath: /home/kirk/.config/discord/0.0.87/modules
+3/7/2025, 4:16:07 PM EST 2: ✅ webContents.created web1 "index.html"
+3/7/2025, 4:16:07 PM EST 3: ✅ window.created win1 "discord"
+3/7/2025, 4:16:07 PM EST 4: ✅ webContents.did-finish-load web1
+3/7/2025, 4:16:08 PM EST 5: ✅ webContents.created web2 ""
+3/7/2025, 4:16:08 PM EST 6: ✅ window.created win2 "Discord"
+3/7/2025, 4:16:10 PM EST 7: ✅ webContents.did-finish-load web2
+3/7/2025, 4:16:10 PM EST 8: window.close win1
+3/7/2025, 4:16:10 PM EST 9: webContents.destroyed web1
+3/7/2025, 4:16:10 PM EST 10: window.closed win1
+3/7/2025, 4:20:10 PM EST 11: window.close win2
+3/7/2025, 4:30:25 PM EST 12: window.close win2
+3/7/2025, 4:47:13 PM EST 13: window.close win2
+3/7/2025, 5:42:22 PM EST 14: window.close win2
