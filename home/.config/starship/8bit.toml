@@ -1,0 +1,179 @@
+format = """
+$username\
+$directory\
+$git_branch\
+$git_status\
+$git_commit\
+$git_state\
+$git_metrics\
+$rust\
+$c\
+$nodejs\
+$python\
+$fill\
+$cmd_duration\
+$time\
+$line_break
+$character
+"""
+# right_format = "$cmd_duration"
+
+# backup character
+# connections:  ╭─
+# 󰂵           󰝨 󰙴  󰊠 󱙝 
+# directory:     󰷏
+# omit: ⚛︎ · 󱏿·     󰝡 …
+# git thing:   
+#
+
+palette = "mypalette"
+
+[palettes.mypalette]
+black_gray = "#3b3f4c"
+gray_white = "#dad7cd"
+white = "#ffffff"
+white_dark = "#dfe6e9"
+blue_light = "#74b9ff"
+blue = "#3a9efd"
+orange = "#fca17d"
+orange2 = "#db8a78"
+orange3 = "#f4a261"
+gray = "#3b3f4c"
+gray_dark = "#282C34"
+red_light = "#DA627D"
+red = "#eb3b5a"
+purple = "#ddacf5"
+cyan = "#1ac0c6"
+
+text_color = "#ffffff"
+background = "#3b3f4c"
+ghost_color = "#3a9efd"
+transient_prompt = "#3a9efd"
+username_color = "#3a9efd"
+directory_color = "#DA627D"
+git_color = "#fca17d"
+cmd_duration = "#ffffff"
+time_color = "#1ac0c6"
+rust_color = "#f07167"
+c_color = "#8093f1"
+py_color = "#db8a78"
+node_color = "#6a994e"
+
+# [env_var.ghost]
+# default="ghost"
+# style = "ghost_color"
+# format = "[](fg:$style)[󰊠](bold fg:text_color bg:$style)[](fg:$style bg:background)"
+
+[env_var.transient_prompt]
+default="transient_prompt"
+style = "transient_prompt"
+format = "\n[](fg:$style)[ 󰊠 ](bold fg:text_color bg:$style)[](fg:$style)[  ](fg:#FCA17D)"
+
+[username]
+show_always = true
+style_user = "username_color"
+style_root = "username_color"
+format = """
+[](fg:$style)[ 󰊠 ](bold fg:text_color bg:$style)[](fg:$style)\
+[](fg:background)[$user](bold fg:$style bg:background)[ ](fg:background)\
+"""
+
+[directory]
+truncation_length = 3
+truncation_symbol = "…/"
+style = "directory_color"
+format = """
+[](fg:$style)[](bold fg:text_color bg:$style)[](fg:$style)\
+[](fg:background)[$path](bold fg:$style bg:background)[ ](fg:background)\
+"""
+
+[directory.substitutions]
+"Documents" = "󰲂"
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+
+[git_branch]
+symbol = ""
+style = "git_color"
+format = """
+[](fg:$style)[](bold fg:text_color bg:$style)[](fg:$style)\
+[](background)[$symbol $branch](fg:$style bg:background)\
+"""
+
+[git_status]
+style = "git_color"
+modified = "󰙏 "
+deleted = " "
+untracked = "󰐕 "
+staged = " "
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+format = """
+[ $all_status](fg:$style bg:background)[ ](fg:background)\
+"""
+
+[rust]
+symbol = ""
+style = "rust_color"
+version_format = "v$major.$minor"
+format = """
+[](fg:$style)[$symbol](bold fg:text_color bg:$style)[](fg:$style)\
+[](fg:background)[$version](bold fg:$style bg:background)[ ](fg:background)\
+"""
+
+[c]
+symbol = ""
+style = "c_color"
+version_format = "v${major}"
+format = """
+[](fg:$style)[$symbol](bold fg:text_color bg:$style)[](fg:$style)\
+[](fg:background)[$version](bold fg:$style bg:background)[ ](fg:background)\
+"""
+
+[python]
+symbol = ""
+style = "py_color"
+pyenv_prefix = "venv:"
+version_format = "v3.${minor}"
+format = """
+[](fg:$style)[$symbol](bold fg:text_color bg:$style)[](fg:$style)\
+[](fg:background)[$version$virtualenv](bold fg:$style bg:background)[ ](fg:background)\
+"""
+
+[nodejs]
+symbol = ""
+style = "node_color"
+format = """
+[](fg:$style)[$symbol](bold fg:text_color bg:$style)[](fg:$style)\
+[](fg:background)[$version](bold fg:$style bg:background)[ ](fg:background)\
+"""
+
+[fill]
+# symbol = "  ✎     ⚛︎                       "
+symbol = " "
+style = "cyan bold"
+
+[cmd_duration]
+# min_time = 0
+style = "cmd_duration"
+format = "[took ](fg:$style)[$duration  ](bold fg:orange)"
+# [](fg:orange)[took ](bold fg:$style bg:orange)[ $duration](bold fg:orange bg:white)[](fg:white)\
+
+[time]
+disabled = false
+time_format = "%R"
+style = "time_color"
+format = """
+[](fg:background)[ $time ](bold fg:$style bg:background)[](fg:background)\
+[](fg:$style bg:background)[](bold fg:text_color bg:$style)[ ](fg:$style)\
+"""
+
+[character]
+success_symbol = '[](fg:#FCA17D)' #╰─  󱞩   󰁔 󱦰 󱞪   👉
+error_symbol = '[](fg:#eb3b5a)' # 💤💥💣💬😅
+vimcmd_symbol = '[](fg:#1ac0c6)'
+
+[line_break]
+disabled = true

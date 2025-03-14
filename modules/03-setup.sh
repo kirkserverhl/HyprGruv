@@ -28,7 +28,7 @@ sudo $CONFIG_DIR/scripts/chatoic.sh
 sleep 1
 
 # Hyprpm plugs
-$CONFIG_DIR/scripts/hyprpm.sh
+CONFIG_DIR/scripts/hyprpm.sh
 sleep 1
 
 # Screenshot & Photo Folder

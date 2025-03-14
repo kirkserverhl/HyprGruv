@@ -24,6 +24,7 @@ Word Wrap Marker=false
 [MainWindow]
 2 screens: Height=849
 2 screens: Width=575
+2 screens: Window-Maximized=true
 
 [UiSettings]
 ColorScheme=Base16

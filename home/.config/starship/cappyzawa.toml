@@ -1,0 +1,95 @@
+[prompt]
+add_newline = true
+
+[aws]
+disabled = true
+
+[battery]
+disabled = true
+
+[character]
+symbol = "$"
+use_symbol_for_status = false
+# Green
+# Light Red
+
+[cmd_duration]
+
+[conda]
+
+[directory]
+truncation_length = 3
+
+[dotnet]
+disabled = true
+
+[env_var]
+disabled = true
+
+[elm]
+symbol = " "
+
+[git_branch]
+
+[git_commit]
+disabled = false
+commit_hash_length = 4
+tag_disabled = false
+
+[git_state]
+disabled = true
+
+[git_status]
+conflicted_count.enabled = true
+untracked_count.enabled = true
+modified_count.enabled = true
+staged_count.enabled = true
+renamed_count.enabled = true
+deleted_count.enabled = true
+stashed_count.enabled = true
+show_sync_count = true
+
+[golang]
+symbol = " "
+
+[hostname]
+
+[jobs]
+
+[kubernetes]
+symbol = "⎈ "
+disabled = true
+
+[line_break]
+disabled = false
+
+[nix_shell]
+disabled = true
+
+[memory_usage]
+disabled = true
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[nodejs]
+symbol = ""
+
+[package]
+symbol = ""
+
+[python]
+
+[ruby]
+
+[rust]
+symbol = " "
+
+[time]
+disabled = true
+
+[username]
+disabled = false

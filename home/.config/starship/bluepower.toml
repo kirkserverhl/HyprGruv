@@ -1,0 +1,149 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+format = """
+[╭─](bold green)\
+[](fg:#33658a)\
+[$os](bg:#33658a)\
+[](fg:#06969a bg:#33658a)\
+[](fg:#86bbd8 bg:#06969a)\
+$username$hostname\
+[](fg:#86bbd8 bg:#a6e3a1)\
+$directory\
+([](fg:prev_bg bg:#fca17d)\
+$git_branch\
+$git_status)\
+([](fg:prev_bg bg:#fcf392)\
+$golang\
+$nodejs\
+$bun\
+$deno\
+$rust\
+$python\
+$ruby\
+$lua)\
+([](fg:prev_bg bg:#f9e2af)\
+$package)\
+([](fg:prev_bg bg:#9a86d8)\
+$aws\
+$azure\
+$gcloud\
+$kubernetes)\
+[](fg:prev_bg bg:#33658a)\
+$time\
+[($shell)](bg:#33658a)\
+[](fg:#33658a)\
+[$line_break│](bold green)\
+[$line_break╰─$character ](bold green)\
+"""
+
+continuation_prompt = "[╰─ ](bold green)"
+command_timeout = 1000
+
+[line_break]
+disabled = false
+
+[character]
+success_symbol = "[](bold green)"
+error_symbol = "[](bold red)"
+
+[os]
+format = "[ $symbol]($style)"
+style = "fg:#ffffff bg:#33658a"
+disabled = false
+
+[hostname]
+ssh_only = true
+style = "bg:#86bbd8 fg:#000000"
+format = "[ $hostname ]($style)"
+
+[username]
+show_always = true
+style_user = "bg:#86bbd8 fg:#000000"
+style_root = "bold bg:#86bbd8 fg:#000000"
+format = "[  ($user) ]($style)"
+
+[directory]
+style = "bg:#a6e3a1 fg:#000000 italic"
+format = "[ $path ]($style)"
+truncation_length = 1
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙"
+"Downloads" = ""
+"Music" = ""
+"Pictures" = ""
+
+[git_branch]
+style = "bg:#fca17d"
+format = "[[ $symbol$branch ](fg:#000000 bg:#fca17d)]($style)"
+truncation_length = 20
+
+[git_status]
+style = "bg:#fca17d"
+format = "[[($all_status$ahead_behind )](fg:#000000 bg:#fca17d)]($style)"
+
+[shell]
+disabled = false
+style = "fg:#ffffff bg:#33658a"
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:#33658a"
+format = "[[ 󰥔 $time ](fg:#ffffff bg:#33658a)]($style)"
+
+[package]
+style = "fg:#000000 bg:#f9e2af"
+format = "[ $symbol$version ]($style)"
+
+[aws]
+style = "bg:#9a86d8"
+format = "[[ $symbol$profile (\\($region\\)) ](fg:#000000 bg:#9a86d8)]($style)"
+
+[azure]
+disabled = false
+style = "bg:#9a86d8"
+format = "[[ $symbol$subscription ](fg:#000000 bg:#9a86d8)]($style)"
+
+[gcloud]
+style = "bg:#9a86d8"
+format = "[[ $symbol$account (\\($region\\)) ](fg:#000000 bg:#9a86d8)]($style)"
+
+[kubernetes]
+disabled = false
+style = "bg:#9a86d8"
+format = "[[ $symbol$context ](fg:#000000 bg:#9a86d8)]($style)"
+
+[python]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+
+[ruby]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+
+[rust]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+
+[golang]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+
+[lua]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+
+[bun]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+
+[nodejs]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
+detect_files = ["package.json", ".node-version", "!bunfig.toml", "!bun.lockb"]
+
+[deno]
+style = "fg:#000000 bg:#fcf392"
+format = "[ $symbol$version ]($style)"
