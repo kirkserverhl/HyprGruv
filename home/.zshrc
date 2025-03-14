@@ -411,6 +411,7 @@ alias rebootsafe='sudo shutdown -r now'
 alias rebootforce='sudo shutdown -r -n now'
 
 # aliases to show disk space and space used in a folder
+alias disko='diskonaut'
 alias duf='duf -theme ansi'
 alias folders='du -h --max-depth=1'
 alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
