@@ -1,0 +1,40 @@
+zincs_host(1)
+=============
+:compat-mode!:
+
+NAME
+----
+zincs_host - a shell script
+
+SYNOPSIS
+--------
+Documentation automatically generated with `zshelldoc'
+
+FUNCTIONS
+---------
+
+ zincs_host
+ zincs_host_default_opts
+
+DETAILS
+-------
+
+Script Body
+~~~~~~~~~~~
+
+Has 1 line(s). No functions are called (may set up e.g. a hook, a Zle widget bound to a key, etc.).
+
+zincs_host
+~~~~~~~~~~
+
+Has 1 line(s). Doesn't call other functions.
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+
+zincs_host_default_opts
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 1 line(s). Doesn't call other functions.
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+

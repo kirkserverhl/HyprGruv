@@ -1,0 +1,11 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+function zincs_cwd_writable () {
+  REPLY="${zincs_cwd_writable[symbol]}"
+}
+
+typeset -gA zincs_cwd_writable
+
+zincs_cwd_writable[symbol]=${zincs_cwd_writable[symbol]:-$'\UE0A2'}
+
+zincs_cwd_writable "$@"

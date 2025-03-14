@@ -1,0 +1,27 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+function zincs_battery_display_hidden () {
+  if [[ ${zincs_battery[state]} == "charged" ]]; then
+    return 0
+  elif [[ ${zincs_battery[state]} == "disconnected" ]]; then
+    return 1
+  elif (( zincs_battery[percent] >= zincs_battery[threshold_hidden] )); then
+    true
+  elif [[ ${zincs_battery[state]} == "unknown" ]] || [[ ${zincs_battery[state]} == "" ]]; then
+    # battery not supported on this system?
+    # _ZINC_DBG_OUT "Not showing battery segment: unknown status."
+    true
+  else
+    false
+  fi
+}
+
+[[ "${(t)zincs_battery}" != "association" ]] && {
+  typeset -gA zincs_battery
+}
+# env-vars {{{
+# zincs_battery[threshold_hidden] -> hide the segment when above this percentage
+zincs_battery[threshold_hidden]=${zincs_battery[threshold_hidden]:-"99"}
+# }}}
+
+zincs_battery_display_hidden "$@"

@@ -1,0 +1,19 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+function zincs_battery_async_started () {
+  # zincs_battery[percent]="??"
+  zincs_battery[state]=""
+  zincs_battery[time_remaining]="..."
+}
+
+[[ "${(t)zincs_battery}" != "association" ]] && {
+  typeset -gA zincs_battery
+}
+
+function _zincs_battery_async_complete () {
+  _zinc_segment_async_reset_status zincs_battery
+}
+
+-zinc-add-hook _zinc_async_complete _zincs_battery_async_complete
+
+zincs_battery_async_started "$@"

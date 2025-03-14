@@ -1,0 +1,21 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+# synopsis {{{
+# Return value of the last command.
+# }}}
+
+typeset -gA zincs_retval
+
+# check if signal is >127, then replace with the signal name
+zincs_retval () {
+  if (( _ZINC_RETVAL_STORE == 0 )); then
+    REPLY='✔'
+  elif (( _ZINC_RETVAL_STORE <= 128 )); then
+    REPLY="${_ZINC_RETVAL_STORE}"
+  else
+    REPLY="SIG${signals[$(( _ZINC_RETVAL_STORE - 127 ))]}($(( _ZINC_RETVAL_STORE - 128 )))"
+  fi
+  # printf '%b' ",args:(${(j.,.)@})"
+}
+
+zincs_retval "$@"

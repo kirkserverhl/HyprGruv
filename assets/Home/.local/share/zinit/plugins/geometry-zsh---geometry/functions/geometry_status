@@ -1,0 +1,13 @@
+# geometry_status - show a symbol with error/success and root/non-root information
+
+(( $GEOMETRY_STATUS )) && error=true || error=false
+[[ $UID = 0 || $EUID = 0 ]] && root=true || root=false
+
+( $error ) && color=${GEOMETRY_STATUS_COLOR_ERROR:-red} || color=${GEOMETRY_STATUS_COLOR:-default}
+
+( ! $root && ! $error ) && symbol=${GEOMETRY_STATUS_SYMBOL:-▲}
+( ! $root && $error ) && symbol=${GEOMETRY_STATUS_SYMBOL_ERROR:-△}
+( $root && ! $error ) && symbol=${GEOMETRY_STATUS_SYMBOL_ROOT:-▼}
+( $root && $error ) && symbol=${GEOMETRY_STATUS_SYMBOL_ROOT_ERROR:=▽}
+
+ansi $color $symbol

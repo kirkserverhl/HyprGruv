@@ -1,0 +1,20 @@
+CC=gcc
+TARGET=rnvimserver.exe
+CFLAGS = -mwindows -std=gnu99 -O3 -Wall -DWIN32
+SRCS = complete.c data_structures.c logging.c rnvimserver.c obbr.c rgui.c tcp.c utilities.c ../common.c
+LIBS=-lWs2_32
+
+ifeq "$(WIN)" "64"
+    CFLAGS += -m64
+else
+    CFLAGS += -m32
+endif
+
+# Note: -lWs2_32 must be after the object files
+all: $(TARGET)
+
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET) $(LIBS)
+
+clean:
+

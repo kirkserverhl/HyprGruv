@@ -1,0 +1,20 @@
+conditions: v1
+
+if: type = pull_request OR tag IS present
+
+os:
+  - linux
+  - osx
+
+language: ruby
+
+rvm:
+  - '2.3'
+  - '2.4'
+  - '2.5'
+
+install:
+  - bundle install --path vendor/bundle
+
+script:
+  - bundle exec rake

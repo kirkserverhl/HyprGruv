@@ -1,0 +1,13 @@
+g:vim_dadbod_completion_disable_notifications	vim-dadbod-completion.txt	/*g:vim_dadbod_completion_disable_notifications*
+g:vim_dadbod_completion_lowercase_keywords	vim-dadbod-completion.txt	/*g:vim_dadbod_completion_lowercase_keywords*
+g:vim_dadbod_completion_mark	vim-dadbod-completion.txt	/*g:vim_dadbod_completion_mark*
+g:vim_dadbod_completion_source_limits	vim-dadbod-completion.txt	/*g:vim_dadbod_completion_source_limits*
+vim-dadbod-completion	vim-dadbod-completion.txt	/*vim-dadbod-completion*
+vim-dadbod-completion-commands	vim-dadbod-completion.txt	/*vim-dadbod-completion-commands*
+vim-dadbod-completion-contents	vim-dadbod-completion.txt	/*vim-dadbod-completion-contents*
+vim-dadbod-completion-features	vim-dadbod-completion.txt	/*vim-dadbod-completion-features*
+vim-dadbod-completion-how_it_works	vim-dadbod-completion.txt	/*vim-dadbod-completion-how_it_works*
+vim-dadbod-completion-install	vim-dadbod-completion.txt	/*vim-dadbod-completion-install*
+vim-dadbod-completion-settings	vim-dadbod-completion.txt	/*vim-dadbod-completion-settings*
+vim-dadbod-completion-todo	vim-dadbod-completion.txt	/*vim-dadbod-completion-todo*
+vim-dadbod-completion-vim-dadbod-completion	vim-dadbod-completion.txt	/*vim-dadbod-completion-vim-dadbod-completion*

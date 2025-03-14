@@ -1,0 +1,21 @@
+\documentclass{minimal}
+\usepackage{csquotes}
+\usepackage[record,style=long]{glossaries-extra}
+
+\GlsXtrLoadResources[
+  src={glossaries-extra.bib},
+  selection={all},
+]
+\GlsXtrLoadResources[src={glossary}]
+
+\begin{document}
+
+Hello World!
+
+\gls{isbn}
+
+\gls{API}
+
+\printunsrtglossaries
+
+\end{document}

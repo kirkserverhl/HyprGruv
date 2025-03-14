@@ -1,0 +1,19 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+zincs_vcs_async_return ()
+{
+  # $1 return code
+  # $2 resulting (stdout) output from job execution
+  # $3 execution time, floating point e.g. 0.0076138973 seconds
+  # $4 resulting (stderr) error output from job execution
+
+  _ZINC_DBG_OUT "zincs_vcs working out input: $2"
+  local -a tmp
+  tmp=("${(s.;;;.)2}")
+  zincs_vcs[_info_msg_0_]="${tmp[2]}"
+  zincs_vcs[_debug_backend_response]="${tmp[1]}"
+  tmp=("${(s.,.)tmp}")
+  (( ${tmp[1]} )) && zincs_vcs[status]="dirty" || zincs_vcs[status]="returned"
+}
+
+zincs_vcs_async_return "$@"

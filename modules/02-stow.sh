@@ -35,7 +35,6 @@ sleep 1
 cd "$REPO_DIR" || {
 	log_error "Failed to change directory to $REPO_DIR"
 	exit 1
-	sleep 1
 }
 
 # Backup existing files
@@ -51,13 +50,13 @@ for file in $(ls -A "$REPO_DIR/home"); do
 		cp -r "$USER_HOME/$file" "$BACKUP_DIR/${file}"
 	fi
 done
-sleep 1
+sleep .5
 
 rm -rf $HOME/.config/hypr
-sleep 1
+sleep .5
 
 yay -S stow
-sleep 1
+sleep .5
 
 # Stow home directory configs
 log_status "Applying configurations with stow"
@@ -71,5 +70,6 @@ log_success "Configuration files stowed successfully"
 log_status "Backup saved to: $BACKUP_DIR"
 save_choice "last_backup" "$BACKUP_DIR"
 sleep 1
+clear
 
 exit 0

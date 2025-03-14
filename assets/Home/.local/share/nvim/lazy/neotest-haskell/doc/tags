@@ -1,0 +1,9 @@
+FrameworkSpec	neotest-haskell.txt	/*FrameworkSpec*
+NeotestHaskellOpts	neotest-haskell.txt	/*NeotestHaskellOpts*
+build_tool	neotest-haskell.txt	/*build_tool*
+framework_opt	neotest-haskell.txt	/*framework_opt*
+neotest-haskell.Adapter	neotest-haskell.txt	/*neotest-haskell.Adapter*
+neotest-haskell.contents	neotest-haskell.txt	/*neotest-haskell.contents*
+neotest-haskell.options	neotest-haskell.txt	/*neotest-haskell.options*
+neotest-haskell.setup	neotest-haskell.txt	/*neotest-haskell.setup*
+test_framework	neotest-haskell.txt	/*test_framework*

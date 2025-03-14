@@ -21,7 +21,7 @@ sleep 1
 
 # Load Wallpaper
 gum spin -- $CONFIG_DIR/scripts/default_wp.sh
-sleep 1
+sleep 2
 
 # Chaotic Pacman Mirrors
 sudo $CONFIG_DIR/scripts/chatoic.sh

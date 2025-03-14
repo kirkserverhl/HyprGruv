@@ -32,6 +32,9 @@ eval $(keychain --eval --agents ssh id_ed25519)
 source "$HOME/.cache/wal/colors-tty.sh"
 cat ~/.cache/wal/sequence
 
+# Source gum pywal theme
+[ -f "$HOME/.cache/wal/gum.sh" ] && . "$HOME/.cache/wal/gum.sh"
+
 alias ls='ls --color=auto'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
@@ -42,6 +45,7 @@ alias egrep='egrep --color=auto'
 # -----------------------------------------------------
 # Themes:
 # -----------------------------------------------------
+
 source ~/.config/zshrc/ultima-shell/ultima.zsh-theme
 
 # -----------------------------------------------------
@@ -77,18 +81,18 @@ zstyle ':completion:*' menu select
 source $ZSH/oh-my-zsh.sh
 source $(dirname $(gem which colorls))/tab_complete.sh
 alias lc='colorls -lA --sd'
+
 ###-----------------------------------------------------
 ### Starship
 ### -----------------------------------------------------
+
 eval "$(starship init zsh)"
 alias starship='~/.hyprgruv/home/scripts/starship_theme.sh'
-
-# autoload -Uz compinit
-# zinit compinit
 
 # -----------------------------------------------------
 # Set-up FZF key bindings (CTRL R for fuzzy history finder)
 # -----------------------------------------------------
+
 source <(fzf --zsh)
 
 # zsh history
@@ -278,7 +282,7 @@ alias .....='cd ../../../../..'
 # Eza-based ls aliases
 alias ls='eza -a --icons'
 alias ll='eza -al --icons'
-alias lt='eza -a --tree --level=2 --icons'
+alias lt='lsd -a --tree --level=2 --icons'
 alias la='eza -Alh --icons'                # show hidden files
 alias lx='eza -lXBh --icons'               # sort by extension
 alias lk='eza -lSrh --icons'               # sort by size
@@ -304,7 +308,7 @@ alias ts='~/scripts/snapshot.sh'
 alias cleanup='~/scripts/cleanup.sh'
 alias update='~/scripts/system_cleanup_and_update.sh'
 alias fig='~/scripts/figlet.sh'
-alias monitor='~/scripts/monitor.sh'
+alias monitor='~/.hyprgruv/assets/scripts/monitor.sh'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
 alias zz='~/scripts/yazi.sh'
 alias python='python3'
@@ -413,7 +417,6 @@ alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' 
 
 # this uses bat (called batcat on debian)
 # to colorize man pages
-
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
 # -----------------------------------------------------

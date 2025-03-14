@@ -1,0 +1,140 @@
+zincs_battery(1)
+================
+:compat-mode!:
+
+NAME
+----
+zincs_battery - a shell script
+
+SYNOPSIS
+--------
+
+Battery segment that displays percent charge,
+reacts to charging/discharging/charged,
+and has other options.
+
+
+FUNCTIONS
+---------
+
+ zincs_battery
+ zincs_battery_async
+ _zincs_battery_async_complete
+ zincs_battery_async_return
+ zincs_battery_async_started
+ zincs_battery_bg
+ zincs_battery_default_opts
+ zincs_battery_display_hidden
+ zincs_battery_fg
+
+ENVIRONMENT VARIABLES
+---------------------
+[width="80%",cols="4,10"]
+|======
+|zincs_battery[bgcolor_charged]|color when above threshold_charged
+|zincs_battery[bgcolor_default]|bgcolor when not low or charged
+|zincs_battery[bgcolor_low]|color when below threshold_low
+|zincs_battery[fgcolor_charging]|color of text when charging
+|zincs_battery[fgcolor_default]|default foreground color
+|zincs_battery[fgcolor_low]|color of text when battery below threshold_low
+|zincs_battery[threshold_charged]|percentage
+|zincs_battery[threshold_hidden]|hide the segment when above this percentage
+|zincs_battery[threshold_low]|percentage
+|zincs_battery[verbose]|0/1: enables showing time until full/empty (requiress acpi)
+|======
+
+DETAILS
+-------
+
+Script Body
+~~~~~~~~~~~
+
+Has 49 line(s). Calls functions:
+
+ 
+
+zincs_battery
+~~~~~~~~~~~~~
+
+____
+ # ZINC Battery segment
+____
+
+Has 9 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+
+zincs_battery_async
+~~~~~~~~~~~~~~~~~~~
+
+Has 41 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+
+_zincs_battery_async_complete
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 1 line(s). Doesn't call other functions.
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+
+zincs_battery_async_return
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 6 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+
+zincs_battery_async_started
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 2 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+
+zincs_battery_bg
+~~~~~~~~~~~~~~~~
+
+Has 7 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+
+zincs_battery_default_opts
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 1 line(s). Doesn't call other functions.
+
+Not called by script or any function (may be e.g. a hook, a Zle widget, etc.).
+
+zincs_battery_display_hidden
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Has 11 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+
+zincs_battery_fg
+~~~~~~~~~~~~~~~~
+
+____
+ # Change fg color based on low, charging, or default.
+____
+
+Has 7 line(s). Doesn't call other functions.
+
+Called by:
+
+ Script-Body
+

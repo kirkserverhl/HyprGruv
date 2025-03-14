@@ -1,0 +1,112 @@
+---@toc rustaceanvim.contents
+
+---@mod rustaceanvim.intro Introduction
+---@brief [[
+---This plugin automatically configures the `rust-analyzer` builtin LSP client
+---and integrates with other rust tools.
+---@brief ]]
+---
+---@mod rustaceanvim
+---
+---@brief [[
+---
+---Commands:
+---
+--- ':RustAnalyzer start' - Start the LSP client.
+--- ':RustAnalyzer stop' - Stop the LSP client.
+--- ':RustAnalyzer restart' - Restart the LSP client.
+--- ':RustAnalyzer reloadSettings' - Reload settings for the LSP client.
+--- ':RustAnalyzer target <target_arch>' - Set the target architecture for the LSP client.
+
+--- The ':RustAnalyzer target' command can take a valid rustc target,
+--- such as 'wasm32-unknown-unknown', or it can be left empty to set the LSP client
+--- to use the default target architecture for the operating system.
+---
+---The ':RustLsp[!]' command is available after the LSP client has initialized.
+---It accepts the following subcommands:
+---
+--- 'runnables {args[]}?' - Run tests, executables, etc.
+---                         ':RustLsp!' means run the last runnable (ignores any args).
+---                         `args[]` allows you to override the executable's arguments.
+--- 'run {args[]}?'       - Like 'runnables', but runs the target at the current cursor position.
+--- 'debuggables {args[]}?' - Debug tests, executables, etc. (requires |nvim-dap|).
+---                           ':RustLsp!' means run the last debuggable (ignores any args).
+---                           `args[]` allows you to override the executable's arguments.
+--- 'debug {args[]}?'       - Like 'debuggables', but debugs the target at the current cursor position.
+--- 'testables {args[]}?' - Run tests
+---                         ':RustLsp!' means run the last testable (ignores any args).
+---                         `args[]` allows you to override the executable's arguments.
+--- 'expandMacro' - Expand macros recursively.
+--- 'moveItem {up|down}' - Move items up or down.
+--- 'codeAction' - Sometimes, rust-analyzer groups code actions by category,
+---                which is not supported by Neovim's built-in |vim.lsp.buf.codeAction|.
+---                This command provides a command with a UI that does.
+---                If you set the option `vim.g.rustaceanvim.tools.code_actions.ui_select_fallback`
+---                to `true` (defaults to `false`), it will fall back to |vim.ui.select|
+---                if there are no grouped code actions.
+--- 'hover {actions|range}' - Hover actions, or hover over visually selected range.
+---               You can invoke a hover action by switching to the hover window and entering `<CR>`
+---               on the respective line, or with a keymap for the `<Plug>RustHoverAction` mapping,
+---               which accepts a `<count>` prefix as the (1-based) index of the hover action to invoke.
+---
+---               For example, if you set the keymap: `vim.keymap.set('n', '<space>a', '<Plug>RustHoverAction')`,
+---               you can invoke the third hover action with `3<space>a`.
+--- 'explainError {cycle?|current?}' - Display a hover window with explanations form the Rust error index.
+---            - If called with |cycle| or no args:
+---              Like |vim.diagnostic.goto_next|,
+---              |explainError| will cycle diagnostics,
+---              starting at the cursor position,
+---              until it can find a diagnostic with an error code.
+---            - If called with |current|:
+---              Searches for diagnostics only in the
+---              current cursor line.
+--- 'renderDiagnostic {cycle?|current?}' - Display a hover window with the rendered diagnostic,
+---            as displayed during |cargo build|.
+---            - If called with |cycle| or no args:
+---              Like |vim.diagnostic.goto_next|,
+---              |renderDiagnostic| will cycle diagnostics,
+---              starting at the cursor position,
+---              until it can find a diagnostic with rendered data.
+---            - If called with |current|:
+---              Searches for diagnostics only in the
+---              current cursor line.
+--- 'relatedDiagnostics' - Jump to diagnostics that are related to the one under the cursor.
+---                        If more than one diagnostic is found, this will populate and open
+---                        the quickfix list.
+--- 'openCargo' - Open the Cargo.toml file for the current package.
+--- 'openDocs' - Open docs.rs documentation for the symbol under the cursor.
+--- 'parentModule' - Open the current module's parent module.
+--- 'workspaceSymbol {onlyTypes?|allSymbols?} {query?}'
+---                  Filtered workspace symbol search.
+---                  When run with a bang (`:RustLsp! workspaceSymbol ...`),
+---                  rust-analyzer will include dependencies in the search.
+---                  You can also configure rust-analyzer so that |vim.lsp.buf.workspace_symbol|
+---                  supports filtering (with a # suffix to the query) or searching dependencies.
+--- 'joinLines' - Join adjacent lines.
+--- 'ssr {query}' - Structural search and replace.
+---                 Searches the entire buffer in normal mode.
+---                 Searches the selected region in visual mode.
+--- 'crateGraph {backend}' - Create and view a crate graph with graphviz.
+--- 'syntaxTree' - View the syntax tree.
+--- 'view {mir|hir}' - View MIR or HIR.
+--- 'flyCheck' {run?|clear?|cancel?}
+---            - Run `cargo check` or another compatible command (f.x. `clippy`)
+---              in a background thread and provide LSP diagnostics based on
+---              the output of the command.
+---              Useful in large projects where running `cargo check` on each save
+---              can be costly.
+---              Defaults to `flyCheck run` if called without an argument.
+--- 'logFile' - Open the rust-analyzer log file.
+---
+---The ':Rustc' command can be used to interact with rustc.
+---It accepts the following subcommands:
+---
+--- 'unpretty {args[]}' - Opens a buffer with a textual representation of the MIR or others things,
+---                       of the function closest to the cursor.
+---                       Achieves an experience similar to Rust Playground.
+---                       NOTE: This currently requires a tree-sitter parser for Rust,
+---                       and a nightly compiler toolchain.
+---@brief ]]
+
+local M = {}
+return M

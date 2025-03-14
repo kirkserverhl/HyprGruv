@@ -1,0 +1,134 @@
+require:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'benchmarks/*'
+    - 'profile/*'
+  DisplayCopNames: true
+  NewCops: enable
+  TargetRubyVersion: 2.6
+
+# Preferred codebase style ---------------------------------------------
+
+Layout/ExtraSpacing:
+  AllowForAlignment: true
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Layout/SpaceInsideBlockBraces:
+  EnforcedStyle: space
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/EmptyElse:
+  EnforcedStyle: empty
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/ModuleLength:
+  Max: 200
+
+Metrics/ClassLength:
+  Max: 350
+
+Metrics/ParameterLists:
+  Max: 16
+
+Naming/FileName:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Layout/SpaceAfterComma:
+  Enabled: false
+
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Style/EmptyCaseCondition:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/StderrPuts:
+  Enabled: false
+
+# Current preferred metrics --------------------------------------------
+# Better values are encouraged, but not required.
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+Metrics/PerceivedComplexity:
+  Max: 8
+
+Gemspec/RequireMFA:
+  Enabled: false
+
+# TODO -----------------------------------------------------------------
+
+Style/Documentation:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/SubjectStub:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false

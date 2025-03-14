@@ -1,0 +1,218 @@
+# vim: ft=zsh ts=2 sw=2 et fenc=utf-8
+
+# synopsis {{{
+# Current Working Directory
+#
+# Renders segment content on the `chpwd` hook.
+# Has different strategy options for rendering the path.
+#
+# Right now, the only strategies available are `rtab` and the shell default.
+#
+# ## Options:
+# - `$1`: FG
+# - `$2`: BG
+# - `$3`: Visual Draw Mode
+# - `$4`: Render Process Mode
+# - `$5`: DIR Display Strategy
+# - `$@`: Additional args passed to the chosen strategy
+#
+#
+# ### Common optstrings:
+#
+# Example dir: `/home/robo/code/configs/zsh`
+#
+# |===
+# | optstring        | Example Output
+# | `;;;;rtab;`      | `/h/r/c/c/z`
+# | `;;;;rtab;-t;-l` | `~/c/con/zsh`
+# |===
+#
+# ### DIR Display Strategy
+#
+# |===
+# | Strategy | Description | Example
+# | default | No shortening, just `%~` as evaluated by shell prompt expansion. | `~/code/zinc`
+# | `rtab` | Reverse tabbing function, has additional options | `~/c/zinc`, `~/c/p`, `/h/r/c/p`, etc
+# |===
+#
+# ### Strategy options:
+#
+# #### `rtab`:
+#
+# WARN: The `rtab` strategy uses a single subshell to explore the path.
+# Although it does spawn a subshell, it is seemingly more performant to explore
+# the path in a subshell rather than clean up and reset the main thread's chpwd
+# hooks, variables, etc.
+#
+# Options can be set with `zstyle` calls, or as arguments `$6...N`
+#
+# ```
+#  -f, --fish      fish-simulation, like -l -s -t
+#  -l, --last      Print the last directory''s full name
+#  -s, --short     Truncate directory names to the first character
+#  -t, --tilde     Substitute ~ for the home directory
+#  -T, --nameddirs Substitute named directories as well
+# The long options can also be set via zstyle, like
+#   zstyle :prompt:rtab fish yes
+# ```
+#
+# Note:
+# ____
+# Combined short form (`-sl`) options are *NOT* supported.
+# ____
+# }}}
+
+# env-vars {{{
+# zincs_cwd -> Array for segment runtime use
+typeset -gA zincs_cwd
+typeset -ga _ZINCS_CWD_STRAT_ARGS
+# zincs_cwd[add_hyperlink] -> If '1', create a hyperlink ANSI escape around the path that is
+# clickable in most VTE terminals!
+zincs_cwd[add_hyperlink]=${zincs_cwd[add_hyperlink]:-"0"}
+# zincs_cwd[strategy] -> The current render strategy for displaying the CWD path
+zincs_cwd[strategy]=${zincs_cwd[strategy]:-"default"}
+# }}}
+
+# A modification of the reverse tabbing utility by Daniel Friesel <derf@xxxxxxxxxxxxxxxxxx>
+## reverse tabbing, useful in the prompt
+## Copyright (C) 2008 by Daniel Friesel <derf@xxxxxxxxxxxxxxxxxx>
+## Copyright (C) 2018 by Ben Klein <robobenklein@xxxxxxxxxxxxxxxxxx>
+## License: WTFPL <http://sam.zoy.org/wtfpl>
+##
+## Robobenklein: The original had a CAVEAT:
+## "directory-names containing two or more consecutive spaces are not supported"
+## This issue has been fixed.
+##
+## Also the script is now a ZSH function instead of an executable shebang file.
+function _zincs_cwd_strat_rtab () {
+
+  setopt localoptions
+  setopt rc_quotes null_glob
+
+  typeset -i lastfull=0
+  typeset -i short=0
+  typeset -i tilde=0
+  typeset -i named=0
+
+  if zstyle -t ':prompt:rtab' fish; then
+    lastfull=1
+    short=1
+    tilde=1
+  fi
+  if zstyle -t ':prompt:rtab' nameddirs; then
+    tilde=1
+    named=1
+  fi
+  zstyle -t ':prompt:rtab' last && lastfull=1
+  zstyle -t ':prompt:rtab' short && short=1
+  zstyle -t ':prompt:rtab' tilde && tilde=1
+
+  while [[ $1 == -* ]]; do
+    case $1 in
+      -f|--fish)
+        lastfull=1
+        short=1
+        tilde=1
+      ;;
+      -h|--help)
+        print "Usage: $0 [-f -l -s -t] [directory]"
+        print ' -f, --fish      fish-simulation, like -l -s -t'
+        print ' -l, --last      Print the last directory''s full name'
+        print ' -s, --short     Truncate directory names to the first character'
+        print ' -t, --tilde     Substitute ~ for the home directory'
+        print ' -T, --nameddirs Substitute named directories as well'
+        print 'The long options can also be set via zstyle, like'
+        print '  zstyle :prompt:rtab fish yes'
+        return 0
+      ;;
+      -l|--last) lastfull=1 ;;
+      -s|--short) short=1 ;;
+      -t|--tilde) tilde=1 ;;
+      -T|--nameddirs)
+        tilde=1
+        named=1
+      ;;
+    esac
+    shift
+  done
+
+  typeset -a tree expn
+  typeset result part dir=${1-$PWD}
+  typeset -i i
+
+  [[ -d $dir ]] || return 0
+
+  if (( named )) {
+    for part in ${(k)nameddirs}; {
+      [[ $dir == ${nameddirs[$part]}(/*|) ]] && dir=${dir/${nameddirs[$part]}/\~$part}
+    }
+  }
+  (( tilde )) && dir=${dir/$HOME/\~}
+  tree=(${(s:/:)dir})
+  # broke syntax highlighting here?
+  REPLY=$(
+    unfunction chpwd 2> /dev/null
+    unset chpwd_functions 2>/dev/null
+    if [[ $tree[1] == \~* ]] {
+      builtin cd ${~tree[1]}
+      result=$tree[1]
+      shift tree
+    } else {
+      builtin cd /
+    }
+    for dir in $tree; {
+      if (( lastfull && $#tree == 1 )) {
+        result+="/$tree"
+        break
+      }
+      expn=(a b)
+      part=''
+      i=0
+      until [[ (( ${#expn} == 1 )) || $dir = $expn || $i -gt 99 ]]  do
+        (( i++ ))
+        part+=$dir[$i]
+        expn=($(echo ${part}*(-/)))
+        (( short )) && break
+      done
+      result+="/$part"
+      builtin cd $dir
+      shift tree
+    }
+    echo ${result:-/}
+  )
+}
+
+# Re-renders the segment output on the chpwd hook.
+_zincs_cwd_chpwd ()
+{
+  case "${zincs_cwd[strategy]}" in
+    'rtab')
+      # _ZINC_DBG_OUT "_zincs_cwd_strat_rtab ${_ZINCS_CWD_STRAT_ARGS}"
+      REPLY=""
+      _zincs_cwd_strat_rtab ${_ZINCS_CWD_STRAT_ARGS}
+      zincs_cwd[output]="${REPLY}"
+      ;;
+    *)
+      zincs_cwd[output]="%~"
+      ;;
+  esac
+}
+
+zincs_cwd ()
+{
+  # shift 4 # we don't care for the ZINC args
+  zincs_cwd[strategy]="$5"
+  _ZINCS_CWD_STRAT_ARGS=("${@:6}") # dump rest of args for strategy options
+
+  [[ "${zincs_cwd[output]}" == "" ]] && _zincs_cwd_chpwd
+
+  if (( zincs_cwd[add_hyperlink] )); then
+    REPLY=$'%{\e]8;;file://'${HOSTNAME}${PWD:gs/%/%%/}$'\e\\%}'${zincs_cwd[output]:gs/%/%%/}$'%{\e]8;;\e\\%}'
+  else
+    REPLY="${zincs_cwd[output]:gs/%/%%/}"
+  fi
+}
+
+-zinc-add-hook _zinc_chpwd _zincs_cwd_chpwd
+
+zincs_cwd "$@"
