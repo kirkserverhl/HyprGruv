@@ -30,7 +30,7 @@ eval $(keychain --eval --agents ssh id_ed25519)
 # -----------------------------------------------------
 
 source "$HOME/.cache/wal/colors-tty.sh"
-# cat ~/.cache/wal/sequence
+cat ~/.cache/wal/sequence
 
 alias ls='ls --color=auto'
 alias dir='dir --color=auto'
@@ -293,7 +293,10 @@ alias lf="eza -l --icons | egrep -v '^d'"  # files only
 alias ldir="eza -l --icons | egrep '^d'"   # directories only
 alias lla='eza -Al --icons'                # List and Hidden Files
 alias las='eza -A -- icons'                # Hidden Files
-alias lls='eza -l --icons'                 # List
+alias lls='eza -l --icons'
+alias cat='bat --style=header,grid'
+
+# List
 
 # Productivity
 alias c='clear && $SHELL'
