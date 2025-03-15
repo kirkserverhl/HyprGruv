@@ -1,42 +1,60 @@
 #!/bin/bash
 # 03-setup.sh
 
-# Load common functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/state.sh"
+# Load common functions and state management
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$HYPR_DIR/lib/common.sh"
+source "$HYPR_DIR/lib/state.sh"
 
-# Copy Local Plugins (Nvim, Hyprpm, Zinit, etc)
-cp -r $CONFIG_DIR/.local $HOME
-sleep 1
+RESET="\e[0m"
+GREEN="\e[38;2;142;192;124m"
+CYAN="\e[38;2;69;133;136m"
+YELLOW="\e[38;2;215;153;33m"
+RED="\e[38;2;204;36;29m"
+GRAY="\e[38;2;60;56;54m"
+BOLD="\e[1m"
 
-# Copy bashrc
-cp -r $CONFIG_DIR/.bashrc $HOME
-sleep 1
+display_header "SETUP"
 
-# Pacman setup
-sudo cp -r $CONFIG_DIR/pacman.conf /etc/ &
-progress -mp $!
-sleep 1
+# Check if gum is installed, install it if not
+if ! command_exists gum; then
+    log_status "gum not found. Installing with yay..."
+    if command_exists yay; then
+        if run_command "yay -S --noconfirm gum" "Installing gum"; then
+            log_success "gum installed successfully"
+        else
+            log_error "Failed to install gum. Please install it manually and run this script again."
+            exit 1
+        fi
+    else
+        log_error "yay is not installed. Please install gum manually and run this script again."
+        exit 1
+    fi
+fi
 
-# Load Wallpaper
-gum spin -- $CONFIG_DIR/scripts/default_wp.sh
-sleep 2
+# Define scripts to run with descriptions
+declare -A SETUP_SCRIPTS=(
+    ["$SCRIPTS/hard_copy.sh"]="Hard Copy Files in Root Directory"
+    ["$SCRIPTS/default_wp.sh"]="Loading default wallpaper"
+    ["$SCRIPTS/chatoic.sh"]="Configuring Chaotic Pacman mirrors"
+    ["$SCRIPTS/hyprpm.sh"]="Installing Hyprpm plugins"
+)
 
-# Chaotic Pacman Mirrors
-sudo $CONFIG_DIR/scripts/chatoic.sh
-sleep 1
+# Run each script in sequence
+for script in "${!SETUP_SCRIPTS[@]}"; do
+    description="${SETUP_SCRIPTS[$script]}"
 
-# Hyprpm plugs
-CONFIG_DIR/scripts/hyprpm.sh
-sleep 1
+    log_status "Starting: $description"
+    if gum spin -- "$script"; then
+        log_success "$description completed"
+    else
+        log_error "$description failed"
+    fi
 
-# Screenshot & Photo Folder
-gum spin -- $CONFIG_DIR/scripts/screenshot_folder.sh
-sleep 1
-
-# Eza-Preview for Yazi
-git clone https://github.com/sharklasers996/eza-preview.yazi ~/.config/yazi/plugins/eza-preview.yazi
-sleep 1
-
+    # Sleep between scripts
+    sleep 2
+done
 clear
+
+log_success "Setup completed successfully"
+

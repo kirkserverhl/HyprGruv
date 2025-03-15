@@ -1,10 +1,18 @@
 #!/bin/bash
 # 02-stow.sh
 
-# Load common functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/state.sh"
+# Load common functions and state management
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$HYPR_DIR/lib/common.sh"
+source "$HYPR_DIR/lib/state.sh"
+
+RESET="\e[0m"
+GREEN="\e[38;2;142;192;124m"
+CYAN="\e[38;2;69;133;136m"
+YELLOW="\e[38;2;215;153;33m"
+RED="\e[38;2;204;36;29m"
+GRAY="\e[38;2;60;56;54m"
+BOLD="\e[1m"
 
 log_status "Starting configuration stowing process"
 
@@ -31,12 +39,27 @@ if [ ! -d "$REPO_DIR" ]; then
 fi
 sleep 1
 
+# Check if stow is installed, install it if not
+if ! command_exists stow; then
+    log_status "stow not found. Installing with yay..."
+    if command_exists yay; then
+        if run_command "yay -S --noconfirm stow" "Installing stow"; then
+            log_success "stow installed successfully"
+        else
+            log_error "Failed to install stow. Please install it manually and run this script again."
+            exit 1
+        fi
+    else
+        log_error "yay is not installed. Please install stow manually and run this script again."
+        exit 1
+    fi
+fi
+
 # Navigate to repo directory
 cd "$REPO_DIR" || {
 	log_error "Failed to change directory to $REPO_DIR"
 	exit 1
 }
-
 # Backup existing files
 log_status "Backing up existing files"
 for file in $(ls -A "$REPO_DIR/home"); do
@@ -52,10 +75,8 @@ for file in $(ls -A "$REPO_DIR/home"); do
 done
 sleep .5
 
+# Remove Default Hyprland Configuration
 rm -rf $HOME/.config/hypr
-sleep .5
-
-yay -S stow
 sleep .5
 
 # Stow home directory configs

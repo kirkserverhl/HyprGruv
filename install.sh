@@ -5,16 +5,16 @@
 set -e
 
 # Packages to assist Setup
-sudo cp -r ~/.hyprgruv/assets/bin /usr/
+sudo cp -r "$ASSET_DIR/bin /usr/"
 
 # Load common functions and state management
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/state.sh"
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$HYPR_DIR/lib/common.sh"
+source "$HYPR_DIR/lib/state.sh"
 
 # Setup log file
-mkdir -p "$CONFIG_DIR/logs"
-LOGFILE="$CONFIG_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
+mkdir -p "$ASSET_DIR/logs"
+LOGFILE="$ASSET_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 clear
@@ -38,7 +38,7 @@ run_module() {
 
 	display_header "$name"
 
-	if "$SCRIPT_DIR/modules/$module"; then
+	if "$HYPR_DIR/modules/$module"; then
 		mark_completed "$name"
 		log_success "$name completed successfully"
 		return 0
@@ -57,7 +57,7 @@ run_module "03-setup.sh" "Setup Sysem" || exit 1
 sleep 1
 
 # Run the interactive configuration module
-"$SCRIPT_DIR/modules/04-config.sh"
+"$HYPR_DIR/modules/04-config.sh"
 
 # Show installation summary
 display_header "Summary"
@@ -70,7 +70,7 @@ if command_exists jq; then
 		echo "  ✅ $step"
 	done
 else
-	cat "$CONFIG_DIR/completed_steps.txt" | while read step; do
+	cat "$ASSET_DIR/completed_steps.txt" | while read step; do
 		echo "  ✅ $step"
 	done
 fi

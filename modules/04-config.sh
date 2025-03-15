@@ -2,21 +2,21 @@
 #04-config.sh
 
 # Set gum theme based on colors.css variables
-#export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-#export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
-#export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
-#export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
-#export GUM_CONFIRM_UNSELECTED_FOREGROUND="#282828" # Using --foreground
+export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
+export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
+export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
+export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
+export GUM_CONFIRM_UNSELECTED_FOREGROUND="#282828" # Using --foreground
 
 # Set other gum colors for consistency
-#export GUM_INPUT_CURSOR_FOREGROUND="#282828" # Using --cursor
-#export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
-#export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
+export GUM_INPUT_CURSOR_FOREGROUND="#282828" # Using --cursor
+export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
+export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 
-# Load common functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/state.sh"
+# Load common functions and state management
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$HYPR_DIR/lib/common.sh"
+source "$HYPR_DIR/lib/state.sh"
 
 RESET="\e[0m"
 GREEN="\e[38;2;142;192;124m"
@@ -25,6 +25,17 @@ YELLOW="\e[38;2;215;153;33m"
 RED="\e[38;2;204;36;29m"
 GRAY="\e[38;2;60;56;54m"
 BOLD="\e[1m"
+
+# Now you can use the pywal color variables in your scripts
+function log_success() {
+  echo "${GREEN}[SUCCESS]${RESET} $1"
+}
+function log_error() {
+  echo "${RED}[ERROR]${RESET} $1"
+}
+function log_info() {
+  echo "${CYAN}[INFO]${RESET} $1"
+}
 
 sleep .5
 echo ""
@@ -37,12 +48,12 @@ if gum confirm "  🍬     Would you like to install Sugar-Candy SDDM theme?  ";
 	sleep 1
 
 	# Check if SDDM script exists
-	if [ -f "$CONFIG_DIR/scripts/sddm_candy_install.sh" ]; then
+	if [ -f "$SCRIPTS/sddm_candy_install.sh" ]; then
 
 		# Run the SDDM script
-		$CONFIG_DIR/scripts/sddm_candy_install.sh
+		$SCRIPTS/sddm_candy_install.sh
 	else
-		echo "Error:  Sugar-Candy script not found at $CONFIG_DIR/scripts/sddm_candy_install.sh"
+		echo "Error:  Sugar-Candy script not found at $SCRIPTS/sddm_candy_install.sh"
 		exit 1
 	fi
 else
@@ -61,11 +72,11 @@ if gum confirm "  🖥️    Would you like to configure monitor setup? "; then
 	sleep 1
 
 	# Check if monitor script exists
-	if [ -f $CONFIG_DIR/scripts/monitor.sh ]; then
+	if [ -f $SCRIPTS/monitor.sh ]; then
 		# Run the monitor script
-		$CONFIG_DIR/scripts/monitor.sh
+		$SCRIPTS/monitor.sh
 	else
-		echo "Error: Monitor script not found at $CONFIG_DIR/scripts/monitor.sh"
+		echo "Error: Monitor script not found at $SCRIPTS/monitor.sh"
 		exit 2
 	fi
 else
@@ -84,12 +95,12 @@ if gum confirm "  🪱    Would you like to configure GRUB theme? "; then
 	sleep 1
 
 	# Check if grub script exists
-	if [ -f $CONFIG_DIR/scripts/grub.sh ]; then
+	if [ -f $SCRIPTS/grub.sh ]; then
 
 		# Run the grub script
-		$CONFIG_DIR/scripts/grub.sh
+		$SCRIPTS/grub.sh
 	else
-		echo "Error: grub script not found at $CONFIG_DIR/scripts/grub.sh"
+		echo "Error: grub script not found at $SCRIPTS/grub.sh"
 		exit 1
 	fi
 else
@@ -110,12 +121,12 @@ if gum confirm "  🧹    Would you like to perform a system cleanup? "; then
 	sleep 1
 
 	# Check if cleanup script exists
-	if [ -f $HOME/scripts/cleanup.sh ]; then
+	if [ -f $SCRIPTS/cleanup.sh ]; then
 
 		# Run the cleanup script
-		$HOME/scripts/cleanup.sh
+		$SCRIPTS/cleanup.sh
 	else
-		echo "Error: Cleanup script not found at $HOME/scripts/cleanup.sh"
+		echo "Error: Cleanup script not found at $SCRIPTS/cleanup.sh"
 		exit 1
 	fi
 else
@@ -135,12 +146,12 @@ if gum confirm "  🐚    Would you like configure the Shell? "; then
 	sleep 1
 
 	# Check if shell script exists
-	if [ -f $CONFIG_DIR/scripts/shell.sh ]; then
+	if [ -f $SCRIPTS/shell.sh ]; then
 
 		# Run the shell script
-		$CONFIG_DIR/scripts/shell.sh
+		$SCRIPTS/shell.sh
 	else
-		echo "Error:  Shell script not found at $CONFIG_DIR/scripts/shell.sh"
+		echo "Error:  Shell script not found at $SCRIPTS/shell.sh"
 		exit 1
 	fi
 else

@@ -1,11 +1,11 @@
 #!/bin/bash
 # State management for Hyprgruv installer
 
-STATE_FILE="$CONFIG_DIR/install_state.json"
+STATE_FILE="$ASSET_DIR/install_state.json"
 
 # Initialize state file if it doesn't exist
 init_state() {
-    mkdir -p "$CONFIG_DIR"
+    mkdir -p "$ASSET_DIR"
     if [[ ! -f "$STATE_FILE" ]]; then
         cat > "$STATE_FILE" <<EOF
 {
@@ -28,7 +28,7 @@ mark_completed() {
         mv "$temp_file" "$STATE_FILE"
     else
         # Fallback if jq isn't available
-        echo "$step" >> "$CONFIG_DIR/completed_steps.txt"
+        echo "$step" >> "$ASSET_DIR/completed_steps.txt"
     fi
 }
 
@@ -38,7 +38,7 @@ is_completed() {
     if command_exists jq; then
         jq -e --arg step "$step" '.completed_steps | contains([$step])' "$STATE_FILE" >/dev/null
     else
-        grep -q "^$step$" "$CONFIG_DIR/completed_steps.txt" 2>/dev/null
+        grep -q "^$step$" "$ASSET_DIR/completed_steps.txt" 2>/dev/null
     fi
 }
 
@@ -51,7 +51,7 @@ save_choice() {
         jq --arg key "$key" --arg value "$value" '.user_choices[$key] = $value' "$STATE_FILE" > "$temp_file"
         mv "$temp_file" "$STATE_FILE"
     else
-        echo "$key=$value" >> "$CONFIG_DIR/user_choices.txt"
+        echo "$key=$value" >> "$ASSET_DIR/user_choices.txt"
     fi
 }
 
@@ -66,8 +66,8 @@ get_choice() {
             return 0
         fi
     else
-        if [[ -f "$CONFIG_DIR/user_choices.txt" ]]; then
-            local value=$(grep "^$key=" "$CONFIG_DIR/user_choices.txt" | cut -d= -f2)
+        if [[ -f "$ASSET_DIR/user_choices.txt" ]]; then
+            local value=$(grep "^$key=" "$ASSET_DIR/user_choices.txt" | cut -d= -f2)
             if [[ -n "$value" ]]; then
                 echo "$value"
                 return 0

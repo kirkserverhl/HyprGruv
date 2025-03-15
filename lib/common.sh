@@ -1,5 +1,5 @@
 #!/bin/bash
-# Common functions and variables for Hyprgruv installer
+# common.sh
 
 # ANSI color codes
 RESET="\e[0m"
@@ -10,8 +10,9 @@ RED="\e[38;2;204;36;29m"
 BOLD="\e[1m"
 
 # Base directories
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG_DIR="$SCRIPT_DIR/assets"
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ASSET_DIR="$HYPR_DIR/assets"
+SCRIPTS="$HYPR_DIR/lib/scripts"
 BACKUP_DIR="$HOME/.local/backup/hyprgruv"
 
 alias ls='ls --color=auto'
@@ -27,17 +28,18 @@ log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
 log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 
+# LS Terminal Colors
+export LSCOLORS=GxFxCxDxbxegedabagaced
+
 # Display header with figlet
 display_header() {
-	figlet -f "$SCRIPT_DIR/home/.fonts/Graffiti.flf" "$1" | lsd-print
+	figlet -f "$HYPR_DIR/home/.fonts/Graffiti.flf" "$1" | lsd-print
 	echo ""
 }
-
 # Check if command exists
 command_exists() {
 	command -v "$1" >/dev/null 2>&1
 }
-
 # Run a command with proper error handling
 run_command() {
 	local cmd="$1"
@@ -52,6 +54,6 @@ run_command() {
 		return 1
 	fi
 }
-
 # Source this at the beginning of each script
-export SCRIPT_DIR CONFIG_DIR BACKUP_DIR
+export HYPR_DIR ASSET_DIR BACKUP_DIR
+

@@ -11,7 +11,7 @@ RESET="%{$reset_color%}"
 
 # Now you can use the pywal color variables in your scripts
 function log_success() {
-  echo "$color2[SUCCESS]$color15 $1"
+  echo "${GREEN}[SUCCESS]${RESET} $1"
 }
 function log_error() {
   echo "${RED}[ERROR]${RESET} $1"
@@ -78,7 +78,7 @@ zstyle ':completion:*' menu select
 
 source $ZSH/oh-my-zsh.sh
 source $(dirname $(gem which colorls))/tab_complete.sh
-alias lc='colorls -lA --sd'
+alias ls='colorls -lA --sd'
 
 ###-----------------------------------------------------
 ### Starship
