@@ -32,7 +32,7 @@ export QT_QPA_PLATFORMTHEME=qt6ct
 export PYWAL='~/.cache/wal/colors.sh'
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 gpgconf --launch gpg-agent
-eval $(keychain --eval --agents ssh id_ed25519)
+eval $(keychain --a eval --agents ssh id_ed25519)
 
 # -----------------------------------------------------
 # Pywal
@@ -83,7 +83,7 @@ alias lc='colorls -lA --sd'
 ###-----------------------------------------------------
 ### Starship
 ### -----------------------------------------------------
-# eval "$(starship init zsh)"
+eval "$(starship init zsh)"
 alias star='~/.hyprgruv/home/scripts/starship_theme.sh'
 
 # -----------------------------------------------------
@@ -251,8 +251,7 @@ autoload -Uz _zinit
 #####################
 # PROMPT            #
 #####################
-zinit ice from"gh-r" as"command" atload'eval "$(starship init zsh)"'
-zinit load starship/starship
+zinit ice from"gh-r" as"command"
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
