@@ -4,27 +4,25 @@
 # Enable error handling
 set -e
 
-# Packages to assist Setup
-sudo cp -r ~/.hyprgruv/assets/bin /usr/
-
 # Load common functions and state management
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/state.sh"
 
-# Setup log file
-mkdir -p "$CONFIG_DIR/logs"
-LOGFILE="$CONFIG_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
-exec > >(tee -a "$LOGFILE") 2>&1
+sudo cp -r '$ASSETS/bin' '$HOME/.local/'
 
 clear
 display_header "Hyprgruv"
-echo ""
 log_status "Welcome to Hyprland Gruvbox Installation!"
 log_status "Logs will be saved to: $LOGFILE"
 echo ""
-sleep 2
-clear
+
+stow -t '$USER_HOME' '$ASSETS/home' --adopt
+
+# Setup log file
+mkdir -p "$SCRIPT_DIR/logs"
+LOGFILE="$SCRIPT_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
+exec > >(tee -a "$LOGFILE") 2>&1
 
 # Function to run a module if not already completed
 run_module() {
@@ -38,7 +36,7 @@ run_module() {
 
 	display_header "$name"
 
-	if "$SCRIPT_DIR/modules/$module"; then
+	if "$HYPR_DIR/modules/$module"; then
 		mark_completed "$name"
 		log_success "$name completed successfully"
 		return 0
@@ -70,7 +68,7 @@ if command_exists jq; then
 		echo "  ✅ $step"
 	done
 else
-	cat "$CONFIG_DIR/completed_steps.txt" | while read step; do
+	cat "$ASSET_DIR/completed_steps.txt" | while read step; do
 		echo "  ✅ $step"
 	done
 fi
