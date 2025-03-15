@@ -1,42 +1,53 @@
 #!/bin/bash
 # 03-setup.sh
 
+
 # Load common functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 source "$SCRIPT_DIR/lib/state.sh"
 
-# Copy Local Plugins (Nvim, Hyprpm, Zinit, etc)
-cp -r $CONFIG_DIR/.local $HOME
-sleep 1
+display_header "SETUP"
 
-# Copy bashrc
-cp -r $CONFIG_DIR/.bashrc $HOME
-sleep 1
+# Check if gum is installed, install it if not
+if ! command_exists gum; then
+    log_status "gum not found. Installing with yay..."
+    if command_exists yay; then
+        if run_command "yay -S --noconfirm gum" "Installing gum"; then
+            log_success "gum installed successfully"
+        else
+            log_error "Failed to install gum. Please install it manually and run this script again."
+            exit 1
+        fi
+    else
+        log_error "yay is not installed. Please install gum manually and run this script again."
+        exit 1
+    fi
+fi
 
-# Pacman setup
-sudo cp -r $CONFIG_DIR/pacman.conf /etc/ &
-progress -mp $!
-sleep 1
+# Define scripts to run with descriptions
+declare -A SETUP_SCRIPTS=(
+    ["$SCRIPTS/hard_copy.sh"]="Hard Copy Files in Root Directory"
+    ["$SCRIPTS/default_wp.sh"]="Loading default wallpaper"
+    ["$SCRIPTS/chatoic.sh"]="Configuring Chaotic Pacman mirrors"
+    ["$SCRIPTS/hyprpm.sh"]="Installing Hyprpm plugins"
+)
 
-# Load Wallpaper
-gum spin -- $CONFIG_DIR/scripts/default_wp.sh
-sleep 1
+# Run each script in sequence
+for script in "${!SETUP_SCRIPTS[@]}"; do
+    description="${SETUP_SCRIPTS[$script]}"
 
-# Chaotic Pacman Mirrors
-sudo $CONFIG_DIR/scripts/chatoic.sh
-sleep 1
+    log_status "Starting: $description"
+    if gum spin -- "$script"; then
+        log_success "$description completed"
+    else
+        log_error "$description failed"
+    fi
 
-# Hyprpm plugs
-$CONFIG_DIR/scripts/hyprpm.sh
-sleep 1
-
-# Screenshot & Photo Folder
-gum spin -- $CONFIG_DIR/scripts/screenshot_folder.sh
-sleep 1
-
-# Eza-Preview for Yazi
-git clone https://github.com/sharklasers996/eza-preview.yazi ~/.config/yazi/plugins/eza-preview.yazi
-sleep 1
-
+    # Sleep between scripts
+    sleep 2
+done
 clear
+
+log_success "Setup completed successfully"
+
