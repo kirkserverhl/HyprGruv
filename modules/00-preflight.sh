@@ -1,43 +1,73 @@
 #!/usr/bin/env bash
-# 00-preflight.sh - Ensure EndeavourOS (or Arch) has Hyprland base stack
+# 00-preflight.sh — ensure Hyprland base stack on Arch/EndeavourOS, with repo assets
 set -euo pipefail
+IFS=$'\n\t'
 
-log_status "Running preflight checks for Hyprland base..."
+# ------------------------------------------------------------
+# Resolve repo root from modules/ and load helpers
+# ------------------------------------------------------------
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# -------------------------------------------------------------
+if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
+  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
+fi
+if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
+  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
+fi
+# shellcheck source=/dev/null
+source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
+source "$HYPR_DIR/lib/state.sh"
+
+display_header "Preflight: Hyprland Base Stack"
+
+# ------------------------------------------------------------
+# Arch sanity
+# ------------------------------------------------------------
+if ! command -v pacman >/dev/null 2>&1; then
+  log_error "pacman not found. This preflight supports Arch/EndeavourOS only."
+  exit 1
+fi
+
+log_status "Running preflight checks for Hyprland base…"
+
+# ------------------------------------------------------------
 # Helpers
-# -------------------------------------------------------------
+# ------------------------------------------------------------
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
 ensure_pkg() {
   local pkgs=()
   for p in "$@"; do
     pkg_installed "$p" || pkgs+=("$p")
   done
-  [[ ${#pkgs[@]} -gt 0 ]] && sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+  if ((${#pkgs[@]})); then
+    sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+  fi
 }
 
-# -------------------------------------------------------------
+# ------------------------------------------------------------
 # Detect GPU vendor
-# -------------------------------------------------------------
+# ------------------------------------------------------------
 GPU_VENDOR="generic"
-if lspci | grep -i ' vga\|3d\|display' | grep -qi nvidia; then
+if lspci | grep -iE ' vga|3d|display' | grep -qi nvidia; then
   GPU_VENDOR="nvidia"
-elif lspci | grep -i ' vga\|3d\|display' | grep -qi amd; then
+elif lspci | grep -iE ' vga|3d|display' | grep -qi amd; then
   GPU_VENDOR="amd"
-elif lspci | grep -i ' vga\|3d\|display' | grep -qi intel; then
+elif lspci | grep -iE ' vga|3d|display' | grep -qi intel; then
   GPU_VENDOR="intel"
 fi
+log_status "Detected GPU vendor: $GPU_VENDOR"
 
 case "$GPU_VENDOR" in
   amd)    GFX_PKGS=(mesa vulkan-radeon libva-mesa-driver lib32-mesa lib32-vulkan-radeon) ;;
-  intel)  GFX_PKGS=(mesa vulkan-intel libva-intel-driver lib32-mesa lib32-vulkan-intel) ;;
+  intel)  GFX_PKGS=(mesa vulkan-intel  libva-intel-driver lib32-mesa lib32-vulkan-intel) ;;
   nvidia) GFX_PKGS=(nvidia nvidia-utils lib32-nvidia-utils) ;;
   *)      GFX_PKGS=(mesa lib32-mesa) ;;
 esac
 
-# -------------------------------------------------------------
+# ------------------------------------------------------------
 # Core Hyprland/Wayland stack
-# -------------------------------------------------------------
+# ------------------------------------------------------------
 BASE_PKGS=(
   hyprland
   xdg-desktop-portal xdg-desktop-portal-hyprland
@@ -55,27 +85,41 @@ BASE_PKGS=(
 OPT_TERMS=(ghostty kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
 
-log_status "Installing core packages..."
+# ------------------------------------------------------------
+# Install packages
+# ------------------------------------------------------------
+log_status "Refreshing package databases"
+sudo pacman -Syu --noconfirm
+
+log_status "Installing core packages"
 ensure_pkg "${BASE_PKGS[@]}"
+
+log_status "Installing GPU packages"
 ensure_pkg "${GFX_PKGS[@]}"
+
+log_status "Installing optional terminals"
 ensure_pkg "${OPT_TERMS[@]}"
+
+log_status "Installing optional extras"
 ensure_pkg "${OPT_EXTRAS[@]}"
 
-# -------------------------------------------------------------
+# ------------------------------------------------------------
 # Enable services
-# -------------------------------------------------------------
+# ------------------------------------------------------------
+log_status "Enabling services"
 sudo systemctl enable --now NetworkManager.service
+# PipeWire stack (socket-activated; enabling is fine)
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
 
 if pkg_installed sddm; then
   sudo systemctl enable --now sddm.service
 fi
 
-# -------------------------------------------------------------
-# Session file
-# -------------------------------------------------------------
+# ------------------------------------------------------------
+# Session file (only if missing)
+# ------------------------------------------------------------
 if [[ ! -f /usr/share/wayland-sessions/hyprland.desktop ]]; then
-  log_status "Creating Hyprland session file..."
+  log_status "Creating Hyprland session file"
   sudo tee /usr/share/wayland-sessions/hyprland.desktop >/dev/null <<'EOF'
 [Desktop Entry]
 Name=Hyprland
@@ -86,4 +130,50 @@ DesktopNames=Hyprland
 EOF
 fi
 
+# ------------------------------------------------------------
+# Apply optional preflight assets from the repo
+#   Place content under:
+#     assets/preflight/etc/         → copied to /etc
+#     assets/preflight/usr_share/   → copied to /usr/share
+#     assets/preflight/systemd/     → copied to /etc/systemd/system (then daemon-reload)
+#     assets/preflight/env          → lines like FOO=bar appended/updated in /etc/environment
+# ------------------------------------------------------------
+PREFLIGHT_DIR="$ASSET_DIR/preflight"
+if [[ -d "$PREFLIGHT_DIR" ]]; then
+  log_status "Applying preflight assets from $PREFLIGHT_DIR"
+
+  if [[ -d "$PREFLIGHT_DIR/etc" ]]; then
+    log_status "Syncing etc/ payload"
+    sudo rsync -a "$PREFLIGHT_DIR/etc/." /etc/
+  fi
+
+  if [[ -d "$PREFLIGHT_DIR/usr_share" ]]; then
+    log_status "Syncing usr_share/ payload → /usr/share"
+    sudo rsync -a "$PREFLIGHT_DIR/usr_share/." /usr/share/
+  fi
+
+  if [[ -d "$PREFLIGHT_DIR/systemd" ]]; then
+    log_status "Installing systemd unit overrides"
+    sudo rsync -a "$PREFLIGHT_DIR/systemd/." /etc/systemd/system/
+    sudo systemctl daemon-reload
+  fi
+
+  if [[ -f "$PREFLIGHT_DIR/env" ]]; then
+    log_status "Merging environment variables into /etc/environment"
+    while IFS= read -r line; do
+      [[ -z "$line" || "$line" =~ ^# ]] && continue
+      key="${line%%=*}"
+      if grep -qE "^${key}=" /etc/environment 2>/dev/null; then
+        sudo sed -i 's|^'"$key"'=.*$|'"$line"'|' /etc/environment
+      else
+        echo "$line" | sudo tee -a /etc/environment >/dev/null
+      fi
+    done < "$PREFLIGHT_DIR/env"
+  fi
+else
+  log_status "No preflight asset directory at $PREFLIGHT_DIR — skipping asset application."
+fi
+
+mark_completed "Preflight"
 log_success "Preflight check completed."
+
