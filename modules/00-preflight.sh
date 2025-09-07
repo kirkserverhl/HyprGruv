@@ -42,28 +42,44 @@ ensure_pkg() {
   done
   ((${#pkgs[@]})) && sudo pacman -S --noconfirm --needed "${pkgs[@]}" || true
 }
+
 # Enable [multilib] if disabled (x86_64 only)
 ensure_multilib_enabled() {
-  # If multilib already queryable, done
-  if pacman -Sl multilib &>/dev/null; then
-    return 0
-  fi
-  # Only relevant on x86_64
-  if [[ "$(uname -m)" != "x86_64" ]]; then
-    return 0
-  fi
+  # if multilib is already queryable, we’re done
+  if pacman -Sl multilib &>/dev/null; then return 0; fi
+  # only relevant on x86_64
+  if [[ "$(uname -m)" != "x86_64" ]]; then return 0; fi
+
   local conf="/etc/pacman.conf"
   local ts; ts="$(date +%Y%m%d_%H%M%S)"
   log_status "Enabling [multilib] in $conf"
   sudo cp -a "$conf" "$conf.bak.$ts"
+
   # Uncomment [multilib] block and its Include line
   sudo sed -i -E \
     -e 's/^[#[:space:]]*\[multilib\]/[multilib]/' \
     -e 's|^[#[:space:]]*Include[[:space:]]*=[[:space:]]*/etc/pacman\.d/mirrorlist|Include = /etc/pacman.d/mirrorlist|' \
     "$conf"
-  # Refresh databases after enabling
+
+  # Hard refresh after enabling
   sudo pacman -Syu --noconfirm
 }
+
+# Ensure chaotic-aur repo block exists (mirrorlist installed by chaotic.sh)
+ensure_chaotic_repo_block() {
+  if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+    log_status "Appending [chaotic-aur] repo block to /etc/pacman.conf"
+    printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+  fi
+}
+
+# ------------------------------------------------------------
+# One-time seeding of pacman.conf (only if missing)
+# ------------------------------------------------------------
+if [[ ! -f /etc/pacman.conf && -f "$ASSET_DIR/pacman.conf" ]]; then
+  log_status "Seeding /etc/pacman.conf from assets"
+  sudo install -m 0644 "$ASSET_DIR/pacman.conf" /etc/pacman.conf
+fi
 
 # ------------------------------------------------------------
 # Detect GPU vendor
@@ -88,10 +104,10 @@ case "$GPU_VENDOR" in
   *)      GFX_PKGS=(mesa);                                     LIB32_GFX=(lib32-mesa)                     ;;
 esac
 
-# Filter lib32 packages if multilib still isn't available
+# Only install lib32 packages if they’re actually available
 AVAILABLE_LIB32=()
 for p in "${LIB32_GFX[@]}"; do
-  if repo_has "$p"; then AVAILABLE_LIB32+=("$p"); fi
+  repo_has "$p" && AVAILABLE_LIB32+=("$p")
 done
 
 # ------------------------------------------------------------
@@ -143,30 +159,18 @@ ensure_pkg "${OPT_EXTRAS[@]}"
 # ------------------------------------------------------------
 log_status "Enabling services"
 sudo systemctl enable --now NetworkManager.service
-# PipeWire stack (socket-activated; enabling is fine)
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
 
 if pkg_installed sddm; then
   sudo systemctl enable --now sddm.service
 fi
 
-# ------------------------------------------------------------
-# Session file (only if missing)
-# ------------------------------------------------------------
-if [[ ! -f /usr/share/wayland-sessions/hyprland.desktop ]]; then
-  log_status "Creating Hyprland session file"
-  sudo tee /usr/share/wayland-sessions/hyprland.desktop >/dev/null <<'EOF'
-[Desktop Entry]
-Name=Hyprland
-Comment=Hyprland Wayland Compositor
-Exec=Hyprland
-Type=Application
-DesktopNames=Hyprland
-EOF
-fi
+# Ensure repo block for chaotic-aur (mirrorlist/keyring is handled by chaotic.sh)
+ensure_chaotic_repo_block || true
 
 # ------------------------------------------------------------
 # Apply optional preflight assets from the repo
+# (Drop files under assets/preflight/{etc,usr_share,systemd,env})
 # ------------------------------------------------------------
 PREFLIGHT_DIR="$ASSET_DIR/preflight"
 if [[ -d "$PREFLIGHT_DIR" ]]; then
@@ -176,18 +180,15 @@ if [[ -d "$PREFLIGHT_DIR" ]]; then
     log_status "Syncing etc/ payload"
     sudo rsync -a "$PREFLIGHT_DIR/etc/." /etc/
   fi
-
   if [[ -d "$PREFLIGHT_DIR/usr_share" ]]; then
     log_status "Syncing usr_share/ payload → /usr/share"
     sudo rsync -a "$PREFLIGHT_DIR/usr_share/." /usr/share/
   fi
-
   if [[ -d "$PREFLIGHT_DIR/systemd" ]]; then
     log_status "Installing systemd unit overrides"
     sudo rsync -a "$PREFLIGHT_DIR/systemd/." /etc/systemd/system/
     sudo systemctl daemon-reload
   fi
-
   if [[ -f "$PREFLIGHT_DIR/env" ]]; then
     log_status "Merging environment variables into /etc/environment"
     while IFS= read -r line; do
