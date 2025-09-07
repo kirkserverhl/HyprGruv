@@ -44,7 +44,7 @@ OFFICIAL_PKGS=(
   cpio
   duf
   fastfetch
-  figlet
+  #figlet
   fzf
   ghostty
   glow
