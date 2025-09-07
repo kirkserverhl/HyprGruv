@@ -1,60 +1,94 @@
-#!/bin/bash
-# 03-setup.sh
+#!/usr/bin/env bash
+# 03-setup.sh — run post-install setup scripts
+set -euo pipefail
+IFS=$'\n\t'
 
-# Load common functions and state management
-HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve repo root from inside modules/
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Ensure helpers exist and load them
+if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
+  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
+fi
+if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
+  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
+fi
+# shellcheck source=/dev/null
 source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
-
-RESET="\e[0m"
-GREEN="\e[38;2;142;192;124m"
-CYAN="\e[38;2;69;133;136m"
-YELLOW="\e[38;2;215;153;33m"
-RED="\e[38;2;204;36;29m"
-GRAY="\e[38;2;60;56;54m"
-BOLD="\e[1m"
 
 display_header "SETUP"
 
-# Check if gum is installed, install it if not
-if ! command_exists gum; then
-    log_status "gum not found. Installing with yay..."
-    if command_exists yay; then
-        if run_command "yay -S --noconfirm gum" "Installing gum"; then
-            log_success "gum installed successfully"
-        else
-            log_error "Failed to install gum. Please install it manually and run this script again."
-            exit 1
-        fi
-    else
-        log_error "yay is not installed. Please install gum manually and run this script again."
-        exit 1
-    fi
+# --- Ensure 'gum' available (fallback to plain bash if not) ---
+ensure_gum() {
+  if command -v gum >/dev/null 2>&1; then return 0; fi
+  log_status "gum not found. Installing…"
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm gum || { log_error "Failed to install gum"; return 1; }
+  else
+    sudo pacman -S --needed --noconfirm gum || { log_error "Failed to install gum"; return 1; }
+  fi
+}
+ensure_gum || true
+
+run_with_spinner() {
+  local cmd="$1"
+  if command -v gum >/dev/null 2>&1; then
+    gum spin --title "Running: ${cmd}" -- bash -c "$cmd"
+  else
+    bash -c "$cmd"
+  fi
+}
+
+# Scripts directory (from common.sh or fallback)
+SCRIPTS_DIR="${SCRIPTS:-$HYPR_DIR/scripts}"
+if [[ ! -d "$SCRIPTS_DIR" ]]; then
+  log_error "Scripts directory not found: $SCRIPTS_DIR"; exit 1
 fi
 
-# Define scripts to run with descriptions
-declare -A SETUP_SCRIPTS=(
-    ["$SCRIPTS/hard_copy.sh"]="Hard Copy Files in Root Directory"
-    ["$SCRIPTS/default_wp.sh"]="Loading default wallpaper"
-    ["$SCRIPTS/chatoic.sh"]="Configuring Chaotic Pacman mirrors"
-    ["$SCRIPTS/hyprpm.sh"]="Installing Hyprpm plugins"
+# Define the scripts in execution order
+declare -a ORDERED_SCRIPTS=(
+  "hard_copy.sh|Hard Copy files in root directory"
+  "default_wp.sh|Load default wallpaper"
+  "chaotic.sh|Configure Chaotic-AUR pacman mirrors"
+  "hyprpm.sh|Install Hyprpm plugins"
 )
 
-# Run each script in sequence
-for script in "${!SETUP_SCRIPTS[@]}"; do
-    description="${SETUP_SCRIPTS[$script]}"
+any_failed=0
+for entry in "${ORDERED_SCRIPTS[@]}"; do
+  script_name="${entry%%|*}"
+  description="${entry#*|}"
+  script_path="$SCRIPTS_DIR/$script_name"
 
-    log_status "Starting: $description"
-    if gum spin -- "$script"; then
-        log_success "$description completed"
-    else
-        log_error "$description failed"
-    fi
+  # If repo still has old typo, auto-fallback
+  if [[ ! -f "$script_path" && "$script_name" == "chaotic.sh" && -f "$SCRIPTS_DIR/chatoic.sh" ]]; then
+    script_path="$SCRIPTS_DIR/chatoic.sh"
+    description="Configure Chaotic-AUR pacman mirrors (chatoic.sh)"
+  fi
 
-    # Sleep between scripts
-    sleep 2
+  if [[ ! -f "$script_path" ]]; then
+    log_error "Missing script: $script_path"
+    any_failed=1
+    continue
+  fi
+
+  [[ -x "$script_path" ]] || chmod +x "$script_path"
+
+  log_status "Starting: $description"
+  if run_with_spinner "\"$script_path\""; then
+    log_success "$description completed"
+  else
+    log_error "$description failed"
+    any_failed=1
+  fi
+  sleep 1
 done
-clear
 
-log_success "Setup completed successfully"
+(( any_failed )) && { log_error "One or more setup steps failed."; exit 1; }
+
+mark_completed "Setup system"
+clear
+log_success "Setup completed"
+
 
