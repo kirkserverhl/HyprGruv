@@ -7,7 +7,6 @@ IFS=$'\n\t'
 # Resolve repo root from modules/ and load helpers
 # ------------------------------------------------------------
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
 if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
   echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
 fi
@@ -35,14 +34,35 @@ log_status "Running preflight checks for Hyprland base…"
 # Helpers
 # ------------------------------------------------------------
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
+repo_has() { pacman -Si "$1" &>/dev/null; }  # visible in enabled repos?
 ensure_pkg() {
   local pkgs=()
   for p in "$@"; do
     pkg_installed "$p" || pkgs+=("$p")
   done
-  if ((${#pkgs[@]})); then
-    sudo pacman -S --noconfirm --needed "${pkgs[@]}"
+  ((${#pkgs[@]})) && sudo pacman -S --noconfirm --needed "${pkgs[@]}" || true
+}
+# Enable [multilib] if disabled (x86_64 only)
+ensure_multilib_enabled() {
+  # If multilib already queryable, done
+  if pacman -Sl multilib &>/dev/null; then
+    return 0
   fi
+  # Only relevant on x86_64
+  if [[ "$(uname -m)" != "x86_64" ]]; then
+    return 0
+  fi
+  local conf="/etc/pacman.conf"
+  local ts; ts="$(date +%Y%m%d_%H%M%S)"
+  log_status "Enabling [multilib] in $conf"
+  sudo cp -a "$conf" "$conf.bak.$ts"
+  # Uncomment [multilib] block and its Include line
+  sudo sed -i -E \
+    -e 's/^[#[:space:]]*\[multilib\]/[multilib]/' \
+    -e 's|^[#[:space:]]*Include[[:space:]]*=[[:space:]]*/etc/pacman\.d/mirrorlist|Include = /etc/pacman.d/mirrorlist|' \
+    "$conf"
+  # Refresh databases after enabling
+  sudo pacman -Syu --noconfirm
 }
 
 # ------------------------------------------------------------
@@ -58,12 +78,21 @@ elif lspci | grep -iE ' vga|3d|display' | grep -qi intel; then
 fi
 log_status "Detected GPU vendor: $GPU_VENDOR"
 
+# Try to enable multilib before choosing lib32 packages
+ensure_multilib_enabled || true
+
 case "$GPU_VENDOR" in
-  amd)    GFX_PKGS=(mesa vulkan-radeon libva-mesa-driver lib32-mesa lib32-vulkan-radeon) ;;
-  intel)  GFX_PKGS=(mesa vulkan-intel  libva-intel-driver lib32-mesa lib32-vulkan-intel) ;;
-  nvidia) GFX_PKGS=(nvidia nvidia-utils lib32-nvidia-utils) ;;
-  *)      GFX_PKGS=(mesa lib32-mesa) ;;
+  amd)    GFX_PKGS=(mesa vulkan-radeon libva-mesa-driver);     LIB32_GFX=(lib32-mesa lib32-vulkan-radeon) ;;
+  intel)  GFX_PKGS=(mesa vulkan-intel  libva-intel-driver);    LIB32_GFX=(lib32-mesa lib32-vulkan-intel)  ;;
+  nvidia) GFX_PKGS=(nvidia nvidia-utils);                      LIB32_GFX=(lib32-nvidia-utils)             ;;
+  *)      GFX_PKGS=(mesa);                                     LIB32_GFX=(lib32-mesa)                     ;;
 esac
+
+# Filter lib32 packages if multilib still isn't available
+AVAILABLE_LIB32=()
+for p in "${LIB32_GFX[@]}"; do
+  if repo_has "$p"; then AVAILABLE_LIB32+=("$p"); fi
+done
 
 # ------------------------------------------------------------
 # Core Hyprland/Wayland stack
@@ -96,6 +125,12 @@ ensure_pkg "${BASE_PKGS[@]}"
 
 log_status "Installing GPU packages"
 ensure_pkg "${GFX_PKGS[@]}"
+if ((${#AVAILABLE_LIB32[@]})); then
+  log_status "Installing 32-bit GPU packages (multilib)"
+  ensure_pkg "${AVAILABLE_LIB32[@]}"
+else
+  log_status "Skipping 32-bit GPU packages (multilib unavailable)"
+fi
 
 log_status "Installing optional terminals"
 ensure_pkg "${OPT_TERMS[@]}"
@@ -132,11 +167,6 @@ fi
 
 # ------------------------------------------------------------
 # Apply optional preflight assets from the repo
-#   Place content under:
-#     assets/preflight/etc/         → copied to /etc
-#     assets/preflight/usr_share/   → copied to /usr/share
-#     assets/preflight/systemd/     → copied to /etc/systemd/system (then daemon-reload)
-#     assets/preflight/env          → lines like FOO=bar appended/updated in /etc/environment
 # ------------------------------------------------------------
 PREFLIGHT_DIR="$ASSET_DIR/preflight"
 if [[ -d "$PREFLIGHT_DIR" ]]; then
@@ -176,4 +206,3 @@ fi
 
 mark_completed "Preflight"
 log_success "Preflight check completed."
-
