@@ -42,11 +42,12 @@ sleep 2
 clear
 
 # ============================================================
-# Function to run modules safely
+# Function to run modules safely (works without exec bit)
 # ============================================================
 run_module() {
     local module="$1"
     local name="$2"
+    local path="$HYPR_DIR/modules/$module"
 
     if is_completed "$name"; then
         log_status "Skipping $name (already completed)"
@@ -55,7 +56,13 @@ run_module() {
 
     display_header "$name"
 
-    if "$HYPR_DIR/modules/$module"; then
+    if [[ -x "$path" ]]; then
+        "$path"
+    else
+        bash "$path"
+    fi
+
+    if [[ $? -eq 0 ]]; then
         mark_completed "$name"
         log_success "$name completed successfully"
         return 0
@@ -68,6 +75,8 @@ run_module() {
 # ============================================================
 # Run essential modules in sequence
 # ============================================================
+run_module "00-preflight.sh" "Preflight: Hyprland base" || exit 1
+sleep 1
 run_module "01-packages.sh" "Install packages" || exit 1
 sleep 1
 run_module "02-stow.sh" "Stow configuration" || exit 1
@@ -150,3 +159,4 @@ case "$next_choice" in
         exit 1
         ;;
 esac
+
