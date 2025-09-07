@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# 00-preflight.sh - Ensure EndeavourOS has the Hyprland base stack
+# 00-preflight.sh - Ensure EndeavourOS (or Arch) has Hyprland base stack
 set -euo pipefail
 
-# logging helpers come from lib/common.sh
 log_status "Running preflight checks for Hyprland base..."
 
 # -------------------------------------------------------------
-# Utility functions
+# Helpers
 # -------------------------------------------------------------
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
 ensure_pkg() {
@@ -18,7 +17,7 @@ ensure_pkg() {
 }
 
 # -------------------------------------------------------------
-# Detect GPU and pick driver stack
+# Detect GPU vendor
 # -------------------------------------------------------------
 GPU_VENDOR="generic"
 if lspci | grep -i ' vga\|3d\|display' | grep -qi nvidia; then
@@ -56,14 +55,14 @@ BASE_PKGS=(
 OPT_TERMS=(ghostty kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
 
-log_status "Installing base packages if missing..."
+log_status "Installing core packages..."
 ensure_pkg "${BASE_PKGS[@]}"
 ensure_pkg "${GFX_PKGS[@]}"
 ensure_pkg "${OPT_TERMS[@]}"
 ensure_pkg "${OPT_EXTRAS[@]}"
 
 # -------------------------------------------------------------
-# Enable services EndeavourOS may not have enabled
+# Enable services
 # -------------------------------------------------------------
 sudo systemctl enable --now NetworkManager.service
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
@@ -73,10 +72,10 @@ if pkg_installed sddm; then
 fi
 
 # -------------------------------------------------------------
-# Session file sanity
+# Session file
 # -------------------------------------------------------------
 if [[ ! -f /usr/share/wayland-sessions/hyprland.desktop ]]; then
-  log_status "Creating Hyprland session file for SDDM/GDM"
+  log_status "Creating Hyprland session file..."
   sudo tee /usr/share/wayland-sessions/hyprland.desktop >/dev/null <<'EOF'
 [Desktop Entry]
 Name=Hyprland
