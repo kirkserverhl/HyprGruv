@@ -41,16 +41,15 @@ if [[ -f "$MIRRORLIST" ]]; then
   sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=[[:space:]]*.*(warp\.dev).*|# &|' "$MIRRORLIST"
 fi
 
-# --- Install pacman.conf from assets (must include [chaotic-aur]) ---
-ASSET_PACMAN_CONF="$ASSET_DIR/pacman.conf"
-if [[ -f "$ASSET_PACMAN_CONF" ]]; then
-  TS="$(date +%Y%m%d_%H%M%S)"
-  if [[ -f /etc/pacman.conf ]]; then
-    sudo cp -a /etc/pacman.conf "/etc/pacman.conf.bak.$TS"
-    log_status "Backed up /etc/pacman.conf → /etc/pacman.conf.bak.$TS"
-  fi
-  log_status "Installing pacman.conf from assets"
-  sudo install -m 0644 "$ASSET_PACMAN_CONF" /etc/pacman.conf
-else
-  log_error "Missin_
+# After installing keyring + mirrorlist
+if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
+  printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+fi
+
+# Optionally de-prefer flaky mirrors:
+sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+
+# Clean + hard refresh
+sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
+sudo pacman -Syyu --noconfirm
 
