@@ -18,6 +18,7 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
+echo
 display_header "Chaotic-AUR setup"
 
 # --- Import key ---
