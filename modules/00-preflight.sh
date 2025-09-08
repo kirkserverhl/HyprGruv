@@ -3,26 +3,16 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# ------------------------------------------------------------
-# Resolve repo root from modules/ and load helpers
-# ------------------------------------------------------------
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
-fi
-if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
-fi
-# shellcheck source=/dev/null
+# Load helpers
+[[ -f "$HYPR_DIR/lib/common.sh" ]] || { echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1; }
+[[ -f "$HYPR_DIR/lib/state.sh"  ]] || { echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh";  exit 1; }
 source "$HYPR_DIR/lib/common.sh"
-# shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
 display_header "Preflight: Hyprland Base Stack"
 
-# ------------------------------------------------------------
 # Arch sanity
-# ------------------------------------------------------------
 if ! command -v pacman >/dev/null 2>&1; then
   log_error "pacman not found. This preflight supports Arch/EndeavourOS only."
   exit 1
@@ -30,72 +20,98 @@ fi
 
 log_status "Running preflight checks for Hyprland base…"
 
-# ------------------------------------------------------------
-# Helpers
-# ------------------------------------------------------------
+# ------------------------ helpers ------------------------
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
-repo_has() { pacman -Si "$1" &>/dev/null; }  # visible in enabled repos?
+repo_has()      { pacman -Si "$1" &>/dev/null; }
 ensure_pkg() {
-  local pkgs=()
-  for p in "$@"; do
-    pkg_installed "$p" || pkgs+=("$p")
-  done
+  local pkgs=(); for p in "$@"; do pkg_installed "$p" || pkgs+=("$p"); done
   ((${#pkgs[@]})) && sudo pacman -S --noconfirm --needed "${pkgs[@]}" || true
 }
 
-# Enable [multilib] if disabled (x86_64 only)
+sanitize_pacman_conf() {
+  local conf="/etc/pacman.conf"
+  local ts; ts="$(date +%Y%m%d_%H%M%S)"
+  [[ -f "$conf" ]] || return 0
+
+  # Backup once
+  sudo cp -a "$conf" "$conf.bak.$ts"
+
+  # 1) Normalize CRLF → LF
+  sudo sed -i 's/\r$//' "$conf"
+
+  # 2) Comment any accidental 'Server =' lines that appear while in [options]
+  #    We only comment those lines until the next section header.
+  sudo awk '
+    BEGIN{inopt=0}
+    /^\[options\]/{inopt=1; print; next}
+    /^\[/{inopt=0; print; next}
+    {
+      if(inopt && $0 ~ /^[[:space:]]*Server[[:space:]]*=/){
+        print "#" $0
+      } else {
+        print
+      }
+    }
+  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
+  sudo mv "$conf.tmp.$$" "$conf"
+
+  # 3) Ensure core/extra sections exist (rare fresh installs can be minimal)
+  if ! grep -q '^\[core\]' "$conf";  then echo -e "\n[core]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null; fi
+  if ! grep -q '^\[extra\]' "$conf"; then echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null; fi
+}
+
 ensure_multilib_enabled() {
-  # if multilib is already queryable, we’re done
-  if pacman -Sl multilib &>/dev/null; then return 0; fi
-  # only relevant on x86_64
-  if [[ "$(uname -m)" != "x86_64" ]]; then return 0; fi
+  # already visible?
+  pacman -Sl multilib &>/dev/null && return 0
+  [[ "$(uname -m)" == "x86_64" ]] || return 0
 
   local conf="/etc/pacman.conf"
   local ts; ts="$(date +%Y%m%d_%H%M%S)"
-  log_status "Enabling [multilib] in $conf"
   sudo cp -a "$conf" "$conf.bak.$ts"
 
-  # Uncomment [multilib] block and its Include line
+  # Only touch the [multilib] block; do NOT alter anything else.
+  # If the block exists but is commented, uncomment it and its Include line.
+  if grep -n '^\[multilib\]' "$conf" >/dev/null 2>&1; then
+    :
+  else
+    # Append a correct block if missing
+    printf '\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n' | sudo tee -a "$conf" >/dev/null
+  fi
+
+  # Uncomment the block header and include line if they were commented
   sudo sed -i -E \
     -e 's/^[#[:space:]]*\[multilib\]/[multilib]/' \
-    -e 's|^[#[:space:]]*Include[[:space:]]*=[[:space:]]*/etc/pacman\.d/mirrorlist|Include = /etc/pacman.d/mirrorlist|' \
+    -e '0,/\[multilib\]/{/\[multilib\]/{n; s|^[#[:space:]]*Include[[:space:]]*=[[:space:]]*/etc/pacman\.d/mirrorlist|Include = /etc/pacman.d/mirrorlist|}}' \
     "$conf"
 
-  # Hard refresh after enabling
-  sudo pacman -Syu --noconfirm
+  # Hard refresh
+  sudo pacman -Syyu --noconfirm
 }
 
-# Ensure chaotic-aur repo block exists (mirrorlist installed by chaotic.sh)
 ensure_chaotic_repo_block() {
+  # Just ensure the block exists; mirrorlist/keyring are handled elsewhere
   if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
-    log_status "Appending [chaotic-aur] repo block to /etc/pacman.conf"
     printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
   fi
 }
 
-# ------------------------------------------------------------
-# One-time seeding of pacman.conf (only if missing)
-# ------------------------------------------------------------
-#if [[ ! -f /etc/pacman.conf && -f "$ASSET_DIR/pacman.conf" ]]; then
-#  log_status "Seeding /etc/pacman.conf from assets"
-#  sudo install -m 0644 "$ASSET_DIR/pacman.conf" /etc/pacman.conf
-#fi
+# ------------------- one-time seed (optional) -------------------
+# If you ever want to seed /etc/pacman.conf from assets only when missing:
+# if [[ ! -f /etc/pacman.conf && -f "$ASSET_DIR/pacman.conf" ]]; then
+#   log_status "Seeding /etc/pacman.conf from assets"
+#   sudo install -m 0644 "$ASSET_DIR/pacman.conf" /etc/pacman.conf
+# fi
 
-# ------------------------------------------------------------
-# Detect GPU vendor
-# ------------------------------------------------------------
-GPU_VENDOR="generic"
-if lspci | grep -iE ' vga|3d|display' | grep -qi nvidia; then
-  GPU_VENDOR="nvidia"
-elif lspci | grep -iE ' vga|3d|display' | grep -qi amd; then
-  GPU_VENDOR="amd"
-elif lspci | grep -iE ' vga|3d|display' | grep -qi intel; then
-  GPU_VENDOR="intel"
-fi
-log_status "Detected GPU vendor: $GPU_VENDOR"
-
-# Try to enable multilib before choosing lib32 packages
+# ------------------ sanitize + multilib ------------------
+sanitize_pacman_conf
 ensure_multilib_enabled || true
+
+# ------------------ detect GPU + packages ----------------
+GPU_VENDOR="generic"
+if   lspci | grep -iE ' vga|3d|display' | grep -qi nvidia; then GPU_VENDOR="nvidia"
+elif lspci | grep -iE ' vga|3d|display' | grep -qi amd;    then GPU_VENDOR="amd"
+elif lspci | grep -iE ' vga|3d|display' | grep -qi intel;  then GPU_VENDOR="intel"; fi
+log_status "Detected GPU vendor: $GPU_VENDOR"
 
 case "$GPU_VENDOR" in
   amd)    GFX_PKGS=(mesa vulkan-radeon libva-mesa-driver);     LIB32_GFX=(lib32-mesa lib32-vulkan-radeon) ;;
@@ -104,35 +120,14 @@ case "$GPU_VENDOR" in
   *)      GFX_PKGS=(mesa);                                     LIB32_GFX=(lib32-mesa)                     ;;
 esac
 
-# Only install lib32 packages if they’re actually available
 AVAILABLE_LIB32=()
-for p in "${LIB32_GFX[@]}"; do
-  repo_has "$p" && AVAILABLE_LIB32+=("$p")
-done
+for p in "${LIB32_GFX[@]}"; do repo_has "$p" && AVAILABLE_LIB32+=("$p"); done
 
-# ------------------------------------------------------------
-# Core Hyprland/Wayland stack
-# ------------------------------------------------------------
-BASE_PKGS=(
-  hyprland
-  xdg-desktop-portal xdg-desktop-portal-hyprland
-  waybar
-  rofi-wayland
-  wl-clipboard grim slurp
-  brightnessctl
-  polkit
-  networkmanager
-  pipewire pipewire-pulse wireplumber
-  gvfs gvfs-mtp
-  noto-fonts ttf-dejavu
-)
-
+BASE_PKGS=(hyprland xdg-desktop-portal xdg-desktop-portal-hyprland waybar rofi-wayland wl-clipboard grim slurp brightnessctl polkit networkmanager pipewire pipewire-pulse wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
 OPT_TERMS=(ghostty kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
 
-# ------------------------------------------------------------
-# Install packages
-# ------------------------------------------------------------
+# ---------------------- install ----------------------
 log_status "Refreshing package databases"
 sudo pacman -Syu --noconfirm
 
@@ -154,43 +149,26 @@ ensure_pkg "${OPT_TERMS[@]}"
 log_status "Installing optional extras"
 ensure_pkg "${OPT_EXTRAS[@]}"
 
-# ------------------------------------------------------------
-# Enable services
-# ------------------------------------------------------------
+# ---------------------- services ----------------------
 log_status "Enabling services"
 sudo systemctl enable --now NetworkManager.service
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
+pkg_installed sddm && sudo systemctl enable --now sddm.service || true
 
-if pkg_installed sddm; then
-  sudo systemctl enable --now sddm.service
-fi
-
-# Ensure repo block for chaotic-aur (mirrorlist/keyring is handled by chaotic.sh)
+# Ensure chaotic-aur block exists (does nothing if already present)
 ensure_chaotic_repo_block || true
 
-# ------------------------------------------------------------
-# Apply optional preflight assets from the repo
-# (Drop files under assets/preflight/{etc,usr_share,systemd,env})
-# ------------------------------------------------------------
+# ------------------- optional assets -------------------
 PREFLIGHT_DIR="$ASSET_DIR/preflight"
 if [[ -d "$PREFLIGHT_DIR" ]]; then
   log_status "Applying preflight assets from $PREFLIGHT_DIR"
-
-  if [[ -d "$PREFLIGHT_DIR/etc" ]]; then
-    log_status "Syncing etc/ payload"
-    sudo rsync -a "$PREFLIGHT_DIR/etc/." /etc/
-  fi
-  if [[ -d "$PREFLIGHT_DIR/usr_share" ]]; then
-    log_status "Syncing usr_share/ payload → /usr/share"
-    sudo rsync -a "$PREFLIGHT_DIR/usr_share/." /usr/share/
-  fi
+  [[ -d "$PREFLIGHT_DIR/etc"       ]] && sudo rsync -a "$PREFLIGHT_DIR/etc/."       /etc/
+  [[ -d "$PREFLIGHT_DIR/usr_share" ]] && sudo rsync -a "$PREFLIGHT_DIR/usr_share/." /usr/share/
   if [[ -d "$PREFLIGHT_DIR/systemd" ]]; then
-    log_status "Installing systemd unit overrides"
     sudo rsync -a "$PREFLIGHT_DIR/systemd/." /etc/systemd/system/
     sudo systemctl daemon-reload
   fi
   if [[ -f "$PREFLIGHT_DIR/env" ]]; then
-    log_status "Merging environment variables into /etc/environment"
     while IFS= read -r line; do
       [[ -z "$line" || "$line" =~ ^# ]] && continue
       key="${line%%=*}"
@@ -201,8 +179,6 @@ if [[ -d "$PREFLIGHT_DIR" ]]; then
       fi
     done < "$PREFLIGHT_DIR/env"
   fi
-else
-  log_status "No preflight asset directory at $PREFLIGHT_DIR — skipping asset application."
 fi
 
 mark_completed "Preflight"
