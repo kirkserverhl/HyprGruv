@@ -161,7 +161,7 @@ ensure_chaotic_ready() {
 
 # -------------------- package sets --------------------
 OFFICIAL_PKGS=(
-  archlinux-xdg-menu bash-language-server bat bluez bluez-utils btop cmake cpio duf fastfetch
+  archlinux-xdg-menu bash-language-server bat bluez bluez-utils btop cmake cpio duf fastfetch firefox
   fzf ghostty glow gsettings-qt gtk-engine-murrine hexyl hypridle hyprpaper
   kate kdecoration konsole kvantum less mediainfo meson ncdu neovim network-manager-applet
   pacman-mirrorlist pavucontrol pkgconf python-ansicolors
