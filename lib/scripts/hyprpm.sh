@@ -35,16 +35,16 @@ hyprpm update
 log_status "Adding plugin repositories"
 hyprpm add https://github.com/hyprwm/hyprland-plugins || true    # hyprwm
 sleep 0.2
-hyprpm add https://github.com/alexhulbert/Hyprchroma || true     # hyprchroma
-sleep 0.2
-hyprpm add https://github.com/DreamMaoMao/hycov || true          # hycov
-sleep 0.2
+# hyprpm add https://github.com/alexhulbert/Hyprchroma || true     # hyprchroma
+# sleep 0.2
+# hyprpm add https://github.com/DreamMaoMao/hycov || true          # hycov
+# sleep 0.2
 
 # Enable specific plugins (idempotent)
 log_status "Enabling plugins"
-hyprpm enable hyprchroma || true
-hyprpm enable hycov || true
-sleep 0.2
+# hyprpm enable hyprchroma || true
+# hyprpm enable hycov || true
+# sleep 0.2
 
 # Update plugins
 log_status "Updating hyprpm plugins"
