@@ -167,13 +167,13 @@ OFFICIAL_PKGS=(
   pacman-mirrorlist pavucontrol pkgconf python-ansicolors
   qt5-declarative qt5-graphicaleffects qt5-x11extras
   rofi-calc rofi-wayland starship stow sudo tig tmux tree udiskie waybar
-  wireplumber wl-clip-persist wl-clipboard xclip xdg-desktop-portal-kde xsettingsd yazi zoxide zsh
+  wireplumber wl-clip-persist wl-clipboard xclip xdg-desktop-portal-kde xsettingsd zoxide zsh
 )
 
 AUR_PKGS=(
   aylurs-gtk-shell-git bpytop clipse diskonaut eza grimblast-git hyprgraphics hyprland-qt-support
   hyprpicker hyprshade iwgtk lscolors-git nwg-dock-hyprland nwg-drawer nwg-look pacseek
-  progress-git python-pywal16 python-pywalfox qt6ct-kde smile waypaper wl-clipboard-history-git
+  progress-git python-pywal16 python-pywalfox qt6ct-kde smile waypaper wl-clipboard-history-git yazi
 )
 
 # -------------------- run --------------------
