@@ -57,6 +57,31 @@ ensure_yay() {
   log_success "yay installed."
 }
 
+# Temporarily disable [chaotic-aur] if its mirrorlist isn’t present yet.
+disable_chaotic_if_unready() {
+  local conf="/etc/pacman.conf"
+  local ml="/etc/pacman.d/chaotic-mirrorlist"
+
+  grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null || return 0
+  [[ -f "$ml" ]] && return 0
+
+  log_status "Chaotic repo referenced but not ready — disabling it until chaotic.sh runs"
+  sudo awk '
+    BEGIN{insec=0}
+    /^\[chaotic-aur\]/{insec=1; if($0 !~ /^#/) print "# hyprgruv: " $0; else print; next}
+    /^\[/ && insec==1 {insec=0; print; next}
+    {
+      if(insec==1) {
+        if($0 !~ /^#/) print "# hyprgruv: " $0; else print
+      } else {
+        print
+      }
+    }
+  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
+  sudo mv "$conf.tmp.$$" "$conf"
+}
+
+
 ensure_chaotic_ready() {
   local conf="/etc/pacman.conf"
   local ml="/etc/pacman.d/chaotic-mirrorlist"
@@ -107,6 +132,34 @@ AUR_PKGS=(
 # -------------------- run --------------------
 say "   📦️  Installing essential packages…"
 sleep 0.15
+
+disable_chaotic_if_unready
+
+
+# Temporarily disable [chaotic-aur] if its mirrorlist isn’t present yet.
+disable_chaotic_if_unready() {
+  local conf="/etc/pacman.conf"
+  local ml="/etc/pacman.d/chaotic-mirrorlist"
+
+  grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null || return 0
+  [[ -f "$ml" ]] && return 0
+
+  log_status "Chaotic repo referenced but not ready — disabling it until chaotic.sh runs"
+  sudo awk '
+    BEGIN{insec=0}
+    /^\[chaotic-aur\]/{insec=1; if($0 !~ /^#/) print "# hyprgruv: " $0; else print; next}
+    /^\[/ && insec==1 {insec=0; print; next}
+    {
+      if(insec==1) {
+        if($0 !~ /^#/) print "# hyprgruv: " $0; else print
+      } else {
+        print
+      }
+    }
+  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
+  sudo mv "$conf.tmp.$$" "$conf"
+}
+
 
 log_status "Sanitizing pacman.conf"
 sanitize_pacman_conf
