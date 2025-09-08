@@ -29,7 +29,7 @@ ROOT_SRC="$ASSET_DIR/root"
 
 if [[ -d "$ROOT_SRC" ]]; then
   log_status "Copying files from $ROOT_SRC → $HOME"
-  # Prefer rsync if available (safer, idempotent), otherwise cp -a
+  # Prefer rsync if available (safer, preserves perms/timestamps), else cp -a
   if command -v rsync >/dev/null 2>&1; then
     rsync -a "$ROOT_SRC"/ "$HOME"/
   else
@@ -41,27 +41,37 @@ else
 fi
 
 # ------------------------------------------------------------
-# (Optional) Install /etc/pacman.conf from assets
-# NOTE: If chaotic.sh already manages pacman.conf, this will skip
-# unless the content actually differs.
+# (Optional) Seed /etc/pacman.conf from assets
+#   - Disabled by default to avoid repo conflicts during early install
+#   - Enable by running: UPDATE_PACMAN_CONF=1 ./hard_copy.sh
+#   - Behavior:
+#       * If /etc/pacman.conf is missing → install the asset
+#       * If it exists → update only if content differs
 # ------------------------------------------------------------
-ASSET_PACMAN_CONF="$ASSET_DIR/pacman.conf"
-if [[ -f "$ASSET_PACMAN_CONF" ]]; then
-  # Only replace if different to avoid unnecessary churn
-  if sudo test -f /etc/pacman.conf && sudo diff -q /etc/pacman.conf "$ASSET_PACMAN_CONF" >/dev/null 2>&1; then
-    log_status "/etc/pacman.conf matches asset; no changes needed."
-  else
-    TS="$(date +%Y%m%d_%H%M%S)"
+if [[ "${UPDATE_PACMAN_CONF:-0}" == "1" ]]; then
+  ASSET_PACMAN_CONF="$ASSET_DIR/pacman.conf"
+  if [[ -f "$ASSET_PACMAN_CONF" ]]; then
     if sudo test -f /etc/pacman.conf; then
-      sudo cp -a /etc/pacman.conf "/etc/pacman.conf.bak.$TS"
-      log_status "Backed up /etc/pacman.conf → /etc/pacman.conf.bak.$TS"
+      if sudo diff -q /etc/pacman.conf "$ASSET_PACMAN_CONF" >/dev/null 2>&1; then
+        log_status "/etc/pacman.conf already matches asset; no changes."
+      else
+        TS="$(date +%Y%m%d_%H%M%S)"
+        sudo cp -a /etc/pacman.conf "/etc/pacman.conf.bak.$TS"
+        log_status "Backed up /etc/pacman.conf → /etc/pacman.conf.bak.$TS"
+        log_status "Updating /etc/pacman.conf from assets"
+        sudo install -m 0644 "$ASSET_PACMAN_CONF" /etc/pacman.conf
+        log_success "pacman.conf updated."
+      fi
+    else
+      log_status "Seeding /etc/pacman.conf from assets"
+      sudo install -m 0644 "$ASSET_PACMAN_CONF" /etc/pacman.conf
+      log_success "pacman.conf installed."
     fi
-    log_status "Installing pacman.conf from assets"
-    sudo install -m 0644 "$ASSET_PACMAN_CONF" /etc/pacman.conf
-    log_success "pacman.conf updated."
+  else
+    log_status "No pacman.conf found at $ASSET_DIR — skipping."
   fi
 else
-  log_status "No pacman.conf in assets — skipping."
+  log_status "Skipping pacman.conf updates (set UPDATE_PACMAN_CONF=1 to enable)."
 fi
 
-sleep 0.3
+sleep 0.2
