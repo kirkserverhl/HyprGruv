@@ -3,18 +3,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# ------------------------------------------------------------
 # Resolve repo root from lib/scripts/
-# ------------------------------------------------------------
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # Load helpers
-if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
-fi
-if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
-fi
+[[ -f "$HYPR_DIR/lib/common.sh" ]] || { echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1; }
+[[ -f "$HYPR_DIR/lib/state.sh"  ]] || { echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh";  exit 1; }
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
@@ -22,14 +16,10 @@ source "$HYPR_DIR/lib/state.sh"
 
 display_header "Hard Copy Files"
 
-# ------------------------------------------------------------
 # Copy ~/ files from assets/root → $HOME
-# ------------------------------------------------------------
 ROOT_SRC="$ASSET_DIR/root"
-
 if [[ -d "$ROOT_SRC" ]]; then
   log_status "Copying files from $ROOT_SRC → $HOME"
-  # Prefer rsync if available (safer, preserves perms/timestamps), else cp -a
   if command -v rsync >/dev/null 2>&1; then
     rsync -a "$ROOT_SRC"/ "$HOME"/
   else
@@ -40,14 +30,8 @@ else
   log_status "No root assets directory at $ROOT_SRC — skipping copy to \$HOME."
 fi
 
-# ------------------------------------------------------------
-# (Optional) Seed /etc/pacman.conf from assets
-#   - Disabled by default to avoid repo conflicts during early install
-#   - Enable by running: UPDATE_PACMAN_CONF=1 ./hard_copy.sh
-#   - Behavior:
-#       * If /etc/pacman.conf is missing → install the asset
-#       * If it exists → update only if content differs
-# ------------------------------------------------------------
+# Optional: seed /etc/pacman.conf from assets (disabled by default)
+# Enable by running: UPDATE_PACMAN_CONF=1 ./hard_copy.sh
 if [[ "${UPDATE_PACMAN_CONF:-0}" == "1" ]]; then
   ASSET_PACMAN_CONF="$ASSET_DIR/pacman.conf"
   if [[ -f "$ASSET_PACMAN_CONF" ]]; then
