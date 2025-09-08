@@ -76,10 +76,10 @@ ensure_chaotic_repo_block() {
 # ------------------------------------------------------------
 # One-time seeding of pacman.conf (only if missing)
 # ------------------------------------------------------------
-if [[ ! -f /etc/pacman.conf && -f "$ASSET_DIR/pacman.conf" ]]; then
-  log_status "Seeding /etc/pacman.conf from assets"
-  sudo install -m 0644 "$ASSET_DIR/pacman.conf" /etc/pacman.conf
-fi
+#if [[ ! -f /etc/pacman.conf && -f "$ASSET_DIR/pacman.conf" ]]; then
+#  log_status "Seeding /etc/pacman.conf from assets"
+#  sudo install -m 0644 "$ASSET_DIR/pacman.conf" /etc/pacman.conf
+#fi
 
 # ------------------------------------------------------------
 # Detect GPU vendor
