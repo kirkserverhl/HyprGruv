@@ -10,8 +10,38 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
-say() {
-  if command -v lsd-print >/dev/null 2>&1; then echo -e "$*" | lsd-print; else echo -e "$*"; fi
+say() { if command -v lsd-print >/dev/null 2>&1; then echo -e "$*" | lsd-print; else echo -e "$*"; fi; }
+
+# -------------------- guards & repairs --------------------
+sanitize_pacman_conf() {
+  local conf="/etc/pacman.conf"
+  [[ -f "$conf" ]] || return 0
+
+  # Normalize CRLF → LF
+  sudo sed -i 's/\r$//' "$conf"
+
+  # Comment any stray `Server =` lines that appear while in [options]
+  sudo awk '
+    BEGIN{inopt=0}
+    /^\[options\]/{inopt=1; print; next}
+    /^\[/{inopt=0; print; next}
+    { if(inopt && $0 ~ /^[[:space:]]*Server[[:space:]]*=/){print "#" $0}else{print}}
+  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
+  sudo mv "$conf.tmp.$$" "$conf"
+
+  # Ensure core/extra exist (defensive on fresh images)
+  grep -q '^\[core\]'  "$conf" || echo -e "\n[core]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null
+  grep -q '^\[extra\]' "$conf" || echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null
+}
+
+ensure_pacman_keyring() {
+  # If listing keys fails (or perms wrong), reinit the keyring from scratch
+  if ! sudo pacman-key --list-keys >/dev/null 2>&1; then
+    log_status "Reinitializing pacman keyring"
+    sudo rm -rf /etc/pacman.d/gnupg
+    sudo pacman-key --init
+    sudo pacman-key --populate archlinux
+  fi
 }
 
 ensure_yay() {
@@ -27,155 +57,79 @@ ensure_yay() {
   log_success "yay installed."
 }
 
-# --- NEW: make sure chaotic-aur is usable if referenced in pacman.conf ---
 ensure_chaotic_ready() {
   local conf="/etc/pacman.conf"
   local ml="/etc/pacman.d/chaotic-mirrorlist"
-  local need_chaotic=0
 
   # only act if pacman.conf references chaotic-aur
-  if grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null; then
-    need_chaotic=1
-  fi
+  grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null || return 0
 
-  # if not referenced, nothing to do
-  (( need_chaotic == 0 )) && return 0
-
-  # if mirrorlist already exists, just sanitize and continue
   if [[ -f "$ml" ]]; then
-    # de-prefer flaky mirrors (like warp.dev), but don't fail if absent
+    # de-prefer known flaky mirrors
     sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' "$ml" || true
     return 0
   fi
 
-  log_status "Chaotic repo referenced, preparing keyring + mirrorlist"
-  # import/sign key
+  log_status "Chaotic listed in pacman.conf; preparing keyring + mirrorlist"
+  # keys
   sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
   sudo pacman-key --lsign-key 3056513887B78AEB || true
 
-  # install keyring + mirrorlist
+  # packages (keyring + mirrorlist)
   sudo pacman -U --noconfirm \
     'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
     'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 
-  # sanitize mirrorlist
-  if [[ -f "$ml" ]]; then
-    sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' "$ml" || true
-  fi
+  # sanitize mirrorlist if it now exists
+  [[ -f "$ml" ]] && sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' "$ml" || true
 
-  # clear any stale DB and force refresh
+  # clear stale DB
   sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
 }
 
+# -------------------- package sets --------------------
 OFFICIAL_PKGS=(
-  archlinux-xdg-menu
-  bash-language-server
-  bat
-  bluez
-  bluez-utils
-  btop
-  cmake
-  cpio
-  duf
-  fastfetch
-  fzf
-  ghostty
-  glow
-  gsettings-qt
-  gtk-engine-murrine
-  hexyl
-  hypridle
-  hyprpaper
-  kate
-  kdecoration
-  konsole
-  kvantum
-  less
-  mediainfo
-  meson
-  ncdu
-  neovim
-  network-manager-applet
-  pacman-mirrorlist
-  pavucontrol
-  pkgconf
-  python-ansicolors
-  qt5-declarative
-  qt5-graphicaleffects
-  qt5-x11extras
-  rofi-calc
-  rofi-wayland
-  starship
-  stow
-  sudo
-  tig
-  tmux
-  tree
-  udiskie
-  waybar
-  wireplumber
-  wl-clip-persist
-  wl-clipboard
-  xclip
-  xdg-desktop-portal-kde
-  xsettingsd
-  yazi
-  zoxide
-  zsh
+  archlinux-xdg-menu bash-language-server bat bluez bluez-utils btop cmake cpio duf fastfetch
+  fzf ghostty glow gsettings-qt gtk-engine-murrine hexyl hypridle hyprpaper
+  kate kdecoration konsole kvantum less mediainfo meson ncdu neovim network-manager-applet
+  pacman-mirrorlist pavucontrol pkgconf python-ansicolors
+  qt5-declarative qt5-graphicaleffects qt5-x11extras
+  rofi-calc rofi-wayland starship stow sudo tig tmux tree udiskie waybar
+  wireplumber wl-clip-persist wl-clipboard xclip xdg-desktop-portal-kde xsettingsd yazi zoxide zsh
 )
 
 AUR_PKGS=(
-  aylurs-gtk-shell-git
-  bpytop
-  clipse
-  diskonaut
-  eza
-  grimblast-git
-  hyprgraphics
-  hyprland-qt-support
-  hyprpicker
-  hyprshade
-  iwgtk
-  lscolors-git
-  nwg-dock-hyprland
-  nwg-drawer
-  nwg-look
-  pacseek
-  progress-git
-  python-pywal16
-  python-pywalfox
-  qt6ct-kde
-  smile
-  waypaper
-  wl-clipboard-history-git
+  aylurs-gtk-shell-git bpytop clipse diskonaut eza grimblast-git hyprgraphics hyprland-qt-support
+  hyprpicker hyprshade iwgtk lscolors-git nwg-dock-hyprland nwg-drawer nwg-look pacseek
+  progress-git python-pywal16 python-pywalfox qt6ct-kde smile waypaper wl-clipboard-history-git
 )
 
+# -------------------- run --------------------
 say "   📦️  Installing essential packages…"
-sleep 0.2
+sleep 0.15
 
-# PREP CHAOTIC IF NEEDED **BEFORE** FIRST -Syu
+log_status "Sanitizing pacman.conf"
+sanitize_pacman_conf
+
+log_status "Ensuring pacman keyring is usable"
+ensure_pacman_keyring
+
+log_status "Preparing Chaotic-aur (if referenced)"
 ensure_chaotic_ready
 
-log_status "Refreshing system packages (pacman -Syu)…"
+log_status "Refreshing system packages (pacman -Syyu)…"
 sudo pacman -Syyu --noconfirm
 
-# Ensure yay is available for AUR
 ensure_yay
 
-# Install official packages with pacman
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
-# Install AUR packages with yay
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"
 
-# Verify essential subset
 ESSENTIAL_CHECK=(nwg-dock-hyprland nwg-drawer nwg-look python-pywal16 python-pywalfox qt5-declarative wlogout xsettingsd yazi)
-MISSING=()
-for pkg in "${ESSENTIAL_CHECK[@]}"; do
-  if ! pacman -Qq "$pkg" &>/dev/null; then MISSING+=("$pkg"); fi
-done
+MISSING=(); for pkg in "${ESSENTIAL_CHECK[@]}"; do pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg"); done
 if (( ${#MISSING[@]} )); then
   log_status "Installing missing essentials: ${MISSING[*]}"
   yay -S --needed --noconfirm "${MISSING[@]}"
@@ -183,6 +137,5 @@ else
   say "All essential packages are already installed."
 fi
 
-sleep 0.3
+sleep 0.2
 mark_completed "Install packages"
-
