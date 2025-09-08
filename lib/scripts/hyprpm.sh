@@ -28,6 +28,9 @@ if ! command -v hyprpm >/dev/null 2>&1; then
   exit 1
 fi
 
+# Updates Hyprpm and Headers
+hyprpm update
+
 # Add plugin repos (idempotent)
 log_status "Adding plugin repositories"
 hyprpm add https://github.com/hyprwm/hyprland-plugins || true    # hyprwm
