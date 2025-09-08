@@ -10,8 +10,6 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
-display_header "Preflight: Hyprland Base Stack"
-
 # Arch sanity
 if ! command -v pacman >/dev/null 2>&1; then
   log_error "pacman not found. This preflight supports Arch/EndeavourOS only."
