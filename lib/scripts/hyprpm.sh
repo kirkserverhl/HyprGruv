@@ -20,6 +20,7 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
+echo ""
 display_header "Hyprpm Plugins"
 
 # Ensure hyprpm exists
@@ -29,7 +30,7 @@ if ! command -v hyprpm >/dev/null 2>&1; then
 fi
 
 # Updates Hyprpm and Headers
-hyprpm update
+#hyprpm update
 
 # Add plugin repos (idempotent)
 log_status "Adding plugin repositories"
