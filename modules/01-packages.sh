@@ -57,6 +57,53 @@ ensure_yay() {
   log_success "yay installed."
 }
 
+# Comment out duplicate repo sections in /etc/pacman.conf, keeping the first.
+dedupe_pacman_repos() {
+  local conf="/etc/pacman.conf"
+  [[ -f "$conf" ]] || return 0
+
+  log_status "De-duplicating repository sections in $conf"
+  sudo awk '
+    function ltrim(s){ sub(/^[ \t\r\n]+/, "", s); return s }
+    function rtrim(s){ sub(/[ \t\r\n]+$/, "", s); return s }
+    function trim(s){ return rtrim(ltrim(s)) }
+
+    BEGIN{ insec=0; secname=""; }
+    # match [repo-name]
+    /^\[[^]]+\][ \t]*$/{
+      line=$0
+      name=$0; sub(/^\[/, "", name); sub(/\][ \t]*$/, "", name)
+      name=trim(name)
+      if(seen[name] == 1){
+        insec=2;    # duplicate section: comment until next section
+        print "# hyprgruv-dup: " line
+        next
+      } else {
+        seen[name]=1
+        insec=1
+        print line
+        next
+      }
+    }
+    # any new section header ends duplicate commenting
+    /^\[/{
+      insec=1
+      print
+      next
+    }
+    {
+      if(insec==2){
+        # we are inside a duplicate section: comment the line (preserve content)
+        if($0 ~ /^# hyprgruv-dup: /){ print $0 } else { print "# hyprgruv-dup: " $0 }
+      } else {
+        print
+      }
+    }
+  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
+  sudo mv "$conf.tmp.$$" "$conf"
+}
+
+
 # Temporarily disable [chaotic-aur] if its mirrorlist isn’t present yet.
 disable_chaotic_if_unready() {
   local conf="/etc/pacman.conf"
@@ -135,7 +182,6 @@ sleep 0.15
 
 disable_chaotic_if_unready
 
-
 # Temporarily disable [chaotic-aur] if its mirrorlist isn’t present yet.
 disable_chaotic_if_unready() {
   local conf="/etc/pacman.conf"
@@ -177,6 +223,8 @@ ensure_yay
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
+
+dedupe_pacman_repos
 
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"
