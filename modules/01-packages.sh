@@ -162,7 +162,7 @@ ensure_chaotic_ready() {
 # -------------------- package sets --------------------
 OFFICIAL_PKGS=(
   archlinux-xdg-menu bash-language-server bat bluez bluez-utils btop cmake cpio duf fastfetch firefox
-  fzf ghostty glow gsettings-qt gtk-engine-murrine hexyl hypridle hyprpaper
+  fzf ghostty glow gsettings-qt gtk-engine-murrine hexyl htop hypridle hyprpaper
   kate kdecoration konsole kvantum less mediainfo meson ncdu neovim network-manager-applet
   pacman-mirrorlist pavucontrol pkgconf python-ansicolors
   qt5-declarative qt5-graphicaleffects qt5-x11extras
@@ -171,7 +171,7 @@ OFFICIAL_PKGS=(
 )
 
 AUR_PKGS=(
-  aylurs-gtk-shell-git bpytop clipse diskonaut displaylink eza grimblast-git hyprgraphics hyprland-qt-support
+  aylurs-gtk-shell-git bpytop clipse diskonaut displaylink eza grimblast-git gruvbox-plus-icon-theme-git hyprgraphics hyprland-qt-support
   hyprpicker hyprshade iwgtk lscolors-git nwg-dock-hyprland nwg-drawer nwg-look pacseek
   progress-git python-pywal16 python-pywalfox qt6ct-kde smile waypaper wl-clipboard-history-git yazi
 )
