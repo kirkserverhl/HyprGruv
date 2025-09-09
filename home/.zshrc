@@ -83,8 +83,27 @@ alias ls='colorls -lA --sd'
 ###-----------------------------------------------------
 ### Starship
 ### -----------------------------------------------------
-eval "$(starship init zsh)"
-alias star='~/.hyprgruv/home/scripts/starship_theme.sh'
+
+#eval "$(starship init zsh)"
+#alias star='~/.hyprgruv/home/scripts/starship_theme.sh'
+
+# Ensure Starship points to the managed symlink
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+
+# Optional: function to launch the picker from anywhere
+starship-theme() {
+  local repo="${HYPR_DIR:-$HOME/.hyprgruv}"   # adjust if you clone elsewhere
+  local script="$repo/lib/scripts/starship_theme.sh"
+  if [ -x "$script" ]; then
+    "$script"
+  else
+    echo "starship_theme.sh not found at: $script"
+  fi
+}
+
+# Or just an alias if you know the exact path:
+# alias starship-theme="$HOME/.hyprgruv/lib/scripts/starship_theme.sh"
+
 
 # -----------------------------------------------------
 # Set-up FZF key bindings (CTRL R for fuzzy history finder)
