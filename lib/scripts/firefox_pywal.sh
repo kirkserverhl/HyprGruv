@@ -27,7 +27,7 @@ export GUM_INPUT_CURSOR_FOREGROUND="${GUM_INPUT_CURSOR_FOREGROUND:-#282828}"
 export GUM_INPUT_PROMPT_FOREGROUND="${GUM_INPUT_PROMPT_FOREGROUND:-#8FC17B}"
 export GUM_SPIN_SPINNER_FOREGROUND="${GUM_SPIN_SPINNER_FOREGROUND:-#749D91}"
 
-display_header() { command -v figlet >/dev/null && figlet -f ~/.local/share/fonts/Graffiti.flf "$1" || echo "=== $1 ==="; }
+#display_header() { command -v figlet >/dev/null && figlet -f ~/.local/share/fonts/Graffiti.flf "$1" || echo "=== $1 ==="; }
 
 ensure_cmd() {
   local c="$1" install_msg="$2" pkg="$3"
