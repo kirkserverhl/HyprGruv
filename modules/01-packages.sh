@@ -164,7 +164,7 @@ OFFICIAL_PKGS=(
   archlinux-xdg-menu bash-language-server bat bluez bluez-utils btop cmake cpio duf fastfetch firefox
   fzf ghostty glow gsettings-qt gtk-engine-murrine hexyl htop hypridle hyprpaper
   kate kdecoration konsole kvantum less mediainfo meson ncdu neovim network-manager-applet
-  pacman-mirrorlist pavucontrol pkgconf python-ansicolors
+  pacman-mirrorlist pavucontrol pkgconf python-ansicolors python-pywayland
   qt5-declarative qt5-graphicaleffects qt5-x11extras
   rofi-calc rofi-wayland starship stow sudo tig tmux tree udiskie waybar
   wireplumber wl-clip-persist wl-clipboard xclip xdg-desktop-portal-kde xsettingsd zoxide zsh
