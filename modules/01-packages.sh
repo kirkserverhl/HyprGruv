@@ -172,8 +172,8 @@ OFFICIAL_PKGS=(
 
 AUR_PKGS=(
   aylurs-gtk-shell-git bpytop clipse diskonaut displaylink evdi-dkms eza grimblast-git gruvbox-plus-icon-theme-git hyprgraphics hyprland-qt-support
-  hyprpicker hyprshade iwgtk lscolors-git nwg-displays nwg-dock-hyprland nwg-drawer nwg-look pacseek
-  progress-git python-pywal16 python-pywalfox qt6ct-kde smile waypaper wl-clipboard-history-git yazi
+  hyprpicker hyprshade iwgtk lscolors-git nwg-dock-hyprland nwg-drawer nwg-look pacseek
+  progress-git python-pywal16 python-pywalfox qt6ct-kde smile waypaper wdisplays wl-clipboard-history-git yazi
 )
 
 # -------------------- run --------------------
