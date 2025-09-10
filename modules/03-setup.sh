@@ -49,7 +49,7 @@ fi
 
 # Define the scripts in execution order
 declare -a ORDERED_SCRIPTS=(
-  "hard_copy.sh|Hard Copy files in root directory"
+  #"hard_copy.sh|Hard Copy files in root directory"
   "default_wp.sh|Load default wallpaper"
   "chaotic.sh|Configure Chaotic-AUR pacman mirrors"
   #"hyprpm.sh|Install Hyprpm plugins"
