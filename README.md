@@ -17,6 +17,7 @@ Storage: At least 40GB free disk space
 💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.  
 
 🌟 Project Overview 🌟
+
 # HyprGruv 🚀
 
 Hyprland Arch Linux featuring GruvBox!
