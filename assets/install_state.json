@@ -1,0 +1,15 @@
+{
+  "completed_steps": [
+    "Install packages",
+    "Install packages",
+    "Stow configuration",
+    "Setup system",
+    "Setup system",
+    "Interactive config"
+  ],
+  "user_choices": {
+    "last_backup": "/home/kirk/.local/backup/hyprgruv_2025-09-28_17-55-08"
+  },
+  "install_date": "2025-09-28 17:48:45",
+  "version": "1.0"
+}

@@ -1,7 +1,7 @@
 [input]
 cursor_blink = false
 
-[manager]
+[mgr]
 linemode = "mtime"
 mouse_events = ["click", "drag", "scroll"]
 ratio = [3, 4, 4]

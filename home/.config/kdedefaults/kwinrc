@@ -1,8 +1,4 @@
-[TabBox]
-LayoutName=org.kde.breeze.desktop
-
 [org.kde.kdecoration2]
-BorderSize=Tiny
 NoPlugin=false
 library=org.kde.kwin.aurorae
-theme=__aurorae__svg__Atl
+theme=__aurorae__svg__Ant-Dark
