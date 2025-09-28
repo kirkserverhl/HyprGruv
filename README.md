@@ -117,3 +117,4 @@ If the script does not finish either ~/.dotfiles/install.sh or ~/.dotfiles/confi
 >
 
 💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.  
+Test
