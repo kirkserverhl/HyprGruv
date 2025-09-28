@@ -89,7 +89,7 @@ Win + Q
 Run the following string of commands Line:
 
 ```sh
-sudo pacman -S git && git clone https://github.com/kirkserverhl/hyprgruv.git ~/.hyprgruv/setup && cd ~/.hyprgruv && chmod +x setup.sh && ./setup.sh
+sudo pacman -S git && git clone https://github.com/kirkserverhl/move.git ~/.hyprgruv/setup && cd ~/.hyprgruv && chmod +x setup.sh && ./setup.sh
 ```
 
 ## Tips
