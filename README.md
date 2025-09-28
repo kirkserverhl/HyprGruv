@@ -1,7 +1,5 @@
 ⚠️ Beta Version - Under Construction ⚠️
 
-🚧 We Tried, We Warned Ya! 🚧This project is currently in BETA and under active development. Expect bugs, incomplete features, and potential crashes. Proceed with caution!  
-
 🔥 For the best experience, we strongly recommend testing in a virtual machine with the following specs:  
 
 
@@ -17,6 +15,7 @@ Storage: At least 40GB free disk space
 
 
 🌟 Project Overview 🌟
+
 
 # HyprGruv 🚀
 
