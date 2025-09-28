@@ -14,7 +14,7 @@ Storage: At least 40GB free disk space
 
 ⚠️ Use at your own risk! We’re working hard to stabilize this project, but it’s a work in progress. Save your work frequently and consider running in an isolated environment to avoid any unexpected issues.  
 
-💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.  
+
 
 🌟 Project Overview 🌟
 
@@ -115,3 +115,6 @@ When the device reboots the next half of the installation, configuration, will b
 If the script does not finish either ~/.dotfiles/install.sh or ~/.dotfiles/config.sh can be ran manually or at any time to change the original configurations.
 
  > Please note that full configuration will require a restart.
+>
+>
+💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.  
