@@ -1,93 +1,135 @@
-#!/bin/bash
-# SHELL.sh
+#!/usr/bin/env bash
+# shell.sh — select and configure default shell (bash/zsh) with plugin setup
+set -euo pipefail
+IFS=$'\n\t'
 
-# Set gum theme based on colors.css variables
+# ------------------------------------------------------------
+# Resolve repo root from lib/scripts/ and load helpers
+# ------------------------------------------------------------
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+[[ -f "$HYPR_DIR/lib/common.sh" ]] || { echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1; }
+[[ -f "$HYPR_DIR/lib/state.sh"  ]] || { echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh";  exit 1; }
+# shellcheck source=/dev/null
+source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
+source "$HYPR_DIR/lib/state.sh"
+
+# ------------------------------------------------------------
+# Theming for gum (optional)
+# ------------------------------------------------------------
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"   # Using --color5 (teal)
-export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"   # Using --background
-export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010" # Using --background
-export GUM_CONFIRM_UNSELECTED_FOREGROUND="#282828" # Using --foreground
+export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"
+export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"
+export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010"
+export GUM_CONFIRM_UNSELECTED_FOREGROUND="#282828"
+export GUM_INPUT_CURSOR_FOREGROUND="#282828"
+export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B"
+export GUM_SPIN_SPINNER_FOREGROUND="#749D91"
 
-# Set other gum colors for consistency
-export GUM_INPUT_CURSOR_FOREGROUND="#282828" # Using --cursor
-export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
-export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
+display_header "SHELL"
 
-# Load common functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$HOME/.hypr/lib/common.sh"
-source "$HOME/.hypr/lib/state.sh"
+# ------------------------------------------------------------
+# Ensure prerequisites
+# ------------------------------------------------------------
+ensure_cmd() {
+  local c="$1" install_msg="$2" pkg="$3"
+  if ! command -v "$c" >/dev/null 2>&1; then
+    log_status "$install_msg"
+    if command -v yay >/dev/null 2>&1; then
+      yay -S --needed --noconfirm "$pkg"
+    else
+      sudo pacman -S --needed --noconfirm "$pkg"
+    fi
+  fi
+}
 
-RESET="\e[0m"                # Reset  ##
-GREEN="\e[38;2;142;192;124m" # 8ec07c ##  **Notes
-CYAN="\e[38;2;69;133;136m"   # 458588 ##
-YELLOW="\e[38;2;215;153;33m" # d79921 ##
-RED="\e[38;2;204;36;29m"     # cc241d ##
-GRAY="\e[38;2;60;56;54m"     # 3c3836 ##
-BOLD="\e[1m"
+ensure_cmd gum "Installing gum…" gum
+ensure_cmd git "Installing git…" git
 
-# display_cdheader "SHELL"
+# zsh will be installed on demand if the user chooses it
+
+# ------------------------------------------------------------
+# Prompt user
+# ------------------------------------------------------------
 echo ""
-echo "Please select your preferred shell" | lsd-print
-sleep 1
+echo "Please select your preferred shell" | lsd-print || echo "Please select your preferred shell"
+sleep 0.5
 
-shell=$(gum choose "zsh" "bash" "CANCEL")
-sleep 1
+shell="$(gum choose "zsh" "bash" "CANCEL")"
 
-# -----------------------------------------------------
+# ------------------------------------------------------------
 # Activate bash
-# -----------------------------------------------------
-if [[ $shell == "bash" ]]; then
-
-	# Change shell to bash
-	while ! chsh -s $(which bash); do
-		echo "ERROR - Authentication failed. Please enter the correct password."
-		sleep 1
-	done
-	echo "Shell is now bash." | lsd-print
-
-	gum spin --spinner dot --title "Please reboot your system." -- sleep 3
-	_selectCategory
-
-# -----------------------------------------------------
-# Activate zsh
-# -----------------------------------------------------
-elif [[ $shell == "zsh" ]]; then
-
-	# Change shell to shh
-	while ! chsh -s $(which zsh); do
-		echo "ERROR - Authentication failed. Please enter the correct password."
-		sleep 1
-	done
-	echo "Shell is now zsh." | lsd-print
-
-	# Installing zsh-autosuggestions
-	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-		echo "Installing zsh-autosuggestions" | lsd-print
-		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-	else
-		echo "zsh-autosuggestions already installed" | lsd-print
-	fi
-
-	# Installing zsh-syntax-highlighting
-	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-		echo "Installing zsh-syntax-highlighting" | lsd-print
-		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-	else
-		echo "zsh-syntax-highlighting already installed" | lsd-print
-	fi
-
-	# Installing fast-syntax-highlighting
-	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting" ]; then
-		_writeMessage "Installing fast-syntax-highlighting"
-		git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-	else
-		echo "fast-syntax-highlighting already installed" | lsd-print
-	fi
-
-	gum spin --spinner dot --title "Please reboot your system." -- sleep 3
-# _selectCategory
-else
-	echo "Changing shell canceled" | lsd-print
-	exit
+# ------------------------------------------------------------
+if [[ "$shell" == "bash" ]]; then
+  log_status "Switching default shell to bash"
+  if chsh -s "$(command -v bash)"; then
+    log_success "Shell is now bash."
+  else
+    log_error "chsh failed. Please re-run and enter the correct password."
+    exit 1
+  fi
+  gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
+  exit 0
 fi
+
+# ------------------------------------------------------------
+# Activate zsh
+# ------------------------------------------------------------
+if [[ "$shell" == "zsh" ]]; then
+  # Ensure zsh is installed
+  ensure_cmd zsh "Installing zsh…" zsh
+
+  log_status "Switching default shell to zsh"
+  if chsh -s "$(command -v zsh)"; then
+    log_success "Shell is now zsh."
+  else
+    log_error "chsh failed. Please re-run and enter the correct password."
+    exit 1
+  fi
+
+  # Oh My Zsh plugins (only if Oh My Zsh is installed)
+  ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+  if [[ -d "$HOME/.oh-my-zsh" ]]; then
+    mkdir -p "$ZSH_CUSTOM_DIR/plugins"
+
+    if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]]; then
+      echo "Installing zsh-autosuggestions" | lsd-print || true
+      git clone https://github.com/zsh-users/zsh-autosuggestions \
+        "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
+    else
+      echo "zsh-autosuggestions already installed" | lsd-print || true
+    fi
+
+    if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]]; then
+      echo "Installing zsh-syntax-highlighting" | lsd-print || true
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+        "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
+    else
+      echo "zsh-syntax-highlighting already installed" | lsd-print || true
+    fi
+
+    if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/fast-syntax-highlighting" ]]; then
+      echo "Installing fast-syntax-highlighting" | lsd-print || true
+      git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
+        "$ZSH_CUSTOM_DIR/plugins/fast-syntax-highlighting"
+    else
+      echo "fast-syntax-highlighting already installed" | lsd-print || true
+    fi
+
+    echo ""
+    log_status "Add the plugins to your ~/.zshrc, e.g.:"
+    echo "  plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)"
+  else
+    log_status "Oh My Zsh not detected (~/.oh-my-zsh). Skipping plugin installs."
+    echo "To install it later:  sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\"" | lsd-print || true
+  fi
+
+  gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
+  exit 0
+fi
+
+# ------------------------------------------------------------
+# Cancel
+# ------------------------------------------------------------
+echo "Changing shell canceled." | lsd-print || echo "Changing shell canceled."
+exit 0

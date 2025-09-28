@@ -69,7 +69,7 @@ Run the following string of commands Line:
 
 ```sh
 sudo pacman -S git &&
-git clone https://github.com/kirkserverhl/move.git ~/.hyprgruv &&
+git clone https://github.com/SentinelHL/move1.git ~/.hyprgruv &&
 cd ~/.hyprgruv/
 ./install.sh
 ```  

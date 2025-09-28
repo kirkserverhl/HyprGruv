@@ -28,7 +28,7 @@ BOLD="\e[1m"                 # Bold   ##
 sleep 1
 aur_helper="$(bat ~/scripts/aur.sh)"
 echo ""
-sleep1
+sleep 1
 $aur_helper -Scc
 yay -Rsn $(pacman -Qdtq)
 sleep 1

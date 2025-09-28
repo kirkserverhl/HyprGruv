@@ -1,33 +1,56 @@
-#!/bin/bash
-# chaotic.sh
+#!/usr/bin/env bash
+# chaotic.sh — add Chaotic-AUR key/mirror and pacman.conf (with mirror hardening)
+set -euo pipefail
+IFS=$'\n\t'
 
-# Load common functions and state management
-HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve repo root from lib/scripts/
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+# Load helpers
+if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
+  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
+fi
+if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
+  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
+fi
+# shellcheck source=/dev/null
 source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
-RESET="\e[0m"
-GREEN="\e[38;2;142;192;124m"
-CYAN="\e[38;2;69;133;136m"
-YELLOW="\e[38;2;215;153;33m"
-RED="\e[38;2;204;36;29m"
-GRAY="\e[38;2;60;56;54m"
-BOLD="\e[1m"
+echo
+display_header "Chaotic-AUR setup"
 
-#   Chaotic Pacman Keys
+# --- Import key ---
+log_status "Importing Chaotic-AUR key"
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-sleep .5
+sleep 0.2
 sudo pacman-key --lsign-key 3056513887B78AEB
-sleep .5
+sleep 0.2
 
-#   Chaotic Pacman Mirrors
-sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-sleep .5
+# --- Install keyring + mirrorlist (pre-repo) ---
+log_status "Installing chaotic-keyring and chaotic-mirrorlist"
+sudo pacman -U --noconfirm \
+  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 
-#  Transfer Pacman Configuration
-sudo cp -r $ASSET_DIR/pacman.conf /etc
-sleep .5
-clear
+# --- Sanitize mirrorlist: comment out known-bad mirrors ---
+MIRRORLIST="/etc/pacman.d/chaotic-mirrorlist"
+if [[ -f "$MIRRORLIST" ]]; then
+  log_status "De-preferring problematic mirrors in $MIRRORLIST"
+  # Add more patterns on the right as needed, separated by \|
+  sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=[[:space:]]*.*(warp\.dev).*|# &|' "$MIRRORLIST"
+fi
 
-log_success "Setup Chaotic AUR successfully"
+# After installing keyring + mirrorlist
+if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
+  printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+fi
+
+# Optionally de-prefer flaky mirrors:
+sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+
+# Clean + hard refresh
+sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
+sudo pacman -Syyu --noconfirm
+

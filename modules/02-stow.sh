@@ -1,96 +1,146 @@
-#!/bin/bash
-# 02-stow.sh
+#!/usr/bin/env bash
+# 02-stow.sh — stow user config from repo (with absolute-symlink handling)
+set -euo pipefail
+IFS=$'\n\t'
 
-# Load common functions and state management
-HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve repo root from inside modules/
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
-RESET="\e[0m"
-GREEN="\e[38;2;142;192;124m"
-CYAN="\e[38;2;69;133;136m"
-YELLOW="\e[38;2;215;153;33m"
-RED="\e[38;2;204;36;29m"
-GRAY="\e[38;2;60;56;54m"
-BOLD="\e[1m"
-
 log_status "Starting configuration stowing process"
 
-# Create a timestamped backup directory
-TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+# Paths
+REPO_DIR="$HYPR_DIR"
+PKG_DIR="home"
+TARGET="$HOME"
+
+# Sanity
+if [[ ! -d "$REPO_DIR/$PKG_DIR" ]]; then
+  log_error "Expected package dir not found: $REPO_DIR/$PKG_DIR"
+  exit 1
+fi
+
+# Timestamped backup dir
+TIMESTAMP="$(date +"%Y-%m-%d_%H-%M-%S")"
 BACKUP_DIR="$HOME/.local/backup/hyprgruv_$TIMESTAMP"
-
-# Create backup directory
 mkdir -p "$BACKUP_DIR"
-log_status "Created backup directory: $BACKUP_DIR"
-sleep 1
+log_status "Backup directory: $BACKUP_DIR"
+sleep 0.3
 
-# Set repo directory
-REPO_DIR="$HOME/.hyprgruv"
-USER_HOME="$HOME"
-
-# Clone repository if it doesn't exist
-if [ ! -d "$REPO_DIR" ]; then
-	log_status "Cloning repository"
-	if ! git clone https://github.com/kirkserverhl/hyprgruv "$REPO_DIR"; then
-		log_error "Failed to clone repository"
-		exit 1
-	fi
-fi
-sleep 1
-
-# Check if stow is installed, install it if not
+# Ensure stow present
 if ! command_exists stow; then
-    log_status "stow not found. Installing with yay..."
-    if command_exists yay; then
-        if run_command "yay -S --noconfirm stow" "Installing stow"; then
-            log_success "stow installed successfully"
-        else
-            log_error "Failed to install stow. Please install it manually and run this script again."
-            exit 1
-        fi
-    else
-        log_error "yay is not installed. Please install stow manually and run this script again."
-        exit 1
-    fi
+  log_status "stow not found. Installing…"
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm stow
+  else
+    sudo pacman -S --needed --noconfirm stow
+  fi
 fi
 
-# Navigate to repo directory
-cd "$REPO_DIR" || {
-	log_error "Failed to change directory to $REPO_DIR"
-	exit 1
-}
-# Backup existing files
-log_status "Backing up existing files"
-for file in $(ls -A "$REPO_DIR/home"); do
-	if [ -e "$USER_HOME/$file" ]; then
-		# Create subdirectories in backup folder to maintain structure
-		PARENT_DIR=$(dirname "$BACKUP_DIR/${file}")
-		mkdir -p "$PARENT_DIR"
+# Back up top-level entries under home/ that would be affected
+log_status "Backing up existing files that would be replaced"
+while IFS= read -r entry; do
+  name="$(basename "$entry")"
+  src_rel="$name"
+  target_path="$TARGET/$src_rel"
+  if [[ -e "$target_path" || -L "$target_path" ]]; then
+    dest_path="$BACKUP_DIR/$src_rel"
+    mkdir -p "$(dirname "$dest_path")"
+    log_status "Backing up: ~/$src_rel"
+    cp -a "$target_path" "$dest_path"
+  fi
+done < <(find "$REPO_DIR/$PKG_DIR" -mindepth 1 -maxdepth 1 -print)
 
-		# Copy the file to backup directory (preserving structure)
-		log_status "Backing up: $file"
-		cp -r "$USER_HOME/$file" "$BACKUP_DIR/${file}"
-	fi
+sleep 0.2
+
+# Special-case: move any existing Hypr config to backup (rather than delete)
+if [[ -e "$HOME/.config/hypr" || -L "$HOME/.config/hypr" ]]; then
+  mv "$HOME/.config/hypr" "$BACKUP_DIR/.config_hypr.pre-stow"
+  log_status "Moved existing ~/.config/hypr to backup"
+fi
+
+# --------------------------------------------------------------------
+# Ignore absolute-symlinked sources that make stow abort
+# We'll create the desired links in $HOME after stow completes.
+# Adjust patterns if your repo layout changes.
+# --------------------------------------------------------------------
+IGNORE_PATTERNS=(
+  '^\.config/gtk-4\.0/.*$'
+  '^\.config/pacseek/pacseek$'
+  '^\.config/starship\.toml$'
+)
+
+STOW_ARGS=(-v -t "$TARGET" "$PKG_DIR" --adopt)
+for pat in "${IGNORE_PATTERNS[@]}"; do
+  STOW_ARGS+=(--ignore "$pat")
 done
-sleep .5
 
-# Remove Default Hyprland Configuration
-rm -rf $HOME/.config/hypr
-sleep .5
+log_status "Applying configurations with GNU Stow (--adopt, with ignores)"
+(
+  cd "$REPO_DIR"
+  stow "${STOW_ARGS[@]}"
+)
 
-# Stow home directory configs
-log_status "Applying configurations with stow"
-if ! stow -t "$USER_HOME" home --adopt; then
-	log_error "Stow failed to apply configurations"
-	exit 1
+log_success "Stow succeeded for non-conflicting paths"
+
+# --------------------------------------------------------------------
+# Recreate the previously ignored items as symlinks in $HOME
+# --------------------------------------------------------------------
+
+# 1) GTK 4.0 files linking to Gruvbox system theme assets
+GTK_SYS_DIR="/usr/share/themes/Gruvbox-Dark/gtk-4.0"
+mkdir -p "$HOME/.config/gtk-4.0"
+
+declare -A GTK_LINKS=(
+  ["$HOME/.config/gtk-4.0/assets"]="$GTK_SYS_DIR/assets"
+  ["$HOME/.config/gtk-4.0/gtk.css"]="$GTK_SYS_DIR/gtk.css"
+  ["$HOME/.config/gtk-4.0/gtk-dark.css"]="$GTK_SYS_DIR/gtk-dark.css"
+)
+
+for link in "${!GTK_LINKS[@]}"; do
+  target="${GTK_LINKS[$link]}"
+  if [[ -e "$target" || -L "$target" ]]; then
+    ln -sfn "$target" "$link"
+    log_status "Linked: $link -> $target"
+  else
+    log_error "Missing theme asset: $target (install Gruvbox-Dark GTK theme?)"
+  fi
+done
+
+# 2) pacseek config — your repo had an odd absolute symlink.
+# Prefer: copy or symlink a real config file/dir.
+# If your repo has defaults at home/.config/pacseek/, copy them in:
+if [[ -d "$REPO_DIR/$PKG_DIR/.config/pacseek" ]]; then
+  mkdir -p "$HOME/.config/pacseek"
+  cp -an "$REPO_DIR/$PKG_DIR/.config/pacseek/." "$HOME/.config/pacseek/" || true
+  log_status "Ensured pacseek config in ~/.config/pacseek"
 fi
-sleep 2
+# If you really want a symlink, set LINK_TO somewhere valid, e.g.:
+# ln -sfn "$HOME/.config/pacseek/config.toml" "$HOME/.config/pacseek/pacseek"
 
-log_success "Configuration files stowed successfully"
+# 3) starship.toml — point to your preferred theme file
+mkdir -p "$HOME/.config/starship"
+if [[ -f "$HOME/.config/starship/chevron.toml" ]]; then
+  ln -sfn "$HOME/.config/starship/chevron.toml" "$HOME/.config/starship.toml"
+  log_status "Linked: ~/.config/starship.toml -> ~/.config/starship/chevron.toml"
+else
+  # If your theme file lives in the repo, fallback copy:
+  if [[ -f "$REPO_DIR/$PKG_DIR/.config/starship/chevron.toml" ]]; then
+    mkdir -p "$HOME/.config/starship"
+    cp -a "$REPO_DIR/$PKG_DIR/.config/starship/chevron.toml" "$HOME/.config/starship/chevron.toml"
+    ln -sfn "$HOME/.config/starship/chevron.toml" "$HOME/.config/starship.toml"
+    log_status "Installed and linked starship theme"
+  else
+    log_error "starship theme chevron.toml not found in $HOME or repo; skip linking"
+  fi
+fi
+
+log_success "Configuration files applied"
 log_status "Backup saved to: $BACKUP_DIR"
 save_choice "last_backup" "$BACKUP_DIR"
-sleep 1
-clear
 
+sleep 0.5
+clear
 exit 0
+
