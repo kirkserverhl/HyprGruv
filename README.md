@@ -115,4 +115,5 @@ If the script does not finish either ~/.dotfiles/install.sh or ~/.dotfiles/confi
  > Please note that full configuration will require a restart.
 >
 >
+
 💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.  
