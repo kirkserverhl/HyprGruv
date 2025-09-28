@@ -1,3 +1,21 @@
+⚠️ Beta Version - Under Construction ⚠️
+
+🚧 We Tried, We Warned Ya! 🚧
+This project is currently in BETA and under active development. Expect bugs, incomplete features, and potential crashes. Proceed with caution!
+
+🔥 For the best experience, we strongly recommend testing in a virtual machine with the following specs:
+
+Hypervisor: Any modern hypervisor (e.g., VirtualBox, VMware, Hyper-V)
+
+RAM: Minimum 4GB (8GB or more for smooth performance)
+
+Storage: At least 40GB free disk space
+
+⚠️ Use at your own risk! We’re working hard to stabilize this project, but it’s a work in progress. Save your work frequently and consider running in an isolated environment to avoid any unexpected issues.
+
+💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.
+
+
 # HyprGruv 🚀
 
 Hyprland Arch Linux featuring GruvBox!
