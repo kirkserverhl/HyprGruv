@@ -22,7 +22,7 @@ positions={"1920x1080":[]}
 Image=/home/kirk/.hyprgruv/home/wallpaper/space_walk.png
 
 [Containments][1][Wallpaper][org.kde.slideshow][General]
-Image=file:///home/kirk/wallpaper/gruvbox_space_walk.png
+Image=file:///home/kirk/wallpaper/space_odyssey.jpg
 SlideInterval=600
 SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/,/home/kirk/wallpaper/
 UncheckedSlides=/usr/share/wallpapers/Next/,/usr/share/wallpapers/EndeavourOS/,/home/kirk/wallpaper/Gruvbox-Dark Color Palette - color-hex.com.png,/home/kirk/wallpaper/guitar.png,/home/kirk/wallpaper/port.png,/home/kirk/wallpaper/gruvbox_stripes_arch.png
@@ -58,7 +58,7 @@ plugin=org.kde.plasma.kickoff
 [Containments][2][Applets][3][Configuration]
 PreloadWeight=100
 popupHeight=520
-popupWidth=665
+popupWidth=713
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
@@ -147,14 +147,14 @@ immutability=1
 plugin=org.kde.plasma.brightness
 
 [Containments][2][Applets][7][Applets][23][Configuration]
-PreloadWeight=18
+PreloadWeight=10
 
 [Containments][2][Applets][7][Applets][24]
 immutability=1
 plugin=org.kde.plasma.battery
 
 [Containments][2][Applets][7][Applets][24][Configuration]
-PreloadWeight=18
+PreloadWeight=10
 
 [Containments][2][Applets][7][Applets][8]
 immutability=1
