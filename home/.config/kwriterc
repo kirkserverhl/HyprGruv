@@ -10,10 +10,13 @@ Show Status Bar=true
 Show Tab Bar=true
 Show Url Nav Bar=false
 
+[KDE]
+widgetStyle=kvantum
+
 [KTextEditor Renderer]
 Animate Bracket Matching=false
 Auto Color Theme Selection=true
-Color Theme=Breeze Dark
+Color Theme=gruvbox Dark
 Line Height Multiplier=1
 Show Indentation Lines=false
 Show Whole Bracket Expression=false
@@ -28,4 +31,4 @@ Word Wrap Marker=false
 3 screens: Window-Maximized=true
 
 [UiSettings]
-ColorScheme=Base16
+ColorScheme=KvRoughGlass

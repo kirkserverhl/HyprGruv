@@ -65,7 +65,7 @@
                 "allowDdcCi": true,
                 "allowSdrSoftwareBrightness": true,
                 "autoRotation": "InTabletMode",
-                "brightness": 1,
+                "brightness": 0.15,
                 "colorPowerTradeoff": "PreferEfficiency",
                 "colorProfileSource": "sRGB",
                 "connectorName": "DVI-I-1",

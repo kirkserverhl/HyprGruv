@@ -22,7 +22,7 @@ positions={"1920x1080":[]}
 Image=/home/kirk/.hyprgruv/home/wallpaper/space_walk.png
 
 [Containments][1][Wallpaper][org.kde.slideshow][General]
-Image=file:///home/kirk/wallpaper/space_odyssey.jpg
+Image=file:///home/kirk/wallpaper/battle.png
 SlideInterval=600
 SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/,/home/kirk/wallpaper/
 UncheckedSlides=/usr/share/wallpapers/Next/,/usr/share/wallpapers/EndeavourOS/,/home/kirk/wallpaper/Gruvbox-Dark Color Palette - color-hex.com.png,/home/kirk/wallpaper/guitar.png,/home/kirk/wallpaper/port.png,/home/kirk/wallpaper/gruvbox_stripes_arch.png
@@ -75,7 +75,7 @@ immutability=1
 plugin=org.kde.plasma.icontasks
 
 [Containments][2][Applets][5][Configuration][General]
-launchers=preferred://filemanager,applications:org.kde.konsole.desktop,preferred://browser
+launchers=preferred://filemanager,applications:org.kde.konsole.desktop,preferred://browser,applications:firefox.desktop
 
 [Containments][2][Applets][6]
 immutability=1
@@ -96,6 +96,9 @@ wallpaperplugin=org.kde.image
 immutability=1
 plugin=org.kde.plasma.devicenotifier
 
+[Containments][2][Applets][7][Applets][10][Configuration]
+PreloadWeight=55
+
 [Containments][2][Applets][7][Applets][11]
 immutability=1
 plugin=org.kde.plasma.manage-inputmethod
@@ -110,6 +113,9 @@ PreloadWeight=55
 [Containments][2][Applets][7][Applets][13]
 immutability=1
 plugin=org.kde.kdeconnect
+
+[Containments][2][Applets][7][Applets][13][Configuration]
+PreloadWeight=55
 
 [Containments][2][Applets][7][Applets][14]
 immutability=1
@@ -131,6 +137,9 @@ plugin=org.kde.plasma.printmanager
 immutability=1
 plugin=org.kde.kscreen
 
+[Containments][2][Applets][7][Applets][18][Configuration]
+PreloadWeight=65
+
 [Containments][2][Applets][7][Applets][19]
 immutability=1
 plugin=org.kde.plasma.volume
@@ -147,14 +156,14 @@ immutability=1
 plugin=org.kde.plasma.brightness
 
 [Containments][2][Applets][7][Applets][23][Configuration]
-PreloadWeight=10
+PreloadWeight=7
 
 [Containments][2][Applets][7][Applets][24]
 immutability=1
 plugin=org.kde.plasma.battery
 
 [Containments][2][Applets][7][Applets][24][Configuration]
-PreloadWeight=10
+PreloadWeight=2
 
 [Containments][2][Applets][7][Applets][8]
 immutability=1
@@ -163,6 +172,10 @@ plugin=org.kde.plasma.cameraindicator
 [Containments][2][Applets][7][Applets][9]
 immutability=1
 plugin=org.kde.plasma.clipboard
+
+[Containments][2][Applets][7][ConfigDialog]
+DialogHeight=540
+DialogWidth=720
 
 [Containments][2][Applets][7][General]
 extraItems=org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.mediacontroller,org.kde.kscreen,org.kde.plasma.volume
