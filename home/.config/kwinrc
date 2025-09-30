@@ -23,4 +23,4 @@ ElectricBorderCornerRatio=0.35
 ElectricBorders=1
 
 [Xwayland]
-Scale=2
+Scale=1

@@ -1,99 +1,58 @@
-#!/usr/bin/env bash
-# monitor.sh — choose and link a Hyprland monitor config
-set -euo pipefail
-IFS=$'\n\t'
+#!/bin/bash
 
-# ------------------------------------------------------------
-# Resolve repo root from lib/scripts/
-# ------------------------------------------------------------
-HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Script to configure monitors using wdisplays and save to Hyprland config in git repo
 
-# Load helpers
-if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
-fi
-if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
-fi
-# shellcheck source=/dev/null
-source "$HYPR_DIR/lib/common.sh"
-# shellcheck source=/dev/null
-source "$HYPR_DIR/lib/state.sh"
+# Define repo path (adjust if .hyprgruv location varies, e.g., via env var)
+REPO_DIR="$HOME/.hyprgruv/home"
 
-# ------------------------------------------------------------
-# Locations
-# ------------------------------------------------------------
-MONITOR_DIR="$HOME/.config/hypr/conf/monitors"
-MONITOR_CONFIG="$HOME/.config/hypr/conf/monitor.conf"
+# Open wdisplays in floating window (assuming Hyprland rules handle floating)
+wdisplays &
 
-display_header "Monitor Configuration"
+# Prompt user
+echo "Set up displays in wdisplays GUI and apply. Press Enter when done."
+read -r
 
-# Ensure the monitors directory exists
-mkdir -p "$MONITOR_DIR"
+# Capture wlr-randr output
+output=$(wlr-randr)
 
-# If MONITOR_DIR is empty but a current config exists, back it up as a preset
-if [[ -z "$(find "$MONITOR_DIR" -mindepth 1 -maxdepth 1 -type f 2>/dev/null)" ]]; then
-  if [[ -f "$MONITOR_CONFIG" ]]; then
-    cp -a "$MONITOR_CONFIG" "$MONITOR_DIR/default.conf"
-    log_status "Backed up current monitor config as: $MONITOR_DIR/default.conf"
-  fi
-fi
-
-# Collect available presets (filenames only)
-mapfile -t PRESETS < <(find "$MONITOR_DIR" -mindepth 1 -maxdepth 1 -type f -printf '%f\n' | sort)
-
-if (( ${#PRESETS[@]} == 0 )); then
-  log_error "No monitor presets found in: $MONITOR_DIR"
-  exit 1
-fi
-
-# Gum helper
-_has_gum() { command -v gum >/dev/null 2>&1; }
-
-# Choose preset (gum or fallback)
-choose_preset() {
-  local choice=""
-  if _has_gum; then
-    log_status "Select a monitor configuration:"
-    # gum choose reads items as args safely
-    choice="$(gum choose --height 10 "${PRESETS[@]}")" || true
-  else
-    echo "Select a monitor configuration:"
-    local i=1
-    for p in "${PRESETS[@]}"; do
-      printf '  %2d) %s\n' "$i" "$p"
-      ((i++))
-    done
-    read -rp "Enter number: " idx
-    if [[ "$idx" =~ ^[0-9]+$ ]] && (( idx>=1 && idx<=${#PRESETS[@]} )); then
-      choice="${PRESETS[$((idx-1))]}"
+# Parse and generate config
+config=""
+while IFS= read -r line; do
+    if [[ $line =~ ^([A-Za-z0-9-]+)\ \" ]]; then
+        monitor="${BASH_REMATCH[1]}"
+        enabled="no"
+        res=""
+        pos=""
+        transform="normal"
+        scale="1"
+        vrr="0"
+    elif [[ $line =~ Enabled:\ (yes|no) ]]; then
+        enabled="${BASH_REMATCH[1]}"
+    elif [[ $line =~ ([0-9]+x[0-9]+)\ px,\ ([0-9.]+)\ Hz\ \(.*current ]]; then
+        res="${BASH_REMATCH[1]}@${BASH_REMATCH[2]%.*}"
+    elif [[ $line =~ Position:\ ([0-9]+),([0-9]+) ]]; then
+        pos="${BASH_REMATCH[1]}x${BASH_REMATCH[2]}"
+    elif [[ $line =~ Transform:\ (.*) ]]; then
+        transform="${BASH_REMATCH[1]}"
+    elif [[ $line =~ Scale:\ ([0-9.]+) ]]; then
+        scale="${BASH_REMATCH[1]}"
+    elif [[ $line =~ Adaptive\ Sync:\ (enabled|disabled) ]]; then
+        if [[ "${BASH_REMATCH[1]}" == "enabled" ]]; then vrr="1"; fi
+        if [[ "$enabled" == "yes" ]]; then
+            trans_num=0
+            case "$transform" in
+                normal) trans_num=0 ;;
+                90) trans_num=1 ;;
+                180) trans_num=2 ;;
+                270) trans_num=3 ;;
+            esac
+            config+="monitor=$monitor,$res,$pos,$scale,transform,$trans_num,vrr,$vrr\n"
+        fi
     fi
-  fi
-  echo "$choice"
-}
+done <<< "$output"
 
-SELECTED_PRESET="$(choose_preset)"
+# Write to repo file
+mkdir -p "$REPO_DIR/.config/hypr/conf"
+echo -e "$config" > "$REPO_DIR/.config/hypr/conf/monitor.conf"
 
-if [[ -z "$SELECTED_PRESET" ]]; then
-  log_status "No selection made. Leaving current configuration unchanged."
-  exit 0
-fi
-
-# Ensure parent directory exists
-mkdir -p "$(dirname "$MONITOR_CONFIG")"
-
-# Replace existing link/file with the new symlink
-ln -sfn "$MONITOR_DIR/$SELECTED_PRESET" "$MONITOR_CONFIG"
-log_success "Switched to monitor preset: $SELECTED_PRESET"
-echo "Linked: $MONITOR_CONFIG -> $MONITOR_DIR/$SELECTED_PRESET"
-
-# Optional: prompt to reload Hyprland monitors (if running)
-if _has_gum && gum confirm "Reload Hyprland monitors now (hyprctl reload)?"; then
-  if command -v hyprctl >/dev/null 2>&1; then
-    hyprctl reload || log_error "hyprctl reload failed (is Hyprland running?)"
-  else
-    log_error "hyprctl not found; cannot reload automatically."
-  fi
-fi
-
-exit 0
+echo "Configuration saved to $REPO_DIR/.config/hypr/conf/monitor.conf"

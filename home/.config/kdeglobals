@@ -21,13 +21,13 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=66,116,116
+BackgroundAlternate=187,169,101
 BackgroundNormal=53,53,53
-DecorationFocus=72,143,143
-DecorationHover=72,143,143
-ForegroundActive=72,143,143
+DecorationFocus=245,219,122
+DecorationHover=245,219,122
+ForegroundActive=245,219,122
 ForegroundInactive=160,160,160
-ForegroundLink=112,222,222
+ForegroundLink=245,219,122
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -37,11 +37,11 @@ ForegroundVisited=255,102,102
 [Colors:Complementary]
 BackgroundAlternate[$d]
 BackgroundNormal[$d]
-DecorationFocus=72,143,143
-DecorationHover=72,143,143
-ForegroundActive=72,143,143
+DecorationFocus=245,219,122
+DecorationHover=245,219,122
+ForegroundActive=245,219,122
 ForegroundInactive[$d]
-ForegroundLink=72,143,143
+ForegroundLink=245,219,122
 ForegroundNegative[$d]
 ForegroundNeutral[$d]
 ForegroundNormal[$d]
@@ -77,27 +77,27 @@ ForegroundPositive[$d]
 ForegroundVisited[$d]
 
 [Colors:Selection]
-BackgroundAlternate=63,113,113
-BackgroundNormal=63,113,113
-DecorationFocus=72,143,143
-DecorationHover=72,143,143
-ForegroundActive=72,143,143
-ForegroundInactive=255,255,255
-ForegroundLink=112,222,222
+BackgroundAlternate=185,166,98
+BackgroundNormal=185,166,98
+DecorationFocus=245,219,122
+DecorationHover=245,219,122
+ForegroundActive=245,219,122
+ForegroundInactive=0,0,0
+ForegroundLink=245,219,122
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
-ForegroundNormal=255,255,255
+ForegroundNormal=0,0,0
 ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
 [Colors:Tooltip]
 BackgroundAlternate=0,0,0
 BackgroundNormal=0,0,0
-DecorationFocus=72,143,143
-DecorationHover=72,143,143
-ForegroundActive=72,143,143
+DecorationFocus=245,219,122
+DecorationHover=245,219,122
+ForegroundActive=245,219,122
 ForegroundInactive=225,225,225
-ForegroundLink=72,143,143
+ForegroundLink=245,219,122
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -107,11 +107,11 @@ ForegroundVisited=255,102,102
 [Colors:View]
 BackgroundAlternate=50,50,50
 BackgroundNormal=45,45,45
-DecorationFocus=72,143,143
-DecorationHover=72,143,143
-ForegroundActive=72,143,143
+DecorationFocus=245,219,122
+DecorationHover=245,219,122
+ForegroundActive=245,219,122
 ForegroundInactive=160,160,160
-ForegroundLink=112,222,222
+ForegroundLink=245,219,122
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -121,11 +121,11 @@ ForegroundVisited=255,102,102
 [Colors:Window]
 BackgroundAlternate=53,53,53
 BackgroundNormal=53,53,53
-DecorationFocus=72,143,143
-DecorationHover=72,143,143
-ForegroundActive=72,143,143
+DecorationFocus=245,219,122
+DecorationHover=245,219,122
+ForegroundActive=245,219,122
 ForegroundInactive=160,160,160
-ForegroundLink=112,222,222
+ForegroundLink=245,219,122
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -138,7 +138,7 @@ History Items[$e]=file:$HOME/wallpaper
 Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
 
 [General]
-AccentColor=72,143,143
+AccentColor=245,219,122
 ColorSchemeHash=186f38e4553082f3b323e64586aa4b75156053b1
 UseSystemBell=true
 accentColorFromWallpaper=true

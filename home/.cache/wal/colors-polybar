@@ -1,8 +1,8 @@
-background = d91e1d1c
-background-alt = 767660
-foreground = c6c6c6
-foreground-alt = c6c6c6
-primary = 928B78
-secondary = A0967F
-alert = 9F9B86
-disabled = c6c6c6
+background = d9101212
+background-alt = 596d6d
+foreground = c3c3c3
+foreground-alt = c3c3c3
+primary = 3F8288
+secondary = 478789
+alert = 739C90
+disabled = c3c3c3

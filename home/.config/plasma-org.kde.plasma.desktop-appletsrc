@@ -22,7 +22,7 @@ positions={"1920x1080":[]}
 Image=/home/kirk/.hyprgruv/home/wallpaper/space_walk.png
 
 [Containments][1][Wallpaper][org.kde.slideshow][General]
-Image=file:///home/kirk/wallpaper/fractal.webp
+Image=file:///home/kirk/wallpaper/shuttle.png
 SlideInterval=600
 SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/,/home/kirk/wallpaper/
 UncheckedSlides=/usr/share/wallpapers/Next/,/usr/share/wallpapers/EndeavourOS/,/home/kirk/wallpaper/Gruvbox-Dark Color Palette - color-hex.com.png,/home/kirk/wallpaper/guitar.png,/home/kirk/wallpaper/port.png,/home/kirk/wallpaper/gruvbox_stripes_arch.png
