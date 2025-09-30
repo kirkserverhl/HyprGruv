@@ -122,7 +122,7 @@ AVAILABLE_LIB32=()
 for p in "${LIB32_GFX[@]}"; do repo_has "$p" && AVAILABLE_LIB32+=("$p"); done
 
 BASE_PKGS=(hyprland xdg-desktop-portal xdg-desktop-portal-hyprland waybar rofi-wayland wl-clipboard grim slurp brightnessctl polkit networkmanager pipewire pipewire-pulse wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
-OPT_TERMS=(ghostty kitty alacritty)
+OPT_TERMS=($($DEFAULTS_DIR/terminal.sh) kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
 
 # ---------------------- install ----------------------

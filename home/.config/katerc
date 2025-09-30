@@ -2,6 +2,7 @@
 2 screens: Height=907
 2 screens: Width=920
 2 screens: Window-Maximized=true
+3 screens: Window-Maximized=true
 
 [General]
 Allow Tab Scrolling=true
@@ -75,6 +76,8 @@ SetEditor=false
 2 screens: Height=887
 2 screens: Width=800
 2 screens: Window-Maximized=true
+3 screens: Height=900
+3 screens: Width=1600
 
 [UiSettings]
 ColorScheme=gruvbox dark

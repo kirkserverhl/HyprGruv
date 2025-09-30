@@ -1,5 +1,6 @@
 [FileDialogSize]
 2 screens: Window-Maximized=true
+3 screens: Window-Maximized=true
 
 [General]
 Days Meta Infos=30
