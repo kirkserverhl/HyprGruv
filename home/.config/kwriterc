@@ -14,6 +14,9 @@ Show Url Nav Bar=false
 [KDE]
 widgetStyle=kvantum
 
+[KFileDialog Settings]
+listViewIconSize=32
+
 [KTextEditor Renderer]
 Animate Bracket Matching=false
 Auto Color Theme Selection=true
