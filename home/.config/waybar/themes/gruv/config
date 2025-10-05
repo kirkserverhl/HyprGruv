@@ -30,7 +30,7 @@
         "group/settings",
         //"wlr/taskbar",
         "group/quicklinks",
-        "hyprland/window",
+        //"hyprland/window",
         "custom/empty"
     ],
 
@@ -51,7 +51,6 @@
         "group/tools",
         "tray",
         "custom/exit",
-        // "custom/ml4w-welcome",
         "clock"
     ]
 }

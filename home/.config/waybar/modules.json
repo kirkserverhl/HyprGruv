@@ -194,8 +194,7 @@
   // Clock
   "clock": {
     "format": "{:%H:%M %a}",
-    "on-click": "ags toggle calendar",
-    "on-click-right": "~/scripts/pomodorolm.sh",
+    "on-click": "eww open cal --screen $(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .id')",
     "tooltip-format": "Left: Calendar\nRight: Pomodoro"
   },
 
