@@ -135,7 +135,7 @@ function M:preload(job)
 		-- audio
 		if job.mime and string.find(job.mime, "^audio/") then
 			local qv = 31 - math.floor(PREVIEW.image_quality * 0.3)
-			local status, _ = Command("ffmpeg"):args({
+			local status, _ = Command("ffmpeg"):arg({
 				"-v",
 				"quiet",
 				"-threads",

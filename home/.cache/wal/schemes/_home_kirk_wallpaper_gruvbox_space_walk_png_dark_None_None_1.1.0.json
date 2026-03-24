@@ -1,7 +1,6 @@
 {
     "wallpaper": "/home/kirk/wallpaper/gruvbox_space_walk.png",
     "alpha": "100",
-
     "special": {
         "background": "#101212",
         "foreground": "#f4f0da",

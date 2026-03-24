@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/kirk/wallpaper/alley_gruv.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#111313",
+        "foreground": "#d3d4bf",
+        "cursor": "#d3d4bf"
+    },
+    "colors": {
+        "color0": "#111313",
+        "color1": "#656158",
+        "color2": "#6C7268",
+        "color3": "#B15A44",
+        "color4": "#788873",
+        "color5": "#ABA06F",
+        "color6": "#848881",
+        "color7": "#d3d4bf",
+        "color8": "#939485",
+        "color9": "#656158",
+        "color10": "#6C7268",
+        "color11": "#B15A44",
+        "color12": "#788873",
+        "color13": "#ABA06F",
+        "color14": "#848881",
+        "color15": "#d3d4bf"
+    }
+}
