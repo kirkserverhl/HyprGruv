@@ -4,6 +4,7 @@ export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
 export PATH="$HOME/scripts:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
+export TERMINAL=kitty
 if command -v bat >/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 fi

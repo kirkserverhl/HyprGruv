@@ -22,6 +22,7 @@ configuration {
 	normalize-match: true;
 	show-icons: true;
 	icon-theme: "Papirus";
+    terminal: "kitty";
 /*	cache-dir: ;*/
 	steal-focus: false;
 /*	dpi: -1;*/
