@@ -1,16 +1,126 @@
-[mgr]
-prepend_keymap = [
-  { on = [ "E" ], run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
-  { on = [ "-" ], run = "plugin eza-preview --args='--inc-level'", desc = "Increment tree level" },
-  { on = [ "_" ], run = "plugin eza-preview --args='--dec-level'", desc = "Decrement tree level" },
-  { on = [ "$" ], run = "plugin eza-preview --args='--toggle-follow-symlinks'", desc = "Toggle tree follow symlinks" },
-  { on = ["<C-e>"], run = "seek 5" },
-  { on = ["<C-y>"], run = "seek -5" },
-  { on = ["1"], run = "plugin fast-enter", desc = "Enter the subfolder faster, or open file directly"},
-]
+#[mgr]
+#prepend_keymap = [
+#  { on = [ "E" ], run = "plugin eza-preview",  desc = "Toggle tree/list dir preview" },
+#  { on = [ "-" ], run = "plugin eza-preview --args='--inc-level'", desc = "Increment tree level" },
+#  { on = [ "_" ], run = "plugin eza-preview --args='--dec-level'", desc = "Decrement tree level" },
+#  { on = [ "$" ], run = "plugin eza-preview --args='--toggle-follow-symlinks'", desc = "Toggle tree follow symlinks" },
+#  { on = ["<C-e>"], run = "seek 5" },
+#  { on = ["<C-y>"], run = "seek -5" },
+#  { on = ["1"], run = "plugin fast-enter", desc = "Enter the subfolder faster, or open file directly"},
+#]
 
+# =============================================================================
+# Manager (file list) keybindings
+# =============================================================================
 
+[[mgr.prepend_keymap]]
+on = [ "E" ]
+run = "plugin eza-preview"
+desc = "Toggle tree/list dir preview"
+
+[[mgr.prepend_keymap]]
+on = [ "-" ]
+run = "plugin eza-preview --args='--inc-level'"
+desc = "Increment tree level"
+
+[[mgr.prepend_keymap]]
+on = [ "_" ]
+run = "plugin eza-preview --args='--dec-level'"
+desc = "Decrement tree level"
+
+[[mgr.prepend_keymap]]
+on = [ "$" ]
+run = "plugin eza-preview --args='--toggle-follow-symlinks'"
+desc = "Toggle tree follow symlinks"
+
+[[mgr.prepend_keymap]]
+on = [ "<C-e>" ]
+run = "seek 5"
+desc = "Seek preview down"
+
+[[mgr.prepend_keymap]]
+on = [ "<C-y>" ]
+run = "seek -5"
+desc = "Seek preview up"
+
+[[mgr.prepend_keymap]]
+on = [ "1" ]
+run = "plugin fast-enter"
+desc = "Enter subfolder or open file directly"
+
+# Input layer - Esc to close (very common modern setting)
 [[input.prepend_keymap]]
-on   = "<Esc>"
-run  = "close"
+on = "<Esc>"
+run = "close"
 desc = "Cancel input"
+
+# Smart paste (recommended)
+[[mgr.prepend_keymap]]
+on = "p"
+run = "plugin smart-paste"
+desc = "Paste into hovered directory or CWD"
+
+# Toggle-pane plugin (modern version from yazi-rs/plugins)
+# Choose ONE of the following approaches:
+
+# Option A: Separate keys (recommended if you want quick access)
+[[mgr.prepend_keymap]]
+on = "T"
+run = "plugin toggle-pane min-preview"
+desc = "Minimize / hide preview pane"
+
+[[mgr.prepend_keymap]]
+on = "<C-t>"
+run = "plugin toggle-pane max-preview"
+desc = "Maximize / restore preview pane"
+
+# Option B: If you prefer a single key with sub-modes (multi-key)
+# [[mgr.prepend_keymap]]
+# on = [ "T", "m" ]
+# run = "plugin toggle-pane min-preview"
+# desc = "Minimize preview"
+
+# [[mgr.prepend_keymap]]
+# on = [ "T", "M" ]
+# run = "plugin toggle-pane max-preview"
+# desc = "Maximize preview"
+
+[[mgr.prepend_keymap]]
+on = "F"
+run = "plugin smart-filter"
+desc = "Smart filter"
+
+[[mgr.prepend_keymap]]
+on = "l"
+run = "plugin smart-enter"
+desc = "Enter child directory or open file"
+
+[[mgr.prepend_keymap]]
+on = [ "<C-d>" ]
+run = "plugin diff"
+desc = "Diff selected with hovered file"
+
+[[mgr.prepend_keymap]]
+on = [ "+" ]
+run = "plugin zoom 1"
+desc = "Zoom in hovered file"
+
+[[mgr.prepend_keymap]]
+on = [ "-" ]
+run = "plugin zoom -1"
+desc = "Zoom out hovered file"
+
+[[mgr.prepend_keymap]]
+on = [ "g", "c" ]
+run = "plugin vcs-files"
+desc = "Show Git file changes"
+
+[[mgr.prepend_keymap]]
+on = "f"
+run = "plugin jump-to-char"
+desc = "Jump to char"
+
+[[mgr.prepend_keymap]]
+on = "M"
+run = "plugin mount"
+desc = "Mount manager"

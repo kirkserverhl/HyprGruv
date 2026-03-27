@@ -141,3 +141,4 @@ if [[ $TERM == "kitty" && -t 1 ]]; then
   # Uncomment if you still want a quote:
   # command -v fortune >/dev/null && fortune | lsd-print
 fi
+alias doom="~/terminal-doom/terminal-doom"

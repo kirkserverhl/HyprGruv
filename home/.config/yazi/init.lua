@@ -40,3 +40,9 @@ require("eza-preview"):setup({
 	-- Whether to show target file info instead of symlink info (default: false)
 	dereference = false,
 })
+
+if os.getenv("NVIM") then
+	require("toggle-pane"):entry("min-preview")
+end
+
+require("full-border"):setup()

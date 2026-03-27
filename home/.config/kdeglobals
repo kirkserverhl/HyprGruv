@@ -21,13 +21,13 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=187,169,101
+BackgroundAlternate=152,92,78
 BackgroundNormal=53,53,53
-DecorationFocus=245,219,122
-DecorationHover=245,219,122
-ForegroundActive=245,219,122
+DecorationFocus=195,109,90
+DecorationHover=195,109,90
+ForegroundActive=195,109,90
 ForegroundInactive=160,160,160
-ForegroundLink=245,219,122
+ForegroundLink=235,196,190
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -35,69 +35,33 @@ ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
 [Colors:Complementary]
-BackgroundAlternate[$d]
-BackgroundNormal[$d]
-DecorationFocus=245,219,122
-DecorationHover=245,219,122
-ForegroundActive=245,219,122
-ForegroundInactive[$d]
-ForegroundLink=245,219,122
-ForegroundNegative[$d]
-ForegroundNeutral[$d]
-ForegroundNormal[$d]
-ForegroundPositive[$d]
-ForegroundVisited[$d]
-
-[Colors:Header]
-BackgroundAlternate[$d]
-BackgroundNormal[$d]
-DecorationFocus[$d]
-DecorationHover[$d]
-ForegroundActive[$d]
-ForegroundInactive[$d]
-ForegroundLink[$d]
-ForegroundNegative[$d]
-ForegroundNeutral[$d]
-ForegroundNormal[$d]
-ForegroundPositive[$d]
-ForegroundVisited[$d]
-
-[Colors:Header][Inactive]
-BackgroundAlternate[$d]
-BackgroundNormal[$d]
-DecorationFocus[$d]
-DecorationHover[$d]
-ForegroundActive[$d]
-ForegroundInactive[$d]
-ForegroundLink[$d]
-ForegroundNegative[$d]
-ForegroundNeutral[$d]
-ForegroundNormal[$d]
-ForegroundPositive[$d]
-ForegroundVisited[$d]
+DecorationFocus=195,109,90
+DecorationHover=195,109,90
+ForegroundActive=195,109,90
+ForegroundLink=195,109,90
 
 [Colors:Selection]
-BackgroundAlternate=185,166,98
-BackgroundNormal=185,166,98
-DecorationFocus=245,219,122
-DecorationHover=245,219,122
-ForegroundActive=245,219,122
-ForegroundInactive=0,0,0
-ForegroundLink=245,219,122
+BackgroundAlternate=150,89,76
+BackgroundNormal=150,89,76
+DecorationFocus=195,109,90
+DecorationHover=195,109,90
+ForegroundActive=195,109,90
+ForegroundInactive=255,255,255
+ForegroundLink=235,196,190
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
-ForegroundNormal=0,0,0
+ForegroundNormal=255,255,255
 ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
 [Colors:Tooltip]
 BackgroundAlternate=0,0,0
 BackgroundNormal=0,0,0
-DecorationFocus=245,219,122
-DecorationHover=245,219,122
-ForegroundActive=245,219,122
+DecorationFocus=195,109,90
+DecorationHover=195,109,90
+ForegroundActive=195,109,90
 ForegroundInactive=225,225,225
-ForegroundLink=245,219,122
+ForegroundLink=195,109,90
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -107,11 +71,11 @@ ForegroundVisited=255,102,102
 [Colors:View]
 BackgroundAlternate=50,50,50
 BackgroundNormal=45,45,45
-DecorationFocus=245,219,122
-DecorationHover=245,219,122
-ForegroundActive=245,219,122
+DecorationFocus=195,109,90
+DecorationHover=195,109,90
+ForegroundActive=195,109,90
 ForegroundInactive=160,160,160
-ForegroundLink=245,219,122
+ForegroundLink=235,196,190
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -121,11 +85,11 @@ ForegroundVisited=255,102,102
 [Colors:Window]
 BackgroundAlternate=53,53,53
 BackgroundNormal=53,53,53
-DecorationFocus=245,219,122
-DecorationHover=245,219,122
-ForegroundActive=245,219,122
+DecorationFocus=195,109,90
+DecorationHover=195,109,90
+ForegroundActive=195,109,90
 ForegroundInactive=160,160,160
-ForegroundLink=245,219,122
+ForegroundLink=235,196,190
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -138,7 +102,7 @@ History Items[$e]=file:$HOME/wallpaper
 Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
 
 [General]
-AccentColor=245,219,122
+AccentColor=195,109,90
 ColorSchemeHash=186f38e4553082f3b323e64586aa4b75156053b1
 UseSystemBell=true
 accentColorFromWallpaper=true
@@ -148,6 +112,8 @@ Theme=Gruvbox-Plus-Dark
 
 [KDE]
 LookAndFeelPackage=Ant-Dark
+contrast=0
+frameContrast=0.2
 widgetStyle=qt6ct-style
 
 [KFileDialog Settings]
