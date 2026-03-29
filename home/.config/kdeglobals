@@ -121,8 +121,6 @@ Allow Expansion=false
 Automatically select filename extension=true
 Breadcrumb Navigation=true
 Decoration position=0
-LocationCombo Completionmode=5
-PathCombo Completionmode=5
 Show Full Path=false
 Show Inline Previews=true
 Show Preview=false
@@ -133,7 +131,7 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=173
-View Style=Simple
+View Style=Detail
 
 [WM]
 activeBackground=45,45,45
