@@ -23,6 +23,7 @@ Mouse forward button action=0
 Open New Tab To The Right Of Current=false
 Output History Limit=100
 Output With Date=false
+PinnedDocuments=
 Quickopen Filter Mode=0
 Quickopen List Mode=true
 Recent File List Entry Count=10
@@ -75,6 +76,7 @@ SetEditor=false
 [MainWindow]
 2 screens: Height=1920
 2 screens: Width=1080
+2 screens: Window-Maximized=true
 3 screens: Height=900
 3 screens: Width=1600
 

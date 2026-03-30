@@ -88,3 +88,7 @@ video/x-anim=vlc.desktop
 video/x-flic=vlc.desktop
 video/x-flv=vlc.desktop
 video/x-nsv=vlc.desktop
+x-scheme-handler/tel=ringcentral-community-app.desktop
+x-scheme-handler/callto=ringcentral-community-app.desktop
+x-scheme-handler/rcvdt=ringcentral-community-app.desktop
+x-scheme-handler/rcapp=ringcentral-community-app.desktop
