@@ -67,6 +67,7 @@ alias gp='git push'; alias gpl='git pull'
 alias gsp='git stash && git pull'
 alias ping='ping -c 5'; alias fastping='ping -c 100 -i .2'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
+# echo 'alias hyprconf="cd ~/.config/hypr/conf"' >> ~/.zshrc
 # ─────────────────────────────────────────────────────
 # Functions
 # ─────────────────────────────────────────────────────
@@ -143,3 +144,21 @@ if [[ $TERM == "kitty" && -t 1 ]]; then
   # command -v fortune >/dev/null && fortune | lsd-print
 fi
 alias doom="~/terminal-doom/terminal-doom"
+alias hyprconf="cd ~/.config/hypr/conf && y"
+alias hyprconf="cd ~/.config/hypr/conf && y"
+alias hyprconf="cd ~/.config/hypr/conf && y"
+
+# Yazi wrapper - changes directory when you quit Yazi
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+# Atuin
+eval "$(atuin init zsh)"
+
+. "$HOME/.atuin/bin/env"

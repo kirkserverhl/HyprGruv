@@ -202,3 +202,33 @@ Traceback (most recent call last):
     for f in os.listdir(d):
              ~~~~~~~~~~^^^
 FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+30/03/26 (00:53:38) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+30/03/26 (01:06:15) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+30/03/26 (01:43:49) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+30/03/26 (01:44:56) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+30/03/26 (01:46:57) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
