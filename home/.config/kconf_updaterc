@@ -36,9 +36,9 @@ done=kwin-6.1-remove-gridview-expose-shortcuts-x11,kwin-6.0-reset-active-mouse-s
 mtime=1774455964
 
 [migrate-calendar-to-plugin-id.upd]
-ctime=1774376870
+ctime=1774748520
 done=kwin-6.1-remove-gridview-expose-shortcuts,migrate-calendar-plugins,kwin-6.5-showpaint-changes
-mtime=1773839243
+mtime=1774701237
 
 [plasma-systemmonitor.upd]
 ctime=1774376889
@@ -46,41 +46,41 @@ done=migrate-calendar-plugins,memory-column
 mtime=1773841058
 
 [plasma6.0-remove-dpi-settings.upd]
-ctime=1774376870
+ctime=1774748520
 done=memory-column,plasma6.0-remove-dpi-settings
-mtime=1773839243
+mtime=1774701237
 
 [plasma6.0-remove-old-shortcuts.upd]
-ctime=1774376870
+ctime=1774748520
 done=plasma6.0-remove-dpi-settings,plasma6.0-remove-old-shortcuts
-mtime=1773839243
+mtime=1774701237
 
 [plasma6.3-update-clipboard-database-2-to-3.upd]
-ctime=1774376870
+ctime=1774748520
 done=plasma6.0-remove-old-shortcuts,plasma6.3-update-clipboard-database-2-to-3
-mtime=1773839243
+mtime=1774701237
 
 [plasma6.4-migrate-fullscreen-notifications-to-dnd.upd]
-ctime=1774376870
+ctime=1774748520
 done=plasma6.3-update-clipboard-database-2-to-3,plasma6.4-migrate-fullscreen-notifications-to-dnd
-mtime=1773839243
+mtime=1774701237
 
 [plasmashell-6.0-keep-custom-position-of-panels.upd]
-ctime=1774376870
+ctime=1774748520
 done=plasma6.4-migrate-fullscreen-notifications-to-dnd,plasmashell-6.0-keep-custom-position-of-panels
-mtime=1773839243
+mtime=1774701237
 
 [plasmashell-6.0-keep-default-floating-setting-for-plasma-5-panels.upd]
-ctime=1774376870
+ctime=1774748520
 done=plasmashell-6.0-keep-custom-position-of-panels,plasmashell-6.0-keep-default-floating-setting-for-plasma-5-panels
-mtime=1773839243
+mtime=1774701237
 
 [plasmashell-6.5-remove-stop-activity-shortcut.upd]
-ctime=1774376870
+ctime=1774748520
 done=plasmashell-6.5-remove-stop-activity-shortcut
-mtime=1773839243
+mtime=1774701237
 
 [spectacle.upd]
-ctime=1774376892
+ctime=1774748521
 done=plasmashell-6.0-keep-default-floating-setting-for-plasma-5-panels,24.02.0-video_format,24.02.0-keep_old_save_location,24.02.0-rename_settings,24.02.0-keep_old_filename_templates,24.05.2-change_placeholder_format,plasmashell-6.5-remove-stop-activity-shortcut
-mtime=1773841460
+mtime=1774699229

@@ -55,7 +55,7 @@ if command -v bat >/dev/null; then
 else
   alias less='less -R'
 fi
-alias ..='cd ..'; alias ...='cd ../..'; alias ....='cd ../../..'; alias .....='cd ../../../../..'
+alias ..='cd ..&& ls'; alias ...='cd ../.. && ls'; alias ....='cd ../../.. && ls'; alias .....='cd ../../../../.. && ls'
 alias bd='cd "$OLDPWD"'
 alias rmd='/bin/rm -rfv'
 alias hypr='$EDITOR ~/.config/hypr/'
@@ -67,7 +67,6 @@ alias gp='git push'; alias gpl='git pull'
 alias gsp='git stash && git pull'
 alias ping='ping -c 5'; alias fastping='ping -c 100 -i .2'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
-# echo 'alias hyprconf="cd ~/.config/hypr/conf"' >> ~/.zshrc
 # ─────────────────────────────────────────────────────
 # Functions
 # ─────────────────────────────────────────────────────
