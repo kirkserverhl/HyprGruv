@@ -96,11 +96,6 @@ ForegroundNormal=255,255,255
 ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
-[DirSelect Dialog]
-DirSelectDialog Size=820,581
-History Items[$e]=file:$HOME/wallpaper
-Splitter State=\x00\x00\x00\xff\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x8c\x00\x00\x02\xa8\x00\xff\xff\xff\xff\x01\x00\x00\x00\x01\x00
-
 [General]
 AccentColor=195,109,90
 ColorSchemeHash=186f38e4553082f3b323e64586aa4b75156053b1

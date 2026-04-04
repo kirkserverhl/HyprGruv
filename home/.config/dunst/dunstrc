@@ -43,7 +43,7 @@
     origin = top-center
 
     # Offset from the origin
-    offset = 30x30
+    offset = (30,30)
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
@@ -71,7 +71,7 @@
     progress_bar_max_width = 300
 
     # Corner radius for the progress bar. 0 disables rounded corners.
-    progress_bar_corner_radius = 10
+    progress_bar_corner_radius = 5
 
     # Corner radius for the icon image.
     icon_corner_radius = 0
@@ -213,7 +213,7 @@
     # Set icon theme (only used for recursive icon lookup)
     # icon_theme = "Papirus-Dark,Adwaita"
     # You can also set multiple icon themes, with the leftmost one being used first.
-    icon_theme = "Gruvbox Plus Dark, Gruvbox-Material-Dark"
+    icon_theme = "Gruvbox-Plus-Dark"
 
     # Align icons left/right/top/off
     icon_position = left

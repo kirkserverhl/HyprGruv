@@ -1,1 +1,1 @@
-/gruv-blur;/gruv-blur/colored
+/gruv;/gruv/colored
