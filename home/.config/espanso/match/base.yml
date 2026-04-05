@@ -1,0 +1,31 @@
+name: "base"
+
+matches:
+  - trigger: "btw"
+    replace: "By the way,"
+
+  # You can add more complex ones with variables, dates, shell commands, forms, etc.
+  #- trigger: "date"
+  #  replace: "{{date}}"
+
+  # Custom customer support / tech support shortcuts
+  - trigger: "xxxx"
+    replace: "➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖"
+
+  - trigger: "ift"
+    replace: "If there is anything else we can assist with, please let us know!"
+
+  - trigger: "wwro"
+    replace: "We will reach out to you with updates once more information is available."
+
+  - trigger: "tkfl"
+    replace: "We would be happy to schedule a time to assist, or the merchant can reach out at their convenience. Our tech departments have representatives available Monday-Friday, 8 AM-8 PM EST. Our phone number is (984) 272-2568."
+
+  - trigger: "oof"
+    replace: "I will be out of the office Monday and Tuesday, but if you need any assistance, please reach out to our support team."
+
+  #- trigger: "rtn"
+  #  replace: "Reference Ticket:"
+
+  - trigger: "yrw"
+    replace: "We're committed to your success—if there's anything else we can support you with, let us know!"
