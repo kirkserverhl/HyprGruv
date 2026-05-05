@@ -21,13 +21,13 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=152,92,78
+BackgroundAlternate=190,174,103
 BackgroundNormal=53,53,53
-DecorationFocus=195,109,90
-DecorationHover=195,109,90
-ForegroundActive=195,109,90
+DecorationFocus=250,226,125
+DecorationHover=250,226,125
+ForegroundActive=250,226,125
 ForegroundInactive=160,160,160
-ForegroundLink=235,196,190
+ForegroundLink=250,226,125
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -35,33 +35,33 @@ ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
 [Colors:Complementary]
-DecorationFocus=195,109,90
-DecorationHover=195,109,90
-ForegroundActive=195,109,90
-ForegroundLink=195,109,90
+DecorationFocus=250,226,125
+DecorationHover=250,226,125
+ForegroundActive=250,226,125
+ForegroundLink=250,226,125
 
 [Colors:Selection]
-BackgroundAlternate=150,89,76
-BackgroundNormal=150,89,76
-DecorationFocus=195,109,90
-DecorationHover=195,109,90
-ForegroundActive=195,109,90
-ForegroundInactive=255,255,255
-ForegroundLink=235,196,190
+BackgroundAlternate=188,171,101
+BackgroundNormal=188,171,101
+DecorationFocus=250,226,125
+DecorationHover=250,226,125
+ForegroundActive=250,226,125
+ForegroundInactive=0,0,0
+ForegroundLink=250,226,125
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
-ForegroundNormal=255,255,255
+ForegroundNormal=0,0,0
 ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
 [Colors:Tooltip]
 BackgroundAlternate=0,0,0
 BackgroundNormal=0,0,0
-DecorationFocus=195,109,90
-DecorationHover=195,109,90
-ForegroundActive=195,109,90
+DecorationFocus=250,226,125
+DecorationHover=250,226,125
+ForegroundActive=250,226,125
 ForegroundInactive=225,225,225
-ForegroundLink=195,109,90
+ForegroundLink=250,226,125
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -71,11 +71,11 @@ ForegroundVisited=255,102,102
 [Colors:View]
 BackgroundAlternate=50,50,50
 BackgroundNormal=45,45,45
-DecorationFocus=195,109,90
-DecorationHover=195,109,90
-ForegroundActive=195,109,90
+DecorationFocus=250,226,125
+DecorationHover=250,226,125
+ForegroundActive=250,226,125
 ForegroundInactive=160,160,160
-ForegroundLink=235,196,190
+ForegroundLink=250,226,125
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -85,11 +85,11 @@ ForegroundVisited=255,102,102
 [Colors:Window]
 BackgroundAlternate=53,53,53
 BackgroundNormal=53,53,53
-DecorationFocus=195,109,90
-DecorationHover=195,109,90
-ForegroundActive=195,109,90
+DecorationFocus=250,226,125
+DecorationHover=250,226,125
+ForegroundActive=250,226,125
 ForegroundInactive=160,160,160
-ForegroundLink=235,196,190
+ForegroundLink=250,226,125
 ForegroundNegative=240,1,1
 ForegroundNeutral=255,221,0
 ForegroundNormal=255,255,255
@@ -97,7 +97,7 @@ ForegroundPositive=128,255,128
 ForegroundVisited=255,102,102
 
 [General]
-AccentColor=195,109,90
+AccentColor=250,226,125
 ColorSchemeHash=186f38e4553082f3b323e64586aa4b75156053b1
 UseSystemBell=true
 accentColorFromWallpaper=true
@@ -114,7 +114,7 @@ widgetStyle=qt6ct-style
 [KFileDialog Settings]
 Allow Expansion=false
 Automatically select filename extension=true
-Breadcrumb Navigation=true
+Breadcrumb Navigation=false
 Decoration position=0
 Show Full Path=false
 Show Inline Previews=true

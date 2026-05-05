@@ -1,5 +1,6 @@
 /* Dark theme. */
-@import "~/.cache/wal/colors-rofi-dark"
+//@import "~/.cache/wal/colors-rofi-dark"
+@import "~/.config/rofi/colors.rasi"
 
 ///* Light theme. */
 ///@import "~/.cache/wal/colors-rofi-light"

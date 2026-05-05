@@ -3,6 +3,18 @@ Id_1=f9ff7753-3d3f-4d7a-bcc4-3a0bc6f39b63
 Number=1
 Rows=1
 
+[Tiling]
+padding=4
+
+[Tiling][98f05b79-b574-5047-8393-5adbe5b276df]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][d080135a-8da0-5a6b-95bb-e9207cc72673]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][ecf3f33d-7f94-5d27-b495-fd51f68d53ba]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][f9ff7753-3d3f-4d7a-bcc4-3a0bc6f39b63][]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 

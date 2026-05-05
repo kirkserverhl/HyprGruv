@@ -1,11 +1,9 @@
 #!/bin/bash
-#                _ _
 # __      ____ _| | |_ __   __ _ _ __   ___ _ __
 # \ \ /\ / / _` | | | '_ \ / _` | '_ \ / _ \ '__|
 #  \ V  V / (_| | | | |_) | (_| | |_) |  __/ |
 #   \_/\_/ \__,_|_|_| .__/ \__,_| .__/ \___|_|
 #                   |_|         |_|
-#
 # -----------------------------------------------------
 # Check to use wallpaper cache
 # -----------------------------------------------------
@@ -70,7 +68,7 @@ tmpwallpaper=$wallpaper
 if [ ! -f $cachefile ]; then
     touch $cachefile
 fi
-echo "$wallpaper" > $cachefile
+echo "$wallpaper" >$cachefile
 echo ":: Path of current wallpaper copied to $cachefile"
 
 # -----------------------------------------------------
@@ -109,9 +107,9 @@ fi
 # Execute pywal
 # -----------------------------------------------------
 
-echo ":: Execute pywal with $used_wallpaper"
-wal -q -i "$used_wallpaper"
-source "$HOME/.cache/wal/colors.sh"
+# echo ":: Execute pywal with $used_wallpaper"
+# wal -q -i "$used_wallpaper"
+# source "$HOME/.cache/wal/colors.sh"
 
 # -----------------------------------------------------
 # Reload Waybar
@@ -124,9 +122,23 @@ source "$HOME/.cache/wal/colors.sh"
 # Pywalfox
 # -----------------------------------------------------
 
-if type pywalfox > /dev/null 2>&1; then
+if type pywalfox >/dev/null 2>&1; then
     pywalfox update
 fi
+
+# -----------------------------------------------------
+# Execute Matugen instead of pywal
+# -----------------------------------------------------
+echo ":: Execute matugen with $used_wallpaper"
+
+# Main color generation
+matugen image "$used_wallpaper" -m dark # or --mode dark
+# For light mode: matugen image "$used_wallpaper" -m light
+
+# Optional: You can also pass --variant or other flags
+# matugen image "$used_wallpaper" -m dark --contrast 0.8
+
+echo ":: Matugen color generation completed"
 
 # -----------------------------------------------------
 # Created blurred wallpaper
@@ -154,7 +166,7 @@ cp $generatedversions/blur-$blur-$effect-$wallpaperfilename.png $blurredwallpape
 if [ ! -f $rasifile ]; then
     touch $rasifile
 fi
-echo "* { current-image: url(\"$blurredwallpaper\", height); }" > "$rasifile"
+echo "* { current-image: url(\"$blurredwallpaper\", height); }" >"$rasifile"
 
 # -----------------------------------------------------
 # Created square wallpaper

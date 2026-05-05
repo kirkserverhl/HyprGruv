@@ -1,0 +1,28 @@
+{
+    "checksum": "84a929e73b8141fdc27b48835e62dd0a",
+    "wallpaper": "/home/kirk/wallpaper/andre-benz-unsplash.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#12242a",
+        "foreground": "#c3c8c9",
+        "cursor": "#c3c8c9"
+    },
+    "colors": {
+        "color0": "#12242a",
+        "color1": "#51666A",
+        "color2": "#A84D4C",
+        "color3": "#99827E",
+        "color4": "#58758A",
+        "color5": "#6E8D97",
+        "color6": "#6999C0",
+        "color7": "#c3c8c9",
+        "color8": "#617176",
+        "color9": "#51666A",
+        "color10": "#A84D4C",
+        "color11": "#99827E",
+        "color12": "#58758A",
+        "color13": "#6E8D97",
+        "color14": "#6999C0",
+        "color15": "#c3c8c9"
+    }
+}

@@ -80,6 +80,7 @@ SetEditor=false
 3 screens: Height=900
 3 screens: Width=1600
 3 screens: Window-Maximized=true
+4 screens: Window-Maximized=true
 
 [UiSettings]
 ColorScheme=gruvbox dark

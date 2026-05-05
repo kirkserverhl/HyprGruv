@@ -7,6 +7,10 @@ export PATH="$HOME/scripts:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
 export TERMINAL=kitty
 
+# Test Path
+export PATH="/home/$USER/.local/bin:$PATH"
+
+
 if command -v bat >/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 fi
@@ -43,6 +47,14 @@ setopt extended_history hist_expire_dups_first hist_ignore_all_dups \
        complete_in_word list_ambiguous nolisttypes listpacked automenu autocd
 
 unsetopt correct
+
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Test
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
 
 # =====================================================
 # Aliases
@@ -94,6 +106,19 @@ alias za='zoxide add'
 alias zr='zoxide remove'
 alias zl='zoxide query -l'
 alias zi='zoxide query -i'
+
+
+# Test
+alias i="yay -S"
+alias r="yay -Rns"
+alias u="yay -Syu"
+alias s="yay -Ss"
+alias q="yay -Q"
+
+# Test
+plugins=(git zsh-syntax-highlighting)
+
+source $ZSH/oh-my-zsh.sh
 
 # =====================================================
 # Functions
@@ -253,3 +278,7 @@ eval "$(thefuck --alias)"
 # =====================================================
 eval "$(atuin init zsh)"
 . "$HOME/.atuin/bin/env"
+
+# Control + Backspace
+bindkey '^H' backward-kill-word
+

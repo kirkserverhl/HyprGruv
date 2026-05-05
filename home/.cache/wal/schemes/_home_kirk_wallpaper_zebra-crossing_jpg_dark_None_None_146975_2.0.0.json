@@ -1,0 +1,28 @@
+{
+    "checksum": "2c9b5322b00a8b210624ae86d99a92be",
+    "wallpaper": "/home/kirk/wallpaper/zebra-crossing.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0c1d1d",
+        "foreground": "#c2c6c6",
+        "cursor": "#c2c6c6"
+    },
+    "colors": {
+        "color0": "#0c1d1d",
+        "color1": "#545945",
+        "color2": "#6F7255",
+        "color3": "#7F805E",
+        "color4": "#9B986E",
+        "color5": "#BFB983",
+        "color6": "#DBD293",
+        "color7": "#c2c6c6",
+        "color8": "#5c7070",
+        "color9": "#545945",
+        "color10": "#6F7255",
+        "color11": "#7F805E",
+        "color12": "#9B986E",
+        "color13": "#BFB983",
+        "color14": "#DBD293",
+        "color15": "#c2c6c6"
+    }
+}

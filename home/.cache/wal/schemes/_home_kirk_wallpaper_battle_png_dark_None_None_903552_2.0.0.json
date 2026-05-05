@@ -1,0 +1,28 @@
+{
+    "checksum": "01fe36ded716d7a54b311274ebc88e25",
+    "wallpaper": "/home/kirk/wallpaper/battle.png",
+    "alpha": "100",
+    "special": {
+        "background": "#101213",
+        "foreground": "#c3c3c4",
+        "cursor": "#c3c3c4"
+    },
+    "colors": {
+        "color0": "#101213",
+        "color1": "#C99727",
+        "color2": "#958675",
+        "color3": "#498688",
+        "color4": "#A89984",
+        "color5": "#8AA192",
+        "color6": "#BCAD92",
+        "color7": "#c3c3c4",
+        "color8": "#59636e",
+        "color9": "#C99727",
+        "color10": "#958675",
+        "color11": "#498688",
+        "color12": "#A89984",
+        "color13": "#8AA192",
+        "color14": "#BCAD92",
+        "color15": "#c3c3c4"
+    }
+}

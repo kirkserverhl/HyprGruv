@@ -1,7 +1,3 @@
-[FileDialogSize]
-2 screens: Window-Maximized=true
-3 screens: Window-Maximized=true
-
 [General]
 Days Meta Infos=30
 Save Meta Infos=true
@@ -20,7 +16,7 @@ listViewIconSize=32
 [KTextEditor Renderer]
 Animate Bracket Matching=false
 Auto Color Theme Selection=true
-Color Theme=gruvbox Dark
+Color Theme=Breeze Dark
 Line Height Multiplier=1
 Show Indentation Lines=false
 Show Whole Bracket Expression=false
@@ -33,6 +29,7 @@ Word Wrap Marker=false
 2 screens: Width=575
 2 screens: Window-Maximized=true
 3 screens: Window-Maximized=true
+4 screens: Window-Maximized=true
 
 [UiSettings]
 ColorScheme=KvRoughGlass

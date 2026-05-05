@@ -1,6 +1,10 @@
 [DetailsMode]
 RightPadding=0
 
+[ExtractDialog]
+3 screens: Window-Maximized=true
+DirHistory[$e]=$HOME/Documents/hyprcourse
+
 [General]
 Version=202
 ViewPropsTimestamp=2025,9,28,17,24,20.062

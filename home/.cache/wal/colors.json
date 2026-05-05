@@ -1,29 +1,22 @@
 {
-    "checksum": "b00056a4d74687261f402855c5de814c",
-    "wallpaper": "/home/kirk/wallpaper/fractal.webp",
-    "alpha": "100",
-
-    "special": {
-        "background": "#111212",
-        "foreground": "#c3c3c3",
-        "cursor": "#c3c3c3"
-    },
-    "colors": {
-        "color0": "#111212",
-        "color1": "#556E6A",
-        "color2": "#57847C",
-        "color3": "#6E827C",
-        "color4": "#3E8585",
-        "color5": "#488687",
-        "color6": "#709A92",
-        "color7": "#c3c3c3",
-        "color8": "#6e5959",
-        "color9": "#556E6A",
-        "color10": "#57847C",
-        "color11": "#6E827C",
-        "color12": "#3E8585",
-        "color13": "#488687",
-        "color14": "#709A92",
-        "color15": "#c3c3c3"
-    }
+  "wallpaper": "/home/kirk/.hyprgruv/home/wallpaper/alley_gruv.jpg",
+  "alpha": "100",
+  "colors": {
+    "color0": "#1a110e",
+    "color1": "",
+    "color2": "",
+    "color3": "#ffb59a",
+    "color4": "",
+    "color5": "#e7beaf",
+    "color6": "",
+    "color7": "#3d322f",
+    "color8": "",
+    "color9": "",
+    "color10": "#ffb59a",
+    "color11": "",
+    "color12": "",
+    "color13": "#e7beaf",
+    "color14": "",
+    "color15": "#f1dfd9"
+  }
 }
