@@ -1,75 +1,106 @@
-@import 'colors/colors.css';
+----------------------------------------------------- 
+*/
 
-window {
-    font-family: "SF Pro Text", "GeistMono Nerd Font Propo";
-    font-size: 1.2em;
-    color:  @fg; /* text */
-    background-color: alpha(@bg0, 0.6);
-} 
+/* -----------------------------------------------------
+ * Import Mutagen colors 
+ * ----------------------------------------------------- */
+@import "colors/colors.css";
+/* -----------------------------------------------------
+ * Import Pywal colors 
+ * ----------------------------------------------------- */
+@import '../../.cache/wal/colors-wlogout.css';
+/* -----------------------------------------------------
+ * General 
+ * ----------------------------------------------------- */
 
-button {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 20%;
-    background-color: transparent;
-    animation: gradient_f 20s ease-in-out infinite;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 0 0 10px 2px transparent;
-    border-radius: 36px;
-    margin: 10px;
-    color: @fg;
+* {
+  font-family:
+    "HeavyData Nerd Font", "Fira Sans Semibold", FontAwesome, Roboto, Helvetica,
+    Arial, sans-serif;
+  background-image: none;
+  transition: 20ms;
+  box-shadow: none;
 }
 
+window {
+  background: url("../settings/cache/blurred_wallpaper.png");
+  background-size: cover;
+  font-size: 16pt;
+  color: #cdd6f4;
+}
+
+button {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20%;
+  background-color: rgba(200, 220, 255, 0);
+  animation: gradient_f 20s ease-in infinite;
+  border-radius: 80px; /* Increased border radius for a more rounded look */
+  border: 0px;
+}
 button:focus {
-    box-shadow: none;
-    outline-style: none;
-    background-size: 20%;
+  background-size: 22%;
+  border: 0px;
 }
 
 button:hover {
-    background-size: 50%;
-    outline-style: none;
-    box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
-    background-color: @blue;
-    color: transparent;
+  background-color: @color11;
+  opacity: 0.8;
+  color: #cdd6f4;
+  background-size: 30%;
+  margin: 30px;
+  border-radius: 80px;
+  transition:
+    all 0.3s cubic-bezier(0.55, 0, 0.28, 1.682),
+    box-shadow 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+  box-shadow: 0 0 50px @color7;
 }
 
-#shutdown {
-    background-image: image(url("./icons/power.png"));
+/* Adjust the size of the icon or content inside the button */
+button span {
+  font-size: 1.2em; /* Increase the font size */
 }
 
-#shutdown:hover {
-  background-image: image(url("./icons/power-hover.png"));
+/* 
+---
+
+--------------------------------------------------
+  Buttons
+  -----------------------------------------------------
+  */
+  #lock {
+  margin: 10px;
+  border-radius: 20px;
+  background-image: image(url("icons/lock.png"));
 }
 
 #logout {
-    background-image: image(url("./icons/logout.png"));
+  margin: 10px;
+  border-radius: 20px;
+  background-image: image(url("icons/logout.png"));
 }
 
-#logout:hover {
-  background-image: image(url("./icons/logout-hover.png"));
+#suspend {
+  margin: 10px;
+  border-radius: 20px;
+  background-image: image(url("icons/suspend.png"));
+}
+
+#hibernate {
+  margin: 10px;
+  border-radius: 20px;
+  background-image: image(url("icons/hibernate.png"));
+}
+
+#shutdown {
+  margin: 10px;
+  border-radius: 20px;
+  background-image: image(url("icons/shutdown.png"));
 }
 
 #reboot {
-    background-image: image(url("./icons/restart.png"));
-}
-
-#reboot:hover {
-  background-image: image(url("./icons/restart-hover.png"));
-}
-
-#lock {
-    background-image: image(url("./icons/lock.png"));
-}
-
-#lock:hover {
-  background-image: image(url("./icons/lock-hover.png"));
-}
-
-#sleep {
-    background-image: image(url("./icons/hibernate.png"));
-}
-
-#sleep:hover {
-  background-image: image(url("./icons/hibernate-hover.png"));
+  margin: 10px;
+  border-radius: 20px;
+  background-image: image(url("icons/reboot.png"));
 }

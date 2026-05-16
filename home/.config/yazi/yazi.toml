@@ -19,6 +19,8 @@ title_format = "{cwd}"
 cache_dir = "~/.cache/yazi"
 image_delay = 100
 image_filter = "catmull-rom"
+max_width = 2000
+max_height = 2000
 image_quality = 90
 sixel_fraction = 10
 tab_size = 4
@@ -34,12 +36,12 @@ image_quality_sort_translt = false
 [plugin]
 prepend_preloaders = [
     # Replace magick, image, video with mediainfo
-    { mime = "{audio,video,image}/*", run = "mediainfo" },
+    { mime = "{audio,video}/*", run = "mediainfo" },
     { mime = "application/subrip", run = "mediainfo" },
 ]
 prepend_previewers = [
     # Replace magick, image, video with mediainfo
-    { mime = "{audio,video,image}/*", run = "mediainfo"},
+    { mime = "{audio,video}/*", run = "mediainfo"},
     { mime = "application/subrip", run = "mediainfo" },
     { name = "*/", run = "eza-preview" },
     { name = "*.md", run = "glow" }, # for markdown (.md) files

@@ -1,0 +1,3 @@
+[submodule "/home/kirk/.hyprgruv/.config/hypr/hypr-hot-edge"]
+	path = /home/kirk/.hyprgruv/.config/hypr/hypr-hot-edge
+	url = https://github.com/claychinasky/hypr-hot-edge.git

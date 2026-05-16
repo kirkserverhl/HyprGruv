@@ -100,6 +100,8 @@ alias gsp='git stash && git pull'
 alias ping='ping -c 5'
 alias fastping='ping -c 100 -i .2'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
+alias reload='hyprctl reload'
+
 
 # Zoxide
 alias za='zoxide add'

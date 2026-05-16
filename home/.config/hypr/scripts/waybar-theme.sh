@@ -1,1 +1,1 @@
-/alchemy;/alchemy
+/gruv-modern;/gruv-modern/colored
