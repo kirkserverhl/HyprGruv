@@ -110,7 +110,7 @@ alias zl='zoxide query -l'
 alias zi='zoxide query -i'
 
 
-# Test
+# YAY
 alias i="yay -S"
 alias r="yay -Rns"
 alias u="yay -Syu"

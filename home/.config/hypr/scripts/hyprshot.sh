@@ -28,9 +28,9 @@ export EDITOR="$(cat ~/scripts/screenshot-editor.sh)" # renamed for clarity
 option_1="Immediate"
 option_2="Delayed"
 
-option_capture_1="Capture Everything"     # output (monitor)
-option_capture_2="Capture Active Display" # active output
-option_capture_3="Capture Selection"      # region
+option_capture_1="Capture Selection"      # region
+option_capture_2="Capture Everything"     # output (monitor)
+option_capture_3="Capture Active Display" # active output
 
 option_time_1="5s"
 option_time_2="10s"

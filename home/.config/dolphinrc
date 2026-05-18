@@ -21,3 +21,6 @@ MenuBar=Disabled
 
 [Notification Messages]
 ConfirmRenameFileType=false
+
+[Search]
+Location=Everywhere
