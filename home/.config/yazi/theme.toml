@@ -1,6 +1,6 @@
 [flavor]
-dark = "pywal"
-light = "pywal"
+dark = "gruvbox-dark"
+light = "gruvbox-ligt"
 
 [status]
 overall = {}

@@ -3,7 +3,7 @@
 # =====================================================
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/.config/hyprgruv/scripts:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
 export TERMINAL=kitty
 
@@ -97,11 +97,12 @@ alias gc='git commit -m'
 alias gp='git push'
 alias gpl='git pull'
 alias gsp='git stash && git pull'
+#alias gup='cd ~/.hyprgruv && git add . && git commit -m "update" && git push'
 alias ping='ping -c 5'
 alias fastping='ping -c 100 -i .2'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
 alias reload='hyprctl reload'
-
+alias scripts= 'cd ~/.config/hypr/scripts'
 
 # Zoxide
 alias za='zoxide add'

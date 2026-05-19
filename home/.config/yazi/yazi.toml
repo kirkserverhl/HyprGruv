@@ -39,13 +39,13 @@ prepend_preloaders = [
     { mime = "{audio,video}/*", run = "mediainfo" },
     { mime = "application/subrip", run = "mediainfo" },
 ]
-prepend_previewers = [
-    # Replace magick, image, video with mediainfo
-    { mime = "{audio,video}/*", run = "mediainfo"},
-    { mime = "application/subrip", run = "mediainfo" },
-    { name = "*/", run = "eza-preview" },
-    { name = "*.md", run = "glow" }, # for markdown (.md) files
-]
-append_previewers = [
-    { name = "*", run = "hexyl" },
-]
+#prepend_previewers = [
+#    # Replace magick, image, video with mediainfo
+#    { mime = "{audio,video}/*", run = "mediainfo"},
+#    { mime = "application/subrip", run = "mediainfo" },
+#{ name = "*/", run = "eza-preview" },
+#{ name = "*.md", run = "glow" }, # for markdown (.md) files
+#]
+#append_previewers = [
+#    { name = "*", run = "hexyl" },
+#]
