@@ -91,10 +91,10 @@
     "format": "  {}",
     "escape": true,
     "return-type": "json",
-    "exec": "~/scripts/updates.sh",
+    "exec": "~/.config/hypr/scripts/updates.sh",
     "interval": 1800,
-    "on-click": "$(cat ~/scripts/terminal.sh) -e ~/.config/hypr/scripts/installupdates.sh",
-    "on-click-right": "~/scripts/software.sh",
+    "on-click": "$(cat ~/.config/hypr/scripts/terminal.sh) -e ~/.config/hypr/scripts/installupdates.sh",
+    "on-click-right": "~/.config/hypr/scripts/software.sh",
     "tooltip-format": "Left:   Updates ⬆️\nRight: Pacseek 📦️"
   },
 
@@ -109,7 +109,7 @@
   // Waybar Themes
   "custom/waybarthemes": {
     "format": "",
-    "on-click": "~/scripts/themeswitcher.sh",
+    "on-click": "~/.config/hypr/scripts/themeswitcher.sh",
     "on-click-right": "~/.config/hypr/scripts/animations.sh",
     "tooltip-format": "Left:    Waybar      ⏸️\nRight: Animations 🔄"
   },
@@ -230,7 +230,7 @@
   // Memory
   "memory": {
     "format": "/ M {}% ",
-    "on-click": "~/.config/hypr/cripts/system-monitor.sh"
+    "on-click": "~/.config/hypr/scripts/system-monitor.sh"
   },
 
   // Harddisc space used
@@ -300,7 +300,7 @@
     "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
     "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
-    "on-click": "~/scripts/networkmanager.sh",
+    "on-click": "~/.config/hypr/scripts/networkmanager.sh",
     "on-click-right": "~/.config/hypr/scripts/nm-applet.sh toggle"
   },
 

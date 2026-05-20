@@ -16,13 +16,13 @@ prompt='Screenshot'
 mesg="DIR: ~/Screenshots"
 
 # Screenshot Filename
-source ~/scripts/screenshot-filename.sh
+source ~/.config/hypr/scripts/screenshot-filename.sh
 
 # Screenshot Folder
-source ~/scripts/screenshot-folder.sh
+source ~/.config/hypr/scripts/screenshot-folder.sh
 
 # Screenshot Editor (if you still want to use it)
-export EDITOR="$(cat ~/scripts/screenshot-editor.sh)" # renamed for clarity
+export EDITOR="$(cat ~/.config/hypr/scripts/screenshot-editor.sh)" # renamed for clarity
 
 # Options
 option_1="Immediate"

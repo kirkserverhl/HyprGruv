@@ -1,2 +1,2 @@
-wlogout_parameters=$(cat $HOME/scripts/wlogout-parameters.sh)
+wlogout_parameters=$(cat $HOME/.config/hypr/scripts/wlogout-parameters.sh)
 wlogout $wlogout_parameters

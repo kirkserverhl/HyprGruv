@@ -1,22 +1,29 @@
 {
-  "wallpaper": "/home/kirk/.hyprgruv/home/wallpaper/lady.png",
-  "alpha": "100",
-  "colors": {
-    "color0": "#16130b",
-    "color1": "",
-    "color2": "",
-    "color3": "#ddc66e",
-    "color4": "",
-    "color5": "#d2c6a1",
-    "color6": "",
-    "color7": "#38352b",
-    "color8": "",
-    "color9": "",
-    "color10": "#ddc66e",
-    "color11": "",
-    "color12": "",
-    "color13": "#d2c6a1",
-    "color14": "",
-    "color15": "#e9e2d4"
-  }
+    "checksum": "68840f85736e2b0aa65d61ffb1706ac7",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/drawtober_day_26__demons___succubus_by_artificiallycreated_dgdrfx4-pre.jpg",
+    "alpha": "100",
+
+    "special": {
+        "background": "#121113",
+        "foreground": "#c3c3c4",
+        "cursor": "#c3c3c4"
+    },
+    "colors": {
+        "color0": "#121113",
+        "color1": "#8D6159",
+        "color2": "#B8685A",
+        "color3": "#8E716C",
+        "color4": "#AA8778",
+        "color5": "#867E82",
+        "color6": "#A99993",
+        "color7": "#c3c3c4",
+        "color8": "#5a5a6e",
+        "color9": "#8D6159",
+        "color10": "#B8685A",
+        "color11": "#8E716C",
+        "color12": "#AA8778",
+        "color13": "#867E82",
+        "color14": "#A99993",
+        "color15": "#c3c3c4"
+    }
 }

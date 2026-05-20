@@ -1,1 +1,2 @@
-/gruv-modern;/gruv-modern/colored
+/gruv-modern
+/gruv-modern/colored

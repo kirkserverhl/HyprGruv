@@ -4,6 +4,7 @@
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
 export PATH="$HOME/.config/hyprgruv/scripts:$PATH"
+export PATH=Z"HOME/scripts:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
 export TERMINAL=kitty
 
@@ -122,6 +123,8 @@ alias q="yay -Q"
 plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
+
+alias reload="hyprctl reload"
 
 # =====================================================
 # Functions
@@ -285,3 +288,6 @@ eval "$(atuin init zsh)"
 # Control + Backspace
 bindkey '^H' backward-kill-word
 
+export PATH="$HOME/bin:$PATH"
+
+export CLUTTER_BACKEND=wayland

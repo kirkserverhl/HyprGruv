@@ -14,7 +14,7 @@
 #
 sleep 1
 clear
-install_platform="$(cat ~/scripts/platform.sh)"
+install_platform="$(cat ~/.config/hypr/scripts/platform.sh)"
 figlet -f smslant "Updates"
 echo
 
@@ -34,71 +34,71 @@ export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
 # Confirm Start
 # ------------------------------------------------------
 if gum confirm "DO YOU WANT TO START THE UPDATE NOW?"; then
-	echo
-	echo ":: Update started." | lsd-print
+    echo
+    echo ":: Update started." | lsd-print
 elif [ $? -eq 130 ]; then
-	exit 130
+    exit 130
 else
-	echo
-	echo ":: Update canceled."  | lsd-print
-	exit
+    echo
+    echo ":: Update canceled." | lsd-print
+    exit
 fi
 
 # Check if platform is supported
 case $install_platform in
 arch)
-	aur_helper="$(cat ~/scripts/aur.sh)"
+    aur_helper="$(cat ~/.config/hypr/scripts/aur.sh)"
 
-	_isInstalledAUR() {
-		package="$1"
-		check="$($aur_helper -Qs --color always "${package}" | grep "local" | grep "${package} ")"
-		if [ -n "${check}" ]; then
-			echo 0 #'0' means 'true' in Bash
-			return #true
-		fi
-		echo 1 #'1' means 'false' in Bash
-		return #false
-	}
+    _isInstalledAUR() {
+        package="$1"
+        check="$($aur_helper -Qs --color always "${package}" | grep "local" | grep "${package} ")"
+        if [ -n "${check}" ]; then
+            echo 0 #'0' means 'true' in Bash
+            return #true
+        fi
+        echo 1 #'1' means 'false' in Bash
+        return #false
+    }
 
-	if [[ $(_isInstalledAUR "timeshift") == "0" ]]; then
-		echo
-		if gum confirm "DO YOU WANT TO CREATE A SNAPSHOT?"; then
-			echo
-			c=$(gum input --placeholder "Enter a comment for the snapshot...")
-			sudo timeshift --create --comments "$c"
-			sudo timeshift --list
-			sudo grub-mkconfig -o /boot/grub/grub.cfg
-			echo ":: DONE. Snapshot $c created!"
-			echo
-		elif [ $? -eq 130 ]; then
-			echo ":: Snapshot skipped." | lsd-print
-			exit 130
-		else
-			echo ":: Snapshot skipped." | lsd-print
-		fi
-		echo
-	fi
+    if [[ $(_isInstalledAUR "timeshift") == "0" ]]; then
+        echo
+        if gum confirm "DO YOU WANT TO CREATE A SNAPSHOT?"; then
+            echo
+            c=$(gum input --placeholder "Enter a comment for the snapshot...")
+            sudo timeshift --create --comments "$c"
+            sudo timeshift --list
+            sudo grub-mkconfig -o /boot/grub/grub.cfg
+            echo ":: DONE. Snapshot $c created!"
+            echo
+        elif [ $? -eq 130 ]; then
+            echo ":: Snapshot skipped." | lsd-print
+            exit 130
+        else
+            echo ":: Snapshot skipped." | lsd-print
+        fi
+        echo
+    fi
 
-	$aur_helper
+    $aur_helper
 
-	if [[ $(_isInstalledAUR "flatpak") == "0" ]]; then
-		flatpak upgrade
-	fi
-	;;
+    if [[ $(_isInstalledAUR "flatpak") == "0" ]]; then
+        flatpak upgrade
+    fi
+    ;;
 fedora)
-	sudo dnf upgrade
-	;;
+    sudo dnf upgrade
+    ;;
 *)
-	echo ":: ERROR - Platform not supported"  | lsd-print
-	echo "Press [ENTER] to close."
-	read
-	;;
+    echo ":: ERROR - Platform not supported" | lsd-print
+    echo "Press [ENTER] to close."
+    read
+    ;;
 esac
 
-notify-send "Update complete"  | lsd-print
+notify-send "Update complete" | lsd-print
 echo
-echo ":: Update complete"  | lsd-print
+echo ":: Update complete" | lsd-print
 echo
 echo
-echo "Press [ENTER] to close."  | lsd-print
+echo "Press [ENTER] to close." | lsd-print
 read

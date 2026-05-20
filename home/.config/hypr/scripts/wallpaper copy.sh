@@ -70,7 +70,7 @@ tmpwallpaper=$wallpaper
 if [ ! -f $cachefile ]; then
     touch $cachefile
 fi
-echo "$wallpaper" > $cachefile
+echo "$wallpaper" >$cachefile
 echo ":: Path of current wallpaper copied to $cachefile"
 
 # -----------------------------------------------------
@@ -118,13 +118,13 @@ source "$HOME/.cache/wal/colors.sh"
 # -----------------------------------------------------
 
 # killall -SIGUSR2 waybar
-~/scripts/launch.sh
+~/.config/hypr/scripts/launch.sh
 
 # -----------------------------------------------------
 # Pywalfox
 # -----------------------------------------------------
 
-if type pywalfox > /dev/null 2>&1; then
+if type pywalfox >/dev/null 2>&1; then
     pywalfox update
 fi
 
@@ -154,7 +154,7 @@ cp $generatedversions/blur-$blur-$effect-$wallpaperfilename.png $blurredwallpape
 if [ ! -f $rasifile ]; then
     touch $rasifile
 fi
-echo "* { current-image: url(\"$blurredwallpaper\", height); }" > "$rasifile"
+echo "* { current-image: url(\"$blurredwallpaper\", height); }" >"$rasifile"
 
 # -----------------------------------------------------
 # Created square wallpaper

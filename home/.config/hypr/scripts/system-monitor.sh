@@ -1,1 +1,1 @@
-$(cat ~/scripts/terminal.sh) --class dotfiles-floating -e htop
+$(cat ~/.config/hypr/scripts/terminal.sh) --class dotfiles-floating -e htop

@@ -22,11 +22,11 @@ reassign_workspaces() {
         hyprctl dispatch moveworkspacetomonitor 1 HDMI-A-1
         hyprctl dispatch moveworkspacetomonitor 2 HDMI-A-1
         hyprctl dispatch moveworkspacetomonitor 3 HDMI-A-1
-        hyprctl dispatch moveworkspacetomonitor 10 HDMI-A-1
+        #hyprctl dispatch moveworkspacetomonitor 10 HDMI-A-1
         hyprctl dispatch moveworkspacetomonitor 6 HDMI-A-1 # combine 6-10
-        hyprctl dispatch moveworkspacetomonitor 7 HDMI-A-1
-        hyprctl dispatch moveworkspacetomonitor 8 HDMI-A-1
-        hyprctl dispatch moveworkspacetomonitor 9 HDMI-A-1
+        #hyprctl dispatch moveworkspacetomonitor 7 HDMI-A-1
+        #hyprctl dispatch moveworkspacetomonitor 8 HDMI-A-1
+        #hyprctl dispatch moveworkspacetomonitor 9 HDMI-A-1
     else
         # Neither DP-1 nor HDMI-A-1 present → only DVI-I-1 left
         # Collapse to 6 workspaces total

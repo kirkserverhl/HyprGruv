@@ -1,185 +1,133 @@
 #!/bin/bash
-# __      ____ _| | |_ __   __ _ _ __   ___ _ __
-# \ \ /\ / / _` | | | '_ \ / _` | '_ \ / _ \ '__|
-#  \ V  V / (_| | | | |_) | (_| | |_) |  __/ |
-#   \_/\_/ \__,_|_|_| .__/ \__,_| .__/ \___|_|
-#                   |_|         |_|
-# -----------------------------------------------------
-# Check to use wallpaper cache
-# -----------------------------------------------------
+# =============================================
+# Hyprland Wallpaper Processor
+# Generates cached versions (blurred, square, effects)
+# and updates colors + waypaper
+# =============================================
 
-if [ -f ~/.config/settings/wallpaper_cache ]; then
-    use_cache=1
-    echo ":: Using Wallpaper Cache"
+# ------------------- Config -------------------
+GENERATED_DIR="$HOME/.config/settings/cache/wallpaper-generated"
+CACHE_DIR="$HOME/.config/settings/cache"
+CURRENT_WP_CACHE="$CACHE_DIR/current_wallpaper"
+BLURRED_WP="$CACHE_DIR/blurred_wallpaper.png"
+SQUARE_WP="$CACHE_DIR/square_wallpaper.png"
+RASI_FILE="$CACHE_DIR/current_wallpaper.rasi"
+WAYPAPER_RUNNING="$CACHE_DIR/waypaper-running"
+
+DEFAULT_WP="$HOME/Pictures/Wallpapers/default.jpg"
+BLUR_FILE="$HOME/.config/hypr/scripts/settings/blur.sh"
+EFFECT_FILE="$HOME/.config/settings/wallpaper-effect.sh"
+
+# Create directories if missing
+mkdir -p "$GENERATED_DIR" "$CACHE_DIR"
+
+# ------------------- Cache flag -------------------
+if [ -f "$HOME/.config/settings/wallpaper_cache" ]; then
+    USE_CACHE=1
+    echo ":: Using wallpaper cache"
 else
-    use_cache=0
-    echo ":: Wallpaper Cache disabled"
+    USE_CACHE=0
+    echo ":: Wallpaper cache disabled"
 fi
 
-# -----------------------------------------------------
-# Set defaults
-# -----------------------------------------------------
-
-force_generate=0
-generatedversions="$HOME/.config/settings/cache/wallpaper-generated"
-waypaperrunning="$HOME/.config/settings/cache/waypaper-running"
-cachefile="$HOME/.config/settings/cache/current_wallpaper"
-blurredwallpaper="$HOME/.config/settings/cache/blurred_wallpaper.png"
-squarewallpaper="$HOME/.config/settings/cache/square_wallpaper.png"
-rasifile="$HOME/.config/settings/cache/current_wallpaper.rasi"
-blurfile="$HOME/.config/settings/blur.sh"
-defaultwallpaper="$HOME/wallpaper/default.jpg"
-wallpapereffect="$HOME/.config/settings/wallpaper-effect.sh"
-blur="50x30"
-blur=$(cat $blurfile)
-
-# Ensures that the script only run once if wallpaper effect enabled
-if [ -f $waypaperrunning ]; then
-    rm $waypaperrunning
-    exit
+# Prevent multiple runs
+if [ -f "$WAYPAPER_RUNNING" ]; then
+    rm -f "$WAYPAPER_RUNNING"
+    exit 0
 fi
 
-# Create folder with generated versions of wallpaper if not exists
-if [ ! -d $generatedversions ]; then
-    mkdir $generatedversions
+# ------------------- Get wallpaper -------------------
+if [ -n "$1" ]; then
+    WALLPAPER="$1"
+elif [ -f "$CURRENT_WP_CACHE" ]; then
+    WALLPAPER=$(cat "$CURRENT_WP_CACHE")
+else
+    WALLPAPER="$DEFAULT_WP"
 fi
 
-# -----------------------------------------------------
-# Get selected wallpaper
-# -----------------------------------------------------
+echo ":: Setting wallpaper: $WALLPAPER"
+echo "$WALLPAPER" >"$CURRENT_WP_CACHE"
 
-if [ -z $1 ]; then
-    if [ -f $cachefile ]; then
-        wallpaper=$(cat $cachefile)
+WP_FILENAME=$(basename "$WALLPAPER")
+TMP_WP="$WALLPAPER"
+
+# ------------------- Load blur setting -------------------
+if [ -f "$BLUR_FILE" ]; then
+    blur=$(cat "$BLUR_FILE" | tr -d ' \t\n')
+else
+    blur="50x30"
+fi
+
+# ------------------- Wallpaper Effects -------------------
+EFFECT="off"
+if [ -f "$EFFECT_FILE" ]; then
+    EFFECT=$(cat "$EFFECT_FILE" | tr -d ' \t\n')
+fi
+
+if [ "$EFFECT" != "off" ] && [ -f "$HOME/.config/hypr/effects/wallpaper/$EFFECT" ]; then
+    USED_WP="$GENERATED_DIR/$EFFECT-$WP_FILENAME"
+
+    if [ -f "$USED_WP" ] && [ "$USE_CACHE" = "1" ]; then
+        echo ":: Using cached effect: $EFFECT-$WP_FILENAME"
     else
-        wallpaper=$defaultwallpaper
+        echo ":: Generating new effect: $EFFECT"
+        notify-send "Wallpaper Effect" "Applying $EFFECT to $WP_FILENAME" -h int:value:40
+        source "$HOME/.config/hypr/effects/wallpaper/$EFFECT"
     fi
 else
-    wallpaper=$1
+    USED_WP="$WALLPAPER"
 fi
-used_wallpaper=$wallpaper
-echo ":: Setting wallpaper with source image $wallpaper"
-tmpwallpaper=$wallpaper
 
-# -----------------------------------------------------
-# Copy path of current wallpaper to cache file
-# -----------------------------------------------------
+# Set the wallpaper via waypaper
+touch "$WAYPAPER_RUNNING"
 
-if [ ! -f $cachefile ]; then
-    touch $cachefile
-fi
-echo "$wallpaper" >$cachefile
-echo ":: Path of current wallpaper copied to $cachefile"
+# ------------------- Color generation -------------------
+echo ":: Running pywal..."
+wal -q -i "$USED_WP"
 
-# -----------------------------------------------------
-# Get wallpaper filename
-# -----------------------------------------------------
-wallpaperfilename=$(basename $wallpaper)
-echo ":: Wallpaper Filename: $wallpaperfilename"
-
-# -----------------------------------------------------
-# Wallpaper Effects
-# -----------------------------------------------------
-
-if [ -f $wallpapereffect ]; then
-    effect=$(cat $wallpapereffect)
-    if [ ! "$effect" == "off" ]; then
-        used_wallpaper=$generatedversions/$effect-$wallpaperfilename
-        if [ -f $generatedversions/$effect-$wallpaperfilename ] && [ "$force_generate" == "0" ] && [ "$use_cache" == "1" ]; then
-            echo ":: Use cached wallpaper $effect-$wallpaperfilename"
-        else
-            echo ":: Generate new cached wallpaper $effect-$wallpaperfilename with effect $effect"
-            notify-send --replace-id=1 "Using wallpaper effect $effect..." "with image $wallpaperfilename" -h int:value:33
-            source $HOME/.config/hypr/effects/wallpaper/$effect
-        fi
-        echo ":: Loading wallpaper $generatedversions/$effect-$wallpaperfilename with effect $effect"
-        echo ":: Setting wallpaper with $used_wallpaper"
-        touch $waypaperrunning
-        waypaper --wallpaper $used_wallpaper
-    else
-        echo ":: Wallpaper effect is set to off"
-    fi
+echo ":: Running matugen..."
+if command -v matugen >/dev/null 2>&1; then
+    matugen image "$USED_WP" --mode dark 2>&1 | tee -a ~/.cache/matugen.log
+    echo ":: Matugen completed (dark mode)"
 else
-    effect="off"
+    echo ":: Warning: matugen command not found"
 fi
 
-# -----------------------------------------------------
-# Execute pywal
-# -----------------------------------------------------
+# Optional: Notify that Yazi needs restart
+notify-send "Theme Updated" "Matugen colors applied.\nRestart Yazi (press Q then reopen) to see changes." -i preferences-desktop-theme
 
-# echo ":: Execute pywal with $used_wallpaper"
-# wal -q -i "$used_wallpaper"
-# source "$HOME/.cache/wal/colors.sh"
-
-# -----------------------------------------------------
-# Reload Waybar
-# -----------------------------------------------------
-
-# killall -SIGUSR2 waybar
-~/scripts/launch.sh
-
-# -----------------------------------------------------
-# Pywalfox
-# -----------------------------------------------------
-
-if type pywalfox >/dev/null 2>&1; then
+# Optional pywalfox
+if command -v pywalfox >/dev/null 2>&1; then
     pywalfox update
 fi
 
-# -----------------------------------------------------
-# Execute Matugen instead of pywal
-# -----------------------------------------------------
-echo ":: Execute matugen with $used_wallpaper"
+# ------------------- Blurred version -------------------
+BLUR_FILENAME="blur-${blur}-${EFFECT}-${WP_FILENAME%.*}.png"
 
-# Main color generation
-matugen image "$used_wallpaper" -m dark # or --mode dark
-# For light mode: matugen image "$used_wallpaper" -m light
-
-# Optional: You can also pass --variant or other flags
-# matugen image "$used_wallpaper" -m dark --contrast 0.8
-
-echo ":: Matugen color generation completed"
-
-# -----------------------------------------------------
-# Created blurred wallpaper
-# -----------------------------------------------------
-
-if [ -f $generatedversions/blur-$blur-$effect-$wallpaperfilename.png ] && [ "$force_generate" == "0" ] && [ "$use_cache" == "1" ]; then
-    echo ":: Use cached wallpaper blur-$blur-$effect-$wallpaperfilename"
+if [ -f "$GENERATED_DIR/$BLUR_FILENAME" ] && [ "$USE_CACHE" = "1" ]; then
+    echo ":: Using cached blurred version"
 else
-    echo ":: Generate new cached wallpaper blur-$blur-$effect-$wallpaperfilename with blur $blur"
-    # notify-send --replace-id=1 "Generate new blurred version" "with blur $blur" -h int:value:66
-    magick $used_wallpaper -resize 75% $blurredwallpaper
-    echo ":: Resized to 75%"
-    if [ ! "$blur" == "0x0" ]; then
-        magick $blurredwallpaper -blur $blur $blurredwallpaper
-        cp $blurredwallpaper $generatedversions/blur-$blur-$effect-$wallpaperfilename.png
-        echo ":: Blurred"
+    echo ":: Generating blurred version ($blur)"
+    magick "$USED_WP" -resize 75% "$BLURRED_WP"
+    if [ "$blur" != "0x0" ]; then
+        magick "$BLURRED_WP" -blur "$blur" "$BLURRED_WP"
     fi
+    cp "$BLURRED_WP" "$GENERATED_DIR/$BLUR_FILENAME"
 fi
-cp $generatedversions/blur-$blur-$effect-$wallpaperfilename.png $blurredwallpaper
 
-# -----------------------------------------------------
-# Create rasi file
-# -----------------------------------------------------
+cp "$GENERATED_DIR/$BLUR_FILENAME" "$BLURRED_WP" 2>/dev/null || true
 
-if [ ! -f $rasifile ]; then
-    touch $rasifile
+# ------------------- Rasi file for rofi/etc -------------------
+echo "* { current-image: url(\"$BLURRED_WP\", height); }" >"$RASI_FILE"
+
+# ------------------- Square version -------------------
+echo ":: Generating square version"
+magick "$TMP_WP" -gravity Center -extent 1:1 "$SQUARE_WP"
+cp "$SQUARE_WP" "$GENERATED_DIR/square-$WP_FILENAME.png"
+
+echo ":: Wallpaper processing complete!"
+
+if [ ! -f "$TMP_WP" ]; then
+    echo "Error: Source image $TMP_WP does not exist!"
+    exit 1
 fi
-echo "* { current-image: url(\"$blurredwallpaper\", height); }" >"$rasifile"
-
-# -----------------------------------------------------
-# Created square wallpaper
-# -----------------------------------------------------
-
-echo ":: Generate new cached wallpaper square-$wallpaperfilename"
-magick $tmpwallpaper -gravity Center -extent 1:1 $squarewallpaper
-cp $squarewallpaper $generatedversions/square-$wallpaperfilename.png
-
-# -----------------------------------------------------
-# Reload AGS
-# -----------------------------------------------------
-
-ags quit &
-sleep 0.2
-ags run &

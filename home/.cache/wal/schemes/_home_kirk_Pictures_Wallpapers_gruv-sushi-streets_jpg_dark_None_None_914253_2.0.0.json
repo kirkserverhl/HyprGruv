@@ -1,0 +1,28 @@
+{
+    "checksum": "d1a0ebf3dd6e5c5eb1d7933fbecb8b01",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv-sushi-streets.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#101725",
+        "foreground": "#c3c5c8",
+        "cursor": "#c3c5c8"
+    },
+    "colors": {
+        "color0": "#101725",
+        "color1": "#4C4D4F",
+        "color2": "#6C6A5F",
+        "color3": "#C15E59",
+        "color4": "#6F8F70",
+        "color5": "#979274",
+        "color6": "#DC9548",
+        "color7": "#c3c5c8",
+        "color8": "#5f6674",
+        "color9": "#4C4D4F",
+        "color10": "#6C6A5F",
+        "color11": "#C15E59",
+        "color12": "#6F8F70",
+        "color13": "#979274",
+        "color14": "#DC9548",
+        "color15": "#c3c5c8"
+    }
+}

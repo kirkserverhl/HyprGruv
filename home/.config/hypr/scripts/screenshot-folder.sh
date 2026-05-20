@@ -1,1 +1,2 @@
-screenshot_folder="$HOME/Pictures"
+screenshot_folder="$HOME/Pictures/screenshots"
+

@@ -16,7 +16,7 @@ export GUM_CONFIRM_UNSELECTED_FOREGROUND="#c3c3c3" # Using --foreground
 export GUM_INPUT_CURSOR_FOREGROUND="#c3c3c3" # Using --cursor
 export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B" # Using --color3 (green)
 export GUM_SPIN_SPINNER_FOREGROUND="#749D91" # Using --color6 (cyan)
-                             ###########
+###########
 RESET="\e[0m"                # Reset  ##
 GREEN="\e[38;2;142;192;124m" # 8ec07c ##  **Notes
 CYAN="\e[38;2;69;133;136m"   # 458588 ##
@@ -26,7 +26,7 @@ GRAY="\e[38;2;60;56;54m"     # 3c3836 ##
 BOLD="\e[1m"                 # Bold   ##
 
 sleep 1
-aur_helper="$(bat ~/scripts/aur.sh)"
+aur_helper="$(bat ~/.config/hypr/scripts/aur.sh)"
 echo ""
 sleep1
 $aur_helper -Scc

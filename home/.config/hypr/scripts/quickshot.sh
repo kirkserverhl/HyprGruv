@@ -1,1 +1,1 @@
-hyprshot -m region --freeze --clipboard-only --format jpg --quality 80
+hyprshot -m region --clipboard-only --format jpg --quality 60

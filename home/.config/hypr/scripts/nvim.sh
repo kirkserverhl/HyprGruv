@@ -1,3 +1,3 @@
 #!/bin/bash
 
-$(cat ~/scripts/terminal.sh) -e nvim
+$(cat ~/.config/hypr/scripts/terminal.sh) -e nvim

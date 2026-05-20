@@ -346,3 +346,113 @@ Traceback (most recent call last):
     for f in os.listdir(d):
              ~~~~~~~~~~^^^
 FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+19/05/26 (06:21:52) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+19/05/26 (13:41:09) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (00:55:58) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:44:40) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:44:40) | ERROR: Data collection thread failed with exception: Format specifier missing precision
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 2959, in _runner
+    collector._draw()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 3991, in _draw
+    ProcBox._draw_fg()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 2849, in _draw_fg
+    f'{c_color}{name:<{offset}.{offset}} {end}' +
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Format specifier missing precision
+20/05/26 (01:44:40) | WARNING: Exiting with errorcode (1). Runtime 0:00:00 
+
+20/05/26 (01:44:42) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:44:43) | ERROR: Data collection thread failed with exception: Format specifier missing precision
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 2959, in _runner
+    collector._draw()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 3991, in _draw
+    ProcBox._draw_fg()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 2849, in _draw_fg
+    f'{c_color}{name:<{offset}.{offset}} {end}' +
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Format specifier missing precision
+20/05/26 (01:44:43) | WARNING: Exiting with errorcode (1). Runtime 0:00:00 
+
+20/05/26 (01:44:57) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:44:58) | ERROR: Data collection thread failed with exception: Format specifier missing precision
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 2959, in _runner
+    collector._draw()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 3991, in _draw
+    ProcBox._draw_fg()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 2849, in _draw_fg
+    f'{c_color}{name:<{offset}.{offset}} {end}' +
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Format specifier missing precision
+20/05/26 (01:44:58) | WARNING: Exiting with errorcode (1). Runtime 0:00:00 
+
+20/05/26 (01:46:55) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:47:03) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:47:32) | ERROR: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 1357, in refresh
+    for f in os.listdir(d):
+             ~~~~~~~~~~^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/kirk/.config/bpytop/themes'
+20/05/26 (01:47:33) | ERROR: Data collection thread failed with exception: division by zero
+Traceback (most recent call last):
+  File "/usr/bin/bpytop", line 2959, in _runner
+    collector._draw()
+    ~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 3991, in _draw
+    ProcBox._draw_fg()
+    ~~~~~~~~~~~~~~~~^^
+  File "/usr/bin/bpytop", line 2834, in _draw_fg
+    val = ((v if v <= 100 else 100) + 100) - calc * 100 // cls.select_max
+                                             ~~~~~~~~~~~^^~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero
+20/05/26 (01:47:33) | WARNING: Exiting with errorcode (1). Runtime 0:00:00 
+
