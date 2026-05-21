@@ -1,33 +1,143 @@
 #!/bin/bash
 # =============================================
-# set_wallpaper.sh - Post waypaper command
+# Hyprland Wallpaper Post-Command for Waypaper
+# Combined: set_wallpaper.sh + wallpaper processor
 # =============================================
 
-CACHE_WAL="$HOME/.cache/wal/wal"
-LAST_WP="$HOME/.config/last_wallpaper.txt"
-DEFAULT_WP="$HOME/Pictures/Wallpapers/default.jpg" # ← note: capital W
+GENERATED_DIR="$HOME/.config/settings/cache/wallpaper-generated"
+CACHE_DIR="$HOME/.config/settings/cache"
+CURRENT_WP_CACHE="$CACHE_DIR/current_wallpaper"
+BLURRED_WP="$CACHE_DIR/blurred_wallpaper.png"
+SQUARE_WP="$CACHE_DIR/square_wallpaper.png"
+RASI_FILE="$CACHE_DIR/current_wallpaper.rasi"
+WAYPAPER_RUNNING="$CACHE_DIR/waypaper-running"
 
-# Get current wallpaper from wal cache
-if [ -f "$CACHE_WAL" ]; then
-    CURRENT_WP=$(cat "$CACHE_WAL" | tr -d '\n\r')
+DEFAULT_WP="$HOME/Pictures/Wallpapers/lady.png"
+BLUR_FILE="$HOME/.config/hypr/scripts/settings/blur.sh"
+EFFECT_FILE="$HOME/.config/settings/wallpaper-effect.sh"
+
+# Create directories
+mkdir -p "$GENERATED_DIR" "$CACHE_DIR"
+
+# ------------------- Debug -------------------
+echo "=== DEBUG ==="
+echo "Script called with args: $@"
+echo "CURRENT_WP_CACHE: $(cat "$CURRENT_WP_CACHE" 2>/dev/null || echo 'empty')"
+echo "=================="
+
+# ------------------- Cache flag -------------------
+if [ -f "$HOME/.config/settings/wallpaper_cache" ]; then
+    USE_CACHE=1
+    echo ":: Using wallpaper cache"
 else
-    CURRENT_WP="$DEFAULT_WP"
+    USE_CACHE=0
+    echo ":: Wallpaper cache disabled"
 fi
 
-# Resolve path and fallback logic
-if [[ -z "$CURRENT_WP" || ! -f "$CURRENT_WP" ]]; then
-    if [ -f "$LAST_WP" ]; then
-        CURRENT_WP=$(cat "$LAST_WP")
-    fi
-    if [[ ! -f "$CURRENT_WP" ]]; then
-        CURRENT_WP="$DEFAULT_WP"
-    fi
+# ------------------- Prevent multiple runs -------------------
+if [ -f "$WAYPAPER_RUNNING" ]; then
+    echo ":: Another instance is running, exiting"
+    exit 0
+fi
+touch "$WAYPAPER_RUNNING"
+trap 'rm -f "$WAYPAPER_RUNNING"' EXIT
+
+# ------------------- Get wallpaper (from Waypaper) -------------------
+if [ -n "$1" ]; then
+    WALLPAPER="$1"
+    echo ":: Received new wallpaper from waypaper: $WALLPAPER"
+elif [ -f "$CURRENT_WP_CACHE" ]; then
+    WALLPAPER=$(cat "$CURRENT_WP_CACHE")
+    echo ":: Using cached wallpaper: $WALLPAPER"
+else
+    WALLPAPER="$DEFAULT_WP"
+    echo ":: Using default wallpaper: $WALLPAPER"
 fi
 
-echo "Selected file: $CURRENT_WP"
+echo "$WALLPAPER" >"$CURRENT_WP_CACHE"
+WP_FILENAME=$(basename "$WALLPAPER")
 
-# Save for next time
-echo "$CURRENT_WP" >"$LAST_WP"
+# ------------------- Load settings -------------------
+if [ -f "$BLUR_FILE" ]; then
+    blur=$(cat "$BLUR_FILE" | tr -d ' \t\n')
+else
+    blur="50x30"
+fi
 
-# Call our processor script
-"$HOME/.config/hypr/scripts/wallpaper.sh" "$CURRENT_WP"
+EFFECT="off"
+if [ -f "$EFFECT_FILE" ]; then
+    EFFECT=$(cat "$EFFECT_FILE" | tr -d ' \t\n')
+fi
+
+# ------------------- Wallpaper Effects -------------------
+if [ "$EFFECT" != "off" ] && [ -f "$HOME/.config/hypr/effects/wallpaper/$EFFECT" ]; then
+    USED_WP="$GENERATED_DIR/$EFFECT-$WP_FILENAME"
+    if [ -f "$USED_WP" ] && [ "$USE_CACHE" = "1" ]; then
+        echo ":: Using cached effect: $EFFECT"
+    else
+        echo ":: Generating effect: $EFFECT"
+        notify-send "Wallpaper Effect" "Applying $EFFECT" -h int:value:40
+        source "$HOME/.config/hypr/effects/wallpaper/$EFFECT"
+    fi
+else
+    USED_WP="$WALLPAPER"
+fi
+
+# ------------------- Color generation -------------------
+echo ":: Running pywal..."
+wal -q -i "$USED_WP"
+
+echo ":: Running matugen..."
+if command -v matugen >/dev/null 2>&1; then
+    if matugen image "$USED_WP" --mode dark 2>&1 | tee -a ~/.cache/matugen.log; then
+        echo ":: Matugen completed (dark mode)"
+    else
+        echo ":: Matugen had minor issues (common in scripts)"
+    fi
+else
+    echo ":: matugen not found"
+fi
+
+# Optional pywalfox
+if command -v pywalfox >/dev/null 2>&1; then
+    pywalfox update
+fi
+
+# ------------------- Blurred version -------------------
+BLUR_FILENAME="blur-${blur}-${EFFECT}-${WP_FILENAME%.*}.png"
+if [ -f "$GENERATED_DIR/$BLUR_FILENAME" ] && [ "$USE_CACHE" = "1" ]; then
+    echo ":: Using cached blurred version"
+else
+    echo ":: Generating blurred version ($blur)"
+    magick "$USED_WP" -resize 75% "$BLURRED_WP"
+    if [ "$blur" != "0x0" ]; then
+        magick "$BLURRED_WP" -blur "$blur" "$BLURRED_WP"
+    fi
+    cp "$BLURRED_WP" "$GENERATED_DIR/$BLUR_FILENAME"
+fi
+cp "$GENERATED_DIR/$BLUR_FILENAME" "$BLURRED_WP" 2>/dev/null || true
+
+# ------------------- Rasi file -------------------
+echo "* { current-image: url(\"$BLURRED_WP\", height); }" >"$RASI_FILE"
+
+# ------------------- Square version -------------------
+echo ":: Generating square version"
+SQUARE_SOURCE="${USED_WP:-$WALLPAPER}"
+
+# Safer + faster square generation
+if [ ! -f "$SQUARE_SOURCE" ]; then
+    echo "Error: Source image not found, using default"
+    SQUARE_SOURCE="$DEFAULT_WP"
+fi
+
+magick "$SQUARE_SOURCE" \
+    -resize 2000x2000\> \
+    -gravity Center \
+    -extent 1:1 \
+    -quality 90 \
+    "$SQUARE_WP" || echo "Warning: Square generation failed"
+
+cp "$SQUARE_WP" "$GENERATED_DIR/square-$WP_FILENAME.png" 2>/dev/null || true
+
+echo ":: Square wallpaper updated: $SQUARE_WP"
+echo ":: Wallpaper processing complete!"

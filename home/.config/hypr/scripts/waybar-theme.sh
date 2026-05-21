@@ -1,2 +1,1 @@
-/gruv-modern
-/gruv-modern/colored
+/sane;/sane/subtle
