@@ -1,0 +1,28 @@
+{
+    "checksum": "f92cd81190fe9c0db570a530e84b564d",
+    "wallpaper": "/home/kirk/Pictures/wallhaven-4dvp83.png",
+    "alpha": "100",
+    "special": {
+        "background": "#171027",
+        "foreground": "#c5c3c9",
+        "cursor": "#c5c3c9"
+    },
+    "colors": {
+        "color0": "#171027",
+        "color1": "#B17665",
+        "color2": "#968676",
+        "color3": "#B08E76",
+        "color4": "#CB9275",
+        "color5": "#D8A17E",
+        "color6": "#B0A187",
+        "color7": "#c5c3c9",
+        "color8": "#665f75",
+        "color9": "#B17665",
+        "color10": "#968676",
+        "color11": "#B08E76",
+        "color12": "#CB9275",
+        "color13": "#D8A17E",
+        "color14": "#B0A187",
+        "color15": "#c5c3c9"
+    }
+}

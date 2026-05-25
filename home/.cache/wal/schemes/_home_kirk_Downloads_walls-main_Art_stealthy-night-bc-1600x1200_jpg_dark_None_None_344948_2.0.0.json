@@ -1,0 +1,28 @@
+{
+    "checksum": "7b97f665c5a24db5da8a7535fd1b776f",
+    "wallpaper": "/home/kirk/Downloads/walls-main/Art/stealthy-night-bc-1600x1200.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0c0c1d",
+        "foreground": "#c2c2c6",
+        "cursor": "#c2c2c6"
+    },
+    "colors": {
+        "color0": "#0c0c1d",
+        "color1": "#6E1044",
+        "color2": "#4D3E48",
+        "color3": "#544951",
+        "color4": "#A41038",
+        "color5": "#E11220",
+        "color6": "#980D46",
+        "color7": "#c2c2c6",
+        "color8": "#5c5c70",
+        "color9": "#6E1044",
+        "color10": "#4D3E48",
+        "color11": "#544951",
+        "color12": "#A41038",
+        "color13": "#E11220",
+        "color14": "#980D46",
+        "color15": "#c2c2c6"
+    }
+}

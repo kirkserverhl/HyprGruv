@@ -1,0 +1,28 @@
+{
+    "checksum": "5234b6dd9eb0197e4aeae5a1ea0bcef7",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat_wallhaven-yx6e9l.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#25122a",
+        "foreground": "#c8c3c9",
+        "cursor": "#c8c3c9"
+    },
+    "colors": {
+        "color0": "#25122a",
+        "color1": "#946D9B",
+        "color2": "#E17490",
+        "color3": "#7C8BA1",
+        "color4": "#A991AF",
+        "color5": "#A89CD0",
+        "color6": "#CDAFC0",
+        "color7": "#c8c3c9",
+        "color8": "#726176",
+        "color9": "#946D9B",
+        "color10": "#E17490",
+        "color11": "#7C8BA1",
+        "color12": "#A991AF",
+        "color13": "#A89CD0",
+        "color14": "#CDAFC0",
+        "color15": "#c8c3c9"
+    }
+}

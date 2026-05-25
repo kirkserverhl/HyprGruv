@@ -6,14 +6,14 @@
   },
   "custom/quicklink2": {
     "format": "",
-    "on-click": "~/scripts/browser.sh",
-    "on-click-right": "~/scripts/terminal.sh",
+    "on-click": "~/.config/settings/browser.sh",
+    "on-click-right": "~/.config/settings/terminal.sh",
     "tooltip-format": "Left:   Firefox   🦊\nRight: Ghostty 👻"
   },
   "custom/quicklink3": {
     "format": "",
     "on-click": "~/scripts/filemanager.sh",
-    "on-click-right": "~/scripts/yazi.sh",
+    "on-click-right": "~/.config/hypr/scripts/yazi.sh",
     "tooltip-format": "Left:    Dolphin 🐬 \nRight:   Yazi    🦆 "
   },
   "custom/quicklink4": {
@@ -23,12 +23,12 @@
   },
   "custom/quicklink5": {
     "format": "",
-    "on-click": "~/scripts/calculator.sh",
+    "on-click": "~/.config/hypr/scripts/rofi_calc.sh",
     "tooltip-format": "Open calculator"
   },
   "custom/quicklink6": {
     "format": "",
-    "on-click": "~/scripts/emojipicker.sh",
+    "on-click": "~/.config/settings/emojipicker.sh",
     "tooltip-format": " Smile 💀"
   },
   "custom/quicklinkempty": {},

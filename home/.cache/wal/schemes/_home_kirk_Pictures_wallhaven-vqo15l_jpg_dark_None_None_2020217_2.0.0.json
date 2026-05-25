@@ -1,0 +1,28 @@
+{
+    "checksum": "cde6e947315254bfb3d83202546ac212",
+    "wallpaper": "/home/kirk/Pictures/wallhaven-vqo15l.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#20110d",
+        "foreground": "#c7c3c2",
+        "cursor": "#c7c3c2"
+    },
+    "colors": {
+        "color0": "#20110d",
+        "color1": "#BC6953",
+        "color2": "#BF9971",
+        "color3": "#D0946E",
+        "color4": "#936E8B",
+        "color5": "#D9AB96",
+        "color6": "#D8C2AE",
+        "color7": "#c7c3c2",
+        "color8": "#71615d",
+        "color9": "#BC6953",
+        "color10": "#BF9971",
+        "color11": "#D0946E",
+        "color12": "#936E8B",
+        "color13": "#D9AB96",
+        "color14": "#D8C2AE",
+        "color15": "#c7c3c2"
+    }
+}

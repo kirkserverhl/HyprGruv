@@ -1,64 +1,30 @@
 #!/bin/bash
-#  _____ _                                       _ _       _
-# |_   _| |__   ___ _ __ ___   ___  _____      _(_) |_ ___| |__   ___ _ __
-#   | | | '_ \ / _ \ '_ ` _ \ / _ \/ __\ \ /\ / / | __/ __| '_ \ / _ \ '__|
-#   | | | | | |  __/ | | | | |  __/\__ \\ V  V /| | || (__| | | |  __/ |
-#   |_| |_| |_|\___|_| |_| |_|\___||___/ \_/\_/ |_|\__\___|_| |_|\___|_|
-#
-# by Stephan Raabe (2024)
-# -----------------------------------------------------
+# Waybar Theme Switcher - Fixed
 
-# -----------------------------------------------------
-# Default theme folder
-# -----------------------------------------------------
-themes_path="$HOME/.config/waybar/themes"
+THEMES_DIR="$HOME/.config/waybar/themes"
 
-# -----------------------------------------------------
-# Initialize arrays
-# -----------------------------------------------------
-listThemes=""
-listNames=""
-listNames2=""
+# Get themes
+themes=($(find "$THEMES_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "assets" -exec basename {} \; | sort))
 
-# -----------------------------------------------------
-# Read theme folder
-# -----------------------------------------------------
-sleep 0.2
-options=$(find $themes_path -maxdepth 2 -type d)
-for value in $options; do
-    if [ ! $value == "$HOME/.config/waybar/themes/assets" ]; then
-        if [ ! $value == "$themes_path" ]; then
-            if [ $(find $value -maxdepth 1 -type d | wc -l) = 1 ]; then
-                result=$(echo $value | sed "s#$HOME/.config/waybar/themes/#/#g")
-                IFS='/' read -ra arrThemes <<<"$result"
-                listThemes[${#listThemes[@]}]="/${arrThemes[1]};$result"
-                if [ -f $themes_path$result/config.sh ]; then
-                    source $themes_path$result/config.sh
-                    listNames+="$theme_name\n"
-                    listNames2+="$theme_name~"
-                else
-                    listNames+="/${arrThemes[1]};$result\n"
-                    listNames2+="/${arrThemes[1]};$result~"
-                fi
-            fi
-        fi
-    fi
-done
+if [ ${#themes[@]} -eq 0 ]; then
+    notify-send "Error" "No themes found!"
+    exit 1
+fi
 
-# -----------------------------------------------------
-# Show rofi dialog
-# -----------------------------------------------------
-listNames=${listNames::-2}
-choice=$(echo -e "$listNames" | rofi -dmenu -replace -i -config ~/.config/rofi/config-themes.rasi -no-show-icons -width 30 -p "Themes" -format i)
-IFS="~"
-input=$listNames2
-read -ra array <<<"$input"
+# Show Rofi
+chosen=$(printf '%s\n' "${themes[@]}" | rofi -dmenu -i \
+    -config ~/.config/rofi/config-themes.rasi \
+    -no-show-icons \
+    -width 40 \
+    -p "Waybar Theme")
 
-# -----------------------------------------------------
-# -----------------------------------------------------
-if [ "$choice" ]; then
-    echo "Loading waybar theme..."
-    echo "${listThemes[$choice+1]}" >~/.config/hypr/scripts/waybar-theme.sh
-    ~/.config/hypr/scripts/launch.sh
-    notify-send "Waybar Theme changed" "to ${array[$choice]}"
+if [[ -n "$chosen" ]]; then
+    echo "Switching to: $chosen"
+
+    cp "$THEMES_DIR/$chosen/config.jsonc" "$HOME/.config/waybar/config.jsonc"
+    cp "$THEMES_DIR/$chosen/style.css" "$HOME/.config/waybar/style.css"
+
+    pkill -SIGUSR2 waybar || waybar &
+
+    notify-send "Waybar" "Theme switched to: $chosen"
 fi

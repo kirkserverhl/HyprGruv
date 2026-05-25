@@ -1,0 +1,28 @@
+{
+    "checksum": "42cac216fe93d51bf22192e3f734694e",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/anatomy.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#332a1c",
+        "foreground": "#ccc9c6",
+        "cursor": "#ccc9c6"
+    },
+    "colors": {
+        "color0": "#332a1c",
+        "color1": "#C6B799",
+        "color2": "#CBBDA2",
+        "color3": "#DFCEAA",
+        "color4": "#D8CBAE",
+        "color5": "#E6D7B8",
+        "color6": "#E2DBC4",
+        "color7": "#ccc9c6",
+        "color8": "#7d7467",
+        "color9": "#C6B799",
+        "color10": "#CBBDA2",
+        "color11": "#DFCEAA",
+        "color12": "#D8CBAE",
+        "color13": "#E6D7B8",
+        "color14": "#E2DBC4",
+        "color15": "#ccc9c6"
+    }
+}

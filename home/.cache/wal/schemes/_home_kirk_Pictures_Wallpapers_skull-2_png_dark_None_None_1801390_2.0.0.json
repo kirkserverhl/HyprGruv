@@ -1,0 +1,28 @@
+{
+    "checksum": "7253a6f2638c6349eaff95cf503db3a3",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/skull-2.png",
+    "alpha": "100",
+    "special": {
+        "background": "#150d09",
+        "foreground": "#c4c2c1",
+        "cursor": "#c4c2c1"
+    },
+    "colors": {
+        "color0": "#150d09",
+        "color1": "#A5997B",
+        "color2": "#A99D82",
+        "color3": "#B6AA8A",
+        "color4": "#C6B996",
+        "color5": "#D9CCA5",
+        "color6": "#DFD2A9",
+        "color7": "#c4c2c1",
+        "color8": "#6c5e58",
+        "color9": "#A5997B",
+        "color10": "#A99D82",
+        "color11": "#B6AA8A",
+        "color12": "#C6B996",
+        "color13": "#D9CCA5",
+        "color14": "#DFD2A9",
+        "color15": "#c4c2c1"
+    }
+}

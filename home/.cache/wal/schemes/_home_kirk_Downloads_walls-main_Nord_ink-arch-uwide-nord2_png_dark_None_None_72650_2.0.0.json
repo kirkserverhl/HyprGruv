@@ -1,0 +1,28 @@
+{
+    "checksum": "cab46b15ed433333afa41ee97466cdcc",
+    "wallpaper": "/home/kirk/Downloads/walls-main/Nord/ink-arch-uwide-nord2.png",
+    "alpha": "100",
+    "special": {
+        "background": "#22252f",
+        "foreground": "#c7c8cb",
+        "cursor": "#c7c8cb"
+    },
+    "colors": {
+        "color0": "#22252f",
+        "color1": "#7895B2",
+        "color2": "#7894B2",
+        "color3": "#7D9CBB",
+        "color4": "#809FBF",
+        "color5": "#80A0BF",
+        "color6": "#82A2C2",
+        "color7": "#c7c8cb",
+        "color8": "#676d7e",
+        "color9": "#7895B2",
+        "color10": "#7894B2",
+        "color11": "#7D9CBB",
+        "color12": "#809FBF",
+        "color13": "#80A0BF",
+        "color14": "#82A2C2",
+        "color15": "#c7c8cb"
+    }
+}

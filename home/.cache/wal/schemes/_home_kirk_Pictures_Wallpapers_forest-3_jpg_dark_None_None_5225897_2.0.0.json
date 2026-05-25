@@ -1,0 +1,28 @@
+{
+    "checksum": "5ed6df1772201e49b5a4d4a2ab8e7240",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/forest-3.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#191712",
+        "foreground": "#c5c5c3",
+        "cursor": "#c5c5c3"
+    },
+    "colors": {
+        "color0": "#191712",
+        "color1": "#6A5F47",
+        "color2": "#966C34",
+        "color3": "#C7793C",
+        "color4": "#97714C",
+        "color5": "#74883D",
+        "color6": "#C39D48",
+        "color7": "#c5c5c3",
+        "color8": "#706c5c",
+        "color9": "#6A5F47",
+        "color10": "#966C34",
+        "color11": "#C7793C",
+        "color12": "#97714C",
+        "color13": "#74883D",
+        "color14": "#C39D48",
+        "color15": "#c5c5c3"
+    }
+}

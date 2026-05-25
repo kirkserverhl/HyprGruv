@@ -1,0 +1,28 @@
+{
+    "checksum": "c4a6fbfd40527426ea6311ed1cabae80",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/max-mckinnon-c9OCWLka764-unsplash.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0b101a",
+        "foreground": "#c2c3c5",
+        "cursor": "#c2c3c5"
+    },
+    "colors": {
+        "color0": "#0b101a",
+        "color1": "#2F3547",
+        "color2": "#443B49",
+        "color3": "#35475A",
+        "color4": "#4B4952",
+        "color5": "#5A5B69",
+        "color6": "#516990",
+        "color7": "#c2c3c5",
+        "color8": "#5a606f",
+        "color9": "#2F3547",
+        "color10": "#443B49",
+        "color11": "#35475A",
+        "color12": "#4B4952",
+        "color13": "#5A5B69",
+        "color14": "#516990",
+        "color15": "#c2c3c5"
+    }
+}

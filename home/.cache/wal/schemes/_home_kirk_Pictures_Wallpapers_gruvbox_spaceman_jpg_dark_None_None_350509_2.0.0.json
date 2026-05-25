@@ -1,0 +1,28 @@
+{
+    "checksum": "611949619714293c3ad07367f8dc7cec",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruvbox_spaceman.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#121413",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#121413",
+        "color1": "#504A49",
+        "color2": "#685C5C",
+        "color3": "#BD5941",
+        "color4": "#94626B",
+        "color5": "#4B847A",
+        "color6": "#C39F40",
+        "color7": "#c3c4c4",
+        "color8": "#5a6f64",
+        "color9": "#504A49",
+        "color10": "#685C5C",
+        "color11": "#BD5941",
+        "color12": "#94626B",
+        "color13": "#4B847A",
+        "color14": "#C39F40",
+        "color15": "#c3c4c4"
+    }
+}

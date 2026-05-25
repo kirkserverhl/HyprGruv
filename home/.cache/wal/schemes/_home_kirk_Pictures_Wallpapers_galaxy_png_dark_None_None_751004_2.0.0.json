@@ -1,0 +1,28 @@
+{
+    "checksum": "e0cb0cd47ce487fd3d9ce6b31bef791d",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/galaxy.png",
+    "alpha": "100",
+    "special": {
+        "background": "#101212",
+        "foreground": "#c3c3c3",
+        "cursor": "#c3c3c3"
+    },
+    "colors": {
+        "color0": "#101212",
+        "color1": "#857A69",
+        "color2": "#958B75",
+        "color3": "#7D968B",
+        "color4": "#A4A48E",
+        "color5": "#D8C7A2",
+        "color6": "#DFD2B1",
+        "color7": "#c3c3c3",
+        "color8": "#596d6d",
+        "color9": "#857A69",
+        "color10": "#958B75",
+        "color11": "#7D968B",
+        "color12": "#A4A48E",
+        "color13": "#D8C7A2",
+        "color14": "#DFD2B1",
+        "color15": "#c3c3c3"
+    }
+}

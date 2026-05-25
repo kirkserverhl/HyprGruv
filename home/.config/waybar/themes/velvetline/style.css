@@ -1,0 +1,281 @@
+@import "matugen/colors.css";
+
+* {
+  border: none;
+  border-radius: 0px;
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo";
+  font-size: 16px;
+  min-height: 0;
+  font-weight: bold;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+.modules-right {
+  margin-right: 12px;
+}
+
+tooltip {
+  background: @bg0;
+  border: 1px solid @blue;
+  border-radius: 12px;
+}
+
+tooltip label {
+  color: @fg;
+  padding: 6px;
+}
+
+#workspaces {
+  background: @bg0;
+  padding: 8px 5px;
+  border-radius: 16px;
+  color: @fg;
+}
+
+#workspaces button {
+  padding: 0px 6px;
+  margin: 0px 3px;
+  border-radius: 50px;
+  color: transparent;
+  backgro@import "../../matugen/colors.css";
+
+/* ============================================= */
+/* ==================== BASE ==================== */
+/* ============================================= */
+* {
+    border: none;
+    border-radius: 0px;
+    font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo";
+    font-size: 16px;
+    min-height: 0;
+    font-weight: bold;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+.modules-right {
+    margin-right: 12px;
+}
+
+/* ============================================= */
+/* ==================== TOOLTIP ==================== */
+/* ============================================= */
+tooltip {
+    background: @surface_variant;
+    border: 1px solid @primary;
+    border-radius: 12px;
+}
+
+tooltip label {
+    color: @on_surface;
+    padding: 6px;
+}
+
+/* ============================================= */
+/* ==================== WORKSPACES ==================== */
+/* ============================================= */
+#workspaces {
+    background: @background;
+    padding: 8px 5px;
+    border-radius: 16px;
+    color: @on_surface;
+}
+
+#workspaces button {
+    padding: 0px 6px;
+    margin: 0px 3px;
+    border-radius: 50px;
+    color: transparent;
+    background: @surface_variant;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.active {
+    background-color: @primary;
+    color: @on_primary;
+    min-width: 50px;
+    transition: all 0.3s ease-in-out;
+    font-size: 13px;
+}
+
+#workspaces button:hover {
+    background-color: @secondary;
+    color: @on_primary;
+    border-radius: 16px;
+    min-width: 50px;
+}
+
+#workspaces button.urgent {
+    background-color: @error;
+    color: @on_primary;
+    border-radius: 16px;
+    min-width: 50px;
+}
+
+/* ============================================= */
+/* ==================== MODULES ==================== */
+/* ============================================= */
+#battery,
+#pulseaudio,
+#backlight,
+#custom-pacman,
+#network,
+#clock,
+#custom-weather,
+#custom-media,
+#window,
+#custom-launcher,
+#custom-notification,
+#submap,
+#power-profiles-daemon,
+#custom-home-folder {
+    background-color: @background;
+    padding: 0 15px;
+    margin: 0 0 0 12px;
+    border-radius: 50px;
+}
+
+/* Module Colors */
+#submap { color: @tertiary; }
+#custom-launcher { color: @on_surface; }
+#clock { color: @primary; }
+#custom-media { color: @tertiary; }
+#custom-weather { color: @yellow; }           /* fallback if no @yellow */
+#custom-notification { color: @on_surface; }
+#power-profiles-daemon { color: @on_surface; }
+#custom-pacman { color: @orange; }            /* fallback */
+#pulseaudio { color: @yellow; }
+#network { color: @secondary; }
+#battery { 
+    color: @tertiary; 
+    margin: 0 10px 0 10px;
+}
+#custom-home-folder { color: @tertiary; }
+
+#custom-notification {
+    margin: 0 12px 0 0;
+@import "../../matugen/colors.css";
+
+/* ============================================= */
+/* ==================== BASE ==================== */
+/* ============================================= */
+* {
+    border: none;
+    border-radius: 0px;
+    font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo";
+    font-size: 16px;
+    min-height: 0;
+    font-weight: bold;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+.modules-right {
+    margin-right: 12px;
+}
+
+/* ============================================= */
+/* ==================== TOOLTIP ==================== */
+/* ============================================= */
+tooltip {
+    background: @surface_variant;
+    border: 1px solid @primary;
+    border-radius: 12px;
+}
+
+tooltip label {
+    color: @on_surface;
+    padding: 6px;
+}
+
+/* ============================================= */
+/* ==================== WORKSPACES ==================== */
+/* ============================================= */
+#workspaces {
+    background: @background;
+    padding: 8px 5px;
+    border-radius: 16px;
+    color: @on_surface;
+}
+
+#workspaces button {
+    padding: 0px 6px;
+    margin: 0px 3px;
+    border-radius: 50px;
+    color: transparent;
+    background: @surface_variant;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.active {
+    background-color: @primary;
+    color: @on_primary;
+    min-width: 50px;
+    transition: all 0.3s ease-in-out;
+    font-size: 13px;
+}
+
+#workspaces button:hover {
+    background-color: @secondary;
+    color: @on_primary;
+    border-radius: 16px;
+    min-width: 50px;
+}
+
+#workspaces button.urgent {
+    background-color: @error;
+    color: @on_primary;
+    border-radius: 16px;
+    min-width: 50px;
+}
+
+/* ============================================= */
+/* ==================== MODULES ==================== */
+/* ============================================= */
+#battery,
+#pulseaudio,
+#backlight,
+#custom-pacman,
+#network,
+#clock,
+#custom-weather,
+#custom-media,
+#window,
+#custom-launcher,
+#custom-notification,
+#submap,
+#power-profiles-daemon,
+#custom-home-folder {
+    background-color: @background;
+    padding: 0 15px;
+    margin: 0 0 0 12px;
+    border-radius: 50px;
+}
+
+/* Module Colors */
+#submap { color: @tertiary; }
+#custom-launcher { color: @on_surface; }
+#clock { color: @primary; }
+#custom-media { color: @tertiary; }
+#custom-weather { color: @yellow; }           /* fallback if no @yellow */
+#custom-notification { color: @on_surface; }
+#power-profiles-daemon { color: @on_surface; }
+#custom-pacman { color: @orange; }            /* fallback */
+#pulseaudio { color: @yellow; }
+#network { color: @secondary; }
+#battery { 
+    color: @tertiary; 
+    margin: 0 10px 0 10px;
+}
+#custom-home-folder { color: @tertiary; }
+
+#custom-notification {
+    margin: 0 12px 0 0;
+}

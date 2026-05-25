@@ -1,0 +1,28 @@
+{
+    "checksum": "645796d39b94c220e150cfc8abdd3829",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat_keyboards.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#101c21",
+        "foreground": "#c3c6c7",
+        "cursor": "#c3c6c7"
+    },
+    "colors": {
+        "color0": "#101c21",
+        "color1": "#5F6063",
+        "color2": "#A06258",
+        "color3": "#B89764",
+        "color4": "#4C699C",
+        "color5": "#778084",
+        "color6": "#6CAAC4",
+        "color7": "#c3c6c7",
+        "color8": "#5e6d72",
+        "color9": "#5F6063",
+        "color10": "#A06258",
+        "color11": "#B89764",
+        "color12": "#4C699C",
+        "color13": "#778084",
+        "color14": "#6CAAC4",
+        "color15": "#c3c6c7"
+    }
+}

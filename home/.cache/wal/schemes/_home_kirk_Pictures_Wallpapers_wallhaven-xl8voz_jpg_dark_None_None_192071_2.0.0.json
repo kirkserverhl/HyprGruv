@@ -1,0 +1,28 @@
+{
+    "checksum": "13cc3739ba93d7958ac7d41c0bd097ef",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/wallhaven-xl8voz.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#111d27",
+        "foreground": "#c3c6c9",
+        "cursor": "#c3c6c9"
+    },
+    "colors": {
+        "color0": "#111d27",
+        "color1": "#3C6485",
+        "color2": "#58738C",
+        "color3": "#77879B",
+        "color4": "#6F8DA7",
+        "color5": "#76A6CB",
+        "color6": "#8494A7",
+        "color7": "#c3c6c9",
+        "color8": "#606c75",
+        "color9": "#3C6485",
+        "color10": "#58738C",
+        "color11": "#77879B",
+        "color12": "#6F8DA7",
+        "color13": "#76A6CB",
+        "color14": "#8494A7",
+        "color15": "#c3c6c9"
+    }
+}

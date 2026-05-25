@@ -1,29 +1,22 @@
 {
-    "checksum": "55fb0e3b8509c00d010f66edbbd61f7c",
-    "wallpaper": "/home/kirk/Pictures/Wallpapers/railway.jpg",
-    "alpha": "100",
-
-    "special": {
-        "background": "#121212",
-        "foreground": "#c3c3c3",
-        "cursor": "#c3c3c3"
-    },
-    "colors": {
-        "color0": "#121212",
-        "color1": "#6A6D73",
-        "color2": "#797C83",
-        "color3": "#817F84",
-        "color4": "#7D8288",
-        "color5": "#909499",
-        "color6": "#999EA2",
-        "color7": "#c3c3c3",
-        "color8": "#6e5959",
-        "color9": "#6A6D73",
-        "color10": "#797C83",
-        "color11": "#817F84",
-        "color12": "#7D8288",
-        "color13": "#909499",
-        "color14": "#999EA2",
-        "color15": "#c3c3c3"
-    }
+  "wallpaper": "/home/kirk/.hyprgruv/home/.config/settings/cache/wallpaper-generated/matugen-input-jive_wallhaven-lykooq.jpg",
+  "alpha": "100",
+  "colors": {
+    "color0": "#0e1514",
+    "color1": "",
+    "color2": "",
+    "color3": "#80d5d3",
+    "color4": "",
+    "color5": "#b0cccb",
+    "color6": "",
+    "color7": "#2f3636",
+    "color8": "",
+    "color9": "",
+    "color10": "#80d5d3",
+    "color11": "",
+    "color12": "",
+    "color13": "#b0cccb",
+    "color14": "",
+    "color15": "#dde4e3"
+  }
 }

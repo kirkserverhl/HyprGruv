@@ -1,0 +1,28 @@
+{
+    "checksum": "3fc346c7e35986e79a5f417ad06cb8d6",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/jive_wallhaven-lykooq.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0d2010",
+        "foreground": "#c2c7c3",
+        "cursor": "#c2c7c3"
+    },
+    "colors": {
+        "color0": "#0d2010",
+        "color1": "#B79171",
+        "color2": "#40778B",
+        "color3": "#767F80",
+        "color4": "#2CAAB1",
+        "color5": "#669495",
+        "color6": "#98A1A0",
+        "color7": "#c2c7c3",
+        "color8": "#5d7160",
+        "color9": "#B79171",
+        "color10": "#40778B",
+        "color11": "#767F80",
+        "color12": "#2CAAB1",
+        "color13": "#669495",
+        "color14": "#98A1A0",
+        "color15": "#c2c7c3"
+    }
+}

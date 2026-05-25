@@ -1,0 +1,28 @@
+{
+    "checksum": "b46dd096ac5821d934118a670b0ba934",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat_wallhaven-ey9mdl.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#171615",
+        "foreground": "#c5c4c4",
+        "cursor": "#c5c4c4"
+    },
+    "colors": {
+        "color0": "#171615",
+        "color1": "#524C65",
+        "color2": "#B4355B",
+        "color3": "#DC9570",
+        "color4": "#376990",
+        "color5": "#546893",
+        "color6": "#E534A0",
+        "color7": "#c5c4c4",
+        "color8": "#71675c",
+        "color9": "#524C65",
+        "color10": "#B4355B",
+        "color11": "#DC9570",
+        "color12": "#376990",
+        "color13": "#546893",
+        "color14": "#E534A0",
+        "color15": "#c5c4c4"
+    }
+}

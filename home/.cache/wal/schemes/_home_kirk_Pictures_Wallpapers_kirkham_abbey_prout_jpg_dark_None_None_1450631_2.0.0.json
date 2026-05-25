@@ -1,0 +1,28 @@
+{
+    "checksum": "c670ada8abf3d5bf16110758304190fe",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/kirkham_abbey_prout.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#2a231c",
+        "foreground": "#c9c8c6",
+        "cursor": "#c9c8c6"
+    },
+    "colors": {
+        "color0": "#2a231c",
+        "color1": "#AE9A84",
+        "color2": "#B9A68F",
+        "color3": "#C6B29A",
+        "color4": "#CFBBA4",
+        "color5": "#D9C6AE",
+        "color6": "#E5D1B9",
+        "color7": "#c9c8c6",
+        "color8": "#7a7064",
+        "color9": "#AE9A84",
+        "color10": "#B9A68F",
+        "color11": "#C6B29A",
+        "color12": "#CFBBA4",
+        "color13": "#D9C6AE",
+        "color14": "#E5D1B9",
+        "color15": "#c9c8c6"
+    }
+}

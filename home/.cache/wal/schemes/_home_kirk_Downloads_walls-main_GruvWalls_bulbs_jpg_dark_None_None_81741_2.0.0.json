@@ -1,0 +1,28 @@
+{
+    "checksum": "8e0a1a8a00916deb58f775a3fafd626c",
+    "wallpaper": "/home/kirk/Downloads/walls-main/GruvWalls/bulbs.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#292225",
+        "foreground": "#c9c7c8",
+        "cursor": "#c9c7c8"
+    },
+    "colors": {
+        "color0": "#292225",
+        "color1": "#6B5C65",
+        "color2": "#526374",
+        "color3": "#9A5E53",
+        "color4": "#CE6C55",
+        "color5": "#E4966E",
+        "color6": "#526B81",
+        "color7": "#c9c7c8",
+        "color8": "#7c6570",
+        "color9": "#6B5C65",
+        "color10": "#526374",
+        "color11": "#9A5E53",
+        "color12": "#CE6C55",
+        "color13": "#E4966E",
+        "color14": "#526B81",
+        "color15": "#c9c7c8"
+    }
+}

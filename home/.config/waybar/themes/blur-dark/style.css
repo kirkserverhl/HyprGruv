@@ -1,0 +1,24 @@
+/* ============================================= */
+/* Matugen Colors Import */
+/* ============================================= */
+@import "../../matugen/colors.css";
+
+/* ============================================= */
+/* Legacy Color Aliases (for compatibility) */
+/* ============================================= */
+@define-color backgroundlight @surface_variant;
+@define-color backgrounddark @background;
+@define-color workspacesbackground1 @background;
+@define-color workspacesbackground2 @surface_variant;
+@define-color bordercolor @surface_variant;
+@define-color textcolor1 @on_surface;
+@define-color textcolor2 @on_surface;
+@define-color textcolor3 @on_surface;
+@define-color iconcolor @on_surface;
+
+/* ============================================= */
+/* Specific Overrides for this theme */
+/* ============================================= */
+window#waybar {
+  background-color: rgba(255, 255, 255, 0.1);
+}

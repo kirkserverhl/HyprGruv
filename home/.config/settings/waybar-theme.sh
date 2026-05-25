@@ -1,1 +1,1 @@
-/gruv;/gruv/colored
+/sane;/sane/subtle

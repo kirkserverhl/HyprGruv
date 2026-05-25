@@ -1,0 +1,28 @@
+{
+    "checksum": "3e7d71bf699af7b80393921fe83fc05e",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/wallhaven-jev33w.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#190a0a",
+        "foreground": "#c5c1c1",
+        "cursor": "#c5c1c1"
+    },
+    "colors": {
+        "color0": "#190a0a",
+        "color1": "#676767",
+        "color2": "#787878",
+        "color3": "#8F8F8F",
+        "color4": "#AFAFAF",
+        "color5": "#D0D0D0",
+        "color6": "#E8E8E8",
+        "color7": "#c5c1c1",
+        "color8": "#6e5959",
+        "color9": "#676767",
+        "color10": "#787878",
+        "color11": "#8F8F8F",
+        "color12": "#AFAFAF",
+        "color13": "#D0D0D0",
+        "color14": "#E8E8E8",
+        "color15": "#c5c1c1"
+    }
+}

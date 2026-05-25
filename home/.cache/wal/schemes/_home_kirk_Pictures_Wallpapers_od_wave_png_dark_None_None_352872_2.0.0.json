@@ -1,0 +1,28 @@
+{
+    "checksum": "026a6afc4a1e22f5aeb729209849b3f2",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/od_wave.png",
+    "alpha": "100",
+    "special": {
+        "background": "#181a1e",
+        "foreground": "#c5c5c6",
+        "cursor": "#c5c5c6"
+    },
+    "colors": {
+        "color0": "#181a1e",
+        "color1": "#6F93B0",
+        "color2": "#7CA6C7",
+        "color3": "#94A2A5",
+        "color4": "#A6C995",
+        "color5": "#85B4D5",
+        "color6": "#8CBDE1",
+        "color7": "#c5c5c6",
+        "color8": "#5f6a74",
+        "color9": "#6F93B0",
+        "color10": "#7CA6C7",
+        "color11": "#94A2A5",
+        "color12": "#A6C995",
+        "color13": "#85B4D5",
+        "color14": "#8CBDE1",
+        "color15": "#c5c5c6"
+    }
+}

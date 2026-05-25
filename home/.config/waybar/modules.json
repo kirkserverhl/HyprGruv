@@ -68,8 +68,8 @@
     "separate-outputs": true
   },
   // Empty
-  "custom/empty": {
-    "format": ""
+  "custom/launcher": {
+    "format": "󰣇"
   },
   // Tools
   "custom/tools": {
@@ -83,7 +83,7 @@
     "format": "",
     "on-click": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh",
     "on-click-right": "sleep 0.1 && ~/.config/hypr/scripts/hyprshot.sh",
-    "on-click-middle": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh w",
+    "on-click-middle": "sleep 0.1 && ~/.config/hypr/scripts/cliphist.sh",
     "tooltip-format": " Left:  Clipboard    📋️\nRight: Screenshot 📸"
   },
   // Updates Count
@@ -132,7 +132,7 @@
   // ChatGPT Launcher
   "custom/chatgpt": {
     "format": " ",
-    "on-click": "~/.config/hypr/scripts/ai.sh",
+    "on-click": "~/.config/settings/ai.sh",
     "tooltip-format": "AI Support 🤖"
   },
 
@@ -210,7 +210,8 @@
 
   // Clock
   "clock": {
-    "format": "{:%H:%M %a}",
+    "format": "{:%I:%M %p}",
+    "format-alt": "{:%a, %b %d %H:%M}",
     "on-click": "eww open cal --screen $(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .id')",
     "tooltip-format": "Left: Calendar\nRight: Pomodoro"
   },
@@ -357,7 +358,25 @@
     "interval": 60,
     "icon": false
   },
-
+  // DUNST
+  "custom/dunst": {
+    "exec": "~/.config/waybar/scripts/dunst.sh",
+    "on-click": "dunstctl set-paused toggle",
+    "restart-interval": 1
+  },
+  // Media Player
+  "custom/media": {
+    "format": "{}",
+    "escape": true,
+    "return-type": "json",
+    "max-length": 40,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl stop",
+    "smooth-scrolling-threshold": 10, // This value was tested using a trackpad, it should be lowered if using a mouse.
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null"
+  },
   // backlight:
   "backlight": {
     "format": "{icon} {percent}%",

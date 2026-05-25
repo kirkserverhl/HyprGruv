@@ -1,0 +1,28 @@
+{
+    "checksum": "847842a0c044897bf7a2e42b10e81abd",
+    "wallpaper": "/home/kirk/Downloads/walls-main/Nord/archlinux.png",
+    "alpha": "100",
+    "special": {
+        "background": "#1b1e25",
+        "foreground": "#c6c6c8",
+        "cursor": "#c6c6c8"
+    },
+    "colors": {
+        "color0": "#1b1e25",
+        "color1": "#6F8F92",
+        "color2": "#7A9FA0",
+        "color3": "#7DA3A4",
+        "color4": "#89B4B4",
+        "color5": "#8FBCBB",
+        "color6": "#8FBDBC",
+        "color7": "#c6c6c8",
+        "color8": "#626878",
+        "color9": "#6F8F92",
+        "color10": "#7A9FA0",
+        "color11": "#7DA3A4",
+        "color12": "#89B4B4",
+        "color13": "#8FBCBB",
+        "color14": "#8FBDBC",
+        "color15": "#c6c6c8"
+    }
+}

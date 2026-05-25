@@ -1,0 +1,28 @@
+{
+    "checksum": "eed254c24fce0f5a573791233e4f65c4",
+    "wallpaper": "/home/kirk/Downloads/walls-main/GruvWalls/leo_visions-XGpUYvpVF9A-unsplash.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#241f20",
+        "foreground": "#c8c7c7",
+        "cursor": "#c8c7c7"
+    },
+    "colors": {
+        "color0": "#241f20",
+        "color1": "#BC9083",
+        "color2": "#DEB28A",
+        "color3": "#F6CF93",
+        "color4": "#FDE296",
+        "color5": "#F5D6AE",
+        "color6": "#FDE6B4",
+        "color7": "#c8c7c7",
+        "color8": "#79636a",
+        "color9": "#BC9083",
+        "color10": "#DEB28A",
+        "color11": "#F6CF93",
+        "color12": "#FDE296",
+        "color13": "#F5D6AE",
+        "color14": "#FDE6B4",
+        "color15": "#c8c7c7"
+    }
+}

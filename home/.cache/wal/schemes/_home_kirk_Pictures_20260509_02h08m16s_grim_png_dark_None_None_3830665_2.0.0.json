@@ -1,0 +1,28 @@
+{
+    "checksum": "a039143173453fc14569a2c5bd9f0622",
+    "wallpaper": "/home/kirk/Pictures/20260509_02h08m16s_grim.png",
+    "alpha": "100",
+    "special": {
+        "background": "#151414",
+        "foreground": "#c4c4c4",
+        "cursor": "#c4c4c4"
+    },
+    "colors": {
+        "color0": "#151414",
+        "color1": "#453C38",
+        "color2": "#384748",
+        "color3": "#305B67",
+        "color4": "#474949",
+        "color5": "#69635E",
+        "color6": "#9C5433",
+        "color7": "#c4c4c4",
+        "color8": "#705b5b",
+        "color9": "#453C38",
+        "color10": "#384748",
+        "color11": "#305B67",
+        "color12": "#474949",
+        "color13": "#69635E",
+        "color14": "#9C5433",
+        "color15": "#c4c4c4"
+    }
+}

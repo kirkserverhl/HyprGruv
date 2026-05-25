@@ -126,6 +126,9 @@ source $ZSH/oh-my-zsh.sh
 
 alias reload="hyprctl reload"
 
+# Matugen Palette Output
+alias palette='~/.config/hypr/scripts/palette.sh'
+
 # =====================================================
 # Functions
 # =====================================================
@@ -291,3 +294,9 @@ bindkey '^H' backward-kill-word
 export PATH="$HOME/bin:$PATH"
 
 export CLUTTER_BACKEND=wayland
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<

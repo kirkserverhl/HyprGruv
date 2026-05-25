@@ -1,0 +1,28 @@
+{
+    "checksum": "a91399222f4cfd2f60a153a924e501d7",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/nord_wallhaven-x62wko.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0d1620",
+        "foreground": "#c2c4c7",
+        "cursor": "#c2c4c7"
+    },
+    "colors": {
+        "color0": "#0d1620",
+        "color1": "#44525A",
+        "color2": "#51616B",
+        "color3": "#576872",
+        "color4": "#677985",
+        "color5": "#768793",
+        "color6": "#96A5AE",
+        "color7": "#c2c4c7",
+        "color8": "#5d6671",
+        "color9": "#44525A",
+        "color10": "#51616B",
+        "color11": "#576872",
+        "color12": "#677985",
+        "color13": "#768793",
+        "color14": "#96A5AE",
+        "color15": "#c2c4c7"
+    }
+}

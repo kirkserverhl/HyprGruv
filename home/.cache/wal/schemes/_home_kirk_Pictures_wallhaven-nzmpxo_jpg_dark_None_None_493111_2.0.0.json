@@ -1,0 +1,28 @@
+{
+    "checksum": "ac911c51ba664c568eabec6e4b7ea526",
+    "wallpaper": "/home/kirk/Pictures/wallhaven-nzmpxo.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#35271c",
+        "foreground": "#ccc9c6",
+        "cursor": "#ccc9c6"
+    },
+    "colors": {
+        "color0": "#35271c",
+        "color1": "#D7B299",
+        "color2": "#B6CC97",
+        "color3": "#CED4A8",
+        "color4": "#E9CDB6",
+        "color5": "#CDE7B3",
+        "color6": "#EDDAC5",
+        "color7": "#ccc9c6",
+        "color8": "#7e7167",
+        "color9": "#D7B299",
+        "color10": "#B6CC97",
+        "color11": "#CED4A8",
+        "color12": "#E9CDB6",
+        "color13": "#CDE7B3",
+        "color14": "#EDDAC5",
+        "color15": "#ccc9c6"
+    }
+}

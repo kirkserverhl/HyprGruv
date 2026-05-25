@@ -1,0 +1,28 @@
+{
+    "checksum": "aec1b4170f292c2408502ab4d2508dd7",
+    "wallpaper": "/home/kirk/Downloads/walls-main/Catppuccin/Screenshot-Stylus.png",
+    "alpha": "100",
+    "special": {
+        "background": "#1e0c0c",
+        "foreground": "#c6c2c2",
+        "cursor": "#c6c2c2"
+    },
+    "colors": {
+        "color0": "#1e0c0c",
+        "color1": "#566B67",
+        "color2": "#C26D70",
+        "color3": "#42A42C",
+        "color4": "#669471",
+        "color5": "#4D6F92",
+        "color6": "#286DF4",
+        "color7": "#c6c2c2",
+        "color8": "#705c5c",
+        "color9": "#566B67",
+        "color10": "#C26D70",
+        "color11": "#42A42C",
+        "color12": "#669471",
+        "color13": "#4D6F92",
+        "color14": "#286DF4",
+        "color15": "#c6c2c2"
+    }
+}

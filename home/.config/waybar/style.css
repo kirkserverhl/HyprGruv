@@ -12,74 +12,113 @@
 /* -----------------------------------------------------
  * Import Pywal colors 
  * ----------------------------------------------------- */
-@import "matugen/colors.css";
+@import "colors.css";
 
-/* -----------------------------------------------------
+/* ============================================= */
+/*                MAIN WINDOW                    */
+/* ============================================= */
+window#waybar {
+  background: transparent;
+  border-bottom: none; /* remove any bottom border */
+}
+
+/* Give modules their own background so they stand out */
+.modules-left,
+.modules-center,
+.modules-right {
+  background: transparent;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+/* Individual module styling with nice rounded look (excluding workspaces and modules made transparent) */
+#custom-launcher,
+#battery,
+#bluetooth,
+#tray,
+#clock {
+  background: @backgroundlight;
+  color: @text2;
+  border-radius: 15px;
+  padding: 2px 12px;
+  margin: 3px 3px;
+  opacity: 0.95;
+} /* -----------------------------------------------------
  * General 
  * ----------------------------------------------------- */
 
 * {
   font-family:
-    "Agave Nerd Font", "Fira Sans Semibold", "Font Awesome 6 Free", FontAwesome,
-    Roboto, Helvetica, Arial, sans-serif;
+    "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo",
+    "Fira Sans Semibold", "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
   border: none;
   border-radius: 0px;
+  min-height: 0;
 }
 
 window#waybar {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-bottom: 0px solid #ffffff;
+  background: transparent;
+  background-color: transparent;
+  border-bottom: 0px solid @source_color;
+  padding-top: 1px;
+  padding-bottom: 1px;
   /* color: #FFFFFF; */
   transition-property: background-color;
   transition-duration: 0.5s;
 }
 
 .modules-left {
-  padding-left: 14px;
+  padding-left: 1rem;
 }
 
 /* -----------------------------------------------------
- * Workspaces 
+ * Workspaces - styled to match #custom-appmenu
  * ----------------------------------------------------- */
 
 #workspaces {
-  background: @workspacesbackground1;
-  margin: 5px 1px 6px 1px;
-  padding: 0px 1px;
+  background-color: @source_color;   /* Same background as the "Apps" button */
+  margin: 3px 4px;   /* minimal vertical gap */
+  padding: 0px 4px;
   border-radius: 15px;
-  border: 0px;
-  font-weight: bold;
-  font-style: normal;
-  opacity: 0.8;
-  font-size: 16px;
-  color: @textcolor1;
+  border: none;
+  opacity: 0.85;
+  font-weight: 600;
+  font-size: 16px;                   /* Match appmenu font-size */
 }
 
 #workspaces button {
-  padding: 0px 5px;
-  margin: 4px 3px;
-  border-radius: 15px;
-  border: 0px;
-  color: @textcolor1;
-  background-color: @workspacesbackground2;
-  transition: all 0.3s ease-in-out;
-  opacity: 0.4;
+  padding: 0px 10px;
+  margin: 2px 2px;   /* tighter internal spacing */
+  border-radius: 12px;
+  border: none;
+  color: #f4d03f;  /* gold for workspace numbers */
+  background-color: transparent;
+  transition: all 0.2s ease;
+  opacity: 0.9;
+  font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", "Fira Sans Semibold", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 #workspaces button.active {
-  color: @textcolor1;
-  background: @workspacesbackground2;
-  border-radius: 15px;
-  min-width: 40px;
-  transition: all 0.3s ease-in-out;
+  background-color: @tertiary_container;  /* secondary color for the active workspace */
+  color: #f9e79f;  /* brighter gold for active number */
   opacity: 1;
+  min-width: 36px;
+  font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", "Fira Sans Semibold", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 #workspaces button:hover {
-  color: @textcolor1;
-  background: @workspacesbackground2;
-  border-radius: 15px;
-  opacity: 0.7;
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #f4d03f;  /* gold */
+  opacity: 0.95;
+  font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", "Fira Sans Semibold", sans-serif;
+  font-size: 16px;
 }
 
 /* -----------------------------------------------------
@@ -88,7 +127,7 @@ window#waybar {
 
 tooltip {
   border-radius: 10px;
-  background-color: @backgroundlight;
+  background-color: @surface;
   opacity: 0.8;
   padding: 20px;
   margin: 0px;
@@ -104,10 +143,10 @@ tooltip label {
 
 #window {
   background: @backgroundlight;
-  margin: 8px 15px 8px 0px;
+  margin: 3px 15px 3px 0px;   /* minimal vertical for floating bar */
   padding: 2px 10px 0px 10px;
   border-radius: 12px;
-  color: @textcolor2;
+  color: @on_secondary_container2;
   font-size: 16px;
   font-weight: normal;
   opacity: 0.8;
@@ -122,8 +161,8 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #taskbar {
-  background: @backgroundlight;
-  margin: 6px 15px 6px 0px;
+  background: transparent;
+  margin: 3px 15px 3px 0px;   /* minimal vertical for floating bar */
   padding: 0px;
   border-radius: 15px;
   font-weight: normal;
@@ -192,7 +231,7 @@ window#waybar.empty #window {
   font-size: 20px;
   font-weight: bold;
   opacity: 0.8;
-  color: @iconcolor;
+  color: @textcolor;
 }
 
 #custom-quicklink1,
@@ -221,17 +260,7 @@ window#waybar.empty #window {
 }
 
 #custom-hypridle.notactive {
-  color: #dc2f2f;
-}
-
-#custom-chatgpt {
-  margin-right: 12px;
-  background-image: url("../assets/openai.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  padding-right: 16px;
-  opacity: 0.8;
+  color: @error;
 }
 
 /* -----------------------------------------------------
@@ -259,14 +288,31 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #custom-appmenu {
-  background-color: @backgrounddark;
+  background-color: @source_color;
   font-size: 16px;
-  color: @textcolor1;
+  color: @textcolor;
   border-radius: 15px;
   padding: 0px 10px 0px 10px;
-  margin: 8px 16px 8px 0px;
+  margin: 3px 16px 3px 0px;   /* minimal vertical margin for floating look */
   opacity: 0.8;
-  border: 3px solid @bordercolor;
+  border: 3px solid transparent;
+}
+
+/* -----------------------------------------------------
+ * Custom Media Player (matches appmenu/updates/clock pill style)
+ * ----------------------------------------------------- */
+#custom-media {
+  background-color: transparent;
+  font-size: 16px;
+  color: @textcolor;
+  padding: 2px 12px 0px 12px;
+  margin: 3px 15px 3px 0px;   /* consistent minimal floating margin */
+  opacity: 0.9;
+}
+
+#custom-media:hover {
+  color: @primary;
+  opacity: 1;
 }
 
 /* -----------------------------------------------------
@@ -277,7 +323,7 @@ window#waybar.empty #window {
   margin: 0px 13px 0px 0px;
   padding: 0px;
   font-size: 20px;
-  color: @iconcolor;
+  color: @accent;
   opacity: 0.8;
 }
 
@@ -286,22 +332,26 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #custom-updates {
-  background-color: @backgroundlight;
+  background-color: transparent;
   font-size: 16px;
-  color: @textcolor2;
-  border-radius: 15px;
+  color: @textcolor;
   padding: 2px 10px 0px 10px;
-  margin: 8px 15px 8px 0px;
-  opacity: 0.8;
+  margin: 3px 15px 3px 0px;
+  opacity: 0.9;
+}
+
+#custom-updates:hover {
+  color: @primary;
+  opacity: 1;
 }
 
 #custom-updates.green {
-  background-color: @backgroundlight;
+  background-color: @source_color;
 }
 
 #custom-updates.yellow {
-  background-color: #ff9a3c;
-  color: #ffffff;
+  background-color: @tertiary;
+  color: @on_background;
 }
 
 #custom-updates.red {
@@ -320,7 +370,7 @@ window#waybar.empty #window {
   margin: 0px;
   padding: 0px;
   font-size: 16px;
-  color: @iconcolor;
+  color: @textcolor;
 }
 
 #language {
@@ -332,14 +382,14 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #clock {
-  background-color: @backgrounddark;
+  background-color: @source_color;
   font-size: 16px;
   color: @textcolor1;
   border-radius: 15px;
   padding: 1px 10px 0px 10px;
-  margin: 8px 15px 8px 0px;
+  margin: 3px 15px 3px 0px;   /* minimal vertical for floating bar */
   opacity: 0.8;
-  border: 3px solid @bordercolor;
+  border: 3px solid transparent;
 }
 
 /* -----------------------------------------------------
@@ -347,12 +397,12 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #backlight {
-  background-color: @backgroundlight;
+  background-color: @source_color;
   font-size: 16px;
   color: @textcolor2;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
-  margin: 8px 15px 8px 0px;
+  margin: 3px 15px 3px 0px;   /* minimal vertical for floating bar */
   opacity: 0.8;
 }
 
@@ -361,18 +411,22 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #pulseaudio {
-  background-color: @backgroundlight;
+  background-color: transparent;
   font-size: 16px;
-  color: @textcolor2;
-  border-radius: 15px;
+  color: @textcolor;
   padding: 2px 10px 0px 10px;
-  margin: 8px 15px 8px 0px;
-  opacity: 0.8;
+  margin: 3px 15px 3px 0px;
+  opacity: 0.9;
+}
+
+#pulseaudio:hover {
+  color: @primary;
+  opacity: 1;
 }
 
 #pulseaudio.muted {
-  background-color: @backgrounddark;
-  color: @textcolor1;
+  background-color: @secondary_container;
+  color: @on_secondary_fixed1;
 }
 
 /* -----------------------------------------------------
@@ -380,23 +434,23 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #network {
-  background-color: @backgroundlight;
+  background-color: transparent;
   font-size: 16px;
   color: @textcolor2;
-  border-radius: 15px;
   padding: 2px 10px 0px 10px;
-  margin: 8px 15px 8px 0px;
-  opacity: 0.8;
+  margin: 3px 15px 3px 0px;
+  opacity: 0.9;
 }
 
-#network.ethernet {
-  background-color: @backgroundlight;
-  color: @textcolor2;
+#network:hover {
+  color: @primary;
+  opacity: 1;
 }
 
+#network.ethernet,
 #network.wifi {
-  background-color: @backgroundlight;
-  color: @textcolor2;
+  /* transparent like the base state */
+  color: @on_secondary_fixed2;
 }
 
 /* -----------------------------------------------------
@@ -406,12 +460,12 @@ window#waybar.empty #window {
 #bluetooth,
 #bluetooth.on,
 #bluetooth.connected {
-  background-color: @backgroundlight;
+  background-color: @source_color;
   font-size: 16px;
-  color: @textcolor2;
+  color: @on_secondary_fixed2;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
-  margin: 8px 15px 8px 0px;
+  margin: 3px 15px 3px 0px;   /* minimal vertical for floating bar */
   opacity: 0.8;
 }
 
@@ -426,31 +480,31 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #battery {
-  background-color: @backgroundlight;
+  background-color: @source_color;
   font-size: 16px;
-  color: @textcolor2;
+  color: @on_secondary_fixed2;
   border-radius: 15px;
   padding: 2px 15px 0px 10px;
-  margin: 8px 15px 8px 0px;
+  margin: 3px 15px 3px 0px;   /* minimal vertical for floating bar */
   opacity: 0.8;
 }
 
 #battery.charging,
 #battery.plugged {
-  color: @textcolor2;
-  background-color: @backgroundlight;
+  color: @on_secondary_fixed2;
+  background-color: @source_color;
 }
 
 @keyframes blink {
   to {
-    background-color: @backgroundlight;
-    color: @textcolor2;
+    background-color: @source_color;
+    color: @on_secondary_fixed2;
   }
 }
 
 #battery.critical:not(.charging) {
   background-color: #f53c3c;
-  color: @textcolor3;
+  color: @on_secondary_fixed3;
   animation-name: blink;
   animation-duration: 0.5s;
   animation-timing-function: linear;
@@ -464,7 +518,7 @@ window#waybar.empty #window {
 
 #tray {
   padding: 0px 15px 0px 0px;
-  color: @textcolor3;
+  color: @on_secondary_fixed3;
 }
 
 #tray > .passive {

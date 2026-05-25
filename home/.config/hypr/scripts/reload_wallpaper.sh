@@ -1,11 +1,10 @@
 #!/bin/bash
+# Reload / restore wallpaper using the active Waypaper + awww backend.
+# (hyprpaper removed to avoid conflicts with waypaper-engine / awww-daemon)
 
-# Restart Hyprpaper
-hyprpaper &
+waypaper --restore 2>/dev/null || true
 
-# Wait for 5 seconds to ensure Hyprpaper is fully activated
-sleep 5
-
-# Restore the wallpaper using Waypaper
-waypaper --restore
+# If you need to restart the daemon:
+# killall waypaper-daemon awww-daemon 2>/dev/null || true
+# waypaper-engine daemon &
 

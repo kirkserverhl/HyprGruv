@@ -1,0 +1,28 @@
+{
+    "checksum": "bf5ecc833036067a7971b8f4817f075b",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv_space_odyssey.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0d2020",
+        "foreground": "#c2c7c7",
+        "cursor": "#c2c7c7"
+    },
+    "colors": {
+        "color0": "#0d2020",
+        "color1": "#B36543",
+        "color2": "#B7934F",
+        "color3": "#66938C",
+        "color4": "#9A9D8B",
+        "color5": "#85A597",
+        "color6": "#BCAD93",
+        "color7": "#c2c7c7",
+        "color8": "#5d7171",
+        "color9": "#B36543",
+        "color10": "#B7934F",
+        "color11": "#66938C",
+        "color12": "#9A9D8B",
+        "color13": "#85A597",
+        "color14": "#BCAD93",
+        "color15": "#c2c7c7"
+    }
+}
