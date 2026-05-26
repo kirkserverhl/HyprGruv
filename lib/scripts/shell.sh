@@ -15,16 +15,12 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 # ------------------------------------------------------------
-# Theming for gum (optional)
+# Theming for gum + headers (matugen dynamic)
 # ------------------------------------------------------------
-export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"
-export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"
-export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010"
-export GUM_CONFIRM_UNSELECTED_FOREGROUND="#282828"
-export GUM_INPUT_CURSOR_FOREGROUND="#282828"
-export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B"
-export GUM_SPIN_SPINNER_FOREGROUND="#749D91"
+source "$HOME/.config/hypr/scripts/colors.sh"
+source "$HOME/.config/hypr/scripts/header.sh"
+gum_apply_matugen_theme
+export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
 
 display_header "SHELL"
 

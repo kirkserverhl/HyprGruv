@@ -32,13 +32,13 @@
     "group/quicklinks",
     //"hyprland/window",
     "custom/empty",
-    "custom/notifications",
     "custom/media"
   ],
 
   // Modules Center
   "modules-center": [
-    "hyprland/workspaces"
+    "hyprland/workspaces",
+    "custom/special"
   ],
 
   // Modules Right

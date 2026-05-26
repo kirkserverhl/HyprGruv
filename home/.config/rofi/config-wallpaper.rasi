@@ -36,7 +36,8 @@ configuration {
 
 /* ---- Window ---- */
 window {
-    width:                        761px;
+    width:                        80%;
+    height:                       65%;           /* Limited height + scrolling */
     x-offset:                     0px;
     y-offset:                     65px;
     spacing:                      0px;
@@ -142,7 +143,7 @@ button selected {
 listview {
     enabled:                      true;
     columns:                      6;
-    lines:                        3;
+    lines:                        4;             /* More visible rows + proper scrolling */
     cycle:                        false;
     dynamic:                      false;
     scrollbar:                    true;
@@ -151,7 +152,7 @@ listview {
     spacing:                      10px;
     padding:                      10px;
     margin:                       0px;
-    fixed-height:                 true;
+    fixed-height:                 false;       /* Enable scrolling when content exceeds height */
     fixed-columns:                true;    
     background-color:             @background;
     border:                       0px;

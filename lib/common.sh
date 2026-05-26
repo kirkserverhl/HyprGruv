@@ -31,11 +31,20 @@ log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 # LS Terminal Colors
 export LSCOLORS=GxFxCxDxbxegedabagaced
 
-# Display header with figlet
-display_header() {
-	figlet -f "$HYPR_DIR/home/.fonts/Graffiti.flf" "$1" | lsd-print
-	echo ""
-}
+# Display header with figlet (uses the robust shared helper when available)
+if [[ -f "$HOME/.config/hypr/scripts/header.sh" ]]; then
+    source "$HOME/.config/hypr/scripts/header.sh"
+else
+    # Fallback for very early installer stages
+    display_header() {
+        if command -v figlet >/dev/null 2>&1 && [[ -f "$HYPR_DIR/home/.fonts/Graffiti.flf" ]]; then
+            figlet -f "$HYPR_DIR/home/.fonts/Graffiti.flf" "$1" | lsd-print
+        else
+            echo "=== $1 ===" | lsd-print
+        fi
+        echo ""
+    }
+fi
 # Check if command exists
 command_exists() {
 	command -v "$1" >/dev/null 2>&1

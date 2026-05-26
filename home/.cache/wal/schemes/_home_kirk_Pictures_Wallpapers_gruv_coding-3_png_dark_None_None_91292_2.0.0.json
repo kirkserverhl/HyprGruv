@@ -1,0 +1,28 @@
+{
+    "checksum": "e94680d6f7bc76364891a54856ad9de9",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv_coding-3.png",
+    "alpha": "100",
+    "special": {
+        "background": "#181818",
+        "foreground": "#c5c5c5",
+        "cursor": "#c5c5c5"
+    },
+    "colors": {
+        "color0": "#181818",
+        "color1": "#985C76",
+        "color2": "#608E63",
+        "color3": "#948C76",
+        "color4": "#437E81",
+        "color5": "#B16286",
+        "color6": "#458487",
+        "color7": "#c5c5c5",
+        "color8": "#725d5d",
+        "color9": "#985C76",
+        "color10": "#608E63",
+        "color11": "#948C76",
+        "color12": "#437E81",
+        "color13": "#B16286",
+        "color14": "#458487",
+        "color15": "#c5c5c5"
+    }
+}

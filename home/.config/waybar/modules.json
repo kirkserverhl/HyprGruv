@@ -6,7 +6,7 @@
 //
 //
 {
-  // Workspaces
+  // Workspaces (grouped 2-per-monitor)
   "hyprland/workspaces": {
     "on-scroll-up": "hyprctl dispatch workspace r-1",
     "on-scroll-down": "hyprctl dispatch workspace r+1",
@@ -21,11 +21,20 @@
     },
     "persistent-only": true,
     "persistent-workspaces": {
-      "DP-1": [1, 2, 3, 10],
-      "DVI-I-1": [4, 5, 6],
-      "HDMI-A-1": [7, 8, 9]
+      "*": [1,2,3,4,5,6,7,8]
     }
-    //"format-icons": {
+  },
+
+  // Special workspace (scratchpad) - third simplified slot
+  "custom/special": {
+    "exec": "~/.config/waybar/scripts/special-workspace.sh",
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "hyprctl dispatch togglespecialworkspace",
+    "interval": 2
+  },
+
+  //"format-icons": {
     //  "1": "1",
     //  "2": "2",
     //  "3": "3",
@@ -67,9 +76,14 @@
     },
     "separate-outputs": true
   },
-  // Empty
+  // App launcher icon (small)
   "custom/launcher": {
     "format": "󰣇"
+  },
+  // Lightweight spacer used in several places (including before media)
+  "custom/empty": {
+    "format": " ",
+    "tooltip": false
   },
   // Tools
   "custom/tools": {
@@ -93,7 +107,7 @@
     "return-type": "json",
     "exec": "~/.config/hypr/scripts/updates.sh",
     "interval": 1800,
-    "on-click": "$(cat ~/.config/hypr/scripts/terminal.sh) -e ~/.config/hypr/scripts/installupdates.sh",
+    "on-click": "$(cat ~/.config/hypr/scripts/terminal.sh) --class hypr-updates -e ~/.config/hypr/scripts/installupdates.sh",
     "on-click-right": "~/.config/hypr/scripts/software.sh",
     "tooltip-format": "Left:   Updates ⬆️\nRight: Pacseek 📦️"
   },
@@ -369,7 +383,6 @@
     "format": "{}",
     "escape": true,
     "return-type": "json",
-    "max-length": 40,
     "on-click": "playerctl play-pause",
     "on-click-right": "playerctl stop",
     "smooth-scrolling-threshold": 10, // This value was tested using a trackpad, it should be lowered if using a mouse.

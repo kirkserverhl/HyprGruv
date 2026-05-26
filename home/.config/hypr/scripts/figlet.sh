@@ -1,11 +1,15 @@
 #!/bin/bash
 
-# Function to display the header using figlet
-# Clears the screen and displays the header
-function display_header() {
-	clear
-	figlet -f ~/.fonts/Graffiti.flf "$1"
-}
+# Use the shared robust header system when available
+if [[ -f "$HOME/.config/hypr/scripts/header.sh" ]]; then
+    source "$HOME/.config/hypr/scripts/header.sh"
+else
+    # Fallback
+    display_header() {
+        clear
+        figlet -f ~/.fonts/Graffiti.flf "$1" 2>/dev/null || figlet "$1"
+    }
+fi
 
 # Main script logic
 echo
@@ -28,7 +32,11 @@ fi
 # Save the output to a file
 output_file=~/figlet.txt
 echo "Saving output to $output_file..."
-figlet -f ~/.fonts/Graffiti.flf "$mytext" >"$output_file"
+if [[ -n "$GRAFFITI_FONT" ]]; then
+    figlet -f "$GRAFFITI_FONT" "$mytext" >"$output_file"
+else
+    figlet -f ~/.fonts/Graffiti.flf "$mytext" 2>/dev/null || figlet "$mytext" >"$output_file"
+fi
 
 echo "Contents of the file:"
 cat "$output_file"

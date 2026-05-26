@@ -1,22 +1,22 @@
 {
-  "wallpaper": "/home/kirk/.hyprgruv/home/.config/settings/cache/wallpaper-generated/matugen-input-jive_wallhaven-lykooq.jpg",
+  "wallpaper": "/home/kirk/.hyprgruv/home/.config/settings/cache/wallpaper-generated/matugen-input-bw_wallhaven-48dy6j.jpg",
   "alpha": "100",
   "colors": {
-    "color0": "#0e1514",
+    "color0": "#111318",
     "color1": "",
     "color2": "",
-    "color3": "#80d5d3",
+    "color3": "#adc6ff",
     "color4": "",
-    "color5": "#b0cccb",
+    "color5": "#bfc6dc",
     "color6": "",
-    "color7": "#2f3636",
+    "color7": "#33353a",
     "color8": "",
     "color9": "",
-    "color10": "#80d5d3",
+    "color10": "#adc6ff",
     "color11": "",
     "color12": "",
-    "color13": "#b0cccb",
+    "color13": "#bfc6dc",
     "color14": "",
-    "color15": "#dde4e3"
+    "color15": "#e2e2e9"
   }
 }

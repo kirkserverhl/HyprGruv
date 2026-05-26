@@ -1,51 +1,56 @@
 #!/bin/bash
-# Hyprland dynamic workspace reassignment on monitor hotplug
+# Dynamic workspace reassignment on monitor hotplug
+# Supports 2 workspaces per monitor groups (1-2, 3-4, 5-6, 7-8)
 
 reassign_workspaces() {
-    # Get currently connected monitors
     local monitors=$(hyprctl monitors -j | jq -r '.[].name')
+    local count=$(echo "$monitors" | wc -l)
 
-    # Default to safe high-number workspace while we rearrange
+    echo ":: Monitor change detected. Reassigning workspaces for $count monitor(s)..."
+
+    # Move focus away temporarily
     hyprctl dispatch workspace 99 >/dev/null 2>&1
 
-    if echo "$monitors" | grep -q "DVI-I-2" && echo "$monitors" | grep -q "HDMI-A-1"; then
-        # Full setup: already handled by the static workspace= rules above
-        echo "Full three-monitor setup active"
-    elif echo "$monitors" | grep -q "DVI-I-2" && ! echo "$monitors" | grep -q "HDMI-A-1"; then
-        # HDMI gone → move 7-9 to DP-1 (or DVI-I-1, your choice)
-        hyprctl dispatch moveworkspacetomonitor 7 DVI-I-2
-        hyprctl dispatch moveworkspacetomonitor 8 DVI-I-2
-        hyprctl dispatch moveworkspacetomonitor 9 DVI-I-2
-        # 6-10 now all on DP-1 (combined)
-    elif ! echo "$monitors" | grep -q "DP-1" && echo "$monitors" | grep -q "HDMI-A-1"; then
-        # DP-1 gone → move 1-3+10 to HDMI-A-1 and combine 6-10 there too if you want
-        hyprctl dispatch moveworkspacetomonitor 1 HDMI-A-1
-        hyprctl dispatch moveworkspacetomonitor 2 HDMI-A-1
-        hyprctl dispatch moveworkspacetomonitor 3 HDMI-A-1
-        #hyprctl dispatch moveworkspacetomonitor 10 HDMI-A-1
-        hyprctl dispatch moveworkspacetomonitor 6 HDMI-A-1 # combine 6-10
-        #hyprctl dispatch moveworkspacetomonitor 7 HDMI-A-1
-        #hyprctl dispatch moveworkspacetomonitor 8 HDMI-A-1
-        #hyprctl dispatch moveworkspacetomonitor 9 HDMI-A-1
-    else
-        # Neither DP-1 nor HDMI-A-1 present → only DVI-I-1 left
-        # Collapse to 6 workspaces total
-        for ws in 1 2 3 4 5 6; do
-            hyprctl dispatch moveworkspacetomonitor "$ws" DVI-I-1
+    if [[ $count -ge 4 ]]; then
+        # 4 monitors: ideal 2-per-monitor layout
+        echo "  → 4-monitor mode (2 workspaces each)"
+        # Workspaces should already be pinned correctly via workspaces.conf
+
+    elif [[ $count -eq 3 ]]; then
+        # 3 monitors: distribute 8 workspaces across 3 screens (e.g. 3+3+2 or 2+3+3)
+        echo "  → 3-monitor mode"
+        # Example: move 7-8 to the last remaining monitor
+        # You can customize this logic
+
+    elif [[ $count -eq 2 ]]; then
+        echo "  → 2-monitor mode (4 workspaces each recommended)"
+        # Move workspaces 5-8 to the second monitor
+        for ws in 5 6 7 8; do
+            hyprctl dispatch moveworkspacetomonitor "$ws" "$(echo "$monitors" | tail -1)" 2>/dev/null
         done
-        # Workspaces 7-10 are still alive but hidden on the single monitor
-        # You can ignore them or move them too if you want
-        echo "Single-monitor fallback: only 6 workspaces"
+
+    elif [[ $count -eq 1 ]]; then
+        echo "  → Single monitor fallback (all workspaces collapsed)"
+        local single_monitor=$(echo "$monitors" | head -1)
+        for ws in {1..8}; do
+            hyprctl dispatch moveworkspacetomonitor "$ws" "$single_monitor" 2>/dev/null
+        done
     fi
 
-    # Return to workspace 1 on the focused monitor
+    # Return focus to workspace 1
+    sleep 0.2
     hyprctl dispatch workspace 1
 }
 
-# Listen for monitor events
+# Listen for monitor events via Hyprland socket
+if [[ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
+    echo "Not running under Hyprland"
+    exit 1
+fi
+
 socat - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do
     if [[ $line == monitoradded* ]] || [[ $line == monitorremoved* ]]; then
-        sleep 1 # give Hyprland a moment to update
+        sleep 0.8
         reassign_workspaces
     fi
 done

@@ -128,16 +128,33 @@ wal -q -i "$WALLPAPER" || echo ":: pywal failed (non-fatal)"
 echo ":: Running matugen..."
 MATUGEN_JSON=""
 if command -v matugen >/dev/null 2>&1; then
-    matugen_args="--mode dark --source-color-index 0"
+    # New: Offer the same 4 palette style choices via Rofi (like the 'palette' command)
+    matugen_args=""
 
-    if is_mostly_grayscale "$WALLPAPER"; then
-        echo ":: Detected mostly grayscale image → using monochrome scheme for neutral colors"
-        matugen_args+=" --type scheme-monochrome"
+    if command -v rofi >/dev/null 2>&1; then
+        echo ":: Launching Rofi to choose Matugen style..."
+        style_flags=$(~/.config/hypr/scripts/rofi-choose-matugen-style.sh "$WALLPAPER" 2>/dev/null || true)
+
+        if [[ -n "$style_flags" ]]; then
+            matugen_args="$style_flags --source-color-index 0"
+            echo ":: User chose: $style_flags"
+        fi
+    fi
+
+    # Fallback to previous behavior if Rofi was cancelled or not available
+    if [[ -z "$matugen_args" ]]; then
+        matugen_args="--mode dark --source-color-index 0"
+
+        if is_mostly_grayscale "$WALLPAPER"; then
+            echo ":: Detected mostly grayscale image → using monochrome scheme for neutral colors"
+            matugen_args+=" --type scheme-monochrome"
+        fi
+        echo ":: Using default Matugen style (no selection made)"
     fi
 
     # Always attempt JSON output for automation (Waypaper post-command has no TTY).
     # --source-color-index 0 prevents the interactive "multiple source colors" prompt.
-    echo ":: Running matugen (non-interactive)..."
+    echo ":: Running matugen (non-interactive) with: $matugen_args"
     matugen image "$PREPROCESSED_WALLPAPER" $matugen_args 2>&1 | tee -a ~/.cache/matugen.log || true
 
     # Capture clean JSON (strip any trailing "ok" noise)
