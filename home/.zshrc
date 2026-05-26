@@ -129,6 +129,9 @@ alias reload="hyprctl reload"
 # Matugen Palette Output
 alias palette='~/.config/hypr/scripts/palette.sh'
 
+# Errors
+alias errors='hyprctl configerrors'
+
 # =====================================================
 # Functions
 # =====================================================

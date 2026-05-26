@@ -20,10 +20,10 @@ fi
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
 # === Choose your preferred look ===
-# Classic previous grid (recommended for "format back to previous"):
+# 3 rows × 4 columns image grid using matugen colors + blurred wallpaper background
 THEME="$HOME/.config/rofi/themes/wallSelect.rasi"
 
-# Alternative "updated config" style (north anchored + blurred wallpaper bg + search):
+# Alternative style:
 # THEME="$HOME/.config/rofi/config-wallpaper.rasi"
 
 WAYPAPER_CMD="${HOME}/.local/bin/waypaper"
@@ -55,18 +55,32 @@ fi
 # Build mapping + rofi input safely (no huge NUL-containing variable)
 MAP_FILE=$(mktemp)
 ROFI_INPUT=$(mktemp)
-trap 'rm -f "$MAP_FILE" "$ROFI_INPUT"' EXIT
+PLACEHOLDER_DIR="/tmp/rofi-wallpaper-placeholders-$$"
+mkdir -p "$PLACEHOLDER_DIR"
+trap 'rm -f "$MAP_FILE" "$ROFI_INPUT"; rm -rf "$PLACEHOLDER_DIR"' EXIT
 
 RANDOM_LABEL="[ Random Wallpaper ]"
 GUI_LABEL="[ Open Waypaper GUI ]"
+
+# Create small placeholder icons for the special entries so they render as clean image cards
+# (no long text labels because element-text is disabled in the theme)
+if command -v magick >/dev/null 2>&1; then
+    magick -size 185x185 xc:'#222222' \
+           -fill '#aaaaaa' -gravity center -pointsize 64 -annotate 0 '⟳' \
+           "$PLACEHOLDER_DIR/random.png" 2>/dev/null || true
+
+    magick -size 185x185 xc:'#222222' \
+           -fill '#aaaaaa' -gravity center -pointsize 42 -annotate 0 'GUI' \
+           "$PLACEHOLDER_DIR/gui.png" 2>/dev/null || true
+fi
 
 # Write header entries to map (no | for these special ones)
 printf '%s\n' "$RANDOM_LABEL" >> "$MAP_FILE"
 printf '%s\n' "$GUI_LABEL" >> "$MAP_FILE"
 
-# For rofi input, special entries have no icon
-printf '%s\n' "$RANDOM_LABEL" >> "$ROFI_INPUT"
-printf '%s\n' "$GUI_LABEL" >> "$ROFI_INPUT"
+# Attach placeholder icons so the long labels are suppressed (element-text is disabled)
+printf '%s\0icon\x1f%s\n' "$RANDOM_LABEL" "$PLACEHOLDER_DIR/random.png" >> "$ROFI_INPUT"
+printf '%s\0icon\x1f%s\n' "$GUI_LABEL" "$PLACEHOLDER_DIR/gui.png" >> "$ROFI_INPUT"
 
 # Track seen basenames for disambiguation
 declare -A SEEN

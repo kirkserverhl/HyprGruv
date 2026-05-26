@@ -23,7 +23,7 @@
 }
 
 window {
-  background: url("../settings/cache/blurred_wallpaper.png");
+  background: url("file:///home/kirk/.config/settings/cache/blurred_wallpaper_full.png");
   background-size: cover;
   font-size: 16pt;
   color: #cdd6f4;

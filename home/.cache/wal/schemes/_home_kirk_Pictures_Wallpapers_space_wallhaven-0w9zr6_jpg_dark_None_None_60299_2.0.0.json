@@ -1,0 +1,28 @@
+{
+    "checksum": "2a8ec708b7457d3085d87bcef0282797",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/space_wallhaven-0w9zr6.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#101415",
+        "foreground": "#c3c4c4",
+        "cursor": "#c3c4c4"
+    },
+    "colors": {
+        "color0": "#101415",
+        "color1": "#8EA0B8",
+        "color2": "#97AAC4",
+        "color3": "#B0B5CD",
+        "color4": "#C3BDD5",
+        "color5": "#BAC4D6",
+        "color6": "#C8C8DA",
+        "color7": "#c3c4c4",
+        "color8": "#5a6e6e",
+        "color9": "#8EA0B8",
+        "color10": "#97AAC4",
+        "color11": "#B0B5CD",
+        "color12": "#C3BDD5",
+        "color13": "#BAC4D6",
+        "color14": "#C8C8DA",
+        "color15": "#c3c4c4"
+    }
+}

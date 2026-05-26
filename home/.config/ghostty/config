@@ -1,0 +1,208 @@
+# Ghostty Configuration
+# Ported from Kitty config + tuned for Ghostty strengths
+#
+# Managed as part of dotfiles in ~/.hyprgruv
+# Symlinked to ~/.config/ghostty/config
+#
+# Reload config: ctrl+shift+,
+# Edit config:   ghostty +edit-config   or ctrl+shift+,
+
+# =============================================================================
+# FONTS (matching your Kitty setup)
+# =============================================================================
+font-family = ShureTechMono Nerd Font
+font-size = 12
+
+# Ghostty automatically picks bold/italic variants when available (like Kitty "auto")
+# You can force specific ones if needed:
+# font-family-bold = ShureTechMono Nerd Font
+# font-family-italic = ShureTechMono Nerd Font
+
+# Disable ligatures (equivalent to Kitty's disable_ligatures always)
+# -calt covers most programming ligatures
+font-feature = -calt -liga -dlig -clig
+
+# =============================================================================
+# COLORS
+# =============================================================================
+# 1. Static fallback (your previous custom dark high-contrast theme)
+config-file = ./colors/static.conf
+
+# 2. Matugen dynamic colors (overrides the static file above when present)
+#    Generated when you change wallpapers via the wallpaper scripts.
+config-file = ?~/.config/ghostty/colors/matugen.conf
+
+# =============================================================================
+# APPEARANCE & OPACITY
+# =============================================================================
+background-opacity = 0.9
+
+# Cursor
+cursor-style = block
+cursor-style-blink = true
+# Note: Ghostty does not currently expose a configurable blink rate.
+# It uses a reasonable ~500-800ms cycle.
+
+# Window chrome
+window-decoration = auto
+window-padding-x = 4
+window-padding-y = 4
+
+# =============================================================================
+# BEHAVIOR (matching your Kitty prefs)
+# =============================================================================
+# Scrollback - Kitty had 5000 lines. Ghostty measures in bytes.
+# ~5-10MB is very generous (roughly equivalent to many thousands of lines)
+scrollback-limit = 10000000
+
+# Bell - completely silent like yours
+bell-features = no-system,no-audio,attention,title,no-border
+
+# Shell integration (excellent in Ghostty)
+shell-integration = detect
+shell-integration-features = cursor,no-sudo,title,no-ssh-env,no-ssh-terminfo,path
+
+# TERM variable - Ghostty's default (xterm-ghostty) is modern and well-supported.
+# Only change if you have a specific reason.
+# term = xterm-ghostty
+
+# =============================================================================
+# WINDOW / STARTUP SIZE
+# =============================================================================
+# Your Kitty had remember_window_size = no + fixed small initial size.
+# On Linux (especially tiling WMs like Hyprland) this is mostly controlled by
+# the compositor rules anyway. These are a reasonable starting point.
+window-width = 900
+window-height = 600
+
+# Do not restore previous session state on launch (closest equivalent)
+# Note: on Linux this key has limited effect; Hyprland rules usually dominate.
+window-save-state = never
+
+# =============================================================================
+# PERFORMANCE
+# =============================================================================
+# Ghostty is extremely fast by default. These are close in spirit to your
+# very low repaint_delay (10) and input_delay (3).
+window-vsync = true
+
+# =============================================================================
+# KEYBINDINGS
+# =============================================================================
+# IMPORTANT: Ghostty has *excellent* default keybindings that are already very
+# similar to what many Kitty power users configure manually.
+#
+# Your Kitty setup used `clear_all_shortcuts yes` + a very minimal custom set.
+# Ghostty does NOT have a direct "clear all" — instead we selectively override
+# or unbind things we don't want.
+#
+# RECOMMENDATION: Try Ghostty with mostly defaults first. You will probably
+# like them. The bindings below are mostly for muscle-memory compatibility
+# with your current Kitty setup.
+
+# --- Clipboard (your exact mappings) ---
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+
+# Note: There is no exact 1:1 for Kitty's "copy_or_interrupt" (ctrl+c does
+# copy if selection else SIGINT). Ghostty sends keys to the shell normally.
+# Use ctrl+shift+c for explicit copy. This is the Ghostty/WezTerm/VSCode way.
+
+# --- Font size (matching your muscle memory) ---
+keybind = ctrl+shift+plus=increase_font_size:1
+keybind = ctrl+shift+equal=increase_font_size:1
+keybind = ctrl+shift+minus=decrease_font_size:1
+keybind = ctrl+shift+backspace=reset_font_size
+
+# --- Scrolling (close to your kitty_mod + k/j etc.) ---
+# Ghostty defaults already give you:
+#   shift+page_up / shift+page_down
+#   shift+home / shift+end
+# You can add more if you really want ctrl+shift+k/j style:
+# keybind = ctrl+shift+k=scroll_up:1
+# keybind = ctrl+shift+j=scroll_down:1
+
+# --- Tabs (your mappings) ---
+# Your Kitty used:
+#   kitty_mod+h / kitty_mod+l  = next/prev tab
+#   kitty_mod+t                = new tab (with cwd)
+#   kitty_mod+q                = close tab
+#
+# Ghostty defaults are very good:
+#   ctrl+shift+t = new_tab
+#   ctrl+shift+w = close current tab/surface
+#   ctrl+tab     = next tab
+#   ctrl+shift+tab = previous tab
+#
+# If you really want h/l for tabs, you can add:
+# keybind = ctrl+shift+h=previous_tab
+# keybind = ctrl+shift+l=next_tab
+
+# --- Windows / Splits ---
+# Ghostty is much more powerful here than Kitty because it has native splits.
+# Default useful ones:
+#   ctrl+shift+n = new window
+#   ctrl+shift+w = close current surface/tab
+#
+# Splits (you didn't have these in Kitty the same way):
+#   ctrl+shift+o = new split right
+#   ctrl+shift+e = new split down
+#   ctrl+alt+arrows = move between splits
+#   super+ctrl+shift+arrows = resize splits
+#
+# If you want to replicate some of your Kitty window resize keys:
+# keybind = ctrl+left=resize_split:left,10
+# keybind = ctrl+right=resize_split:right,10
+# etc.
+
+# --- Quick actions you might want ---
+# keybind = ctrl+shift+f=start_search
+# keybind = ctrl+shift+a=select_all
+
+# Unbind things you never want (example):
+# keybind = ctrl+shift+q=unbind
+
+# =============================================================================
+# THEMING / WAL INTEGRATION (optional)
+# =============================================================================
+# You have a wal template at ~/.config/wal/templates/colors-ghostty
+# When you run wal, it generates something like ~/.cache/wal/ghostty.conf
+#
+# If you want dynamic colors from wal/pywal/matugen, uncomment:
+# config-file = ~/.cache/wal/ghostty.conf
+#
+# Note: the generated file will override the static colors above if placed
+# after them (or use a separate colors file + include order carefully).
+
+# =============================================================================
+# MISC / QUALITY OF LIFE
+# =============================================================================
+# Mouse
+mouse-hide-while-typing = true
+
+# Click timing (your Kitty had 0.5s)
+click-repeat-interval = 500
+
+# Allow programs to write to clipboard (similar to your clipboard_control)
+clipboard-write = allow
+clipboard-read = ask
+
+# Confirm before closing the last surface (safety net)
+confirm-close-surface = true
+
+# =============================================================================
+# NOTES FOR YOU (Kirk)
+# =============================================================================
+# 1. Ghostty's splits are fantastic. Consider learning the split navigation.
+# 2. The default keybindings are deliberately chosen to be discoverable and
+#    consistent with other modern terminals (WezTerm, Alacritty users, etc).
+# 3. `ghostty +list-keybinds` will show you everything that is active.
+# 4. `ghostty +list-actions` shows every possible action you can bind.
+# 5. On Hyprland you can make Ghostty even nicer with window rules (opacity,
+#    size, workspace, floating terminal, etc).
+#
+# To test this config:
+#   ghostty +validate-config
+#   ghostty
+#
+# If something looks wrong, the errors are usually very clear.

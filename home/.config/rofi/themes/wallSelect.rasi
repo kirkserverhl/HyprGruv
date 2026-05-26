@@ -4,7 +4,7 @@ configuration {
     modi:                        "drun";
     show-icons:                  true;
     drun-display-format:         "{name}";
-    font:                        "JetBrainsMono NF Bold 11";
+    font:                        "ShureTechMono Nerd Font 13";
     
     //hover-select:				 true;
 	//me-select-entry:			 "";
@@ -13,11 +13,23 @@ configuration {
 
 //----- Global Properties -----//
 
+/* Load blurred wallpaper background + border width first (same as main launcher) */
+@import "~/.config/settings/cache/current_wallpaper.rasi"
+@import "~/.config/settings/rofi-border.rasi"
+
+/* Matugen colors (replaces pywal) */
+@import "~/.config/rofi/colors.rasi"
+
+/* Map matugen Material You variables to the names this theme expects */
 * {
-main-bg: #282828CC;   /* more transparent (was E6) so compositor blur shows through nicely */
-main-fg: #fbf1c7;
-select-bg: #d79921;
-select-fg: #282828;
+    background:  @surface-container-low;
+    foreground:  @on-surface;
+    color11:     @primary;     /* selection color */
+
+    /* fallbacks */
+    color0:      @surface-container-lowest;
+    color7:      @on-surface;
+    color8:      @outline;
 }
 
 //----- Main Window -----//
@@ -25,15 +37,16 @@ select-fg: #282828;
 window {
     enabled:                     true;
     fullscreen:                  false;
-    width:                       92%;
-    height:                      72%;           /* Limited to ~3/4 of screen, scrollable */
+    width:                       820px;
+    height:                      660px;        /* increased to fit all 3 rows fully */
     transparency:                "real";
     cursor:                      "default";
     spacing:                     0px;
     padding:                     0px;
-    border:                      0px;
-    border-radius:               0px;
-    border-color:                transparent;
+    margin:                      0px;
+    border:                      @border-width;
+    border-color:                @foreground;
+    border-radius:               10px;
     background-color:            transparent;
 }
 
@@ -41,68 +54,86 @@ window {
 
 mainbox {
     enabled:                     true;
-    children:                    [ "listview" ];
-    background-color:            @main-bg;
+    spacing:                     4px;
+    padding:                     8px;
+    background-color:            rgba(0, 0, 0, 0.35);
+    background-image:            @current-image;   /* blurred wallpaper like main launcher */
+    children:                    [ "inputbar", "listview" ];
+}
+
+//----- Inputbar (compact search) -----//
+inputbar {
+    enabled:                     true;
+    spacing:                     8px;
+    padding:                     8px 12px;
+    border-radius:               8px;
+    /* Very dark solid background so the search text stands out clearly */
+    background-color:            #0f0f0f;
+    text-color:                  #ffffff;
+    children:                    [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                     true;
+    text-color:                  #dddddd;
+    padding:                     0px 4px 0px 0px;
+}
+
+entry {
+    enabled:                     true;
+    placeholder:                 "Search wallpapers...";
+    placeholder-color:           #bbbbbb;
 }
 
 //----- Listview -----//
 
 listview {
     enabled:                     true;
-    columns:                     6;
+    columns:                     4;
     lines:                       3;
-    spacing:                     12px;          /* was 50px — massive dead space between previews */
-    padding:                     12px 18px;
+    spacing:                     2px;
+    padding:                     4px;
     cycle:                       true;
     dynamic:                     false;
     scrollbar:                   true;
     layout:                      vertical;
-    reverse:                     true;
+    reverse:                     false;
     fixed-height:                false;
     fixed-columns:               true;
+    flow:                        horizontal;
     cursor:                      "default";
-    background-color:            transparent;
-    text-color:                  @main-fg;
+    background-color:            rgba(15, 15, 15, 0.55);  /* more transparent so blurred wallpaper shows through better */
+    text-color:                  @foreground;
 }
 
 //----- Elements -----//
 
 element {
     enabled:                     true;
-    orientation:                 vertical;   /* portrait cards — icon on top, label below (preferred look) */
-    spacing:                     4px;
-    padding:                     4px;
-    border-radius:               14px;
+    orientation:                 vertical;
+    spacing:                     0px;
+    padding:                     0px;
+    border-radius:               6px;
     cursor:                      pointer;
     background-color:            transparent;
-    text-color:                  @main-fg;
-}
-
-/* Keep horizontal only on very wide screens if desired — comment out to force vertical everywhere */
-@media(max-aspect-ratio: 1.8) {
-    element {
-        orientation:             vertical;
-    }
+    text-color:                  @foreground;
 }
 
 element selected.normal {
-    background-color:            @select-bg;
-    text-color:                  @select-fg;
+    background-color:            @color11;
+    border-radius:               6px;
 }
 
 element-icon {
-    size:                        140px;       /* fixed size works better for vertical portrait previews */
+    size:                        185px;        /* slightly smaller to guarantee all 3 rows fit cleanly */
     cursor:                      inherit;
-    border-radius:               8px;
+    border-radius:               4px;
     background-color:            transparent;
     text-color:                  inherit;
 }
 
+
+
 element-text {
-    vertical-align:              0.5;
-    horizontal-align:            0.5;
-    padding:                     8px 12px;
-    cursor:                      inherit;
-    background-color:            transparent;
-    text-color:                  inherit;
+    enabled:                     false;       /* no filenames under previews */
 }

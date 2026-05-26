@@ -29,8 +29,8 @@ by Stephan Raabe (2023)
 }
 
 window {
-  background-image: url("file:///home/kirk/.config/settings/cache/current_wallpaper.jpg");
-  background-size: cover; /* or contain, fill, etc. */
+  background-image: url("file:///home/kirk/.config/settings/cache/blurred_wallpaper_full.png");
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }

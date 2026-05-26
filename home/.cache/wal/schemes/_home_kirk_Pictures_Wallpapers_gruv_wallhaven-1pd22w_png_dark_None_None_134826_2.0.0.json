@@ -1,0 +1,28 @@
+{
+    "checksum": "ebd8afd0162740bac2bc698364a8cd97",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv_wallhaven-1pd22w.png",
+    "alpha": "100",
+    "special": {
+        "background": "#181818",
+        "foreground": "#c5c5c5",
+        "cursor": "#c5c5c5"
+    },
+    "colors": {
+        "color0": "#181818",
+        "color1": "#D78B1D",
+        "color2": "#D79921",
+        "color3": "#9C955C",
+        "color4": "#697987",
+        "color5": "#AF6386",
+        "color6": "#458588",
+        "color7": "#c5c5c5",
+        "color8": "#725d5d",
+        "color9": "#D78B1D",
+        "color10": "#D79921",
+        "color11": "#9C955C",
+        "color12": "#697987",
+        "color13": "#AF6386",
+        "color14": "#458588",
+        "color15": "#c5c5c5"
+    }
+}

@@ -16,6 +16,8 @@ DEFAULT_WP="$HOME/Pictures/Wallpapers/lady.png"
 
 BLURRED_WALLPAPER="$CACHE_DIR/blurred_wallpaper.png"
 SQUARE_WALLPAPER="$CACHE_DIR/square_wallpaper.png"
+# Full-screen (monitor native res) blurred version — for hyprlock / wlogout / SDDM
+FULL_BLURRED_WALLPAPER="$CACHE_DIR/blurred_wallpaper_full.png"
 RASI_FILE="$CACHE_DIR/current_wallpaper.rasi"
 
 WALLPAPER_EFFECT_FILE="$HOME/.config/settings/wallpaper-effect.sh"
@@ -32,8 +34,9 @@ GRAYSCALE_THRESHOLD=0.08
 mkdir -p "$GENERATED_DIR" "$CACHE_DIR"
 
 if [ -f "$BLUR_FILE" ]; then
-    BLUR=$(cat "$BLUR_FILE")
+    BLUR=$(cat "$BLUR_FILE" | tr -d '[:space:]' | grep -oE '^[0-9]+x[0-9]+' || true)
 fi
+[ -z "$BLUR" ] && BLUR="20x8"   # sane default if file is empty/garbage
 
 if [ -f "$USE_CACHE_FILE" ]; then
     USE_CACHE=1
@@ -297,6 +300,46 @@ else
 fi
 cp "$BLUR_CACHE_PATH" "$BLURRED_WALLPAPER" 2>/dev/null || true
 
+# Full-screen blurred wallpaper (native monitor resolution, for lock/logout/login screens)
+# Uses the (possibly effected) USED_WALLPAPER so it matches current theme
+FULL_BLUR_CACHE_NAME="fullblur-${BLUR}-${EFFECT}-${WALLPAPER_FILENAME}.png"
+FULL_BLUR_CACHE_PATH="$GENERATED_DIR/$FULL_BLUR_CACHE_NAME"
+
+# Detect primary monitor pixel resolution for "full screen"
+if command -v hyprctl >/dev/null 2>&1; then
+    FULL_RES=$(hyprctl -j monitors 2>/dev/null | jq -r '[ .[] | select(.focused == true) | "\(.width)x\(.height)" ] | .[0] // "1920x1080"' 2>/dev/null || echo "1920x1080")
+else
+    FULL_RES="1920x1080"
+fi
+FULL_W="${FULL_RES%x*}"
+FULL_H="${FULL_RES#*x}"
+
+if [ -f "$FULL_BLUR_CACHE_PATH" ] && [ "$FORCE_GENERATE" -eq 0 ] && [ "$USE_CACHE" -eq 1 ]; then
+    echo ":: Using cached FULL blurred wallpaper"
+else
+    echo ":: Generating FULL SCREEN blurred (${FULL_W}x${FULL_H})..."
+    # Optimized path: scale to cover, downsample for expensive blur, heavy blur, then upsample to full res
+    # Fallback to simpler if magick struggles
+    if ! magick "$USED_WALLPAPER" \
+            -resize "${FULL_W}x${FULL_H}^" \
+            -gravity center \
+            -extent "${FULL_W}x${FULL_H}" \
+            -resize 30% \
+            -blur "$BLUR" \
+            -resize "${FULL_W}x${FULL_H}" \
+            "$FULL_BLURRED_WALLPAPER" 2>/dev/null; then
+        # Simpler fallback (milder blur to keep it fast)
+        magick "$USED_WALLPAPER" \
+            -resize "${FULL_W}x${FULL_H}^" \
+            -gravity center \
+            -extent "${FULL_W}x${FULL_H}" \
+            -blur 0x12 \
+            "$FULL_BLURRED_WALLPAPER" 2>/dev/null || true
+    fi
+    cp "$FULL_BLURRED_WALLPAPER" "$FULL_BLUR_CACHE_PATH" 2>/dev/null || true
+fi
+cp "$FULL_BLUR_CACHE_PATH" "$FULL_BLURRED_WALLPAPER" 2>/dev/null || true
+
 # Square wallpaper
 SQUARE_CACHE="$GENERATED_DIR/square-$WALLPAPER_FILENAME.png"
 if [ -f "$SQUARE_CACHE" ] && [ "$FORCE_GENERATE" -eq 0 ] && [ "$USE_CACHE" -eq 1 ]; then
@@ -311,8 +354,14 @@ fi
 echo "* { current-image: url(\"$BLURRED_WALLPAPER\", height); }" > "$RASI_FILE"
 
 echo ":: Generated assets:"
-echo "   - $BLURRED_WALLPAPER"
+echo "   - $BLURRED_WALLPAPER (small, for UI/rofi)"
+echo "   - $FULL_BLURRED_WALLPAPER (full screen, for hyprlock/wlogout/sddm)"
 echo "   - $SQUARE_WALLPAPER"
 echo "   - $RASI_FILE"
 
 echo ":: Wallpaper processing complete!"
+
+# ------------------- SDDM (optional, needs sudo on first run) -------------------
+# Update sugar-candy SDDM theme with the full-screen blurred wallpaper
+"$HOME/.config/hypr/scripts/update-sddm-wallpaper.sh" "$FULL_BLURRED_WALLPAPER" || true &
+disown 2>/dev/null || true

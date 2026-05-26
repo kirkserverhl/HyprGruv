@@ -2,66 +2,66 @@
 /* This file is auto-generated. Do not edit manually. */
 
 QWidget {
-    background-color: #111318;
-    color: #e2e2e9;
+    background-color: #10131c;
+    color: #e0e2ef;
     font-family: "JetBrainsMono Nerd Font Propo", sans-serif;
     font-size: 11pt;
 }
 
 QPushButton {
-    background-color: #2b4678;
-    color: #d8e2ff;
-    border: 1px solid #8e9099;
+    background-color: #00429c;
+    color: #d9e2ff;
+    border: 1px solid #8e909c;
     border-radius: 6px;
     padding: 6px 12px;
 }
 
 QPushButton:hover {
-    background-color: #adc6ff;
-    color: #102f60;
+    background-color: #b0c6ff;
+    color: #002d6f;
 }
 
 QPushButton:pressed {
-    background-color: #2b4678;
+    background-color: #00429c;
 }
 
 QListWidget {
-    background-color: #1e1f25;
-    border: 1px solid #44474f;
+    background-color: #1c1f29;
+    border: 1px solid #434651;
     border-radius: 6px;
 }
 
 QListWidget::item:selected {
-    background-color: #adc6ff;
-    color: #102f60;
+    background-color: #b0c6ff;
+    color: #002d6f;
 }
 
 QLabel {
-    color: #e2e2e9;
+    color: #e0e2ef;
 }
 
 QLineEdit {
-    background-color: #282a2f;
-    color: #e2e2e9;
-    border: 1px solid #8e9099;
+    background-color: #262a34;
+    color: #e0e2ef;
+    border: 1px solid #8e909c;
     border-radius: 4px;
     padding: 4px;
 }
 
 QComboBox {
-    background-color: #1e1f25;
-    color: #e2e2e9;
-    border: 1px solid #8e9099;
+    background-color: #1c1f29;
+    color: #e0e2ef;
+    border: 1px solid #8e909c;
     border-radius: 4px;
     padding: 4px;
 }
 
 QScrollBar:vertical {
-    background: #1e1f25;
+    background: #1c1f29;
     width: 8px;
 }
 
 QScrollBar::handle:vertical {
-    background: #8e9099;
+    background: #8e909c;
     border-radius: 4px;
 }
