@@ -1,0 +1,13 @@
+/* Matugen Dynamic Firefox Theme */
+
+:root {
+    /* Hex colors */
+    <* for name, value in colors *>
+    --{{name}}: {{value.default.hex}};
+    <* endfor *>
+
+    /* RGB values (very useful for transparency) */
+    <* for name, value in colors *>
+    --{{name}}-rgb: {{value.default.red}} {{value.default.green}} {{value.default.blue}};
+    <* endfor *>
+}

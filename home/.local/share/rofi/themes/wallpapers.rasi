@@ -1,14 +1,28 @@
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun";
     show-icons:                 true;
-    display-drun:               " Wallpapers";
-	drun-display-format:        "{name}";
-    font:                       "SF Pro Text Medium 12";
+    font:                       "sans-serif 11";
 }
 
 /*****----- Global Properties -----*****/
-@import                          "../colors/colors.rasi"
+/* Use live matugen Material You colors (generated to ~/.config/rofi/colors.rasi) */
+@import "~/.config/rofi/colors.rasi"
+
+/* Map Material 3 tokens to the names this theme expects (minimal visual change) */
+* {
+    bg0:  @surface-container-lowest;
+    bg1:  @surface-container-low;
+    bg2:  @surface-container;
+    bg3:  @surface-container-high;
+    bg4:  @surface-container-highest;
+
+    text: @on-surface;
+    blue: @primary;                 /* accent/selection highlight */
+
+    grey0: @outline;
+    grey1: @outline-variant;
+    grey2: @on-surface-variant;
+}
 
 /*****----- Main Window -----*****/
 window {
@@ -16,15 +30,15 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       1200px;
-    height:                      380px;
+    width:                       58%;
+    height:                      76%;        /* give enough vertical room for input + 3 full rows of cards */
     x-offset:                    0px;
     y-offset:                    0px;
     enabled:                     true;
     margin:                      0px;
-    padding:                     0px;
+    padding:                     0px;        /* minimal */
     border:                      1px solid;
-    border-radius:               20px;
+    border-radius:               14px;
     border-color:                @bg2;
     background-color:            @bg0;
     cursor:                      "default";
@@ -33,10 +47,10 @@ window {
 /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     20px;
+    spacing:                     4px;        /* minimal gap */
     margin:                      0px;
-    padding:                     30px;
-    border:                      0px solid;
+    padding:                     6px 8px 8px 8px;   /* very reduced */
+    border:                      0px;
     border-radius:               0px;
     border-color:                @blue;
     background-color:            transparent;
@@ -46,11 +60,11 @@ mainbox {
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     15px;
+    spacing:                     4px;
     margin:                      0px;
-    padding:                     15px 20px;
+    padding:                     4px 8px;    /* very compact search bar */
     border:                      0px;
-    border-radius:               15px;
+    border-radius:               6px;
     border-color:                @blue;
     background-color:            @bg1;
     text-color:                  @text;
@@ -76,20 +90,21 @@ entry {
 /*****----- Listview -----*****/
 listview {
     enabled:                     true;
-    columns:                     4;
-    lines:                       2;
+    columns:                     4;          /* 3 rows x 4 columns scrolling grid */
+    lines:                       3;
     cycle:                       true;
-    dynamic:                     true;
-    scrollbar:                   false;
+    dynamic:                     false;    /* important for stable grid with dmenu icons */
+    scrollbar:                   true;
     layout:                      vertical;
     reverse:                     false;
-    fixed-height:                true;
+    fixed-height:                false;    /* let Rofi calculate proper row height; prevents clipping */
     fixed-columns:               true;
+    flow:                        horizontal;  /* row-by-row filling, good for keyboard nav */
     
-    spacing:                     15px;
+    spacing:                     5px;       /* tight between cards */
     margin:                      0px;
-    padding:                     0px;
-    border:                      0px solid;
+    padding:                     2px 4px;   /* minimal outer padding */
+    border:                      0px;
     border-radius:               0px;
     border-color:                @blue;
     background-color:            transparent;
@@ -98,20 +113,20 @@ listview {
 }
 
 scrollbar {
-    handle-width:                8px;
-    handle-color:                @blue;
-    border-radius:               4px;
-    background-color:            @bg1;
+    handle-width:                6px;
+    handle-color:                @primary;
+    border-radius:               3px;
+    background-color:            @bg2;
 }
 
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     1px;        /* icon to filename */
     margin:                      0px;
-    padding:                     15px;
-    border:                      2px solid;
-    border-radius:               15px;
+    padding:                     2px;       /* minimal card padding */
+    border:                      1px solid;
+    border-radius:               6px;
     border-color:                transparent;
     background-color:            @bg1;
     text-color:                  @text;
@@ -128,15 +143,15 @@ element normal.normal {
 element selected.normal {
     background-color:            @bg2;
     text-color:                  @blue;
-    border-color:                @blue;
+    border-color:                @primary;   /* use live matugen primary */
 }
 
 element-icon {
     background-color:            transparent;
     text-color:                  inherit;
-    size:                        180px;
+    size:                        155px;      /* 4-col grid, leaves room for 3 full rows + input */
     cursor:                      inherit;
-    border-radius:               10px;
+    border-radius:               5px;
 }
 
 element-text {
@@ -146,6 +161,8 @@ element-text {
     cursor:                      inherit;
     vertical-align:              0.5;
     horizontal-align:            0.5;
+    font:                        "sans-serif 8";
+    padding:                     0px 3px 1px 3px;   /* almost zero vertical to protect row height */
 }
 
 /*****----- Message -----*****/

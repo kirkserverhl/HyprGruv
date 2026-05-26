@@ -1,0 +1,34 @@
+/*
+ * freshstart theme - uses the shared rich modules layout
+ * while allowing per-theme visual overrides via style.css
+ */
+{
+    "include": "../../modules.json",
+
+    // The exact rich layout the user wants (all modules surfaced)
+    "modules-left": [
+        "custom/appmenu",
+        "custom/keybindings",
+        "group/settings",
+        "group/links",
+        "group/quicklinks",
+        "custom/empty",
+        "custom/media"
+    ],
+
+    "modules-center": [
+        "hyprland/workspaces",
+        "custom/special"
+    ],
+
+    "modules-right": [
+        "custom/updates",
+        "pulseaudio",
+        "network",
+        "group/hardware",
+        "group/tools",
+        "tray",
+        "custom/exit",
+        "clock"
+    ]
+}

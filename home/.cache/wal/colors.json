@@ -1,22 +1,22 @@
 {
-  "wallpaper": "/home/kirk/.hyprgruv/home/.config/settings/cache/wallpaper-generated/matugen-input-space_wallhaven-gw96jd.jpg",
+  "wallpaper": "/home/kirk/.hyprgruv/home/.config/settings/cache/wallpaper-generated/matugen-input-gruvbox_girl.png",
   "alpha": "100",
   "colors": {
-    "color0": "#10131c",
+    "color0": "#0e1415",
     "color1": "",
     "color2": "",
-    "color3": "#b0c6ff",
+    "color3": "#81d3e0",
     "color4": "",
-    "color5": "#c3c3eb",
+    "color5": "#b1cbd0",
     "color6": "",
-    "color7": "#31353f",
+    "color7": "#303637",
     "color8": "",
     "color9": "",
-    "color10": "#b0c6ff",
+    "color10": "#81d3e0",
     "color11": "",
     "color12": "",
-    "color13": "#c3c3eb",
+    "color13": "#b1cbd0",
     "color14": "",
-    "color15": "#e0e2ef"
+    "color15": "#dee3e4"
   }
 }

@@ -10,11 +10,35 @@
 # - Clear "Exit" option to leave
 # - Uses your existing theming helpers (header + colors)
 
-set -euo pipefail
+# --- Pop out in floating window (same mechanism as unlockroot.sh, htop.sh, etc.) ---
+CLASS="dotfiles-floating"
+CLEAN_ENV=(env -u GDK_DEBUG -u GDK_DISABLE GDK_DEBUG= GDK_DISABLE=)
+
+if [[ -z "${PALETTE_INSIDE:-}" ]]; then
+    export PALETTE_INSIDE=1
+    # Use -e + explicit column size for reliable floating pop-out (same pattern as other tools).
+    # The Hyprland windowrule below will enforce the final pixel size + centering.
+    # 70c is a good starting point for the compact color preview content.
+    # Change this number (e.g. 65c or 75c) to tune the width to your liking.
+    exec "${CLEAN_ENV[@]}" kitty \
+        --class "$CLASS" \
+        --title "Color Palette" \
+        --override initial_window_width=70c \
+        --override initial_window_height=24c \
+        -e "$0" "$@"
+fi
 
 # --- Load your existing helpers for consistent look ---
 source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
+# Force the terminal title from inside the script as early as possible.
+# This guarantees the Hyprland windowrule (which keys on title) will match reliably.
+printf '\e]2;Color Palette\a' 2>/dev/null || true
+
+# Note: We intentionally do not use set -euo pipefail for the main body.
+# gum, matugen, and some of the wallpaper detection commands can return
+# non-zero in normal interactive use and would kill the script.
 
 # --- Find current wallpaper (your reliable cache) ---
 CURRENT_WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
@@ -104,7 +128,17 @@ while true; do
     echo
     gum style --bold --foreground 6 "✓ Shown: $LABEL"
     echo
-    read -r -p "Press Enter to choose another style (or select Exit above)..."
+    echo "Press [Enter] to choose another style, or [q] to exit"
+    while true; do
+        read -rsn1 key
+        if [[ -z "$key" ]]; then
+            # Enter → go back to the menu (re-run)
+            break
+        elif [[ "$key" =~ [qQ] ]]; then
+            echo "Exiting palette viewer."
+            exit 0
+        fi
+    done
 done
 
 echo

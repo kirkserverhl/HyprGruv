@@ -29,7 +29,8 @@ by Stephan Raabe (2023)
 }
 
 window {
-  background-image: url("file:///home/kirk/.config/settings/cache/blurred_wallpaper_full.png");
+  /* Live desktop blur transition — updated by launch-wlogout.sh before every run */
+  background-image: url("file:///tmp/wlogout-live-sharp.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -109,4 +110,60 @@ Buttons
   margin: 10px;
   border-radius: 20px;
   background-image: image(url("icons/reboot.png"));
+}
+
+/* ============================================================
+   LIVE BLUR TRANSITION + BETTER ICON + TEXT CENTERING
+   Added for the smooth open/close effect. Does not touch your
+   existing icon rules or hover styling above.
+   ============================================================ */
+
+/* The blurred version fades in over the sharp screenshot */
+window::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("file:///tmp/wlogout-live-blurred.png");
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: wlogout-blur-in 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    z-index: 1;
+}
+
+/* Gentle dim for readability during the transition */
+window::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 42%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.38) 70%);
+    opacity: 0;
+    animation: wlogout-dim-in 340ms ease forwards;
+    animation-delay: 30ms;
+    z-index: 2;
+}
+
+@keyframes wlogout-blur-in { to { opacity: 0.92; } }
+@keyframes wlogout-dim-in  { to { opacity: 0.52; } }
+
+/* === Proper centering for icon + text labels from the layout === */
+button {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* keep your other button properties from above */
+}
+
+button span {
+    margin-top: 6px;
+    font-size: 1.05em;
+    text-align: center;
+    line-height: 1.1;
+    z-index: 10; /* above the background layers */
+}
+
+/* Make the icon a bit larger now that we have text below it */
+#lock, #logout, #suspend, #hibernate, #shutdown, #reboot {
+    background-size: 38%;
 }

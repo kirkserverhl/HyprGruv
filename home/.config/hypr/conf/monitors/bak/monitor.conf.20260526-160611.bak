@@ -1,0 +1,29 @@
+# =====================================================
+# Monitor Configuration - Perfectly adjacent for smooth mouse
+# =====================================================
+# All monitors positioned so their edges touch exactly (no gaps).
+# Logical widths calculated from current scales for perfect alignment.
+# DP-1 (far left) left at scale 1.0 as you liked.
+# Other monitors use their current scales (1.20 / 2.40) for now.
+
+# Far left - Main monitor (DP-1)
+# Logical width: 1920 / 1.0 = 1920
+monitor = DP-1, 1920x1080@60.00, 0x0, 1.0
+
+# Next - Rotated vertical monitor (DVI-I-1)
+# Logical width (after 90° rotation): 1080 / 1.20 = 900
+# Positioned immediately after DP-1
+monitor = DVI-I-1, 1920x1080@60.00, 1920x0, 1.20, transform, 1
+
+# Next - HDMI monitor
+# Logical width: 1920 / 1.20 = 1600
+# Positioned immediately after DVI-I-1
+monitor = HDMI-A-1, 1920x1080@60.00, 2820x0, 1.20
+
+# Far right - 4K TV (DVI-I-2)
+# Logical width: 3840 / 2.40 = 1600
+# Positioned immediately after HDMI-A-1
+monitor = DVI-I-2, 3840x2160@60.00, 4420x0, 2.40
+
+# Fallback for any unknown monitors
+monitor = , preferred, auto, 1

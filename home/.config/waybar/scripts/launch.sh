@@ -43,7 +43,8 @@ IFS=';' read -ra arrThemes <<<"$themestyle"
 echo ":: Theme: ${arrThemes[0]}"
 
 if [ ! -f ~/.config/waybar/themes${arrThemes[1]}/style.css ]; then
-    themestyle="/sane;/sane/subtle"
+    # Fallback to the reliable freshstart + matugen theme instead of the old broken /sane
+    themestyle="/freshstart;/freshstart"
 fi
 
 # -----------------------------------------------------
@@ -58,6 +59,14 @@ if [ -f ~/.config/waybar/themes${arrThemes[0]}/config-custom ]; then
 fi
 if [ -f ~/.config/waybar/themes${arrThemes[1]}/style-custom.css ]; then
     style_file="style-custom.css"
+fi
+
+# If the chosen theme folder has no 'config' at all, fall back to the rich root layout
+if [ ! -f ~/.config/waybar/themes${arrThemes[0]}/$config_file ]; then
+    echo ":: Theme has no config — falling back to main ~/.config/waybar/config"
+    config_file=""
+    style_file="style.css"
+    # We will let the later waybar call use the root files
 fi
 
 # Check if waybar-disabled file exists

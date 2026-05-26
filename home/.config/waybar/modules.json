@@ -226,8 +226,8 @@
   "clock": {
     "format": "{:%I:%M %p}",
     "format-alt": "{:%a, %b %d %H:%M}",
-    "on-click": "eww open cal --screen $(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .id')",
-    "tooltip-format": "Left: Calendar\nRight: Pomodoro"
+    "on-click-right": "eww open cal --screen $(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .id')",
+    "tooltip-format": "Left: Toggle time/date format\nRight: Calendar"
   },
 
   // System

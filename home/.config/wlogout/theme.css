@@ -23,7 +23,8 @@
 }
 
 window {
-  background: url("file:///home/kirk/.config/settings/cache/blurred_wallpaper_full.png");
+  /* Live blur transition version (updated by launch script) */
+  background: url("file:///tmp/wlogout-live-sharp.png");
   background-size: cover;
   font-size: 16pt;
   color: #cdd6f4;

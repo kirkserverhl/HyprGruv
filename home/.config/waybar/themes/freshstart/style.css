@@ -1,0 +1,49 @@
+/*
+ * freshstart theme style
+ *
+ * This is the canonical starting point when using sane's HyprAccelerator course themes.
+ *
+ * It pulls:
+ *   1. Matugen dynamic colors (wallpaper-based)
+ *   2. The full preserved base styling (freshstart.css) that contains all the
+ *      module rules for the rich layout (groups, custom icons, workspaces, etc.)
+ *
+ * To create a new visual variant:
+ *   - Copy this folder to e.g. themes/myvariant/
+ *   - Change only the things below (or add more overrides)
+ *   - Update ~/.config/settings/waybar-theme.sh to point at it
+ */
+
+/* === Matugen dynamic colors (must come first) === */
+@import "../../../colors/matugen.css";
+
+/* === The complete preserved base style (all your module styling) === */
+@import "../../../freshstart.css";
+
+/*
+ * ============================================
+ * THEME-SPECIFIC OVERRIDES (add your tweaks here)
+ * ============================================
+ *
+ * Examples of what you can override without touching freshstart.css:
+ *
+ * window#waybar {
+ *     background: rgba(0, 0, 0, 0.35);
+ * }
+ *
+ * #workspaces {
+ *     background: @surface;
+ *     border-radius: 12px;
+ * }
+ *
+ * #custom-appmenu {
+ *     background-color: @primary;
+ *     color: @on_primary;
+ * }
+ *
+ * .modules-left, .modules-right {
+ *     background: transparent;
+ * }
+ */
+
+/* Start with zero extra overrides — pure freshstart + matugen */

@@ -1,51 +1,54 @@
-[input]
-cursor_blink = false
+# Yazi main configuration
+# See https://yazi-rs.github.io/docs/configuration/yazi/
 
-[mgr]
-linemode = "mtime"
-mouse_events = ["click", "drag", "scroll"]
-ratio = [3, 4, 4]
-scrolloff = 5
+[manager]
+# Show hidden files (dotfiles) by default
 show_hidden = true
-show_symlink = true
-sort_by = "alphabetical"
-sort_dir_first = true
-sort_sensitive = true
-sort_translit = false
-title_format = "{cwd}"
 
+# Sorting
+sort_by = "natural"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+
+# Display
+linemode = "none"
+show_symlink = true
+
+# Mouse
+mouse_events = [ "click", "scroll" ]
 
 [preview]
-cache_dir = "~/.cache/yazi"
-image_delay = 100
-image_filter = "catmull-rom"
-max_width = 2000
-max_height = 2000
-image_quality = 90
-sixel_fraction = 10
-tab_size = 4
-ueberzug_scale = 1.0
-wrap = "no"
+# Image preview settings
+max_width  = 1200
+max_height = 1200
 
-[which]
-sort_by = "none"
-sort_reverse = false
-sort_sensitive = true
-image_quality_sort_translt = false
+[opener]
+# You can customize openers here if needed
 
 [plugin]
-prepend_preloaders = [
-    # Replace magick, image, video with mediainfo
-    { mime = "{audio,video}/*", run = "mediainfo" },
-    { mime = "application/subrip", run = "mediainfo" },
+# Plugin settings
+prepend_previewers = [
+  # Add custom previewers here if needed
 ]
-#prepend_previewers = [
-#    # Replace magick, image, video with mediainfo
-#    { mime = "{audio,video}/*", run = "mediainfo"},
-#    { mime = "application/subrip", run = "mediainfo" },
-#{ name = "*/", run = "eza-preview" },
-#{ name = "*.md", run = "glow" }, # for markdown (.md) files
-#]
-#append_previewers = [
-#    { name = "*", run = "hexyl" },
-#]
+
+append_previewers = [
+  # ...
+]
+
+[input]
+# Input behavior
+
+[confirm]
+# Confirmation dialogs
+
+[select]
+# Selection dialogs
+
+[open]
+# "Open with" menu behavior
+
+[tasks]
+# Task manager
+
+# Keybindings are in keymap.toml (create it if you want to customize)

@@ -89,6 +89,7 @@ alias bd='cd "$OLDPWD"'
 # General
 alias rmd='/bin/rm -rfv'
 alias hypr='$EDITOR ~/.config/hypr/'
+alias hyprstow='$HOME/bin/migrate-config-to-stow'
 alias c='clear && $SHELL'
 alias ff='fastfetch'
 alias tm='tmux'
@@ -103,7 +104,7 @@ alias ping='ping -c 5'
 alias fastping='ping -c 100 -i .2'
 alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
 alias reload='hyprctl reload'
-alias scripts= 'cd ~/.config/hypr/scripts'
+alias hyprscripts= '$EDITOR ~/.config/hypr/scripts'
 
 # Zoxide
 alias za='zoxide add'
@@ -124,13 +125,16 @@ plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-alias reload="hyprctl reload"
+# alias reload="hyprctl reload"
 
 # Matugen Palette Output
 alias palette='~/.config/hypr/scripts/palette.sh'
 
 # Errors
-alias errors='hyprctl configerrors'
+alias hyprerror='hyprctl configerrors'
+
+# Unlock Faillock
+alias unlock='~/.config/hypr/scripts/unlockroot.sh'
 
 # =====================================================
 # Functions

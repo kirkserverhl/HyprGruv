@@ -66,3 +66,108 @@ run_command() {
 # Source this at the beginning of each script
 export HYPR_DIR ASSET_DIR BACKUP_DIR
 
+
+# ============== Matugen + Gum Styling (Added for consistency) ==============
+
+# Source matugen colors if available
+if [ -f ~/.cache/matugen/colors.sh ]; then
+    source ~/.cache/matugen/colors.sh
+elif [ -f ~/.config/hypr/colors.conf ]; then
+    source ~/.config/hypr/colors.conf
+fi
+
+# Fallback colors
+: "${COLOR_PRIMARY:="#89b4fa"}"
+: "${COLOR_SUCCESS:="#a6e3a1"}"
+: "${COLOR_ERROR:="#f38ba8"}"
+: "${COLOR_TEXT:="#cdd6f4"}"
+
+# Enhanced print functions using gum (for modern scripts)
+print_section() {
+    local title="$1"
+    echo ""
+    echo "$title" | gum style --foreground "$COLOR_PRIMARY" --bold
+}
+
+print_box() {
+    local content="$1"
+    echo "$content" | gum style \
+        --foreground "$COLOR_TEXT" \
+        --border rounded \
+        --border-foreground "$COLOR_PRIMARY" \
+        --padding "1 3" \
+        --width 95
+}
+
+show_success() {
+    gum style --foreground "$COLOR_SUCCESS" --bold "✓ $1"
+}
+
+show_error() {
+    gum style --foreground "$COLOR_ERROR" --bold "✗ $1"
+}
+
+# Make sure display_header is always available
+if ! command -v display_header >/dev/null 2>&1; then
+    display_header() {
+        if command -v figlet >/dev/null 2>&1 && [[ -f "$HOME/.fonts/Graffiti.flf" ]]; then
+            figlet -f "$HOME/.fonts/Graffiti.flf" "$1" | gum style --foreground "$COLOR_PRIMARY" --bold
+        else
+            echo "=== $1 ===" | gum style --foreground "$COLOR_PRIMARY" --bold
+        fi
+        echo ""
+    }
+fi
+EOFcat >> ~/.hyprgruv/lib/common.sh << 'EOF'
+
+# ============== Matugen + Gum Styling (Added for consistency) ==============
+
+# Source matugen colors if available
+if [ -f ~/.cache/matugen/colors.sh ]; then
+    source ~/.cache/matugen/colors.sh
+elif [ -f ~/.config/hypr/colors.conf ]; then
+    source ~/.config/hypr/colors.conf
+fi
+
+# Fallback colors
+: "${COLOR_PRIMARY:="#89b4fa"}"
+: "${COLOR_SUCCESS:="#a6e3a1"}"
+: "${COLOR_ERROR:="#f38ba8"}"
+: "${COLOR_TEXT:="#cdd6f4"}"
+
+# Enhanced print functions using gum (for modern scripts)
+print_section() {
+    local title="$1"
+    echo ""
+    echo "$title" | gum style --foreground "$COLOR_PRIMARY" --bold
+}
+
+print_box() {
+    local content="$1"
+    echo "$content" | gum style \
+        --foreground "$COLOR_TEXT" \
+        --border rounded \
+        --border-foreground "$COLOR_PRIMARY" \
+        --padding "1 3" \
+        --width 95
+}
+
+show_success() {
+    gum style --foreground "$COLOR_SUCCESS" --bold "✓ $1"
+}
+
+show_error() {
+    gum style --foreground "$COLOR_ERROR" --bold "✗ $1"
+}
+
+# Make sure display_header is always available
+if ! command -v display_header >/dev/null 2>&1; then
+    display_header() {
+        if command -v figlet >/dev/null 2>&1 && [[ -f "$HOME/.fonts/Graffiti.flf" ]]; then
+            figlet -f "$HOME/.fonts/Graffiti.flf" "$1" | gum style --foreground "$COLOR_PRIMARY" --bold
+        else
+            echo "=== $1 ===" | gum style --foreground "$COLOR_PRIMARY" --bold
+        fi
+        echo ""
+    }
+fi

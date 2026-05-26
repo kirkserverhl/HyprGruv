@@ -4,8 +4,6 @@
 #  ┃ ┏━┃┏━┛┃┃┃┏━┛  ━━┃┃┃┃┃ ┃ ┃  ┏━┃┏━┛┏┏┛
 #  ┛ ┛ ┛━━┛┛┛┛━━┛  ━━┛━━┛┛ ┛ ━━┛┛ ┛━━┛┛ ┛
 
-# -- To learn how to make something like this yourself, check out https://sane1090x.gumroad.com/l/hypraccelerator -- #
-
 # Check if the user provided an argument
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <path_to_image>"
@@ -19,9 +17,10 @@ notify-send "Changing Theme" "Applying new wallpaper and updating colors, please
 
 # Set wallpaper
 #swww img "$IMAGE" --transition-type center
+hyprctl hyprpaper wallpaper "[],$IMAGE"
 
 # Generate pywal colors
-#wal -i "$IMAGE" -n -s -t -e
+wal -i "$IMAGE" -n -s -t -e
 
 # Refresh Spotify
 #pywal-spicetify Dribbblish
@@ -31,11 +30,10 @@ matugen image "$IMAGE"
 
 # Refresh waybar
 pkill waybar
-$HOME/.config/waybar/scripts/launch.sh >/dev/null 2>&1 &
+$HOME/.config/hypr/scripts/launch.sh >/dev/null 2>&1 &
 
 # Refresh swaync
-pkill swaync
-swaync >/dev/null 2>&1 &
+pkill dunst
+dunst >/dev/null 2>&1 &
 
 notify-send "Theme Applied" "Wallpaper and theme updated successfully!"
-

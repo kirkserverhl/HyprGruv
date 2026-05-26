@@ -1,0 +1,157 @@
+/*
+ * config-matugen-chooser.rasi
+ *
+ * Clean list-style rofi theme for the two matugen post-waypaper menus:
+ *   1. Palette style selection (Dark/Light + Vibrant / Monochrome / etc.)
+ *   2. Source color selection (with live color swatches)
+ *
+ * This theme deliberately matches the visual language of:
+ *   - wallSelect.rasi (the fast wallpaper grid you get on Super+Shift+W)
+ *   - the other modern config-*.rasi files in this setup
+ *
+ * Key properties:
+ *   - Uses the exact same font (ShureTechMono Nerd Font 13)
+ *   - Imports live matugen colors via colors.rasi
+ *   - Imports the shared border width
+ *   - Uses matugen surface / primary colors for everything
+ *   - **NO** import of current_wallpaper.rasi
+ *   - **NO** background-image using the blurred wallpaper
+ *
+ * This completely eliminates the "old blurred wallpaper" problem because
+ * these two rofi menus are launched by set_wallpaper.sh *before* the new
+ * blurred image and current_wallpaper.rasi are generated for the newly
+ * chosen wallpaper.
+ */
+
+configuration {
+    font:                        "ShureTechMono Nerd Font 13";
+    show-icons:                  true;
+    icon-theme:                  "Gruvbox Plus Dark";
+    hover-select:                false;
+    me-select-entry:             "";
+    me-accept-entry:             "MousePrimary";
+    cycle:                       false;
+}
+
+/* Use the exact same live matugen Material You colors as the Super+W wallpaper selector (wallpapers.rasi) */
+@import "~/.config/rofi/colors.rasi"
+
+/* Shared border width */
+@import "~/.config/settings/rofi-border.rasi"
+
+/* Map exactly the same way wallpapers.rasi (the Super+W "waypaper engine" rofi) does.
+   This is what produces the "light tan" text the user sees on that rofi. */
+* {
+    bg0:  @surface-container-lowest;
+    bg1:  @surface-container-low;
+    bg2:  @surface-container;
+    bg3:  @surface-container-high;
+    bg4:  @surface-container-highest;
+
+    text: @on-surface;           /* the warm "light tan" the user likes */
+    blue: @primary;              /* accent for prompts / highlights */
+
+    grey0: @outline;
+    grey1: @outline-variant;
+    grey2: @on-surface-variant;
+}
+
+/* ---------------- Window ---------------- */
+window {
+    enabled:                     true;
+    fullscreen:                  false;
+    width:                       420px;
+    height:                      380px;     /* overridden per-menu via -theme-str when needed */
+    transparency:                "real";
+    cursor:                      "default";
+    spacing:                     0px;
+    padding:                     0px;
+    margin:                      0px;
+    border:                      @border-width;
+    border-color:                @outline;
+    border-radius:               12px;
+    background-color:            @surface-container-low;   /* solid surface color, no image */
+    location:                    center;
+    anchor:                      center;
+}
+
+/* ---------------- Main container (dark overlay like wallSelect for consistent text rendering) */
+mainbox {
+    enabled:                     true;
+    spacing:                     6px;
+    padding:                     10px;
+    /* Same dark translucent layer as wallSelect so the matugen text colors
+       (the "light tan" you see on the wallpaper grid) look identical here */
+    background-color:            rgba(0, 0, 0, 0.35);
+    children:                    [ "inputbar", "listview" ];
+}
+
+/* ---------------- Search bar — same variable usage as wallpapers.rasi (the Super+W waypaper engine rofi) */
+inputbar {
+    enabled:                     true;
+    spacing:                     8px;
+    padding:                     8px 12px;
+    border-radius:               8px;
+    background-color:            @bg1;   /* surface-container-low — matches the Super+W rofi */
+    text-color:                  @text;  /* the warm "light tan" (@on-surface) you see on Super+W */
+    children:                    [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                     true;
+    text-color:                  @blue;  /* primary accent, same as the Super+W rofi header */
+    padding:                     0 6px 0 0;
+}
+
+entry {
+    enabled:                     true;
+    placeholder:                 "Select option...";
+    placeholder-color:           @grey1;
+    text-color:                  @text;  /* warm light tan, same as Super+W */
+}
+
+/* ---------------- List (dark translucent bg + text from matugen, same as wallSelect) */
+listview {
+    enabled:                     true;
+    lines:                       7;          /* overridden per-menu via small -theme-str */
+    fixed-height:                true;
+    scrollbar:                   true;
+    cycle:                       false;
+    dynamic:                     false;
+    spacing:                     3px;
+    padding:                     4px;
+    /* Same dark layer as wallSelect so the text renders the same way */
+    background-color:            rgba(15, 15, 15, 0.55);
+    text-color:                  @foreground;
+}
+
+/* ---------------- Elements (rows) — force the exact warm "light tan" the wallpaper engine rofi shows for its list text */
+element {
+    enabled:                     true;
+    padding:                     8px 12px;
+    border-radius:               8px;
+    spacing:                     8px;
+    cursor:                      pointer;
+    background-color:            transparent;
+    /* The warm light tan (#eae1d4) you see on the wallpaper grid (wallSelect) for the actual values/lines.
+       This makes "Dark - Standard", "Light - Standard", "Dark - Vibrant", and the hex lines look the same. */
+    text-color:                  #eae1d4;
+}
+
+element selected.normal {
+    background-color:            @primary;
+    text-color:                  #222222;
+    border-radius:               8px;
+}
+
+element-icon {
+    size:                        28px;
+    margin:                      0 8px 0 2px;
+    border-radius:               4px;
+    background-color:            transparent;
+}
+
+element-text {
+    vertical-align:              0.5;
+    text-color:                  #eae1d4;
+}
