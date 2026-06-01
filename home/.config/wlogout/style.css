@@ -6,19 +6,17 @@ __      _| | ___   __ _  ___  _   _| |_
   \_/\_/ |_|\___/ \__, |\___/ \__,_|\__| 
                   |___/                  
  
-by Stephan Raabe (2023) 
 ----------------------------------------------------- 
 */
 
 /* -----------------------------------------------------
- * Import Pywal colors 
+ * Import Matugen colors 
  * ----------------------------------------------------- */
-@import "../../.cache/wal/colors-wlogout.css";
+@import "colors.css";
 
 /* -----------------------------------------------------
  * General 
  * ----------------------------------------------------- */
-
 * {
   font-family:
     "HeavyData Nerd Font", "Fira Sans Semibold", FontAwesome, Roboto, Helvetica,
@@ -29,40 +27,39 @@ by Stephan Raabe (2023)
 }
 
 window {
-  /* Live desktop blur transition — updated by launch-wlogout.sh before every run */
-  background-image: url("file:///tmp/wlogout-live-sharp.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* Heavy security-lens look:
+     - Very dark + low opacity tint over the heavily blurred desktop.
+     - This + the strong layerrule blur creates the "frosted security film" effect.
+  */
+  background-color: rgba(12, 12, 12, 0.55);
+  font-size: 13pt;
+  color: #cdd6f4;
 }
 
 button {
+  /* Compact Rofi-style buttons */
+  min-width: 130px;
+  min-height: 130px;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 20%;
-  background-color: rgba(200, 220, 255, 0);
-  animation: gradient_f 20s ease-in infinite;
-  border-radius: 80px; /* Increased border radius for a more rounded look */
+  background-size: 38%;
+  background-color: rgba(25, 25, 25, 0.78);
+  border-radius: 18px;
   border: 0px;
+  margin: 8px;
 }
 
 button:focus {
-  background-size: 22%;
-  border: 0px;
+  background-size: 42%;
+  border: 2px solid #89b4fa;
+  border-radius: 18px;
 }
 
 button:hover {
-  background-color: @color11;
-  opacity: 0.8;
-  color: #cdd6f4;
-  background-size: 30%;
-  margin: 30px;
-  border-radius: 80px;
-  transition:
-    all 0.3s cubic-bezier(0.55, 0, 0.28, 1.682),
-    box-shadow 0.2s ease-in-out,
-    background-color 0.2s ease-in-out;
-  box-shadow: 0 0 50px @color7;
+  background-color: rgba(55, 55, 55, 0.92);
+  background-size: 42%;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.3);
 }
 
 /* Adjust the size of the icon or content inside the button */
@@ -76,22 +73,24 @@ Buttons
 ----------------------------------------------------- 
 */
 
+/* Individual icon buttons — size controlled above in the general button rule */
 #lock {
-  margin: 10px;
-  border-radius: 20px;
   background-image: image(url("icons/lock.png"));
 }
-
 #logout {
-  margin: 10px;
-  border-radius: 20px;
   background-image: image(url("icons/logout.png"));
 }
-
 #suspend {
-  margin: 10px;
-  border-radius: 20px;
   background-image: image(url("icons/suspend.png"));
+}
+#hibernate {
+  background-image: image(url("icons/hibernate.png"));
+}
+#reboot {
+  background-image: image(url("icons/reboot.png"));
+}
+#shutdown {
+  background-image: image(url("icons/shutdown.png"));
 }
 
 #hibernate {
@@ -110,60 +109,4 @@ Buttons
   margin: 10px;
   border-radius: 20px;
   background-image: image(url("icons/reboot.png"));
-}
-
-/* ============================================================
-   LIVE BLUR TRANSITION + BETTER ICON + TEXT CENTERING
-   Added for the smooth open/close effect. Does not touch your
-   existing icon rules or hover styling above.
-   ============================================================ */
-
-/* The blurred version fades in over the sharp screenshot */
-window::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("file:///tmp/wlogout-live-blurred.png");
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    animation: wlogout-blur-in 380ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    z-index: 1;
-}
-
-/* Gentle dim for readability during the transition */
-window::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 42%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.38) 70%);
-    opacity: 0;
-    animation: wlogout-dim-in 340ms ease forwards;
-    animation-delay: 30ms;
-    z-index: 2;
-}
-
-@keyframes wlogout-blur-in { to { opacity: 0.92; } }
-@keyframes wlogout-dim-in  { to { opacity: 0.52; } }
-
-/* === Proper centering for icon + text labels from the layout === */
-button {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* keep your other button properties from above */
-}
-
-button span {
-    margin-top: 6px;
-    font-size: 1.05em;
-    text-align: center;
-    line-height: 1.1;
-    z-index: 10; /* above the background layers */
-}
-
-/* Make the icon a bit larger now that we have text below it */
-#lock, #logout, #suspend, #hibernate, #shutdown, #reboot {
-    background-size: 38%;
 }

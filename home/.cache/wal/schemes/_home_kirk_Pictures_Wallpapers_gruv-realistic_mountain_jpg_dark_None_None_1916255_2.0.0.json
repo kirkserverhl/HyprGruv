@@ -1,0 +1,28 @@
+{
+    "checksum": "846fca748389d6233c53c3f1ba3f39c1",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv-realistic_mountain.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0e2222",
+        "foreground": "#c2c7c7",
+        "cursor": "#c2c7c7"
+    },
+    "colors": {
+        "color0": "#0e2222",
+        "color1": "#343F40",
+        "color2": "#3A4647",
+        "color3": "#505A5B",
+        "color4": "#8D6854",
+        "color5": "#A0A6A5",
+        "color6": "#C4C1BC",
+        "color7": "#c2c7c7",
+        "color8": "#5e7272",
+        "color9": "#343F40",
+        "color10": "#3A4647",
+        "color11": "#505A5B",
+        "color12": "#8D6854",
+        "color13": "#A0A6A5",
+        "color14": "#C4C1BC",
+        "color15": "#c2c7c7"
+    }
+}

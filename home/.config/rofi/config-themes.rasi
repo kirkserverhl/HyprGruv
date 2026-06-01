@@ -4,7 +4,6 @@
 
 configuration {
     modi: "drun,run";
-    font: "Fira Sans 11";
     show-icons: true;
     icon-theme: "kora";
     display-drun: "APPS";
@@ -13,8 +12,9 @@ configuration {
     scroll-method: 1;
 }
 
-/* Import Matugen Colors */
-@import "~/.config/waybar/matugen/colors.css";
+/* Standard matugen colors + font + (no blurred bg for this simple theme picker) */
+@import "~/.config/rofi/colors.rasi"
+@import "~/.config/settings/rofi-font.rasi"
 
 /* Window */
 window {

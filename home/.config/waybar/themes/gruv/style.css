@@ -21,14 +21,14 @@
 
 * {
   font-family:
-    "Agave Nerd Font", "Fira Sans Semibold", FontAwesome, Roboto, Helvetica,
+    "Agave Nerd Font Propo", "Fira Sans Semibold", FontAwesome, Roboto, Helvetica,
     Arial,@import "../../matugen/colors.css";
 
 /* ============================================= */
 /* ==================== BASE ==================== */
 /* ============================================= */
 * {
-    font-family: "Agave Nerd Font", "Fira Sans Semibold", "FontAwesome", "Roboto", Helvetica, Arial, sans-serif;
+    font-family: "Agave Nerd Font Propo", "Fira Sans Semibold", "FontAwesome", "Roboto", Helvetica, Arial, sans-serif;
     border: none;
     border-radius: 0px;
     font-size: 16px;
@@ -158,7 +158,7 @@ window#waybar.empty #window {
 /* ==================== BASE ==================== */
 /* ============================================= */
 * {
-    font-family: "Agave Nerd Font", "Fira Sans Semibold", "FontAwesome", "Roboto", Helvetica, Arial, sans-serif;
+    font-family: "Agave Nerd Font Propo", "Fira Sans Semibold", "FontAwesome", "Roboto", Helvetica, Arial, sans-serif;
     border: none;
     border-radius: 0px;
     font-size: 16px;

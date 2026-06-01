@@ -21,10 +21,18 @@ chosen=$(printf '%s\n' "${themes[@]}" | rofi -dmenu -i \
 if [[ -n "$chosen" ]]; then
     echo "Switching to: $chosen"
 
-    cp "$THEMES_DIR/$chosen/config.jsonc" "$HOME/.config/waybar/config.jsonc"
-    cp "$THEMES_DIR/$chosen/style.css" "$HOME/.config/waybar/style.css"
+    # --- Style switching (clean, non-destructive) ---
+    # We maintain a symlink so the root style.css can @import "themes/current/style.css"
+    rm -f "$THEMES_DIR/current"
+    ln -s "$THEMES_DIR/$chosen" "$THEMES_DIR/current"
 
-    pkill -SIGUSR2 waybar || waybar &
+    # --- Config switching (optional per-theme layouts) ---
+    if [ -f "$THEMES_DIR/$chosen/config.jsonc" ]; then
+        cp "$THEMES_DIR/$chosen/config.jsonc" "$HOME/.config/waybar/config.jsonc"
+    fi
+
+    # Reload waybar gracefully
+    pkill -SIGUSR2 waybar 2>/dev/null || waybar &
 
     notify-send "Waybar" "Theme switched to: $chosen"
 fi

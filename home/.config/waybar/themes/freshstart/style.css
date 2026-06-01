@@ -47,3 +47,161 @@
  */
 
 /* Start with zero extra overrides — pure freshstart + matugen */
+
+/* Force the updates module to have a visible background no matter what
+   internal boxes/labels Waybar creates for the custom JSON module. */
+#custom-updates,
+#custom-updates > *,
+#custom-updates > * > *,
+#custom-updates > * > * > label,
+#custom-updates.green,
+#custom-updates.yellow,
+#custom-updates.red {
+  background-color: @color_aqua;
+}
+
+#custom-updates.green,
+#custom-updates.green > *,
+#custom-updates.green > * > * {
+  background-color: @source_color;
+}
+
+#custom-updates.yellow,
+#custom-updates.yellow > *,
+#custom-updates.yellow > * > * {
+  background-color: @tertiary;
+}
+
+#custom-updates.red,
+#custom-updates.red > *,
+#custom-updates.red > * > * {
+  background-color: #dc2f2f;
+}
+
+/* ============================================
+ * UPDATES (packages) MODULE — match dunst styling on left
+ * Farthest left module on the right side, left-rounded pill like dunst
+ * Very aggressive selectors to punch through Waybar's internal wrappers
+ * ============================================ */
+#custom-updates,
+#custom-updates > *,
+#custom-updates > * > *,
+#custom-updates > * > * > *,
+#custom-updates label,
+#custom-updates.green,
+#custom-updates.yellow,
+#custom-updates.red,
+#custom-updates.green > *,
+#custom-updates.yellow > *,
+#custom-updates.red > * {
+  border-radius: 15px 0 0 15px;
+  padding: 2px 12px 0 12px;
+  margin: 3px -2px 3px 6px;
+  opacity: 1;
+}
+
+#custom-updates:hover,
+#custom-updates.green:hover,
+#custom-updates.yellow:hover,
+#custom-updates.red:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+/* Base fallback */
+#custom-updates,
+#custom-updates > *,
+#custom-updates > * > * {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+/* The actual colored states — these must win for the background */
+#custom-updates.green,
+#custom-updates.green > *,
+#custom-updates.green > * > * {
+  background-color: @source_color;
+  color: @on_surface;
+}
+
+#custom-updates.yellow,
+#custom-updates.yellow > *,
+#custom-updates.yellow > * > * {
+  background-color: @tertiary;
+  color: @on_background;
+}
+
+#custom-updates.red,
+#custom-updates.red > *,
+#custom-updates.red > * > * {
+  background-color: #dc2f2f;
+  color: #ffffff;
+}
+
+/* group/network — same aqua pill as the network module (matugen color) */
+#group\/network,
+#group\/network *,
+#group\/network > box,
+#group\/network > box * {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+#group\/network {
+  border-radius: 15px 0 0 15px;
+  padding: 2px 8px 0 12px;
+  margin: 3px -2px 3px 0px;
+}
+
+#group\/network:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+}
+
+#group\/network #network.ethernet,
+#group\/network #network.wifi {
+  background: transparent;
+  color: @color_on_aqua;
+}
+
+/* Force correct text color on hardware + tools modules inside the group to match network icon */
+#group\/network #cpu,
+#group\/network #memory,
+#group\/network #disk,
+#group\/network #language,
+#group\/network #custom-system,
+#group\/network #custom-tools,
+#group\/network #custom-cliphist,
+#group\/network #custom-hypridle,
+#group\/network #custom-hyprshade {
+  color: @color_on_aqua;
+}
+
+#group\/network #custom-hypridle.active {
+  color: @color_on_aqua;
+}
+
+#group\/network #custom-hypridle.notactive {
+  color: @error;
+}
+
+/* Final clean updates styling - placed at absolute end of theme stylesheet */
+#custom-updates,
+#custom-updates.green,
+#custom-updates.yellow,
+/* Updates module — simple icon + count, styled exactly like the left dunst pill */
+#custom-updates {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 15px 0 0 15px;   /* left cap for right side */
+  padding: 2px 12px 0 12px;
+  margin: 3px -2px 3px 0px;
+  opacity: 1;
+}
+
+#custom-updates:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}

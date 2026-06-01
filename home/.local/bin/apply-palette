@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# apply-palette - Replace placeholders in config.toml
+
+CONFIG="$1"
+if [ ! -f "$CONFIG" ]; then
+    echo "Usage: apply-palette <path-to-config.toml>"
+    echo "Example: apply-palette ~/.config/waybar/config.toml"
+    exit 1
+fi
+
+source ~/.cache/matugen/short-palette.env
+
+cp "$CONFIG" "$CONFIG.bak"
+
+sed -i "
+    s/@bg@/$bg/g
+    s/@obg@/$obg/g
+    s/@mid@/$mid/g
+    s/@cnt@/$cnt/g
+    s/@ter@/$ter/g
+    s/@sec@/$sec/g
+    s/@err@/$err/g
+    s/@inv@/$inv/g
+    s/@out@/$out/g
+    s/@vout@/$vout/g
+    s/@sct@/$sct/g
+    s/@tcon@/$tcon/g
+" "$CONFIG"
+
+echo "✅ Applied palette to $CONFIG"
+echo "   Backup saved as $CONFIG.bak"

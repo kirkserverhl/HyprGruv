@@ -1,0 +1,28 @@
+{
+    "checksum": "443dd372e034bcadedea584db75c47f2",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-isekai.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0c0e1d",
+        "foreground": "#c2c2c6",
+        "cursor": "#c2c2c6"
+    },
+    "colors": {
+        "color0": "#0c0e1d",
+        "color1": "#525568",
+        "color2": "#5F6074",
+        "color3": "#67667A",
+        "color4": "#887076",
+        "color5": "#747085",
+        "color6": "#90788F",
+        "color7": "#c2c2c6",
+        "color8": "#5c5e70",
+        "color9": "#525568",
+        "color10": "#5F6074",
+        "color11": "#67667A",
+        "color12": "#887076",
+        "color13": "#747085",
+        "color14": "#90788F",
+        "color15": "#c2c2c6"
+    }
+}

@@ -5,8 +5,12 @@
 # ___) | (__| | | __/ __/ | | \__ \ | | | (_) | |_
 # |____/ \___|_| \___|\___|_| |_|___/_| |_|\___/ \__|
 #
-# Updated from grimblast to hyprshot
+# Advanced interactive screenshot tool (hyprshot backend)
 # -----------------------------------------------------
+# This is the full-featured version (menus, timers, save/copy/edit).
+# For the fast "just grab region to clipboard" use quickshot.sh instead.
+# (The old generic "screenshot.sh" wrapper has been retired.)
+#
 # Screenshots will be stored in $HOME by default.
 # The screenshot will be moved into the screenshot directory
 # Add this to ~/.config/user-dirs.dirs to save screenshots in a custom folder:

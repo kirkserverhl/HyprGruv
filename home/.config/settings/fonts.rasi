@@ -1,0 +1,6 @@
+/* Centralized Rofi Font - managed by apply-fonts.sh
+   Source: ~/.config/settings/fonts.sh  (FONT_UI role)
+*/
+configuration {
+    font: "Agave Nerd Font Propo 11";
+}

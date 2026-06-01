@@ -12,7 +12,6 @@
 /* ---- Configuration ---- */
 configuration {
     modi:                       "drun,run";
-    font:                       "Fira Sans 11";
     show-icons:                 true;
 	hover-select:               false;
     me-select-entry:            "";
@@ -22,17 +21,17 @@ configuration {
     scroll-method: 1;
 }
 
-/* ---- Load font ---- */
-@import "~/.config/settings/rofi-font.rasi"
+/* ---- Standard matugen colors + font + 50x30 blurred wallpaper background ---- */
+@import "~/.config/rofi/shared/standard.rasi"
 
-/* ---- Load pywal colors (custom wal template) ---- */
-@import "~/.cache/wal/colors-rofi-pywal"
-
-/* ---- Load wallpaper ---- */
-@import "~/.config/settings/cache/current_wallpaper.rasi"
-
-/* ---- Load border width ---- */
-@import "~/.config/settings/rofi-border.rasi"
+/* Map matugen Material You variables to the legacy names this theme expects */
+* {
+    background:     @surface-container-low;
+    foreground:     @on-surface;
+    color11:        @primary;
+    selected:       @primary;
+    background-alt: @surface-container;
+}
 
 /* ---- Window ---- */
 window {

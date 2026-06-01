@@ -1,0 +1,159 @@
+/*
+ * pavucontrol.css
+ * Matugen-powered theme for pavucontrol (GTK4)
+ * Generated automatically — do not edit directly.
+ */
+
+window {
+    background-color: @window_bg_color;
+    color: @window_fg_color;
+}
+
+.background {
+    background-color: @window_bg_color;
+}
+
+/* Headerbar */
+headerbar {
+    background-color: @headerbar_bg_color;
+    color: @headerbar_fg_color;
+    border: none;
+    box-shadow: none;
+}
+
+headerbar button {
+    color: @headerbar_fg_color;
+}
+
+headerbar button:hover {
+    background-color: alpha(currentColor, 0.08);
+}
+
+/* Main content areas */
+stack, scrolledwindow {
+    background-color: @window_bg_color;
+}
+
+/* Tree views (device lists, stream lists) */
+treeview {
+    background-color: @view_bg_color;
+    color: @view_fg_color;
+}
+
+treeview:selected {
+    background-color: alpha(@accent_color, 0.25);
+    color: @view_fg_color;
+}
+
+treeview row:hover {
+    background-color: alpha(currentColor, 0.06);
+}
+
+/* Volume scales / sliders */
+scale {
+    margin: 6px 0;
+}
+
+scale trough {
+    background-color: alpha(@view_fg_color, 0.15);
+    border-radius: 999px;
+    min-height: 6px;
+}
+
+scale highlight {
+    background-color: @accent_color;
+    border-radius: 999px;
+}
+
+scale slider {
+    background-color: @accent_color;
+    border: 2px solid @window_bg_color;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border-radius: 999px;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+/* Mute / lock buttons */
+button.toggle {
+    background-color: transparent;
+    color: @window_fg_color;
+    border-radius: 6px;
+}
+
+button.toggle:checked {
+    background-color: alpha(@accent_color, 0.2);
+    color: @accent_color;
+}
+
+/* Entry fields (search, etc.) */
+entry {
+    background-color: alpha(@view_fg_color, 0.08);
+    color: @view_fg_color;
+    border-radius: 8px;
+    border: 1px solid alpha(@view_fg_color, 0.15);
+}
+
+entry:focus {
+    border-color: @accent_color;
+    box-shadow: 0 0 0 1px alpha(@accent_color, 0.3);
+}
+
+/* Labels */
+label {
+    color: @view_fg_color;
+}
+
+label.dim-label {
+    color: alpha(@view_fg_color, 0.6);
+}
+
+/* Cards / stream boxes */
+frame, .card {
+    background-color: @card_bg_color;
+    border-radius: 10px;
+    border: 1px solid alpha(@view_fg_color, 0.08);
+}
+
+/* Sidebar / notebook tabs */
+notebook tab {
+    background-color: transparent;
+    color: alpha(@view_fg_color, 0.75);
+    padding: 6px 14px;
+    border-radius: 6px;
+}
+
+notebook tab:checked {
+    background-color: alpha(@accent_color, 0.15);
+    color: @view_fg_color;
+}
+
+/* Buttons */
+button {
+    background-color: alpha(@view_fg_color, 0.08);
+    color: @view_fg_color;
+    border-radius: 8px;
+}
+
+button:hover {
+    background-color: alpha(@view_fg_color, 0.15);
+}
+
+button.suggested-action {
+    background-color: @accent_color;
+    color: @accent_fg_color;
+}
+
+/* Scrollbars */
+scrollbar {
+    background-color: transparent;
+}
+
+scrollbar slider {
+    background-color: alpha(@view_fg_color, 0.3);
+    border-radius: 999px;
+}
+
+scrollbar slider:hover {
+    background-color: alpha(@view_fg_color, 0.5);
+}

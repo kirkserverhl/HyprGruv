@@ -1,19 +1,52 @@
 /* Waypaper Stylesheet - Managed by Matugen */
-/* This file is auto-generated. Do not edit manually. */
+/* 
+   Designed for Hyprland blur + isolated transparency on the Waypaper window only.
+   Main backgrounds are transparent / low alpha so the compositor blur shows through.
+   Matches your matugen colors + Agave Nerd Font Propo.
+   Does NOT affect nvim, browsers, etc.
+*/
 
+QMainWindow,
+QWidget#centralWidget,
+QWidget#centralwidget {
+    /* Let Hyprland's blur show through */
+    background-color: transparent;
+}
+
+/* Base font + text */
 QWidget {
-    background-color: {{colors.surface.default.hex}};
     color: {{colors.on_surface.default.hex}};
-    font-family: "JetBrainsMono Nerd Font Propo", sans-serif;
+    font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", sans-serif;
     font-size: 11pt;
 }
 
+/* The wallpaper grid — this is where you see the blur behind the thumbnails */
+QListWidget {
+    /* Tuned to ~0.90 opacity using matugen surface to match Kitty background_opacity 0.9 + global blur when running yazi */
+    background-color: {{colors.surface.default.hex}}e6;
+    border: 1px solid {{colors.outline_variant.default.hex}};
+    border-radius: 10px;
+}
+
+/* Thumbnails themselves are transparent so blur is visible behind them */
+QListWidget::item {
+    background-color: transparent;
+    border-radius: 6px;
+}
+
+QListWidget::item:selected {
+    background-color: {{colors.primary.default.hex}};
+    color: {{colors.on_primary.default.hex}};
+    border-radius: 8px;
+}
+
+/* Controls stay more solid for usability */
 QPushButton {
     background-color: {{colors.primary_container.default.hex}};
     color: {{colors.on_primary_container.default.hex}};
     border: 1px solid {{colors.outline.default.hex}};
     border-radius: 6px;
-    padding: 6px 12px;
+    padding: 6px 14px;
 }
 
 QPushButton:hover {
@@ -25,43 +58,47 @@ QPushButton:pressed {
     background-color: {{colors.primary_container.default.hex}};
 }
 
-QListWidget {
-    background-color: {{colors.surface_container.default.hex}};
-    border: 1px solid {{colors.outline_variant.default.hex}};
-    border-radius: 6px;
-}
-
-QListWidget::item:selected {
-    background-color: {{colors.primary.default.hex}};
-    color: {{colors.on_primary.default.hex}};
-}
-
 QLabel {
     color: {{colors.on_surface.default.hex}};
+    background-color: transparent;
 }
 
 QLineEdit {
     background-color: {{colors.surface_container_high.default.hex}};
     color: {{colors.on_surface.default.hex}};
     border: 1px solid {{colors.outline.default.hex}};
-    border-radius: 4px;
-    padding: 4px;
+    border-radius: 6px;
+    padding: 5px 8px;
+    selection-background-color: {{colors.primary.default.hex}};
 }
 
 QComboBox {
     background-color: {{colors.surface_container.default.hex}};
     color: {{colors.on_surface.default.hex}};
     border: 1px solid {{colors.outline.default.hex}};
-    border-radius: 4px;
-    padding: 4px;
+    border-radius: 6px;
+    padding: 5px 8px;
 }
 
+QComboBox QAbstractItemView {
+    background-color: {{colors.surface_container_high.default.hex}};
+    color: {{colors.on_surface.default.hex}};
+    selection-background-color: {{colors.primary.default.hex}};
+}
+
+/* Scrollbars - tuned for consistency with yazi-in-kitty transparency */
 QScrollBar:vertical {
-    background: {{colors.surface_container.default.hex}};
+    background: {{colors.surface_container.default.hex}}b3;  /* ~0.70 alpha for subtle scrollbar */
     width: 8px;
+    border-radius: 4px;
 }
 
 QScrollBar::handle:vertical {
     background: {{colors.outline.default.hex}};
     border-radius: 4px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: {{colors.outline_variant.default.hex}};
 }

@@ -1,0 +1,28 @@
+{
+    "checksum": "caed6a0cef4aa55a48238ea88af1f0b2",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-stop.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0c0f1e",
+        "foreground": "#c2c3c6",
+        "cursor": "#c2c3c6"
+    },
+    "colors": {
+        "color0": "#0c0f1e",
+        "color1": "#124893",
+        "color2": "#2B59A6",
+        "color3": "#305CA6",
+        "color4": "#4B71B8",
+        "color5": "#587CC2",
+        "color6": "#4BA3BA",
+        "color7": "#c2c3c6",
+        "color8": "#5c5f70",
+        "color9": "#124893",
+        "color10": "#2B59A6",
+        "color11": "#305CA6",
+        "color12": "#4B71B8",
+        "color13": "#587CC2",
+        "color14": "#4BA3BA",
+        "color15": "#c2c3c6"
+    }
+}

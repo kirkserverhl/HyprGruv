@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+# palette.sh — Simple, reliable 4-color source picker for matugen
+#
+# Goal: For any wallpaper, give you 4 "confident" colors that produce
+# good non-grey results. No more guessing which scheme will work.
+#
+# Usage:
+#   palette
+#
+# The script:
+#   1. Extracts 4 good source colors (saturation-aware, hue-diverse)
+#   2. Lets you preview + apply any of them instantly via `matugen color hex`
+#   3. Uses a single reliable scheme type (tonal-spot by default)
+#
+# Floating Kitty window (same pattern as your other tools)
+
+CLASS="dotfiles-floating"
+CLEAN_ENV=(env -u GDK_DEBUG -u GDK_DISABLE GDK_DEBUG= GDK_DISABLE=)
+
+if [[ -z "${PALETTE_INSIDE:-}" ]]; then
+    export PALETTE_INSIDE=1
+    exec "${CLEAN_ENV[@]}" kitty \
+        --class "$CLASS" \
+        --title "Matugen Palette" \
+        --override initial_window_width=68c \
+        --override initial_window_height=22c \
+        -e "$0" "$@"
+fi
+
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
+printf '\e]2;Matugen Palette\a' 2>/dev/null || true
+
+# --- Wallpaper detection ---
+CURRENT_WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
+DEFAULT_WP="$HOME/Pictures/Wallpapers/gruvbox_image46.png"
+
+if [[ -f "$CURRENT_WP_CACHE" ]]; then
+    WALLPAPER=$(cat "$CURRENT_WP_CACHE")
+elif command -v hyprctl &>/dev/null; then
+    WALLPAPER=$(hyprctl hyprpaper listactive 2>/dev/null | awk -F' = ' '{print $2}' | head -1 || true)
+fi
+
+if [[ -z "${WALLPAPER:-}" || ! -f "$WALLPAPER" ]]; then
+    WALLPAPER="$DEFAULT_WP"
+fi
+
+WP_NAME=$(basename "$WALLPAPER")
+
+EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
+
+# Default scheme — tonal-spot is the most reliable once you have a good source color.
+# Change to scheme-vibrant or scheme-expressive here if you prefer.
+DEFAULT_TYPE="--type scheme-tonal-spot"
+
+# --- Helper: apply a source color ---
+apply_color() {
+    local hex="$1"
+    local label="$2"
+
+    if ! command -v matugen >/dev/null 2>&1; then
+        echo "matugen not found"
+        return 1
+    fi
+
+    echo
+    echo "Applying: $label  ($hex)"
+    echo "Wallpaper: $WP_NAME"
+    echo
+
+    # Use the real wallpaper (or your normal preprocessed one if you prefer)
+    matugen color hex "$hex" --mode dark $DEFAULT_TYPE --show-colors 2>&1 | tail -n +2
+
+    # Explicit reloads (belt + suspenders).
+    # Some post_hooks from matugen config may behave differently under `matugen color` vs `image`.
+    pkill -SIGUSR2 waybar 2>/dev/null || true
+    pkill -SIGUSR1 kitty 2>/dev/null || true   # kitty listens on USR1 for config reload in your setup
+    # nvim is handled via its own post_hook (SIGUSR1 to nvim)
+
+    # Keep the legacy root colors.css in sync too (some old imports or themes may still reference it)
+    cp -f ~/.config/waybar/colors/matugen.css ~/.config/waybar/colors.css 2>/dev/null || true
+
+    echo
+    gum style --bold --foreground 6 "✓ Applied $label from $hex"
+    echo "Press Enter to pick another, or q to exit"
+    while true; do
+        read -rsn1 key
+        if [[ -z "$key" ]]; then
+            return 0
+        elif [[ "$key" =~ [qQ] ]]; then
+            exit 0
+        fi
+    done
+}
+
+# --- Main loop ---
+while true; do
+    clear
+    print_header "Matugen Source Colors"
+    echo "Wallpaper: $WP_NAME"
+    echo
+
+    if [[ ! -x "$EXTRACTOR" ]]; then
+        echo "Extractor script missing or not executable: $EXTRACTOR"
+        read -r -p "Press Enter..."
+        break
+    fi
+
+    # Get our 4 confident colors (one per line)
+    mapfile -t COLORS < <("$EXTRACTOR" "$WALLPAPER" 2>/dev/null | head -4)
+
+    if [[ ${#COLORS[@]} -lt 1 ]]; then
+        echo "Failed to extract colors. Falling back to matugen defaults."
+        COLORS=("#7a8a6e" "#a88a6e" "#6e8a9a" "#9a7a8a")
+    fi
+
+    # Build gum menu
+    # We show "Best (auto)" + the four extracted colors with their hex
+    menu_items=()
+    menu_items+=("Best — use first color (usually the strongest)")
+
+    for i in "${!COLORS[@]}"; do
+        c="${COLORS[$i]}"
+        menu_items+=("Color $((i+1))  $c")
+    done
+    menu_items+=("Exit")
+
+    choice=$(printf '%s\n' "${menu_items[@]}" | \
+        gum choose --header "Pick a source color (these are pre-filtered for good results):")
+
+    [[ -z "$choice" ]] && break
+
+    case "$choice" in
+        Exit)
+            echo "Exiting."
+            break
+            ;;
+        Best*)
+            apply_color "${COLORS[0]}" "Best"
+            ;;
+        Color\ 1*)
+            apply_color "${COLORS[0]}" "Color 1"
+            ;;
+        Color\ 2*)
+            apply_color "${COLORS[1]}" "Color 2"
+            ;;
+        Color\ 3*)
+            apply_color "${COLORS[2]}" "Color 3"
+            ;;
+        Color\ 4*)
+            apply_color "${COLORS[3]}" "Color 4"
+            ;;
+        *)
+            echo "Unknown choice"
+            sleep 0.6
+            ;;
+    esac
+done
+
+echo
+echo "Done."

@@ -1,0 +1,166 @@
+# Matugen Plymouth Theme
+# A minimal script theme that uses colors baked in by update-plymouth-theme.sh
+#
+# Colors are substituted at generation time:
+#   {{background}}      - main background (surface)
+#   {{foreground}}      - text color (on_surface)
+#   {{accent}}          - highlight / progress (primary)
+#   {{surface_container}} - slightly lighter/darker box bg
+#   {{error}}           - error states
+
+# ------------------------------------------------------------------
+# Colors baked in at generation time by update-plymouth-theme.sh
+# (0.0 - 1.0 float values — much more reliable inside Plymouth)
+# ------------------------------------------------------------------
+bg_r = {{bg_r}}; bg_g = {{bg_g}}; bg_b = {{bg_b}};
+fg_r = {{fg_r}}; fg_g = {{fg_g}}; fg_b = {{fg_b}};
+accent_r = {{accent_r}}; accent_g = {{accent_g}}; accent_b = {{accent_b}};
+
+# ------------------------------------------------------------------
+# Setup
+# ------------------------------------------------------------------
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+
+# Screen dimensions
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+
+# ------------------------------------------------------------------
+# Background sprite (full screen solid color)
+# ------------------------------------------------------------------
+background = Image.New(screen_width, screen_height);
+background.FillRectangle(0, 0, screen_width, screen_height, bg_r, bg_g, bg_b, 1.0);
+background_sprite = Sprite.New(background);
+background_sprite.SetZ(-100);
+
+# ------------------------------------------------------------------
+# Title / hostname
+# ------------------------------------------------------------------
+title = "Arch Linux";
+if (System.GetHostname() != "") {
+    title = System.GetHostname();
+}
+
+title_font = Font.New("HeavyData Nerd Font, Bold 28");
+title_image = Image.Text(title, fg_r, fg_g, fg_b, 1.0, title_font);
+title_sprite = Sprite.New(title_image);
+title_sprite.SetPosition(screen_width / 2 - title_image.GetWidth() / 2,
+                         screen_height / 2 - 80);
+
+# ------------------------------------------------------------------
+# Simple progress bar / throbber area
+# ------------------------------------------------------------------
+bar_width = 420;
+bar_height = 6;
+bar_x = screen_width / 2 - bar_width / 2;
+bar_y = screen_height / 2 + 20;
+
+# Background track for the bar
+bar_bg = Image.New(bar_width, bar_height);
+bar_bg.FillRectangle(0, 0, bar_width, bar_height, 0.15, 0.15, 0.15, 1.0);
+bar_bg_sprite = Sprite.New(bar_bg);
+bar_bg_sprite.SetPosition(bar_x, bar_y);
+
+# The actual moving/ pulsing bar (accent color)
+bar = Image.New(bar_width, bar_height);
+bar.FillRectangle(0, 0, bar_width, bar_height, accent_r, accent_g, accent_b, 1.0);
+bar_sprite = Sprite.New(bar);
+bar_sprite.SetPosition(bar_x, bar_y);
+
+# ------------------------------------------------------------------
+# Status message (bottom)
+# ------------------------------------------------------------------
+status_font = Font.New("HeavyData Nerd Font 14");
+status_text = "Starting system...";
+status_image = Image.Text(status_text, fg_r, fg_g, fg_b, 0.85, status_font);
+status_sprite = Sprite.New(status_image);
+status_sprite.SetPosition(screen_width / 2 - status_image.GetWidth() / 2,
+                          screen_height / 2 + 60);
+
+# ------------------------------------------------------------------
+# Animation state
+# ------------------------------------------------------------------
+progress = 0.0;
+direction = 1.0;
+animating = 1;
+
+# ------------------------------------------------------------------
+# Main animation loop
+# ------------------------------------------------------------------
+fun refresh_callback() {
+    if (!animating) return;
+
+    # Simple left-right throbber effect
+    progress = progress + (direction * 0.035);
+
+    if (progress > 1.0) {
+        progress = 1.0;
+        direction = -1.0;
+    } else if (progress < 0.0) {
+        progress = 0.0;
+        direction = 1.0;
+    }
+
+    # Move the bar sprite to create a "scanning" effect
+    visible_width = bar_width * 0.35;   # width of the moving chunk
+    offset = (bar_width - visible_width) * progress;
+
+    bar_sprite.SetImage(bar);
+    bar_sprite.SetPosition(bar_x + offset, bar_y);
+}
+
+Plymouth.SetRefreshFunction(refresh_callback);
+
+# ------------------------------------------------------------------
+# Plymouth event handlers
+# ------------------------------------------------------------------
+fun status_callback(status) {
+    status_image = Image.Text(status, fg_r, fg_g, fg_b, 0.85, status_font);
+    status_sprite.SetImage(status_image);
+    status_sprite.SetPosition(screen_width / 2 - status_image.GetWidth() / 2,
+                              screen_height / 2 + 60);
+}
+
+fun message_callback(message) {
+    # You can show important messages here if desired
+}
+
+Plymouth.SetStatusFunction(status_callback);
+Plymouth.SetMessageFunction(message_callback);
+
+# ------------------------------------------------------------------
+# Boot progression (if Plymouth gives us percentage)
+# ------------------------------------------------------------------
+fun boot_progress_callback(percentage) {
+    # We keep the nice throbber, but we can also drive the bar from real progress
+    if (percentage > 0.0) {
+        animating = 0;
+        bar_sprite.SetPosition(bar_x, bar_y);
+        # Scale the bar image to show real progress
+        scaled = bar.Scale(percentage, 1.0);
+        bar_sprite.SetImage(scaled);
+    }
+}
+
+Plymouth.SetBootProgressFunction(boot_progress_callback);
+
+# ------------------------------------------------------------------
+# Quit / shutdown handling
+# ------------------------------------------------------------------
+fun quit_callback() {
+    animating = 0;
+    # Optional: fade or just let it disappear
+}
+
+Plymouth.SetQuitFunction(quit_callback);
+
+# ------------------------------------------------------------------
+# Password prompt (for LUKS etc.)
+# ------------------------------------------------------------------
+fun password_callback(prompt, entry) {
+    # Keep it minimal — most people don't want fancy password UI on boot splash
+    status_callback("Disk unlock required");
+}
+
+Plymouth.SetPasswordFunction(password_callback);

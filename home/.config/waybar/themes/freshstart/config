@@ -25,6 +25,7 @@
         "custom/updates",
         "pulseaudio",
         "network",
+        "bluetooth",
         "group/hardware",
         "group/tools",
         "tray",

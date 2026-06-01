@@ -1,0 +1,28 @@
+{
+    "checksum": "fb77cad9b5cbaef361c558c824578386",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/xxx-grey-nurse.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#191c2a",
+        "foreground": "#c5c6c9",
+        "cursor": "#c5c6c9"
+    },
+    "colors": {
+        "color0": "#191c2a",
+        "color1": "#A9ABB4",
+        "color2": "#D8B1B3",
+        "color3": "#EBC7B8",
+        "color4": "#B8B8C7",
+        "color5": "#D5D1D6",
+        "color6": "#E5D7D9",
+        "color7": "#c5c6c9",
+        "color8": "#636779",
+        "color9": "#A9ABB4",
+        "color10": "#D8B1B3",
+        "color11": "#EBC7B8",
+        "color12": "#B8B8C7",
+        "color13": "#D5D1D6",
+        "color14": "#E5D7D9",
+        "color15": "#c5c6c9"
+    }
+}

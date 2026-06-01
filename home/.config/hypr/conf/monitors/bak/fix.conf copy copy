@@ -1,5 +1,0 @@
-monitor=HDMI-A-1,1920x1080@60,7273x653,1.199219,transform,0,vrr,0
-monitor=DVI-I-1,1920x1080@60,4771x430,1.199219,transform,1,vrr,0
-monitor=DP-1,1920x1080@60,5672x653,1.199219,transform,0,vrr,0
-
-

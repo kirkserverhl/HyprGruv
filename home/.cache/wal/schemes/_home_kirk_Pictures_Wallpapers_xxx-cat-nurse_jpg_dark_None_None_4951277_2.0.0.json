@@ -1,0 +1,28 @@
+{
+    "checksum": "cea3202bc9cb48e6bb4a3952042541a9",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/xxx-cat-nurse.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#191219",
+        "foreground": "#c5c3c5",
+        "cursor": "#c5c3c5"
+    },
+    "colors": {
+        "color0": "#191219",
+        "color1": "#C37A8F",
+        "color2": "#B88692",
+        "color3": "#AB9EA6",
+        "color4": "#DAA1A8",
+        "color5": "#F1CBB6",
+        "color6": "#D8B3D0",
+        "color7": "#c5c3c5",
+        "color8": "#705c70",
+        "color9": "#C37A8F",
+        "color10": "#B88692",
+        "color11": "#AB9EA6",
+        "color12": "#DAA1A8",
+        "color13": "#F1CBB6",
+        "color14": "#D8B3D0",
+        "color15": "#c5c3c5"
+    }
+}

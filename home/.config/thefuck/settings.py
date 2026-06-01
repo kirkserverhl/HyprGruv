@@ -24,18 +24,3 @@
 # num_close_matches = 3
 # env = {'LC_ALL': 'C', 'LANG': 'C', 'GIT_TRACE': '1'}
 # excluded_search_path_prefixes = []
-#
-# Only enable these specific rules (recommended for clean setup)
-rules = [
-    'sudo',
-    'no_command',
-    'git_push',
-    # 'pacman',          # ← Remove or comment out this line
-    # Add any other rules you like here
-]
-
-# Alternative: Keep most rules but explicitly exclude the buggy one
-# exclude_rules = ['pacman', 'git_push_force', 'rm_dir']
-
-require_confirmation = True
-debug = False

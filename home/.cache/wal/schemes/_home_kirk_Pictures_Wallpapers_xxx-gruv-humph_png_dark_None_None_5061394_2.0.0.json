@@ -1,0 +1,28 @@
+{
+    "checksum": "0487fe4747854bd57eb99c2b39d2f54f",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/xxx-gruv-humph.png",
+    "alpha": "100",
+    "special": {
+        "background": "#131011",
+        "foreground": "#c4c3c3",
+        "cursor": "#c4c3c3"
+    },
+    "colors": {
+        "color0": "#131011",
+        "color1": "#B18F70",
+        "color2": "#C4897C",
+        "color3": "#8B7C84",
+        "color4": "#C79A90",
+        "color5": "#C2A495",
+        "color6": "#CDA89B",
+        "color7": "#c4c3c3",
+        "color8": "#6e5964",
+        "color9": "#B18F70",
+        "color10": "#C4897C",
+        "color11": "#8B7C84",
+        "color12": "#C79A90",
+        "color13": "#C2A495",
+        "color14": "#CDA89B",
+        "color15": "#c4c3c3"
+    }
+}

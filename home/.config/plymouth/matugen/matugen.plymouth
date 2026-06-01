@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Matugen
+Description=Matugen dynamic theme (matches current wallpaper colors)
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/matugen
+ScriptFile=/usr/share/plymouth/themes/matugen/matugen.script

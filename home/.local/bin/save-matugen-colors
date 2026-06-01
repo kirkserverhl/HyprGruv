@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Auto-generated palette reference (runs after matugen)
+
+WALLPAPER="$1"
+
+mkdir -p ~/.cache/matugen
+
+# Get colors in JSON (most reliable)
+matugen image "$WALLPAPER" --json hex > ~/.cache/matugen/current.json 2>/dev/null || true
+
+# Create clean pywal-style colors file
+cat > ~/.cache/matugen/colors << 'END'
+# ==================== Matugen Colors ====================
+# Generated on $(date)
+# Wallpaper: $(basename "$WALLPAPER")
+# =======================================================
+
+END
+
+# Add short aliases + main colors
+jq -r '
+  .colors.default as $c |
+  [
+    "# Short & Useful Aliases",
+    "bg=" + $c.background.hex,
+    "obg=" + $c.on_background.hex,
+    "pri=" + $c.primary.hex,
+    "sec=" + $c.secondary.hex,
+    "ter=" + $c.tertiary.hex,
+    "err=" + $c.error.hex,
+    "out=" + ($c.outline.hex // "#888888"),
+    "mid=" + ($c.surface_variant.hex // "#333333"),
+    "cnt=" + ($c.surface_bright.hex // "#aaaaaa"),
+    "",
+    "# Main Colors",
+    "background=" + $c.background.hex,
+    "foreground=" + $c.on_background.hex,
+    "cursor=" + $c.on_background.hex,
+    "",
+    "# All Colors (original names)"
+  ] | .[]
+' ~/.cache/matugen/current.json 2>/dev/null >> ~/.cache/matugen/colors
+
+# Add every color
+echo -e "\n# === Full Matugen Palette ===\n" >> ~/.cache/matugen/colors
+jq -r '.colors.default | to_entries[] | "\(.key)=\(.value.hex)"' ~/.cache/matugen/current.json 2>/dev/null >> ~/.cache/matugen/colors
+
+echo "✅ Matugen palette saved to ~/.cache/matugen/colors"

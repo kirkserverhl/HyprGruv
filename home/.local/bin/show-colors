@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# show-colors - Reference for your short aliases
+
+WALLPAPER="${1:-}"
+if [ -z "$WALLPAPER" ]; then
+    WALLPAPER=$(ls ~/Pictures/Wallpapers/*.{png,jpg,jpeg} 2>/dev/null | head -n 1)
+fi
+
+if [ ! -f "$WALLPAPER" ]; then
+    echo "❌ No valid wallpaper found!"
+    ls ~/Pictures/Wallpapers/ | grep -E '\.(png|jpg|jpeg)$' | head -8
+    exit 1
+fi
+
+echo "🎨 Current Palette Reference"
+echo "============================="
+echo "Wallpaper: $(basename "$WALLPAPER")"
+echo ""
+
+# Run matugen and capture output for debugging
+RAW=$(matugen image "$WALLPAPER" --show-colors 2>&1)
+
+if echo "$RAW" | grep -q "Failed\|Error\|not a terminal"; then
+    echo "❌ Matugen error:"
+    echo "$RAW" | tail -n 10
+    exit 1
+fi
+
+# Parse and display with short aliases
+echo "$RAW" | grep -E '^[a-z]' | while read -r line; do
+    name=$(echo "$line" | awk '{print $1}')
+    color=$(echo "$line" | awk '{print $2}')
+    
+    case "$name" in
+        background)          short="bg" ;;
+        on_background)       short="obg" ;;
+        surface_variant)     short="mid" ;;
+        surface_bright)      short="cnt" ;;
+        tertiary)            short="ter" ;;
+        secondary)           short="sec" ;;
+        error)               short="err" ;;
+        inverse_primary)     short="inv" ;;
+        inverse_on_surface)  short="off" ;;
+        inverse_surface)     short="sin" ;;
+        outline)             short="out" ;;
+        outline_variant)     short="vout" ;;
+        secondary_container) short="sct" ;;
+        tertiary_container)  short="tcon" ;;
+        surface_tint)        short="tin" ;;
+        source_color)        short="src" ;;
+        primary)             short="pri" ;;
+        *)                   short="   " ;;
+    esac
+
+    if [ -n "$color" ] && [[ $color == \#* ]]; then
+        r=$(printf "%d" 0x${color:1:2})
+        g=$(printf "%d" 0x${color:3:2})
+        b=$(printf "%d" 0x${color:5:2})
+        printf "\e[48;2;%d;%d;%dm   \e[0m  %-6s → %-20s %s\n" "$r" "$g" "$b" "$short" "$name" "$color"
+    fi
+done

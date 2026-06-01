@@ -20,35 +20,34 @@
   // Load Modules
   "include": [
     "~/.config/settings/waybar-quicklinks.json",
-    "~/.config/waybar/modules.json"
+    "~/.config/waybar/modules.json",
   ],
 
   // Modules Left
   "modules-left": [
     "custom/appmenu",
-    "custom/keybindings",
+    //"custom/keybindings",
     "group/settings",
     "group/links",
     "group/quicklinks",
-    "custom/empty",
-    "custom/media"
+    //"custom/empty",
+    "custom/media",
+    "custom/notifications",
   ],
 
   // Modules Center — kept exactly as currently configured
-  "modules-center": [
-    "hyprland/workspaces",
-    "custom/special"
-  ],
+  "modules-center": ["hyprland/workspaces", "custom/special"],
 
   // Modules Right
   "modules-right": [
     "custom/updates",
     "pulseaudio",
     "network",
+    "bluetooth",
     "group/hardware",
     "group/tools",
     "tray",
     "custom/exit",
-    "clock"
-  ]
+    "clock",
+  ],
 }

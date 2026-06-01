@@ -104,14 +104,20 @@ COLOR_THEME_STR='
     prompt { str: "Source color (drives the palette)"; }
 '
 
-# Extract up to 4 prominent colors from the (preprocessed) wallpaper
-extract_colors() {
-    local img="$1"
-    magick "$img" -resize '400x400>' -colors 10 +dither -unique-colors txt:- 2>/dev/null \
+# Use the reliable saturation-aware extractor for the 4 swatches shown to the user.
+# This prevents the "all grey" problem in the source color picker.
+EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
+if [[ -x "$EXTRACTOR" ]]; then
+    mapfile -t COLORS < <("$EXTRACTOR" "$WALLPAPER" 2>/dev/null | head -4)
+else
+    # Fallback (old naive method)
+    mapfile -t COLORS < <(
+        magick "$WALLPAPER" -resize '400x400>' -modulate 100,160,100 -colors 12 +dither -unique-colors txt:- 2>/dev/null \
         | grep -oP '#[0-9A-Fa-f]{6}' | head -4 || true
-}
-
-COLORS=($(extract_colors "$WALLPAPER"))
+    )
+fi
+while [ ${#COLORS[@]} -lt 4 ]; do COLORS+=("#5a6a7a"); done
+COLORS=("${COLORS[@]:0:4}")
 
 # Temporary directory for the swatch icons (cleaned on exit)
 SWATCH_DIR=$(mktemp -d /tmp/matugen-swatches-XXXXXX)

@@ -24,10 +24,16 @@
  * ============================================ */
 @import "freshstart.css";
 
-/* ============================================
+/*
+ * ============================================
  * ROOT-LEVEL OVERRIDES (optional)
  * ============================================
  *
  * Only put things here that should affect plain waybar launches
  * but NOT the themes (or put them in freshstart.css if they should be shared).
+ *
+ * Example (commented out to avoid parser issues):
+ * window#waybar {
+ *     margin-top: 4px;
+ * }
  */

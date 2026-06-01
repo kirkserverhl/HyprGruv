@@ -22,7 +22,7 @@ positions={"1920x1080":[]}
 Image=/home/kirk/.hyprgruv/home/wallpaper/space_walk.png
 
 [Containments][1][Wallpaper][org.kde.slideshow][General]
-Image=file:///home/kirk/wallpaper/earth-in-space.png
+Image=file:///home/kirk/.local/share/wallpapers/Ant-Dark-wallpapers/Ant-Dark.jpg
 SlideInterval=600
 SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/,/home/kirk/wallpaper/
 UncheckedSlides=/usr/share/wallpapers/Next/,/usr/share/wallpapers/EndeavourOS/,/home/kirk/wallpaper/Gruvbox-Dark Color Palette - color-hex.com.png,/home/kirk/wallpaper/guitar.png,/home/kirk/wallpaper/port.png,/home/kirk/wallpaper/gruvbox_stripes_arch.png
@@ -56,8 +56,8 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][2][Applets][3][Configuration]
-popupHeight=520
-popupWidth=713
+popupHeight=531
+popupWidth=739
 
 [Containments][2][Applets][3][Configuration][General]
 favoritesPortedToKAstats=true
@@ -208,6 +208,15 @@ positions={"3840x2160":[]}
 Image=file:///home/kirk/wallpaper/default.jpeg
 SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/
 
+[Containments][27]
+activityId=8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4
+formfactor=0
+immutability=1
+lastScreen=3
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
 [ScreenMapping]
 itemsOnDisabledScreens=
-screenMapping=
+screenMapping=desktop:/brave-kajebgjangihfbkjfejcanhanjmmbcfd-Default.desktop,1,8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4

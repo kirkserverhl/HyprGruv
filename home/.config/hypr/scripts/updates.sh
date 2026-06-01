@@ -14,12 +14,12 @@
 threshhold_green=0
 threshhold_yellow=25
 threshhold_red=100
-install_platform="$(cat ~/.config/hypr/scripts/platform.sh)"
+install_platform="$(cat ~/.config/settings/platform.sh)"
 
 # Check if platform is supported
 case $install_platform in
 arch)
-    aur_helper="$(cat ~/.config/hypr/scripts/aur.sh)"
+    aur_helper="$(cat ~/.config/settings/aur.sh)"
 
     # -----------------------------------------------------
     # Calculate available updates
@@ -60,7 +60,7 @@ if [ "$updates" -gt $threshhold_red ]; then
 fi
 
 if [ "$updates" -gt $threshhold_green ]; then
-    printf '{"text": "%s", "alt": "%s", "tooltip": "Click to update your system", "class": "%s"}' "$updates" "$updates" "$updates" "$css_class"
+    printf '{"text": "󰏖 %s", "alt": "%s", "tooltip": "Click to update your system", "class": "%s"}' "$updates" "$updates" "$css_class"
 else
-    printf '{"text": "0", "alt": "0", "tooltip": "No updates available", "class": "green"}'
+    printf '{"text": "󰏖 0", "alt": "0", "tooltip": "No updates available", "class": "green"}'
 fi

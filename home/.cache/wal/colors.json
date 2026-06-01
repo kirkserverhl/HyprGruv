@@ -1,22 +1,22 @@
 {
-  "wallpaper": "/home/kirk/.hyprgruv/home/.config/settings/cache/wallpaper-generated/matugen-input-gruvbox_girl.png",
+  "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-biking-sunset.jpg",
   "alpha": "100",
   "colors": {
-    "color0": "#0e1415",
+    "color0": "#131318",
     "color1": "",
     "color2": "",
-    "color3": "#81d3e0",
+    "color3": "#c3c1ff",
     "color4": "",
-    "color5": "#b1cbd0",
+    "color5": "#c7c4dd",
     "color6": "",
-    "color7": "#303637",
+    "color7": "#35343a",
     "color8": "",
     "color9": "",
-    "color10": "#81d3e0",
+    "color10": "#c3c1ff",
     "color11": "",
     "color12": "",
-    "color13": "#b1cbd0",
+    "color13": "#c7c4dd",
     "color14": "",
-    "color15": "#dee3e4"
+    "color15": "#e5e1e9"
   }
 }

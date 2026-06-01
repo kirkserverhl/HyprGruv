@@ -1,0 +1,23 @@
+/*
+   Centralized Waybar Font Snippet
+   ===============================
+   Managed by ~/.config/settings/fonts.sh + apply-fonts.sh
+
+   Usage in a waybar style.css:
+       @import "~/.config/settings/fonts-waybar.css";
+
+   Then in your rules you can do:
+       font-family: var(--font-ui);
+       font-size: 17px;
+*/
+
+:root {
+    --font-text: "ShureTechMono Nerd Font", monospace;
+    --font-ui: "Agave Nerd Font Propo", "Fira Sans Semibold", "Font Awesome 6 Free", sans-serif;
+    --font-header: "HeavyData Nerd Font", "Fira Sans Semibold", sans-serif;
+}
+
+/* Default body uses UI font (what you wanted for waybar/menus) */
+window#waybar {
+    font-family: var(--font-ui);
+}

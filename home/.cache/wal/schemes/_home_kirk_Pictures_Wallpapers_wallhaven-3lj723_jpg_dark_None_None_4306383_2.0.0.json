@@ -1,0 +1,28 @@
+{
+    "checksum": "57ceb35cb990c4983e72b17ed644396f",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/wallhaven-3lj723.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#46363f",
+        "foreground": "#d0cccf",
+        "cursor": "#d0cccf"
+    },
+    "colors": {
+        "color0": "#46363f",
+        "color1": "#F2CAB8",
+        "color2": "#AFBCC3",
+        "color3": "#D8AFD1",
+        "color4": "#B1D3E7",
+        "color5": "#F8D9D1",
+        "color6": "#FDE5DB",
+        "color7": "#d0cccf",
+        "color8": "#8d7483",
+        "color9": "#F2CAB8",
+        "color10": "#AFBCC3",
+        "color11": "#D8AFD1",
+        "color12": "#B1D3E7",
+        "color13": "#F8D9D1",
+        "color14": "#FDE5DB",
+        "color15": "#d0cccf"
+    }
+}

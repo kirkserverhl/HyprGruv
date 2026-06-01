@@ -1,0 +1,28 @@
+{
+    "checksum": "25621abe0f132d6e515da81263b03ee5",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/xxx-gruv-bike.png",
+    "alpha": "100",
+    "special": {
+        "background": "#1e0c18",
+        "foreground": "#c6c2c5",
+        "cursor": "#c6c2c5"
+    },
+    "colors": {
+        "color0": "#1e0c18",
+        "color1": "#C98579",
+        "color2": "#8C7B85",
+        "color3": "#A39EA4",
+        "color4": "#DCA49D",
+        "color5": "#DEC2BE",
+        "color6": "#F8D5CC",
+        "color7": "#c6c2c5",
+        "color8": "#705c69",
+        "color9": "#C98579",
+        "color10": "#8C7B85",
+        "color11": "#A39EA4",
+        "color12": "#DCA49D",
+        "color13": "#DEC2BE",
+        "color14": "#F8D5CC",
+        "color15": "#c6c2c5"
+    }
+}

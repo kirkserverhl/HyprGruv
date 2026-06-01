@@ -1,0 +1,28 @@
+{
+    "checksum": "af470f15be03b689687a2ac3ad7197b9",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv-garden.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#251d0f",
+        "foreground": "#c8c6c3",
+        "cursor": "#c8c6c3"
+    },
+    "colors": {
+        "color0": "#251d0f",
+        "color1": "#C17448",
+        "color2": "#A58A6C",
+        "color3": "#CA8F65",
+        "color4": "#8E738B",
+        "color5": "#B19C93",
+        "color6": "#CBB2A2",
+        "color7": "#c8c6c3",
+        "color8": "#746d5f",
+        "color9": "#C17448",
+        "color10": "#A58A6C",
+        "color11": "#CA8F65",
+        "color12": "#8E738B",
+        "color13": "#B19C93",
+        "color14": "#CBB2A2",
+        "color15": "#c8c6c3"
+    }
+}

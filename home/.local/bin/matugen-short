@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# matugen-short - Generate short aliases using --show-colors
+
+WALLPAPER="${1:-}"
+
+if [ -z "$WALLPAPER" ]; then
+    WALLPAPER=$(ls ~/Pictures/Wallpapers/*.{png,jpg,jpeg} 2>/dev/null | head -n 1)
+    echo "⚠️  Using: $(basename "$WALLPAPER")"
+fi
+
+if [ ! -f "$WALLPAPER" ]; then
+    echo "❌ Wallpaper not found: $WALLPAPER"
+    ls ~/Pictures/Wallpapers/ | grep -E '\.(png|jpg|jpeg)$' | head -12
+    exit 1
+fi
+
+mkdir -p ~/.cache/matugen
+
+echo "🎨 Processing: $(basename "$WALLPAPER")"
+
+# Get colors using --show-colors
+TERM=xterm NO_COLOR=1 matugen image "$WALLPAPER" --show-colors > ~/.cache/matugen/raw-colors.txt 2> ~/.cache/matugen/error.log
+
+if [ $? -ne 0 ] || ! grep -q "primary" ~/.cache/matugen/raw-colors.txt; then
+    echo "❌ Failed to get colors:"
+    cat ~/.cache/matugen/error.log
+    exit 1
+fi
+
+# Parse the output and create your short aliases
+cat ~/.cache/matugen/raw-colors.txt | grep -E '^[a-z]' | awk '{print $1, $2}' | while read -r name hex; do
+    case "$name" in
+        background)          echo "bg=$hex" ;;
+        on_background)       echo "obg=$hex" ;;
+        surface_variant)     echo "mid=$hex" ;;
+        surface_bright)      echo "cnt=$hex" ;;
+        tertiary)            echo "ter=$hex" ;;
+        secondary)           echo "sec=$hex" ;;
+        error)               echo "err=$hex" ;;
+        inverse_primary)     echo "inv=$hex" ;;
+        inverse_on_surface)  echo "off=$hex" ;;
+        inverse_surface)     echo "sin=$hex" ;;
+        outline)             echo "out=$hex" ;;
+        outline_variant)     echo "vout=$hex" ;;
+        secondary_container) echo "sct=$hex" ;;
+        tertiary_container)  echo "tcon=$hex" ;;
+        surface_tint)        echo "tin=$hex" ;;
+        source_color)        echo "src=$hex" ;;
+    esac
+done > ~/.cache/matugen/short-palette.env
+
+# Add fallbacks for missing ones
+echo "osfv=#000000" >> ~/.cache/matugen/short-palette.env  # placeholder
+echo "otfv=#000000" >> ~/.cache/matugen/short-palette.env
+
+echo "✅ Palette generated successfully!"
+echo "📁 Saved to: ~/.cache/matugen/short-palette.env"

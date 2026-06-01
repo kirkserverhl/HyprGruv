@@ -1,17 +1,10 @@
-/* Dark theme. */
-//@import "~/.cache/wal/colors-rofi-dark"
-@import "~/.config/rofi/colors.rasi"
-
-///* Light theme. */
-///@import "~/.cache/wal/colors-rofi-light"
+/* Main Rofi config — matugen + standard font (see shared/standard.rasi) */
+@import "~/.config/rofi/shared/standard.rasi"
 
 /**
- *
- * Author : Aditya Shakya (adi1090x)
- * Github : @adi1090x
- * 
- * Configuration For Rofi Version: 1.7.3
- **/
+ * Rofi Configuration — Matugen + standard shared includes
+ * (font, colors, and blurred wallpaper background)
+ */
 
 configuration {
 	/*---------- General setting ----------*/
@@ -91,7 +84,7 @@ configuration {
 
 	/*---------- Misc setting ----------*/
 	terminal: "rofi-sensible-terminal";
-	font: "Mono 12";
+	/* font is provided by shared/standard.rasi */
 	sort: false;
 	threads: 0;
 	click-to-exit: true;

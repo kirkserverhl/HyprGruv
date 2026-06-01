@@ -10,9 +10,12 @@
 */
 
 /* -----------------------------------------------------
- * Import Pywal colors 
+ * Matugen colors (dynamic from wallpaper)
+ * The calling style.css (or theme style) already imports colors/matugen.css first.
+ * We keep a second import here for safety when this file is used standalone,
+ * pointing at the matugen version instead of the old pywal colors.css.
  * ----------------------------------------------------- */
-@import "colors.css";
+@import "colors/matugen.css";
 
 /* ============================================= */
 /*                MAIN WINDOW                    */
@@ -35,7 +38,6 @@ window#waybar {
 /* Individual module styling with nice rounded look (excluding workspaces and modules made transparent) */
 #custom-launcher,
 #battery,
-#bluetooth,
 #tray,
 #clock {
   background: @surface_container;
@@ -52,11 +54,10 @@ window#waybar {
 
 * {
   font-family:
-    "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo",
-    "Fira Sans Semibold", "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica,
-    Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
+    "Agave Nerd Font Propo", "Fira Sans Semibold",
+    "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 500;
   border: none;
   border-radius: 0px;
   min-height: 0;
@@ -78,21 +79,18 @@ window#waybar {
 }
 
 /* -----------------------------------------------------
- * Workspaces - styled to match #custom-appmenu
+ * Workspaces (center) - subtle transparent background
+ * Bold @on_surface text (matches pacman), 17px
+ * Active workspace highlighted with @source_color
  * ----------------------------------------------------- */
 
 #workspaces {
-  background-color: @surface;
-  /* Same background as the "Apps" button */
+  background-color: transparent;
   margin: 3px 4px;
-  /* minimal vertical gap */
-  padding: 0px 4px;
-  border-radius: 15px;
+  padding: 0px 2px;
   border: none;
-  opacity: 0.85;
-  font-weight: 600;
-  font-size: 16px;
-  /* Match appmenu font-size */
+  font-weight: 500;
+  font-size: 17px;
 }
 
 #workspaces button {
@@ -100,12 +98,11 @@ window#waybar {
   margin: 2px 2px;
   border-radius: 12px;
   border: none;
-  color: #f4d03f;
+  color: @on_surface;
   background-color: transparent;
   transition: all 0.2s ease;
-  opacity: 0.9;
-  font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", "Fira Sans Semibold", sans-serif;
-  font-size: 16px;
+  opacity: 0.95;
+  font-size: 17px;
   font-weight: 600;
 }
 
@@ -117,46 +114,39 @@ window#waybar {
 }
 
 #workspaces button.active {
-  background-color: @tertiary_container;
-  /* secondary color for the active workspace */
-  color: #f9e79f;
-  /* brighter gold for active number */
+  background-color: @source_color;
+  color: @on_surface;
   opacity: 1;
-  min-width: 36px;
-  font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", "Fira Sans Semibold", sans-serif;
-  font-size: 16px;
   font-weight: 700;
 }
 
 #workspaces button:hover {
-  background-color: rgba(255, 255, 255, 0.18);
-  color: #f4d03f;
-  /* gold */
-  opacity: 0.95;
-  font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", "Fira Sans Semibold", sans-serif;
-  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: @on_surface;
+  opacity: 1;
 }
 
-/* Special workspace (scratchpad) button - third slot */
+/* Special workspace (scratchpad) button */
 #custom-special {
-  background-color: @surface_variant;
+  background-color: transparent;
   color: @on_surface;
   border-radius: 12px;
   padding: 0 12px;
   margin: 3px 4px;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 17px;
   min-width: 28px;
 }
 
 #custom-special.active {
-  background-color: @tertiary_container;
-  color: @on_tertiary;
+  background-color: @source_color;
+  color: @on_surface;
   font-weight: 700;
 }
 
 #custom-special:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: @on_surface;
 }
 
 /* -----------------------------------------------------
@@ -186,7 +176,7 @@ tooltip label {
   padding: 2px 10px 0px 10px;
   border-radius: 12px;
   color: @on_secondary_container;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: normal;
   opacity: 0.8;
 }
@@ -228,11 +218,11 @@ window#waybar.empty #window {
  * Modules
  * ----------------------------------------------------- */
 
-.modules-left>widget:first-child>#workspaces {
+.modules-left > widget:first-child > #workspaces {
   margin-left: 0;
 }
 
-.modules-right>widget:last-child>#workspaces {
+.modules-right > widget:last-child > #workspaces {
   margin-right: 0;
 }
 
@@ -329,7 +319,7 @@ window#waybar.empty #window {
 
 #custom-appmenu {
   background-color: @source_color;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 0px 10px 0px 10px;
@@ -337,26 +327,6 @@ window#waybar.empty #window {
   /* minimal vertical margin for floating look */
   opacity: 0.8;
   border: 3px solid transparent;
-}
-
-/* -----------------------------------------------------
- * Custom Media Player (pill style like appmenu/clock when playing)
- * ----------------------------------------------------- */
-#custom-media {
-  background-color: @surface;
-  font-size: 16px;
-  color: @on_surface;
-  padding: 2px 12px 0px 12px;
-  margin: 3px 15px 3px 0px;
-  border-radius: 15px;
-  /* consistent minimal floating margin */
-  opacity: 0.9;
-}
-
-#custom-media:hover {
-  background-color: @surface_container;
-  color: @primary;
-  opacity: 1;
 }
 
 /* -----------------------------------------------------
@@ -371,26 +341,64 @@ window#waybar.empty #window {
   opacity: 0.8;
 }
 
-/* -----------------------------------------------------
- * Custom Updates
- * ----------------------------------------------------- */
+/* Updates styling is defined at the very end of the file for highest priority */
 
-#custom-updates {
-  background-color: transparent;
-  font-size: 16px;
-  color: @on_surface;
-  padding: 2px 10px 0px 10px;
-  margin: 3px 15px 3px 0px;
-  opacity: 0.9;
+/* ============================================
+ * NUCLEAR OVERRIDE FOR UPDATES MODULE (root)
+ * Targets every possible wrapper Waybar creates.
+ * ============================================ */
+#custom-updates,
+#custom-updates *,
+#custom-updates > *,
+#custom-updates > * > *,
+#custom-updates > * > * > *,
+#custom-updates > * > * > * > *,
+#custom-updates > box,
+#custom-updates > box > *,
+#custom-updates > box > label,
+#custom-updates.green,
+#custom-updates.yellow,
+#custom-updates.red {
+  background-color: @color_aqua;
 }
 
-#custom-updates:hover {
-  color: @primary;
-  opacity: 1;
+#custom-updates.green,
+#custom-updates.green *,
+#custom-updates.green > *,
+#custom-updates.green > * > *,
+#custom-updates.green > box > label {
+  background-color: @source_color;
+}
+
+#custom-updates.yellow,
+#custom-updates.yellow *,
+#custom-updates.yellow > *,
+#custom-updates.yellow > * > *,
+#custom-updates.yellow > box > label {
+  background-color: @tertiary;
+}
+
+#custom-updates.red,
+#custom-updates.red *,
+#custom-updates.red > *,
+#custom-updates.red > * > *,
+#custom-updates.red > box > label {
+  background-color: #dc2f2f;
+}
+
+/* Clean updates styling - no !important to avoid parser errors */
+#custom-updates,
+#custom-updates.green,
+#custom-updates.yellow,
+#custom-updates.red {
+  border-radius: 15px 0 0 15px;
+  padding: 2px 12px 0 12px;
+  margin: 3px -2px 3px 0px;
 }
 
 #custom-updates.green {
   background-color: @source_color;
+  color: @on_surface;
 }
 
 #custom-updates.yellow {
@@ -413,7 +421,7 @@ window#waybar.empty #window {
 #language {
   margin: 0px;
   padding: 0px;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface;
 }
 
@@ -427,7 +435,7 @@ window#waybar.empty #window {
 
 #clock {
   background-color: @source_color;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 1px 10px 0px 10px;
@@ -443,7 +451,7 @@ window#waybar.empty #window {
 
 #backlight {
   background-color: @source_color;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface_variant;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
@@ -453,26 +461,14 @@ window#waybar.empty #window {
 }
 
 /* -----------------------------------------------------
- * Pulseaudio
+ * Pulseaudio base styles removed (all usage now lives inside #group-media).
+ * The group-specific rules later in this file handle background/padding/etc.
+ * Only the muted state rule is kept globally.
  * ----------------------------------------------------- */
 
-#pulseaudio {
-  background-color: transparent;
-  font-size: 16px;
-  color: @on_surface;
-  padding: 2px 10px 0px 10px;
-  margin: 3px 15px 3px 0px;
-  opacity: 0.9;
-}
-
-#pulseaudio:hover {
-  color: @primary;
-  opacity: 1;
-}
-
 #pulseaudio.muted {
-  background-color: @secondary_container;
-  color: @on_secondary_container;
+  background-color: @on_surface;
+  color: @on_surface;
 }
 
 /* -----------------------------------------------------
@@ -481,7 +477,7 @@ window#waybar.empty #window {
 
 #network {
   background-color: transparent;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface_variant;
   padding: 2px 10px 0px 10px;
   margin: 3px 15px 3px 0px;
@@ -500,27 +496,28 @@ window#waybar.empty #window {
 }
 
 /* -----------------------------------------------------
- * Bluetooth
+ * Bluetooth — standalone rules commented out because bluetooth now only lives
+ * inside #group/media (where it gets the unified aqua pill treatment).
  * ----------------------------------------------------- */
-
+/*
 #bluetooth,
 #bluetooth.on,
 #bluetooth.connected {
   background-color: @source_color;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
   margin: 3px 15px 3px 0px;
-  /* minimal vertical for floating bar */
   opacity: 0.8;
 }
 
 #bluetooth.off {
-  background-color: transparent;
+  background-color: @source_color;
   padding: 0px;
   margin: 0px;
 }
+*/
 
 /* -----------------------------------------------------
  * Battery
@@ -528,7 +525,7 @@ window#waybar.empty #window {
 
 #battery {
   background-color: @source_color;
-  font-size: 16px;
+  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 2px 15px 0px 10px;
@@ -569,10 +566,405 @@ window#waybar.empty #window {
   color: @on_surface;
 }
 
-#tray>.passive {
+#tray > .passive {
   -gtk-icon-effect: dim;
 }
 
-#tray>.needs-attention {
+#tray > .needs-attention {
   -gtk-icon-effect: highlight;
+}
+
+/* Starship rainbow chained modules - clean version (new package) */
+
+/* -----------------------------------------------------
+ * Rainbow powerline-style chain (matches matugen starship prompt)
+ * Left (4 segments to match right side): 
+ *   appmenu(orange) → settings(yellow/gear, flat) → group/media (aqua, to match #network)
+ *     [media title + pavu + bluetooth] 
+ *   → custom/dunst (bell, continuation of aqua segment)
+ * Right (mirrored): updates (aqua left cap) | group/network (aqua — network + hardware + tools) → exit(yellow) → clock(orange)
+ * The group/media pill uses the exact same @color_aqua / @color_on_aqua treatment as the network module.
+ * All three modules inside group/media now share one single pill background.
+ * ----------------------------------------------------- */
+
+/* LEFT CHAIN ------------------------------------------------ */
+#custom-appmenu {
+  background-color: @color_orange;
+  color: @color_on_orange;
+  border-radius: 15px 0 0 15px;
+  padding: 2px 14px 0 14px;
+  margin: 3px 0 3px 6px;
+}
+
+#custom-appmenu:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+#custom-settings {
+  background-color: @color_yellow;
+  color: @color_on_yellow;
+  border-radius: 0;
+  padding: 2px 12px 0 12px;
+  margin: 3px 0 3px -2px; /* small right gap now handled by the grey pill's left margin */
+}
+
+#custom-settings:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+/* -----------------------------------------------------
+ * LAST PILL: group/media (pavu icon only + clean media title + bell)
+ * Uses the exact same theming as the right-side #network module:
+ *   background-color: @color_aqua
+ *   text color: @color_on_aqua
+ *   padding, border-radius, and overall pill treatment to match.
+ * This gives the combined left pill the same solid colored rounded look and contrast as the network manager on the right.
+ * Slight gaps inside for the three elements.
+ * ----------------------------------------------------- */
+/* LAST PILL — matches the exact theming of the right-side #network module
+   (the third color in the starship matugen rainbow sequence: @color_aqua + @color_on_aqua).
+   This is the one the user wants the combined pavu + media pill to mirror,
+   not the updates/pacman/cpu module. */
+#group-media {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 0 15px 15px 0;
+  padding: 2px 12px 0 12px; /* exact same as #network */
+  margin: 3px 2px 3px 4px; /* reduced right margin so dunst can sit immediately after */
+}
+
+/* Solid aqua background on the group and its direct structural boxes
+   (ensures the entire pill has the same solid colored treatment as #network).
+   Bluetooth is now also inside this group so all three (bt + pavu + media) share one pill. */
+#group-media,
+#group-media > box,
+#group-media > * {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+/* Force the three modules inside the group to have no background of their own.
+   Listed with high specificity so they win over older standalone rules for
+   #bluetooth and #pulseaudio. */
+#group-media > box #bluetooth,
+#group-media > box #pulseaudio,
+#group-media > box #custom-media,
+#group-media box #bluetooth,
+#group-media box #pulseaudio,
+#group-media box #custom-media,
+#group-media #bluetooth,
+#group-media #pulseaudio,
+#group-media #custom-media {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+/* The actual functional modules inside the group are transparent so the solid aqua
+   pill background shows through them (matching how #network renders its content).
+   Multiple selector levels + broad catch-all for robustness against Waybar's
+   internal widget structure (groups often nest deeper than expected). */
+#group-media #bluetooth,
+#group-media #pulseaudio,
+#group-media #custom-media,
+#group-media > box > widget > #bluetooth,
+#group-media > box > widget > #pulseaudio,
+#group-media > box > widget > #custom-media,
+#group-media box #bluetooth,
+#group-media box #pulseaudio,
+#group-media box #custom-media,
+#group-media * {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  padding: 0 3px;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Hover treatment identical to #network, applied to the whole pill and its content. */
+#group-media:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+#group-media:hover #bluetooth,
+#group-media:hover #pulseaudio,
+#group-media:hover #custom-media {
+  color: @on_primary_container;
+}
+
+/* Tight, minimal internal spacing for a crisp single-module look like #network. */
+#group-media #custom-media {
+  padding-left: 4px;
+}
+
+/* Muted volume icon visible on the aqua background */
+#group-media #pulseaudio.muted {
+  color: @error;
+}
+
+/* Bluetooth inside the combined group (inherits group colors, states like .connected still work for text) */
+#group-media #bluetooth {
+  padding: 0 4px;
+}
+#group-media #bluetooth.connected,
+#group-media #bluetooth.on {
+  color: @color_on_aqua;
+}
+
+/* Strong background nuke for everything inside the group.
+   Some modules (especially pulseaudio and bluetooth) create extra wrapper boxes
+   that carry background styles. This targets boxes + widgets at multiple depths
+   and uses both background shorthands to maximize chance of winning.
+   Also covers common internal elements (labels, buttons, images) that modules use. */
+#group-media box,
+#group-media widget,
+#group-media label,
+#group-media button,
+#group-media image,
+#group-media > box,
+#group-media > box *,
+#group-media > box > widget,
+#group-media > box > widget *,
+#group-media * {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 0 15px 15px 0;
+}
+
+/* Explicit overrides for the exact selectors used by the old standalone rules.
+   These must win because they have the #group-media prefix (higher specificity)
+   and appear later in the file. */
+#group-media #bluetooth,
+#group-media #bluetooth.on,
+#group-media #bluetooth.connected,
+#group-media #bluetooth.off {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 0 15px 15px 0;
+  padding: 2px 12px 0 12px; /* match network padding exactly */
+  margin: 3px 6px 3px -4px; /* connect tightly to group/media on left, normal right gap before center workspaces */
+  opacity: 1;
+}
+
+#group-media #pulseaudio,
+#group-media #pulseaudio.muted {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 0 15px 15px 0;
+  padding: 2px 12px 0 12px; /* match network padding exactly */
+  margin: 3px 6px 3px -4px; /* connect tightly to group/media on left, normal right gap before center workspaces */
+  opacity: 1;
+}
+
+/* 4th item on left rainbow chain: standalone dunst bell
+   Continues the aqua segment to match the network module theming on the right.
+   Rounded right as the end cap of the left group. */
+#custom-dunst,
+#custom-notifications {
+  background-color: @color_blue;
+  color: @color_on_blue;
+  border-radius: 0 15px 15px 0;
+  padding: 2px 12px 0 12px; /* match network padding exactly */
+  margin: 3px 6px 3px -4px; /* connect tightly to group/media on left, normal right gap before center workspaces */
+  opacity: 1;
+}
+
+#custom-dunst:hover,
+#custom-notifications:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+/* Extra safety for visibility in the chain */
+#custom-dunst,
+#custom-notifications {
+  min-width: 24px;
+}
+
+/* When paused (from dunst.sh json class) */
+#custom-dunst.paused {
+  color: @error;
+}
+
+/* Standalone custom/media (now-playing title) for the simple left layout
+   (pulseaudio + bluetooth + custom/media). Uses a blue accent to match
+   the historical rainbow media treatment. Hidden automatically by the
+   mediaplayer.py script when nothing is playing (empty output). */
+#custom-media {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 8px;
+  padding: 2px 10px 0 10px;
+  margin: 3px 4px;
+  font-size: 17px;
+  opacity: 0.95;
+}
+
+/* #custom-media:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+*/
+
+/* RIGHT CHAIN (mirrored) ------------------------------------ */
+#network {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 15px 0 0 15px;
+  padding: 2px 12px 0 12px;
+  margin: 3px -2px 3px 0px;
+}
+
+/*
+#network:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+*/
+/* ethernet/wifi states inherit the chain bg unless overridden */
+#network.ethernet,
+#network.wifi {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+/* ============================================================
+ * group/network — combines network + hardware + tools into one
+ * visual aqua pill, matching the left-side group/media treatment.
+ * This makes the network section one continuous colored block
+ * (same @color_aqua from matugen as the standalone #network).
+ * ============================================================ */
+#group\/network {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+  border-radius: 15px 0 0 15px; /* left cap, starts the aqua segment after updates */
+  padding: 2px 8px 0 12px;
+  margin: 3px -2px 3px 0px;
+}
+
+#group\/network,
+#group\/network > box,
+#group\/network > * {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+/* Make everything inside transparent so the group background shows */
+#group\/network *,
+#group\/network > box *,
+#group\/network > * > * {
+  background: transparent;
+  color: @color_on_aqua;
+  padding: 0 4px;
+  margin: 0;
+  border: none;
+}
+
+/* Keep network states working inside the group */
+#group\/network #network.ethernet,
+#group\/network #network.wifi {
+  background: transparent;
+  color: @color_on_aqua;
+}
+
+#group\/network:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+#group\/network:hover * {
+  color: @on_primary_container;
+}
+
+/* Force correct text color on all modules inside group/network so they match the network icon
+   (instead of falling back to @on_surface / white from their standalone rules) */
+#group\/network #cpu,
+#group\/network #memory,
+#group\/network #disk,
+#group\/network #language,
+#group\/network #custom-system,
+#group\/network #custom-tools,
+#group\/network #custom-cliphist,
+#group\/network #custom-hypridle,
+#group\/network #custom-hyprshade {
+  color: @color_on_aqua;
+}
+
+/* Also handle active/notactive states for hypridle when inside the group */
+#group\/network #custom-hypridle.active {
+  color: @color_on_aqua;
+}
+
+#group\/network #custom-hypridle.notactive {
+  color: @error;
+}
+
+#custom-exit {
+  background-color: @color_yellow;
+  color: @color_on_yellow;
+  border-radius: 0;
+  padding: 2px 10px 0 10px;
+  margin: 3px -2px;
+}
+
+#custom-exit:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+/* Power module re-uses the yellow slot in the rainbow chain (same as custom-exit visually) */
+#custom-power {
+  background-color: @color_yellow;
+  color: @color_on_yellow;
+  border-radius: 0;
+  padding: 2px 10px 0 10px;
+  margin: 3px -2px;
+}
+
+#custom-power:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+#clock {
+  background-color: @color_orange;
+  color: @color_on_orange;
+  border-radius: 0 15px 15px 0;
+  padding: 2px 14px 0 14px;
+  margin: 3px 6px 3px -2px;
+}
+
+#clock:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+/* Updates module — simple icon + count, styled exactly like the left dunst pill */
+#custom-updates {
+  background-color: @color_blue;
+  color: @color_on_blue;
+  border-radius: 15px 0 0 15px; /* left cap for right side */
+  padding: 2px 12px 0 12px;
+  margin: 3px -2px 3px 0px;
+  opacity: 1;
+}
+
+#custom-updates:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  opacity: 1;
 }

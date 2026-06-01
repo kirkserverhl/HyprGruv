@@ -1,0 +1,17 @@
+#!/bin/bash
+# Hyprland Lua Launcher (daily driver)
+# Uses ~/.config/hypr/hyprland.lua (the clean modular Lua config)
+# Legacy .conf is available via the "Hyprland (Legacy Conf)" session at login.
+
+set -e
+
+LUA_CFG="$HOME/.config/hypr/hyprland.lua"
+
+if [[ ! -f "$LUA_CFG" ]]; then
+    echo "ERROR: Lua config not found at $LUA_CFG" >&2
+    exit 1
+fi
+
+echo "[hypr-lua] Starting Hyprland with explicit Lua config: $LUA_CFG" >&2
+
+exec /usr/bin/Hyprland -c "$LUA_CFG" "$@"

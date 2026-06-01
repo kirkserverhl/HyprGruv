@@ -62,18 +62,31 @@
             {
                 "allowDdcCi": true,
                 "allowSdrSoftwareBrightness": true,
+                "autoBrightnessCurve": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
                 "autoRotation": "InTabletMode",
+                "automaticBrightness": false,
                 "brightness": 0.15,
                 "colorPowerTradeoff": "PreferEfficiency",
                 "colorProfileSource": "sRGB",
-                "connectorName": "DVI-I-1",
+                "connectorName": "DVI-I-2",
+                "customModes": [
+                ],
                 "detectedDdcCi": false,
-                "edidHash": "4231c9a3efa5e357beecfa8fcaa0ef57",
+                "edidHash": "353e6da757efd6f92bfca821f0a1d76e",
                 "edidIdentifier": "GSM 32896 16843009 1 2020 0",
                 "edrPolicy": "always",
                 "highDynamicRange": false,
                 "iccProfilePath": "",
+                "maxBitsPerColor": 0,
                 "mode": {
+                    "flags": 1,
                     "height": 2160,
                     "refreshRate": 60000,
                     "width": 3840
@@ -83,6 +96,7 @@
                 "scale": 2,
                 "sdrBrightness": 200,
                 "sdrGamutWideness": 0,
+                "sharpness": 0,
                 "transform": "Normal",
                 "uuid": "829a4fc8-3453-4a7e-9244-2df702a73f1d",
                 "vrrPolicy": "Never",
@@ -105,6 +119,8 @@
                 "colorPowerTradeoff": "PreferEfficiency",
                 "colorProfileSource": "sRGB",
                 "connectorName": "DP-1",
+                "customModes": [
+                ],
                 "detectedDdcCi": true,
                 "edidHash": "07c416d61c5a3929dd23d23256165851",
                 "edidIdentifier": "GSM 23380 151410 3 2021 0",
@@ -113,6 +129,7 @@
                 "iccProfilePath": "",
                 "maxBitsPerColor": 0,
                 "mode": {
+                    "flags": 1,
                     "height": 1080,
                     "refreshRate": 60000,
                     "width": 1920
@@ -145,6 +162,8 @@
                 "colorPowerTradeoff": "PreferEfficiency",
                 "colorProfileSource": "sRGB",
                 "connectorName": "HDMI-A-1",
+                "customModes": [
+                ],
                 "detectedDdcCi": false,
                 "edidHash": "ee8aad8b9350cd6cd30e93cb9ca71ef0",
                 "edidIdentifier": "GSM 1 16843009 1 2023 0",
@@ -153,6 +172,7 @@
                 "iccProfilePath": "",
                 "maxBitsPerColor": 0,
                 "mode": {
+                    "flags": 0,
                     "height": 1080,
                     "refreshRate": 60000,
                     "width": 1920
@@ -185,6 +205,8 @@
                 "colorPowerTradeoff": "PreferEfficiency",
                 "colorProfileSource": "sRGB",
                 "connectorName": "DVI-I-1",
+                "customModes": [
+                ],
                 "detectedDdcCi": false,
                 "edidHash": "c0e43d69c534bfb82f03f140c86ab7dd",
                 "edidIdentifier": "GSM 23470 317911 4 2023 0",
@@ -193,6 +215,7 @@
                 "iccProfilePath": "",
                 "maxBitsPerColor": 0,
                 "mode": {
+                    "flags": 0,
                     "height": 1080,
                     "refreshRate": 74973,
                     "width": 1920
@@ -319,6 +342,111 @@
                             "y": 0
                         },
                         "priority": 3,
+                        "replicationSource": ""
+                    }
+                ]
+            },
+            {
+                "lidClosed": false,
+                "outputs": [
+                    {
+                        "enabled": true,
+                        "outputIndex": 3,
+                        "position": {
+                            "x": 982,
+                            "y": 233
+                        },
+                        "priority": 1,
+                        "replicationSource": ""
+                    },
+                    {
+                        "enabled": true,
+                        "outputIndex": 4,
+                        "position": {
+                            "x": 2902,
+                            "y": 233
+                        },
+                        "priority": 2,
+                        "replicationSource": ""
+                    },
+                    {
+                        "enabled": true,
+                        "outputIndex": 5,
+                        "position": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "priority": 3,
+                        "replicationSource": ""
+                    },
+                    {
+                        "enabled": true,
+                        "outputIndex": 2,
+                        "position": {
+                            "x": 4822,
+                            "y": 233
+                        },
+                        "priority": 4,
+                        "replicationSource": ""
+                    }
+                ]
+            },
+            {
+                "lidClosed": false,
+                "outputs": [
+                    {
+                        "enabled": true,
+                        "outputIndex": 3,
+                        "position": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "priority": 0,
+                        "replicationSource": ""
+                    },
+                    {
+                        "enabled": true,
+                        "outputIndex": 4,
+                        "position": {
+                            "x": 1920,
+                            "y": 0
+                        },
+                        "priority": 1,
+                        "replicationSource": ""
+                    },
+                    {
+                        "enabled": true,
+                        "outputIndex": 2,
+                        "position": {
+                            "x": 3840,
+                            "y": 0
+                        },
+                        "priority": 2,
+                        "replicationSource": ""
+                    }
+                ]
+            },
+            {
+                "lidClosed": false,
+                "outputs": [
+                    {
+                        "enabled": true,
+                        "outputIndex": 3,
+                        "position": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "priority": 0,
+                        "replicationSource": ""
+                    },
+                    {
+                        "enabled": true,
+                        "outputIndex": 4,
+                        "position": {
+                            "x": 1920,
+                            "y": 0
+                        },
+                        "priority": 1,
                         "replicationSource": ""
                     }
                 ]

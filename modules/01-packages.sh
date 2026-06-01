@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # 01-packages.sh — install base/desktop packages for Hyprgruv
+#
+# Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Dolphin).
+# See the package sets section below for the full rationale and grouping.
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -160,13 +163,120 @@ ensure_chaotic_ready() {
 }
 
 # -------------------- package sets --------------------
+#
+# Curated "necessary" packages only.
+#
+# Rules followed here:
+#   - Lean core: terminal workflow (zsh + lf + neovim + zellij/foot) + Hyprland
+#   - Dolphin + full KDE integration/thumbnailers (you still actively use Dolphin as your file manager)
+#   - No full Plasma desktop bloat (no plasma-desktop, spectacle, kate as default, etc.)
+#   - Prefer pacman when possible (especially after Chaotic-AUR is enabled)
+#   - Keep AUR list small — move packages to OFFICIAL_PKGS once they are available via Chaotic
+#
+# This list was refined from actual usage + the dots repo curation.
+# Reference: ~/.dots/packages/install.sh (or the dots git repo)
+
 OFFICIAL_PKGS=(
-    archlinux-xdg-menu bash-language-server bat blueman bluez bluez-utils btop btrfs-progs cmake cpio duf dust e2fsprogs ethtool fastfetch firefox fzf ghostty glow gsettings-qt gtk-engine-murrine hexyl htop hypridle hyprpaper kate kdecoration konsole kvantum less lsb-release lscolors-git mediainfo meson ncdu neovim network-manager-applet openssh pavucontrol pkgconf power-profiles-daemon progress-git pv python python-ansicolors python-defusedxml python-hyprpy python-packaging python-pip python-pynvim python-pyqt6 python-pywalfox python-pywayland python-pywal16 tig timeshift tmux tree ttf-bitstream-vera udiskie unp unrar unzip upower usb_modeswitch usbutils vlc vulkan-radeon waybar wireplumber wl-clip-persist wl-clipboard xorg-xkill xorg-xrandr xsettingsd zoxide zsh zram-generator
+    # --- Bootstrap / essentials ---
+    base-devel
+    git
+    reflector
+    networkmanager
+
+    # --- Shell & core terminal workflow ---
+    zsh
+    eza
+    fzf
+    zoxide
+    bat
+    trash-cli
+    stow
+    lf
+    neovim
+    lazygit
+    starship
+
+    # lf file preview support
+    chafa
+    mupdf-tools
+    tesseract
+    tesseract-data-eng
+    ffmpeg
+    ffmpegthumbnailer
+
+    # --- Hyprland (lean, no full desktop) ---
+    hyprland
+    hyprpolkitagent
+    hyprpicker
+    grim
+    slurp
+    wl-clipboard
+    brightnessctl
+    xdg-desktop-portal-hyprland
+    xdg-desktop-portal
+
+    # PipeWire audio
+    pipewire
+    wireplumber
+    pipewire-pulse
+    pipewire-alsa
+
+    # --- Theming foundation ---
+    uv
+    qt6ct
+    papirus-icon-theme
+    adw-gtk-theme
+    ttf-material-symbols-variable
+
+    # --- Daily utilities ---
+    jq
+    curl
+    fastfetch
+    btop
+    duf
+    dust
+    ncdu
+    man-db
+    man-pages
+    pavucontrol
+
+    # --- Browser ---
+    firefox
+
+    # --- Dolphin file manager + KDE integration ---
+    # Kept because you still use Dolphin (with good thumbnails, archive support, etc.)
+    # even though the rest of Plasma is not installed.
+    dolphin ark audiocd-kio baloo dolphin-plugins kio-admin kompare konsole
+    ffmpegthumbs icoutils kdegraphics-thumbnailers kdesdk-thumbnailers
+    kimageformats libappimage qt6-imageformats resvg taglib
+    kdeconnect
+
+    # --- Hyprgruv / personal additions ---
+    # Move packages here (from AUR_PKGS) once Chaotic-AUR is enabled for faster installs.
+    # nwg-dock-hyprland nwg-drawer nwg-look grimblast-git pyprland yazi
 )
 
 AUR_PKGS=(
-    aylurs-gtk-shell-git bpytop cliphist clipse displaylink dunst-wayland-git espanso-wayland-git evdi-dkms eza grimblast-git gruvbox-material-gtk-theme-git gruvbox-plus-icon-theme-git hyprgraphics hyprland-qt-support hyprpicker hyprshade iwgtk lscolors-git masterpdfeditor nwg-dock-hyprland nwg-drawer
-    nwg-look pacseek pcsx2-git progress-git pyprland timeshift-autosnap virt-manager wdisplays-persistent wl-clipboard-history-git xcursor-simp1e-gruvbox-light yazi zsh-auto-dunstify zsh-thefuck-git
+    # === Theming (critical for this dots/hyprgruv setup) ===
+    matugen-git
+    python-pywalfox
+    qt6ct-kde
+    bibata-cursor-theme-bin
+
+    # === Tools declared in dots manifests ===
+    opencode-bin
+
+    # === Personal / usually still AUR or preferred -git versions ===
+    # Move anything below to OFFICIAL_PKGS as soon as Chaotic provides it.
+    # aylurs-gtk-shell-git
+    # grimblast-git
+    # nwg-dock-hyprland
+    # nwg-drawer
+    # nwg-look
+    # pyprland
+    # yazi
+    # zsh-thefuck-git
+    # etc.
 )
 
 # -------------------- run --------------------
@@ -174,30 +284,6 @@ say "   📦️  Installing essential packages…"
 sleep 0.15
 
 disable_chaotic_if_unready
-
-# Temporarily disable [chaotic-aur] if its mirrorlist isn’t present yet.
-disable_chaotic_if_unready() {
-    local conf="/etc/pacman.conf"
-    local ml="/etc/pacman.d/chaotic-mirrorlist"
-
-    grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null || return 0
-    [[ -f "$ml" ]] && return 0
-
-    log_status "Chaotic repo referenced but not ready — disabling it until chaotic.sh runs"
-    sudo awk '
-    BEGIN{insec=0}
-    /^\[chaotic-aur\]/{insec=1; if($0 !~ /^#/) print "# hyprgruv: " $0; else print; next}
-    /^\[/ && insec==1 {insec=0; print; next}
-    {
-      if(insec==1) {
-        if($0 !~ /^#/) print "# hyprgruv: " $0; else print
-      } else {
-        print
-      }
-    }
-  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
-    sudo mv "$conf.tmp.$$" "$conf"
-}
 
 log_status "Sanitizing pacman.conf"
 sanitize_pacman_conf

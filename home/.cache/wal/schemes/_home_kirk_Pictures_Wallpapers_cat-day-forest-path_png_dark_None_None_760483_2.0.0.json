@@ -1,0 +1,28 @@
+{
+    "checksum": "7078946ed5c93b245390510f9161a703",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-day-forest-path.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0e0e21",
+        "foreground": "#c2c2c7",
+        "cursor": "#c2c2c7"
+    },
+    "colors": {
+        "color0": "#0e0e21",
+        "color1": "#606579",
+        "color2": "#70857B",
+        "color3": "#5D7183",
+        "color4": "#6D7389",
+        "color5": "#788B9D",
+        "color6": "#8E9CAE",
+        "color7": "#c2c2c7",
+        "color8": "#5d5d72",
+        "color9": "#606579",
+        "color10": "#70857B",
+        "color11": "#5D7183",
+        "color12": "#6D7389",
+        "color13": "#788B9D",
+        "color14": "#8E9CAE",
+        "color15": "#c2c2c7"
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "checksum": "6ac1d4529db7480cc8d121ac0251b68a",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/xxx-checkers.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#180f0a",
+        "foreground": "#c5c3c1",
+        "cursor": "#c5c3c1"
+    },
+    "colors": {
+        "color0": "#180f0a",
+        "color1": "#B78576",
+        "color2": "#C78C73",
+        "color3": "#7B7385",
+        "color4": "#AE9294",
+        "color5": "#D5AA9D",
+        "color6": "#E9C6B8",
+        "color7": "#c5c3c1",
+        "color8": "#6d6259",
+        "color9": "#B78576",
+        "color10": "#C78C73",
+        "color11": "#7B7385",
+        "color12": "#AE9294",
+        "color13": "#D5AA9D",
+        "color14": "#E9C6B8",
+        "color15": "#c5c3c1"
+    }
+}

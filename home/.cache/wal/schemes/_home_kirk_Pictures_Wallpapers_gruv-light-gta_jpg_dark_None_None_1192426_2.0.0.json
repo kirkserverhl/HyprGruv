@@ -1,0 +1,28 @@
+{
+    "checksum": "22381e87cd3366d405b3cb9c63374fe1",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv-light-gta.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#1e0d0d",
+        "foreground": "#c6c2c2",
+        "cursor": "#c6c2c2"
+    },
+    "colors": {
+        "color0": "#1e0d0d",
+        "color1": "#C39D5E",
+        "color2": "#699A9D",
+        "color3": "#9DA8A4",
+        "color4": "#E2C583",
+        "color5": "#E0CDA6",
+        "color6": "#DDDAD1",
+        "color7": "#c6c2c2",
+        "color8": "#705c5c",
+        "color9": "#C39D5E",
+        "color10": "#699A9D",
+        "color11": "#9DA8A4",
+        "color12": "#E2C583",
+        "color13": "#E0CDA6",
+        "color14": "#DDDAD1",
+        "color15": "#c6c2c2"
+    }
+}

@@ -1,0 +1,49 @@
+/* Minimal standalone theme for tight 2x2 color splotches.
+   Pure tiles, minimal gaps and padding. "Four square court" style.
+   No text, no scrollbar, icons only.
+*/
+
+configuration {
+    show-icons: true;
+}
+
+window {
+    width: 460px;
+    background-color: #0f0f0f;
+    border-radius: 4px;
+}
+
+mainbox {
+    background-color: #0f0f0f;
+    padding: 2px;
+}
+
+listview {
+    display-columns: 2;
+    fixed-columns: true;
+    lines: 2;
+    spacing: 2px;
+    padding: 1px;
+    background-color: transparent;
+    scrollbar: false;
+}
+
+element {
+    background-color: transparent;
+    padding: 0px;
+    margin: 0px;
+    border: 0;
+}
+
+element-icon {
+    size: 225px;
+    margin: 0px;
+}
+
+element-text {
+    enabled: false;
+}
+
+inputbar {
+    enabled: false;
+}

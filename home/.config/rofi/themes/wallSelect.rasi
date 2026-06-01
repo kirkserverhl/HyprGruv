@@ -4,23 +4,15 @@ configuration {
     modi:                        "drun";
     show-icons:                  true;
     drun-display-format:         "{name}";
-    font:                        "ShureTechMono Nerd Font 13";
-    
-    //hover-select:				 true;
-	//me-select-entry:			 "";
-	//me-accept-entry:			 "MousePrimary";
+    /* font provided by standard import below */
 }
 
 //----- Global Properties -----//
 
-/* Load blurred wallpaper background + border width first (same as main launcher) */
-@import "~/.config/settings/cache/current_wallpaper.rasi"
-@import "~/.config/settings/rofi-border.rasi"
+/* Standard: matugen colors + font + 50x30 blurred wallpaper + border */
+@import "~/.config/rofi/shared/standard.rasi"
 
-/* Matugen colors (replaces pywal) */
-@import "~/.config/rofi/colors.rasi"
-
-/* Map matugen Material You variables to the names this theme expects */
+/* Map matugen Material You variables to the names this wallpaper grid theme expects */
 * {
     background:  @surface-container-low;
     foreground:  @on-surface;

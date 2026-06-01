@@ -1,3 +1,2 @@
-* {
-    font: "Hermit Nerd Font Propo Regular 10.5";
-}
+/* Use the global standard font (change in ~/.config/settings/fonts.sh + apply-fonts.sh) */
+@import "~/.config/settings/rofi-font.rasi"

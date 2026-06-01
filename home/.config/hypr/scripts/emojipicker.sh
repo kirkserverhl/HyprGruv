@@ -1,1 +1,1 @@
-smile
+hypremoji -s ~/.config/hypremoji/matugen.css

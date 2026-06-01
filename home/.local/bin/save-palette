@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# save-palette - Creates a clean, readable palette reference
+
+WALLPAPER="${1:-$(ls ~/Pictures/Wallpapers/*.{png,jpg,jpeg} 2>/dev/null | head -n 1)}"
+
+if [ ! -f "$WALLPAPER" ]; then
+    echo "❌ No wallpaper found!"
+    exit 1
+fi
+
+mkdir -p ~/.cache/matugen
+
+echo "🎨 Generating palette reference..."
+
+# Get colors
+matugen image "$WALLPAPER" --show-colors > ~/.cache/matugen/raw.txt 2>&1
+
+# Create nice reference file
+cat > ~/.cache/matugen/palette-reference.txt << PALETTE
+# ================================================
+# Matugen Color Palette Reference
+# Generated: $(date)
+# Wallpaper: $(basename "$WALLPAPER")
+# ================================================
+
+# === Prominent / Most Used Colors ===
+PALETTE
+
+# First pass: Prominent colors with short aliases
+grep -E '^[a-z]' ~/.cache/matugen/raw.txt | while read -r line; do
+    name=$(echo "$line" | awk '{print $1}')
+    color=$(echo "$line" | awk '{print $2}')
+
+    case "$name" in
+        background)          short="bg" ;;
+        on_background)       short="obg" ;;
+        primary)             short="pri" ;;
+        secondary)           short="sec" ;;
+        tertiary)            short="ter" ;;
+        error)               short="err" ;;
+        outline)             short="out" ;;
+        surface_variant)     short="mid" ;;
+        surface_bright)      short="cnt" ;;
+        *)                   short="" ;;
+    esac
+
+    if [ -n "$short" ]; then
+        printf "%-6s  %-22s  %s\n" "$short" "($name)" "$color" >> ~/.cache/matugen/palette-reference.txt
+    fi
+done
+
+echo -e "\n# === All Other Colors ===\n" >> ~/.cache/matugen/palette-reference.txt
+
+# Second pass: All remaining colors
+grep -E '^[a-z]' ~/.cache/matugen/raw.txt | while read -r line; do
+    name=$(echo "$line" | awk '{print $1}')
+    color=$(echo "$line" | awk '{print $2}')
+
+    case "$name" in
+        background|on_background|primary|secondary|tertiary|error|outline|surface_variant|surface_bright) continue ;;
+    esac
+
+    printf "%-6s  %-22s  %s\n" "" "($name)" "$color" >> ~/.cache/matugen/palette-reference.txt
+done
+
+echo -e "\n# Tip: Use these short names in your Waybar config" >> ~/.cache/matugen/palette-reference.txt
+
+echo "✅ Palette reference saved!"
+echo "📂 Open with: nvim ~/.cache/matugen/palette-reference.txt"

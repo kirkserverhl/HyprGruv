@@ -1,16 +1,12 @@
 #!/bin/bash
 #
 # launch-wlogout.sh
-# Smooth live-desktop → blurred background transition for wlogout.
 #
-# This version is the simplest and most reliable:
-#   - Only job: take a live screenshot + generate a blurred version into two fixed /tmp files.
-#   - Then launch wlogout pointing at your REAL ~/.config/wlogout/style.css and layout.
-#   - 100% of your original icons, text labels ("Lock", "Shutdown"...), fonts,
-#     button styling, hover effects, and any centering rules you have live in your style.css
-#     are used exactly as written. Nothing is stripped or regenerated.
+# Launcher for wlogout.
 #
-# The transition effect is done with CSS inside your style.css (see the window + ::before rules below).
+# Follows the strict rule: wlogout does *not* source any static wallpaper image.
+# Background blur is handled 100% by Hyprland layerrules (real-time, no pre-rendered images).
+# Only SDDM and the rofi 50x30 generator are permitted to load wallpaper files.
 #
 
 set -euo pipefail
@@ -21,34 +17,17 @@ if pgrep -x wlogout >/dev/null 2>&1; then
     exit 0
 fi
 
-# These two fixed files are what your style.css will reference for the transition
-SHARP="/tmp/wlogout-live-sharp.png"
-BLURRED="/tmp/wlogout-live-blurred.png"
+# Small delay to let any in-progress wallpaper transition settle on screen.
+# This prevents the common "blurred background is one wallpaper behind" issue.
+sleep 0.3
 
-rm -f "$SHARP" "$BLURRED" 2>/dev/null || true
-
-# Capture the exact current screen state on the focused monitor
-FOCUSED_MONITOR=$(hyprctl -j monitors 2>/dev/null | jq -r '.[] | select(.focused==true) | .name' || echo "")
-
-if [[ -n "$FOCUSED_MONITOR" ]]; then
-    grim -o "$FOCUSED_MONITOR" -t png "$SHARP" 2>/dev/null || grim -t png "$SHARP"
-else
-    grim -t png "$SHARP"
-fi
-
-if [[ ! -f "$SHARP" ]]; then
-    cp "$HOME/.config/settings/cache/blurred_wallpaper_full.png" "$SHARP" 2>/dev/null || true
-    cp "$SHARP" "$BLURRED"
-else
-    # Nice fast blur (adjust 0x13 if you want stronger/weaker final blur)
-    magick "$SHARP" -resize 22% -blur 0x13 -resize 455% "$BLURRED" 2>/dev/null || cp "$SHARP" "$BLURRED"
-fi
-
-# Launch with your real files — all original formatting, icons and text are preserved
+# Launch wlogout.
+# Heavy "security lens" blur (unreadable background) comes from the layerrule in conf/layerrules.lua.
+# The menu itself is now a compact centered floating grid (Rofi/Waypaper style).
 exec wlogout \
     --protocol layer-shell \
-    -b 6 \
-    -c 0 -r 0 -m 0 \
+    -b 3 \                    # 3 buttons per row → nice 2x3 grid, compact
+    --margin 280 \            # pulls the whole menu inward from screen edges (makes it smaller/centered)
     --layout "$HOME/.config/wlogout/layout" \
     --css "$HOME/.config/wlogout/style.css" \
     "$@"

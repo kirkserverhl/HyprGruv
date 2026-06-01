@@ -1,0 +1,16 @@
+#!/bin/bash
+# Hyprland Legacy Launcher (for troubleshooting the old .conf setup)
+# This explicitly forces the backed-up classic config from ~/.config/hypr-legacy/
+
+set -e
+
+CONF="$HOME/.config/hypr-legacy/hyprland.conf"
+
+if [[ ! -f "$CONF" ]]; then
+    echo "ERROR: Legacy config not found at $CONF" >&2
+    exit 1
+fi
+
+echo "[hypr-legacy] Starting Hyprland with explicit config: $CONF" >&2
+
+exec /usr/bin/Hyprland -c "$CONF" "$@"

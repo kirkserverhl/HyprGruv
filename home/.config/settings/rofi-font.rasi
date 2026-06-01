@@ -1,1 +1,4 @@
-configuration { font: "Fira Sans 11"; }
+/* Single source of truth for Rofi font (managed by apply-fonts.sh) */
+configuration {
+    font: "Agave Nerd Font Propo 11";
+}

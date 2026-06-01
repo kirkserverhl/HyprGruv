@@ -3,9 +3,6 @@ Id_1=f9ff7753-3d3f-4d7a-bcc4-3a0bc6f39b63
 Number=1
 Rows=1
 
-[Tiling]
-padding=4
-
 [Tiling][98f05b79-b574-5047-8393-5adbe5b276df]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
@@ -30,6 +27,7 @@ padding=4
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][f9ff7753-3d3f-4d7a-bcc4-3a0bc6f39b63][829a4fc8-3453-4a7e-9244-2df702a73f1d]
+padding=4
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][f9ff7753-3d3f-4d7a-bcc4-3a0bc6f39b63][b4f41849-ffab-4af0-a2fe-87a156232715]
@@ -44,7 +42,7 @@ ElectricBorderCornerRatio=0.35
 ElectricBorders=1
 
 [Xwayland]
-Scale=1.1
+Scale=2
 
 [org.kde.kdecoration2]
 library=org.kde.kwin.aurorae.v2

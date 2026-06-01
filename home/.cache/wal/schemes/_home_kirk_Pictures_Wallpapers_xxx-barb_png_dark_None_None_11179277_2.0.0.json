@@ -1,0 +1,28 @@
+{
+    "checksum": "9adbd0d53df0762a9829ceb092fd87fd",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/xxx-barb.png",
+    "alpha": "100",
+    "special": {
+        "background": "#170f09",
+        "foreground": "#c5c3c1",
+        "cursor": "#c5c3c1"
+    },
+    "colors": {
+        "color0": "#170f09",
+        "color1": "#636057",
+        "color2": "#883E1C",
+        "color3": "#925B32",
+        "color4": "#9D7250",
+        "color5": "#AE8967",
+        "color6": "#C6986E",
+        "color7": "#c5c3c1",
+        "color8": "#6d6259",
+        "color9": "#636057",
+        "color10": "#883E1C",
+        "color11": "#925B32",
+        "color12": "#9D7250",
+        "color13": "#AE8967",
+        "color14": "#C6986E",
+        "color15": "#c5c3c1"
+    }
+}

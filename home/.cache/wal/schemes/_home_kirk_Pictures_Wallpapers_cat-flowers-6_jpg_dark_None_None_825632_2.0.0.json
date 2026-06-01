@@ -1,0 +1,28 @@
+{
+    "checksum": "3681a7aa12d330af9d43086af8f55246",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-flowers-6.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0f0f23",
+        "foreground": "#c3c3c8",
+        "cursor": "#c3c3c8"
+    },
+    "colors": {
+        "color0": "#0f0f23",
+        "color1": "#7E8197",
+        "color2": "#A190A6",
+        "color3": "#D19FB2",
+        "color4": "#B2B1D0",
+        "color5": "#D0B5C9",
+        "color6": "#BAC7E0",
+        "color7": "#c3c3c8",
+        "color8": "#5e5e74",
+        "color9": "#7E8197",
+        "color10": "#A190A6",
+        "color11": "#D19FB2",
+        "color12": "#B2B1D0",
+        "color13": "#D0B5C9",
+        "color14": "#BAC7E0",
+        "color15": "#c3c3c8"
+    }
+}

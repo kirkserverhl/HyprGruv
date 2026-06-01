@@ -1,0 +1,28 @@
+{
+    "checksum": "822fdcf27791b6424b9ee5ca644c0db7",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/gruv-bed.png",
+    "alpha": "100",
+    "special": {
+        "background": "#181110",
+        "foreground": "#c5c3c3",
+        "cursor": "#c5c3c3"
+    },
+    "colors": {
+        "color0": "#181110",
+        "color1": "#976454",
+        "color2": "#956754",
+        "color3": "#B66C58",
+        "color4": "#AB715A",
+        "color5": "#B6846D",
+        "color6": "#D69173",
+        "color7": "#c5c3c3",
+        "color8": "#6f5f5b",
+        "color9": "#976454",
+        "color10": "#956754",
+        "color11": "#B66C58",
+        "color12": "#AB715A",
+        "color13": "#B6846D",
+        "color14": "#D69173",
+        "color15": "#c5c3c3"
+    }
+}

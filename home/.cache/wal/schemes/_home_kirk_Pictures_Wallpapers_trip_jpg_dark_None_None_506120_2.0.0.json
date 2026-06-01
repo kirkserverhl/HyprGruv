@@ -1,0 +1,28 @@
+{
+    "checksum": "98515521aa0dcb4f54fdf0b41f05801e",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/trip.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#1f1934",
+        "foreground": "#c7c5cc",
+        "cursor": "#c7c5cc"
+    },
+    "colors": {
+        "color0": "#1f1934",
+        "color1": "#D3A457",
+        "color2": "#DBCD52",
+        "color3": "#3C6C8D",
+        "color4": "#526F89",
+        "color5": "#708C95",
+        "color6": "#A3AB94",
+        "color7": "#c7c5cc",
+        "color8": "#6b667d",
+        "color9": "#D3A457",
+        "color10": "#DBCD52",
+        "color11": "#3C6C8D",
+        "color12": "#526F89",
+        "color13": "#708C95",
+        "color14": "#A3AB94",
+        "color15": "#c7c5cc"
+    }
+}

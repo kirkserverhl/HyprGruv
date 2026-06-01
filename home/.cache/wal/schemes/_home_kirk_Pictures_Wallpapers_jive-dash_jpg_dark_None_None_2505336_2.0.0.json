@@ -1,0 +1,28 @@
+{
+    "checksum": "9b03b013275f453634a12881f1c01e09",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/jive-dash.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#090404",
+        "foreground": "#c1c0c0",
+        "cursor": "#c1c0c0"
+    },
+    "colors": {
+        "color0": "#090404",
+        "color1": "#B2542A",
+        "color2": "#9A6D53",
+        "color3": "#46975B",
+        "color4": "#C69866",
+        "color5": "#44708E",
+        "color6": "#5CADB0",
+        "color7": "#c1c0c0",
+        "color8": "#665353",
+        "color9": "#B2542A",
+        "color10": "#9A6D53",
+        "color11": "#46975B",
+        "color12": "#C69866",
+        "color13": "#44708E",
+        "color14": "#5CADB0",
+        "color15": "#c1c0c0"
+    }
+}
