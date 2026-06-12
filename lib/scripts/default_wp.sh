@@ -22,6 +22,14 @@ source "$HYPR_DIR/lib/state.sh"
 
 display_header "Default Wallpaper"
 
+# Respect SKIP_WALLPAPER (handy for non-graphical install phases or laptop testing)
+if [[ "${SKIP_WALLPAPER:-0}" == "1" ]]; then
+  log_warning "SKIP_WALLPAPER=1 set — skipping wallpaper + matugen step"
+  log_status "You can run this manually later from a graphical session:"
+  log_status "  bash $0"
+  exit 0
+fi
+
 # ------------------------------------------------------------
 # Ensure Waypaper is installed
 # ------------------------------------------------------------

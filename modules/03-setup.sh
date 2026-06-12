@@ -76,15 +76,31 @@ fi
 # from install.sh *before* the final reboot so the first graphical login is ready.
 declare -a ORDERED_SCRIPTS=(
   #"hard_copy.sh|Hard Copy files in root directory"
-  "default_wp.sh|Load default wallpaper"
+  # Temporarily commented out (hangs on waypaper in pre-graphical / no-compositor context).
+  # Use SKIP_WALLPAPER=1 to control, or manually run after first Hyprland login.
+  # "default_wp.sh|Load default wallpaper"
   #"hyprpm.sh|Install Hyprpm plugins"
 )
+
+# Support skipping the wallpaper step (waypaper + matugen can hang or block
+# when there is no running Wayland compositor / swww / hyprpaper yet during
+# the text-mode install phase). Use on laptop / test runs:
+#   SKIP_WALLPAPER=1 ./install.sh
+# The step can be run manually later from inside Hyprland:
+#   bash ~/.hyprgruv/lib/scripts/default_wp.sh
+
 
 any_failed=0
 for entry in "${ORDERED_SCRIPTS[@]}"; do
   script_name="${entry%%|*}"
   description="${entry#*|}"
   script_path="$SCRIPTS_DIR/$script_name"
+
+  # Skip wallpaper step if requested (avoids hangs with waypaper in non-graphical context)
+  if [[ "$script_name" == "default_wp.sh" && "${SKIP_WALLPAPER:-0}" == "1" ]]; then
+    log_warning "SKIP_WALLPAPER=1 — skipping default wallpaper / matugen step"
+    continue
+  fi
 
   # If repo still has old typo, auto-fallback
   if [[ ! -f "$script_path" ]]; then
