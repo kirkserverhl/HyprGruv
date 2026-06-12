@@ -26,6 +26,7 @@ CACHE_DIR="$HOME/.config/settings/cache"
 CURRENT_WP_CACHE="$CACHE_DIR/current_wallpaper"
 WAYPAPER_LOCK="$CACHE_DIR/waypaper-running"
 DEFAULT_WP="$HOME/Pictures/Wallpapers/lady.png"
+DEFAULT_WALLPAPER_FILE="$HOME/.config/settings/default"
 
 # ------------------------------------------------------------------
 # The only blurred wallpaper we still generate.
@@ -91,11 +92,15 @@ if [ -n "${1:-}" ]; then
     WALLPAPER="$1"
 elif [ -f "$CURRENT_WP_CACHE" ]; then
     WALLPAPER=$(cat "$CURRENT_WP_CACHE")
+elif [ -f "$DEFAULT_WALLPAPER_FILE" ]; then
+    WALLPAPER=$(cat "$DEFAULT_WALLPAPER_FILE")
 else
     WALLPAPER="$DEFAULT_WP"
 fi
 
 echo "$WALLPAPER" > "$CURRENT_WP_CACHE"
+echo "$WALLPAPER" > "$DEFAULT_WALLPAPER_FILE"
+echo "$WALLPAPER" > "$HOME/.config/last_wallpaper.txt"
 echo ":: Setting wallpaper: $WALLPAPER"
 
 WALLPAPER_FILENAME=$(basename "$WALLPAPER")
@@ -146,362 +151,103 @@ fi
 echo ":: Running pywal (legacy, being phased out)..."
 wal -q -i "$WALLPAPER" || echo ":: pywal failed (non-fatal)"
 
-echo ":: Running matugen via palette chooser (interactive)..."
-MATUGEN_JSON=""
-SKIP_MATUGEN_THEMING=0
+echo ":: Applying a good automatic base palette from current wallpaper..."
+# We always apply one solid default first (best source color + tonal-spot).
+# This guarantees the desktop (starship, gtk, terminals, semantic palette, etc.)
+# never ends up in a bad color state.
+#
+# Immediately after that we launch the interactive palette.sh so the user
+# can pick the exact one of the four good palettes (or B&W fallback or
+# transparent waybar variant) they want for this wallpaper.
 
 if command -v matugen >/dev/null 2>&1; then
-    # palette.sh is the main outhook for wallpaper changes.
-    # It pops the floating Kitty + gum menu so you can visually choose a good source color.
-    # Inside palette.sh it calls `matugen color hex` (which we verified updates every template + post_hooks).
-    echo ":: Launching palette chooser..."
-    ~/.config/hypr/scripts/palette.sh || true
-
-    # --- New transparent text-only modes (bright/dark font on fully transparent bar) ---
-    # IMPORTANT: We deliberately do NOT call matugen at all here, to avoid applying any color scheme.
-    # We use the local extractor (ImageMagick based) to get candidate colors, then pick the extreme one.
-    if [ -f "$HOME/.cache/matugen/waybar-transparent-bright" ] || [ -f "$HOME/.cache/matugen/waybar-transparent-dark" ]; then
-        echo ":: Transparent text-only mode (from palette) — no matugen theming will be applied"
-
-        EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
-        CANDIDATES=()
-        if [[ -x "$EXTRACTOR" ]]; then
-            mapfile -t CANDIDATES < <("$EXTRACTOR" "$WALLPAPER" 8 2>/dev/null | head -8)
-        fi
-
-        # Fallback if extractor gave nothing
-        if [ ${#CANDIDATES[@]} -lt 2 ]; then
-            mapfile -t CANDIDATES < <(magick "$PREPROCESSED_WALLPAPER" -resize 300x300\> -modulate 100,180,100 -colors 12 +dither -unique-colors txt:- 2>/dev/null | grep -oP '#[0-9A-Fa-f]{6}' | head -8)
-        fi
-
-        if [ ${#CANDIDATES[@]} -gt 0 ]; then
-            if [ -f "$HOME/.cache/matugen/waybar-transparent-bright" ]; then
-                # Pick brightest (highest luma)
-                WAYBAR_CUSTOM_TEXT=$(python3 -c '
-import sys
-colors = sys.stdin.read().split()
-best_hex = "#eeeeee"
-best_luma = -1
-for hx in colors:
-    hx = hx.strip()
-    if hx.startswith("#") and len(hx) == 7:
-        r = int(hx[1:3], 16)
-        g = int(hx[3:5], 16)
-        b = int(hx[5:7], 16)
-        luma = 0.299 * r + 0.587 * g + 0.114 * b
-        if luma > best_luma:
-            best_luma = luma
-            best_hex = hx
-print(best_hex)
-' <<< "${CANDIDATES[*]}" 2>/dev/null || echo "#eeeeee")
-                MODE_LABEL="bright text (light font)"
-                rm -f "$HOME/.cache/matugen/waybar-transparent-bright"
-            else
-                # Pick darkest (lowest luma)
-                WAYBAR_CUSTOM_TEXT=$(python3 -c '
-import sys
-colors = sys.stdin.read().split()
-best_hex = "#222222"
-best_luma = 999999
-for hx in colors:
-    hx = hx.strip()
-    if hx.startswith("#") and len(hx) == 7:
-        r = int(hx[1:3], 16)
-        g = int(hx[3:5], 16)
-        b = int(hx[5:7], 16)
-        luma = 0.299 * r + 0.587 * g + 0.114 * b
-        if luma < best_luma:
-            best_luma = luma
-            best_hex = hx
-print(best_hex)
-' <<< "${CANDIDATES[*]}" 2>/dev/null || echo "#222222")
-                MODE_LABEL="dark text"
-                rm -f "$HOME/.cache/matugen/waybar-transparent-dark"
-            fi
-
-            # Write fully transparent minimal colors — only the text color is set
-            cat > ~/.config/waybar/colors.css << EOF
-/* Fully transparent bar + $MODE_LABEL only (from palette None modes)
-   No matugen scheme applied at all.
-*/
-@define-color background rgba(0,0,0,0.0);
-@define-color foreground ${WAYBAR_CUSTOM_TEXT};
-@define-color surface rgba(0,0,0,0.0);
-@define-color on_surface ${WAYBAR_CUSTOM_TEXT};
-@define-color surface_container rgba(0,0,0,0.0);
-@define-color surface_container_high rgba(0,0,0,0.0);
-EOF
-            pkill -SIGUSR2 waybar 2>/dev/null || true
-            echo ":: Waybar now fully transparent with $MODE_LABEL (${WAYBAR_CUSTOM_TEXT})"
-            WAYBAR_COLORS_WRITTEN=true
-            MATUGEN_JSON=""
-            SKIP_MATUGEN_THEMING=1
-        else
-            echo ":: Could not extract colors for transparent mode, skipping"
-            rm -f "$HOME/.cache/matugen/waybar-transparent-bright" "$HOME/.cache/matugen/waybar-transparent-dark"
-        fi
+    EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
+    AUTO_SRC="#a78a9d"
+    if [[ -x "$EXTRACTOR" ]]; then
+        AUTO_SRC=$("$EXTRACTOR" "$WALLPAPER" 1 2>/dev/null | head -1)
+        [[ -z "$AUTO_SRC" ]] && AUTO_SRC="#a78a9d"
     fi
 
-    # Respect full "None / no matugen" choice
-    if [ -f "$HOME/.cache/matugen/no-matugen-this-time" ]; then
-        echo ":: None mode selected — keeping waybar minimal/transparent (no matugen colors forced)"
-        # Write a very minimal transparent waybar colors file
-        cat > ~/.config/waybar/colors.css << 'EOF'
-/* Minimal transparent mode requested from palette "None" */
-@define-color background rgba(0,0,0,0.0);
-@define-color foreground #dddddd;
-@define-color surface rgba(0,0,0,0.0);
-EOF
+    echo ":: Quick auto matugen with source $AUTO_SRC (tonal-spot)..."
+    matugen color hex "$AUTO_SRC" --mode dark --type scheme-tonal-spot 2>&1 | tail -3
+
+    # Respect persistent "I want transparent waybar on top of whatever palette" choice
+    if [ -f "$HOME/.cache/matugen/waybar-transparent-this-time" ]; then
+        echo ":: waybar-transparent-this-time marker present — making bar transparent while keeping full colors"
+        python3 - "$HOME/.config/waybar/colors/matugen.css" <<'PY' 2>/dev/null || true
+import sys, re
+path = sys.argv[1]
+with open(path) as f:
+    css = f.read()
+repl = [
+    (r'@define-color background [^;]+;', '@define-color background rgba(0,0,0,0.0);'),
+    (r'@define-color surface [^;]+;',     '@define-color surface rgba(0,0,0,0.0);'),
+    (r'@define-color surface_container [^;]+;', '@define-color surface_container rgba(0,0,0,0.0);'),
+    (r'@define-color surface_container_high [^;]+;', '@define-color surface_container_high rgba(0,0,0,0.0);'),
+]
+for pat, rep in repl:
+    css = re.sub(pat, rep, css)
+with open(path, 'w') as f:
+    f.write(css)
+print("Waybar made transparent (full semantic palette still active for everything else).")
+PY
         pkill -SIGUSR2 waybar 2>/dev/null || true
-        rm -f "$HOME/.cache/matugen/no-matugen-this-time"
-        # Skip all the normal matugen JSON / waybar writing below
-        WAYBAR_COLORS_WRITTEN=true
-        MATUGEN_JSON=""
-    else
-        if [ "$SKIP_MATUGEN_THEMING" = "1" ]; then
-            echo ":: Skipping normal matugen JSON capture (transparent text mode)"
-        else
-            # Normal path: try to capture JSON for special handling (best effort)
-            RAW_JSON=$(matugen image "$PREPROCESSED_WALLPAPER" --mode dark --source-color-index 0 --json hex 2>/dev/null || true)
-        MATUGEN_JSON=$(printf '%s\n' "$RAW_JSON" | sed '/^ok$/d' | python3 -c '
-import sys, json
-try:
-    data = json.load(sys.stdin)
-    print(json.dumps(data))
-except Exception:
-    print("")
-' 2>/dev/null || true)
-
-        if [ -n "$MATUGEN_JSON" ]; then
-            echo ":: Matugen JSON captured (for special Waybar modes)"
-        else
-            echo ":: Could not capture extra JSON (not critical)"
-        fi
     fi
 fi
 
-# Strong guard for transparent text-only modes
-if [ "$SKIP_MATUGEN_THEMING" = "1" ]; then
-    echo ":: Transparent text-only mode — skipping remaining matugen forcing"
-fi
 
-# ------------------- Ensure Waybar colors.css is updated (defensive Matugen-only) -------------------
-if [ -f "$HOME/.cache/matugen/no-matugen-this-time" ]; then
-    # Already handled above — do nothing
-    rm -f "$HOME/.cache/matugen/no-matugen-this-time" 2>/dev/null || true
-    echo ":: Skipping waybar theming (None mode)"
+# ------------------- Clean defensive sync (new world) -------------------
+# The main matugen call above (or palette.sh when run manually) is responsible
+# for writing the full correct colors via the normal template system.
+# This block just makes sure waybar gets a reload signal, and handles the
+# one clean "transparent bar + full colors elsewhere" case.
+
+echo ":: Ensuring waybar sees the latest colors..."
+
+if [ -f "$HOME/.cache/matugen/waybar-transparent-this-time" ]; then
+    # Already post-processed right after the matugen run above.
+    echo ":: Transparent waybar marker active (full semantic palette still in use for other apps)"
 else
-echo ":: Ensuring Waybar colors.css is up to date from Matugen..."
-
-WAYBAR_COLORS_WRITTEN=false
-
-if [ -n "$MATUGEN_JSON" ]; then
-    python3 -c '
-import json, sys, os
-data = json.loads(sys.stdin.read())
-colors = data.get("colors", {}).get("default", {})
-
-css = ""
-for name, value in colors.items():
-    if isinstance(value, dict) and "hex" in value:
-        css += f"@define-color {name} {value["hex"]};\n"
-
-waybar_css_path = os.path.expanduser("~/.config/waybar/colors.css")
-with open(waybar_css_path, "w") as f:
-    f.write(css)
-print(f"Waybar colors.css written from Matugen JSON ({len(colors)} colors)")
-' <<< "$MATUGEN_JSON" && WAYBAR_COLORS_WRITTEN=true
+    # Normal case — the matugen templates (including the one that writes
+    # ~/.config/waybar/colors/matugen.css) have already done the right thing.
+    true
 fi
 
-# If we didn't get JSON from the main run (palette.sh), try one simple safe fallback for Waybar
-if [ "$WAYBAR_COLORS_WRITTEN" = false ] && command -v matugen >/dev/null 2>&1; then
-    if [ "$SKIP_MATUGEN_THEMING" = "1" ]; then
-        echo ":: Skipping fallback matugen (transparent text mode active)"
-    else
-        echo ":: Trying simple fallback matugen run for Waybar JSON..."
-        RAW_FALLBACK=$(matugen image "$PREPROCESSED_WALLPAPER" --mode dark --source-color-index 0 --json hex 2>/dev/null || true)
-    FALLBACK_JSON=$(printf '%s\n' "$RAW_FALLBACK" | sed '/^ok$/d' | python3 -c '
-import sys, json
-try:
-    data = json.load(sys.stdin)
-    print(json.dumps(data))
-except Exception:
-    print("")
-' 2>/dev/null || true)
-    if [ -n "$FALLBACK_JSON" ]; then
-        python3 -c '
-import json, sys, os
-data = json.loads(sys.stdin.read())
-colors = data.get("colors", {}).get("default", {})
+pkill -SIGUSR2 waybar 2>/dev/null || true
 
-css = ""
-for name, value in colors.items():
-    if isinstance(value, dict) and "hex" in value:
-        css += f"@define-color {name} {value["hex"]};\n"
+# Remove any truly ancient single-purpose markers we no longer support.
+rm -f "$HOME/.cache/matugen/waybar-dark-text" \
+      "$HOME/.cache/matugen/waybar-light-text" 2>/dev/null || true
 
-waybar_css_path = os.path.expanduser("~/.config/waybar/colors.css")
-with open(waybar_css_path, "w") as f:
-    f.write(css)
-print(f"Waybar colors.css written from fallback Matugen JSON ({len(colors)} colors)")
-' <<< "$FALLBACK_JSON" && WAYBAR_COLORS_WRITTEN=true
-    fi
-fi
 
-if [ "$WAYBAR_COLORS_WRITTEN" = true ]; then
-    pkill -SIGUSR2 waybar 2>/dev/null || true
+# ------------------- Launch interactive palette chooser -------------------
+# After the fast auto base palette is applied (so the system is never left
+# without good colors), we bring up palette.sh.
+#
+# This is the part the user wants: after picking a wallpaper in waypaper,
+# they immediately get the nice floating menu to choose from the four good
+# source colors (the "four matugen outputs"), B&W white/grey/black or
+# black/white/grey fallbacks, or "full palette + transparent waybar".
+#
+# On login/restore we set SKIP_PALETTE_CHOOSER=1 so we re-apply matugen + assets
+# without popping an interactive chooser every time you log in.
+
+if [ "${SKIP_PALETTE_CHOOSER:-0}" != "1" ]; then
+    echo ":: Bringing up palette chooser for final selection on this wallpaper..."
+    ~/.config/hypr/scripts/palette.sh || true
 else
-    echo ":: Could not obtain Matugen data for Waybar this time"
+    echo ":: Skipping interactive palette chooser (restore/login mode)"
 fi
 
-# --- Handle "None" mode from palette (apply Matugen everywhere except Waybar) ---
-if [ -f "$HOME/.cache/matugen/waybar-dark-text" ]; then
-    echo ":: Waybar Dark mode — extracting whitest color from Matugen palette for text"
-    WAYBAR_CUSTOM_TEXT=$(python3 -c '
-import sys, json
-data = json.load(sys.stdin)
-colors = data.get("colors", {}).get("default", {})
-best_hex = "#ffffff"
-best_luma = -1
-for name, val in colors.items():
-    if isinstance(val, dict) and "hex" in val:
-        h = val["hex"].lstrip("#")
-        if len(h) == 6:
-            r = int(h[0:2], 16)
-            g = int(h[2:4], 16)
-            b = int(h[4:6], 16)
-            luma = 0.299 * r + 0.587 * g + 0.114 * b
-            if luma > best_luma:
-                best_luma = luma
-                best_hex = val["hex"]
-print(best_hex)
-' <<< "$MATUGEN_JSON" 2>/dev/null || echo "#ffffff")
-    rm -f "$HOME/.cache/matugen/waybar-dark-text"
+# One last reload in case the user chose a transparent variant inside palette.sh
+pkill -SIGUSR2 waybar 2>/dev/null || true
 
-elif [ -f "$HOME/.cache/matugen/waybar-light-text" ]; then
-    echo ":: Waybar Light mode — extracting darkest color from Matugen palette for text"
-    WAYBAR_CUSTOM_TEXT=$(python3 -c '
-import sys, json
-data = json.load(sys.stdin)
-colors = data.get("colors", {}).get("default", {})
-best_hex = "#000000"
-best_luma = 999999
-for name, val in colors.items():
-    if isinstance(val, dict) and "hex" in val:
-        h = val["hex"].lstrip("#")
-        if len(h) == 6:
-            r = int(h[0:2], 16)
-            g = int(h[2:4], 16)
-            b = int(h[4:6], 16)
-            luma = 0.299 * r + 0.587 * g + 0.114 * b
-            if luma < best_luma:
-                best_luma = luma
-                best_hex = val["hex"]
-print(best_hex)
-' <<< "$MATUGEN_JSON" 2>/dev/null || echo "#000000")
-    rm -f "$HOME/.cache/matugen/waybar-light-text"
-fi
+# Clean up any remaining legacy markers
+rm -f "$HOME/.cache/matugen/waybar-dark-text" \
+      "$HOME/.cache/matugen/waybar-light-text" \
+      "$HOME/.cache/matugen/waybar-transparent-bright" \
+      "$HOME/.cache/matugen/waybar-transparent-dark" 2>/dev/null || true
 
-if [ -n "$WAYBAR_CUSTOM_TEXT" ]; then
-    cat > ~/.config/waybar/colors/matugen.css << EOF
-/* Waybar using single extreme color pulled from the current Matugen palette */
-/* Dark bar background + high-contrast text color chosen to match the wallpaper */
-
-@define-color background #1f1f1f;
-@define-color foreground ${WAYBAR_CUSTOM_TEXT};
-
-@define-color surface #1f1f1f;
-@define-color on_surface ${WAYBAR_CUSTOM_TEXT};
-EOF
-    pkill -SIGUSR2 waybar 2>/dev/null || true
-fi
-
-# --- Generate and switch Starship to grayscale scale when using special "None" Waybar modes ---
-STARSHIP_DIR="$HOME/.config/starship"
-mkdir -p "$STARSHIP_DIR"
-
-if [ "$WAYBAR_MODE" = "dark" ] || [ -f "$HOME/.cache/matugen/waybar-dark-text" ]; then
-    # white-grey-black scale using the bright extreme
-    cat > "$STARSHIP_DIR/matugen-grayscale-dark.toml" << EOF
-# Grayscale prompt - white/grey/black (for "Dark" None option)
-# Bright accent from Matugen: ${WAYBAR_CUSTOM_TEXT}
-# All text is black except the final time module.
-
-format = """
-[](fg:color_bright)\
-$os\
-$username\
-[](fg:color_bright bg:color_grey2)\
-$directory\
-[](fg:color_grey2 bg:color_grey1)\
-$git_branch\
-$git_status\
-[](fg:color_grey1 bg:color_dark)\
-$character
-[](fg:color_dark bg:color_bright)\
-$time
-[](fg:color_bright)\
-$line_break"""
-
-palette = 'matugen-gs-dark'
-
-[palettes.matugen-gs-dark]
-color_bright = "${WAYBAR_CUSTOM_TEXT}"
-color_grey2   = "#aaaaaa"
-color_grey1   = "#666666"
-color_dark    = "#222222"
-
-[time]
-format = "[$time]($style)"
-style = "bg:color_bright fg:black"
-EOF
-    ln -sf "$STARSHIP_DIR/matugen-grayscale-dark.toml" "$HOME/.config/starship.toml"
-    echo ":: Starship → grayscale dark (white-grey-black)"
-
-elif [ "$WAYBAR_MODE" = "light" ] || [ -f "$HOME/.cache/matugen/waybar-light-text" ]; then
-    # black-grey-white scale using the dark extreme
-    cat > "$STARSHIP_DIR/matugen-grayscale-light.toml" << EOF
-# Grayscale prompt - black/grey/white (for "Light" None option)
-# Dark accent from Matugen: ${WAYBAR_CUSTOM_TEXT}
-# All text is black except the final time module.
-
-format = """
-[](fg:color_dark)\
-$os\
-$username\
-[](fg:color_dark bg:color_grey1)\
-$directory\
-[](fg:color_grey1 bg:color_grey2)\
-$git_branch\
-$git_status\
-[](fg:color_grey2 bg:color_bright)\
-$character
-[](fg:color_bright bg:color_dark)\
-$time
-[](fg:color_dark)\
-$line_break"""
-
-palette = 'matugen-gs-light'
-
-[palettes.matugen-gs-light]
-color_dark   = "${WAYBAR_CUSTOM_TEXT}"
-color_grey1  = "#555555"
-color_grey2  = "#aaaaaa"
-color_bright = "#ffffff"
-
-[time]
-format = "[$time]($style)"
-style = "bg:color_bright fg:black"
-EOF
-    ln -sf "$STARSHIP_DIR/matugen-grayscale-light.toml" "$HOME/.config/starship.toml"
-    echo ":: Starship → grayscale light (black-grey-white)"
-fi
-
-
-
-# (Old generic static Waybar block removed — replaced by the Matugen extreme-color modes above)
-
-fi   # end of "if not in no-matugen mode" guard
-fi   # end of SKIP_MATUGEN_THEMING guard (for transparent text modes)
 
 # ------------------- Generate Waypaper Stylesheet (DISABLED) -------------------
 # The stock waypaper (GTK) cannot load the Qt/QSS generated here.
@@ -592,5 +338,3 @@ echo ":: Wallpaper processing complete!"
 # (The only remaining blur for SDDM is the theme's optional PartialBlur on the form.)
 "$HOME/.config/hypr/scripts/update-sddm-wallpaper.sh" "$WALLPAPER" || true &
 disown 2>/dev/null || true
-
-fi  # close main matugen if (safety for previous edits)

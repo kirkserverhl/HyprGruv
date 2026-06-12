@@ -17,8 +17,13 @@ local config_dir = debug.getinfo(1, "S").source:match("^@(.*/)") or (os.getenv("
 package.path = config_dir .. "?.lua;" .. config_dir .. "?/init.lua;" .. package.path
 -- =============================================
 
--- Load colors early (same order as original)
-local colors = require("colors.init").load()
+-- Force fresh colors module on every evaluation (including hyprctl reload).
+-- Without this, Lua's require cache would make matugen color updates invisible
+-- until a full Hyprland restart.
+package.loaded["colors.init"] = nil
+
+-- Load colors early (same order as original) — now guaranteed fresh on reloads
+local _ = require("colors.init").load()  -- result unused here; modules that need it call load() themselves
 
 -- Load centralized fonts (single source: ~/.config/settings/fonts.sh)
 local fonts = require("conf.fonts").load()

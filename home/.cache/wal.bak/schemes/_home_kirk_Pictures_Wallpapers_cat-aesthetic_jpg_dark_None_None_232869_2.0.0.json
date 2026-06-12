@@ -1,0 +1,28 @@
+{
+    "checksum": "91ca5bd22574b3eb740a09a29bd12e6c",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-aesthetic.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#20212b",
+        "foreground": "#c7c7ca",
+        "cursor": "#c7c7ca"
+    },
+    "colors": {
+        "color0": "#20212b",
+        "color1": "#B1ABD3",
+        "color2": "#9CB7E4",
+        "color3": "#A8BAE6",
+        "color4": "#C6B2D9",
+        "color5": "#B4C2E0",
+        "color6": "#B3C4E6",
+        "color7": "#c7c7ca",
+        "color8": "#66667c",
+        "color9": "#B1ABD3",
+        "color10": "#9CB7E4",
+        "color11": "#A8BAE6",
+        "color12": "#C6B2D9",
+        "color13": "#B4C2E0",
+        "color14": "#B3C4E6",
+        "color15": "#c7c7ca"
+    }
+}

@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""
+Wrapper that launches the real waypaper but forces it to use a patched
+App class (~/waypaper_fixed_app.py) that fixes search/filter selection.
+
+The upstream bug:
+  - Typing in the search box rebuilds the grid using only matching images.
+  - But on_image_clicked, arrow keys, Enter, etc. still did:
+        self.selected_index = self.image_paths.index(path)
+        ...
+        wallpaper_path = self.image_paths[self.selected_index]
+  - Result: you click a filtered thumbnail and it applies a completely
+    different (pre-filter) wallpaper.
+
+The patched app.py keeps parallel `displayed_*` lists that are kept in sync
+with what is currently visible in the grid, and all selection / navigation
+operates on the displayed lists when a filter is active.
+
+Environment:
+    WAYPAPER_USE_SYSTEM=1   bypass this wrapper and use the distro version
+    WAYPAPER_WRAPPER_DEBUG=1   show which app.py is being used
+"""
+
+import os
+import sys
+
+PATCHED_APP_PATH = os.path.expanduser("~/waypaper_fixed_app.py")
+USE_SYSTEM = os.environ.get("WAYPAPER_USE_SYSTEM", "").lower() in ("1", "true", "yes")
+DEBUG = bool(os.environ.get("WAYPAPER_WRAPPER_DEBUG"))
+
+
+def install_patched_app():
+    """Ensure the real waypaper package is loaded, then replace only its .app module."""
+    if not os.path.isfile(PATCHED_APP_PATH):
+        if DEBUG:
+            print(f"[waypaper-wrapper] {PATCHED_APP_PATH} not found — using system waypaper", file=sys.stderr)
+        return False
+
+    try:
+        # 1. Force the *real* waypaper package (and all its submodules) to be
+        #    imported from site-packages first. This creates a proper package
+        #    with __path__, registers waypaper.changer, waypaper.config etc.
+        import waypaper
+        import waypaper.changer
+        import waypaper.config
+        import waypaper.common
+        import waypaper.keybindings
+        import waypaper.options
+        import waypaper.translations
+
+        # 2. Now load our patched file as the waypaper.app module.
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("waypaper.app", PATCHED_APP_PATH)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("could not create spec")
+
+        patched = importlib.util.module_from_spec(spec)
+
+        # Put it in sys.modules *before* executing so that any relative or
+        # absolute imports inside the patched file that touch "waypaper.app"
+        # see the right thing (defensive).
+        sys.modules["waypaper.app"] = patched
+
+        # Also attach it under the real package object.
+        waypaper.app = patched
+
+        # Execute the patched source.
+        spec.loader.exec_module(patched)
+
+        if DEBUG:
+            print(f"[waypaper-wrapper] Using patched App from {PATCHED_APP_PATH}", file=sys.stderr)
+
+        return True
+
+    except Exception as e:
+        print(f"[waypaper-wrapper] Failed to load patched app.py: {e}", file=sys.stderr)
+        print("[waypaper-wrapper] Falling back to the system waypaper (unpatched).", file=sys.stderr)
+        # Remove any partial module we may have inserted so the real one can load.
+        sys.modules.pop("waypaper.app", None)
+        try:
+            import waypaper
+            if hasattr(waypaper, "app"):
+                delattr(waypaper, "app")
+        except Exception:
+            pass
+        return False
+
+
+def main():
+    if not USE_SYSTEM and install_patched_app():
+        pass  # patched successfully
+    else:
+        if DEBUG:
+            print("[waypaper-wrapper] Using system (unpatched) waypaper", file=sys.stderr)
+
+    # Import the real CLI/GUI entrypoint. Because we (may have) replaced
+    # sys.modules['waypaper.app'], the line inside __main__.py that does
+    #     from waypaper.app import App
+    # will resolve to our patched class.
+    from waypaper.__main__ import run
+    sys.exit(run())
+
+
+if __name__ == "__main__":
+    main()

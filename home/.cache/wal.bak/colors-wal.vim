@@ -1,0 +1,23 @@
+" Special
+let wallpaper  = "/home/kirk/Pictures/Wallpapers/cat-astronaut.png"
+let background = "#101019"
+let foreground = "#c3c3c5"
+let cursor     = "#c3c3c5"
+
+" Colors
+let color0  = "#101019"
+let color1  = "#887B91"
+let color2  = "#A594AA"
+let color3  = "#D5A6B4"
+let color4  = "#E7B4B2"
+let color5  = "#EAC6BA"
+let color6  = "#DABAC1"
+let color7  = "#c3c3c5"
+let color8  = "#5b5b70"
+let color9  = "#887B91"
+let color10 = "#A594AA"
+let color11 = "#D5A6B4"
+let color12 = "#E7B4B2"
+let color13 = "#EAC6BA"
+let color14 = "#DABAC1"
+let color15 = "#c3c3c5"

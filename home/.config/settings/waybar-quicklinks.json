@@ -8,18 +8,18 @@
     "format": "",
     "on-click": "~/.config/settings/browser.sh",
     "on-click-right": "~/.config/settings/terminal.sh",
-    "tooltip-format": "Left:   Firefox   🦊\nRight: Ghostty 👻"
+    "tooltip-format": "Left:   Firefox \nRight: Ghostty "
   },
   "custom/quicklink3": {
     "format": "",
     "on-click": "~/scripts/filemanager.sh",
     "on-click-right": "~/.config/hypr/scripts/yazi.sh",
-    "tooltip-format": "Left:    Dolphin 🐬 \nRight:   Yazi    🦆 "
+    "tooltip-format": "Left:    Dolphin  \nRight:   Yazi "
   },
   "custom/quicklink4": {
     "format": "",
     "on-click": "xdg-open https://gmail.com",
-    "tooltip-format": "Gmail  📧"
+    "tooltip-format": "Gmail "
   },
   "custom/quicklink5": {
     "format": "",
@@ -29,7 +29,7 @@
   "custom/quicklink6": {
     "format": "",
     "on-click": "~/.config/settings/emojipicker.sh",
-    "tooltip-format": " Smile 💀"
+    "tooltip-format": " Hypremoji"
   },
   "custom/quicklinkempty": {},
   "group/quicklinks": {

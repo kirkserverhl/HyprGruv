@@ -23,6 +23,7 @@
 # --- Menu definition (edit this list to add/remove items) ---
 options=$(cat <<EOF
   Wallpapers & Decorations
+  Fonts (independent of colors)
   Waybar Themes
 󰀻  Animations
   Edit .zshrc
@@ -40,6 +41,10 @@ chosen=$(echo "$options" | rofi -dmenu -i \
 case "$chosen" in
     *"Wallpapers"*)
         waypaper
+        ;;
+
+    *"Fonts"*)
+        ~/.config/hypr/scripts/font-chooser.sh
         ;;
 
     *"Waybar Themes"*)

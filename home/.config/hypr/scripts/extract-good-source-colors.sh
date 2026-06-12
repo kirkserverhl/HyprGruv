@@ -25,6 +25,8 @@ if [[ -z "$WALLPAPER" ]]; then
     CURRENT_WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
     if [[ -f "$CURRENT_WP_CACHE" ]]; then
         WALLPAPER=$(cat "$CURRENT_WP_CACHE")
+    elif [ -f "$HOME/.config/settings/default" ]; then
+        WALLPAPER=$(cat "$HOME/.config/settings/default")
     fi
 fi
 

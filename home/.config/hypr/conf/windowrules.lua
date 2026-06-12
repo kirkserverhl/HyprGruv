@@ -114,6 +114,21 @@ hl.window_rule({
     pin = true,
 })
 
+-- Color Palette chooser (invoked by set_wallpaper.sh after waypaper selection)
+-- Uses a compact size tuned for the 70c x 24c kitty overrides inside palette.sh
+-- plus explicit title match for precision (the script forces the title via OSC).
+hl.window_rule({
+    name = "color-palette",
+    match = {
+        class = "^(dotfiles-floating)$",
+        title = "^(Color Palette)$",
+    },
+    float = true,
+    center = true,
+    size = {880, 540},
+    pin = true,
+})
+
 -- Root Unlock tool (very wide)
 hl.window_rule({
     name = "unlockroot",
@@ -144,28 +159,20 @@ hl.window_rule({
     move = { "(monitor_w*0.695)", "(monitor_h*0.04)" },
 })
 
--- CMatrix fullscreen special case
--- Force fullscreen via rule so it appears directly in fullscreen (no floating flash).
--- The script still does focus + reinforcement for multi-monitor correctness.
-hl.window_rule({
-    name = "cmatrix-full",
-    match = { class = "^(cmatrix-full)$" },
-    float = true,
-    border_size = 0,
-    fullscreen = true,
-})
-
--- Extra properties for the matrix screensaver
-hl.exec_cmd("hyprctl keyword windowrulev2 'noblur,class:^(cmatrix-full)$'")
-
--- Use a dedicated fade animation for this overlay (nice open/close feel)
-hl.exec_cmd("hyprctl keyword windowrulev2 'animation fade,class:^(cmatrix-full)$'")
-
 -- yazi floating
 hl.window_rule({
     name = "yazi-float",
     match = { class = "^(yazi)$" },
     float = true,
+})
+
+-- Basic cmatrix (F5): fullscreen on the focused monitor
+hl.window_rule({
+    name = "cmatrix",
+    match = { class = "^(cmatrix)$" },
+    float = true,
+    border_size = 0,
+    fullscreen = true,
 })
 
 -- Generic floating utility windows (example of using the preset pattern)
@@ -197,6 +204,10 @@ hl.window_rule({
     },
     no_focus = true,
 })
+
+-- Extra polish for cmatrix (pure look, no wallpaper blur bleeding through)
+hl.exec_cmd("hyprctl keyword windowrulev2 'noblur,class:^(cmatrix)$'")
+hl.exec_cmd("hyprctl keyword windowrulev2 'animation fade,class:^(cmatrix)$'")
 
 -- =============================================
 -- TODO / REMAINING

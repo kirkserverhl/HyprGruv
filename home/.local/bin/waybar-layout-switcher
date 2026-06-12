@@ -14,48 +14,77 @@ if [[ ! -d "$LAYOUTS_DIR" ]]; then
     exit 1
 fi
 
-mapfile -t LAYOUTS < <(find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort)
+# Include themes that provide a config.jsonc (for layout / modules selection).
+# If they lack their own style.css, they will follow freshstart.css + matugen (and the modules from the lua backup).
+mapfile -t LAYOUTS < <(find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d -exec sh -c '
+  d=$1
+  if [[ -f "$d/config.jsonc" || -f "$d/config" ]]; then
+    printf "%s\n" "$(basename "$d")"
+  fi
+' _ {} \; | sort)
 ((${#LAYOUTS[@]})) || {
-    echo "No layouts found in $LAYOUTS_DIR"
+    echo "No layouts with config.jsonc found in $LAYOUTS_DIR"
     exit 1
 }
 
-# Detect current layout
+# Detect current layout.
+# Priority: running waybar process -c arg (what you actually see) > state file > root symlink
 current="(none)"
-if [[ -L "$WAYBAR_DIR/config.jsonc" ]]; then
-    tgt=$(readlink -f "$WAYBAR_DIR/config.jsonc" || true)
-    if [[ "$tgt" == "$LAYOUTS_DIR/"*"/config.jsonc" ]]; then
-        current=$(basename "$(dirname "$tgt")")
+running_c=$(pgrep -a waybar 2>/dev/null | grep -oE -- '-c [^ ]+' | head -1 | awk '{print $2}' || true)
+if [[ -n "$running_c" && "$running_c" == "$LAYOUTS_DIR/"*"/config.jsonc" ]]; then
+    current=$(basename "$(dirname "$running_c")")
+fi
+if [[ "$current" == "(none)" || ! -d "$LAYOUTS_DIR/$current" ]]; then
+    if [[ -f "$STATE_FILE" ]]; then
+        saved=$(cat "$STATE_FILE")
+        if [[ -d "$LAYOUTS_DIR/$saved" ]]; then
+            current="$saved"
+        fi
     fi
 fi
+if [[ "$current" == "(none)" || ! -d "$LAYOUTS_DIR/$current" ]]; then
+    if [[ -L "$WAYBAR_DIR/config.jsonc" ]]; then
+        tgt=$(readlink -f "$WAYBAR_DIR/config.jsonc" || true)
+        if [[ "$tgt" == "$LAYOUTS_DIR/"*"/config.jsonc" ]]; then
+            current=$(basename "$(dirname "$tgt")")
+        fi
+    fi
+fi
+# Sanitize
+[[ -d "$LAYOUTS_DIR/$current" ]] || current="(none)"
 
 # Build menu with star on current
 menu=$(printf "%s\n" "${LAYOUTS[@]}" | awk -v c="$current" '{print ($0==c?"| ":"  ")$0}')
 chosen=$(echo "$menu" | rofi -dmenu -i -p "Select Layout" -theme ~/.local/share/rofi/themes/minimal.rasi | sed 's/^| //; s/^  //')
 [[ -z "${chosen:-}" ]] && exit 0
 
-cfg_src="$LAYOUTS_DIR/$chosen/config.jsonc"
+cfg_src=""
+for cf in config.jsonc config; do
+  if [[ -f "$LAYOUTS_DIR/$chosen/$cf" ]]; then
+    cfg_src="$LAYOUTS_DIR/$chosen/$cf"
+    break
+  fi
+done
+if [[ -z "$cfg_src" ]]; then
+    # theme does not have its own modules/config spec -> follow the modules from the lua backup via fallback
+    cfg_src="$WAYBAR_DIR/fallback-config.jsonc"
+fi
 css_src="$LAYOUTS_DIR/$chosen/style.css"
-
-[[ -f "$cfg_src" ]] || {
-    echo "Missing $cfg_src"
-    exit 1
-}
-[[ -f "$css_src" ]] || {
-    echo "Missing $css_src"
-    exit 1
-}
+if [[ ! -f "$css_src" ]]; then
+    # theme does not have its own style -> follow freshstart.css + matugen
+    css_src="$WAYBAR_DIR/freshstart.css"
+fi
 
 ln -sf "$cfg_src" "$WAYBAR_DIR/config.jsonc"
 ln -sf "$css_src" "$WAYBAR_DIR/style.css"
 
 echo "$chosen" >"$STATE_FILE"
 
-# Reload Waybar
-if pgrep -x waybar >/dev/null; then
-    pkill -USR2 waybar || true
-else
-    nohup waybar >/dev/null 2>&1 &
-fi
+# Restart Waybar using the *chosen* theme's (or fallback) files explicitly.
+# (We do this because waybar is typically started with -c/-s pointing at a theme,
+# so just USR2 or root symlinks alone won't switch the active layout.)
+pkill -x waybar 2>/dev/null || true
+sleep 0.2
+waybar -c "$cfg_src" -s "$css_src" &
 
 [[ "$NOTIFY" = ":" ]] || $NOTIFY "Waybar" "Layout: $chosen"

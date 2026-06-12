@@ -1,0 +1,13 @@
+static const char norm_fg[] = "#c3c3c5";
+static const char norm_bg[] = "#101019";
+static const char norm_border[] = "#5b5b70";
+
+static const char sel_fg[] = "#c3c3c5";
+static const char sel_bg[] = "#887B91";
+static const char sel_border[] = "#c3c3c5";
+
+static const char *colors[][3]      = {
+    /*               fg           bg         border                         */
+    [SchemeNorm] = { norm_fg,     norm_bg,   norm_border }, // unfocused wins
+    [SchemeSel]  = { sel_fg,      sel_bg,    sel_border },  // the focused win
+};

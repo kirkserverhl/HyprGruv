@@ -62,6 +62,7 @@ hl.bind(mod .. " + V",            hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + L",            hl.dsp.exec_cmd("hyprlock"))
 
 hl.bind(mod .. " + W", hl.dsp.exec_cmd("killall waybar || waybar"))
+hl.bind("CTRL + W",       hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
 
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())
@@ -181,8 +182,11 @@ hl.bind(mod .. " + L",           hl.dsp.layout("mfact +0.05"))
 hl.bind("SUPER + period", hl.dsp.layout("move +col"))
 hl.bind("SUPER + comma",  hl.dsp.layout("move -col"))
 
--- Dunst
-hl.bind(mod .. " + A",               hl.dsp.exec_cmd("dunstctl history-pop"))
+-- Dunst notifications (short 5s popups for missed ones)
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh last"))   -- SUPER + D = last missed (5s)
+hl.bind(mod     .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh menu"))   -- ALT + D  = menu of last 10 (5s each)
+
+-- Other Dunst controls
 hl.bind(mod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd("dunstctl close-all"))
 hl.bind(mod .. " + SUPER + A",       hl.dsp.exec_cmd("dunstctl set-paused toggle"))
 

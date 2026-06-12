@@ -37,3 +37,24 @@
 @define-color color_on_yellow {{colors.on_tertiary.default.hex}};
 @define-color color_on_aqua   {{colors.on_secondary.default.hex}};
 @define-color color_on_blue   {{colors.on_primary_container.default.hex}};
+
+/* Semantic palette names (curated Starship-style set).
+   The entire theme system is built around these names.
+   Exact same definitions as ~/.config/matugen/palette.css */
+@define-color color_fg0   {{colors.on_surface.default.hex}};
+@define-color color_bg1   {{colors.surface_container.default.hex}};
+@define-color color_bg3   {{colors.surface_container_high.default.hex}};
+
+@define-color color_orange {{colors.primary.default.hex}};
+@define-color color_yellow {{colors.tertiary.default.hex}};
+@define-color color_aqua   {{colors.secondary.default.hex}};
+@define-color color_blue   {{colors.primary_container.default.hex}};
+
+@define-color color_on_orange {{colors.on_primary.default.hex}};
+@define-color color_on_yellow {{colors.on_tertiary.default.hex}};
+@define-color color_on_aqua   {{colors.on_secondary.default.hex}};
+@define-color color_on_blue   {{colors.on_primary_container.default.hex}};
+
+@define-color color_green  {{colors.secondary.default.hex}};
+@define-color color_red    {{colors.error.default.hex}};
+@define-color color_purple {{colors.tertiary.default.hex}};

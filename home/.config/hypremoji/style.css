@@ -207,3 +207,92 @@ entry {
     transform: scale3d(.3,.3,.3);
   }
 }
+
+/* New styles for v1.2 components */
+/* You can integrate these styles into your custom theme */
+
+:root{
+  --error: #c41313;
+}
+
+.generic-btn{
+  color: var(--primary-col);
+  -gtk-icon-size: 24px; 
+}
+
+.toast-container {
+  background-color: var(--btn-list-col);
+  border-radius: 10px;
+  padding: 5px 15px;
+  margin: 0 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--primary-col);
+  
+  transition: all 0.3s ease-in-out;
+  transform: scale(0.0000000001);
+}
+
+.toast-container.error {
+  border: 1px solid var(--error);
+}
+
+.toast-label {
+  color: white;
+  font-weight: 700;
+}
+
+.show-toast {
+  transform: scale(1);
+
+  animation-name: boingCombo;
+  animation-duration: 5s;
+  animation-fill-mode: both;
+}
+
+@keyframes boingCombo {
+  0% {
+    opacity: 0;
+    transform: scale3d(.3,.3,.3);
+  }
+
+  0.6% {
+    transform: scale3d(1.1,1.1,1.1);
+  }
+
+  1.2% {
+    transform: scale3d(.9,.9,.9);
+  }
+
+  1.8% {
+    opacity: 1;
+    transform: scale3d(1.03,1.03,1.03);
+  }
+
+  2.4% {
+    transform: scale3d(.97,.97,.97);
+  }
+
+  3% {
+    opacity: 1;
+    transform: scale3d(1,1,1);
+  }
+
+  90% {
+    opacity: 1;
+    transform: scale3d(1,1,1);
+  }
+
+  92% {
+    transform: scale3d(.9,.9,.9);
+  }
+
+  95%, 95.5% {
+    opacity: 1;
+    transform: scale3d(1.1,1.1,1.1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale3d(.3,.3,.3);
+  }
+}

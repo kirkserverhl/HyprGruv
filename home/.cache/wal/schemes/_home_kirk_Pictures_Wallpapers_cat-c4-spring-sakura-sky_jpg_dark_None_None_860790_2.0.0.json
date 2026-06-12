@@ -1,0 +1,28 @@
+{
+    "checksum": "c487e565f239a4aeedf2c9b456ef2bc3",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-c4-spring-sakura-sky.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0f1224",
+        "foreground": "#c3c3c8",
+        "cursor": "#c3c3c8"
+    },
+    "colors": {
+        "color0": "#0f1224",
+        "color1": "#8893AF",
+        "color2": "#9D9BA9",
+        "color3": "#92AED4",
+        "color4": "#A3B7D6",
+        "color5": "#CEBCC6",
+        "color6": "#AEC8E0",
+        "color7": "#c3c3c8",
+        "color8": "#5e6074",
+        "color9": "#8893AF",
+        "color10": "#9D9BA9",
+        "color11": "#92AED4",
+        "color12": "#A3B7D6",
+        "color13": "#CEBCC6",
+        "color14": "#AEC8E0",
+        "color15": "#c3c3c8"
+    }
+}

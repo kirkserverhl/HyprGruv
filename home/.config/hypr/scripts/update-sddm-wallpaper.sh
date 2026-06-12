@@ -93,6 +93,8 @@ if [ -n "${1:-}" ] && [ "$1" != "--setup" ]; then
     SOURCE="$1"
 elif [ -f "$HOME/.config/settings/cache/current_wallpaper" ]; then
     SOURCE=$(cat "$HOME/.config/settings/cache/current_wallpaper" | tr -d '\n\r')
+elif [ -f "$HOME/.config/settings/default" ]; then
+    SOURCE=$(cat "$HOME/.config/settings/default" | tr -d '\n\r')
 else
     echo "No wallpaper source available" >&2
     notify-send "SDDM Wallpaper" "Failed: no current wallpaper in cache" -u critical 2>/dev/null || true

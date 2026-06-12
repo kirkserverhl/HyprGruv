@@ -45,19 +45,33 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
 
--- === MAC-STYLE SHORTCUTS (send to focused window) ===
--- These simulate Ctrl+Insert / Shift+Insert etc. inside the active app.
--- Fixed syntax for Lua API (window target + repeating flag).
-local macShortcutOpts = { repeating = true }
+-- === MAC-STYLE SHORTCUTS (SUPER/Cmd-like → Ctrl equivalents) ===
+-- We use a small wtype wrapper instead of hl.dsp.send_shortcut.
+--
+-- Reason: send_shortcut (especially with the previous { repeating = true })
+-- was frequently leaving the target key "stuck" (the letter would auto-repeat
+-- or stay pressed in the focused app after you let go of SUPER+letter).
+-- wtype sends clean, paired press+release events from userspace and is much
+-- more reliable for these "translate my WM shortcut into an app shortcut" cases.
+--
+-- The script is ~/.config/hypr/scripts/mac-shortcut.sh
 
-hl.bind(mainMod .. " + C", hl.dsp.send_shortcut({ mods = "CTRL", key = "Insert", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + V", hl.dsp.send_shortcut({ mods = "SHIFT", key = "Insert", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.send_shortcut({ mods = "CTRL", key = "V", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + X", hl.dsp.send_shortcut({ mods = "CTRL", key = "X", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + Z", hl.dsp.send_shortcut({ mods = "CTRL", key = "Z", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + I", hl.dsp.send_shortcut({ mods = "CTRL", key = "I", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + U", hl.dsp.send_shortcut({ mods = "CTRL", key = "U", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + K", hl.dsp.send_shortcut({ mods = "CTRL", key = "K", window = "activewindow" }), macShortcutOpts)
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh copy"))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh paste"))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh paste"))
+hl.bind(mainMod .. " + X", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh cut"))
+hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh undo"))
+
+-- Less universal "mac-like" ones kept for compatibility with whatever was
+-- bound to Ctrl+I / U / K before.
+hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh i"))
+hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh u"))
+hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh k"))
+
+-- If you have specific terminal apps that ONLY react to the old-school
+-- Shift+Insert (paste) / Ctrl+Insert (copy) and not Ctrl+Shift+V / Ctrl+C,
+-- you can add dedicated binds here that call wtype -M shift -k insert -m shift etc.
+-- Most people no longer need the Insert variants.
 
 -- === TERMINALS & LAUNCHERS ===
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
@@ -85,9 +99,11 @@ hl.bind(mainMod .. " + CTRL + Q", hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh
 hl.bind(mainMod .. " + L",        hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"))
 hl.bind("CTRL + ALT + DELETE",    hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 hl.bind(mod .. " + V",            hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mod .. " + L",            hl.dsp.exec_cmd("hyprlock"))
+-- Also use explicit config for the alternate lock bind so matugen colors (primary/secondary) are always loaded
+hl.bind(mod .. " + L",            hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"))
 
 hl.bind(mod .. " + W", hl.dsp.exec_cmd("killall waybar || waybar"))
+hl.bind("CTRL + W",       hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
 
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())
@@ -100,6 +116,10 @@ hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special" })
 hl.bind(mod     .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"))
 
+-- Merchant OCR (iAccess profile screenshots → formatted clipboard block)
+-- SUPER + SHIFT + M : region select → OCR → pretty merchant details copied
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd('grim -g "$(slurp)" /tmp/merchant.png && ~/bin/merchant-ocr.py /tmp/merchant.png'))
+
 -- Clip history
 hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))
 
@@ -111,6 +131,9 @@ hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))
 hl.bind(mainMod .. " + CTRL + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-waybar.sh"))
 hl.bind(mod     .. " + M",        hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
 hl.bind(mainMod .. " + T",        hl.dsp.exec_cmd("pkill -x rofi 2>/dev/null; ~/.config/colorschemes/rofi-launcher.sh"))
+
+-- NothingLess <-> Waybar toggle (ALT+SHIFT+N). Keeps CTRL+W purely for Waybar theme switching.
+hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-nothingless.sh"))
 
 -- Misc tools
 hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(SCRIPTS .. "/unlockroot.sh"))
@@ -154,7 +177,7 @@ hl.bind("F1",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), { locked = tr
 hl.bind("F2",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), { locked = true, repeating = true })
 hl.bind("F3",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),     { locked = true, repeating = true })
 hl.bind("F4",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),     { locked = true, repeating = true })
-hl.bind("F5",  hl.dsp.exec_cmd(SCRIPTS .. "/cmatrix-saver.sh"))
+hl.bind("F5",  hl.dsp.exec_cmd("[fullscreen] kitty --class cmatrix -e cmatrix"))
 hl.bind("F6",  hl.dsp.exec_cmd("hypremoji -s ~/.config/hypremoji/matugen.css"))
 hl.bind("F7",  hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
 hl.bind("F8",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"))
@@ -162,14 +185,6 @@ hl.bind("F9",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 hl.bind("F10", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("F11", hl.dsp.exec_cmd("playerctl next"),       { locked = true })
 hl.bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), { locked = true })
-
--- Idle CMatrix daemons (different timeouts for home vs laptop)
-hl.bind(mainMod .. " + ALT + I", hl.dsp.exec_cmd(SCRIPTS .. "/idle-cmatrix-daemon.sh 900 home"))
-hl.bind(mainMod .. " + ALT + O", hl.dsp.exec_cmd(SCRIPTS .. "/idle-cmatrix-daemon.sh 300 laptop"))
-hl.bind(mainMod .. " + ALT + K", hl.dsp.exec_cmd(SCRIPTS .. "/stop-idle-cmatrix-daemon.sh all"))
-
--- Dismiss the screensaver overlay (safe global bind)
-hl.bind("SUPER + Escape", hl.dsp.exec_cmd(SCRIPTS .. "/dismiss-screensaver.sh"))
 
 -- Workspace numbers (1-9)
 for i = 1, 9 do
@@ -221,8 +236,11 @@ hl.bind(mod .. " + L",           hl.dsp.layout("mfact +0.05"))
 hl.bind("SUPER + period", hl.dsp.layout("move +col"))
 hl.bind("SUPER + comma",  hl.dsp.layout("move -col"))
 
--- Dunst
-hl.bind(mod .. " + A",               hl.dsp.exec_cmd("dunstctl history-pop"))
+-- Dunst notifications (short 5s popups for missed ones)
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh last"))   -- SUPER + D = last missed (5s)
+hl.bind(mod     .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh menu"))   -- ALT + D  = menu of last 10 (5s each)
+
+-- Other Dunst controls
 hl.bind(mod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd("dunstctl close-all"))
 hl.bind(mod .. " + SUPER + A",       hl.dsp.exec_cmd("dunstctl set-paused toggle"))
 

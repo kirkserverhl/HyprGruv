@@ -1,0 +1,24 @@
+{
+  "include": "~/.config/waybar/modules.json",
+  "layer": "top",
+  "position": "top",
+  "margin-top": 13,
+  "height": 40,
+  "modules-left": [
+    "custom/launcher",
+    "clock",
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "custom/notification",
+    "custom/media"
+  ],
+  "modules-right": [
+    "custom/pacman",
+    "custom/weather",
+    "pulseaudio",
+    "battery",
+    "network",
+    "power-profiles-daemon"
+  ]
+}

@@ -1,0 +1,37 @@
+/**
+ * @name NothingLess
+ * @description A Discord recolor theme, generated with NothingLess.
+ * @author Leriart
+ * @version 1.0.0
+ * @invite gHG9WHyNvH
+ * @website https://github.com/Leriart/NothingLess
+ * @source https://github.com/Leriart/NothingLess
+ * @authorId 294856304969908224
+ * @authorLink https://github.com/Axenide
+*/ 
+
+@import url('https://mwittrien.github.io/BetterDiscordAddons/Themes/DiscordRecolor/DiscordRecolor.css');
+
+:root {
+  --accentcolor: 255,179,174;
+  --accentcolor2: 231,189,185;
+  --linkcolor: 206,189,254;
+  --mentioncolor: 222,197,110;
+  --textbrightest: 241,222,221;
+  --textbrighter: 210,193,192;
+  --textbright: 175,161,160;
+  --textdark: 132,122,121;
+  --textdarker: 109,100,100;
+  --textdarkest: 76,70,69;
+  --font: Ndot, gg sans;
+  --backgroundaccent: 43,28,28;
+  --backgroundprimary: 26,17,17;
+  --backgroundsecondary: 17,11,11;
+  --backgroundsecondaryalt: 13,9,9;
+  --backgroundtertiary: 9,6,6;
+  --backgroundfloating: 0,0,0;
+  --settingsicons: 1;
+}
+
+/* Any custom CSS below here */ 
+

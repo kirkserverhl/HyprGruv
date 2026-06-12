@@ -369,15 +369,19 @@ PYEOF
     fi
 fi
 
-# Keep the legacy root waybar/colors.css in sync with the matugen one,
-# but only when not in an explicit "no matugen / transparent" mode.
-if [ -f ~/.cache/matugen/no-matugen-this-time ] || [ -f ~/.cache/matugen/waybar-transparent-bright ] || [ -f ~/.cache/matugen/waybar-transparent-dark ] || [ -f ~/.cache/matugen/waybar-dark-text ] || [ -f ~/.cache/matugen/waybar-light-text ]; then
-    echo "[posthook] Skipping waybar colors sync (None / transparent text mode active)"
+# Keep the legacy root waybar/colors.css in sync with the matugen one.
+# The only time we intentionally skip this is the explicit "disable matugen entirely" marker.
+if [ -f ~/.cache/matugen/no-matugen-this-time ]; then
+    echo "[posthook] Skipping waybar colors sync (no-matugen-this-time marker)"
 else
     if [ -f ~/.config/waybar/colors/matugen.css ]; then
         cp -f ~/.config/waybar/colors/matugen.css ~/.config/waybar/colors.css 2>/dev/null || true
     fi
 fi
+
+# Note: waybar-transparent-this-time is handled by set_wallpaper.sh (and palette.sh)
+# *after* a full matugen run. The posthook always writes the complete themed file;
+# the toggle script then punches holes in just the background roles.
 
 # -----------------------------------------------------------------------------
 # TTY (virtual console) palette - so Ctrl+Alt+F3 etc. match the current theme

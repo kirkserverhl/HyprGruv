@@ -1,0 +1,54 @@
+/* =============================================================================
+   Matugen Semantic Base Palette
+   =============================================================================
+   This is the single source of truth for the curated "rainbow powerline"
+   palette style defined in the Starship matugen template.
+
+   Every other theme file (waybar, hyprland borders, fuzzel, rofi, etc.)
+   can import this and just use different *combinations* of these variables.
+
+   The mapping is deliberately small and opinionated (same as starship-rainbow):
+     Neutrals
+       color_fg0, color_bg1, color_bg3
+     Accents (the four powerline colors)
+       color_orange, color_yellow, color_aqua, color_blue
+     Contrast text for the accents
+       color_on_orange, color_on_yellow, color_on_aqua, color_on_blue
+     Semantic state colors
+       color_green, color_red, color_purple
+
+   These are generated from Material You roles every time you apply a palette
+   via matugen (palette.sh, waypaper post-command, etc.).
+
+   Usage in other CSS:
+     @import "path/to/this/file";
+     .my-thing { background: color_orange; color: color_on_orange; }
+============================================================================= */
+
+/* --- Neutrals (from surface roles) --- */
+@define-color color_fg0   #e3e2e9;
+@define-color color_bg1   #1e1f25;
+@define-color color_bg3   #292a2f;
+
+/* --- Rainbow powerline accents (chosen for hue spread) --- */
+@define-color color_orange #b4c4ff;
+@define-color color_yellow #e2bbdb;
+@define-color color_aqua   #c1c5dd;
+@define-color color_blue   #334478;
+
+/* --- High-contrast text on the vivid accents --- */
+@define-color color_on_orange #1b2d61;
+@define-color color_on_yellow #422740;
+@define-color color_on_aqua   #2b3042;
+@define-color color_on_blue   #dbe1ff;
+
+/* --- Semantic state colors (reuse existing roles for good contrast) --- */
+@define-color color_green  #c1c5dd;
+@define-color color_red    #ffb4ab;
+@define-color color_purple #e2bbdb;
+
+/* --- Convenience aliases (so files can be more readable) --- */
+@define-color accent1 color_orange;
+@define-color accent2 color_yellow;
+@define-color accent3 color_aqua;
+@define-color accent4 color_blue;

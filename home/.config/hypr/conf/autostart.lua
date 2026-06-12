@@ -15,8 +15,8 @@ hl.on("hyprland.start", function()
     -- Polkit
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
-    -- Idle + bar
-    hl.exec_cmd("hypridle & waybar")
+    -- Idle + bar (or nothingless if that was the last choice via the toggle)
+    hl.exec_cmd("hypridle & sh -c 's=${XDG_STATE_HOME:-$HOME/.local/state}/waybar/last_layout; if [ \"$(cat \"$s\" 2>/dev/null)\" = nothingless ]; then nothingless &; else ~/.config/waybar/scripts/launch.sh; fi'")
 
     -- Clipboard history (images)
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
@@ -28,12 +28,10 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("killall -q waypaper-daemon awww-daemon waypaper-engine 2>/dev/null || true")
     hl.exec_cmd("waypaper-engine daemon &")
 
-    -- Idle visual screensaver (pure Hyprland, no hypridle dependency for the visual part)
-    -- Starts with 15 min timeout by default (home). Use keybinds to change on laptop.
-    hl.exec_cmd(SCRIPTS .. "/idle-cmatrix-daemon.sh 900 home &")
-
-    -- Restore wallpaper after monitors are ready
-    hl.exec_cmd("sleep 2 && ~/.local/bin/waypaper --restore &")
+    -- Restore last wallpaper + re-apply matugen/colors on every login/start.
+    -- Uses our script so we get both the image *and* the full post-processing (matugen etc.)
+    -- without the interactive palette chooser popping on boot.
+    hl.exec_cmd("sleep 1.5 && ~/.config/hypr/scripts/restore_wallpaper.sh &")
 
     -- Cursor theme
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic-Gruvbox 24")
@@ -46,6 +44,9 @@ hl.on("hyprland.start", function()
 
     -- Dunst
     hl.exec_cmd("dunst")
+
+    -- cava-bg: Wayland-native audio visualizer as desktop background (dynamic colors from wallpaper)
+    hl.exec_cmd("cava-bg on")
 
     -- The original also had a non-once exec here:
     -- hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")

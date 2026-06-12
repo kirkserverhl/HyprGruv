@@ -1,0 +1,28 @@
+{
+    "checksum": "7699471bd837045444f22af0022d4229",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-sunset2.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#112128",
+        "foreground": "#c3c7c9",
+        "cursor": "#c3c7c9"
+    },
+    "colors": {
+        "color0": "#112128",
+        "color1": "#2B5565",
+        "color2": "#386271",
+        "color3": "#4E484D",
+        "color4": "#6C4C50",
+        "color5": "#975155",
+        "color6": "#EC6765",
+        "color7": "#c3c7c9",
+        "color8": "#606f76",
+        "color9": "#2B5565",
+        "color10": "#386271",
+        "color11": "#4E484D",
+        "color12": "#6C4C50",
+        "color13": "#975155",
+        "color14": "#EC6765",
+        "color15": "#c3c7c9"
+    }
+}

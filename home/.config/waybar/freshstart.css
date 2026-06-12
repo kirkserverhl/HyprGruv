@@ -54,8 +54,8 @@ window#waybar {
 
 * {
   font-family:
-    "Agave Nerd Font Propo", "Fira Sans Semibold",
-    "Font Awesome 6 Free", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    "Agave Nerd Font Propo", "Fira Sans Semibold", "Font Awesome 6 Free",
+    FontAwesome, Roboto, Helvetica, Arial, sans-serif;
   font-size: 17px;
   font-weight: 500;
   border: none;
@@ -968,3 +968,5 @@ window#waybar.empty #window {
   color: @on_primary_container;
   opacity: 1;
 }
+
+/* (updates module always visible with count; no .hidden rule needed) */

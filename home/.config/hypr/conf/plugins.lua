@@ -6,8 +6,6 @@
 
 -- You can also load/unload from keybinds (see keybinds.lua)
 
-local colors = require("colors.init").load()
-
 -- (Optional) Source Matugen variables if you still want to use traditional
 -- plugin { } blocks for other plugins. Not required for the hyprbars config below.
 -- source = "~/.config/hypr/colors/custom/matugen.conf"
@@ -16,9 +14,11 @@ local colors = require("colors.init").load()
 -- This is the most reliable way to configure hyprbars with dynamic colors
 -- from the Lua color loader without "unknown key" or legacy block parser errors.
 --
--- We apply on both startup and every config reload so the settings (including
--- your starship/matugen colors) are always up to date.
+-- IMPORTANT: We load colors *inside* the handler so that `hyprctl reload`
+-- (triggered by matugen post_hook) always picks up the latest matugen palette.
 local function apply_hyprbars()
+    local colors = require("colors.init").load()
+
     hl.keyword("plugin:hyprbars:bar_height", 33)
     hl.keyword("plugin:hyprbars:bar_color", colors.bg1)
     hl.keyword("plugin:hyprbars:bar_blur", true)

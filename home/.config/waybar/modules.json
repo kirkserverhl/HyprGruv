@@ -87,7 +87,8 @@
       "car": "\uf1b9 ",
       "default": ["\uf026", "\uf028", "\uf028"]
     },
-    "on-click": "pavucontrol"
+    "on-click": "~/.config/waybar/scripts/volume-menu.sh",
+    "on-click-right": "pavucontrol"
   },
   "bluetooth": {
     "format": "  ",
@@ -111,12 +112,13 @@
     "tooltip": false
   },
   "custom/updates": {
-    "exec": "~/.config/hypr/scripts/updates.sh",
+    "exec": "~/.config/hypr/scripts/updates.sh waybar",
     "interval": 1800,
     "return-type": "json",
     "format": "{}",
-    "on-click": "~/.config/hypr/settings/installupdates.sh",
-    "tooltip-format": "Click to install updates"
+    "on-click": "$(cat ~/.config/hypr/scripts/terminal.sh) --class hypr-updates -e ~/.config/hypr/scripts/installupdates.sh",
+    "on-click-right": "~/.config/hypr/scripts/software.sh",
+    "tooltip-format": "Left:  Backup + Install updates  ⬆️\nRight: Pacseek 📦️"
   },
   "custom/exit": {
     "format": "\udb81\udc25",

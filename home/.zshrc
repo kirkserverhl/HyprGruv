@@ -235,27 +235,6 @@ export PATH="$HOME/.grok/bin:$PATH"
 fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
-#
-# Terminal Idle CMatrix (Lightweight)
-# =============================================================================
-# Triggers cmatrix after X seconds of inactivity at the prompt.
-# Works in Kitty and Ghostty. Very low overhead.
-#
-# Exit cmatrix with 'q' or Ctrl+C to return to the prompt.
 
-IDLE_TIMEOUT=180          # 3 minutes (change this if you want)
-IDLE_COMMAND="cmatrix -a -b; clear"
-
-# Reset the idle timer after every command
-precmd() {
-    TMOUT=$IDLE_TIMEOUT
-}
-
-# This runs when the prompt has been idle for too long
-TRAPALRM() {
-    eval "$IDLE_COMMAND"
-    TMOUT=$IDLE_TIMEOUT
-}
-
-TMOUT=$IDLE_TIMEOUT
-
+source "$HOME/.cargo/env"
+export PATH="$HOME/bin:$PATH"

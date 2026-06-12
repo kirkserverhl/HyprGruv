@@ -19,7 +19,7 @@ fi
 if [[ "$1" == "lock" ]]; then
 	echo ":: Lock"
 	sleep 0.5
-	hyprlock
+	hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf
 fi
 
 if [[ "$1" == "reboot" ]]; then

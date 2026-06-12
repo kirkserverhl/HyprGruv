@@ -83,6 +83,12 @@ input_path = "~/.config/matugen/templates/hyprland-colors.conf"
 output_path = "~/.config/hypr/colors/custom/matugen.conf"
 post_hook = "hyprctl reload"
 
+# Dedicated colors for hyprlock (clean separation from main Hyprland colors)
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
+output_path = "~/.config/hypr/hyprlock/colors/matugen.conf"
+# No post_hook — hyprlock isn't usually running when you change wallpapers
+
 [templates.dunst]
 input_path = "~/.config/matugen/templates/dunst.conf"
 output_path = "~/.config/dunst/dunstrc"
@@ -154,6 +160,16 @@ output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/userChrome.css
 input_path = "~/.config/matugen/templates/waypaper-style.css"
 output_path = "~/.config/waypaper/style.css"
 # Note: Waypaper may need to be restarted to pick up the new stylesheet
+
+# -----------------------------------------------------------------------------
+# Canonical semantic palette (Starship-inspired)
+# This is the single importable source of truth for most custom themes.
+# Written to a stable location so waybar, hyprland, fuzzel, etc. can @import it.
+# -----------------------------------------------------------------------------
+[templates.semantic_palette]
+input_path = "~/.config/matugen/templates/base-palette.css"
+output_path = "~/.config/matugen/palette.css"
+post_hook = 'echo "[matugen] semantic palette updated" >> ~/.cache/matugen.log'
 
 [templates.bat]
 input_path = "~/.config/matugen/templates/bat.tmTheme"

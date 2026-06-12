@@ -1,22 +1,22 @@
 {
-  "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-biking-sunset.jpg",
+  "wallpaper": "Null",
   "alpha": "100",
   "colors": {
-    "color0": "#131318",
+    "color0": "#121318",
     "color1": "",
     "color2": "",
-    "color3": "#c3c1ff",
+    "color3": "#b5c4ff",
     "color4": "",
-    "color5": "#c7c4dd",
+    "color5": "#c1c5dd",
     "color6": "",
-    "color7": "#35343a",
+    "color7": "#34343a",
     "color8": "",
     "color9": "",
-    "color10": "#c3c1ff",
+    "color10": "#b5c4ff",
     "color11": "",
     "color12": "",
-    "color13": "#c7c4dd",
+    "color13": "#c1c5dd",
     "color14": "",
-    "color15": "#e5e1e9"
+    "color15": "#e3e1e9"
   }
 }
