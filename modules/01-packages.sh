@@ -251,6 +251,17 @@ fi
 
 sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
 
+# Ensure the default mirrorlist is populated if missing or empty.
+# sanitize_pacman_conf (and preflight) add "Include = /etc/pacman.d/mirrorlist"
+# for [core] and [extra]. If the file doesn't exist or is empty, pacman fails
+# with "could not be read".
+# We seed a basic reliable mirror to bootstrap. Once reflector is installed
+# (in the core list), you can run a better generation later if desired.
+if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
+  log_status "Seeding initial mirrorlist (bootstrap)..."
+  echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+fi
+
 # Minimal pacman.conf change: enable parallel downloads.
 log_status "Setting ParallelDownloads in pacman.conf for faster downloads"
 if ! grep -q '^ParallelDownloads' /etc/pacman.conf 2>/dev/null; then

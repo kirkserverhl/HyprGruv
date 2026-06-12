@@ -96,6 +96,12 @@ OPT_TERMS=(kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
 
 # ---------------------- install ----------------------
+# Ensure mirrorlist is seeded early (same reason as in 01-packages)
+if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
+  log_status "Seeding initial mirrorlist (bootstrap)..."
+  echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+fi
+
 log_status "Refreshing package databases"
 sudo pacman -Syu --noconfirm
 
