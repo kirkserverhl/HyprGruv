@@ -31,6 +31,33 @@ sleep 0.3
 # Ensure stow present
 if ! command_exists stow; then
   log_status "stow not found. Installing…"
+
+  # IMPORTANT: Before running pacman/yay, temporarily disable [chaotic-aur] if its mirrorlist
+  # file is missing. This prevents the exact error you saw:
+  #   "error: config file /etc/pacman.d/chaotic-mirrorlist could not be read: No such file or directory"
+  #   "error: parsing '/etc/pacman.conf'"
+  #
+  # This can happen if 00-preflight added the chaotic repo block but the mirrorlist
+  # (installed later in 01 or 03) isn't present yet. The disable logic matches 01-packages.sh.
+  local_conf="/etc/pacman.conf"
+  local_ml="/etc/pacman.d/chaotic-mirrorlist"
+  if grep -q '^\[chaotic-aur\]' "$local_conf" 2>/dev/null && [[ ! -f "$local_ml" ]]; then
+    log_status "Temporarily disabling [chaotic-aur] for stow install (mirrorlist not ready yet)..."
+    sudo awk '
+    BEGIN{insec=0}
+    /^\[chaotic-aur\]/{insec=1; if($0 !~ /^#/) print "# hyprgruv-stow: " $0; else print; next}
+    /^\[/ && insec==1 {insec=0; print; next}
+    {
+      if(insec==1) {
+        if($0 !~ /^#/) print "# hyprgruv-stow: " $0; else print
+      } else {
+        print
+      }
+    }
+  ' "$local_conf" | sudo tee "$local_conf.tmp.$$" >/dev/null
+    sudo mv "$local_conf.tmp.$$" "$local_conf"
+  fi
+
   if command -v yay >/dev/null 2>&1; then
     yay -S --needed --noconfirm stow
   else

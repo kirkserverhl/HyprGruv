@@ -200,17 +200,20 @@ OFFICIAL_PKGS=(
     trash-cli
     stow
     lf
+    yazi
     neovim
     lazygit
     starship
 
-    # lf file preview support
+    # lf / yazi file preview support
     chafa
     mupdf-tools
     tesseract
     tesseract-data-eng
     ffmpeg
     ffmpegthumbnailer
+
+    # yazi (modern TUI file manager, alongside lf)
 
     # --- Hyprland (lean, no full desktop, no KDE/Plasma) ---
     hyprland
@@ -275,7 +278,6 @@ OFFICIAL_PKGS=(
 
     # --- Hyprgruv / personal additions ---
     # Move packages here (from AUR_PKGS) once Chaotic-AUR is enabled for faster installs.
-    # yazi
 
     # --- Additional tools (user requested) ---
     7zip
@@ -331,7 +333,6 @@ AUR_PKGS=(
 
     # === Personal / usually still AUR or preferred -git versions ===
     # Move anything below to OFFICIAL_PKGS as soon as Chaotic provides it.
-    # yazi
     # zsh-thefuck-git
     # etc.
 )
@@ -364,6 +365,8 @@ sudo pacman -S --needed --noconfirm \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
     pipewire pipewire-pulse wireplumber \
     networkmanager pavucontrol sddm \
+    yazi \
+    stow \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     7zip atuin bpytop cava clang cliphist cmatrix discount htop \
