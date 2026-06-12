@@ -1,1 +1,0 @@
-zinc.zsh-theme

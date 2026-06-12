@@ -109,59 +109,9 @@ dedupe_pacman_repos() {
     sudo mv "$conf.tmp.$$" "$conf"
 }
 
-# Temporarily disable [chaotic-aur] if its mirrorlist isn’t present yet.
-disable_chaotic_if_unready() {
-    local conf="/etc/pacman.conf"
-    local ml="/etc/pacman.d/chaotic-mirrorlist"
-
-    grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null || return 0
-    [[ -f "$ml" ]] && return 0
-
-    log_status "Chaotic repo referenced but not ready — disabling it until chaotic.sh runs"
-    sudo awk '
-    BEGIN{insec=0}
-    /^\[chaotic-aur\]/{insec=1; if($0 !~ /^#/) print "# hyprgruv: " $0; else print; next}
-    /^\[/ && insec==1 {insec=0; print; next}
-    {
-      if(insec==1) {
-        if($0 !~ /^#/) print "# hyprgruv: " $0; else print
-      } else {
-        print
-      }
-    }
-  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
-    sudo mv "$conf.tmp.$$" "$conf"
-}
-
-ensure_chaotic_ready() {
-    local conf="/etc/pacman.conf"
-    local ml="/etc/pacman.d/chaotic-mirrorlist"
-
-    # only act if pacman.conf references chaotic-aur
-    grep -q '^\[chaotic-aur\]' "$conf" 2>/dev/null || return 0
-
-    if [[ -f "$ml" ]]; then
-        # de-prefer known flaky mirrors
-        sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' "$ml" || true
-        return 0
-    fi
-
-    log_status "Chaotic listed in pacman.conf; preparing keyring + mirrorlist"
-    # keys
-    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
-    sudo pacman-key --lsign-key 3056513887B78AEB || true
-
-    # packages (keyring + mirrorlist)
-    sudo pacman -U --noconfirm \
-        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-
-    # sanitize mirrorlist if it now exists
-    [[ -f "$ml" ]] && sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' "$ml" || true
-
-    # clear stale DB
-    sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
-}
+# Note: Chaotic-AUR is now set up safely and early (before the first pacman refresh)
+# in the main flow, using the correct order (install via -U first, *then* add the repo section).
+# The old helper functions below are kept for reference / 03-setup but are no longer called in the early path.
 
 # -------------------- package sets --------------------
 #
@@ -349,8 +299,33 @@ sanitize_pacman_conf
 log_status "Ensuring pacman keyring is usable"
 ensure_pacman_keyring
 
-log_status "Preparing Chaotic-aur (if referenced)"
-ensure_chaotic_ready
+# Setup Chaotic-AUR *safely* and *early* (before any pacman refresh)
+# We install the keyring + mirrorlist via direct pacman -U (this does not require
+# the repo section to already be in pacman.conf, avoiding the "mirrorlist could not be read" error).
+# Only after the file exists do we add/uncomment the [chaotic-aur] section.
+# This is the correct order (see also lib/scripts/chaotic.sh).
+log_status "Setting up Chaotic-AUR early (safe order to avoid pacman.conf parse errors)"
+# Import key (idempotent)
+sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
+sudo pacman-key --lsign-key 3056513887B78AEB || true
+
+# Install the actual files via -U (bypasses repo config)
+sudo pacman -U --noconfirm \
+  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || true
+
+# Now that the file exists, ensure the section is in pacman.conf
+if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+  printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+fi
+
+# Sanitize the new mirrorlist (de-prefer known flaky mirrors)
+if [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+  sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+fi
+
+# Clear any stale db so the upcoming refresh picks it up
+sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
 
 log_status "Refreshing system packages (pacman -Syyu)…"
 sudo pacman -Syyu --noconfirm

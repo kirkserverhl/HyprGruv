@@ -114,14 +114,28 @@ echo -e "  Win + ENTER         Kitty Terminal
 echo -e "\n   Display full keybinds with:  Win + SPACE
    or click the gear icon in the Waybar"
 
-log_status "Restart is required to complete setup!"
-sleep 1
+log_status "Core installation complete (Hyprland, SDDM, deps, stow). Rebooting into SDDM..."
+sleep 2
 
 # ============================================================
-# Direct finish: reboot into SDDM
+# Post-reboot instructions (printed before reboot)
 # ============================================================
-log_status "Installation complete. Rebooting into SDDM..."
-sleep 2
+cat << 'EOF'
+
+After the reboot, log in via SDDM (select the Hyprland session).
+
+Then run these commands for the remaining setup (Chaotic-AUR, shell config, preferred apps, etc.).
+These must run from inside the graphical Hyprland session:
+
+  bash ~/.hyprgruv/lib/scripts/chaotic.sh
+  ~/.hyprgruv/modules/04-config.sh          # shell, monitors, GRUB, cleanup, etc. (interactive)
+  ~/.hyprgruv/modules/05-setup_defaults.sh  # choose preferred terminal / browser / editor
+
+You can reboot again afterwards if you like.
+
+EOF
+
+sleep 3
 sudo reboot
 
 

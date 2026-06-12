@@ -154,8 +154,8 @@ sudo systemctl enable --now NetworkManager.service
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
 # SDDM enable moved to after packages in 03-setup for direct flow (Hyprland/Sddm after yay)
 
-# Ensure chaotic-aur block exists (does nothing if already present)
-ensure_chaotic_repo_block || true
+# Chaotic-AUR section is added later in 01-packages.sh *after* the mirrorlist file is installed
+# (adding the Include too early causes pacman parse errors if the file doesn't exist yet)
 
 # ------------------- optional assets -------------------
 PREFLIGHT_DIR="$ASSET_DIR/preflight"

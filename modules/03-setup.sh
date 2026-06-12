@@ -48,10 +48,12 @@ if [[ ! -d "$SCRIPTS_DIR" ]]; then
 fi
 
 # Define the scripts in execution order
+# Note: chaotic.sh, shell config, and preferred apps (05-setup_defaults) are now intended to run AFTER the initial reboot,
+# once you are logged into the new Hyprland session.
 declare -a ORDERED_SCRIPTS=(
   #"hard_copy.sh|Hard Copy files in root directory"
   "default_wp.sh|Load default wallpaper"
-  "chaotic.sh|Configure Chaotic-AUR pacman mirrors"
+  #"chaotic.sh|Configure Chaotic-AUR pacman mirrors"
   #"hyprpm.sh|Install Hyprpm plugins"
 )
 

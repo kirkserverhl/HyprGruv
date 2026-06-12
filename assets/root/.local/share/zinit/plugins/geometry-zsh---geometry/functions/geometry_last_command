@@ -1,1 +1,0 @@
-(($+GEOMETRY_LAST_COMMAND)) && builtin echo $GEOMETRY_LAST_COMMAND

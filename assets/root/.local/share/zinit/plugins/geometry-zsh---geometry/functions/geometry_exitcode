@@ -1,3 +1,0 @@
-# geometry_exitcode - show the exit code of the last status
-
-(( $GEOMETRY_STATUS )) && ansi ${GEOMETRY_EXITCODE_COLOR:-red} $GEOMETRY_STATUS
