@@ -15,17 +15,9 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 # ------------------------------------------------------------
-# Theming for gum + headers (matugen dynamic)
-# ------------------------------------------------------------
-source "$HOME/.config/hypr/scripts/colors.sh"
-source "$HOME/.config/hypr/scripts/header.sh"
-gum_apply_matugen_theme
-export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
-
-display_header "SHELL"
-
-# ------------------------------------------------------------
-# Ensure prerequisites
+# Ensure prerequisites VERY EARLY (before any sourcing or gum usage)
+# This prevents stalls when shell.sh is invoked from 04-config or directly
+# if gum/zsh were not yet guaranteed (SKIP_PACKAGES, etc.)
 # ------------------------------------------------------------
 ensure_cmd() {
   local c="$1" install_msg="$2" pkg="$3"
@@ -42,7 +34,17 @@ ensure_cmd() {
 ensure_cmd gum "Installing gum…" gum
 ensure_cmd git "Installing git…" git
 
-# zsh will be installed on demand if the user chooses it
+# zsh will be installed on demand if the user chooses it (see below)
+
+# ------------------------------------------------------------
+# Theming for gum + headers (matugen dynamic) — now safe
+# ------------------------------------------------------------
+source "$HOME/.config/hypr/scripts/colors.sh"
+source "$HOME/.config/hypr/scripts/header.sh"
+gum_apply_matugen_theme
+export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
+
+display_header "SHELL"
 
 # ------------------------------------------------------------
 # Prompt user

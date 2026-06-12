@@ -49,11 +49,10 @@ _say() {
 run_step() {
   local path="$1"; local title="$2"
   log_status "Starting: $title"
-  if _has_gum; then
-    gum spin --title "$title" -- bash -c "\"$path\""
-  else
-    bash "$path"
-  fi
+  # Do NOT wrap in gum spin here. These sub-scripts (shell.sh, monitor.sh, etc.)
+  # are interactive (gum choose/confirm, wdisplays GUI, read prompts, etc.).
+  # Wrapping them in gum spin breaks TTY / nested gum input and causes apparent stalls/hangs.
+  bash "$path"
   log_success "$title completed"
 }
 
@@ -65,17 +64,24 @@ if [[ ! -d "$SCRIPTS_DIR" ]]; then
 fi
 
 # --------------------- SDDM (Sugar Candy) --------------------
+# Note: Core SDDM enable + Sugar Candy theme is now performed unconditionally
+# in 03-setup.sh (before we reach here) so the system boots to SDDM.
+# We keep a section for re-runs / manual but auto-skip the prompt when already done.
 sleep 0.5; echo ""; display_header "SDDM"; sleep 0.5
-if _confirm "  🍬   Install Sugar-Candy SDDM theme?"; then
-  _say "Configuring SDDM theme…"
-  script="$SCRIPTS_DIR/sddm_candy_install.sh"
-  if [[ -f "$script" ]]; then
-    run_step "$script" "Sugar-Candy SDDM Theme"
-  else
-    log_error "Script not found: $script"; exit 1
-  fi
+if systemctl is-enabled sddm.service &>/dev/null; then
+  _say "SDDM service already enabled and Sugar Candy theme applied earlier in setup."
 else
-  _say "SDDM configuration skipped."
+  if _confirm "  🍬   Install Sugar-Candy SDDM theme?"; then
+    _say "Configuring SDDM theme…"
+    script="$SCRIPTS_DIR/sddm_candy_install.sh"
+    if [[ -f "$script" ]]; then
+      run_step "$script" "Sugar-Candy SDDM Theme"
+    else
+      log_error "Script not found: $script"; exit 1
+    fi
+  else
+    _say "SDDM configuration skipped."
+  fi
 fi
 sleep 1; clear
 

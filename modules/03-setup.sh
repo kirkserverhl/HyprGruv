@@ -31,6 +31,7 @@ ensure_gum() {
   fi
 }
 ensure_gum || true
+ensure_zsh || true
 
 # --- Ensure 'sddm' is installed (handles SKIP_PACKAGES or partial runs) ---
 ensure_sddm() {
@@ -40,6 +41,17 @@ ensure_sddm() {
     yay -S --needed --noconfirm sddm || { log_error "Failed to install sddm"; return 1; }
   else
     sudo pacman -S --needed --noconfirm sddm || { log_error "Failed to install sddm"; return 1; }
+  fi
+}
+
+# --- Ensure 'zsh' (many scripts and user workflow depend on it; shell.sh will choose it) ---
+ensure_zsh() {
+  if pacman -Qq zsh &>/dev/null; then return 0; fi
+  log_status "zsh not found. Installing…"
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm zsh || { log_error "Failed to install zsh"; return 1; }
+  else
+    sudo pacman -S --needed --noconfirm zsh || { log_error "Failed to install zsh"; return 1; }
   fi
 }
 
@@ -60,7 +72,8 @@ fi
 
 # Define the scripts in execution order
 # Note: chaotic.sh (Chaotic-AUR) is now done early inside 01-packages.sh.
-# shell config + preferred apps (05-setup_defaults) run after initial reboot in graphical session.
+# Full interactive config (04-config including shell + 05-setup_defaults) now runs
+# from install.sh *before* the final reboot so the first graphical login is ready.
 declare -a ORDERED_SCRIPTS=(
   #"hard_copy.sh|Hard Copy files in root directory"
   "default_wp.sh|Load default wallpaper"

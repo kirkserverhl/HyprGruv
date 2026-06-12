@@ -89,8 +89,44 @@ sleep 1
 run_module "03-setup.sh" "Setup system" || exit 1
 sleep 1
 
-# (Optional) Interactive config - comment out for fully direct install
-# "$HYPR_DIR/modules/04-config.sh"
+# ------------------------------------------------------------
+# Run the remaining configuration scripts BEFORE reboot.
+# This way the user gets a fully configured system (shell choice,
+# monitors, GRUB theme, cleanup, default apps) on first login
+# instead of having to run these after rebooting into Hyprland.
+# ------------------------------------------------------------
+log_status "Ensuring interactive prerequisites (gum, zsh) are present..."
+# Quick local ensure (in case of SKIP_PACKAGES or jumping around)
+if ! command -v gum >/dev/null 2>&1; then
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm gum || true
+  else
+    sudo pacman -S --needed --noconfirm gum || true
+  fi
+fi
+if ! pacman -Qq zsh &>/dev/null; then
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm zsh || true
+  else
+    sudo pacman -S --needed --noconfirm zsh || true
+  fi
+fi
+
+log_status "Running full interactive configuration (monitors, GRUB, cleanup, shell, etc.)..."
+if [[ -f "$HYPR_DIR/modules/04-config.sh" ]]; then
+  bash "$HYPR_DIR/modules/04-config.sh" || log_warning "04-config.sh finished (some steps may have been skipped)"
+else
+  log_warning "04-config.sh not found"
+fi
+sleep 1
+
+log_status "Choosing default terminal / browser / editor..."
+if [[ -f "$HYPR_DIR/modules/05-setup_defaults.sh" ]]; then
+  bash "$HYPR_DIR/modules/05-setup_defaults.sh" || log_warning "05-setup_defaults.sh finished"
+else
+  log_warning "05-setup_defaults.sh not found"
+fi
+sleep 1
 
 # ============================================================
 # Summary Screen
@@ -130,7 +166,7 @@ echo -e "  Win + ENTER         Kitty Terminal
 echo -e "\n   Display full keybinds with:  Win + SPACE
    or click the gear icon in the Waybar"
 
-log_status "Core installation complete (Hyprland, SDDM, deps, stow). Rebooting into SDDM..."
+log_status "Core installation + configuration complete (Hyprland, SDDM, stow, shell/monitors/GRUB/defaults, etc.). Rebooting into SDDM..."
 sleep 2
 
 # ============================================================
@@ -138,20 +174,21 @@ sleep 2
 # ============================================================
 cat << 'EOF'
 
-After the reboot, log in via SDDM (select the Hyprland session).
+Core setup + interactive configuration completed before reboot.
+
+After reboot, log in via SDDM (select the Hyprland session). Your shell preference,
+monitor config, GRUB theme, defaults, etc. should already be applied.
 
 Chaotic-AUR setup now happens early (during package install in 01-packages.sh).
-Run the remaining interactive setup from inside the graphical Hyprland session:
-
-  ~/.hyprgruv/modules/04-config.sh          # shell, monitors, GRUB, cleanup, etc. (interactive)
-  ~/.hyprgruv/modules/05-setup_defaults.sh  # choose preferred terminal / browser / editor
 
 If you need to manually (re)configure Chaotic-AUR later (e.g. after network fix in a VM):
   sudo bash ~/.hyprgruv/modules/000-setup_chaotic.sh                 # dedicated robust standalone (recommended for the keyring/VM case)
   DRY_RUN=1 bash ~/.hyprgruv/lib/scripts/chaotic.sh                  # test mode
   bash ~/.hyprgruv/lib/scripts/chaotic.sh                          # apply for real
 
-You can reboot again afterwards if you like.
+Re-run these any time if you want to change choices:
+  ~/.hyprgruv/modules/04-config.sh
+  ~/.hyprgruv/modules/05-setup_defaults.sh
 
 EOF
 

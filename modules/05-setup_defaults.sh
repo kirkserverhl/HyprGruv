@@ -1,7 +1,17 @@
 #!/bin/bash
 
+# Ensure gum is present (05 can be run standalone or after SKIP_PACKAGES)
+if ! command -v gum >/dev/null 2>&1; then
+  echo "gum not found, installing..."
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm gum || true
+  else
+    sudo pacman -S --needed --noconfirm gum || true
+  fi
+fi
+
 # Style header
-gum style --foreground 212 --border double --align center --width 50 --margin "1 2" --padding "2 4" "Set Default Programs"
+gum style --foreground 212 --border double --align center --width 50 --margin "1 2" --padding "2 4" "Set Default Programs" 2>/dev/null || echo "=== Set Default Programs ==="
 
 # Supported mappings (cmd:pkg)
 declare -A terms=( ["kitty"]="kitty" ["alacritty"]="alacritty" ["wezterm"]="wezterm" ["foot"]="foot" )
