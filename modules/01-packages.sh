@@ -233,41 +233,45 @@ fi
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
 purge_endeavouros_remnants || true
 
-log_status "Ensuring pacman keyring is usable"
-ensure_pacman_keyring
-
-# Install Chaotic-AUR from the beginning so the repo is fully ready before
-# the refresh and before the Hyprland/core package installs.
-# Robust to VM/network flakiness: only enable [chaotic-aur] if the bootstrap pkgs actually install.
-log_status "Installing Chaotic-AUR from the beginning..."
-sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
-sudo pacman-key --lsign-key 3056513887B78AEB || true
-
-CHAOTIC_BOOTSTRAP_OK=0
-if sudo pacman -U --noconfirm \
-    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' ; then
-    CHAOTIC_BOOTSTRAP_OK=1
-    log_success "Chaotic-AUR keyring + mirrorlist installed successfully"
+if [[ "${SKIP_CHAOTIC:-0}" == "1" ]]; then
+    log_warning "SKIP_CHAOTIC=1 — skipping Chaotic-AUR keyring bootstrap and repo enable (you said you might not need it right now)"
 else
-    log_warning "Chaotic-AUR bootstrap download/install failed (common on VMs with NAT/latency). Will skip repo for now."
-fi
+    log_status "Ensuring pacman keyring is usable"
+    ensure_pacman_keyring
 
-# Add the repo section ONLY if we successfully got the mirrorlist file
-if [[ $CHAOTIC_BOOTSTRAP_OK -eq 1 ]] && [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-    if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
-        printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+    # Install Chaotic-AUR from the beginning so the repo is fully ready before
+    # the refresh and before the Hyprland/core package installs.
+    # Robust to VM/network flakiness: only enable [chaotic-aur] if the bootstrap pkgs actually install.
+    log_status "Installing Chaotic-AUR from the beginning..."
+    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
+    sudo pacman-key --lsign-key 3056513887B78AEB || true
+
+    CHAOTIC_BOOTSTRAP_OK=0
+    if sudo pacman -U --noconfirm \
+        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' ; then
+        CHAOTIC_BOOTSTRAP_OK=1
+        log_success "Chaotic-AUR keyring + mirrorlist installed successfully"
+    else
+        log_warning "Chaotic-AUR bootstrap download/install failed (common on VMs with NAT/latency). Will skip repo for now."
     fi
 
-    # Sanitize the mirrorlist (only known-bad; extend patterns as needed)
-    sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+    # Add the repo section ONLY if we successfully got the mirrorlist file
+    if [[ $CHAOTIC_BOOTSTRAP_OK -eq 1 ]] && [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+        if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+            printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+        fi
 
-    sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
-else
-    # Ensure we never leave a broken [chaotic-aur] Include pointing at nothing
-    if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-        log_status "Removing [chaotic-aur] (bootstrap did not produce mirrorlist file)"
-        sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+        # Sanitize the mirrorlist (only known-bad; extend patterns as needed)
+        sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+
+        sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
+    else
+        # Ensure we never leave a broken [chaotic-aur] Include pointing at nothing
+        if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+            log_status "Removing [chaotic-aur] (bootstrap did not produce mirrorlist file)"
+            sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+        fi
     fi
 fi
 

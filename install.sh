@@ -38,7 +38,7 @@ run_module() {
     local name="$2"
     local path="$HYPR_DIR/modules/$module"
 
-    if is_completed "$name"; then
+    if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]] && is_completed "$name"; then
         log_status "Skipping $name (already completed)"
         return 0
     fi
@@ -66,8 +66,24 @@ run_module() {
 # ============================================================
 run_module "00-preflight.sh" "Preflight: Hyprland base" || exit 1
 sleep 1
-run_module "01-packages.sh" "Install packages" || exit 1
+
+# Packages step (and its internal chaotic bootstrap) can be heavy, slow on VMs,
+# or blocked by keyring/pacman.d issues. If you mainly want to reach/re-run
+# the stow step to apply configs (and don't need the full pkg reinstall right now):
+#     SKIP_PACKAGES=1 ./install.sh
+# To also force re-running stow (or other later steps) even if state says completed:
+#     SKIP_PACKAGES=1 FORCE=1 ./install.sh
+# (Or just run the script directly: bash modules/02-stow.sh )
+if [[ "${SKIP_PACKAGES:-0}" == "1" ]]; then
+    log_warning "SKIP_PACKAGES=1 — skipping 'Install packages' module (chaotic + big pacman/yay installs)"
+    if ! is_completed "Install packages"; then
+        mark_completed "Install packages"
+    fi
+else
+    run_module "01-packages.sh" "Install packages" || exit 1
+fi
 sleep 1
+
 run_module "02-stow.sh" "Stow configuration" || exit 1
 sleep 1
 run_module "03-setup.sh" "Setup system" || exit 1
