@@ -48,7 +48,7 @@ ensure_cmd git "Installing git…" git
 # Prompt user
 # ------------------------------------------------------------
 echo ""
-echo "Please select your preferred shell" | lsd-print || echo "Please select your preferred shell"
+echo "Please select your preferred shell"
 sleep 0.5
 
 shell="$(gum choose "zsh" "bash" "CANCEL")"
@@ -89,27 +89,27 @@ if [[ "$shell" == "zsh" ]]; then
     mkdir -p "$ZSH_CUSTOM_DIR/plugins"
 
     if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]]; then
-      echo "Installing zsh-autosuggestions" | lsd-print || true
+      echo "Installing zsh-autosuggestions"
       git clone https://github.com/zsh-users/zsh-autosuggestions \
         "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
     else
-      echo "zsh-autosuggestions already installed" | lsd-print || true
+      echo "zsh-autosuggestions already installed"
     fi
 
     if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]]; then
-      echo "Installing zsh-syntax-highlighting" | lsd-print || true
+      echo "Installing zsh-syntax-highlighting"
       git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
         "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
     else
-      echo "zsh-syntax-highlighting already installed" | lsd-print || true
+      echo "zsh-syntax-highlighting already installed"
     fi
 
     if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/fast-syntax-highlighting" ]]; then
-      echo "Installing fast-syntax-highlighting" | lsd-print || true
+      echo "Installing fast-syntax-highlighting"
       git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
         "$ZSH_CUSTOM_DIR/plugins/fast-syntax-highlighting"
     else
-      echo "fast-syntax-highlighting already installed" | lsd-print || true
+      echo "fast-syntax-highlighting already installed"
     fi
 
     echo ""
@@ -117,7 +117,7 @@ if [[ "$shell" == "zsh" ]]; then
     echo "  plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)"
   else
     log_status "Oh My Zsh not detected (~/.oh-my-zsh). Skipping plugin installs."
-    echo "To install it later:  sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\"" | lsd-print || true
+    echo "To install it later:  sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
   fi
 
   gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
@@ -127,5 +127,5 @@ fi
 # ------------------------------------------------------------
 # Cancel
 # ------------------------------------------------------------
-echo "Changing shell canceled." | lsd-print || echo "Changing shell canceled."
+echo "Changing shell canceled."
 exit 0

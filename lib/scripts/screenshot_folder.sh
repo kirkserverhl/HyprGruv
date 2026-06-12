@@ -1,8 +1,9 @@
 #!/bin/bash
 # screenshot_folder.sh
 
-# Load common functions and state management
-HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Load common functions and state management (robust resolution from tree root)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 

@@ -2,8 +2,10 @@
 
 # Script to configure monitors using wdisplays and save to Hyprland config in git repo
 
-# Define repo path (adjust if .hyprgruv location varies, e.g., via env var)
-REPO_DIR="$HOME/.hyprgruv/home"
+# Resolve from the canonical tree at ~/.hyprgruv (or any checkout)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+REPO_DIR="$HYPR_DIR/home"
 
 # Open wdisplays in floating window (assuming Hyprland rules handle floating)
 wdisplays &

@@ -82,14 +82,22 @@ Win + Q
 ```    
  > temporary, after install   Win + ENTER
 
-Run the following string of commands Line:
+Run the following (example — you can clone or copy the tree anywhere, but the canonical location on this machine is ~/.hyprgruv):
 
 ```sh
-sudo pacman -S git &&
-git clone https://github.com/KirkserverHL/move.git ~/.hyprgruv &&
+sudo pacman -S git
+# Option A: fresh clone
+git clone https://github.com/KirkserverHL/move.git ~/.hyprgruv
 cd ~/.hyprgruv/
 ./install.sh
-```  
+
+# Option B: if you already have the tree in Downloads/move-main or elsewhere
+cp -a ~/Downloads/move-main ~/.hyprgruv   # or rsync, etc.
+cd ~/.hyprgruv/
+./install.sh
+```
+
+The installer detects its own location via HYPR_DIR (dirname of the script + ../..), so it works from ~/.hyprgruv, ~/Downloads/move-main, or any checkout. The old hard requirement for ~/.hyprgruv is no longer strict, but that's still the master copy on this system.  
 
 ## Tips
 

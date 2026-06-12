@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# Load common functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$HOME/.hyprgruv/lib/common.sh"
-source "$HOME/.hyprgruv/lib/state.sh"
+# Load common functions from the installer tree (robust for the canonical ~/.hyprgruv location or any clone)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+source "$HYPR_DIR/lib/common.sh"
+source "$HYPR_DIR/lib/state.sh"
 
 # Load current matugen colors and apply to gum
 source "$HOME/.config/hypr/scripts/colors.sh"
@@ -19,13 +20,39 @@ GRAY="\e[38;2;60;56;54m"     # 3c3836 ##
 BOLD="\e[1m"                 # Bold   ##
 
 sleep 1
-aur_helper="$(bat ~/scripts/aur.sh)"
+
+# Prefer user's aur helper script if present in the tree, else default to yay
+AUR_SCRIPT="$HYPR_DIR/home/scripts/aur.sh"
+if [[ -f "$AUR_SCRIPT" ]]; then
+    aur_helper="$(cat "$AUR_SCRIPT" | tr -d ' \t\r\n')"
+else
+    aur_helper="yay"
+fi
+[[ -z "$aur_helper" ]] && aur_helper="yay"
+
 echo ""
 
-$aur_helper -Scc
-yay -Rsn $(pacman -Qdtq)
-sleep 1
-clear
+# Safe cleanup: cache only by default. Orphan removal is commented for safety.
+if command -v "$aur_helper" >/dev/null 2>&1; then
+    log_status "Cleaning $aur_helper cache..."
+    "$aur_helper" -Scc || true
+else
+    log_warning "AUR helper '$aur_helper' not found, skipping cache clean."
+fi
 
-duf -theme ansi
+# Orphan removal is powerful and can remove things you want. Uncomment only if desired.
+# log_status "Removing orphaned packages (review the list!)"
+# ORPHANS=$(pacman -Qdtq || true)
+# if [[ -n "$ORPHANS" ]]; then
+#     echo "Orphans found: $ORPHANS"
+#     if command -v gum >/dev/null 2>&1; then
+#         gum confirm "Remove orphans with pacman -Rsn?" && sudo pacman -Rsn $ORPHANS || true
+#     else
+#         read -rp "Remove orphans? [y/N]: " ans
+#         [[ "${ans,,}" =~ ^y ]] && sudo pacman -Rsn $ORPHANS || true
+#     fi
+# fi
+
+duf -theme ansi || df -h
 sleep 2
+clear

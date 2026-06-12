@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # 01-packages.sh — install base/desktop packages for Hyprgruv
 #
-# Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Dolphin).
+# Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Thunar).
+# Pure Arch (no EndeavourOS/KDE/Plasma remnants).
 # See the package sets section below for the full rationale and grouping.
 set -euo pipefail
 IFS=$'\n\t'
@@ -13,7 +14,7 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
-say() { if command -v lsd-print >/dev/null 2>&1; then echo -e "$*" | lsd-print; else echo -e "$*"; fi; }
+say() { echo -e "$*"; }
 
 # -------------------- guards & repairs --------------------
 sanitize_pacman_conf() {
@@ -167,9 +168,16 @@ ensure_chaotic_ready() {
 # Curated "necessary" packages only.
 #
 # Rules followed here:
-#   - Lean core: terminal workflow (zsh + lf + neovim + zellij/foot) + Hyprland
-#   - Dolphin + full KDE integration/thumbnailers (you still actively use Dolphin as your file manager)
-#   - No full Plasma desktop bloat (no plasma-desktop, spectacle, kate as default, etc.)
+#   - Lean core: terminal workflow (zsh + lf + neovim + starship) + Hyprland (no KDE/Plasma)
+#   - Thunar as primary file manager (no Dolphin/KDE file integration)
+#   - No full Plasma bloat, no EndeavourOS-specific packages
+#   - Browsers: brave (primary), google-chrome, firefox (fallback)
+#   - Terminals: kitty (main), ghostty (secondary)
+#   - Screenshots: hyprshot
+#   - Authentication: gnome-keyring + polkit-gnome
+#   - Greeter: sddm (no KDE)
+#   - Other: fuzzel (launcher), libreoffice, timeshift (with separate partition)
+#   - Still using pywalfox for theming
 #   - Prefer pacman when possible (especially after Chaotic-AUR is enabled)
 #   - Keep AUR list small — move packages to OFFICIAL_PKGS once they are available via Chaotic
 #
@@ -204,9 +212,8 @@ OFFICIAL_PKGS=(
     ffmpeg
     ffmpegthumbnailer
 
-    # --- Hyprland (lean, no full desktop) ---
+    # --- Hyprland (lean, no full desktop, no KDE/Plasma) ---
     hyprland
-    hyprpolkitagent
     hyprpicker
     grim
     slurp
@@ -214,6 +221,10 @@ OFFICIAL_PKGS=(
     brightnessctl
     xdg-desktop-portal-hyprland
     xdg-desktop-portal
+
+    # Authentication (gnome instead of hyprpolkitagent / KDE polkit)
+    polkit-gnome
+    gnome-keyring
 
     # PipeWire audio
     pipewire
@@ -228,7 +239,7 @@ OFFICIAL_PKGS=(
     adw-gtk-theme
     ttf-material-symbols-variable
 
-    # --- Daily utilities ---
+    # --- Daily utilities + launchers ---
     jq
     curl
     fastfetch
@@ -239,41 +250,87 @@ OFFICIAL_PKGS=(
     man-db
     man-pages
     pavucontrol
+    gum
+    fuzzel
 
-    # --- Browser ---
+    # --- Terminals ---
+    kitty
+
+    # --- File manager (Thunar, no Dolphin/KDE) ---
+    thunar
+    thunar-volman
+    thunar-archive-plugin
+    thunar-media-tags-plugin
+    tumbler
+    gvfs
+
+    # --- Browser (brave primary, with fallbacks) ---
     firefox
 
-    # --- Dolphin file manager + KDE integration ---
-    # Kept because you still use Dolphin (with good thumbnails, archive support, etc.)
-    # even though the rest of Plasma is not installed.
-    dolphin ark audiocd-kio baloo dolphin-plugins kio-admin kompare konsole
-    ffmpegthumbs icoutils kdegraphics-thumbnailers kdesdk-thumbnailers
-    kimageformats libappimage qt6-imageformats resvg taglib
-    kdeconnect
+    # --- Office ---
+    libreoffice-fresh
+
+    # --- Backup (timeshift with separate partition) ---
+    timeshift
 
     # --- Hyprgruv / personal additions ---
     # Move packages here (from AUR_PKGS) once Chaotic-AUR is enabled for faster installs.
-    # nwg-dock-hyprland nwg-drawer nwg-look grimblast-git pyprland yazi
+    # yazi
+
+    # --- Additional tools (user requested) ---
+    7zip
+    blueberry
+    atuin
+    bpytop
+    cava
+    clang
+    cliphist
+    cmatrix
+    discount
+    ffmpegthumbs
+    htop
+    imagemagick
+    media-player-info
+    nm-connection-editor
+    pacutils
+    obs-studio
+    ttf-nerd-fonts-symbols
+    udiskie
+    zram-generator
 )
 
 AUR_PKGS=(
     # === Theming (critical for this dots/hyprgruv setup) ===
     matugen-git
-    python-pywalfox
-    qt6ct-kde
+    python-pywalfox          # still using pywalfox
     bibata-cursor-theme-bin
+
+    # === Terminals ===
+    ghostty-bin
+
+    # === Browsers ===
+    brave-bin
+    google-chrome
+
+    # === Screenshots ===
+    hyprshot
 
     # === Tools declared in dots manifests ===
     opencode-bin
 
+    # === Additional tools (user requested, AUR) ===
+    displaylink
+    masterpdfeditor
+    otf-apple-sf-pro
+    timeshift-autosnap
+    udiskie-dmenu-git
+    vscodium-bin
+    wl-clip-persist
+    wl-clipboard-history-git
+    wlogout
+
     # === Personal / usually still AUR or preferred -git versions ===
     # Move anything below to OFFICIAL_PKGS as soon as Chaotic provides it.
-    # aylurs-gtk-shell-git
-    # grimblast-git
-    # nwg-dock-hyprland
-    # nwg-drawer
-    # nwg-look
-    # pyprland
     # yazi
     # zsh-thefuck-git
     # etc.
@@ -307,7 +364,7 @@ dedupe_pacman_repos
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"
 
-ESSENTIAL_CHECK=(nwg-dock-hyprland nwg-drawer nwg-look python-pywal16 python-pywalfox qt5-declarative wlogout xsettingsd yazi)
+ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg"); done
 if ((${#MISSING[@]})); then

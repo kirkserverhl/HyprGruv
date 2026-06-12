@@ -19,17 +19,6 @@ LOGFILE="$ASSET_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 # ============================================================
-# Copy helper binaries
-# ============================================================
-if [[ -d "$ASSET_DIR/bin" ]]; then
-    log_status "Copying helper binaries to /usr/bin..."
-    sudo cp -r "$ASSET_DIR/bin" /usr/
-else
-    log_error "Missing assets/bin directory at $ASSET_DIR/bin"
-    exit 1
-fi
-
-# ============================================================
 # Welcome Screen
 # ============================================================
 clear
@@ -108,22 +97,21 @@ fi
 sleep 1.5
 
 # ============================================================
-# Helpful keybinds (shown with lsd-print)
+# Helpful keybinds (plain output for simplicity)
 # ============================================================
-echo -e "\n       Hyprland Gruvbox Installation is Complete !! 🫠
-        A list of common helpful keybinds is below:" | lsd-print
+echo -e "\n   Hyprland Gruvbox Installation is Complete !!\n        A list of common helpful keybinds is below:"
 
-echo -e "  ⌨️  ▏  + ENTER             👻   Ghostty Terminal
-  ⌨️  ▏  + B                    Firefox
-  ⌨️  ▏  + F                    Krusader Browser
-  ⌨️  ▏  + N                    NeoVim
-  ⌨️  ▏  + Q                    Close Window
-  ⌨️  ▏  + SPACE                Rofi App Launcher
-  ⌨️  ▏  + CTRL + Q             Logout
-  ⌨️  ▏  + Mouse Left        🪟   Move Window"
+echo -e "  Win + ENTER         Ghostty Terminal
+  Win + B             Firefox
+  Win + F             File Manager
+  Win + N             NeoVim
+  Win + Q             Close Window
+  Win + SPACE         Rofi App Launcher
+  Win + CTRL + Q      Logout
+  Win + Mouse Left    Move Window"
 
-echo -e "\n   Display full keybinds with:  ⌨️  ▏  + SPACE
-   or click the gear icon    in the Waybar" | lsd-print
+echo -e "\n   Display full keybinds with:  Win + SPACE
+   or click the gear icon in the Waybar"
 
 log_status "Restart is required to complete setup!"
 sleep 1
@@ -131,7 +119,7 @@ sleep 1
 # ============================================================
 # Next step prompt
 # ============================================================
-echo "What would you like to do next?" | lsd-print
+echo "What would you like to do next?"
 echo "  1. Exit"
 echo "  2. Reboot system"
 echo "  3. Launch Hyprland"

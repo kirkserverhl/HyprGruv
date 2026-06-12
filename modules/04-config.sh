@@ -44,11 +44,7 @@ _confirm() {
   fi
 }
 _say() {
-  if command -v lsd-print >/dev/null 2>&1; then
-    echo -e "$*" | lsd-print
-  else
-    echo -e "$*"
-  fi
+  echo -e "$*"
 }
 run_step() {
   local path="$1"; local title="$2"

@@ -31,20 +31,16 @@ log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 # LS Terminal Colors
 export LSCOLORS=GxFxCxDxbxegedabagaced
 
-# Display header with figlet (uses the robust shared helper when available)
-if [[ -f "$HOME/.config/hypr/scripts/header.sh" ]]; then
-    source "$HOME/.config/hypr/scripts/header.sh"
-else
-    # Fallback for very early installer stages
-    display_header() {
-        if command -v figlet >/dev/null 2>&1 && [[ -f "$HYPR_DIR/home/.fonts/Graffiti.flf" ]]; then
-            figlet -f "$HYPR_DIR/home/.fonts/Graffiti.flf" "$1" | lsd-print
-        else
-            echo "=== $1 ===" | lsd-print
-        fi
-        echo ""
-    }
-fi
+# Simple functional display_header (gum if available for a bit of polish, otherwise plain)
+display_header() {
+    echo ""
+    if command -v gum >/dev/null 2>&1; then
+        echo "$1" | gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --bold
+    else
+        echo "=== $1 ==="
+    fi
+    echo ""
+}
 # Check if command exists
 command_exists() {
 	command -v "$1" >/dev/null 2>&1
@@ -107,14 +103,4 @@ show_error() {
     gum style --foreground "$COLOR_ERROR" --bold "✗ $1"
 }
 
-# Make sure display_header is always available
-if ! command -v display_header >/dev/null 2>&1; then
-    display_header() {
-        if command -v figlet >/dev/null 2>&1 && [[ -f "$HOME/.fonts/Graffiti.flf" ]]; then
-            figlet -f "$HOME/.fonts/Graffiti.flf" "$1" | gum style --foreground "$COLOR_PRIMARY" --bold
-        else
-            echo "=== $1 ===" | gum style --foreground "$COLOR_PRIMARY" --bold
-        fi
-        echo ""
-    }
-fi
+# display_header is defined above; no figlet/lsd-print dependency (kept functional + optional gum polish)

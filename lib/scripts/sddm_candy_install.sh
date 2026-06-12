@@ -74,15 +74,9 @@ EOF"
 log_success "Sugar Candy theme installed and configured"
 
 # Optional: quick test hint
-if command -v lsd-print >/dev/null 2>&1; then
-  echo "SDDM theme installation complete." | lsd-print
-  echo "You can test with:  sudo sddm --test-mode" | lsd-print
-  echo "To exit the test, press Ctrl+C." | lsd-print
-else
-  echo "SDDM theme installation complete."
-  echo "You can test with:  sudo sddm --test-mode"
-  echo "To exit the test, press Ctrl+C."
-fi
+echo "SDDM theme installation complete."
+echo "You can test with:  sudo sddm --test-mode"
+echo "To exit the test, press Ctrl+C."
 
 sleep 0.5
 exit 0
