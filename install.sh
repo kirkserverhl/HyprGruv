@@ -31,6 +31,31 @@ sleep 2
 clear
 
 # ============================================================
+# Re-run / testing guidance (addresses "skips packages/stow on re-runs")
+# ============================================================
+if [[ "${RESET_STATE:-0}" == "1" || "${RESET:-0}" == "1" ]]; then
+  log_warning "RESET_STATE=1 — clearing previous completed steps (fresh test run)"
+  : > "$ASSET_DIR/completed_steps.txt" 2>/dev/null || true
+  if command_exists jq && [[ -f "$STATE_FILE" ]]; then
+    tmp="$(mktemp)"
+    jq '.completed_steps = []' "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
+  fi
+fi
+
+if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]]; then
+  if is_completed "Install packages" || is_completed "Stow configuration"; then
+    log_warning "Previous install state detected (packages or stow marked complete)."
+    log_warning "Normal runs will SKIP the package + stow modules and jump ahead."
+    log_warning "To force a full re-test (re-run packages + reach stow):  FORCE=1 ./install.sh"
+    log_warning "To reach/re-test stow *without* re-doing the heavy package step: SKIP_PACKAGES=1 FORCE=1 ./install.sh"
+    log_warning "For a completely clean state this run: RESET_STATE=1 FORCE=1 ./install.sh"
+    log_warning "(You can also run modules directly: bash modules/02-stow.sh )"
+    echo ""
+    sleep 1.5
+  fi
+fi
+
+# ============================================================
 # Function to run modules safely (works without exec bit)
 # ============================================================
 run_module() {

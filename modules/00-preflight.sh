@@ -86,7 +86,7 @@ esac
 AVAILABLE_LIB32=()
 for p in "${LIB32_GFX[@]}"; do repo_has "$p" && AVAILABLE_LIB32+=("$p"); done
 
-BASE_PKGS=(networkmanager pipewire pipewire-pulse wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
+BASE_PKGS=(networkmanager pipewire pipewire-pulse pipewire-jack wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
 # Safe fallback for terminals (05-setup_defaults.sh not yet run in this flow; user sets via interactive or manually)
 OPT_TERMS=(kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
@@ -100,6 +100,14 @@ fi
 
 log_status "Refreshing package databases"
 sudo pacman -Syu --noconfirm
+
+# Preempt the common pipewire-jack vs jack2 conflict (same issue that can appear
+# later in 01-packages). Remove legacy jack2 if present so the PipeWire
+# implementation can satisfy the 'jack' dependency without prompts or failures.
+if pacman -Qq jack2 &>/dev/null; then
+    log_status "Removing conflicting jack2 (will use pipewire-jack instead)..."
+    sudo pacman -Rdd --noconfirm jack2 2>/dev/null || true
+fi
 
 log_status "Installing core packages"
 ensure_pkg "${BASE_PKGS[@]}"

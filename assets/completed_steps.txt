@@ -1,2 +1,0 @@
-Preflight
-Preflight: Hyprland base

@@ -7,8 +7,8 @@ monitor = 0
 follow = none
 width = 400
 height = (0, 400)
-origin = top-center
-offset = (10, 20)
+origin = top-right
+offset = (20, 20)
 scale = 0
 notification_limit = 0
 progress_bar = true
@@ -17,7 +17,7 @@ progress_bar_frame_width = 1
 progress_bar_min_width = 150
 progress_bar_max_width = 300
 indicate_hidden = yes
-transparency = 0
+transparency = 18
 separator_height = 2
 padding = 8
 horizontal_padding = 8
@@ -57,24 +57,24 @@ mouse_right_click = close_all
 # Matugen / Material You colors
 # ============================================
 
-frame_color = "#955e33"
-highlight = "#ffb782"
-separator_color = "#52443b"
+frame_color = "#a78a9d"
+highlight = "#f5b2e2"
+separator_color = "#4f444a"
 
 # --- Urgency levels ---
 
 [urgency_low]
-background = "#261e18"
-foreground = "#d6c3b7"
-frame_color = "#52443b"
-highlight = "#c7ca95"
+background = "#241e22"
+foreground = "#d2c2ca"
+frame_color = "#4f444a"
+highlight = "#f5b9a3"
 timeout = 6
 
 [urgency_normal]
-background = "#312822"
-foreground = "#f0dfd6"
-frame_color = "#955e33"
-highlight = "#ffb782"
+background = "#2f282c"
+foreground = "#ecdfe5"
+frame_color = "#a78a9d"
+highlight = "#f5b2e2"
 timeout = 8
 
 [urgency_critical]
