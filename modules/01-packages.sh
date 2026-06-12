@@ -219,12 +219,39 @@ AUR_PKGS=(
 say "   📦️  Installing essential packages…"
 sleep 0.15
 
+# Fix any stale/broken chaotic-aur entry from previous failed runs
+# (section present but no mirrorlist file -> pacman parse error on refresh)
+if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+  log_status "Removing stale [chaotic-aur] entry from pacman.conf (mirrorlist was missing)..."
+  sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+fi
+
 log_status "Ensuring pacman keyring is usable"
 ensure_pacman_keyring
 
+# Install Chaotic-AUR from the beginning so the repo is fully ready before
+# the refresh and before the Hyprland/core package installs.
+log_status "Installing Chaotic-AUR from the beginning..."
+sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
+sudo pacman-key --lsign-key 3056513887B78AEB || true
+
+sudo pacman -U --noconfirm \
+  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || true
+
+# Add the repo section now that the mirrorlist file exists
+if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+  printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+fi
+
+# Sanitize the mirrorlist
+if [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+  sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+fi
+
+sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
+
 # Minimal pacman.conf change: enable parallel downloads.
-# Nothing else special here — chaotic-aur setup is deferred until after first login
-# (user will run the chaotic.sh script post-reboot when they want it).
 log_status "Setting ParallelDownloads in pacman.conf for faster downloads"
 if ! grep -q '^ParallelDownloads' /etc/pacman.conf 2>/dev/null; then
   sudo sed -i '/^\[options\]/a ParallelDownloads = 5' /etc/pacman.conf
