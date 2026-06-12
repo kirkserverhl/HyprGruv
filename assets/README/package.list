@@ -129,7 +129,8 @@ oomox-qt6-styleplugin-git
 otf-font-awesome
 otf-font-awesome-4
 otf-font-awesome-5
-pacseek
+pacseek-bin
+ags (aylurs-gtk-shell-git)
 pavucontrol
 pipecolor-bin
 pipewire

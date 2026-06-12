@@ -208,6 +208,12 @@ AUR_PKGS=(
     # === UI / headers used by scripts ===
     lsd-print-git
 
+    # ags (Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
+    aylurs-gtk-shell-git
+
+    # pacseek (TUI for pacman/AUR)
+    pacseek-bin
+
     # === Additional tools (user requested, AUR) ===
     displaylink
     masterpdfeditor
@@ -326,7 +332,7 @@ sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"
 
-ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git)
+ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git pacseek-bin)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg"); done
 if ((${#MISSING[@]})); then

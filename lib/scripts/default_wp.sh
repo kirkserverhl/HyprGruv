@@ -43,35 +43,44 @@ ensure_waypaper() {
 ensure_waypaper
 
 # ------------------------------------------------------------
-# Pick a wallpaper (prefer space_walk.png; else first image)
+# Use the canonical default wallpaper + generate colors with matugen
+# User-specified: $HYPR_DIR/home/Pictures/Wallpapers/default.png
 # ------------------------------------------------------------
-CANDIDATE_DIRS=(
-  "$HYPR_DIR/home/wallpaper"
-  "$HYPR_DIR/assets/wallpaper"
-)
-WALLPAPER=""
-for d in "${CANDIDATE_DIRS[@]}"; do
-  if [[ -f "$d/space_walk.png" ]]; then
-    WALLPAPER="$d/space_walk.png"
-    break
-  fi
-done
-if [[ -z "${WALLPAPER:-}" ]]; then
-  for d in "${CANDIDATE_DIRS[@]}"; do
-    if [[ -d "$d" ]]; then
-      # first png/jpg/jpeg found
-      WALLPAPER="$(find "$d" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | head -n1 || true)"
-      [[ -n "$WALLPAPER" ]] && break
-    fi
-  done
-fi
+WALLPAPER="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
 
-if [[ -z "${WALLPAPER:-}" ]]; then
-  log_error "No wallpaper image found in: ${CANDIDATE_DIRS[*]}"
+if [[ ! -f "$WALLPAPER" ]]; then
+  log_error "Required wallpaper not found: $WALLPAPER"
   exit 1
 fi
 
-log_status "Setting wallpaper: $(basename "$WALLPAPER")"
+log_status "Using wallpaper: $(basename "$WALLPAPER")"
+
+# ------------------------------------------------------------
+# Ensure matugen (for color scheme generation from wallpaper)
+# ------------------------------------------------------------
+ensure_matugen() {
+  if command -v matugen >/dev/null 2>&1; then
+    return 0
+  fi
+  log_status "Installing matugen…"
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm matugen-git || return 1
+  else
+    log_error "matugen-git requires yay (AUR) or install manually."
+    return 1
+  fi
+}
+ensure_matugen
+
+# Run matugen to generate theme/colors from the wallpaper
+log_status "Running matugen on wallpaper (generates ~/.cache/matugen etc.)"
+if matugen image "$WALLPAPER"; then
+  log_success "matugen completed"
+else
+  log_warning "matugen exited non-zero (theme files may be partial or need manual re-run)"
+fi
+
+log_status "Setting wallpaper via waypaper"
 
 # ------------------------------------------------------------
 # Apply the wallpaper (support both common Waypaper CLIs)
