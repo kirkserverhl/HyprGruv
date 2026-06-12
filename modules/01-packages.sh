@@ -279,30 +279,30 @@ OFFICIAL_PKGS=(
 
     # --- Additional tools (user requested) ---
     7zip
-    blueberry
+    # blueberry
     atuin
     bpytop
-    cava
+    cava-bg
     clang
     cliphist
     cmatrix
     discount
-    ffmpegthumbs
+    # ffmpegthumbs
     htop
-    imagemagick
+    # imagemagick
     media-player-info
     nm-connection-editor
     pacutils
     obs-studio
     ttf-nerd-fonts-symbols
     udiskie
-    zram-generator
+    # zram-generator
 )
 
 AUR_PKGS=(
     # === Theming (critical for this dots/hyprgruv setup) ===
     matugen-git
-    python-pywalfox          # still using pywalfox
+    python-pywalfox # still using pywalfox
     bibata-cursor-theme-bin
 
     # === Terminals ===
@@ -366,8 +366,8 @@ sudo pacman -S --needed --noconfirm \
     networkmanager pavucontrol sddm \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
-    7zip blueberry atuin bpytop cava clang cliphist cmatrix discount htop imagemagick \
-    media-player-info nm-connection-editor pacutils obs-studio udiskie zram-generator
+    7zip atuin bpytop cava clang cliphist cmatrix discount htop \
+    media-player-info nm-connection-editor pacutils obs-studio udiskie
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
