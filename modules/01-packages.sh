@@ -17,12 +17,16 @@ source "$HYPR_DIR/lib/state.sh"
 say() { echo -e "$*"; }
 
 ensure_pacman_keyring() {
-    # If listing keys fails (or perms wrong), reinit the keyring from scratch
+    # If listing keys fails (or perms wrong), reinit the keyring from scratch.
+    # This directly addresses the "you do not have sufficient permissions to read the pacman keyring" error.
     if ! sudo pacman-key --list-keys >/dev/null 2>&1; then
-        log_status "Reinitializing pacman keyring"
+        log_status "Reinitializing pacman keyring (fixing permissions/read errors)"
         sudo rm -rf /etc/pacman.d/gnupg
         sudo pacman-key --init
         sudo pacman-key --populate archlinux
+        # Ensure correct ownership/permissions (common source of read failures)
+        sudo chown -R root:root /etc/pacman.d/gnupg 2>/dev/null || true
+        sudo chmod 700 /etc/pacman.d/gnupg 2>/dev/null || true
     fi
 }
 

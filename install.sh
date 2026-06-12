@@ -131,8 +131,9 @@ Run the remaining interactive setup from inside the graphical Hyprland session:
   ~/.hyprgruv/modules/05-setup_defaults.sh  # choose preferred terminal / browser / editor
 
 If you need to manually (re)configure Chaotic-AUR later (e.g. after network fix in a VM):
-  DRY_RUN=1 bash ~/.hyprgruv/lib/scripts/chaotic.sh   # test mode, prints actions
-  bash ~/.hyprgruv/lib/scripts/chaotic.sh             # apply for real
+  sudo bash ~/.hyprgruv/modules/000-setup_chaotic.sh                 # dedicated robust standalone (recommended for the keyring/VM case)
+  DRY_RUN=1 bash ~/.hyprgruv/lib/scripts/chaotic.sh                  # test mode
+  bash ~/.hyprgruv/lib/scripts/chaotic.sh                          # apply for real
 
 You can reboot again afterwards if you like.
 
