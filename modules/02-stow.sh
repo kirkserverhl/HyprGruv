@@ -22,8 +22,12 @@ if [[ ! -d "$REPO_DIR/$PKG_DIR" ]]; then
 fi
 
 # Timestamped backup dir
+# IMPORTANT: Must NOT be inside any top-level directory that the repo stows
+# (e.g. not under ~/.local, ~/.config, ~/.cache etc.). The backup loop does
+# `cp -a` of those exact dirs (including ~/.local), so placing the backup root
+# inside ~/.local would cause "cannot copy a directory ... into itself".
 TIMESTAMP="$(date +"%Y-%m-%d_%H-%M-%S")"
-BACKUP_DIR="$HOME/.local/backup/hyprgruv_$TIMESTAMP"
+BACKUP_DIR="$HOME/.hyprgruv-backups/hyprgruv_$TIMESTAMP"
 mkdir -p "$BACKUP_DIR"
 log_status "Backup directory: $BACKUP_DIR"
 sleep 0.3
