@@ -101,14 +101,15 @@ sleep 1.5
 # ============================================================
 echo -e "\n   Hyprland Gruvbox Installation is Complete !!\n        A list of common helpful keybinds is below:"
 
-echo -e "  Win + ENTER         Ghostty Terminal
-  Win + B             Firefox
-  Win + F             File Manager
+echo -e "  Win + ENTER         Kitty Terminal
+  Win + B             Brave Browser
+  Win + F             Thunar File Manager
   Win + N             NeoVim
   Win + Q             Close Window
-  Win + SPACE         Rofi App Launcher
+  Win + SPACE         Fuzzel Launcher
   Win + CTRL + Q      Logout
-  Win + Mouse Left    Move Window"
+  Win + Mouse Left    Move Window
+  Win + Print         Hyprshot Screenshot"
 
 echo -e "\n   Display full keybinds with:  Win + SPACE
    or click the gear icon in the Waybar"

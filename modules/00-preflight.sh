@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 00-preflight.sh — ensure Hyprland base stack on Arch/EndeavourOS, with repo assets
+# 00-preflight.sh — ensure base system prep on pure Arch (Hyprland installed after yay in 01-packages)
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -12,7 +12,7 @@ source "$HYPR_DIR/lib/state.sh"
 
 # Arch sanity
 if ! command -v pacman >/dev/null 2>&1; then
-  log_error "pacman not found. This preflight supports Arch/EndeavourOS only."
+  log_error "pacman not found. This preflight supports pure Arch only."
   exit 1
 fi
 
@@ -121,8 +121,9 @@ esac
 AVAILABLE_LIB32=()
 for p in "${LIB32_GFX[@]}"; do repo_has "$p" && AVAILABLE_LIB32+=("$p"); done
 
-BASE_PKGS=(hyprland xdg-desktop-portal xdg-desktop-portal-hyprland waybar fuzzel wl-clipboard grim slurp brightnessctl polkit networkmanager pipewire pipewire-pulse wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
-OPT_TERMS=($($DEFAULTS_DIR/terminal.sh) kitty alacritty)
+BASE_PKGS=(networkmanager pipewire pipewire-pulse wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
+# Safe fallback for terminals (05-setup_defaults.sh not yet run in this flow; user sets via interactive or manually)
+OPT_TERMS=(kitty alacritty)
 OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
 
 # ---------------------- install ----------------------

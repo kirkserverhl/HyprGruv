@@ -356,6 +356,19 @@ sudo pacman -Syyu --noconfirm
 
 ensure_yay
 
+log_status "Installing Hyprland and core dependencies right after yay…"
+sudo pacman -S --needed --noconfirm \
+    hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
+    waybar fuzzel wl-clipboard grim slurp brightnessctl \
+    polkit-gnome gnome-keyring \
+    kitty thunar thunar-volman thunar-archive-plugin tumbler \
+    pipewire pipewire-pulse wireplumber \
+    networkmanager pavucontrol \
+    noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
+    git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
+    7zip blueberry atuin bpytop cava clang cliphist cmatrix discount htop imagemagick \
+    media-player-info nm-connection-editor pacutils obs-studio udiskie zram-generator
+
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
