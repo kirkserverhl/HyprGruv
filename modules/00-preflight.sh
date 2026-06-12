@@ -21,6 +21,9 @@ log_status "Running preflight checks for Hyprland base…"
 # ------------------------ helpers ------------------------
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
 repo_has()      { pacman -Si "$1" &>/dev/null; }
+
+# Purge EndeavourOS (or other distro) remnants early — supports migrating away to pure Arch.
+purge_endeavouros_remnants || true
 ensure_pkg() {
   local pkgs=(); for p in "$@"; do pkg_installed "$p" || pkgs+=("$p"); done
   ((${#pkgs[@]})) && sudo pacman -S --noconfirm --needed "${pkgs[@]}" || true
@@ -54,13 +57,6 @@ ensure_multilib_enabled() {
   sudo pacman -Syyu --noconfirm
 }
 
-ensure_chaotic_repo_block() {
-  # Just ensure the block exists; mirrorlist/keyring are handled elsewhere
-  if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
-    printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
-  fi
-}
-
 # ------------------- one-time seed (optional) -------------------
 # If you ever want to seed /etc/pacman.conf from assets only when missing:
 # if [[ ! -f /etc/pacman.conf && -f "$ASSET_DIR/pacman.conf" ]]; then
@@ -69,8 +65,8 @@ ensure_chaotic_repo_block() {
 # fi
 
 # ------------------ minimal pacman prep ------------------
-# Only multilib for 32-bit libs if needed. No chaotic, no heavy sanitizing here
-# (those are kept minimal in the packages module).
+# Only multilib for 32-bit libs if needed. Chaotic-AUR setup (with mirrorlist) is
+# handled later in 01-packages.sh so we never have a broken Include.
 ensure_multilib_enabled || true
 
 # ------------------ detect GPU + packages ----------------
@@ -129,8 +125,8 @@ sudo systemctl enable --now NetworkManager.service
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
 # SDDM enable moved to after packages in 03-setup for direct flow (Hyprland/Sddm after yay)
 
-# Chaotic-AUR section is added later in 01-packages.sh *after* the mirrorlist file is installed
-# (adding the Include too early causes pacman parse errors if the file doesn't exist yet)
+# Chaotic-AUR (with its own mirrorlist) is set up in 01-packages.sh after the pkgs are fetched via direct URL.
+# We deliberately avoid early Include of chaotic-mirrorlist here.
 
 # ------------------- optional assets -------------------
 PREFLIGHT_DIR="$ASSET_DIR/preflight"

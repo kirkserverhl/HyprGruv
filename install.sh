@@ -124,12 +124,15 @@ cat << 'EOF'
 
 After the reboot, log in via SDDM (select the Hyprland session).
 
-Then run these commands for the remaining setup (Chaotic-AUR, shell config, preferred apps, etc.).
-These must run from inside the graphical Hyprland session:
+Chaotic-AUR setup now happens early (during package install in 01-packages.sh).
+Run the remaining interactive setup from inside the graphical Hyprland session:
 
-  bash ~/.hyprgruv/lib/scripts/chaotic.sh
   ~/.hyprgruv/modules/04-config.sh          # shell, monitors, GRUB, cleanup, etc. (interactive)
   ~/.hyprgruv/modules/05-setup_defaults.sh  # choose preferred terminal / browser / editor
+
+If you need to manually (re)configure Chaotic-AUR later (e.g. after network fix in a VM):
+  DRY_RUN=1 bash ~/.hyprgruv/lib/scripts/chaotic.sh   # test mode, prints actions
+  bash ~/.hyprgruv/lib/scripts/chaotic.sh             # apply for real
 
 You can reboot again afterwards if you like.
 

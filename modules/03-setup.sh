@@ -48,12 +48,11 @@ if [[ ! -d "$SCRIPTS_DIR" ]]; then
 fi
 
 # Define the scripts in execution order
-# Note: chaotic.sh, shell config, and preferred apps (05-setup_defaults) are now intended to run AFTER the initial reboot,
-# once you are logged into the new Hyprland session.
+# Note: chaotic.sh (Chaotic-AUR) is now done early inside 01-packages.sh.
+# shell config + preferred apps (05-setup_defaults) run after initial reboot in graphical session.
 declare -a ORDERED_SCRIPTS=(
   #"hard_copy.sh|Hard Copy files in root directory"
   "default_wp.sh|Load default wallpaper"
-  #"chaotic.sh|Configure Chaotic-AUR pacman mirrors"
   #"hyprpm.sh|Install Hyprpm plugins"
 )
 
@@ -64,11 +63,6 @@ for entry in "${ORDERED_SCRIPTS[@]}"; do
   script_path="$SCRIPTS_DIR/$script_name"
 
   # If repo still has old typo, auto-fallback
-  if [[ ! -f "$script_path" && "$script_name" == "chaotic.sh" && -f "$SCRIPTS_DIR/chatoic.sh" ]]; then
-    script_path="$SCRIPTS_DIR/chatoic.sh"
-    description="Configure Chaotic-AUR pacman mirrors (chatoic.sh)"
-  fi
-
   if [[ ! -f "$script_path" ]]; then
     log_error "Missing script: $script_path"
     any_failed=1

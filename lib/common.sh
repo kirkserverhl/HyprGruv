@@ -104,3 +104,68 @@ show_error() {
 }
 
 # display_header is defined above; no figlet/lsd-print dependency (kept functional + optional gum polish)
+
+# ============================================================
+# Pure Arch sanitization helpers (for users moving away from EndeavourOS or other derivatives)
+# ============================================================
+
+# Remove EndeavourOS repository section, mirrorlist, and packages.
+# This keeps the system on pure Arch + only the repos the installer explicitly manages (multilib + chaotic-aur).
+# Respects DRY_RUN=1 / TEST_MODE=1 for safe testing (no changes performed).
+purge_endeavouros_remnants() {
+  local conf="/etc/pacman.conf"
+  if ! grep -q '^\[endeavouros\]' "$conf" 2>/dev/null; then
+    return 0
+  fi
+
+  local dry=0
+  [[ "${DRY_RUN:-0}" == "1" || "${TEST_MODE:-0}" == "1" ]] && dry=1
+
+  if [[ $dry -eq 1 ]]; then
+    log_warning "DRY_RUN/TEST_MODE active — would purge EndeavourOS remnants (no changes)"
+    echo "[dry-run] Would remove [endeavouros] section from $conf"
+    echo "[dry-run] Would rm /etc/pacman.d/endeavouros-mirrorlist if present"
+    echo "[dry-run] Would pacman -Rdd endeavouros-mirrorlist endeavouros-keyring"
+    echo "[dry-run] Would clean eos-* from HoldPkg"
+    return 0
+  fi
+
+  log_status "Purging EndeavourOS repository remnants (pure Arch only)..."
+
+  local ts
+  ts="$(date +%Y%m%d_%H%M%S)"
+  sudo cp -a "$conf" "$conf.bak.eos.$ts" 2>/dev/null || true
+
+  # Delete the entire [endeavouros] section (until next [repo])
+  sudo awk '
+    BEGIN { insec=0 }
+    /^\[endeavouros\]/ { insec=1; next }
+    /^\[/ && insec==1 { insec=0 }
+    { if (insec==0) print }
+  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
+  sudo mv "$conf.tmp.$$" "$conf" 2>/dev/null || true
+
+  # Remove the EOS mirrorlist file if present
+  if [[ -f /etc/pacman.d/endeavouros-mirrorlist ]]; then
+    sudo rm -f /etc/pacman.d/endeavouros-mirrorlist 2>/dev/null || true
+    log_status "Removed /etc/pacman.d/endeavouros-mirrorlist"
+  fi
+
+  # Remove the EOS mirrorlist/keyring packages (dd to allow removal during transition)
+  for p in endeavouros-mirrorlist endeavouros-keyring; do
+    if pacman -Qi "$p" &>/dev/null; then
+      sudo pacman -Rdd --noconfirm "$p" 2>/dev/null || true
+    fi
+  done
+
+  # Strip any eos- entries from HoldPkg lines
+  sudo sed -i -E '
+    /^HoldPkg[[:space:]]*=/ {
+      s/[[:space:]]+eos-[^ ]+//g
+      s/[[:space:]]{2,}/ /g
+      s/[[:space:]]+$//
+    }
+  ' "$conf" 2>/dev/null || true
+
+  log_success "EndeavourOS remnants removed from pacman configuration."
+}

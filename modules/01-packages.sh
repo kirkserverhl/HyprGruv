@@ -2,7 +2,7 @@
 # 01-packages.sh — install base/desktop packages for Hyprgruv
 #
 # Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Thunar).
-# Pure Arch (no EndeavourOS/KDE/Plasma remnants).
+# Pure Arch (third-party distro remnants such as EndeavourOS are stripped on sight).
 # See the package sets section below for the full rationale and grouping.
 set -euo pipefail
 IFS=$'\n\t'
@@ -48,7 +48,7 @@ ensure_yay() {
 # Rules followed here:
 #   - Lean core: terminal workflow (zsh + lf + neovim + starship) + Hyprland (no KDE/Plasma)
 #   - Thunar as primary file manager (no Dolphin/KDE file integration)
-#   - No full Plasma bloat, no EndeavourOS-specific packages
+#   - No full Plasma bloat; EndeavourOS (or other derivative) packages/repos are purged
 #   - Browsers: brave (primary), google-chrome, firefox (fallback)
 #   - Terminals: kitty (main), ghostty (secondary)
 #   - Screenshots: hyprshot
@@ -226,35 +226,48 @@ if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacma
     sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
 fi
 
+# Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
+purge_endeavouros_remnants || true
+
 log_status "Ensuring pacman keyring is usable"
 ensure_pacman_keyring
 
 # Install Chaotic-AUR from the beginning so the repo is fully ready before
 # the refresh and before the Hyprland/core package installs.
+# Robust to VM/network flakiness: only enable [chaotic-aur] if the bootstrap pkgs actually install.
 log_status "Installing Chaotic-AUR from the beginning..."
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
 sudo pacman-key --lsign-key 3056513887B78AEB || true
 
-sudo pacman -U --noconfirm \
+CHAOTIC_BOOTSTRAP_OK=0
+if sudo pacman -U --noconfirm \
     'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || true
-
-# Add the repo section now that the mirrorlist file exists
-if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
-    printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' ; then
+    CHAOTIC_BOOTSTRAP_OK=1
+    log_success "Chaotic-AUR keyring + mirrorlist installed successfully"
+else
+    log_warning "Chaotic-AUR bootstrap download/install failed (common on VMs with NAT/latency). Will skip repo for now."
 fi
 
-# Sanitize the mirrorlist
-if [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+# Add the repo section ONLY if we successfully got the mirrorlist file
+if [[ $CHAOTIC_BOOTSTRAP_OK -eq 1 ]] && [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+    if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+        printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+    fi
+
+    # Sanitize the mirrorlist (only known-bad; extend patterns as needed)
     sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
-fi
 
-sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
+    sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
+else
+    # Ensure we never leave a broken [chaotic-aur] Include pointing at nothing
+    if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+        log_status "Removing [chaotic-aur] (bootstrap did not produce mirrorlist file)"
+        sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+    fi
+fi
 
 # Ensure the default mirrorlist is populated if missing or empty.
-# sanitize_pacman_conf (and preflight) add "Include = /etc/pacman.d/mirrorlist"
-# for [core] and [extra]. If the file doesn't exist or is empty, pacman fails
-# with "could not be read".
 # We seed a basic reliable mirror to bootstrap. Once reflector is installed
 # (in the core list), you can run a better generation later if desired.
 if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
@@ -269,7 +282,12 @@ if ! grep -q '^ParallelDownloads' /etc/pacman.conf 2>/dev/null; then
 fi
 
 log_status "Refreshing system packages (pacman -Syyu)…"
-sudo pacman -Syyu --noconfirm
+# Guard: if somehow a broken chaotic block is still present without mirrorlist, strip it first.
+if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
+    log_warning "Stripping broken [chaotic-aur] before refresh (missing mirrorlist)"
+    sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+fi
+sudo pacman -Syyu --noconfirm || log_warning "pacman -Syyu reported issues (continuing; some updates may be pending)"
 
 ensure_yay
 
