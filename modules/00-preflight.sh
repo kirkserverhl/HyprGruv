@@ -152,7 +152,7 @@ ensure_pkg "${OPT_EXTRAS[@]}"
 log_status "Enabling services"
 sudo systemctl enable --now NetworkManager.service
 sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
-pkg_installed sddm && sudo systemctl enable --now sddm.service || true
+# SDDM enable moved to after packages in 03-setup for direct flow (Hyprland/Sddm after yay)
 
 # Ensure chaotic-aur block exists (does nothing if already present)
 ensure_chaotic_repo_block || true

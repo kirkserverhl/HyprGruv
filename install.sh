@@ -73,8 +73,8 @@ sleep 1
 run_module "03-setup.sh" "Setup system" || exit 1
 sleep 1
 
-# Interactive config
-"$HYPR_DIR/modules/04-config.sh"
+# (Optional) Interactive config - comment out for fully direct install
+# "$HYPR_DIR/modules/04-config.sh"
 
 # ============================================================
 # Summary Screen
@@ -118,34 +118,10 @@ log_status "Restart is required to complete setup!"
 sleep 1
 
 # ============================================================
-# Next step prompt
+# Direct finish: reboot into SDDM
 # ============================================================
-echo "What would you like to do next?"
-echo "  1. Exit"
-echo "  2. Reboot system"
-echo "  3. Launch Hyprland"
-echo ""
-read -rp "Enter your choice [1]: " next_choice
-next_choice=${next_choice:-1}
-echo ""
+log_status "Installation complete. Rebooting into SDDM..."
 sleep 2
+sudo reboot
 
-case "$next_choice" in
-    1)
-        log_status "Exiting installer"
-        exit 0
-        ;;
-    2)
-        log_status "Rebooting system"
-        sudo reboot
-        ;;
-    3)
-        log_status "Launching Hyprland"
-        exec hyprland
-        ;;
-    *)
-        log_error "Invalid choice"
-        exit 1
-        ;;
-esac
 

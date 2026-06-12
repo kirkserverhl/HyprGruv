@@ -87,6 +87,10 @@ done
 
 (( any_failed )) && { log_error "One or more setup steps failed."; exit 1; }
 
+log_status "Enabling SDDM (greeter) and installing theme..."
+sudo systemctl enable sddm.service
+bash "$SCRIPTS_DIR/sddm_candy_install.sh" || true
+
 mark_completed "Setup system"
 clear
 log_success "Setup completed"

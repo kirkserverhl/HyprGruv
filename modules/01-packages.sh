@@ -363,7 +363,7 @@ sudo pacman -S --needed --noconfirm \
     polkit-gnome gnome-keyring \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
     pipewire pipewire-pulse wireplumber \
-    networkmanager pavucontrol \
+    networkmanager pavucontrol sddm \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     7zip blueberry atuin bpytop cava clang cliphist cmatrix discount htop imagemagick \
