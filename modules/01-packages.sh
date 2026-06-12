@@ -45,6 +45,41 @@ ensure_yay() {
     log_success "yay installed."
 }
 
+# Ensure the fundamental Arch repos ([core], [extra], [multilib]) are present
+# and that /etc/pacman.d/mirrorlist contains at least one usable Server line.
+# This is critical in VMs, after previous partial runs, or when chaotic bootstrap
+# leaves the config in a weird state. We call it early and after chaotic logic.
+repair_official_repos() {
+    local conf="/etc/pacman.conf"
+    local ml="/etc/pacman.d/mirrorlist"
+
+    # Guarantee the three main sections exist with a standard Include.
+    # (Some minimal/test images or prior sed surgery can drop them.)
+    for section in core extra; do
+        if ! grep -q "^\[$section\]" "$conf" 2>/dev/null; then
+            log_status "Adding missing [$section] section to pacman.conf"
+            printf '\n[%s]\nInclude = /etc/pacman.d/mirrorlist\n' "$section" | sudo tee -a "$conf" >/dev/null
+        fi
+    done
+
+    # Multilib (x86_64 only) — reuse the spirit of preflight's ensure_multilib_enabled but lighter.
+    if [[ "$(uname -m)" == "x86_64" ]] && ! grep -q '^\[multilib\]' "$conf" 2>/dev/null; then
+        log_status "Adding missing [multilib] section"
+        printf '\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n' | sudo tee -a "$conf" >/dev/null
+    fi
+
+    # Force a sane mirrorlist if it is missing, empty, or has no active Server lines.
+    # Using a couple of reliable mirrors helps with flaky VM NAT/geo mirrors.
+    if [[ ! -s "$ml" ]] || ! grep -qE '^\s*Server\s*=' "$ml" 2>/dev/null; then
+        log_status "Seeding/repairing official mirrorlist (reliable defaults)..."
+        {
+            echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch'
+            echo 'Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch'
+            echo 'Server = https://ftp.halifax.rwth-aachen.de/archlinux/$repo/os/$arch'
+        } | sudo tee "$ml" >/dev/null
+    fi
+}
+
 # -------------------- package sets --------------------
 #
 # Curated "necessary" packages only.
@@ -116,6 +151,7 @@ OFFICIAL_PKGS=(
     wireplumber
     pipewire-pulse
     pipewire-alsa
+    pipewire-jack   # preferred JACK implementation (replaces/conflicts with jack2)
 
     # --- Theming foundation ---
     uv
@@ -169,7 +205,9 @@ OFFICIAL_PKGS=(
     # blueberry
     atuin
     bpytop
-    cava-bg
+ 
+
+    
     clang
     cliphist
     cmatrix
@@ -180,9 +218,9 @@ OFFICIAL_PKGS=(
     media-player-info
     nm-connection-editor
     pacutils
-    obs-studio
+    # obs-studio   # not needed for now
     ttf-nerd-fonts-symbols
-    udiskie
+    # udiskie   # not needed for now
     # zram-generator
 )
 
@@ -193,7 +231,7 @@ AUR_PKGS=(
     bibata-cursor-theme-bin
 
     # === Terminals ===
-    ghostty-bin
+    # ghostty-bin   # not needed for now (AUR build can be heavy/flaky in test VMs; kitty is in base)
 
     # === Browsers ===
     brave-bin
@@ -212,14 +250,14 @@ AUR_PKGS=(
     aylurs-gtk-shell-git
 
     # pacseek (TUI for pacman/AUR)
-    pacseek-bin
+    # pacseek-bin   # not needed for now (can conflict with pacseek if both present)
 
     # === Additional tools (user requested, AUR) ===
     displaylink
     masterpdfeditor
-    otf-apple-sf-pro
+    # otf-apple-sf-pro   # not needed for now (often fails sha256 on the upstream .dmg)
     timeshift-autosnap
-    udiskie-dmenu-git
+    # udiskie-dmenu-git   # companion for udiskie; not needed for now
     vscodium-bin
     wl-clip-persist
     wl-clipboard-history-git
@@ -235,6 +273,10 @@ AUR_PKGS=(
 say "   📦️  Installing essential packages…"
 sleep 0.15
 
+# Make sure we have working official repos + a usable mirrorlist *before* anything else.
+# This is the most common source of "target not found" in VM install tests.
+repair_official_repos
+
 # Fix any stale/broken chaotic-aur entry from previous failed runs
 # (section present but no mirrorlist file -> pacman parse error on refresh)
 if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
@@ -244,6 +286,13 @@ fi
 
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
 purge_endeavouros_remnants || true
+
+# Install yay (AUR helper) as early as possible in the packages phase.
+# This ensures the "Installing yay" step is visible near the beginning (when needed)
+# and that we can use yay for anything that requires it right away.
+# (Previously this was buried after ~200 lines of chaotic setup + refreshes.)
+log_status "Ensuring yay (AUR helper) is available early…"
+ensure_yay
 
 if [[ "${SKIP_CHAOTIC:-0}" == "1" ]]; then
     log_warning "SKIP_CHAOTIC=1 — skipping Chaotic-AUR keyring bootstrap and repo enable (you said you might not need it right now)"
@@ -279,21 +328,24 @@ else
 
         sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
     else
-        # Ensure we never leave a broken [chaotic-aur] Include pointing at nothing
-        if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-            log_status "Removing [chaotic-aur] (bootstrap did not produce mirrorlist file)"
+        # On failure this run, *always* remove the [chaotic-aur] section.
+        # Previously we only removed when the mirrorlist file itself was absent.
+        # Leaving a stale Include here causes:
+        #   - "chaotic-aur downloading..." even when not ready
+        #   - provider prompts for packages that have variants in chaotic
+        #   - potential parse/sync problems that make official core/extra appear "missing"
+        if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+            log_status "Removing [chaotic-aur] section (bootstrap did not succeed this run)"
             sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
         fi
+        # Clean the local db file too so we don't have a half-cached broken repo
+        sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* 2>/dev/null || true
     fi
 fi
 
-# Ensure the default mirrorlist is populated if missing or empty.
-# We seed a basic reliable mirror to bootstrap. Once reflector is installed
-# (in the core list), you can run a better generation later if desired.
-if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
-    log_status "Seeding initial mirrorlist (bootstrap)..."
-    echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
-fi
+# After chaotic (success or skip/fail), make absolutely sure official repos + mirrorlist are solid
+# before we do the big refresh and the "core dependencies" install list.
+repair_official_repos
 
 # Minimal pacman.conf change: enable parallel downloads.
 log_status "Setting ParallelDownloads in pacman.conf for faster downloads"
@@ -301,36 +353,91 @@ if ! grep -q '^ParallelDownloads' /etc/pacman.conf 2>/dev/null; then
     sudo sed -i '/^\[options\]/a ParallelDownloads = 5' /etc/pacman.conf
 fi
 
-log_status "Refreshing system packages (pacman -Syyu)…"
-# Guard: if somehow a broken chaotic block is still present without mirrorlist, strip it first.
-if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-    log_warning "Stripping broken [chaotic-aur] before refresh (missing mirrorlist)"
+# One last defensive repair + force a clean official-focused refresh.
+# (VMs with latency/NAT can have partial syncs; we want core/extra visible.)
+repair_official_repos
+log_status "Refreshing system packages (pacman -Syy)…"
+# Always strip chaotic here if it is present but not fully ready — we only want official + multilib
+# for the core Hyprland/desktop packages that follow.
+if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
+    log_status "Temporarily ensuring no broken [chaotic-aur] before main package phase"
     sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+    sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* 2>/dev/null || true
 fi
-sudo pacman -Syyu --noconfirm || log_warning "pacman -Syyu reported issues (continuing; some updates may be pending)"
+sudo pacman -Syy --noconfirm || log_warning "pacman -Syy reported issues (continuing)"
 
-ensure_yay
+# Make sure we have a fresh arch keyring (helps with signature issues in fresh/VM installs)
+sudo pacman -S --needed --noconfirm archlinux-keyring 2>/dev/null || true
 
-log_status "Installing Hyprland and core dependencies right after yay…"
+# Final sanity: if basic packages still aren't visible, the test environment probably
+# has no usable network/mirrors. We warn loudly instead of letting 50 "target not found" scroll by.
+if ! pacman -Si git >/dev/null 2>&1; then
+    log_error "Official repos still cannot resolve basic packages (e.g. git)."
+    log_error "Check your VM network, /etc/pacman.d/mirrorlist, and pacman.conf."
+    log_error "You can try: sudo pacman -Syyu  then re-run this installer with FORCE=1"
+    # We continue (some environments recover on the next -S), but the upcoming list will likely fail.
+fi
+
+# yay was already ensured early (see top of this file). We keep the comment for history.
+log_status "Installing Hyprland and core dependencies…"
+
+# PipeWire JACK handling: pipewire-jack provides the 'jack' virtual package.
+# jack2 is the legacy implementation and they conflict on the jack API.
+# We must resolve this *before* the big list, otherwise --noconfirm + conflict
+# removal causes "unresolvable package conflicts" (as seen in VM testing).
+if pacman -Qq jack2 &>/dev/null; then
+    log_status "Removing conflicting jack2 package (replaced by pipewire-jack)..."
+    sudo pacman -Rdd --noconfirm jack2 2>/dev/null || true
+fi
+
+# Install the PipeWire audio stack (including jack replacement) in its own
+# transaction first. This keeps dependency resolution clean.
+sudo pacman -S --needed --noconfirm \
+    pipewire pipewire-pulse pipewire-jack wireplumber
+
 sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
     waybar fuzzel wl-clipboard grim slurp brightnessctl \
     polkit-gnome gnome-keyring \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
-    pipewire pipewire-pulse wireplumber \
     networkmanager pavucontrol sddm \
     yazi \
     stow \
+    zsh \
+    starship \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
-    7zip atuin bpytop cava clang cliphist cmatrix discount htop \
-    media-player-info nm-connection-editor pacutils obs-studio udiskie
+    media-player-info nm-connection-editor pacutils
+# (obs-studio and udiskie intentionally omitted — not needed for now.
+# They were also in OFFICIAL_PKGS / AUR but have been commented out for this round.)
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
 log_status "Installing AUR packages…"
-yay -S --needed --noconfirm "${AUR_PKGS[@]}"
+# Install one-by-one so a single problematic/flaky AUR package (common during
+# VM testing: network hiccups, build failures, EULA packages like masterpdfeditor,
+# font packages with upstream checksum changes like otf-apple-sf-pro,
+# conflicts like pacseek vs pacseek-bin, hardware-specific like displaylink, etc.)
+# does not abort the entire module.
+# This helps ensure we always reach (and can test) the stow step.
+AUR_FAILED=()
+for pkg in "${AUR_PKGS[@]}"; do
+  output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
+  if [ $? -eq 0 ]; then
+    say "  ✓ $pkg"
+  else
+    log_warning "AUR package failed: $pkg"
+    # Show the tail of the error output for diagnosis (e.g. checksum fail, conflicts)
+    echo "$output" | tail -8 | sed 's/^/    | /'
+    AUR_FAILED+=("$pkg")
+  fi
+done
+if ((${#AUR_FAILED[@]})); then
+  log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
+else
+  say "All AUR packages installed successfully."
+fi
 
 # ------------------------------------------------------------------
 # VM guest tools (only when running inside a virtual machine).
@@ -372,12 +479,23 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
   log_success "VM guest integration packages + services processed"
 fi
 
-ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git pacseek-bin)
+ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git)
+# (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
-for pkg in "${ESSENTIAL_CHECK[@]}"; do pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg"); done
+for pkg in "${ESSENTIAL_CHECK[@]}"; do
+  pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg")
+done
 if ((${#MISSING[@]})); then
-    log_status "Installing missing essentials: ${MISSING[*]}"
-    yay -S --needed --noconfirm "${MISSING[@]}"
+    log_status "Installing missing essentials one-by-one (resilient)..."
+    for pkg in "${MISSING[@]}"; do
+      output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
+      if [ $? -eq 0 ]; then
+        say "  ✓ $pkg (essential)"
+      else
+        log_warning "Essential package failed: $pkg (continuing; may need manual install later)"
+        echo "$output" | tail -8 | sed 's/^/    | /'
+      fi
+    done
 else
     say "All essential packages are already installed."
 fi

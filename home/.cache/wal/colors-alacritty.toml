@@ -1,5 +1,5 @@
 [colors.primary]
-background = '#181818'
+background = '#171818'
 foreground = '#c5c5c5'
 
 [colors.cursor]
@@ -7,21 +7,21 @@ text = '#c5c5c5'
 cursor = '#c5c5c5'
 
 [colors.normal]
-black = '#181818'
-red = '#5F6C66'
-green = '#757C74'
-yellow = '#6A8279'
-blue = '#928475'
-magenta = '#3F8684'
-cyan = '#67928C'
+black = '#171818'
+red = '#D75D0E'
+green = '#C25711'
+yellow = '#D66410'
+blue = '#D7921F'
+magenta = '#D79921'
+cyan = '#DBA436'
 white = '#c5c5c5'
 
 [colors.bright]
 black = '#725d5d'
-red = '#5F6C66'
-green = '#757C74'
-yellow = '#6A8279'
-blue = '#928475'
-magenta = '#3F8684'
-cyan = '#67928C'
+red = '#D75D0E'
+green = '#C25711'
+yellow = '#D66410'
+blue = '#D7921F'
+magenta = '#D79921'
+cyan = '#DBA436'
 white = '#c5c5c5'

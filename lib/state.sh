@@ -24,11 +24,14 @@ mark_completed() {
     # Using jq to update the JSON state file
     if command_exists jq; then
         local temp_file="$(mktemp)"
-        jq --arg step "$step" '.completed_steps += [$step]' "$STATE_FILE" > "$temp_file"
+        # Use unique to avoid accumulating duplicate entries on re-marks/force runs
+        jq --arg step "$step" '.completed_steps = (.completed_steps + [$step] | unique)' "$STATE_FILE" > "$temp_file"
         mv "$temp_file" "$STATE_FILE"
     else
-        # Fallback if jq isn't available
-        echo "$step" >> "$ASSET_DIR/completed_steps.txt"
+        # Fallback if jq isn't available (simple append; duplicates harmless for grep -q)
+        if ! grep -qxF "$step" "$ASSET_DIR/completed_steps.txt" 2>/dev/null; then
+            echo "$step" >> "$ASSET_DIR/completed_steps.txt"
+        fi
     fi
 }
 

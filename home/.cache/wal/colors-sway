@@ -1,21 +1,21 @@
-set $wallpaper /home/kirk/.hyprgruv/home/Pictures/Wallpapers/default.png
+set $wallpaper /home/kirk/Pictures/aroace-plain-wide.png
 
-set $background #181818
+set $background #171818
 set $foreground #c5c5c5
 
-set $color0 #181818
-set $color1 #5F6C66
-set $color2 #757C74
-set $color3 #6A8279
-set $color4 #928475
-set $color5 #3F8684
-set $color6 #67928C
+set $color0 #171818
+set $color1 #D75D0E
+set $color2 #C25711
+set $color3 #D66410
+set $color4 #D7921F
+set $color5 #D79921
+set $color6 #DBA436
 set $color7 #c5c5c5
 set $color8 #725d5d
-set $color9 #5F6C66
-set $color10 #757C74
-set $color11 #6A8279
-set $color12 #928475
-set $color13 #3F8684
-set $color14 #67928C
+set $color9 #D75D0E
+set $color10 #C25711
+set $color11 #D66410
+set $color12 #D7921F
+set $color13 #D79921
+set $color14 #DBA436
 set $color15 #c5c5c5

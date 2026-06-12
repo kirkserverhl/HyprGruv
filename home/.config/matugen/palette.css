@@ -26,26 +26,26 @@
 ============================================================================= */
 
 /* --- Neutrals (from surface roles) --- */
-@define-color color_fg0   #e3e2e9;
-@define-color color_bg1   #1e1f25;
-@define-color color_bg3   #292a2f;
+@define-color color_fg0   #ecdfe5;
+@define-color color_bg1   #241e22;
+@define-color color_bg3   #2f282c;
 
 /* --- Rainbow powerline accents (chosen for hue spread) --- */
-@define-color color_orange #b4c4ff;
-@define-color color_yellow #e2bbdb;
-@define-color color_aqua   #c1c5dd;
-@define-color color_blue   #334478;
+@define-color color_orange #f5b2e2;
+@define-color color_yellow #f5b9a3;
+@define-color color_aqua   #dcbed1;
+@define-color color_blue   #68355d;
 
 /* --- High-contrast text on the vivid accents --- */
-@define-color color_on_orange #1b2d61;
-@define-color color_on_yellow #422740;
-@define-color color_on_aqua   #2b3042;
-@define-color color_on_blue   #dbe1ff;
+@define-color color_on_orange #4e1e45;
+@define-color color_on_yellow #4c2618;
+@define-color color_on_aqua   #3e2a38;
+@define-color color_on_blue   #ffd7f1;
 
 /* --- Semantic state colors (reuse existing roles for good contrast) --- */
-@define-color color_green  #c1c5dd;
+@define-color color_green  #dcbed1;
 @define-color color_red    #ffb4ab;
-@define-color color_purple #e2bbdb;
+@define-color color_purple #f5b9a3;
 
 /* --- Convenience aliases (so files can be more readable) --- */
 @define-color accent1 color_orange;

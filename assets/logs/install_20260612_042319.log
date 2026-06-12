@@ -1,0 +1,69 @@
+[H[2J
+Hyprgruv
+
+
+[38;2;69;133;136m[INFO][0m Welcome to Hyprland Gruvbox Installation!
+[38;2;69;133;136m[INFO][0m Logs will be saved to: /home/kirk/.hyprgruv/assets/logs/install_20260612_042319.log
+
+[H[2J[38;2;215;153;33m[WARNING][0m RESET_STATE=1 — clearing previous completed steps (fresh test run)
+
+Preflight: Hyprland base
+
+[38;2;69;133;136m[INFO][0m Virtual machine / hypervisor detected: qemu (guest tools + boot tweaks will be applied)
+[38;2;69;133;136m[INFO][0m Running preflight checks for Hyprland base…
+[38;2;69;133;136m[INFO][0m Detected GPU vendor: generic
+[38;2;69;133;136m[INFO][0m Refreshing package databases
+:: Synchronizing package databases...
+ multilib downloading...
+ core downloading...
+ extra downloading...
+:: Starting full system upgrade...
+ there is nothing to do
+[38;2;69;133;136m[INFO][0m Installing core packages
+[38;2;69;133;136m[INFO][0m Installing GPU packages
+[38;2;69;133;136m[INFO][0m Installing 32-bit GPU packages (multilib)
+[38;2;69;133;136m[INFO][0m Installing optional terminals
+[38;2;69;133;136m[INFO][0m Installing optional extras
+[38;2;69;133;136m[INFO][0m Enabling services
+[38;2;142;192;124m[SUCCESS][0m Preflight check completed.
+[38;2;142;192;124m[SUCCESS][0m Preflight: Hyprland base completed successfully
+
+Install packages
+
+[38;2;69;133;136m[INFO][0m Virtual machine / hypervisor detected: qemu (guest tools + boot tweaks will be applied)
+   📦️  Installing essential packages…
+[38;2;69;133;136m[INFO][0m Ensuring yay (AUR helper) is available early…
+[38;2;69;133;136m[INFO][0m Ensuring pacman keyring is usable
+[38;2;69;133;136m[INFO][0m Installing Chaotic-AUR from the beginning...
+gpg: key 3056513887B78AEB: "Pedro Henrique Lara Campos <root@pedrohlc.com>" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+  -> Locally signed 1 key.
+==> Updating trust database...
+gpg: next trustdb check due at 2026-10-21
+warning: chaotic-keyring-20251028-1 is up to date -- reinstalling
+warning: chaotic-mirrorlist-20260403-1 is up to date -- reinstalling
+loading packages...
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (2) chaotic-keyring-20251028-1  chaotic-mirrorlist-20260403-1
+
+Total Installed Size:  0.03 MiB
+Net Upgrade Size:      0.00 MiB
+
+:: Proceed with installation? [Y/n] 
+checking keyring...
+checking package integrity...
+loading package files...
+checking for file conflicts...
+checking available disk space...
+:: Running pre-transaction hooks...
+(1/1) Creating Timeshift snapshot before upgrade...
+Mounted '/dev/vda2' at '/run/timeshift/4757/backup'
+------------------------------------------------------------------------------
+Estimating system size...
+Creating new snapshot...(RSYNC)
+Saving to device: /dev/vda2, mounted at path: /run/timeshift/4757/backup
+Syncing files with rsync...
+  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remaining)  0.00% complete (??? remain

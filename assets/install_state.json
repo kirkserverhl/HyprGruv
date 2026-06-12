@@ -1,15 +1,14 @@
 {
   "completed_steps": [
     "Install packages",
-    "Install packages",
-    "Stow configuration",
+    "Preflight",
+    "Preflight: Hyprland base",
     "Setup system",
-    "Setup system",
-    "Interactive config"
+    "Stow configuration"
   ],
   "user_choices": {
-    "last_backup": "/home/kirk/.local/backup/hyprgruv_2025-09-28_17-55-08"
+    "last_backup": "/home/kirk/.hyprgruv-backups/hyprgruv_2026-06-12_04-24-41"
   },
-  "install_date": "2025-09-28 17:48:45",
+  "install_date": "2026-06-12",
   "version": "1.0"
 }
