@@ -138,6 +138,9 @@ OFFICIAL_PKGS=(
     gum
     fuzzel
 
+    # Greeter / display manager (SDDM, no Plasma/KDE bits)
+    sddm
+
     # --- Terminals ---
     kitty
 
@@ -201,6 +204,9 @@ AUR_PKGS=(
 
     # === Tools declared in dots manifests ===
     opencode-bin
+
+    # === UI / headers used by scripts ===
+    lsd-print-git
 
     # === Additional tools (user requested, AUR) ===
     displaylink
@@ -320,7 +326,7 @@ sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"
 
-ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout)
+ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg"); done
 if ((${#MISSING[@]})); then

@@ -32,6 +32,17 @@ ensure_gum() {
 }
 ensure_gum || true
 
+# --- Ensure 'sddm' is installed (handles SKIP_PACKAGES or partial runs) ---
+ensure_sddm() {
+  if pacman -Qq sddm &>/dev/null; then return 0; fi
+  log_status "sddm not found. Installing…"
+  if command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm sddm || { log_error "Failed to install sddm"; return 1; }
+  else
+    sudo pacman -S --needed --noconfirm sddm || { log_error "Failed to install sddm"; return 1; }
+  fi
+}
+
 run_with_spinner() {
   local cmd="$1"
   if command -v gum >/dev/null 2>&1; then
@@ -83,8 +94,12 @@ done
 
 (( any_failed )) && { log_error "One or more setup steps failed."; exit 1; }
 
+log_status "Ensuring SDDM is installed..."
+ensure_sddm || true
+
 log_status "Enabling SDDM (greeter) and installing theme..."
-sudo systemctl enable sddm.service
+sudo systemctl enable sddm.service || true
+sudo systemctl set-default graphical.target || true
 bash "$SCRIPTS_DIR/sddm_candy_install.sh" || true
 
 mark_completed "Setup system"
