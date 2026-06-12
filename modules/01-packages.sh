@@ -89,7 +89,7 @@ OFFICIAL_PKGS=(
     tesseract
     tesseract-data-eng
     ffmpeg
-    ffmpegthumbnailer
+    # ffmpegthumbnailer
 
     # yazi (modern TUI file manager, alongside lf)
 
@@ -222,8 +222,8 @@ sleep 0.15
 # Fix any stale/broken chaotic-aur entry from previous failed runs
 # (section present but no mirrorlist file -> pacman parse error on refresh)
 if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-  log_status "Removing stale [chaotic-aur] entry from pacman.conf (mirrorlist was missing)..."
-  sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
+    log_status "Removing stale [chaotic-aur] entry from pacman.conf (mirrorlist was missing)..."
+    sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
 fi
 
 log_status "Ensuring pacman keyring is usable"
@@ -236,17 +236,17 @@ sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || 
 sudo pacman-key --lsign-key 3056513887B78AEB || true
 
 sudo pacman -U --noconfirm \
-  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || true
+    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+    'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || true
 
 # Add the repo section now that the mirrorlist file exists
 if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
-  printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+    printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
 fi
 
 # Sanitize the mirrorlist
 if [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-  sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
+    sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
 fi
 
 sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
@@ -258,14 +258,14 @@ sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
 # We seed a basic reliable mirror to bootstrap. Once reflector is installed
 # (in the core list), you can run a better generation later if desired.
 if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
-  log_status "Seeding initial mirrorlist (bootstrap)..."
-  echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+    log_status "Seeding initial mirrorlist (bootstrap)..."
+    echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
 fi
 
 # Minimal pacman.conf change: enable parallel downloads.
 log_status "Setting ParallelDownloads in pacman.conf for faster downloads"
 if ! grep -q '^ParallelDownloads' /etc/pacman.conf 2>/dev/null; then
-  sudo sed -i '/^\[options\]/a ParallelDownloads = 5' /etc/pacman.conf
+    sudo sed -i '/^\[options\]/a ParallelDownloads = 5' /etc/pacman.conf
 fi
 
 log_status "Refreshing system packages (pacman -Syyu)…"
