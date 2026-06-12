@@ -16,28 +16,6 @@ source "$HYPR_DIR/lib/state.sh"
 
 say() { echo -e "$*"; }
 
-# -------------------- guards & repairs --------------------
-sanitize_pacman_conf() {
-    local conf="/etc/pacman.conf"
-    [[ -f "$conf" ]] || return 0
-
-    # Normalize CRLF → LF
-    sudo sed -i 's/\r$//' "$conf"
-
-    # Comment any stray `Server =` lines that appear while in [options]
-    sudo awk '
-    BEGIN{inopt=0}
-    /^\[options\]/{inopt=1; print; next}
-    /^\[/{inopt=0; print; next}
-    { if(inopt && $0 ~ /^[[:space:]]*Server[[:space:]]*=/){print "#" $0}else{print}}
-  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
-    sudo mv "$conf.tmp.$$" "$conf"
-
-    # Ensure core/extra exist (defensive on fresh images)
-    grep -q '^\[core\]' "$conf" || echo -e "\n[core]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null
-    grep -q '^\[extra\]' "$conf" || echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null
-}
-
 ensure_pacman_keyring() {
     # If listing keys fails (or perms wrong), reinit the keyring from scratch
     if ! sudo pacman-key --list-keys >/dev/null 2>&1; then
@@ -62,56 +40,6 @@ ensure_yay() {
     rm -rf "$tmpdir"
     log_success "yay installed."
 }
-
-# Comment out duplicate repo sections in /etc/pacman.conf, keeping the first.
-dedupe_pacman_repos() {
-    local conf="/etc/pacman.conf"
-    [[ -f "$conf" ]] || return 0
-
-    log_status "De-duplicating repository sections in $conf"
-    sudo awk '
-    function ltrim(s){ sub(/^[ \t\r\n]+/, "", s); return s }
-    function rtrim(s){ sub(/[ \t\r\n]+$/, "", s); return s }
-    function trim(s){ return rtrim(ltrim(s)) }
-
-    BEGIN{ insec=0; secname=""; }
-    # match [repo-name]
-    /^\[[^]]+\][ \t]*$/{
-      line=$0
-      name=$0; sub(/^\[/, "", name); sub(/\][ \t]*$/, "", name)
-      name=trim(name)
-      if(seen[name] == 1){
-        insec=2;    # duplicate section: comment until next section
-        print "# hyprgruv-dup: " line
-        next
-      } else {
-        seen[name]=1
-        insec=1
-        print line
-        next
-      }
-    }
-    # any new section header ends duplicate commenting
-    /^\[/{
-      insec=1
-      print
-      next
-    }
-    {
-      if(insec==2){
-        # we are inside a duplicate section: comment the line (preserve content)
-        if($0 ~ /^# hyprgruv-dup: /){ print $0 } else { print "# hyprgruv-dup: " $0 }
-      } else {
-        print
-      }
-    }
-  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
-    sudo mv "$conf.tmp.$$" "$conf"
-}
-
-# Note: Chaotic-AUR is now set up safely and early (before the first pacman refresh)
-# in the main flow, using the correct order (install via -U first, *then* add the repo section).
-# The old helper functions below are kept for reference / 03-setup but are no longer called in the early path.
 
 # -------------------- package sets --------------------
 #
@@ -291,41 +219,16 @@ AUR_PKGS=(
 say "   📦️  Installing essential packages…"
 sleep 0.15
 
-disable_chaotic_if_unready
-
-log_status "Sanitizing pacman.conf"
-sanitize_pacman_conf
-
 log_status "Ensuring pacman keyring is usable"
 ensure_pacman_keyring
 
-# Setup Chaotic-AUR *safely* and *early* (before any pacman refresh)
-# We install the keyring + mirrorlist via direct pacman -U (this does not require
-# the repo section to already be in pacman.conf, avoiding the "mirrorlist could not be read" error).
-# Only after the file exists do we add/uncomment the [chaotic-aur] section.
-# This is the correct order (see also lib/scripts/chaotic.sh).
-log_status "Setting up Chaotic-AUR early (safe order to avoid pacman.conf parse errors)"
-# Import key (idempotent)
-sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
-sudo pacman-key --lsign-key 3056513887B78AEB || true
-
-# Install the actual files via -U (bypasses repo config)
-sudo pacman -U --noconfirm \
-  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-  'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || true
-
-# Now that the file exists, ensure the section is in pacman.conf
-if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
-  printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+# Minimal pacman.conf change: enable parallel downloads.
+# Nothing else special here — chaotic-aur setup is deferred until after first login
+# (user will run the chaotic.sh script post-reboot when they want it).
+log_status "Setting ParallelDownloads in pacman.conf for faster downloads"
+if ! grep -q '^ParallelDownloads' /etc/pacman.conf 2>/dev/null; then
+  sudo sed -i '/^\[options\]/a ParallelDownloads = 5' /etc/pacman.conf
 fi
-
-# Sanitize the new mirrorlist (de-prefer known flaky mirrors)
-if [[ -f /etc/pacman.d/chaotic-mirrorlist ]]; then
-  sudo sed -i -E 's|^[[:space:]]*Server[[:space:]]*=.*warp\.dev.*|# &|' /etc/pacman.d/chaotic-mirrorlist || true
-fi
-
-# Clear any stale db so the upcoming refresh picks it up
-sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* || true
 
 log_status "Refreshing system packages (pacman -Syyu)…"
 sudo pacman -Syyu --noconfirm
@@ -349,8 +252,6 @@ sudo pacman -S --needed --noconfirm \
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
-
-dedupe_pacman_repos
 
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"

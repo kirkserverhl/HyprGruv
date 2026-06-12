@@ -26,38 +26,6 @@ ensure_pkg() {
   ((${#pkgs[@]})) && sudo pacman -S --noconfirm --needed "${pkgs[@]}" || true
 }
 
-sanitize_pacman_conf() {
-  local conf="/etc/pacman.conf"
-  local ts; ts="$(date +%Y%m%d_%H%M%S)"
-  [[ -f "$conf" ]] || return 0
-
-  # Backup once
-  sudo cp -a "$conf" "$conf.bak.$ts"
-
-  # 1) Normalize CRLF → LF
-  sudo sed -i 's/\r$//' "$conf"
-
-  # 2) Comment any accidental 'Server =' lines that appear while in [options]
-  #    We only comment those lines until the next section header.
-  sudo awk '
-    BEGIN{inopt=0}
-    /^\[options\]/{inopt=1; print; next}
-    /^\[/{inopt=0; print; next}
-    {
-      if(inopt && $0 ~ /^[[:space:]]*Server[[:space:]]*=/){
-        print "#" $0
-      } else {
-        print
-      }
-    }
-  ' "$conf" | sudo tee "$conf.tmp.$$" >/dev/null
-  sudo mv "$conf.tmp.$$" "$conf"
-
-  # 3) Ensure core/extra sections exist (rare fresh installs can be minimal)
-  if ! grep -q '^\[core\]' "$conf";  then echo -e "\n[core]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null; fi
-  if ! grep -q '^\[extra\]' "$conf"; then echo -e "\n[extra]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a "$conf" >/dev/null; fi
-}
-
 ensure_multilib_enabled() {
   # already visible?
   pacman -Sl multilib &>/dev/null && return 0
@@ -100,8 +68,9 @@ ensure_chaotic_repo_block() {
 #   sudo install -m 0644 "$ASSET_DIR/pacman.conf" /etc/pacman.conf
 # fi
 
-# ------------------ sanitize + multilib ------------------
-sanitize_pacman_conf
+# ------------------ minimal pacman prep ------------------
+# Only multilib for 32-bit libs if needed. No chaotic, no heavy sanitizing here
+# (those are kept minimal in the packages module).
 ensure_multilib_enabled || true
 
 # ------------------ detect GPU + packages ----------------
