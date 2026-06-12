@@ -332,6 +332,46 @@ sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 log_status "Installing AUR packages…"
 yay -S --needed --noconfirm "${AUR_PKGS[@]}"
 
+# ------------------------------------------------------------------
+# VM guest tools (only when running inside a virtual machine).
+# This helps video, dynamic resolution, clipboard, time sync, etc.
+# Critical for getting the SDDM greeter (and graphical session) to
+# appear reliably on boot in VirtualBox, VMware, QEMU/KVM, etc.
+# ------------------------------------------------------------------
+if [[ "${IS_VM:-false}" == "true" ]]; then
+  log_status "VM detected ($HYPERVISOR) — installing hypervisor guest packages"
+  GUEST_PKGS=()
+  case "$HYPERVISOR" in
+    virtualbox)
+      GUEST_PKGS=(virtualbox-guest-utils)
+      ;;
+    vmware)
+      GUEST_PKGS=(open-vm-tools)
+      ;;
+    qemu|kvm|generic-vm)
+      GUEST_PKGS=(qemu-guest-agent spice-vdagent)
+      ;;
+    hyperv)
+      GUEST_PKGS=(hyperv)
+      ;;
+    *)
+      GUEST_PKGS=(qemu-guest-agent)
+      ;;
+  esac
+
+  if ((${#GUEST_PKGS[@]})); then
+    sudo pacman -S --needed --noconfirm "${GUEST_PKGS[@]}" || log_warning "Some guest packages may have failed to install"
+  fi
+
+  # Enable the corresponding services (safe if the unit doesn't exist)
+  for svc in vboxservice.service qemu-guest-agent.service spice-vdagent.service vmtoolsd.service; do
+    if systemctl list-unit-files | grep -q "^${svc}"; then
+      sudo systemctl enable --now "$svc" 2>/dev/null || true
+    fi
+  done
+  log_success "VM guest integration packages + services processed"
+fi
+
 ESSENTIAL_CHECK=(brave-bin ghostty-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor otf-apple-sf-pro timeshift-autosnap udiskie-dmenu-git vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git pacseek-bin)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg"); done

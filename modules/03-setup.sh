@@ -131,6 +131,14 @@ sudo systemctl enable sddm.service || true
 sudo systemctl set-default graphical.target || true
 bash "$SCRIPTS_DIR/sddm_candy_install.sh" || true
 
+# For VMs we force the GRUB cmdline / boot compatibility tweaks here
+# (nomodeset etc.) so SDDM can take over the display on first reboot,
+# even if the user later skips the interactive GRUB theme question.
+if [[ "${IS_VM:-false}" == "true" ]]; then
+  log_status "VM detected — forcing GRUB compatibility (so SDDM loads from boot)"
+  APPLY_GRUB_THEME=0 bash "$SCRIPTS_DIR/grub.sh" || true
+fi
+
 mark_completed "Setup system"
 clear
 log_success "Setup completed"

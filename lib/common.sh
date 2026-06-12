@@ -169,3 +169,68 @@ purge_endeavouros_remnants() {
 
   log_success "EndeavourOS remnants removed from pacman configuration."
 }
+
+# ============================================================
+# VM / Hypervisor detection (used for guest tools, GRUB video
+# compatibility, and SDDM greeter stability on virtual hardware).
+# Sets IS_VM=true/false and HYPERVISOR=virtualbox|qemu|vmware|...
+# Safe to call multiple times; exports the vars.
+# ============================================================
+detect_vm() {
+  local _is_vm=false
+  local _hv="none"
+
+  # Primary reliable source
+  if command -v systemd-detect-virt >/dev/null 2>&1; then
+    local v
+    v="$(systemd-detect-virt 2>/dev/null || true)"
+    if [[ -n "$v" && "$v" != "none" ]]; then
+      _is_vm=true
+      _hv="$v"
+    fi
+  fi
+
+  # DMI fallback / refinement
+  if [[ "$_is_vm" != true && -r /sys/class/dmi/id/product_name ]]; then
+    local prod
+    prod=$(cat /sys/class/dmi/id/product_name 2>/dev/null || true)
+    case "$prod" in
+      *VirtualBox*|*virtualbox*) _is_vm=true; _hv="virtualbox" ;;
+      *VMware*|*vmware*)         _is_vm=true; _hv="vmware" ;;
+      *QEMU*|*KVM*)              _is_vm=true; _hv="qemu" ;;
+      *Microsoft*|*Hyper-V*|*HyperV*) _is_vm=true; _hv="hyperv" ;;
+    esac
+  fi
+
+  # lspci last resort (only if we still don't have a positive ID)
+  if [[ "$_is_vm" != true ]]; then
+    if lspci 2>/dev/null | grep -qiE 'virtualbox|innotek.*vbox|vmware|vmxnet|qemu.*gpu|virtio.*(gpu|display)|red hat.*virt'; then
+      _is_vm=true
+      if   lspci 2>/dev/null | grep -qiE 'virtualbox|innotek'; then _hv="virtualbox"
+      elif lspci 2>/dev/null | grep -qiE 'vmware|vmxnet';     then _hv="vmware"
+      elif lspci 2>/dev/null | grep -qiE 'qemu|virtio';      then _hv="qemu"
+      else                                                     _hv="generic-vm"
+      fi
+    fi
+  fi
+
+  # Normalize
+  [[ "$_hv" == "oracle" ]] && _hv="virtualbox"
+  [[ "$_hv" == "kvm"    ]] && _hv="qemu"
+
+  # Final guard: only declare a VM when we have a concrete non-none hypervisor
+  if [[ "$_is_vm" == true && "$_hv" != "none" && -n "$_hv" ]]; then
+    declare -g IS_VM=true
+    declare -g HYPERVISOR="$_hv"
+    log_status "Virtual machine / hypervisor detected: $HYPERVISOR (guest tools + boot tweaks will be applied)"
+  else
+    declare -g IS_VM=false
+    declare -g HYPERVISOR="none"
+  fi
+
+  export IS_VM HYPERVISOR
+}
+
+# Run detection on every source of common.sh (lightweight, idempotent)
+detect_vm
+

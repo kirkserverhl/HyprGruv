@@ -179,6 +179,9 @@ Core setup + interactive configuration completed before reboot.
 After reboot, log in via SDDM (select the Hyprland session). Your shell preference,
 monitor config, GRUB theme, defaults, etc. should already be applied.
 
+VM users: guest tools were installed and GRUB was adjusted (nomodeset + visible menu)
+to help the SDDM greeter appear reliably on virtual graphics.
+
 Chaotic-AUR setup now happens early (during package install in 01-packages.sh).
 
 If you need to manually (re)configure Chaotic-AUR later (e.g. after network fix in a VM):
