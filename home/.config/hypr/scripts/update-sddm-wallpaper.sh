@@ -18,6 +18,11 @@
 #
 # --setup : One-time action (run with sudo). Creates a sudoers rule
 #           so future calls from waypaper post-command need no password.
+
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 #           Then performs the wallpaper update immediately.
 #
 # Without --setup, the script needs root (sudo/pkexec). The recommended

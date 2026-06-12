@@ -76,9 +76,10 @@ emit_waybar_json() {
 # POPUP / PRETTY TERMINAL MODE  (the nice view you launch in floating window)
 # -----------------------------------------------------
 emit_popup_view() {
-    # Load nice theming if available (header + matugen gum colors + lsd-print)
+    # --- Load your existing helpers for consistent look ---
     source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-    source "$HOME/.config/hypr/scripts/colors.sh" --gum 2>/dev/null || true
+    source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+    gum_apply_matugen_theme 2>/dev/null || true
 
     # Try to use lsd-print if present, otherwise plain echo
     print_line() {

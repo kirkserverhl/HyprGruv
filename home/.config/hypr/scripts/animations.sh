@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 # Path to the animation configuration file
 ANIMATION_CONF=~/.config/hypr/conf/animations.conf
 

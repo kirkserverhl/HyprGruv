@@ -7,6 +7,10 @@ HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 RESET="\e[0m"
 GREEN="\e[38;2;142;192;124m"
 CYAN="\e[38;2;69;133;136m"

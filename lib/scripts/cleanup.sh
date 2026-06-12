@@ -6,8 +6,9 @@ HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
-# Load current matugen colors and apply to gum
-source "$HOME/.config/hypr/scripts/colors.sh"
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
                              ###########

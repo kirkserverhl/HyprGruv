@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 # Ensure gum is present (05 can be run standalone or after SKIP_PACKAGES)
 if ! command -v gum >/dev/null 2>&1; then
   echo "gum not found, installing..."

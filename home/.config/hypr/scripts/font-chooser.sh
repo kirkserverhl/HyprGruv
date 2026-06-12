@@ -24,8 +24,9 @@ if [[ -z "${FONTCHOOSER_INSIDE:-}" ]]; then
         -e "$0" "$@"
 fi
 
+# --- Load your existing helpers for consistent look ---
 source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true   # only for gum colors, not for theming content
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
 printf '\e]2;Choose Fonts\a' 2>/dev/null || true
 

@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Use the shared robust header system when available
-if [[ -f "$HOME/.config/hypr/scripts/header.sh" ]]; then
-    source "$HOME/.config/hypr/scripts/header.sh"
-else
-    # Fallback
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
+# Fallback display_header only if header sourcing did not provide it (e.g. header.sh missing)
+if ! declare -f display_header >/dev/null 2>&1 && ! declare -f print_header >/dev/null 2>&1; then
     display_header() {
         clear
         figlet -f ~/.fonts/Graffiti.flf "$1" 2>/dev/null || figlet "$1"

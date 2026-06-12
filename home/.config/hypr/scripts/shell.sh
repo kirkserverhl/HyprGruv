@@ -1,9 +1,9 @@
-./#!/bin/bash
+#!/bin/bash
 clear
 
-# Load theming (matugen colors + reliable headers)
-source "$HOME/.config/hypr/scripts/colors.sh"
-source "$HOME/.config/hypr/scripts/header.sh"
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
 

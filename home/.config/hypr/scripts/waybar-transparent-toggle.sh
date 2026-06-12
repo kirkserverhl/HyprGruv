@@ -12,6 +12,10 @@
 
 set -euo pipefail
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 WAYBAR_COLORS="$HOME/.config/waybar/colors/matugen.css"
 CACHE_MARKER="$HOME/.cache/matugen/waybar-transparent-this-time"
 

@@ -18,6 +18,11 @@
 #           GRUB cmdline, etc.).
 #
 # The script is intentionally safe to call even if Plymouth is not
+
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 # installed yet — it will just warn.
 # ===================================================================
 

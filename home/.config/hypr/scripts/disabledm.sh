@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 clear
 figlet -f smslant "Disable DM"
 echo "Hyprland recommends the start with the tty login."

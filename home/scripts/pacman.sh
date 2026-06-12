@@ -6,6 +6,9 @@
 #  |____|    (____  /\___  >__|_|  (____  /___|  /
 #                 \/     \/      \/     \/     \/ 
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
 sleep 1
 clear

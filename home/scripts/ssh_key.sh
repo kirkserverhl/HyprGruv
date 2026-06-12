@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 SSH_DIR="$HOME/.ssh"
 SSH_KEY="$SSH_DIR/id4me"
 GITHUB_URL="https://github.com/kirkserverhl/hyprgruv.git"

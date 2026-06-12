@@ -1,6 +1,10 @@
 #!/bin/bash
 # update-stow.sh - Restow ~/.hyprgruv/home using --adopt (recommended for your case)
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 set -euo pipefail
 
 DOTFILES_DIR="$HOME/.hyprgruv"

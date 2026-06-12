@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 SCRIPTS_DIR="$HOME/.hyprgruv/home/scripts"
 HYPR_DIR="$HOME/.hyprgruv"
 OUTPUT_FILE="$HOME/unused_scripts.txt"

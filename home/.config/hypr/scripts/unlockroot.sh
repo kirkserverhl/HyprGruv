@@ -33,6 +33,10 @@ fi
 
 source ~/.hyprgruv/lib/common.sh
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 display_header "ROOT UNLOCK"
 
 print_section "Checking faillock status..."

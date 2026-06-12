@@ -15,9 +15,9 @@
 sleep 1
 clear
 
-# Load theming (matugen colors for gum + reliable figlet headers)
-source "$HOME/.config/hypr/scripts/colors.sh"
-source "$HOME/.config/hypr/scripts/header.sh"
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 
 install_platform="$(cat ~/.config/hypr/scripts/platform.sh)"

@@ -17,6 +17,10 @@
 
 set -euo pipefail
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 JSON_CACHE="$HOME/.cache/matugen/current.json"
 SHELL_CACHE="$HOME/.cache/matugen/colors.sh"
 

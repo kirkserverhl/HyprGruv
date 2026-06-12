@@ -14,6 +14,10 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+
 say() { echo -e "$*"; }
 
 ensure_pacman_keyring() {
@@ -151,7 +155,7 @@ OFFICIAL_PKGS=(
     wireplumber
     pipewire-pulse
     pipewire-alsa
-    pipewire-jack   # preferred JACK implementation (replaces/conflicts with jack2)
+    pipewire-jack # preferred JACK implementation (replaces/conflicts with jack2)
 
     # --- Theming foundation ---
     uv
@@ -205,9 +209,7 @@ OFFICIAL_PKGS=(
     # blueberry
     atuin
     bpytop
- 
 
-    
     clang
     cliphist
     cmatrix
@@ -310,7 +312,7 @@ else
     CHAOTIC_BOOTSTRAP_OK=0
     if sudo pacman -U --noconfirm \
         'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' ; then
+        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'; then
         CHAOTIC_BOOTSTRAP_OK=1
         log_success "Chaotic-AUR keyring + mirrorlist installed successfully"
     else
@@ -423,20 +425,20 @@ log_status "Installing AUR packages…"
 # This helps ensure we always reach (and can test) the stow step.
 AUR_FAILED=()
 for pkg in "${AUR_PKGS[@]}"; do
-  output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
-  if [ $? -eq 0 ]; then
-    say "  ✓ $pkg"
-  else
-    log_warning "AUR package failed: $pkg"
-    # Show the tail of the error output for diagnosis (e.g. checksum fail, conflicts)
-    echo "$output" | tail -8 | sed 's/^/    | /'
-    AUR_FAILED+=("$pkg")
-  fi
+    output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
+    if [ $? -eq 0 ]; then
+        say "  ✓ $pkg"
+    else
+        log_warning "AUR package failed: $pkg"
+        # Show the tail of the error output for diagnosis (e.g. checksum fail, conflicts)
+        echo "$output" | tail -8 | sed 's/^/    | /'
+        AUR_FAILED+=("$pkg")
+    fi
 done
 if ((${#AUR_FAILED[@]})); then
-  log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
+    log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
 else
-  say "All AUR packages installed successfully."
+    say "All AUR packages installed successfully."
 fi
 
 # ------------------------------------------------------------------
@@ -446,55 +448,55 @@ fi
 # appear reliably on boot in VirtualBox, VMware, QEMU/KVM, etc.
 # ------------------------------------------------------------------
 if [[ "${IS_VM:-false}" == "true" ]]; then
-  log_status "VM detected ($HYPERVISOR) — installing hypervisor guest packages"
-  GUEST_PKGS=()
-  case "$HYPERVISOR" in
+    log_status "VM detected ($HYPERVISOR) — installing hypervisor guest packages"
+    GUEST_PKGS=()
+    case "$HYPERVISOR" in
     virtualbox)
-      GUEST_PKGS=(virtualbox-guest-utils)
-      ;;
+        GUEST_PKGS=(virtualbox-guest-utils)
+        ;;
     vmware)
-      GUEST_PKGS=(open-vm-tools)
-      ;;
-    qemu|kvm|generic-vm)
-      GUEST_PKGS=(qemu-guest-agent spice-vdagent)
-      ;;
+        GUEST_PKGS=(open-vm-tools)
+        ;;
+    qemu | kvm | generic-vm)
+        GUEST_PKGS=(qemu-guest-agent spice-vdagent)
+        ;;
     hyperv)
-      GUEST_PKGS=(hyperv)
-      ;;
+        GUEST_PKGS=(hyperv)
+        ;;
     *)
-      GUEST_PKGS=(qemu-guest-agent)
-      ;;
-  esac
+        GUEST_PKGS=(qemu-guest-agent)
+        ;;
+    esac
 
-  if ((${#GUEST_PKGS[@]})); then
-    sudo pacman -S --needed --noconfirm "${GUEST_PKGS[@]}" || log_warning "Some guest packages may have failed to install"
-  fi
-
-  # Enable the corresponding services (safe if the unit doesn't exist)
-  for svc in vboxservice.service qemu-guest-agent.service spice-vdagent.service vmtoolsd.service; do
-    if systemctl list-unit-files | grep -q "^${svc}"; then
-      sudo systemctl enable --now "$svc" 2>/dev/null || true
+    if ((${#GUEST_PKGS[@]})); then
+        sudo pacman -S --needed --noconfirm "${GUEST_PKGS[@]}" || log_warning "Some guest packages may have failed to install"
     fi
-  done
-  log_success "VM guest integration packages + services processed"
+
+    # Enable the corresponding services (safe if the unit doesn't exist)
+    for svc in vboxservice.service qemu-guest-agent.service spice-vdagent.service vmtoolsd.service; do
+        if systemctl list-unit-files | grep -q "^${svc}"; then
+            sudo systemctl enable --now "$svc" 2>/dev/null || true
+        fi
+    done
+    log_success "VM guest integration packages + services processed"
 fi
 
 ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git)
 # (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do
-  pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg")
+    pacman -Qq "$pkg" &>/dev/null || MISSING+=("$pkg")
 done
 if ((${#MISSING[@]})); then
     log_status "Installing missing essentials one-by-one (resilient)..."
     for pkg in "${MISSING[@]}"; do
-      output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
-      if [ $? -eq 0 ]; then
-        say "  ✓ $pkg (essential)"
-      else
-        log_warning "Essential package failed: $pkg (continuing; may need manual install later)"
-        echo "$output" | tail -8 | sed 's/^/    | /'
-      fi
+        output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
+        if [ $? -eq 0 ]; then
+            say "  ✓ $pkg (essential)"
+        else
+            log_warning "Essential package failed: $pkg (continuing; may need manual install later)"
+            echo "$output" | tail -8 | sed 's/^/    | /'
+        fi
     done
 else
     say "All essential packages are already installed."
