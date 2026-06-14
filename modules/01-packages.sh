@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 # 01-packages.sh — install base/desktop packages for Hyprgruv
-#
 # Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Thunar).
-# Pure Arch (third-party distro remnants such as EndeavourOS are stripped on sight).
-# See the package sets section below for the full rationale and grouping.
+
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -101,9 +99,6 @@ repair_official_repos() {
 #   - Still using pywalfox for theming
 #   - Prefer pacman when possible (especially after Chaotic-AUR is enabled)
 #   - Keep AUR list small — move packages to OFFICIAL_PKGS once they are available via Chaotic
-#
-# This list was refined from actual usage + the dots repo curation.
-# Reference: ~/.dots/packages/install.sh (or the dots git repo)
 
 OFFICIAL_PKGS=(
     # --- Bootstrap / essentials ---
@@ -111,6 +106,8 @@ OFFICIAL_PKGS=(
     git
     reflector
     networkmanager
+    nm-connection-editor
+    gparted
 
     # --- Shell & core terminal workflow ---
     zsh
@@ -201,65 +198,50 @@ OFFICIAL_PKGS=(
     # --- Backup (timeshift with separate partition) ---
     timeshift
 
-    # --- Hyprgruv / personal additions ---
-    # Move packages here (from AUR_PKGS) once Chaotic-AUR is enabled for faster installs.
-
     # --- Additional tools (user requested) ---
     7zip
-    # blueberry
+    blueman
+    bluez
+    bluez-utils
+    blueman
     atuin
     bpytop
-
     clang
     cliphist
     cmatrix
     discount
-    # ffmpegthumbs
+    ffmpegthumbs
     htop
-    # imagemagick
     media-player-info
     nm-connection-editor
     pacutils
-    # obs-studio   # not needed for now
     ttf-nerd-fonts-symbols
-    # udiskie   # not needed for now
-    # zram-generator
+    udiskie # not needed for now
+    # zram-generator, imagemagick
 )
-
 AUR_PKGS=(
-    # === Theming (critical for this dots/hyprgruv setup) ===
     matugen-git
-    python-pywalfox # still using pywalfox
+    python-pywalfox
     bibata-cursor-theme-bin
 
-    # === Terminals ===
-    # ghostty-bin   # not needed for now (AUR build can be heavy/flaky in test VMs; kitty is in base)
-
-    # === Browsers ===
+    # === Browsers / Terminals ===
     brave-bin
     google-chrome
+    # ghostty-bin
 
-    # === Screenshots ===
     hyprshot
-
-    # === Tools declared in dots manifests ===
     opencode-bin
-
-    # === UI / headers used by scripts ===
     lsd-print-git
+    aylurs-gtk-shell-git # Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
 
-    # ags (Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
-    aylurs-gtk-shell-git
-
-    # pacseek (TUI for pacman/AUR)
-    # pacseek-bin   # not needed for now (can conflict with pacseek if both present)
+    pacseek
+    pacseek-bin
 
     # === Additional tools (user requested, AUR) ===
     displaylink
     masterpdfeditor
-    # otf-apple-sf-pro   # not needed for now (often fails sha256 on the upstream .dmg)
     timeshift-autosnap
-    # udiskie-dmenu-git   # companion for udiskie; not needed for now
+    udiskie-dmenu-git # companion for udiskie; not needed for now
     vscodium-bin
     wl-clip-persist
     wl-clipboard-history-git
@@ -285,7 +267,7 @@ if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacma
     log_status "Removing stale [chaotic-aur] entry from pacman.conf (mirrorlist was missing)..."
     sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
 fi
-
+/
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
 purge_endeavouros_remnants || true
 
@@ -405,23 +387,18 @@ sudo pacman -S --needed --noconfirm \
     networkmanager pavucontrol sddm \
     yazi \
     stow \
+    waypape \
     zsh \
     starship \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     media-player-info nm-connection-editor pacutils
-# (obs-studio and udiskie intentionally omitted — not needed for now.
-# They were also in OFFICIAL_PKGS / AUR but have been commented out for this round.)
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
 log_status "Installing AUR packages…"
 # Install one-by-one so a single problematic/flaky AUR package (common during
-# VM testing: network hiccups, build failures, EULA packages like masterpdfeditor,
-# font packages with upstream checksum changes like otf-apple-sf-pro,
-# conflicts like pacseek vs pacseek-bin, hardware-specific like displaylink, etc.)
-# does not abort the entire module.
 # This helps ensure we always reach (and can test) the stow step.
 AUR_FAILED=()
 for pkg in "${AUR_PKGS[@]}"; do
@@ -501,6 +478,5 @@ if ((${#MISSING[@]})); then
 else
     say "All essential packages are already installed."
 fi
-
 sleep 0.2
 mark_completed "Install packages"

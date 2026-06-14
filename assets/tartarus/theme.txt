@@ -6,7 +6,7 @@ title-text: ""
 desktop-image: "background.png"
 desktop-image-scale-method: "stretch"
 desktop-color: "#282828"
-terminal-font: "Unifont Regular 16"
+terminal-font: "Agave Nerd Font Regular 16"
 terminal-left: "0"
 terminal-top: "0"
 terminal-width: "100%"
@@ -26,7 +26,7 @@ terminal-border: "0"
   top = 60%
   width = 480
   height = 30%
-  item_font = "Unifont Regular 16"
+  item_font = "ShureTechMono Nerd Font Regular 16"
   item_color = "#d4be98"
   selected_item_color = "#d4be98"
   item_height = 32

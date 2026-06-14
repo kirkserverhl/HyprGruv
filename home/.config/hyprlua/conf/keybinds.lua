@@ -147,9 +147,6 @@ hl.bind(mainMod .. " + SHIFT + E", hl.dsp.window.move({ workspace = "empty" }))
 hl.bind(mainMod .. " + Tab", hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" }))
 
-hl.bind(mod .. " + Tab",         hl.dsp.exec_cmd("snappy-switcher next"))
-hl.bind(mod .. " + SUPER + Tab", hl.dsp.exec_cmd("snappy-switcher prev"))
-
 -- Mission Control (hymission plugin)
 hl.bind(mod .. " + grave",       hl.dsp.exec_cmd("hymission:toggle forceall"))
 hl.bind(mod .. " + SHIFT + grave", hl.dsp.exec_cmd("hymission:toggle onlycurrentworkspace"))

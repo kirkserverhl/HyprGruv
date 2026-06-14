@@ -1,0 +1,28 @@
+{
+    "checksum": "11f4a4e20f94f9a9303329326c02668a",
+    "wallpaper": "/home/kirk/Pictures/pos_zany_vision_tree.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#060610",
+        "foreground": "#c0c0c3",
+        "cursor": "#c0c0c3"
+    },
+    "colors": {
+        "color0": "#060610",
+        "color1": "#B38F72",
+        "color2": "#7A678C",
+        "color3": "#A5A19C",
+        "color4": "#DCB09D",
+        "color5": "#B9C4B4",
+        "color6": "#DFCAB3",
+        "color7": "#c0c0c3",
+        "color8": "#565669",
+        "color9": "#B38F72",
+        "color10": "#7A678C",
+        "color11": "#A5A19C",
+        "color12": "#DCB09D",
+        "color13": "#B9C4B4",
+        "color14": "#DFCAB3",
+        "color15": "#c0c0c3"
+    }
+}

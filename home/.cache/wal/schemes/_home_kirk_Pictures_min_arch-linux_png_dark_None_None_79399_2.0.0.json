@@ -1,0 +1,28 @@
+{
+    "checksum": "cb6977f449d16f876c08780ab756bf82",
+    "wallpaper": "/home/kirk/Pictures/min_arch-linux.png",
+    "alpha": "100",
+    "special": {
+        "background": "#0c0c1e",
+        "foreground": "#c2c2c6",
+        "cursor": "#c2c2c6"
+    },
+    "colors": {
+        "color0": "#0c0c1e",
+        "color1": "#51534C",
+        "color2": "#616B62",
+        "color3": "#867D68",
+        "color4": "#61827C",
+        "color5": "#948B71",
+        "color6": "#70978F",
+        "color7": "#c2c2c6",
+        "color8": "#5c5c70",
+        "color9": "#51534C",
+        "color10": "#616B62",
+        "color11": "#867D68",
+        "color12": "#61827C",
+        "color13": "#948B71",
+        "color14": "#70978F",
+        "color15": "#c2c2c6"
+    }
+}

@@ -9,8 +9,11 @@
 #   The *only* thing that loads a processed version of the wallpaper as an
 #   image file is the rofi 50x30 blur generator.
 #
-#   SDDM receives the actual chosen wallpaper (never a blurred copy) via
-#   update-sddm-wallpaper.sh, which also forces FullBlur="false".
+#   SDDM (and anything else) reads the *central* default:
+#     ~/.config/settings/default_wp.png
+#   This file is kept fresh on every change (see the block below that runs
+#   magick/cp to it). The update-sddm script mainly handles ACLs + color sync
+#   into theme.conf and ensures the Background= lines point at the central path.
 #
 #   Everything else must use live layers + real-time blur:
 #     - Wlogout → live screenshot + layerrule blur
@@ -105,6 +108,26 @@ echo ":: Setting wallpaper: $WALLPAPER"
 
 WALLPAPER_FILENAME=$(basename "$WALLPAPER")
 USED_WALLPAPER="$WALLPAPER"
+
+# ------------------------------------------------------------------
+# Update the canonical default wallpaper image.
+# SDDM (and any other tools) reference ONE stable path. The file at that
+# path is refreshed on every wallpaper change.
+# We always normalize to PNG here for maximum SDDM/Qt compatibility.
+# Any input (jpg, png, webp, etc.) is converted losslessly enough via magick.
+# This step requires no root privileges.
+# ------------------------------------------------------------------
+DEFAULT_WP_PNG="$HOME/.config/settings/default_wp.png"
+if command -v magick >/dev/null 2>&1; then
+    magick "$WALLPAPER" -strip -interlace none -quality 92 "$DEFAULT_WP_PNG" 2>/dev/null \
+        || cp -f "$WALLPAPER" "$DEFAULT_WP_PNG"
+else
+    cp -f "$WALLPAPER" "$DEFAULT_WP_PNG"
+fi
+chmod 644 "$DEFAULT_WP_PNG" 2>/dev/null || true
+echo ":: Updated canonical default (for SDDM etc.): $DEFAULT_WP_PNG"
+# Optional: also keep the convenience sourcable script in sync if needed (it just points at the png)
+source "$HOME/.config/settings/default_wp.sh" 2>/dev/null || true
 
 # ------------------- Wallpaper Effects -------------------
 if [ -f "$WALLPAPER_EFFECT_FILE" ]; then
@@ -325,16 +348,24 @@ echo "   - $BLURRED_WALLPAPER   ← The only pre-blurred variant (rofi menus)"
 echo "   - $SQUARE_WALLPAPER"
 echo "   - $RASI_FILE"
 echo ""
-echo "   SDDM: actual wallpaper (sddm-wallpaper.png) + FullBlur=false"
+echo "   SDDM: central default ($DEFAULT_WP_PNG)  [all themes reference this]"
 echo "   Wlogout + Hyprlock (via hypridle) → live layers + real-time blur only."
 
 echo ":: Wallpaper processing complete!"
 
 # -----------------------------------------------------------------------------
-# SDDM background update (sugar-candy)
+# SDDM background update
 # -----------------------------------------------------------------------------
-# Pass the *raw actual wallpaper*. The updater writes it directly as
-# sddm-wallpaper.png and forces theme.conf to use it with FullBlur=false.
-# (The only remaining blur for SDDM is the theme's optional PartialBlur on the form.)
+# The main work for the *image pixels* is already done above (we wrote
+# ~/.config/settings/default_wp.png).
+#
+# This call (self-elevating) mainly ensures:
+#   - sddm can traverse into your homedir to read the central default
+#   - theme.conf files (sugar-candy + any others you add) point at the central path
+#   - matugen colors are synced into the greeter
+#
+# Because the Background= now points at a stable user-controlled path,
+# future wallpaper changes only need to update the png file (no more
+# rewriting theme.conf for the wallpaper itself).
 "$HOME/.config/hypr/scripts/update-sddm-wallpaper.sh" "$WALLPAPER" || true &
 disown 2>/dev/null || true
