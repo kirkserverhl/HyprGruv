@@ -268,7 +268,7 @@ if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacma
     log_status "Removing stale [chaotic-aur] entry from pacman.conf (mirrorlist was missing)..."
     sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
 fi
-/
+
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
 purge_endeavouros_remnants || true
 
