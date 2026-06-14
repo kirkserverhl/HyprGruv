@@ -1,21 +1,21 @@
-set $wallpaper /home/kirk/Pictures/dark-minimalism-fish-red-wallpaper-preview.jpg
+set $wallpaper /home/kirk/Pictures/artix-linux-gruvbox-wallpaper-v2-dark-light-all-res-v0-may2on50kej61.webp
 
-set $background #121212
+set $background #101011
 set $foreground #c3c3c3
 
-set $color0 #121212
-set $color1 #71342A
-set $color2 #8F3A2B
-set $color3 #AD3D29
-set $color4 #CE3F27
-set $color5 #964232
-set $color6 #B0422E
+set $color0 #101011
+set $color1 #689E6B
+set $color2 #DB981D
+set $color3 #CA992E
+set $color4 #D9A124
+set $color5 #938B75
+set $color6 #438489
 set $color7 #c3c3c3
-set $color8 #6e5959
-set $color9 #71342A
-set $color10 #8F3A2B
-set $color11 #AD3D29
-set $color12 #CE3F27
-set $color13 #964232
-set $color14 #B0422E
+set $color8 #59596d
+set $color9 #689E6B
+set $color10 #DB981D
+set $color11 #CA992E
+set $color12 #D9A124
+set $color13 #938B75
+set $color14 #438489
 set $color15 #c3c3c3

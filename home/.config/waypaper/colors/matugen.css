@@ -15,7 +15,7 @@ QWidget#centralwidget {
 
 /* Base font + text */
 QWidget {
-    color: #f1dfda;
+    color: #dee4e4;
     font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", sans-serif;
     font-size: 11pt;
 }
@@ -23,8 +23,8 @@ QWidget {
 /* The wallpaper grid — this is where you see the blur behind the thumbnails */
 QListWidget {
     /* Tuned to ~0.90 opacity using matugen surface to match Kitty background_opacity 0.9 + global blur when running yazi */
-    background-color: #1a110fe6;
-    border: 1px solid #53433f;
+    background-color: #0e1415e6;
+    border: 1px solid #3f484a;
     border-radius: 10px;
 }
 
@@ -35,70 +35,70 @@ QListWidget::item {
 }
 
 QListWidget::item:selected {
-    background-color: #ffb59e;
-    color: #561f0d;
+    background-color: #81d3de;
+    color: #00363c;
     border-radius: 8px;
 }
 
 /* Controls stay more solid for usability */
 QPushButton {
-    background-color: #723521;
-    color: #ffdbd0;
-    border: 1px solid #a08c87;
+    background-color: #004f56;
+    color: #9df0fb;
+    border: 1px solid #899294;
     border-radius: 6px;
     padding: 6px 14px;
 }
 
 QPushButton:hover {
-    background-color: #ffb59e;
-    color: #561f0d;
+    background-color: #81d3de;
+    color: #00363c;
 }
 
 QPushButton:pressed {
-    background-color: #723521;
+    background-color: #004f56;
 }
 
 QLabel {
-    color: #f1dfda;
+    color: #dee4e4;
     background-color: transparent;
 }
 
 QLineEdit {
-    background-color: #322825;
-    color: #f1dfda;
-    border: 1px solid #a08c87;
+    background-color: #252b2c;
+    color: #dee4e4;
+    border: 1px solid #899294;
     border-radius: 6px;
     padding: 5px 8px;
-    selection-background-color: #ffb59e;
+    selection-background-color: #81d3de;
 }
 
 QComboBox {
-    background-color: #271d1b;
-    color: #f1dfda;
-    border: 1px solid #a08c87;
+    background-color: #1b2122;
+    color: #dee4e4;
+    border: 1px solid #899294;
     border-radius: 6px;
     padding: 5px 8px;
 }
 
 QComboBox QAbstractItemView {
-    background-color: #322825;
-    color: #f1dfda;
-    selection-background-color: #ffb59e;
+    background-color: #252b2c;
+    color: #dee4e4;
+    selection-background-color: #81d3de;
 }
 
 /* Scrollbars - tuned for consistency with yazi-in-kitty transparency */
 QScrollBar:vertical {
-    background: #271d1bb3;  /* ~0.70 alpha for subtle scrollbar */
+    background: #1b2122b3;  /* ~0.70 alpha for subtle scrollbar */
     width: 8px;
     border-radius: 4px;
 }
 
 QScrollBar::handle:vertical {
-    background: #a08c87;
+    background: #899294;
     border-radius: 4px;
     min-height: 20px;
 }
 
 QScrollBar::handle:vertical:hover {
-    background: #53433f;
+    background: #3f484a;
 }

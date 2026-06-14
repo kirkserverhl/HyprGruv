@@ -12,24 +12,24 @@ end
 
 base16.setup({
   palette = {
-    base00 = "#1a110f",                    -- bg
-    base01 = "#140c0a",      -- bg alt / statusline
-    base02 = "#231917",         -- selection bg
-    base03 = "#53433f",               -- comments, invisibles
-    base04 = "#d8c2bc",            -- dark fg / line numbers
-    base05 = "#f1dfda",                    -- default fg
-    base06 = "#392e2b",            -- light fg
-    base07 = "#423734",                -- bright bg / cursorline?
+    base00 = "#0e1415",                    -- bg
+    base01 = "#090f10",      -- bg alt / statusline
+    base02 = "#171d1e",         -- selection bg
+    base03 = "#3f484a",               -- comments, invisibles
+    base04 = "#bec8ca",            -- dark fg / line numbers
+    base05 = "#dee4e4",                    -- default fg
+    base06 = "#2b3132",            -- light fg
+    base07 = "#343a3b",                -- bright bg / cursorline?
 
     -- Accents (Material You tuned)
-    base08 = "#d0bd7a",        -- variables, tags, errors
-    base09 = "#d7c68d",                      -- constants, numbers
-    base0A = "#e7bdb1",                     -- classes, types, attributes
-    base0B = "#ffb59e",                       -- strings, git added
-    base0C = "#52461a",            -- regex, escapes, git modified
-    base0D = "#723521",             -- functions, methods, git deleted?
-    base0E = "#5d4037",           -- keywords, storage, git changed
-    base0F = "#d99582",      -- deprecated, embedded
+    base08 = "#a5b6e4",        -- variables, tags, errors
+    base09 = "#b9c6ea",                      -- constants, numbers
+    base0A = "#b1cbcf",                     -- classes, types, attributes
+    base0B = "#81d3de",                       -- strings, git added
+    base0C = "#394664",            -- regex, escapes, git modified
+    base0D = "#004f56",             -- functions, methods, git deleted?
+    base0E = "#324b4e",           -- keywords, storage, git changed
+    base0F = "#8bb2b8",      -- deprecated, embedded
   },
   use_cterm = false,
   plugins = { default = true },   -- auto-skin a ton of plugins (lualine, telescope, treesitter, etc.)
@@ -41,49 +41,49 @@ base16.setup({
 
 -- Selection stands out nicely
 vim.api.nvim_set_hl(0, "Visual", {
-  bg = "#723521",
-  fg = "#ffdbd0",
+  bg = "#004f56",
+  fg = "#9df0fb",
 })
 
 -- Comments are subtle + italic (very common preference)
 vim.api.nvim_set_hl(0, "Comment", {
-  fg = "#a08c87",
+  fg = "#899294",
   italic = true,
 })
 vim.api.nvim_set_hl(0, "@comment", {
-  fg = "#a08c87",
+  fg = "#899294",
   italic = true,
 })
 
 -- Strings pop a bit more than the default base0B
 vim.api.nvim_set_hl(0, "String", {
-  fg = "#c3aa54",
+  fg = "#7e96d8",
 })
 vim.api.nvim_set_hl(0, "@string", {
-  fg = "#c3aa54",
+  fg = "#7e96d8",
 })
 
 -- Make function calls a little distinct
 vim.api.nvim_set_hl(0, "Function", {
-  fg = "#e7bdb1",
+  fg = "#b1cbcf",
 })
 vim.api.nvim_set_hl(0, "@function", {
-  fg = "#e7bdb1",
+  fg = "#b1cbcf",
 })
 vim.api.nvim_set_hl(0, "@function.call", {
-  fg = "#e7bdb1",
+  fg = "#b1cbcf",
 })
 
 -- Keywords a touch more vibrant
 vim.api.nvim_set_hl(0, "Keyword", {
-  fg = "#8f4c36",
+  fg = "#006972",
 })
 
 -- Diagnostics (use the proper semantic colors from matugen)
 vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ffb4ab" })
-vim.api.nvim_set_hl(0, "DiagnosticWarn",  { fg = "#d7c68d" })
-vim.api.nvim_set_hl(0, "DiagnosticInfo",  { fg = "#ffb59e" })
-vim.api.nvim_set_hl(0, "DiagnosticHint",  { fg = "#e7bdb1" })
+vim.api.nvim_set_hl(0, "DiagnosticWarn",  { fg = "#b9c6ea" })
+vim.api.nvim_set_hl(0, "DiagnosticInfo",  { fg = "#81d3de" })
+vim.api.nvim_set_hl(0, "DiagnosticHint",  { fg = "#b1cbcf" })
 
 -- ------------------------------------------------------------------
 -- Live-reload helpers (lualine, bufferline, etc. often need a kick)
@@ -95,7 +95,7 @@ pcall(function() require("lualine").setup({}) end)
 
 -- Optional: make the cursorline/subtle background changes feel nicer
 vim.api.nvim_set_hl(0, "CursorLine", {
-  bg = "#231917",
+  bg = "#171d1e",
 })
 
 -- You can keep adding your own nvim_set_hl overrides here as you tune.

@@ -57,24 +57,24 @@ mouse_right_click = close_all
 # Matugen / Material You colors
 # ============================================
 
-frame_color = "#ff4f01"
-highlight = "#ffb59e"
-separator_color = "#53433f"
+frame_color = "#0acfe1"
+highlight = "#81d3de"
+separator_color = "#3f484a"
 
 # --- Urgency levels ---
 
 [urgency_low]
-background = "#271d1b"
-foreground = "#d8c2bc"
-frame_color = "#53433f"
-highlight = "#d7c68d"
+background = "#1b2122"
+foreground = "#bec8ca"
+frame_color = "#3f484a"
+highlight = "#b9c6ea"
 timeout = 6
 
 [urgency_normal]
-background = "#322825"
-foreground = "#f1dfda"
-frame_color = "#ff4f01"
-highlight = "#ffb59e"
+background = "#252b2c"
+foreground = "#dee4e4"
+frame_color = "#0acfe1"
+highlight = "#81d3de"
 timeout = 8
 
 [urgency_critical]

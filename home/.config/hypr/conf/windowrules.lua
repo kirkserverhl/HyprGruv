@@ -66,13 +66,6 @@ hl.window_rule({ name = "rofi-float",      match = { class = "^(rofi|Rofi)$" }, 
 -- hl.window_rule({ name = "alacritty-float", match = { class = "^(alacritty)$" },  float = true })
 -- hl.window_rule({ name = "ghostty-float",   match = { class = "^(ghostty)$" },    float = true })
 
--- VLC
-hl.window_rule({
-    name = "vlc-float",
-    match = { class = "^(vlc)$" },
-    float = true,
-})
-
 -- Emoji picker (hypremoji)
 -- Top-right, comfortably under waybar (waybar is ~34-42px + margin-top:5)
 -- NOTE: Using broad match temporarily so it reliably floats (like smile did).

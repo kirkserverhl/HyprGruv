@@ -56,13 +56,6 @@ hl.window_rule({ name = "rofi-float",      match = { class = "^(rofi|Rofi)$" }, 
 -- hl.window_rule({ name = "alacritty-float", match = { class = "^(alacritty)$" },  float = true })
 -- hl.window_rule({ name = "ghostty-float",   match = { class = "^(ghostty)$" },    float = true })
 
--- VLC
-hl.window_rule({
-    name = "vlc-float",
-    match = { class = "^(vlc)$" },
-    float = true,
-})
-
 -- Emoji picker (smile) - precise positioning
 hl.window_rule({
     name = "emoji-picker",

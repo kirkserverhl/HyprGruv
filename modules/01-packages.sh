@@ -200,10 +200,11 @@ OFFICIAL_PKGS=(
 
     # --- Additional tools (user requested) ---
     7zip
-    blueman
-    bluez
-    bluez-utils
-    blueman
+    # blueman
+    # bluez
+    # bluez-utils
+    # blueman
+    overskride
     atuin
     bpytop
     clang
@@ -216,7 +217,7 @@ OFFICIAL_PKGS=(
     nm-connection-editor
     pacutils
     ttf-nerd-fonts-symbols
-    udiskie # not needed for now
+    udiskie
     # zram-generator, imagemagick
 )
 AUR_PKGS=(
@@ -381,18 +382,26 @@ sudo pacman -S --needed --noconfirm \
 
 sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
-    waybar fuzzel wl-clipboard grim slurp brightnessctl \
-    polkit-gnome gnome-keyring \
+    hyremoji hyprcursor hyprpicker hyprsunset \
+    hyprpaper hyprpicker hyprlockwaybar hyprshot hyprtoolkit \
+    fuzzel wl-clipboard grim slurp brightnessctl \
+    polkit-gnome gnome-keyring ncdu \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
-    networkmanager pavucontrol sddm \
-    yazi \
-    stow \
-    waypape \
+    networkmanager nm-connection-editor pavucontrol sddm \
+    obsidian yazi \
+    piper stow \
+    qt6-declarative qt5-declarative qt6ct rustup \
+    waypape powerdevil \
     zsh \
     starship \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
-    media-player-info nm-connection-editor pacutils
+    media-player-info nm-connection-editor pacutils \
+    overskride \
+    doxygen \
+    dust \
+    e2fsprogs \
+    ex-vi-compat
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
@@ -458,7 +467,7 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
     log_success "VM guest integration packages + services processed"
 fi
 
-ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git)
+ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git)
 # (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do
