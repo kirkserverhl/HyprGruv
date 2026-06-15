@@ -1,41 +1,70 @@
 #!/bin/bash
-# Reliable macOS-style (SUPER/Cmd) → Ctrl+letter translation for Wayland.
-# Uses wtype because Hyprland's sendshortcut can leave keys "stuck" (especially
-# when repeating was involved or with Insert hacks).
+# macOS-style (SUPER/Cmd) → Ctrl+letter translation for Wayland/Hyprland.
+# Uses hyprctl sendshortcut so the shortcut is delivered to the active window
+# by the compositor (more reliable than wtype or send_shortcut+repeating in Lua).
 #
 # Usage:
-#   mac-shortcut.sh copy     # Ctrl+C
-#   mac-shortcut.sh paste    # Ctrl+V
-#   mac-shortcut.sh cut      # Ctrl+X
-#   mac-shortcut.sh undo     # Ctrl+Z
-#   etc.
+#   mac-shortcut.sh copy     # Super+C → Ctrl+C (or Ctrl+Shift+C in terminals)
+#   mac-shortcut.sh paste    # Super+V → Ctrl+V (or Ctrl+Shift+V in terminals)
+#   mac-shortcut.sh cut      # Super+X → Ctrl+X
+#   mac-shortcut.sh undo     # Super+Z → Ctrl+Z
 
 set -euo pipefail
 
 action="${1:-}"
 
+active_class() {
+    hyprctl activewindow -j 2>/dev/null \
+        | sed -n 's/.*"class"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+        | head -n1
+}
+
+is_terminal() {
+    local cls
+    cls="$(active_class)"
+    case "$cls" in
+        kitty|ghostty|Ghostty|Alacritty|wezterm-gui|foot|com.mitchellh.ghostty|org.wezfurlong.wezterm)
+            return 0
+            ;;
+    esac
+    return 1
+}
+
+send_shortcut() {
+    local mods="$1"
+    local key="$2"
+    hyprctl dispatch sendshortcut "${mods}, ${key},"
+}
+
 case "$action" in
     copy|c)
-        wtype -M ctrl -k c -m ctrl
+        if is_terminal; then
+            send_shortcut "CTRL SHIFT" "C"
+        else
+            send_shortcut "CTRL" "C"
+        fi
         ;;
     paste|v)
-        wtype -M ctrl -k v -m ctrl
+        if is_terminal; then
+            send_shortcut "CTRL SHIFT" "V"
+        else
+            send_shortcut "CTRL" "V"
+        fi
         ;;
     cut|x)
-        wtype -M ctrl -k x -m ctrl
+        send_shortcut "CTRL" "X"
         ;;
     undo|z)
-        wtype -M ctrl -k z -m ctrl
+        send_shortcut "CTRL" "Z"
         ;;
-    # Add more as needed. These were in the original mac section.
     i)
-        wtype -M ctrl -k i -m ctrl
+        send_shortcut "CTRL" "I"
         ;;
     u)
-        wtype -M ctrl -k u -m ctrl
+        send_shortcut "CTRL" "U"
         ;;
     k)
-        wtype -M ctrl -k k -m ctrl
+        send_shortcut "CTRL" "K"
         ;;
     *)
         echo "Unknown mac-shortcut action: $action" >&2

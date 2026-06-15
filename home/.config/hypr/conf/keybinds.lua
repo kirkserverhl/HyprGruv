@@ -46,15 +46,12 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
 
 -- === MAC-STYLE SHORTCUTS (SUPER/Cmd-like → Ctrl equivalents) ===
--- We use a small wtype wrapper instead of hl.dsp.send_shortcut.
+-- Super+letter is translated to Ctrl+letter in the focused app (Mac Cmd behavior).
+-- Ctrl+C/V/X/Z still work natively when pressed directly — these are additive.
 --
--- Reason: send_shortcut (especially with the previous { repeating = true })
--- was frequently leaving the target key "stuck" (the letter would auto-repeat
--- or stay pressed in the focused app after you let go of SUPER+letter).
--- wtype sends clean, paired press+release events from userspace and is much
--- more reliable for these "translate my WM shortcut into an app shortcut" cases.
---
--- The script is ~/.config/hypr/scripts/mac-shortcut.sh
+-- Implemented via ~/.config/hypr/scripts/mac-shortcut.sh which uses
+-- `hyprctl dispatch sendshortcut` (compositor → active window). Terminals get
+-- Ctrl+Shift+C/V for copy/paste so Ctrl+C is not interpreted as SIGINT.
 
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh copy"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh paste"))
@@ -62,16 +59,9 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh 
 hl.bind(mainMod .. " + X", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh cut"))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh undo"))
 
--- Less universal "mac-like" ones kept for compatibility with whatever was
--- bound to Ctrl+I / U / K before.
 hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh i"))
 hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh u"))
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh k"))
-
--- If you have specific terminal apps that ONLY react to the old-school
--- Shift+Insert (paste) / Ctrl+Insert (copy) and not Ctrl+Shift+V / Ctrl+C,
--- you can add dedicated binds here that call wtype -M shift -k insert -m shift etc.
--- Most people no longer need the Insert variants.
 
 -- === TERMINALS & LAUNCHERS ===
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))

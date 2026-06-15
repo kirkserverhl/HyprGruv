@@ -19,19 +19,17 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
 
--- === MAC-STYLE SHORTCUTS (send to focused window) ===
--- These simulate Ctrl+Insert / Shift+Insert etc. inside the active app.
--- Fixed syntax for Lua API (window target + repeating flag).
-local macShortcutOpts = { repeating = true }
+-- === MAC-STYLE SHORTCUTS (SUPER/Cmd-like → Ctrl equivalents) ===
+-- Same mac-shortcut.sh helper as ~/.config/hypr (sendshortcut → active window).
 
-hl.bind(mainMod .. " + C", hl.dsp.send_shortcut({ mods = "CTRL", key = "Insert", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + V", hl.dsp.send_shortcut({ mods = "SHIFT", key = "Insert", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.send_shortcut({ mods = "CTRL", key = "V", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + X", hl.dsp.send_shortcut({ mods = "CTRL", key = "X", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + Z", hl.dsp.send_shortcut({ mods = "CTRL", key = "Z", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + I", hl.dsp.send_shortcut({ mods = "CTRL", key = "I", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + U", hl.dsp.send_shortcut({ mods = "CTRL", key = "U", window = "activewindow" }), macShortcutOpts)
-hl.bind(mainMod .. " + K", hl.dsp.send_shortcut({ mods = "CTRL", key = "K", window = "activewindow" }), macShortcutOpts)
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh copy"))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh paste"))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh paste"))
+hl.bind(mainMod .. " + X", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh cut"))
+hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh undo"))
+hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh i"))
+hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh u"))
+hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh k"))
 
 -- === TERMINALS & LAUNCHERS ===
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
