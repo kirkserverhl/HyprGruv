@@ -1,5 +1,11 @@
 #!/bin/bash
 
+HYPR_DIR="${HYPRGRUV_DIR:-$HOME/.hyprgruv}"
+# shellcheck source=/dev/null
+[[ -f "$HYPR_DIR/lib/common.sh" ]] && source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
+[[ -f "$HYPR_DIR/lib/state.sh" ]] && source "$HYPR_DIR/lib/state.sh"
+
 # --- Load your existing helpers for consistent look ---
 source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
@@ -92,3 +98,7 @@ EOF
 chmod +x defaults/editor.sh
 
 gum style --foreground green "Defaults set: Terminal=$TERMINAL, Browser=$BROWSER, Editor=$EDITOR_CHOICE"
+
+if declare -F mark_completed >/dev/null 2>&1; then
+  mark_completed "Setup defaults"
+fi

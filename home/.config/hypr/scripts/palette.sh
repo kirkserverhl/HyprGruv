@@ -55,8 +55,8 @@ DEFAULT_WP="$HOME/Pictures/Wallpapers/gruvbox_image46.png"
 
 if [[ -f "$CURRENT_WP_CACHE" ]]; then
     WALLPAPER=$(cat "$CURRENT_WP_CACHE")
-elif command -v hyprctl &>/dev/null; then
-    WALLPAPER=$(hyprctl hyprpaper listactive 2>/dev/null | awk -F' = ' '{print $2}' | head -1 || true)
+elif [[ -f "$HOME/.config/settings/default" ]]; then
+    WALLPAPER=$(cat "$HOME/.config/settings/default")
 fi
 
 if [[ -z "${WALLPAPER:-}" || ! -f "$WALLPAPER" ]]; then

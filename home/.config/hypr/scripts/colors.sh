@@ -162,7 +162,8 @@ load_matugen_colors() {
         # (slow, only if everything else failed)
         if command -v matugen >/dev/null 2>&1; then
             local wp
-            wp=$(hyprctl hyprpaper listactive 2>/dev/null | awk -F' = ' 'NR==1{print $2}' | head -1 || true)
+            wp=""
+            [[ -f "$HOME/.config/settings/cache/current_wallpaper" ]] && wp=$(cat "$HOME/.config/settings/cache/current_wallpaper")
             if [[ -n "$wp" && -f "$wp" ]]; then
                 local json
                 json=$(matugen image "$wp" --mode dark --json hex 2>/dev/null | sed '/^ok$/d' | jq -c '.colors.default' 2>/dev/null || true)

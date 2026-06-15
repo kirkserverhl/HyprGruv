@@ -65,7 +65,11 @@ if [ -z "$selected_path" ]; then
 fi
 
 # Apply wallpaper with wipe transition
-swww img "$selected_path" --transition-type wipe --transition-fps 144 --transition-step 255
+if command -v waypaper >/dev/null 2>&1; then
+    waypaper --wallpaper "$selected_path"
+else
+    awww img "$selected_path"
+fi
 
 # Update state file
 touch "$WALLPAPER_STATE"

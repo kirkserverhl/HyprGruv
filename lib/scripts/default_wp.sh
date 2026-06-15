@@ -37,28 +37,35 @@ fi
 # ------------------------------------------------------------
 # Ensure Waypaper is installed
 # ------------------------------------------------------------
-ensure_waypaper() {
-  if command -v waypaper >/dev/null 2>&1; then
-    return 0
-  fi
-  log_status "Installing waypaper…"
-  # Try pacman first (if available in repo), fallback to yay (AUR)
-  if sudo pacman -Si waypaper >/dev/null 2>&1; then
-    sudo pacman -S --needed --noconfirm waypaper
-  elif command -v yay >/dev/null 2>&1; then
-    yay -S --needed --noconfirm waypaper
-  else
-    log_error "waypaper not found in repos and yay is not installed."
-    return 1
+ensure_waypaper_stack() {
+  local pkgs=()
+  for pkg in awww waypaper waypaper-engine; do
+    pacman -Qq "$pkg" &>/dev/null || pkgs+=("$pkg")
+  done
+  ((${#pkgs[@]})) || return 0
+
+  local official=() aur=()
+  for pkg in "${pkgs[@]}"; do
+    if pacman -Si "$pkg" &>/dev/null 2>&1; then official+=("$pkg"); else aur+=("$pkg"); fi
+  done
+
+  log_status "Installing wallpaper stack: ${pkgs[*]}"
+  ((${#official[@]})) && sudo pacman -S --needed --noconfirm "${official[@]}"
+  if ((${#aur[@]})); then
+    command -v yay >/dev/null 2>&1 || { log_error "yay required for ${aur[*]}"; return 1; }
+    yay -S --needed --noconfirm "${aur[@]}"
   fi
 }
-ensure_waypaper
+ensure_waypaper_stack
 
 # ------------------------------------------------------------
 # Use the canonical default wallpaper + generate colors with matugen
-# User-specified: $HYPR_DIR/home/Pictures/Wallpapers/default.png
+# Prefer stowed path under $HOME; fall back to repo copy during install
 # ------------------------------------------------------------
-WALLPAPER="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
+WALLPAPER="$HOME/Pictures/Wallpapers/default.png"
+if [[ ! -f "$WALLPAPER" ]]; then
+  WALLPAPER="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
+fi
 
 if [[ ! -f "$WALLPAPER" ]]; then
   log_error "Required wallpaper not found: $WALLPAPER"

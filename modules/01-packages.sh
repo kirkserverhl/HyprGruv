@@ -219,6 +219,14 @@ OFFICIAL_PKGS=(
     ttf-nerd-fonts-symbols
     udiskie
     # zram-generator, imagemagick
+
+    # --- Audio / widgets / display utilities ---
+    cava
+    kew
+    opencode
+    quickshell
+    wlr-randr
+    aha
 )
 AUR_PKGS=(
     matugen-git
@@ -231,7 +239,6 @@ AUR_PKGS=(
     # ghostty-bin
 
     hyprshot
-    opencode-bin
     lsd-print-git
     aylurs-gtk-shell-git # Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
 
@@ -383,7 +390,7 @@ sudo pacman -S --needed --noconfirm \
 sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
     hyremoji hyprcursor hyprpicker hyprsunset \
-    hyprpaper hyprpicker hyprlockwaybar hyprshot hyprtoolkit \
+    hyprlockwaybar hyprshot hyprtoolkit \
     fuzzel wl-clipboard grim slurp brightnessctl \
     polkit-gnome gnome-keyring ncdu \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
@@ -391,7 +398,7 @@ sudo pacman -S --needed --noconfirm \
     obsidian yazi \
     piper stow \
     qt6-declarative qt5-declarative qt6ct rustup \
-    waypape powerdevil \
+    powerdevil \
     zsh \
     starship \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
@@ -425,6 +432,19 @@ if ((${#AUR_FAILED[@]})); then
     log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
 else
     say "All AUR packages installed successfully."
+fi
+
+# Rust AUR builds (e.g. lsd-print-git) need an active default toolchain.
+# Common on fresh/VM installs where rustup is present but no default is set.
+if command -v rustup >/dev/null 2>&1; then
+    log_status "Setting rustup default toolchain to stable (for Rust AUR builds)…"
+    if rustup default stable; then
+        log_success "rustup default stable"
+    else
+        log_warning "rustup default stable failed — run manually if lsd-print-git or other Rust AUR builds fail"
+    fi
+else
+    log_warning "rustup not in PATH — skipping 'rustup default stable'"
 fi
 
 # ------------------------------------------------------------------

@@ -49,11 +49,12 @@ fi
 if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]]; then
   if is_completed "Install packages" || is_completed "Stow configuration"; then
     log_warning "Previous install state detected (packages or stow marked complete)."
-    log_warning "Normal runs will SKIP the package + stow modules and jump ahead."
+    log_warning "Normal runs will SKIP completed pre-reboot modules."
+    log_warning "Post-reboot setup (SDDM, monitors, GRUB, shell, defaults) runs on first Hyprland login."
     log_warning "To force a full re-test (re-run packages + reach stow):  FORCE=1 ./install.sh"
     log_warning "To reach/re-test stow *without* re-doing the heavy package step: SKIP_PACKAGES=1 FORCE=1 ./install.sh"
     log_warning "For a completely clean state this run: RESET_STATE=1 FORCE=1 ./install.sh"
-    log_warning "(You can also run modules directly: bash modules/02-stow.sh )"
+    log_warning "To re-run post-reboot wizard: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
     echo ""
     sleep 1.5
   fi
@@ -115,54 +116,28 @@ sleep 1
 
 run_module "02-stow.sh" "Stow configuration" || exit 1
 sleep 1
-run_module "03-setup.sh" "Setup system" || exit 1
-sleep 1
 
-# ------------------------------------------------------------
-# Run the remaining configuration scripts BEFORE reboot.
-# This way the user gets a fully configured system (shell choice,
-# monitors, GRUB theme, cleanup, default apps) on first login
-# instead of having to run these after rebooting into Hyprland.
-# ------------------------------------------------------------
-log_status "Ensuring interactive prerequisites (gum, zsh) are present..."
-# Quick local ensure (in case of SKIP_PACKAGES or jumping around)
-if ! command -v gum >/dev/null 2>&1; then
-  if command -v yay >/dev/null 2>&1; then
-    yay -S --needed --noconfirm gum || true
-  else
-    sudo pacman -S --needed --noconfirm gum || true
-  fi
-fi
-if ! pacman -Qq zsh &>/dev/null; then
-  if command -v yay >/dev/null 2>&1; then
-    yay -S --needed --noconfirm zsh || true
-  else
-    sudo pacman -S --needed --noconfirm zsh || true
-  fi
-fi
-
-log_status "Running full interactive configuration (monitors, GRUB, cleanup, shell, etc.)..."
-if [[ -f "$HYPR_DIR/modules/04-config.sh" ]]; then
-  bash "$HYPR_DIR/modules/04-config.sh" || log_warning "04-config.sh finished (some steps may have been skipped)"
+# ============================================================
+# Final sync before reboot (pre-reboot phase complete)
+# ============================================================
+display_header "Pre-reboot sync"
+log_status "Pre-reboot install complete. Running final system sync before reboot..."
+if command -v yay >/dev/null 2>&1; then
+  yay -Syu --noconfirm || log_warning "yay -Syu reported issues (continuing to reboot)"
 else
-  log_warning "04-config.sh not found"
+  log_warning "yay not found — falling back to pacman -Syu"
+  sudo pacman -Syu --noconfirm || log_warning "pacman -Syu reported issues (continuing to reboot)"
 fi
 sleep 1
 
-log_status "Choosing default terminal / browser / editor..."
-if [[ -f "$HYPR_DIR/modules/05-setup_defaults.sh" ]]; then
-  bash "$HYPR_DIR/modules/05-setup_defaults.sh" || log_warning "05-setup_defaults.sh finished"
-else
-  log_warning "05-setup_defaults.sh not found"
-fi
-sleep 1
+mark_completed "Pre-reboot install"
 
 # ============================================================
 # Summary Screen
 # ============================================================
 display_header "Summary"
 sleep .5
-log_success "Installation completed successfully!"
+log_success "Pre-reboot installation completed successfully!"
 sleep 1
 echo "Completed steps:"
 
@@ -177,25 +152,7 @@ else
 fi
 sleep 1.5
 
-# ============================================================
-# Helpful keybinds (plain output for simplicity)
-# ============================================================
-echo -e "\n   Hyprland Gruvbox Installation is Complete !!\n        A list of common helpful keybinds is below:"
-
-echo -e "  Win + ENTER         Kitty Terminal
-  Win + B             Brave Browser
-  Win + F             Thunar File Manager
-  Win + N             NeoVim
-  Win + Q             Close Window
-  Win + SPACE         Fuzzel Launcher
-  Win + CTRL + Q      Logout
-  Win + Mouse Left    Move Window
-  Win + Print         Hyprshot Screenshot"
-
-echo -e "\n   Display full keybinds with:  Win + SPACE
-   or click the gear icon in the Waybar"
-
-log_status "Core installation + configuration complete (Hyprland, SDDM, stow, shell/monitors/GRUB/defaults, etc.). Rebooting into SDDM..."
+log_status "Rebooting now. Post-reboot setup will start automatically on first Hyprland login."
 sleep 2
 
 # ============================================================
@@ -203,24 +160,21 @@ sleep 2
 # ============================================================
 cat << 'EOF'
 
-Core setup + interactive configuration completed before reboot.
+Pre-reboot install complete (preflight, packages, stow).
 
-After reboot, log in via SDDM (select the Hyprland session). Your shell preference,
-monitor config, GRUB theme, defaults, etc. should already be applied.
+After reboot:
+  1. Log in via SDDM — select the Hyprland session (not uwsm-managed)
+  2. A terminal wizard will open automatically to finish setup:
+     - waypaper/awww + wallpapers (matugen theming), SDDM, monitors, GRUB, shell, defaults
 
-VM users: guest tools were installed and GRUB was adjusted (nomodeset + visible menu)
-to help the SDDM greeter appear reliably on virtual graphics.
+If the wizard does not appear, run manually:
+  bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
-Chaotic-AUR setup now happens early (during package install in 01-packages.sh).
+Re-run the wizard any time:
+  FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
-If you need to manually (re)configure Chaotic-AUR later (e.g. after network fix in a VM):
-  sudo bash ~/.hyprgruv/modules/000-setup_chaotic.sh                 # dedicated robust standalone (recommended for the keyring/VM case)
-  DRY_RUN=1 bash ~/.hyprgruv/lib/scripts/chaotic.sh                  # test mode
-  bash ~/.hyprgruv/lib/scripts/chaotic.sh                          # apply for real
-
-Re-run these any time if you want to change choices:
-  ~/.hyprgruv/modules/04-config.sh
-  ~/.hyprgruv/modules/05-setup_defaults.sh
+Chaotic-AUR setup happens during package install (01-packages.sh).
+VM users: guest tools are installed in 01-packages.sh for SDDM/display stability.
 
 EOF
 

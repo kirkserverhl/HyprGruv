@@ -23,8 +23,6 @@ if [[ -f "$CURRENT_WP_CACHE" ]]; then
     WALLPAPER=$(cat "$CURRENT_WP_CACHE")
 elif [ -f "$HOME/.config/settings/default" ]; then
     WALLPAPER=$(cat "$HOME/.config/settings/default")
-elif command -v hyprctl &>/dev/null; then
-    WALLPAPER=$(hyprctl hyprpaper listactive 2>/dev/null | awk -F' = ' '{print $2}' | head -1 || true)
 fi
 [[ -z "${WALLPAPER:-}" || ! -f "$WALLPAPER" ]] && WALLPAPER="$DEFAULT_WP"
 

@@ -141,10 +141,8 @@ notify-send "Wallpaper" "Applying: $(basename "$SELECTED_PATH")" -t 1200
 
 if ! "$WAYPAPER_CMD" --wallpaper "$SELECTED_PATH" 2>/dev/null; then
     # Fallback direct (rare)
-    if command -v swww >/dev/null 2>&1; then
-        swww img "$SELECTED_PATH"
-    elif command -v awww >/dev/null 2>&1; then
-        awww "$SELECTED_PATH"
+    if command -v awww >/dev/null 2>&1; then
+        awww img "$SELECTED_PATH"
     fi
     "$HOME/.config/hypr/scripts/set_wallpaper.sh" "$SELECTED_PATH" || true
 fi

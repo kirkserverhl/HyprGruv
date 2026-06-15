@@ -115,7 +115,7 @@ for p in "${LIB32_GFX[@]}"; do repo_has "$p" && AVAILABLE_LIB32+=("$p"); done
 BASE_PKGS=(networkmanager pipewire pipewire-pulse pipewire-jack wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
 # Safe fallback for terminals (05-setup_defaults.sh not yet run in this flow; user sets via interactive or manually)
 OPT_TERMS=(kitty alacritty)
-OPT_EXTRAS=(wlogout swaybg hyprpaper hyprlock)
+OPT_EXTRAS=(wlogout swaybg hyprlock)
 
 # ---------------------- install ----------------------
 # Ensure mirrorlist is seeded early (same reason as in 01-packages)

@@ -32,14 +32,14 @@ rofiCommand="rofi -show -dmenu -theme ${themesDir}/wallSelect.rasi"
 # Execute command according the wallpaper manager
 executeCommand() {
 
-  if command -v swww &>/dev/null; then
-    swww img "$1" ${SWWW_PARAMS}
-
+  if command -v waypaper &>/dev/null; then
+    waypaper --wallpaper "$1"
+  elif command -v awww &>/dev/null; then
+    awww img "$1"
   elif command -v swaybg &>/dev/null; then
     swaybg -i "$1" &
-  
   else
-    echo "Neither swww nor swaybg are installed."
+    echo "No wallpaper backend (waypaper/awww/swaybg) installed."
     exit 1
   fi
 
@@ -62,11 +62,6 @@ menu() {
     fi
   done
 }
-
-# If swww exists, start it
-if command -v swww &>/dev/null; then
-  swww query || swww init
-fi
 
 # Execution
 main() {

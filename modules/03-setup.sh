@@ -76,8 +76,8 @@ fi
 
 # Define the scripts in execution order
 # Note: chaotic.sh (Chaotic-AUR) is now done early inside 01-packages.sh.
-# Full interactive config (04-config including shell + 05-setup_defaults) now runs
-# from install.sh *before* the final reboot so the first graphical login is ready.
+# Modules 04-config and 05-setup_defaults run after reboot via
+# lib/scripts/post_reboot_setup.sh (triggered from autostart on first Hyprland login).
 declare -a ORDERED_SCRIPTS=(
   #"hard_copy.sh|Hard Copy files in root directory"
   # Temporarily commented out (hangs on waypaper in pre-graphical / no-compositor context).
@@ -87,7 +87,7 @@ declare -a ORDERED_SCRIPTS=(
 )
 
 # Support skipping the wallpaper step (waypaper + matugen can hang or block
-# when there is no running Wayland compositor / swww / hyprpaper yet during
+# when there is no running Wayland compositor / awww yet during
 # the text-mode install phase). Use on laptop / test runs:
 #   SKIP_WALLPAPER=1 ./install.sh
 # The step can be run manually later from inside Hyprland:

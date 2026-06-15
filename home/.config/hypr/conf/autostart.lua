@@ -3,12 +3,18 @@
 -- Most exec-once become hl.on("hyprland.start", function() hl.exec_cmd(...) end)
 
 local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
+local HYPRPM_RELOAD = SCRIPTS .. "/hyprpm-reload.sh"
 
--- Run on every Hyprland start / reload (use hl.on for the event)
+local function reload_hyprpm()
+	hl.exec_cmd(HYPRPM_RELOAD)
+end
+
+-- Hyprpm: every new Hyprland session (login) and after config reload
+hl.on("hyprland.start", reload_hyprpm)
+hl.on("config.reloaded", reload_hyprpm)
+
+-- Run on every Hyprland start (use hl.on for the event)
 hl.on("hyprland.start", function()
-	-- Hyprpm (plugin manager)
-	hl.exec_cmd("hyprpm reload")
-
 	-- Hot corners (custom reliable implementation)
 	hl.exec_cmd(SCRIPTS .. "/start-hyprcorners.sh")
 
@@ -40,6 +46,9 @@ hl.on("hyprland.start", function()
 
 	-- Workspace monitor setup script
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
+
+	-- First-run post-install wizard (modules 03–05 after pre-reboot install + reboot)
+	hl.exec_cmd("sleep 2 && " .. SCRIPTS .. "/first_run_setup.sh &")
 
 	-- Auto-mount
 	hl.exec_cmd("udiskie")
