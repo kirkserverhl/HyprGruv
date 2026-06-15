@@ -3,7 +3,7 @@
  * while allowing per-theme visual overrides via style.css
  */
 {
-    "include": "../../modules.json",
+    @import "modules.json",
 
     // The exact rich layout the user wants (all modules surfaced)
     "modules-left": [

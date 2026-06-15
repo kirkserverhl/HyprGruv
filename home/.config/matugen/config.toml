@@ -10,6 +10,9 @@
 [config]
 # No custom keyword mappings after 2026 cleanup.
 # Templates use full paths like {{colors.primary.default.hex}}.
+# Block syntax for quickshell templates (quickshell.json / quickshell.qml).
+block_prefix = "<*"
+block_postfix = "*>"
 
 # -----------------------------------------------------------------------------
 # Wallpaper setter (optional, used when "set" is true)
@@ -110,12 +113,22 @@ input_path = "~/.config/matugen/templates/starship-rainbow.toml"
 output_path = "~/.config/starship/matugen-rainbow.toml"
 post_hook = 'echo "[matugen] starship-rainbow template processed for $(basename "{{image}}")" >> ~/.cache/matugen.log'
 
-# Terminal OSC color sequences (applied in .zshrc)
+# Terminal OSC color sequences (applied in .zshrc on new shells)
 [templates.terminal_sequences]
 input_path = "~/.config/matugen/templates/terminal-sequences"
 output_path = "~/.config/terminal-sequences"
-# No heavy post_hook needed — new shells will pick it up automatically
-post_hook = 'notify-send "Matugen" "Terminal colors updated" 2>/dev/null || true'
+post_hook = '''
+    # Push OSC palette to already-open terminal emulators (Linux PTYs)
+    if [ -f "$HOME/.config/terminal-sequences" ]; then
+        tee /dev/pts/[0-9]* < "$HOME/.config/terminal-sequences" >/dev/null 2>&1 || true
+    fi
+    notify-send "Matugen" "Terminal colors updated" 2>/dev/null || true
+'''
+
+[templates.tmux]
+input_path = "~/.config/matugen/templates/tmux-colors.conf"
+output_path = "~/.config/tmux/generated.conf"
+post_hook = "tmux source-file ~/.config/tmux/generated.conf 2>/dev/null || true"
 
 [templates.btop]
 input_path = "~/.config/matugen/templates/btop.theme"
@@ -156,35 +169,67 @@ input_path = "~/.config/matugen/templates/firefox-colors.css"
 output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/userChrome.css"
 # post_hook disabled — too aggressive. Reload Firefox manually or use its devtools.
 
+# Firefox website theming (userContent.css imports these)
+[templates.firefox_website_colors]
+input_path = "~/.config/matugen/templates/firefox-colors.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/colors.css"
+
+[templates.firefox_youtube]
+input_path = "~/.config/matugen/websites/youtube.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/youtube.css"
+
+[templates.firefox_github]
+input_path = "~/.config/matugen/websites/github.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/github.css"
+
 [templates.waypaper]
 input_path = "~/.config/matugen/templates/waypaper-style.css"
-output_path = "~/.config/waypaper/style.css"
+output_path = "~/.config/waypaper/colors/matugen.css"
 # Note: Waypaper may need to be restarted to pick up the new stylesheet
-
-# -----------------------------------------------------------------------------
-# Canonical semantic palette (Starship-inspired)
-# This is the single importable source of truth for most custom themes.
-# Written to a stable location so waybar, hyprland, fuzzel, etc. can @import it.
-# -----------------------------------------------------------------------------
-[templates.semantic_palette]
-input_path = "~/.config/matugen/templates/base-palette.css"
-output_path = "~/.config/matugen/palette.css"
-post_hook = 'echo "[matugen] semantic palette updated" >> ~/.cache/matugen.log'
 
 [templates.bat]
 input_path = "~/.config/matugen/templates/bat.tmTheme"
 output_path = "~/.config/bat/themes/Matugen.tmTheme"
 post_hook = 'bat cache --build 2>/dev/null; notify-send "Matugen" "bat theme updated" 2>/dev/null || true'
 
+[templates.cava]
+input_path = "~/.config/matugen/templates/cava-colors.ini"
+output_path = "~/.config/cava/themes/matugen"
+post_hook = "pkill -USR1 cava 2>/dev/null || true"
+
+[templates.labwc]
+input_path = "~/.config/matugen/templates/labwc"
+output_path = "~/.config/labwc/themerc-override"
+post_hook = "labwc -r 2>/dev/null || true"
+
+[templates.obs]
+input_path = "~/.config/matugen/templates/matugen.obt"
+output_path = "~/.config/obs-studio/themes/matugen.obt"
+post_hook = 'notify-send "Matugen" "OBS theme updated — restart OBS or re-select Matugen in Settings → Appearance" 2>/dev/null || true'
+
+[templates.opencode]
+input_path = "~/.config/matugen/templates/opencode-colors.json"
+output_path = "~/.config/opencode/themes/matugen.json"
+post_hook = 'notify-send "Matugen" "OpenCode theme updated — restart OpenCode or run /theme matugen" 2>/dev/null || true'
+
+[templates.quickshell]
+input_path = "~/.config/matugen/templates/quickshell.json"
+output_path = "~/.local/state/quickshell/generated/colors.json"
+
+[templates.quickshell_qml]
+input_path = "~/.config/matugen/templates/quickshell.qml"
+output_path = "~/.local/state/quickshell/generated/MatugenColors.qml"
+
 # -----------------------------------------------------------------------------
 # Qt / Kvantum / KDE apps (KWrite, Kate, Dolphin, etc.)
 # -----------------------------------------------------------------------------
 [templates.kvantum_kvconfig]
-input_path = "~/.config/matugen/templates/archive/kvantum-colors.kvconfig"
+input_path = "~/.config/matugen/templates/kvantum-colors.kvconfig"
 output_path = "~/.config/Kvantum/matugen/matugen.kvconfig"
+post_hook = 'notify-send "Matugen" "Kvantum theme updated — restart Qt apps" 2>/dev/null || true'
 
 [templates.kvantum_svg]
-input_path = "~/.config/matugen/templates/archive/kvantum-colors.svg"
+input_path = "~/.config/matugen/templates/kvantum-colors.svg"
 output_path = "~/.config/Kvantum/matugen/matugen.svg"
 
 [templates.qt6ct]
@@ -209,3 +254,8 @@ run_after = [
   ["~/.local/bin/matugen-posthook", "{{image}}"]
 ]
 
+
+#[templates.iisddmtheme]
+#input_path = '~/.config/ii-sddm-theme/SddmColors.qml'
+#output_path = '~/.config/ii-sddm-theme/Colors.qml'
+#post_hook = 'sudo ~/.config/ii-sddm-theme/sddm-theme-apply.sh &'

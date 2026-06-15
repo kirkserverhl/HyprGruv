@@ -1,0 +1,95 @@
+@import "../matugen/matugen-waybar.css";
+
+* {
+  border: none;
+  border-radius: 0px;
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo";
+  font-size: 16px;
+  min-height: 0;
+  font-weight: bold;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+.modules-right {
+  margin-right: 12px;
+}
+
+tooltip {
+  background: @background;
+  border: 1px solid @primary;
+  border-radius: 12px;
+}
+
+tooltip label {
+  color: @on_surface;
+  padding: 6px;
+}
+
+#workspaces {
+  background: @surface;
+  padding: 8px 5px;
+  border-radius: 16px;
+  color: @on_surface;
+}
+
+#workspaces button {
+  padding: 0px 6px;
+  margin: 0px 3px;
+  border-radius: 50px;
+  color: transparent;
+  background: @surface_bright;
+  transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.active {
+  background-color: @primary;
+  color: @surface;
+  min-width: 50px;
+  transition: all 0.3s ease-in-out;
+  font-size: 13px;
+  border-radius: 5px;
+}
+
+#workspaces button:hover {
+  background-color: @on_secondary_container;
+  color: @surface;
+  border-radius: 16px;
+  min-width: 50px;
+  background-size: 400% 400%;
+}
+
+#workspaces button.urgent {
+  background-color: @error;
+  color: @surface;
+  border-radius: 16px;
+  min-width: 50px;
+  background-size: 400% 400%;
+  transition: all 0.3s ease-in-out;
+}
+
+#battery,
+#pulseaudio,
+#backlight,
+#custom-pacman,
+#network,
+#clock,
+#custom-weather,
+#custom-media,
+#window,
+#custom-launcher,
+#custom-notification,
+#power-profiles-daemon {
+  background-color: @surface;
+  color: @primary;
+  padding: 0 15px 0 15px;
+  margin: 0 0 0 12px;
+  border-radius: 50px;
+}
+
+#custom-notification {
+  margin: 0 12px 0 0;
+}
+

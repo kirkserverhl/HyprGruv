@@ -1,0 +1,190 @@
+/*
+## -- Subtle Waybar theme -- ##
+
+## Author: sane1090x
+## YouTube: https://youtube.com/@sane1090x
+*/
+
+/* --- Import Material-You colors --- */
+@import "../../colors/matugen.css";
+
+/* --- Global settings --- */
+* {
+  font-size: 15px;
+  font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo";
+  font-weight: bold;
+}
+
+window#waybar {
+  all: unset;
+}
+
+/* --- Module island settings --- */
+.modules-left,
+.modules-center,
+.modules-right {
+  padding: 7px;
+  margin: 0 13px;
+  border-radius: 10px;
+  background: alpha(@background, 0.6);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* --- Tooltip settings --- */
+tooltip {
+  background: @background;
+  border: 2px solid @primary;
+  border-radius: 12px;
+}
+
+tooltip-label {
+  color: @on_surface;
+  padding: 5px;
+}
+
+/* --- Separator --- */
+#custom-separator {
+  padding: 0 10px 0 15px;
+  color: alpha(@on_surface, 0.7);
+}
+
+/* --- Modules --- */
+#bluetooth,
+#pulseaudio,
+#network,
+#custom-weather,
+#battery,
+#power-profiles-daemon,
+#custom-notification,
+#clock,
+#custom-pacman,
+#custom-media {
+  padding: 0px 5px;
+  transition: all 0.3s ease;
+  color: @on_surface;
+}
+
+/* --- Modules on hover --- */
+#clock:hover,
+#custom-pacman:hover,
+#custom-notification:hover,
+#bluetooth:hover,
+#network:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#pulseaudio:hover,
+#temperature:hover,
+#power-profiles-daemon:hover,
+#custom-weather:hover,
+#custom-media:hover,
+#custom-expandleft:hover {
+  transition: all 0.3s ease;
+  color: @tertiary;
+}
+
+/* --- Workspace settings --- */
+#workspaces {
+  padding: 0px 5px;
+}
+
+#workspaces button {
+  all: unset;
+  padding: 0px 5px;
+  color: alpha(@primary, 0.4);
+  transition: all 0.2s ease;
+}
+
+#workspaces button:hover {
+  color: rgba(0, 0, 0, 0);
+  border: none;
+  text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 0.5);
+  transition: all 1s ease;
+}
+
+#workspaces button.active {
+  color: @primary;
+  border: none;
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+}
+
+#workspaces button.empty {
+  color: rgba(0, 0, 0, 0);
+  border: none;
+  text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 0.2);
+}
+
+#workspaces button.empty:hover {
+  color: rgba(0, 0, 0, 0);
+  border: none;
+  text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 0.5);
+  transition: all 1s ease;
+}
+
+#workspaces button.empty.active {
+  color: @on_surface;
+  border: none;
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Battery --- */
+#battery.charging {
+  color: @tertiary;
+}
+
+#battery.warning:not(.charging) {
+  color: @error;
+}
+
+#battery.critical:not(.charging) {
+  color: @error_container;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* --- Drawers --- */
+#group-expand {
+  padding: 0px 5px;
+  transition: all 0.3s ease;
+}
+
+#custom-expand,
+#custom-expandleft {
+  padding: 0px 5px;
+  color: alpha(@on_surface, 0.9);
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.7);
+  transition: all 0.3s ease;
+}
+
+#custom-expand:hover {
+  color: rgba(255, 255, 255, 0.2);
+  text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* --- Stats --- */
+#cpu,
+#memory,
+#temperature {
+  padding: 0px 5px;
+  transition: all 0.3s ease;
+  color: @on_surface;
+}
+
+/* --- Tray --- */
+#tray {
+  padding: 0px 5px;
+  transition: all 0.3s ease;
+}
+
+#tray menu * {
+  padding: 0px 5px;
+  transition: all 0.3s ease;
+}
+
+#tray menu separator {
+  padding: 0px 5px;
+  transition: all 0.3s ease;
+}
