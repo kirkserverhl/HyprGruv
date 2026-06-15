@@ -51,25 +51,25 @@ palette = 'matugen'
 # =============================================================================
 [palettes.matugen]
 # Core neutrals
-color_fg0 = '#f1dfda'
-color_bg1 = '#271d1b'
-color_bg3 = '#322825'
+color_fg0 = '#e6e0e9'
+color_bg1 = '#211f24'
+color_bg3 = '#2b292f'
 
 # Rainbow powerline segments (chosen for hue variety across most wallpapers)
-color_orange = '#ffb59e'
-color_yellow = '#d7c68d'
-color_aqua   = '#e7bdb1'
-color_blue   = '#723521'
+color_orange = '#cfbdfe'
+color_yellow = '#efb8c8'
+color_aqua   = '#cbc2db'
+color_blue   = '#4d3d75'
 
 # Proper contrast text colors for the vivid accent segments
-color_on_orange = '#561f0d'
-color_on_yellow = '#3a3005'
-color_on_aqua   = '#442a22'
+color_on_orange = '#36275d'
+color_on_yellow = '#4a2532'
+color_on_aqua   = '#332d41'
 
 # Special states (character) — using only core roles that are always present
-color_green  = '#e7bdb1'
+color_green  = '#cbc2db'
 color_red    = '#ffb4ab'
-color_purple = '#d7c68d'
+color_purple = '#efb8c8'
 
 # =============================================================================
 # OS Segment

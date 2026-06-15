@@ -17,25 +17,28 @@
 -- IMPORTANT: We load colors *inside* the handler so that `hyprctl reload`
 -- (triggered by matugen post_hook) always picks up the latest matugen palette.
 local function apply_hyprbars()
-    local colors = require("colors.init").load()
+	local colors = require("colors.init").load()
 
-    hl.keyword("plugin:hyprbars:bar_height", 33)
-    hl.keyword("plugin:hyprbars:bar_color", colors.bg1)
-    hl.keyword("plugin:hyprbars:bar_blur", true)
-    hl.keyword("plugin:hyprbars:bar_title_enabled", true)
-    hl.keyword("plugin:hyprbars:bar_text_size", 12)
-    hl.keyword("plugin:hyprbars:bar_text_font", "Agave Nerd Font Propo")
-    hl.keyword("plugin:hyprbars:bar_text_align", "center")
-    hl.keyword("plugin:hyprbars:bar_buttons_alignment", "left")
-    hl.keyword("plugin:hyprbars:bar_padding", 15)
-    hl.keyword("plugin:hyprbars:bar_button_padding", 6)
-    hl.keyword("plugin:hyprbars:col.text", colors.fg)
-    hl.keyword("plugin:hyprbars:on_double_click", "hyprctl dispatch fullscreen 1")
+	hl.keyword("plugin:hyprbars:bar_height", 33)
+	hl.keyword("plugin:hyprbars:bar_color", colors.bg1)
+	hl.keyword("plugin:hyprbars:bar_blur", true)
+	hl.keyword("plugin:hyprbars:bar_title_enabled", true)
+	hl.keyword("plugin:hyprbars:bar_text_size", 14)
+	hl.keyword("plugin:hyprbars:bar_text_font", "Agave Nerd Font Propo")
+	hl.keyword("plugin:hyprbars:bar_text_align", "center")
+	hl.keyword("plugin:hyprbars:bar_buttons_alignment", "left")
+	hl.keyword("plugin:hyprbars:bar_padding", 15)
+	hl.keyword("plugin:hyprbars:bar_button_padding", 6)
+	hl.keyword("plugin:hyprbars:col.text", colors.fg)
+	hl.keyword("plugin:hyprbars:on_double_click", "hyprctl dispatch fullscreen 1")
 
-    -- Window control buttons using your starship matugen colors
-    hl.keyword("plugin:hyprbars:hyprbars-button", colors.hyprbar_close    .. ", 15, , hyprctl dispatch killactive")
-    hl.keyword("plugin:hyprbars:hyprbars-button", colors.hyprbar_minimize .. ", 15, , ~/.config/hypr/scripts/hyprbars-minimize.sh")
-    hl.keyword("plugin:hyprbars:hyprbars-button", colors.hyprbar_maximize .. ", 15, , hyprctl dispatch fullscreen 1")
+	-- Window control buttons using your starship matugen colors
+	hl.keyword("plugin:hyprbars:hyprbars-button", colors.hyprbar_close .. ", 15, , hyprctl dispatch killactive")
+	hl.keyword(
+		"plugin:hyprbars:hyprbars-button",
+		colors.hyprbar_minimize .. ", 15, , ~/.config/hypr/scripts/hyprbars-minimize.sh"
+	)
+	hl.keyword("plugin:hyprbars:hyprbars-button", colors.hyprbar_maximize .. ", 15, , hyprctl dispatch fullscreen 1")
 end
 
 hl.on("hyprland.start", apply_hyprbars)

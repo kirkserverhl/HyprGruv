@@ -45,7 +45,7 @@ hl.config({
 		initial_workspace_tracking = 1,
 		animate_mouse_windowdragging = false,
 		enable_swallow = false,
-		swallow_regex = "^(Alacritty|kitty|footclient|brave-browser)$",
+		swallow_regex = "^(Alacritty|kitty|footclient|brave|google-chrome|firefox)$",
 		force_default_wallpaper = 0, -- 0 disables built-in anime wallpapers (use your own via waypaper/hyprpaper)
 		mouse_move_enables_dpms = true,
 	},
