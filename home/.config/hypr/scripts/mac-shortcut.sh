@@ -1,11 +1,10 @@
 #!/bin/bash
-# macOS-style (SUPER/Cmd) → Ctrl+letter translation for Wayland/Hyprland.
-# Uses hyprctl sendshortcut so the shortcut is delivered to the active window
-# by the compositor (more reliable than wtype or send_shortcut+repeating in Lua).
+# macOS-style (SUPER/Cmd) → Ctrl+letter translation for Hyprland 0.55+ Lua config.
+# Uses hl.dsp.send_shortcut via hyprctl (old "sendshortcut CTRL, C," syntax is dead).
 #
 # Usage:
-#   mac-shortcut.sh copy     # Super+C → Ctrl+C (or Ctrl+Shift+C in terminals)
-#   mac-shortcut.sh paste    # Super+V → Ctrl+V (or Ctrl+Shift+V in terminals)
+#   mac-shortcut.sh copy     # Super+C → Ctrl+C (Ctrl+Shift+C in terminals)
+#   mac-shortcut.sh paste    # Super+V → Ctrl+V (Ctrl+Shift+V in terminals)
 #   mac-shortcut.sh cut      # Super+X → Ctrl+X
 #   mac-shortcut.sh undo     # Super+Z → Ctrl+Z
 
@@ -33,7 +32,7 @@ is_terminal() {
 send_shortcut() {
     local mods="$1"
     local key="$2"
-    hyprctl dispatch sendshortcut "${mods}, ${key},"
+    hyprctl dispatch "hl.dsp.send_shortcut({mods=\"${mods}\",key=\"${key}\",window=\"activewindow\"})"
 }
 
 case "$action" in

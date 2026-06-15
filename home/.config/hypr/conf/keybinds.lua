@@ -49,9 +49,9 @@ hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
 -- Super+letter is translated to Ctrl+letter in the focused app (Mac Cmd behavior).
 -- Ctrl+C/V/X/Z still work natively when pressed directly — these are additive.
 --
--- Implemented via ~/.config/hypr/scripts/mac-shortcut.sh which uses
--- `hyprctl dispatch sendshortcut` (compositor → active window). Terminals get
--- Ctrl+Shift+C/V for copy/paste so Ctrl+C is not interpreted as SIGINT.
+-- Implemented via ~/.config/hypr/scripts/mac-shortcut.sh which calls
+-- hl.dsp.send_shortcut (Hyprland 0.55+ Lua API). Terminals get Ctrl+Shift+C/V
+-- for copy/paste so Ctrl+C is not interpreted as SIGINT.
 
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh copy"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh paste"))
