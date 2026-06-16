@@ -218,7 +218,6 @@ OFFICIAL_PKGS=(
     # bluez
     # bluez-utils
     # blueman
-    atuin
     bpytop
     clang
     cliphist
@@ -248,7 +247,7 @@ AUR_PKGS=(
     # === Browsers / Terminals ===
     brave-bin
     google-chrome
-    # ghostty-bin
+    ghostty-bin
 
     hyprshot
     aylurs-gtk-shell-git # Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
@@ -415,7 +414,6 @@ sudo pacman -S --needed --noconfirm \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     media-player-info nm-connection-editor pacutils \
-    \
     doxygen \
     dust \
     e2fsprogs \

@@ -156,5 +156,20 @@ else
 fi
 sleep 0.5; clear
 
+# ------------------------- Atuin -----------------------------
+echo ""; display_header "Atuin"; sleep 0.5
+if _confirm "  📜   Set up Atuin shell history?"; then
+  _say "Starting Atuin setup…"
+  script="$SCRIPTS_DIR/atuin.sh"
+  if [[ -f "$script" ]]; then
+    run_step "$script" "Atuin Setup"
+  else
+    log_error "Script not found: $script"; exit 1
+  fi
+else
+  _say "Atuin setup skipped."
+fi
+sleep 0.5; clear
+
 mark_completed "Interactive config"
 
