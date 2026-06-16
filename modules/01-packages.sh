@@ -173,7 +173,7 @@ OFFICIAL_PKGS=(
     qt6ct
     papirus-icon-theme
     adw-gtk-theme
-    ttf-material-symbols-variable
+    # ttf-material-symbols-variable
 
     # --- Daily utilities + launchers ---
     jq
@@ -190,12 +190,15 @@ OFFICIAL_PKGS=(
     fuzzel
     toilet
     toilet-fonts
+    sl
+    zsh
 
     # Greeter / display manager (SDDM, no Plasma/KDE bits)
     sddm
 
     # --- Terminals ---
     kitty
+    ghostty
     tmux
 
     # --- File manager (Thunar, no Dolphin/KDE) ---
@@ -217,10 +220,6 @@ OFFICIAL_PKGS=(
 
     # --- Additional tools (user requested) ---
     7zip
-    # blueman
-    # bluez
-    # bluez-utils
-    # blueman
     bpytop
     clang
     cliphist
@@ -230,9 +229,14 @@ OFFICIAL_PKGS=(
     htop
     media-player-info
     nm-connection-editor
+    nvim
     pacutils
     ttf-nerd-fonts-symbols
     udiskie
+    # blueman
+    # bluez
+    # bluez-utils
+    # blueman
     # zram-generator, imagemagick
 
     # --- Audio / widgets / display utilities ---
@@ -242,6 +246,7 @@ OFFICIAL_PKGS=(
     quickshell
     wlr-randr
     aha
+    mpv
 )
 AUR_PKGS=(
     python-pywalfox
@@ -261,11 +266,13 @@ AUR_PKGS=(
     tmux-resurrect-git
     tmux-tad
     tmuxai
+    tmuxinator
 
     hyprshot
     aylurs-gtk-shell-git # Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
 
     # === Additional tools (user requested, AUR) ===
+    atuin
     displaylink
     masterpdfeditor
     timeshift-autosnap
@@ -411,19 +418,20 @@ sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
     hyprcursor hyprpicker hyprsunset \
     hyprlock waybar hyprshot hyprtoolkit \
-    fuzzel wl-clipboard grim slurp brightnessctl \
+    atuin fuzzel wl-clipboard grim slurp brightnessctl \
     polkit-gnome gnome-keyring ncdu \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
-    networkmanager nm-connection-editor pavucontrol sddm \
+    mpv networkmanager nm-connection-editor pavucontrol sddm \
     obsidian yazi \
     piper stow \
     qt6-declarative qt5-declarative qt6ct rustup \
     powerdevil \
-    zsh \
+    sl zsh \
     starship \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     media-player-info nm-connection-editor pacutils \
+    tmux tmuxinator \
     doxygen \
     dust \
     e2fsprogs \

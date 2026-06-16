@@ -83,7 +83,7 @@ declare -a ORDERED_SCRIPTS=(
   # Temporarily commented out (hangs on waypaper in pre-graphical / no-compositor context).
   # Use SKIP_WALLPAPER=1 to control, or manually run after first Hyprland login.
   # "default_wp.sh|Load default wallpaper"
-  #"hyprpm.sh|Install Hyprpm plugins"
+  "hyprpm.sh|Install Hyprpm plugins"
 )
 
 # Support skipping the wallpaper step (waypaper + matugen can hang or block
