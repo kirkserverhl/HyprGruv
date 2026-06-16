@@ -1,9 +1,0 @@
-[H[2J
-Hyprgruv
-
-
-[38;2;69;133;136m[INFO][0m Welcome to Hyprland Gruvbox Installation!
-[38;2;69;133;136m[INFO][0m Logs will be saved to: /home/kirk/.hyprgruv/assets/logs/install_20260612_041145.log
-
-[H[2J[38;2;215;153;33m[WARNING][0m RESET_STATE=1 — clearing previous completed steps (fresh test run)
-./install.sh: line 40: local: can only be used in a function

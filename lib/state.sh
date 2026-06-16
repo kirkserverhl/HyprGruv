@@ -3,11 +3,21 @@
 
 STATE_FILE="$ASSET_DIR/install_state.json"
 
-# Initialize state file if it doesn't exist
+# Initialize state file if it doesn't exist (local only — never committed; see .gitignore)
 init_state() {
     mkdir -p "$ASSET_DIR"
     if [[ ! -f "$STATE_FILE" ]]; then
-        cat > "$STATE_FILE" <<EOF
+        local example="$ASSET_DIR/install_state.json.example"
+        if [[ -f "$example" ]]; then
+            cp "$example" "$STATE_FILE"
+            if command_exists jq; then
+                local tmp
+                tmp="$(mktemp)"
+                jq --arg date "$(date +"%Y-%m-%d %H:%M:%S")" '.install_date = $date' "$STATE_FILE" > "$tmp"
+                mv "$tmp" "$STATE_FILE"
+            fi
+        else
+            cat > "$STATE_FILE" <<EOF
 {
   "completed_steps": [],
   "user_choices": {},
@@ -15,6 +25,7 @@ init_state() {
   "version": "1.0"
 }
 EOF
+        fi
     fi
 }
 

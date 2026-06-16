@@ -39,11 +39,8 @@ clear
 # ============================================================
 if [[ "${RESET_STATE:-0}" == "1" || "${RESET:-0}" == "1" ]]; then
   log_warning "RESET_STATE=1 — clearing previous completed steps (fresh test run)"
-  : > "$ASSET_DIR/completed_steps.txt" 2>/dev/null || true
-  if command_exists jq && [[ -f "$STATE_FILE" ]]; then
-    tmp="$(mktemp)"
-    jq '.completed_steps = []' "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
-  fi
+  rm -f "$STATE_FILE" "$ASSET_DIR/completed_steps.txt" "$ASSET_DIR/user_choices.txt" 2>/dev/null || true
+  # init_state (from state.sh) recreates a fresh install_state.json on next access
 fi
 
 if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]]; then

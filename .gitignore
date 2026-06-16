@@ -1,0 +1,7 @@
+# Per-machine install progress (never commit — each clone gets a fresh run)
+assets/install_state.json
+assets/completed_steps.txt
+assets/user_choices.txt
+
+# Install logs (local only)
+assets/logs/
