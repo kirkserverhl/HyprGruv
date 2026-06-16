@@ -197,28 +197,10 @@ input_path = "~/.config/matugen/templates/cava-colors.ini"
 output_path = "~/.config/cava/themes/matugen"
 post_hook = "pkill -USR1 cava 2>/dev/null || true"
 
-[templates.labwc]
-input_path = "~/.config/matugen/templates/labwc"
-output_path = "~/.config/labwc/themerc-override"
-post_hook = "labwc -r 2>/dev/null || true"
-
 [templates.obs]
 input_path = "~/.config/matugen/templates/matugen.obt"
 output_path = "~/.config/obs-studio/themes/matugen.obt"
 post_hook = 'notify-send "Matugen" "OBS theme updated — restart OBS or re-select Matugen in Settings → Appearance" 2>/dev/null || true'
-
-[templates.opencode]
-input_path = "~/.config/matugen/templates/opencode-colors.json"
-output_path = "~/.config/opencode/themes/matugen.json"
-post_hook = 'notify-send "Matugen" "OpenCode theme updated — restart OpenCode or run /theme matugen" 2>/dev/null || true'
-
-[templates.quickshell]
-input_path = "~/.config/matugen/templates/quickshell.json"
-output_path = "~/.local/state/quickshell/generated/colors.json"
-
-[templates.quickshell_qml]
-input_path = "~/.config/matugen/templates/quickshell.qml"
-output_path = "~/.local/state/quickshell/generated/MatugenColors.qml"
 
 # -----------------------------------------------------------------------------
 # Qt / Kvantum / KDE apps (KWrite, Kate, Dolphin, etc.)

@@ -1,7 +1,7 @@
 /* Matugen colors for Waybar + other apps */
 
 /* Standard Material You roles */
-@define-color background #111318;
+@define-color background rgba(0,0,0,0.0);
 @define-color foreground #e1e2e9;
 
 @define-color primary #a6c8ff;
@@ -19,13 +19,13 @@
 @define-color error #ffb4ab;
 @define-color on_error #690005;
 
-@define-color surface #111318;
+@define-color surface rgba(0,0,0,0.0);
 @define-color on_surface #e1e2e9;
 @define-color surface_variant #43474e;
 @define-color on_surface_variant #c3c6cf;
 
-@define-color surface_container #1d2024;
-@define-color surface_container_high #282a2f;
+@define-color surface_container rgba(0,0,0,0.0);
+@define-color surface_container_high rgba(0,0,0,0.0);
 
 /* Rainbow palette to match Starship matugen-rainbow.toml */
 @define-color color_orange #a6c8ff;

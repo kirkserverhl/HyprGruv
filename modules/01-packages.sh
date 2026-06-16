@@ -168,6 +168,7 @@ OFFICIAL_PKGS=(
     pipewire-jack # preferred JACK implementation (replaces/conflicts with jack2)
 
     # --- Theming foundation ---
+    matugen
     uv
     qt6ct
     papirus-icon-theme
@@ -241,7 +242,6 @@ OFFICIAL_PKGS=(
     aha
 )
 AUR_PKGS=(
-    matugen-git
     python-pywalfox
     bibata-cursor-theme-bin
 
@@ -251,7 +251,6 @@ AUR_PKGS=(
     # ghostty-bin
 
     hyprshot
-    lsd-print-git
     aylurs-gtk-shell-git # Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
 
     pacseek
@@ -425,13 +424,13 @@ sudo pacman -S --needed --noconfirm \
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
-# Rust AUR builds (e.g. lsd-print-git) need an active default toolchain *before* yay.
+# Rust AUR builds need an active default toolchain *before* yay.
 if command -v rustup >/dev/null 2>&1; then
     log_status "Setting rustup default toolchain to stable (for Rust AUR builds)…"
     if rustup default stable; then
         log_success "rustup default stable"
     else
-        log_warning "rustup default stable failed — run manually if lsd-print-git or other Rust AUR builds fail"
+        log_warning "rustup default stable failed — run manually if Rust AUR builds fail"
     fi
 else
     log_warning "rustup not in PATH — skipping 'rustup default stable'"
@@ -490,7 +489,7 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
     log_success "VM guest integration packages + services processed"
 fi
 
-ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout lsd-print-git aylurs-gtk-shell-git)
+ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout aylurs-gtk-shell-git)
 # (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do

@@ -82,10 +82,12 @@ ensure_matugen() {
     return 0
   fi
   log_status "Installing matugen…"
-  if command -v yay >/dev/null 2>&1; then
-    yay -S --needed --noconfirm matugen-git || return 1
+  if pacman -Si matugen >/dev/null 2>&1; then
+    sudo pacman -S --needed --noconfirm matugen || return 1
+  elif command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm matugen-bin || return 1
   else
-    log_error "matugen-git requires yay (AUR) or install manually."
+    log_error "Install matugen via pacman or matugen-bin (AUR)."
     return 1
   fi
 }

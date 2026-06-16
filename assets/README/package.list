@@ -99,7 +99,7 @@ linux-discord-rich-presence
 linux-firmware
 lscolors-git
 lsd
-lsd-print-git
+# lsd-print — bundled in home/.local/bin/lsd-print (stowed, not AUR)
 lua-colors
 lua51-colors
 lua52-colors
