@@ -141,6 +141,13 @@ if _confirm "  🐚   Configure the Shell?"; then
   script="$SCRIPTS_DIR/shell.sh"
   if [[ -f "$script" ]]; then
     run_step "$script" "Shell Configuration"
+
+    zsh_fix="$SCRIPTS_DIR/zsh_fix.sh"
+    if [[ -f "$zsh_fix" ]]; then
+      run_step "$zsh_fix" "Zsh Plugin Fix"
+    else
+      log_warning "zsh_fix.sh not found at: $zsh_fix"
+    fi
   else
     log_error "Script not found: $script"; exit 1
   fi

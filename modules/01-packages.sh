@@ -512,5 +512,20 @@ sleep 0.2
 if ((${#AUR_FAILED[@]})); then
     log_warning "Install packages finished with ${#AUR_FAILED[@]} AUR failure(s) — proceeding to stow."
 fi
+
+# Opening wallpaper + first matugen palette.
+# On a fresh install, hypr configs are not stowed yet — install.sh runs
+# default_wp.sh after stow, immediately before reboot.
+if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
+    if [[ -x "$HOME/.config/hypr/scripts/set_wallpaper.sh" ]]; then
+        log_status "Applying opening wallpaper and default matugen theme…"
+        bash "$HYPR_DIR/lib/scripts/default_wp.sh" || log_warning "default_wp.sh finished with warnings"
+    else
+        log_status "Opening wallpaper deferred until after stow (install.sh, before reboot)"
+    fi
+else
+    log_status "SKIP_WALLPAPER=1 — skipping opening wallpaper step"
+fi
+
 mark_completed "Install packages"
 exit 0

@@ -127,6 +127,29 @@ run_module "02-stow.sh" "Stow configuration" || exit 1
 sleep 1
 
 # ============================================================
+# Opening wallpaper + first matugen palette (before reboot)
+# Runs after stow so set_wallpaper.sh, matugen templates, and
+# waypaper config are in place.
+# ============================================================
+if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
+  display_header "Opening Wallpaper"
+  log_status "Applying opening wallpaper and default matugen theme…"
+  set +e
+  bash "$HYPR_DIR/lib/scripts/default_wp.sh"
+  wp_exit=$?
+  set -e
+  if [[ $wp_exit -eq 0 ]]; then
+    log_success "Opening wallpaper and matugen theme applied"
+    mark_completed "Opening wallpaper"
+  else
+    log_warning "default_wp.sh finished with warnings (post-reboot setup can retry)"
+  fi
+else
+  log_warning "SKIP_WALLPAPER=1 — skipping opening wallpaper step"
+fi
+sleep 1
+
+# ============================================================
 # Final sync before reboot (pre-reboot phase complete)
 # ============================================================
 display_header "Pre-reboot sync"
@@ -174,7 +197,7 @@ Pre-reboot install complete (preflight, packages, stow).
 After reboot:
   1. Log in via SDDM — select the Hyprland session (not uwsm-managed)
   2. A terminal wizard will open automatically to finish setup:
-     - waypaper/awww + wallpapers (matugen theming), SDDM, monitors, GRUB, shell, defaults
+     - SDDM, monitors, GRUB, shell, defaults (opening wallpaper applied pre-reboot)
 
 If the wizard does not appear, run manually:
   bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh

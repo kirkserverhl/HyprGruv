@@ -1,26 +1,26 @@
 # : Manager [[[
 
 [mgr]
-cwd = { fg = "#e1e2e9" }
+cwd = { fg = "#dde4e4" }
 
 # Find
 find_keyword  = { fg = "#ffb4ab", bold = true, italic = true, underline = true }
 find_position = { fg = "#ffb4ab", bold = true, italic = true }
 
 # Marker
-marker_copied   = { fg = "#e272ff", bg = "#e272ff" }
-marker_cut      = { fg = "#f7d8ff", bg = "#f7d8ff" }
+marker_copied   = { fg = "#709dff", bg = "#709dff" }
+marker_cut      = { fg = "#d6e3ff", bg = "#d6e3ff" }
 marker_marked   = { fg = "#ffb4ab", bg = "#ffb4ab" }
-marker_selected = { fg = "#dabde2", bg = "#dabde2" }
+marker_selected = { fg = "#b6c7ea", bg = "#b6c7ea" }
 
 # Count
-count_copied   = { fg = "#271430", bg = "#f7d8ff" }
-count_cut      = { fg = "#271430", bg = "#f7d8ff" }
-count_selected = { fg = "#00315e", bg = "#dabde2" }
+count_copied   = { fg = "#091b36", bg = "#d6e3ff" }
+count_cut      = { fg = "#091b36", bg = "#d6e3ff" }
+count_selected = { fg = "#00373a", bg = "#b6c7ea" }
 
 # Border
 border_symbol = "│"
-border_style  = { fg = "#a6c8ff" }
+border_style  = { fg = "#80d4da" }
 
 # : ]]]
 
@@ -36,8 +36,8 @@ padding = { open = "█", close = "█" }
 # : Tabs [[[
 
 [tabs]
-active    = { fg = "#a6c8ff", bold = true, bg = "#111318" }
-inactive  = { fg = "#bcc7dc", bg = "#111318" }
+active    = { fg = "#80d4da", bold = true, bg = "#0e1415" }
+inactive  = { fg = "#b1cccd", bg = "#0e1415" }
 sep_inner = { open = "[", close = "]" }
 
 # : ]]]
@@ -47,16 +47,16 @@ sep_inner = { open = "[", close = "]" }
 
 [mode]
 # Mode
-normal_main = { bg = "#a6c8ff", fg = "#00315e", bold = true }
-normal_alt  = { bg = "#43474e", fg = "#c3c6cf" }
+normal_main = { bg = "#80d4da", fg = "#00373a", bold = true }
+normal_alt  = { bg = "#3f4849", fg = "#bec8c9" }
 
 # Select mode
-select_main = { bg = "#bcc7dc", fg = "#273141", bold = true }
-select_alt  = { bg = "#43474e", fg = "#c3c6cf" }
+select_main = { bg = "#b1cccd", fg = "#1b3436", bold = true }
+select_alt  = { bg = "#3f4849", fg = "#bec8c9" }
 
 # Unset mode
-unset_main = { bg = "#dabde2", fg = "#3d2946", bold = true }
-unset_alt  = { bg = "#43474e", fg = "#c3c6cf" }
+unset_main = { bg = "#b6c7ea", fg = "#20314c", bold = true }
+unset_alt  = { bg = "#3f4849", fg = "#bec8c9" }
 
 # : ]]]
 
@@ -68,16 +68,16 @@ sep_left  = { open = "🭁", close = "🭠" }
 sep_right = { open = "🭁", close = "🭠" }
 
 # Permissions
-perm_type  = { fg = "#5873a8" }
-perm_write = { fg = "#9e53b3" }
+perm_type  = { fg = "#598a8c" }
+perm_write = { fg = "#3f6cc8" }
 perm_read  = { fg = "#ff2b12" }
-perm_exec  = { fg = "#d83fff" }
-perm_sep   = { fg = "#3b7fff" }
+perm_exec  = { fg = "#3d7bff" }
+perm_sep   = { fg = "#13d7e7" }
 
 # Progress
 progress_label  = { bold = true }
-progress_normal = { fg = "#a6c8ff", bg = "#37393e" }
-progress_error  = { fg = "#ffb4ab", bg = "#37393e" }
+progress_normal = { fg = "#80d4da", bg = "#343a3b" }
+progress_error  = { fg = "#ffb4ab", bg = "#343a3b" }
 
 # : ]]]
 
@@ -86,12 +86,12 @@ progress_error  = { fg = "#ffb4ab", bg = "#37393e" }
 
 [which]
 cols = 3
-mask = { bg = "#37393e" }
-cand = { fg = "#a6c8ff" }
-rest = { fg = "#00315e" }
-desc = { fg = "#e1e2e9" }
+mask = { bg = "#343a3b" }
+cand = { fg = "#80d4da" }
+rest = { fg = "#00373a" }
+desc = { fg = "#dde4e4" }
 separator = " ▶ "
-separator_style = { fg = "#e1e2e9" }
+separator_style = { fg = "#dde4e4" }
 
 # : ]]]
 
@@ -99,8 +99,8 @@ separator_style = { fg = "#e1e2e9" }
 # : Notify [[[
 
 [notify]
-title_info  = { fg = "#dabde2" }
-title_warn  = { fg = "#a6c8ff" }
+title_info  = { fg = "#b6c7ea" }
+title_warn  = { fg = "#80d4da" }
 title_error = { fg = "#ffb4ab" }
 
 # : ]]]
@@ -109,8 +109,8 @@ title_error = { fg = "#ffb4ab" }
 # : Picker [[[
 
 [pick]
-border = { fg = "#a6c8ff" }
-active = { fg = "#dabde2", bold = true }
+border = { fg = "#80d4da" }
+active = { fg = "#b6c7ea", bold = true }
 inactive = {}
 
 # : ]]]
@@ -119,8 +119,8 @@ inactive = {}
 # : Input [[[
 
 [input]
-border = { fg = "#a6c8ff" }
-value  = { fg = "#e1e2e9" }
+border = { fg = "#80d4da" }
+value  = { fg = "#dde4e4" }
 
 # : ]]]
 
@@ -128,7 +128,7 @@ value  = { fg = "#e1e2e9" }
 # : Completion [[[
 
 [cmp]
-border = { fg = "#a6c8ff", bg = "#00315e" }
+border = { fg = "#80d4da", bg = "#00373a" }
 
 # : ]]]
 
@@ -136,9 +136,9 @@ border = { fg = "#a6c8ff", bg = "#00315e" }
 # : Tasks [[[
 
 [tasks]
-border  = { fg = "#a6c8ff" }
+border  = { fg = "#80d4da" }
 title   = {}
-hovered = { fg = "#f7d8ff", underline = true }
+hovered = { fg = "#d6e3ff", underline = true }
 
 # : ]]]
 
@@ -146,9 +146,9 @@ hovered = { fg = "#f7d8ff", underline = true }
 # : Help [[[
 
 [help]
-on     = { fg = "#e1e2e9" }
-run    = { fg = "#e1e2e9" }
-footer = { fg = "#273141", bg = "#bcc7dc" }
+on     = { fg = "#dde4e4" }
+run    = { fg = "#dde4e4" }
+footer = { fg = "#1b3436", bg = "#b1cccd" }
 
 # : ]]]
 
@@ -175,25 +175,25 @@ rules = [
     { url = "*", is = "exec", fg = "#ffdad6" },
 
     # Fallback
-    { url = "*", fg = "#e1e2e9" },
-    { url = "*/", fg = "#a6c8ff" },
+    { url = "*", fg = "#dde4e4" },
+    { url = "*/", fg = "#80d4da" },
 ]
 
 # : ]]]
 conds = [
 	# Special files
-	{ if = "orphan", text = "", fg = "#a6c8ff" },
-	{ if = "link", text = "", fg = "#a6c8ff" },
-	{ if = "block", text = "", fg = "#a6c8ff" },
-	{ if = "char", text = "", fg = "#a6c8ff" },
-	{ if = "fifo", text = "", fg = "#a6c8ff" },
-	{ if = "sock", text = "", fg = "#a6c8ff" },
-	{ if = "sticky", text = "", fg = "#a6c8ff" },
-	{ if = "dummy", text = "", fg = "#a6c8ff" },
+	{ if = "orphan", text = "", fg = "#80d4da" },
+	{ if = "link", text = "", fg = "#80d4da" },
+	{ if = "block", text = "", fg = "#80d4da" },
+	{ if = "char", text = "", fg = "#80d4da" },
+	{ if = "fifo", text = "", fg = "#80d4da" },
+	{ if = "sock", text = "", fg = "#80d4da" },
+	{ if = "sticky", text = "", fg = "#80d4da" },
+	{ if = "dummy", text = "", fg = "#80d4da" },
 
 	# Fallback
-	{ if = "dir", text = "", fg = "#a6c8ff" },
-	{ if = "exec", text = "", fg = "#a6c8ff" },
-	{ if = "!dir", text = "", fg = "#a6c8ff" },
+	{ if = "dir", text = "", fg = "#80d4da" },
+	{ if = "exec", text = "", fg = "#80d4da" },
+	{ if = "!dir", text = "", fg = "#80d4da" },
 ]
 # : }}}

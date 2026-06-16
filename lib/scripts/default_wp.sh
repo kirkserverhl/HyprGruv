@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# default_wp.sh — set a default wallpaper via Waypaper
+# default_wp.sh — apply opening wallpaper + first matugen palette (non-interactive)
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -59,23 +59,7 @@ ensure_waypaper_stack() {
 ensure_waypaper_stack
 
 # ------------------------------------------------------------
-# Use the canonical default wallpaper + generate colors with matugen
-# Prefer stowed path under $HOME; fall back to repo copy during install
-# ------------------------------------------------------------
-WALLPAPER="$HOME/Pictures/Wallpapers/default.png"
-if [[ ! -f "$WALLPAPER" ]]; then
-  WALLPAPER="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
-fi
-
-if [[ ! -f "$WALLPAPER" ]]; then
-  log_error "Required wallpaper not found: $WALLPAPER"
-  exit 1
-fi
-
-log_status "Using wallpaper: $(basename "$WALLPAPER")"
-
-# ------------------------------------------------------------
-# Ensure matugen (for color scheme generation from wallpaper)
+# Ensure matugen (set_wallpaper.sh uses it for the auto palette)
 # ------------------------------------------------------------
 ensure_matugen() {
   if command -v matugen >/dev/null 2>&1; then
@@ -93,28 +77,79 @@ ensure_matugen() {
 }
 ensure_matugen
 
-# Run matugen to generate theme/colors from the wallpaper
-log_status "Running matugen on wallpaper (generates ~/.cache/matugen etc.)"
-if matugen image "$WALLPAPER"; then
-  log_success "matugen completed"
-else
-  log_warning "matugen exited non-zero (theme files may be partial or need manual re-run)"
+# ------------------------------------------------------------
+# Resolve canonical opening wallpaper
+# ------------------------------------------------------------
+WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
+WALLPAPER="$WALLPAPER_DIR/default.png"
+STOWED_DEFAULT="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
+
+mkdir -p "$WALLPAPER_DIR"
+
+if [[ ! -f "$WALLPAPER" && -f "$STOWED_DEFAULT" ]]; then
+  cp -a "$STOWED_DEFAULT" "$WALLPAPER"
+  log_status "Seeded default wallpaper into $WALLPAPER_DIR"
 fi
 
-log_status "Setting wallpaper via waypaper"
+if [[ ! -f "$WALLPAPER" ]]; then
+  WALLPAPER="$STOWED_DEFAULT"
+fi
 
-# ------------------------------------------------------------
-# Apply the wallpaper (support both common Waypaper CLIs)
-# ------------------------------------------------------------
-if waypaper --wallpaper "$WALLPAPER" --apply >/dev/null 2>&1; then
-  :
-elif waypaper --wallpaper "$WALLPAPER" >/dev/null 2>&1; then
-  :
-else
-  log_error "Failed to set wallpaper with waypaper."
+if [[ ! -f "$WALLPAPER" ]]; then
+  log_error "Required wallpaper not found: $WALLPAPER"
   exit 1
 fi
 
-log_success "Wallpaper applied successfully"
+log_status "Opening wallpaper: $(basename "$WALLPAPER")"
+
+# ------------------------------------------------------------
+# Ensure wallpaper daemon is up (waypaper post_command needs it)
+# ------------------------------------------------------------
+if ! pgrep -f "waypaper-engine.*daemon" >/dev/null 2>&1; then
+  if command -v waypaper-engine >/dev/null 2>&1; then
+    log_status "Starting waypaper-engine daemon…"
+    waypaper-engine daemon &>/dev/null &
+    sleep 1.5
+  fi
+fi
+
+SET_WALLPAPER="$HOME/.config/hypr/scripts/set_wallpaper.sh"
+
+# ------------------------------------------------------------
+# Apply wallpaper + first matugen palette (Dark Standard, source color 1)
+# set_wallpaper.sh auto-picks the first good source color with tonal-spot.
+# SKIP_PALETTE_CHOOSER=1 skips the interactive palette menu on first boot.
+# ------------------------------------------------------------
+log_status "Applying wallpaper with first matugen palette (non-interactive)"
+export SKIP_PALETTE_CHOOSER=1
+
+applied=0
+if command -v waypaper >/dev/null 2>&1; then
+  if waypaper --wallpaper "$WALLPAPER" --apply >/dev/null 2>&1; then
+    applied=1
+  elif waypaper --wallpaper "$WALLPAPER" >/dev/null 2>&1; then
+    applied=1
+  fi
+fi
+
+if [[ "$applied" -eq 0 && -x "$SET_WALLPAPER" ]]; then
+  log_status "waypaper did not apply — running set_wallpaper.sh directly"
+  bash "$SET_WALLPAPER" "$WALLPAPER" || true
+  applied=1
+fi
+
+if [[ "$applied" -eq 0 ]]; then
+  log_error "Failed to set wallpaper with waypaper or set_wallpaper.sh."
+  exit 1
+fi
+
+# Belt-and-suspenders: ensure the image is visible even if waypaper bookkeeping is odd
+if command -v awww >/dev/null 2>&1; then
+  awww img "$WALLPAPER" >/dev/null 2>&1 || true
+fi
+
+pkill -SIGUSR2 waybar 2>/dev/null || true
+
+log_success "Opening wallpaper applied (Dark Standard + first source color)"
 sleep 0.3
 clear

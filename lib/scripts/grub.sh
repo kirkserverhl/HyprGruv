@@ -76,13 +76,29 @@ ensure_vm_grub_compat() {
   # nomodeset is the classic fix for many hypervisors so the simple
   # framebuffer works until guest driver / modesetting kicks in.
   # We append only if not already present.
+  #
+  # Repair older broken edits that appended " nomodeset" outside the quotes
+  # (which makes grub-mkconfig fail with "nomodeset: command not found").
+  if grep -qE "^GRUB_CMDLINE_LINUX_DEFAULT=.*' nomodeset$" "$GRUB_DEFAULT"; then
+    sudo sed -i "s|^\(GRUB_CMDLINE_LINUX_DEFAULT='.*\)'\ nomodeset$|\1 nomodeset'|" "$GRUB_DEFAULT"
+  elif grep -qE '^GRUB_CMDLINE_LINUX_DEFAULT=.*" nomodeset$' "$GRUB_DEFAULT"; then
+    sudo sed -i 's|^\(GRUB_CMDLINE_LINUX_DEFAULT=".*\)" nomodeset$|\1 nomodeset"|' "$GRUB_DEFAULT"
+  fi
+
   local current
   current=$(grep -E '^GRUB_CMDLINE_LINUX_DEFAULT=' "$GRUB_DEFAULT" | head -1 || true)
 
   if [[ -n "$current" ]]; then
     if ! echo "$current" | grep -q 'nomodeset'; then
-      # Append nomodeset
-      sudo sed -i 's|^GRUB_CMDLINE_LINUX_DEFAULT=.*|& nomodeset|' "$GRUB_DEFAULT"
+      # Append nomodeset inside the existing quoted value.
+      if echo "$current" | grep -qE "^GRUB_CMDLINE_LINUX_DEFAULT='"; then
+        sudo sed -i "s|^GRUB_CMDLINE_LINUX_DEFAULT='\(.*\)'|GRUB_CMDLINE_LINUX_DEFAULT='\1 nomodeset'|" "$GRUB_DEFAULT"
+      elif echo "$current" | grep -qE '^GRUB_CMDLINE_LINUX_DEFAULT="'; then
+        sudo sed -i 's|^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"|GRUB_CMDLINE_LINUX_DEFAULT="\1 nomodeset"|' "$GRUB_DEFAULT"
+      else
+        local val="${current#GRUB_CMDLINE_LINUX_DEFAULT=}"
+        sudo sed -i "s|^GRUB_CMDLINE_LINUX_DEFAULT=.*|GRUB_CMDLINE_LINUX_DEFAULT=\"${val} nomodeset\"|" "$GRUB_DEFAULT"
+      fi
     fi
   else
     echo 'GRUB_CMDLINE_LINUX_DEFAULT="nomodeset loglevel=3"' | sudo tee -a "$GRUB_DEFAULT" >/dev/null
