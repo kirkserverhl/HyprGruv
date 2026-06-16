@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# post_reboot_setup.sh — run modules 03–05 (install wizard / first Hyprland login)
+# post_reboot_setup.sh — run modules 03–05 (install wizard; invoked from install.sh or manually)
 set -euo pipefail
 IFS=$'\n\t'
 

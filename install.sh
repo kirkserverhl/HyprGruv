@@ -167,7 +167,7 @@ if [[ "${SKIP_SETUP_WIZARD:-0}" != "1" ]]; then
     log_status "Retry: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
   fi
 else
-  log_warning "SKIP_SETUP_WIZARD=1 — wizard deferred to first Hyprland login"
+  log_warning "SKIP_SETUP_WIZARD=1 — wizard skipped (run manually: bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh)"
 fi
 sleep 1
 
@@ -239,7 +239,7 @@ Install complete — reboot skipped (graphical session detected).
 Next steps:
   1. Log out of your current session (KDE / etc.)
   2. At SDDM, select the Hyprland session
-  3. If the wizard did not run, use:
+  3. Hyprland will not auto-open a setup terminal. If anything was skipped:
        FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 Force reboot now:  FORCE_REBOOT=1 ./install.sh

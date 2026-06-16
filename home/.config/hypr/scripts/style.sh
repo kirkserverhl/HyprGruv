@@ -1,16 +1,14 @@
 #!/bin/bash
-# =============================================
 # Universal Styling Library for Hypr Scripts
-# Uses matugen colors + consistent figlet + gum
-# =============================================
+# matugen colors + toilet/lsd-print headers + gum
 
-# Source matugen colors
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+
 if [ -f ~/.cache/matugen/colors.sh ]; then
     source ~/.cache/matugen/colors.sh
 elif [ -f ~/.config/hypr/colors.conf ]; then
     source ~/.config/hypr/colors.conf
 else
-    # Fallback colors
     export COLOR_PRIMARY="#89b4fa"
     export COLOR_SUCCESS="#a6e3a1"
     export COLOR_ERROR="#f38ba8"
@@ -18,14 +16,20 @@ else
     export COLOR_SURFACE="#1e1e2e"
 fi
 
-# Figlet font (you mentioned graffiti style)
-export FIGLET_FONT="graffiti" # You can change to "slant", "big", "doh", etc.
-
-# Common gum styling functions
 print_header() {
     local title="$1"
     clear
-    figlet -f "$FIGLET_FONT" "$title" | gum style --foreground "$COLOR_PRIMARY" --bold
+    if declare -f display_header >/dev/null 2>&1; then
+        display_header "$title"
+    elif command -v toilet >/dev/null 2>&1; then
+        if command -v lsd-print >/dev/null 2>&1; then
+            toilet -f graffiti "$title" | lsd-print
+        else
+            toilet -f graffiti "$title"
+        fi
+    else
+        echo "$title" | gum style --foreground "$COLOR_PRIMARY" --bold
+    fi
     echo ""
 }
 

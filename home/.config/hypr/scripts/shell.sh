@@ -7,7 +7,7 @@ source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
 
-display_header "Shell Setup" | lsd-print
+display_header "Shell Setup"
 sleep 1
 _isInstalledYay() {
 	package="$1"

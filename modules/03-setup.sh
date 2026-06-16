@@ -77,7 +77,7 @@ fi
 # Define the scripts in execution order
 # Note: chaotic.sh (Chaotic-AUR) is now done early inside 01-packages.sh.
 # Modules 04-config and 05-setup_defaults run in the same post_reboot_setup.sh
-# wizard (from install.sh before reboot, or first Hyprland login via autostart).
+# wizard (from install.sh before reboot, or manual post_reboot_setup.sh).
 declare -a ORDERED_SCRIPTS=(
   #"hard_copy.sh|Hard Copy files in root directory"
   # Temporarily commented out (hangs on waypaper in pre-graphical / no-compositor context).

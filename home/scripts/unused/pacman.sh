@@ -7,9 +7,11 @@
 #                 \/     \/      \/     \/     \/ 
 
 
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+
 sleep 1
 clear
-figlet -f smslant "pacman.conf"
+display_header "pacman.conf"
 echo
 echo ":: This script will activate or deactivate additions for your pacman.conf."
 echo 

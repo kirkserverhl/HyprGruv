@@ -10,14 +10,8 @@ RED="\e[38;2;204;36;29m"      	 #cc241d ##
 GRAY="\e[38;2;60;56;54m"      	 #3c3836 ##
 BOLD="\e[1m"                  	 # Bold  ##
 
-##############################################################################################
-# Function to display headers with figlet ####################################################
-##############################################################################################
-
-display_header() {
-    # clear
-    figlet -f ~/.fonts/Graffiti.flf "$1"
-}
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 ##############################################################################################
 # Initialize Editors Choice Script  ##########################################################
 ##############################################################################################
@@ -51,7 +45,7 @@ checklist=()
 
 # Function to install Surfshark VPN
 echo ""
-display_header "Surfshark" | lsd-print
+display_header "Surfshark"
 read -p "  🦈   Do you want to install Surfshark VPN (y/n) ? " install_surfshark
 echo ""
 if [[ "$install_surfshark" =~ ^[Yy]$ ]]; then
@@ -63,7 +57,7 @@ fi
 clear
 
 # Function to install qBittorrent Enhanced
-display_header "qBittorrent" | lsd-print
+display_header "qBittorrent"
 echo ""
 read -p "  👿     Do you want to install qBittorrent (y/n) ? " install_qbittorent
 echo ""
@@ -76,7 +70,7 @@ fi
 clear
 
 # Function to install Disk Utility
-display_header "Disk  Utility" | lsd-print
+display_header "Disk  Utility"
 echo ""
 read -p "  💽   Do you want to install Disk Utility (y/n) ? " install_disk
 echo ""
@@ -89,7 +83,7 @@ fi
 clear
 
 # Function to install Game Package
-display_header "Games" | lsd-print
+display_header "Games"
 echo ""
 read -p "  🕹️   Do you want to install Game Package (y/n) ? " install_game
 echo ""

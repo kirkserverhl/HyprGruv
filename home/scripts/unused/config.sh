@@ -14,10 +14,8 @@ GRAY="\e[38;2;60;56;54m"     	# 3c3836 ##
 BOLD="\e[1m"                 	:# Bold   ##
 clear #####################################
 
-display_header() {
-    # clear
-    figlet -f ~/.local/share/fonts/Graffiti.flf "$1"
-}
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
 ######  Initialize checklist array  ########
 
@@ -31,7 +29,7 @@ mark_skipped() {
 
 ######## SDDM Configuration  #######################
 
-display_header "SDDM" | lsd-print
+display_header "SDDM"
 echo ""
 read -p "   🍬     Would you like to install Sugar-Candy SDDM theme  (y/n)  ? " configure_sddm
 if [[ "$configure_sddm" =~ ^[Yy]$ ]]; then
@@ -48,7 +46,7 @@ clear
 
 ######## Monitor Setup #########################
 
-display_header "Monitors" | lsd-print
+display_header "Monitors"
 echo ""
 read -p "   🖥️    Would you like to configure monitor setup  (y/n)  ? " configure_monitor
 echo ""
@@ -66,7 +64,7 @@ clear
 
 #######  GRUB Theme and Extra Packages ##########
 
-display_header "GRUB" | lsd-print
+display_header "GRUB"
 echo ""
 read -p "  🪱    Would you like to configure GRUB theme & extra packages (y/n)? " configure_grub
 echo ""
@@ -87,7 +85,7 @@ clear
 
 ######  Editors Choice #######################
 
-display_header "Editors Choice" | lsd-print
+display_header "Editors Choice"
 echo ""
 read -p "  🫠    Would you like to install Editors Choice packages  (y/n) ? " editors_choice
 echo ""
@@ -105,11 +103,11 @@ clear
 
 #####  Neovim Configuration #################
 
-display_header "Neovim  Setup" | lsd-print
+display_header "Neovim  Setup"
 echo ""
 echo "     Would you like to configure Neovim (y/n) ? "
 echo ""
-echo "  ( To Close Neovim use:  󰖳 + Q )   " | lsd-print
+echo "  ( To Close Neovim use:  󰖳 + Q )   "
 read -p "   " configure_nvim
 if [[ "$configure_nvim" =~ ^[Yy]$ ]]; then
     if ~/scripts/nvim.sh; then
@@ -125,7 +123,7 @@ clear
 
 #########  Terminal Effects  ################
 
-display_header "Terminal Effects" | lsd-print
+display_header "Terminal Effects"
 echo ""
 read -p "   🌈    Would you like to Beautify your Terminal  (y/n) ?   " terminal_effects
 if [[ "$terminal_effects" =~ ^[Yy]$ ]]; then
@@ -142,7 +140,7 @@ clear
 
 #########  Python Packages  ################
 
-display_header "Python Packages" | lsd-print
+display_header "Python Packages"
 echo ""
 read -p "::  🐍    Would you like to install Python Packages  (y/n) ?   " python_pkgs
 if [[ "$python_pkgs" =~ ^[Yy]$ ]]; then
@@ -159,7 +157,7 @@ clear
 
 ###########  Cleanup  ####################
 
-display_header "Cleanup" | lsd-print
+display_header "Cleanup"
 echo ""
 read -p ":: 🧹    Would you like to perform a system cleanup  (y/n) ? " perform_cleanup
 if [[ "$perform_cleanup" =~ ^[Yy]$ ]]; then
@@ -176,16 +174,16 @@ clear
 
 ###########   Display Checklist Summary  ###############
 
-echo -e "\n  📜    Configuration Summary:"   | lsd-print
+echo -e "\n  📜    Configuration Summary:"  
 for section in "${!checklist[@]}"; do
     echo -e "${checklist[$section]} $section"
 done
-echo -e "\n Configuration Completed Successfully." | lsd-print
+echo -e "\n Configuration Completed Successfully."
 
 ########## Options for reboot, rerun, or ###############
 
 echo -e "  ✔️   Installation is complete.\n"
-echo -e " Choose an option:"                | lsd-print
+echo -e " Choose an option:"               
 echo -e " 1.  🔙  Rerun this script \n"
 echo -e " 2.  🚀   Exit \n"
 read -p "Enter your choice: " choice
@@ -195,17 +193,17 @@ echo -e ""
 
 case $choice in
     1)
-        echo -e"  🔙  Rerunning the script..." | lsd-print
+        echo -e"  🔙  Rerunning the script..."
         exec "$0"  # Reruns the current script
         ;;
 
     2)
-        echo -e "  🚀   Exiting..." | lsd-print
+        echo -e "  🚀   Exiting..."
         echo "off" > ~/config_check.sh
         exit 0
         ;;
     *)
-        echo -e "❌ Invalid choice. Exiting by default." | lsd-print
+        echo -e "❌ Invalid choice. Exiting by default."
         # echo "off" > ~/config_check.sh  # Ensure the file is set to "off" on invalid input as well
         exit 1
         ;;

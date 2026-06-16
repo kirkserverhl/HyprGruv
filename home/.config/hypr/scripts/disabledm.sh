@@ -5,7 +5,7 @@ source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
 clear
-figlet -f smslant "Disable DM"
+display_header "Disable DM"
 echo "Hyprland recommends the start with the tty login."
 echo "You can deactivate the current display manager (if exists)."
 echo ""

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# first_run_setup.sh — launch post-reboot setup wizard on first Hyprland login
+# first_run_setup.sh — optional manual launcher for post_reboot_setup.sh
+# Not started from Hyprland autostart (install.sh runs the wizard before reboot).
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -47,14 +48,14 @@ if [[ "${1:-}" == "--run" ]]; then
   exit $?
 fi
 
-# --- Launcher (called from autostart) ---
+# --- Launcher (manual only: bash first_run_setup.sh) ---
 needs_setup || exit 0
 
 TERM_CMD="$(resolve_terminal)"
 SELF="$HOME/.config/hypr/scripts/first_run_setup.sh"
 
 "$TERM_CMD" \
-  --title "Hyprgruv — First-run Setup" \
+  --title "Hyprgruv — Setup Wizard" \
   -- bash "$SELF" --run &
 
 exit 0

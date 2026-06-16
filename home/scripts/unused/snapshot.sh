@@ -9,9 +9,11 @@
 # by Stephan Raabe (2024) 
 # ----------------------------------------------------- 
 
+source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
+
 sleep 1
 clear
-figlet -f smslant "Snapshot"
+display_header "Snapshot"
 aur_helper="$(cat ~/scripts/aur.sh)"
 
 _isInstalledAUR() {

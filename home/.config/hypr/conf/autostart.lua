@@ -47,8 +47,8 @@ hl.on("hyprland.start", function()
 	-- Workspace monitor setup script
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
 
-	-- First-run post-install wizard (modules 03–05 after pre-reboot install + reboot)
-	hl.exec_cmd("sleep 2 && " .. SCRIPTS .. "/first_run_setup.sh &")
+	-- Post-install wizard runs from install.sh (before reboot). No auto kitty popup on login.
+	-- Manual re-run: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 	-- Auto-mount
 	hl.exec_cmd("udiskie")

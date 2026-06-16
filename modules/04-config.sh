@@ -186,5 +186,35 @@ else
 fi
 sleep 0.5; clear
 
+# ------------------------- SSH Key --------------------------
+echo ""; display_header "SSH Key"; sleep 0.5
+if _confirm "  🔑   Set up SSH key for GitHub?"; then
+  _say "Starting SSH key setup…"
+  script="$SCRIPTS_DIR/ssh_key.sh"
+  if [[ -f "$script" ]]; then
+    run_step "$script" "SSH Key Setup"
+  else
+    log_error "Script not found: $script"; exit 1
+  fi
+else
+  _say "SSH key setup skipped."
+fi
+sleep 0.5; clear
+
+# -------------------------- Zram ----------------------------
+echo ""; display_header "Zram"; sleep 0.5
+if _confirm "  💾   Set up zram compressed swap?"; then
+  _say "Starting zram setup…"
+  script="$SCRIPTS_DIR/zram.sh"
+  if [[ -f "$script" ]]; then
+    run_step "$script" "Zram Setup" || log_warning "Zram setup finished with warnings"
+  else
+    log_error "Script not found: $script"; exit 1
+  fi
+else
+  _say "Zram setup skipped."
+fi
+sleep 0.5; clear
+
 mark_completed "Interactive config"
 
