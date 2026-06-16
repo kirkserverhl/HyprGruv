@@ -194,6 +194,7 @@ OFFICIAL_PKGS=(
 
     # --- Terminals ---
     kitty
+    tmux
 
     # --- File manager (Thunar, no Dolphin/KDE) ---
     thunar
@@ -247,13 +248,20 @@ AUR_PKGS=(
     # === Browsers / Terminals ===
     brave-bin
     google-chrome
-    ghostty-bin
+    ghostty-git
+    ghostty-shell-integration-git
+    ghostty-terminfo-git
+
+    # === tmux plugins / tooling ===
+    tmux-continuum-git
+    tmux-fingers
+    tmux-language-server
+    tmux-resurrect-git
+    tmux-tad
+    tmuxai
 
     hyprshot
     aylurs-gtk-shell-git # Aylur's Gtk Shell) — widgets, sidebars, bars, etc.
-
-    pacseek
-    pacseek-bin
 
     # === Additional tools (user requested, AUR) ===
     displaylink

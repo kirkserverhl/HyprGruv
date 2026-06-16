@@ -171,5 +171,20 @@ else
 fi
 sleep 0.5; clear
 
+# ------------------------ Pacseek ---------------------------
+echo ""; display_header "Pacseek"; sleep 0.5
+if _confirm "  📦   Install Pacseek (AUR package browser)?"; then
+  _say "Starting Pacseek setup…"
+  script="$SCRIPTS_DIR/pacseek.sh"
+  if [[ -f "$script" ]]; then
+    run_step "$script" "Pacseek Setup" || log_warning "Pacseek install failed — you can retry later"
+  else
+    log_error "Script not found: $script"; exit 1
+  fi
+else
+  _say "Pacseek setup skipped."
+fi
+sleep 0.5; clear
+
 mark_completed "Interactive config"
 
