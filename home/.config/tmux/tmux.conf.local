@@ -403,6 +403,18 @@ set -g window-active-style                "bg=#{@thm_bg},fg=#{@thm_fg}"
 
 if-shell '[ -f ~/.config/tmux/generated.conf ]' 'source-file ~/.config/tmux/generated.conf'
 
+# -- matugen status bar (overrides oh-my-tmux theme via #!important) -----------
+# oh-my-tmux applies its own palette after the matugen block above; these win last.
+set -g status-style "bg=#{@thm_bg},fg=#{@thm_fg},none" #!important
+set -g status-left "#[fg=#{@thm_bg},bg=#{@thm_primary},bold] ❐ #S #[fg=#{@thm_primary},bg=#{@thm_surface_variant},none]|#[fg=#{@thm_fg},bg=#{@thm_surface_variant},none] ↑#{?@uptime_y, #{@uptime_y}y,}#{?@uptime_d, #{@uptime_d}d,}#{?@uptime_h, #{@uptime_h}h,}#{?@uptime_m, #{@uptime_m}m,} " #!important
+set -g status-right "#[fg=#{@thm_text_variant},bg=#{@thm_bg},none] #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} #[fg=#{@thm_text_variant},bg=#{@thm_surface_variant},none]| %R #[fg=#{@thm_text_variant},bg=#{@thm_surface_variant},none]| %d %b #[fg=#{@thm_fg},bg=#{@thm_inverse_primary},bold] #{username}#{root} #[fg=#{@thm_bg},bg=#{@thm_primary},bold] #{hostname} " #!important
+setw -g window-status-style "fg=#{@thm_text_variant},bg=#{@thm_bg},none" #!important
+setw -g window-status-format "#[fg=#{@thm_text_variant},bg=#{@thm_bg},none] #I #W#{?#{||:#{window_bell_flag},#{window_zoomed_flag}}, ,}#{?window_bell_flag,!,}#{?window_zoomed_flag,Z,}" #!important
+setw -g window-status-current-style "fg=#{@thm_bg},bg=#{@thm_primary},bold" #!important
+setw -g window-status-current-format "#[fg=#{@thm_bg},bg=#{@thm_primary},bold] #I #W#{?#{||:#{window_bell_flag},#{window_zoomed_flag}}, ,}#{?window_bell_flag,!,}#{?window_zoomed_flag,Z,}" #!important
+set -g pane-border-style "fg=#{@thm_outline},bg=default" #!important
+set -g pane-active-border-style "fg=#{@thm_primary},bg=default" #!important
+
 # increase history size
 #set -g history-limit 10000
 

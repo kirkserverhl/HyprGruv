@@ -1,0 +1,28 @@
+{
+    "checksum": "416c858cd461f6335d8731cd704e3d13",
+    "wallpaper": "/home/kirk/Pictures/Wallpapers/cat-chess-gate.jpeg",
+    "alpha": "100",
+    "special": {
+        "background": "#0e1122",
+        "foreground": "#c2c3c7",
+        "cursor": "#c2c3c7"
+    },
+    "colors": {
+        "color0": "#0e1122",
+        "color1": "#7F8096",
+        "color2": "#9B96AC",
+        "color3": "#B1B2CB",
+        "color4": "#C0BBC9",
+        "color5": "#CDB9C8",
+        "color6": "#D6CED1",
+        "color7": "#c2c3c7",
+        "color8": "#5e6172",
+        "color9": "#7F8096",
+        "color10": "#9B96AC",
+        "color11": "#B1B2CB",
+        "color12": "#C0BBC9",
+        "color13": "#CDB9C8",
+        "color14": "#D6CED1",
+        "color15": "#c2c3c7"
+    }
+}

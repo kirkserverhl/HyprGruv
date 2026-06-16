@@ -3,7 +3,7 @@
 # - Loads the last known wallpaper from the primary cache (or legacy last_wallpaper.txt)
 # - Uses waypaper --wallpaper so that the configured post_command runs (set_wallpaper.sh)
 #   which re-runs the matugen quick-auto + generates assets + updates SDDM etc.
-# - Sets SKIP_PALETTE_CHOOSER=1 so we do NOT pop the interactive gum/kitty palette chooser on every login.
+# - Non-interactive: set_wallpaper.sh auto-applies Dark Standard + source color 1.
 # - Has a direct awww fallback in case the waypaper CLI path has issues.
 #
 # This replaces the plain "waypaper --restore" which only sets the image on the backend
@@ -47,7 +47,7 @@ done
 # Primary path: go through waypaper so post_command (set_wallpaper.sh) is invoked.
 # This ensures matugen is re-applied, assets are (re)generated if needed, SDDM updated, etc.
 echo "[restore_wallpaper] setting via waypaper (will invoke post_command + matugen)"
-SKIP_PALETTE_CHOOSER=1 waypaper --wallpaper "$WP" >>/tmp/restore_wallpaper.log 2>&1 || true
+waypaper --wallpaper "$WP" >>/tmp/restore_wallpaper.log 2>&1 || true
 
 # Direct fallback / belt-and-suspenders: tell awww daemon directly.
 # This guarantees an image actually appears even if waypaper's restore bookkeeping is odd.

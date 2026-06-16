@@ -38,7 +38,7 @@ hl.on("hyprland.start", function()
 
 	-- Restore last wallpaper + re-apply matugen/colors on every login/start.
 	-- Uses our script so we get both the image *and* the full post-processing (matugen etc.)
-	-- without the interactive palette chooser popping on boot.
+	-- with auto matugen (Dark Standard + source color 1); palette.sh is manual only (Ctrl+P).
 	hl.exec_cmd("sleep 1.5 && ~/.config/hypr/scripts/restore_wallpaper.sh &")
 
 	-- Cursor theme

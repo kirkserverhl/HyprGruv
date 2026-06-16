@@ -13,9 +13,7 @@
 
 WALLPAPER="$1"
 if [[ -z "$WALLPAPER" ]]; then
-    # Called from `matugen color hex` (no image). Still do the useful work.
     WALLPAPER="(color source)"
-    echo "[posthook] Running in color-hex mode (no image path)"
 fi
 
 CACHE_DIR="${HOME}/.cache/matugen"
@@ -42,60 +40,103 @@ is_mostly_grayscale() {
 # -----------------------------------------------------------------------------
 # Generate fresh matugen data
 # -----------------------------------------------------------------------------
-if [[ ! -f "$WALLPAPER" ]]; then
-    echo "[posthook] Non-image argument (likely from 'matugen color hex' or palette.sh) — skipping re-generation to avoid errors."
-    echo "[posthook] Theme files were already written by the main matugen invocation."
-    # The css sync at the bottom will still run.
-    echo "Matugen post-hook completed for: $WALLPAPER"
-    exit 0
-fi
-
 MATUGEN_JSON=""
-matugen_args="--mode dark"
+matugen_args=()
 
-if is_mostly_grayscale "$WALLPAPER"; then
-    echo ":: [posthook] Mostly grayscale wallpaper → using neutral dark scheme"
-    matugen_args+=" --source-color \"#0f0f0f\""
+if [[ ! -f "$WALLPAPER" ]]; then
+    echo "[posthook] Color-hex mode — rebuilding JSON cache from current wallpaper + source color 1"
+    WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
+    if [[ -f "$WP_CACHE" ]]; then
+        WALLPAPER=$(cat "$WP_CACHE")
+    fi
 fi
 
-# Capture clean JSON (matugen sometimes prints "ok" or other noise on stdout)
-if command -v matugen >/dev/null 2>&1; then
-    RAW=$(matugen image "$WALLPAPER" $matugen_args --json hex 2>/dev/null || true)
-    # Strip common noise ("ok", empty lines, etc.) then validate
+if [[ -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
+    EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
+    SRC="#a78a9d"
+    if [[ -x "$EXTRACTOR" ]]; then
+        SRC=$("$EXTRACTOR" "$WALLPAPER" 1 2>/dev/null | head -1)
+        [[ -z "$SRC" ]] && SRC="#a78a9d"
+    fi
+
+    if is_mostly_grayscale "$WALLPAPER"; then
+        echo ":: [posthook] Mostly grayscale wallpaper → neutral source"
+        SRC="#0f0f0f"
+    fi
+
+    echo ":: [posthook] Source color 1: $SRC (from $(basename "$WALLPAPER"))"
+    RAW=$(matugen color hex "$SRC" --mode dark --type scheme-tonal-spot --dry-run --json hex 2>/dev/null || true)
+elif command -v matugen >/dev/null 2>&1; then
+    RAW=""
+fi
+
+# Legacy image-only path (if something still calls posthook with a bare image path)
+if [[ -z "$RAW" && -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
+    matugen_args=(--mode dark --type scheme-tonal-spot --source-color-index 0 --dry-run)
+    if is_mostly_grayscale "$WALLPAPER"; then
+        matugen_args=(--mode dark --type scheme-tonal-spot --fallback-color "#0f0f0f" --dry-run)
+    fi
+    RAW=$(matugen image "$WALLPAPER" "${matugen_args[@]}" --json hex 2>/dev/null || true)
+fi
+
+# Strip common noise ("ok", empty lines, etc.) then validate
+CLEAN=""
+if [[ -n "${RAW:-}" ]]; then
     CLEAN=$(printf '%s\n' "$RAW" | sed '/^ok$/d' | sed '/^[[:space:]]*$/d')
-    if echo "$CLEAN" | jq -e '.colors.default' >/dev/null 2>&1; then
+    if echo "$CLEAN" | jq -e '.colors | type == "object"' >/dev/null 2>&1; then
         MATUGEN_JSON="$CLEAN"
-    else
-        # Try python extraction as last resort (same pattern as set_wallpaper.sh)
-        MATUGEN_JSON=$(python3 -c '
-import sys, json
-try:
-    data = json.loads(sys.stdin.read())
-    print(json.dumps(data))
-except Exception:
-    print("")
-' <<< "$CLEAN" 2>/dev/null || true)
     fi
 fi
 
 # -----------------------------------------------------------------------------
 # Write current.json (only if valid)
 # -----------------------------------------------------------------------------
-if [[ -n "$MATUGEN_JSON" ]] && echo "$MATUGEN_JSON" | jq -e '.colors.default' >/dev/null 2>&1; then
+if [[ -n "$MATUGEN_JSON" ]] && echo "$MATUGEN_JSON" | jq -e '.colors | type == "object"' >/dev/null 2>&1; then
     echo "$MATUGEN_JSON" > "$JSON_CACHE"
     echo ":: [posthook] Wrote clean JSON cache"
+    # Snapshot JSON per wallpaper for offline reuse / debugging
+    if [[ -f "$WALLPAPER" ]]; then
+        SNAP_DIR="${CACHE_DIR}/snapshots"
+        mkdir -p "$SNAP_DIR"
+        wp_base=$(basename "$WALLPAPER" | tr '/ ' '__')
+        cp -f "$JSON_CACHE" "${SNAP_DIR}/${wp_base}.json" 2>/dev/null || true
+    fi
 else
     echo ":: [posthook] WARNING: matugen did not return usable JSON for $WALLPAPER" >&2
+fi
+
+JSON_TMP=""
+if [[ -f "$JSON_CACHE" ]] && [[ -s "$JSON_CACHE" ]]; then
+    JSON_TMP="$JSON_CACHE"
 fi
 
 # -----------------------------------------------------------------------------
 # Write colors.sh — directly sourceable, used by gum / scripts / etc.
 # -----------------------------------------------------------------------------
-if [[ -n "$MATUGEN_JSON" ]]; then
-    python3 - "$MATUGEN_JSON" > "$SHELL_CACHE" <<'PYEOF'
+if [[ -n "$JSON_TMP" ]]; then
+    python3 - "$JSON_TMP" > "$SHELL_CACHE" <<'PYEOF'
 import sys, json
-data = json.loads(sys.stdin.read())
-colors = data.get("colors", {}).get("default", {})
+
+def normalize_colors(data):
+    raw = data.get("colors", {})
+    if isinstance(raw.get("default"), dict) and any(
+        isinstance(v, dict) and "hex" in v for v in raw["default"].values()
+    ):
+        return raw["default"]
+    out = {}
+    for name, val in raw.items():
+        if not isinstance(val, dict):
+            continue
+        if "hex" in val:
+            out[name] = val
+        elif isinstance(val.get("default"), dict):
+            color = val["default"].get("color") or val["default"].get("hex")
+            if color:
+                out[name] = {"hex": color}
+    return out
+
+data = json.loads(open(sys.argv[1], encoding="utf-8").read())
+colors = normalize_colors(data)
 
 lines = [
     "#!/usr/bin/env bash",
@@ -108,7 +149,6 @@ lines = [
 for name, val in sorted(colors.items()):
     if isinstance(val, dict) and "hex" in val:
         hexval = val["hex"]
-        # Normalize to uppercase var name with underscores
         var = "COLOR_" + name.upper().replace("-", "_")
         lines.append(f'export {var}="{hexval}"')
 
@@ -130,15 +170,36 @@ PYEOF
 fi
 
 # -----------------------------------------------------------------------------
-# Guarantee Starship matugen-rainbow.toml is always fresh
-# (defensive layer in case the normal template registration has issues)
+# Starship fallback — only if the matugen template did not write the file.
+# The main [templates.starship_rainbow] entry is the source of truth; this
+# defensive copy used to overwrite it and could desync colors from kitty/gtk.
 # -----------------------------------------------------------------------------
-if [ -n "$MATUGEN_JSON" ]; then
-    python3 - "$MATUGEN_JSON" > /tmp/starship-render.toml <<'PYEOF'
+STARSHIP_OUT="$HOME/.config/starship/matugen-rainbow.toml"
+if [ -n "$JSON_TMP" ] && { [ ! -s "$STARSHIP_OUT" ] || [ ! -s "$JSON_CACHE" ]; }; then
+    python3 - "$JSON_TMP" > /tmp/starship-render.toml <<'PYEOF'
 import sys, json, os
 
-data = json.loads(sys.stdin.read())
-colors = data.get("colors", {}).get("default", {})
+data = json.loads(open(sys.argv[1], encoding="utf-8").read())
+
+def normalize_colors(data):
+    raw = data.get("colors", {})
+    if isinstance(raw.get("default"), dict) and any(
+        isinstance(v, dict) and "hex" in v for v in raw["default"].values()
+    ):
+        return raw["default"]
+    out = {}
+    for name, val in raw.items():
+        if not isinstance(val, dict):
+            continue
+        if "hex" in val:
+            out[name] = val
+        elif isinstance(val.get("default"), dict):
+            color = val["default"].get("color") or val["default"].get("hex")
+            if color:
+                out[name] = {"hex": color}
+    return out
+
+colors = normalize_colors(data)
 
 def getc(name, fallback="#888888"):
     c = colors.get(name, {})
@@ -364,15 +425,18 @@ PYEOF
 
     if [ -s /tmp/starship-render.toml ]; then
         mkdir -p ~/.config/starship
-        cp /tmp/starship-render.toml ~/.config/starship/matugen-rainbow.toml
-        echo ":: [posthook] Updated ~/.config/starship/matugen-rainbow.toml defensively"
+        cp /tmp/starship-render.toml "$STARSHIP_OUT"
+        echo ":: [posthook] Wrote fallback ~/.config/starship/matugen-rainbow.toml"
     fi
+elif [ -s "$STARSHIP_OUT" ]; then
+    touch "$STARSHIP_OUT" 2>/dev/null || true
+    echo ":: [posthook] Starship config left to matugen template ($STARSHIP_OUT)"
 fi
 
 # Keep the legacy root waybar/colors.css in sync with the matugen one.
 # The only time we intentionally skip this is the explicit "disable matugen entirely" marker.
 if [ -f ~/.cache/matugen/no-matugen-this-time ]; then
-    echo "[posthook] Skipping waybar colors sync (no-matugen-this-time marker)"
+    echo "[posthook] Skipping waybar colors sync (no-matugen-this-time marker — run palette.sh or change wallpaper to clear)"
 else
     if [ -f ~/.config/waybar/colors/matugen.css ]; then
         cp -f ~/.config/waybar/colors/matugen.css ~/.config/waybar/colors.css 2>/dev/null || true

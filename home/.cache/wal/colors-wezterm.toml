@@ -1,29 +1,29 @@
 [colors]
 ansi = [
-    "#160909",
-    "#4D4D4D",
-    "#605F60",
-    "#6E6E6E",
-    "#8E8E8E",
-    "#A09FA0",
-    "#AEAEAE",
-    "#c4c1c1",
+    "#111119",
+    "#625D69",
+    "#5E6176",
+    "#63677C",
+    "#6E7288",
+    "#847B84",
+    "#7D8299",
+    "#c3c3c5",
 ]
-background = "#160909"
+background = "#111119"
 brights = [
-    "#6c5959",
-    "#4D4D4D",
-    "#605F60",
-    "#6E6E6E",
-    "#8E8E8E",
-    "#A09FA0",
-    "#AEAEAE",
-    "#c4c1c1",
+    "#5c5c70",
+    "#625D69",
+    "#5E6176",
+    "#63677C",
+    "#6E7288",
+    "#847B84",
+    "#7D8299",
+    "#c3c3c5",
 ]
-cursor_bg = "#c4c1c1"
-cursor_border = "#c4c1c1"
-cursor_fg = "#160909"
-foreground = "#c4c1c1"
-selection_bg = "#8E8E8E"
-selection_fg = "#160909"
+cursor_bg = "#c3c3c5"
+cursor_border = "#c3c3c5"
+cursor_fg = "#111119"
+foreground = "#c3c3c5"
+selection_bg = "#6E7288"
+selection_fg = "#111119"
 

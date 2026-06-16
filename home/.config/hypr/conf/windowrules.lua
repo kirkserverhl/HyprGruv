@@ -107,7 +107,7 @@ hl.window_rule({
     pin = true,
 })
 
--- Color Palette chooser (invoked by set_wallpaper.sh after waypaper selection)
+-- Color Palette chooser (manual via Ctrl+P → palette.sh)
 -- Uses a compact size tuned for the 70c x 24c kitty overrides inside palette.sh
 -- plus explicit title match for precision (the script forces the title via OSC).
 hl.window_rule({

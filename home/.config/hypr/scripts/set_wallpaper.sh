@@ -174,25 +174,13 @@ fi
 echo ":: Running pywal (legacy, being phased out)..."
 wal -q -i "$WALLPAPER" || echo ":: pywal failed (non-fatal)"
 
-echo ":: Applying a good automatic base palette from current wallpaper..."
-# We always apply one solid default first (best source color + tonal-spot).
-# This guarantees the desktop (starship, gtk, terminals, semantic palette, etc.)
-# never ends up in a bad color state.
-#
-# Immediately after that we launch the interactive palette.sh so the user
-# can pick the exact one of the four good palettes (or B&W fallback or
-# transparent waybar variant) they want for this wallpaper.
+echo ":: Applying automatic matugen palette from current wallpaper..."
+# Non-interactive default: Dark Standard (tonal-spot) + source color 1.
+# palette.sh is kept for manual use (Ctrl+P) but is no longer launched here.
+# Waybar colors are managed separately (waybar-theme.sh / theme switcher).
 
 if command -v matugen >/dev/null 2>&1; then
-    EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
-    AUTO_SRC="#a78a9d"
-    if [[ -x "$EXTRACTOR" ]]; then
-        AUTO_SRC=$("$EXTRACTOR" "$WALLPAPER" 1 2>/dev/null | head -1)
-        [[ -z "$AUTO_SRC" ]] && AUTO_SRC="#a78a9d"
-    fi
-
-    echo ":: Quick auto matugen with source $AUTO_SRC (tonal-spot)..."
-    matugen color hex "$AUTO_SRC" --mode dark --type scheme-tonal-spot 2>&1 | tail -3
+    "$HOME/.config/hypr/scripts/apply-matugen-auto.sh" "$WALLPAPER" || true
 
     # Respect persistent "I want transparent waybar on top of whatever palette" choice
     if [ -f "$HOME/.cache/matugen/waybar-transparent-this-time" ]; then
@@ -236,36 +224,9 @@ else
     true
 fi
 
+# palette.sh is available on demand via Ctrl+P — not part of the waypaper post-command flow.
 pkill -SIGUSR2 waybar 2>/dev/null || true
 
-# Remove any truly ancient single-purpose markers we no longer support.
-rm -f "$HOME/.cache/matugen/waybar-dark-text" \
-      "$HOME/.cache/matugen/waybar-light-text" 2>/dev/null || true
-
-
-# ------------------- Launch interactive palette chooser -------------------
-# After the fast auto base palette is applied (so the system is never left
-# without good colors), we bring up palette.sh.
-#
-# This is the part the user wants: after picking a wallpaper in waypaper,
-# they immediately get the nice floating menu to choose from the four good
-# source colors (the "four matugen outputs"), B&W white/grey/black or
-# black/white/grey fallbacks, or "full palette + transparent waybar".
-#
-# On login/restore we set SKIP_PALETTE_CHOOSER=1 so we re-apply matugen + assets
-# without popping an interactive chooser every time you log in.
-
-if [ "${SKIP_PALETTE_CHOOSER:-0}" != "1" ]; then
-    echo ":: Bringing up palette chooser for final selection on this wallpaper..."
-    ~/.config/hypr/scripts/palette.sh || true
-else
-    echo ":: Skipping interactive palette chooser (restore/login mode)"
-fi
-
-# One last reload in case the user chose a transparent variant inside palette.sh
-pkill -SIGUSR2 waybar 2>/dev/null || true
-
-# Clean up any remaining legacy markers
 rm -f "$HOME/.cache/matugen/waybar-dark-text" \
       "$HOME/.cache/matugen/waybar-light-text" \
       "$HOME/.cache/matugen/waybar-transparent-bright" \

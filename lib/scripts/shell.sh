@@ -88,7 +88,7 @@ ensure_zsh_ready() {
 set_login_shell() {
     local target="$1"
     local user="${USER:-$(whoami)}"
-    local current attempt
+    local current
 
     current="$(getent passwd "$user" | cut -d: -f7)"
     if [[ "$current" == "$target" ]]; then
@@ -98,28 +98,25 @@ set_login_shell() {
 
     log_status "Changing login shell: $current → $target"
     echo "You may be prompted for your account password (not root)."
+    # gum leaves the TTY in raw mode; restore it so chsh can read the password
+    stty sane 2>/dev/null || true
     sleep 0.5
 
-    attempt=0
-    while (( attempt < 5 )); do
-        if chsh -s "$target" 2>/dev/null; then
-            break
+    if chsh -s "$target"; then
+        current="$(getent passwd "$user" | cut -d: -f7)"
+        if [[ "$current" == "$target" ]]; then
+            log_success "Login shell updated to $target"
+            log_status "Open a new terminal or log out/in for the change to apply"
+            return 0
         fi
-        attempt=$((attempt + 1))
-        log_warning "chsh failed (attempt $attempt/5) — re-enter your password"
-        sleep 1
-    done
-
-    current="$(getent passwd "$user" | cut -d: -f7)"
-    if [[ "$current" == "$target" ]]; then
-        log_success "Login shell updated to $target"
-        log_status "Open a new terminal or log out/in for the change to apply"
-        return 0
+        log_warning "chsh reported success but login shell is still $current"
+    else
+        log_warning "chsh failed"
     fi
 
-    log_warning "chsh did not update /etc/passwd (still: $current)"
-    if gum confirm "Try again using sudo chsh?"; then
-        if sudo chsh -s "$target" "$user"; then
+    log_warning "Login shell is still $current"
+    if gum confirm "Try again using sudo?"; then
+        if sudo chsh -s "$target" "$user" || sudo usermod -s "$target" "$user"; then
             current="$(getent passwd "$user" | cut -d: -f7)"
             if [[ "$current" == "$target" ]]; then
                 log_success "Login shell updated via sudo to $target"
@@ -155,20 +152,18 @@ echo "Please select your preferred shell"
 sleep 0.5
 
 shell="$(gum choose "zsh" "bash" "CANCEL")"
+selected_shell_path=""
 
 # ------------------------------------------------------------
 # Activate bash
 # ------------------------------------------------------------
 if [[ "$shell" == "bash" ]]; then
     ensure_cmd bash "Installing bash…" bash
-    bash_path="$(resolve_shell_path bash)" || {
+    selected_shell_path="$(resolve_shell_path bash)" || {
         log_error "bash binary not found"
         exit 1
     }
-    ensure_shell_allowed "$bash_path"
-    set_login_shell "$bash_path"
-    gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
-    exit 0
+    ensure_shell_allowed "$selected_shell_path"
 fi
 
 # ------------------------------------------------------------
@@ -176,12 +171,10 @@ fi
 # ------------------------------------------------------------
 if [[ "$shell" == "zsh" ]]; then
     ensure_zsh_ready || exit 1
-    zsh_path="$(resolve_shell_path zsh)" || {
+    selected_shell_path="$(resolve_shell_path zsh)" || {
         log_error "Could not resolve zsh path after install"
         exit 1
     }
-
-    set_login_shell "$zsh_path" || exit 1
 
     # Oh My Zsh plugins (only if Oh My Zsh is installed)
     ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
@@ -219,13 +212,22 @@ if [[ "$shell" == "zsh" ]]; then
         log_status "Oh My Zsh not detected (~/.oh-my-zsh). Skipping plugin installs."
         echo "To install it later:  sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
     fi
-
-    gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
-    exit 0
 fi
 
 # ------------------------------------------------------------
 # Cancel
 # ------------------------------------------------------------
-echo "Changing shell canceled."
+if [[ "$shell" == "CANCEL" || -z "$selected_shell_path" ]]; then
+    echo "Changing shell canceled."
+    exit 0
+fi
+
+# ------------------------------------------------------------
+# Change login shell last (after gum + plugin setup; needs a sane TTY)
+# ------------------------------------------------------------
+echo ""
+log_status "Applying login shell change…"
+set_login_shell "$selected_shell_path" || exit 1
+
+gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
 exit 0

@@ -28,13 +28,9 @@ if [[ ! -f "$CURRENT_WALLPAPER" ]]; then
     exit 1
 fi
 
-# Update the wallpaper using waypaper (this will run post_command which does matugen + palette chooser)
+# Update the wallpaper using waypaper (post_command runs set_wallpaper.sh → auto matugen)
 echo "Setting wallpaper to: $CURRENT_WALLPAPER" >>"$LOG_FILE"
-SKIP_PALETTE_CHOOSER=0 waypaper --wallpaper "$CURRENT_WALLPAPER" >>"$LOG_FILE" 2>&1 || true
-
-# If you want a non-interactive re-apply (matugen only, no palette popup), use:
-# SKIP_PALETTE_CHOOSER=1 waypaper --wallpaper "$CURRENT_WALLPAPER" ... 
-# or just call: ~/.config/hypr/scripts/restore_wallpaper.sh
+waypaper --wallpaper "$CURRENT_WALLPAPER" >>"$LOG_FILE" 2>&1 || true
 
 # If you use pywal, you can regenerate the colorscheme as well
 # Uncomment the following line if you want to use pywal

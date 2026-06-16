@@ -154,21 +154,18 @@ fi
 # If you really want a symlink, set LINK_TO somewhere valid, e.g.:
 # ln -sfn "$HOME/.config/pacseek/config.toml" "$HOME/.config/pacseek/pacseek"
 
-# 3) starship.toml — point to your preferred theme file
+# 3) starship.toml — matugen rainbow theme (updated by matugen on wallpaper change)
 mkdir -p "$HOME/.config/starship"
-if [[ -f "$HOME/.config/starship/chevron.toml" ]]; then
-  ln -sfn "$HOME/.config/starship/chevron.toml" "$HOME/.config/starship.toml"
-  log_status "Linked: ~/.config/starship.toml -> ~/.config/starship/chevron.toml"
+STARSHIP_THEME="matugen-rainbow.toml"
+if [[ -f "$HOME/.config/starship/$STARSHIP_THEME" ]]; then
+  ln -sfn "$HOME/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship.toml"
+  log_status "Linked: ~/.config/starship.toml -> ~/.config/starship/$STARSHIP_THEME"
+elif [[ -f "$REPO_DIR/$PKG_DIR/.config/starship/$STARSHIP_THEME" ]]; then
+  cp -a "$REPO_DIR/$PKG_DIR/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship/$STARSHIP_THEME"
+  ln -sfn "$HOME/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship.toml"
+  log_status "Installed and linked starship theme: $STARSHIP_THEME"
 else
-  # If your theme file lives in the repo, fallback copy:
-  if [[ -f "$REPO_DIR/$PKG_DIR/.config/starship/chevron.toml" ]]; then
-    mkdir -p "$HOME/.config/starship"
-    cp -a "$REPO_DIR/$PKG_DIR/.config/starship/chevron.toml" "$HOME/.config/starship/chevron.toml"
-    ln -sfn "$HOME/.config/starship/chevron.toml" "$HOME/.config/starship.toml"
-    log_status "Installed and linked starship theme"
-  else
-    log_error "starship theme chevron.toml not found in $HOME or repo; skip linking"
-  fi
+  log_error "starship theme $STARSHIP_THEME not found in $HOME or repo; skip linking"
 fi
 
 log_success "Configuration files applied"

@@ -20,115 +20,59 @@ block_postfix = "*>"
 [image]
 command = "awww"
 arguments = ["img", "--transition-type", "center", "--transition-duration", "1"]
-set = true
+set = false
 
 # -----------------------------------------------------------------------------
 # Templates
 # -----------------------------------------------------------------------------
 
-[templates.gtk3]
-input_path = "~/.config/matugen/templates/gtk-colors.css"
-output_path = "~/.config/gtk-3.0/colors.css"
-post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
-
-[templates.gtk4]
-input_path = "~/.config/matugen/templates/gtk-colors.css"
-output_path = "~/.config/gtk-4.0/colors.css"
+# -----------------------------------------------------------------------------
+# Templates — priority first (most visible on wallpaper change):
+#   kitty → hyprland → starship → waybar → terminal_sequences
+# Remaining templates follow (parallel export; order still prefers UI-first).
+# -----------------------------------------------------------------------------
 
 [templates.kitty]
 input_path = "~/.config/matugen/templates/kitty-colors.conf"
 output_path = "~/.config/kitty/colors.conf"
-post_hook = "kill -SIGUSR1 $(pidof kitty 2>/dev/null) 2>/dev/null || true"  # Kitty official reload signal
+post_hook = "true"
 
-[templates.ghostty]
-input_path = "~/.config/matugen/templates/ghostty-colors.conf"
-output_path = "~/.config/ghostty/colors/matugen.conf"
-# Ghostty has no reliable external reload signal from CLI in current versions.
-# Press ctrl+shift+, inside Ghostty (or bind a global hotkey) to reload after theme changes.
-post_hook = "notify-send -a matugen 'Ghostty' 'Theme updated — reload with ctrl+shift+,' 2>/dev/null || true"
-
-[templates.waybar]
-input_path = "~/.config/matugen/templates/colors.css"
-output_path = "~/.config/waybar/colors/matugen.css"
-post_hook = "pkill -SIGUSR2 waybar 2>/dev/null || true"  # waybar reloads on SIGUSR2
-
-[templates.pywalfox]
-input_path = "~/.config/matugen/templates/pywalfox-colors.json"
-output_path = "~/.cache/wal/colors.json"
-post_hook = "pywalfox update"
-
-[templates.rofi]
-input_path = "~/.config/matugen/templates/rofi-colors.rasi"
-output_path = "~/.config/rofi/colors.rasi"
-
-[templates.fuzzel]
-input_path = "~/.config/matugen/templates/fuzzel.ini"
-output_path = "~/.config/fuzzel/colors.ini"
-
-[templates.hypremoji]
-input_path = "~/.config/matugen/templates/hypremoji.css"
-output_path = "~/.config/hypremoji/matugen.css"
-
-[templates.chrome-user]
-input_path = "~/.config/matugen/templates/chrome.user.css"
-output_path = "~/.config/chrome/matugen-theme.user.css"
-
-[templates.wlogout]
-input_path = "~/.config/matugen/templates/colors.css"
-output_path = "~/.config/wlogout/colors.css"
-
-[templates.pavucontrol]
-input_path = "~/.config/matugen/templates/pavucontrol.css"
-output_path = "~/.config/pavucontrol/pavucontrol.css"
 
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.conf"
 output_path = "~/.config/hypr/colors/custom/matugen.conf"
-post_hook = "hyprctl reload"
+post_hook = "true"  # hyprctl reload deferred to apply-matugen-auto.sh
 
 # Dedicated colors for hyprlock (clean separation from main Hyprland colors)
-[templates.hyprlock]
-input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
-output_path = "~/.config/hypr/hyprlock/colors/matugen.conf"
-# No post_hook — hyprlock isn't usually running when you change wallpapers
 
-[templates.dunst]
-input_path = "~/.config/matugen/templates/dunst.conf"
-output_path = "~/.config/dunst/dunstrc"
-post_hook = 'killall dunst 2>/dev/null; dunst &'
-
-[templates.yazi]
-input_path = "~/.config/matugen/templates/yazi-theme.toml"
-output_path = "~/.config/yazi/theme.toml"
-
-# Neovim (Material You via mini.base16)
-[templates.neovim]
-input_path = "~/.config/matugen/templates/neovim-mini.lua"
-output_path = "~/.config/nvim/lua/matugen-theme.lua"
-post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
-
-# Starship prompt - rainbow powerline structure using matugen colors
 [templates.starship_rainbow]
 input_path = "~/.config/matugen/templates/starship-rainbow.toml"
 output_path = "~/.config/starship/matugen-rainbow.toml"
-post_hook = 'echo "[matugen] starship-rainbow template processed for $(basename "{{image}}")" >> ~/.cache/matugen.log'
+post_hook = 'touch ~/.config/starship/matugen-rainbow.toml 2>/dev/null; echo "[matugen] starship-rainbow template processed for $(basename "{{image}}")" >> ~/.cache/matugen.log'
 
 # Terminal OSC color sequences (applied in .zshrc on new shells)
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/waybar/colors/matugen.css"
+post_hook = "true"  # reloaded in apply-matugen-auto.sh after all priority files land
+
+
 [templates.terminal_sequences]
 input_path = "~/.config/matugen/templates/terminal-sequences"
 output_path = "~/.config/terminal-sequences"
 post_hook = '''
-    # Push OSC palette to already-open terminal emulators (Linux PTYs)
-    if [ -f "$HOME/.config/terminal-sequences" ]; then
-        tee /dev/pts/[0-9]* < "$HOME/.config/terminal-sequences" >/dev/null 2>&1 || true
-    fi
-    notify-send "Matugen" "Terminal colors updated" 2>/dev/null || true
+    # OSC for non-kitty shells only (.zshrc). Kitty reload runs once in set_wallpaper.sh
+    # after starship + kitty files are both written (avoids kitty updating before starship).
+    true
 '''
 
-[templates.tmux]
-input_path = "~/.config/matugen/templates/tmux-colors.conf"
-output_path = "~/.config/tmux/generated.conf"
-post_hook = "tmux source-file ~/.config/tmux/generated.conf 2>/dev/null || true"
+
+[templates.bat]
+input_path = "~/.config/matugen/templates/bat.tmTheme"
+output_path = "~/.config/bat/themes/Matugen.tmTheme"
+post_hook = 'bat cache --build 2>/dev/null; notify-send "Matugen" "bat theme updated" 2>/dev/null || true'
+
 
 [templates.btop]
 input_path = "~/.config/matugen/templates/btop.theme"
@@ -144,6 +88,108 @@ post_hook = '''
 
     notify-send "Matugen" "btop / bpytop theme updated" 2>/dev/null || true
 '''
+
+
+[templates.cava]
+input_path = "~/.config/matugen/templates/cava-colors.ini"
+output_path = "~/.config/cava/themes/matugen"
+post_hook = "pkill -USR1 cava 2>/dev/null || true"
+
+
+[templates.chrome-user]
+input_path = "~/.config/matugen/templates/chrome.user.css"
+output_path = "~/.config/chrome/matugen-theme.user.css"
+
+
+[templates.dunst]
+input_path = "~/.config/matugen/templates/dunst.conf"
+output_path = "~/.config/dunst/dunstrc"
+post_hook = 'killall dunst 2>/dev/null; dunst &'
+
+
+[templates.firefox]
+input_path = "~/.config/matugen/templates/firefox-colors.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/userChrome.css"
+# post_hook disabled — too aggressive. Reload Firefox manually or use its devtools.
+
+# Firefox website theming (userContent.css imports these)
+
+[templates.firefox_github]
+input_path = "~/.config/matugen/websites/github.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/github.css"
+
+
+[templates.firefox_website_colors]
+input_path = "~/.config/matugen/templates/firefox-colors.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/colors.css"
+
+
+[templates.firefox_youtube]
+input_path = "~/.config/matugen/websites/youtube.css"
+output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/youtube.css"
+
+
+[templates.fuzzel]
+input_path = "~/.config/matugen/templates/fuzzel.ini"
+output_path = "~/.config/fuzzel/colors.ini"
+
+
+[templates.ghostty]
+input_path = "~/.config/matugen/templates/ghostty-colors.conf"
+output_path = "~/.config/ghostty/colors/matugen.conf"
+# Ghostty has no reliable external reload signal from CLI in current versions.
+# Press ctrl+shift+, inside Ghostty (or bind a global hotkey) to reload after theme changes.
+post_hook = "notify-send -a matugen 'Ghostty' 'Theme updated — reload with ctrl+shift+,' 2>/dev/null || true"
+
+
+[templates.gtk3]
+input_path = "~/.config/matugen/templates/gtk-colors.css"
+output_path = "~/.config/gtk-3.0/colors.css"
+post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
+
+
+[templates.gtk4]
+input_path = "~/.config/matugen/templates/gtk-colors.css"
+output_path = "~/.config/gtk-4.0/colors.css"
+
+
+[templates.hypremoji]
+input_path = "~/.config/matugen/templates/hypremoji.css"
+output_path = "~/.config/hypremoji/matugen.css"
+
+
+[templates.hyprlock]
+input_path = "~/.config/matugen/templates/hyprlock-colors.conf"
+output_path = "~/.config/hypr/hyprlock/colors/matugen.conf"
+# No post_hook — hyprlock isn't usually running when you change wallpapers
+
+
+[templates.kvantum_kvconfig]
+input_path = "~/.config/matugen/templates/kvantum-colors.kvconfig"
+output_path = "~/.config/Kvantum/matugen/matugen.kvconfig"
+post_hook = 'notify-send "Matugen" "Kvantum theme updated — restart Qt apps" 2>/dev/null || true'
+
+
+[templates.kvantum_svg]
+input_path = "~/.config/matugen/templates/kvantum-colors.svg"
+output_path = "~/.config/Kvantum/matugen/matugen.svg"
+
+
+[templates.neovim]
+input_path = "~/.config/matugen/templates/neovim-mini.lua"
+output_path = "~/.config/nvim/lua/matugen-theme.lua"
+post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
+
+# Starship prompt - rainbow powerline structure using matugen colors
+
+[templates.obs]
+input_path = "~/.config/matugen/templates/matugen.obt"
+output_path = "~/.config/obs-studio/themes/matugen.obt"
+post_hook = 'notify-send "Matugen" "OBS theme updated — restart OBS or re-select Matugen in Settings → Appearance" 2>/dev/null || true'
+
+# -----------------------------------------------------------------------------
+# Qt / Kvantum / KDE apps (KWrite, Kate, Dolphin, etc.)
+# -----------------------------------------------------------------------------
 
 [templates.obsidian]
 input_path = "~/.config/matugen/templates/obsidian.css"
@@ -164,70 +210,61 @@ post_hook = '''
     notify-send "Matugen" "Obsidian theme updated" 2>/dev/null || true
 '''
 
-[templates.firefox]
-input_path = "~/.config/matugen/templates/firefox-colors.css"
-output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/userChrome.css"
-# post_hook disabled — too aggressive. Reload Firefox manually or use its devtools.
 
-# Firefox website theming (userContent.css imports these)
-[templates.firefox_website_colors]
-input_path = "~/.config/matugen/templates/firefox-colors.css"
-output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/colors.css"
+[templates.pavucontrol]
+input_path = "~/.config/matugen/templates/pavucontrol.css"
+output_path = "~/.config/pavucontrol/pavucontrol.css"
 
-[templates.firefox_youtube]
-input_path = "~/.config/matugen/websites/youtube.css"
-output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/youtube.css"
 
-[templates.firefox_github]
-input_path = "~/.config/matugen/websites/github.css"
-output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/github.css"
+[templates.pywalfox]
+input_path = "~/.config/matugen/templates/pywalfox-colors.json"
+output_path = "~/.cache/wal/colors.json"
+post_hook = "pywalfox update"
 
-[templates.waypaper]
-input_path = "~/.config/matugen/templates/waypaper-style.css"
-output_path = "~/.config/waypaper/colors/matugen.css"
-# Note: Waypaper may need to be restarted to pick up the new stylesheet
-
-[templates.bat]
-input_path = "~/.config/matugen/templates/bat.tmTheme"
-output_path = "~/.config/bat/themes/Matugen.tmTheme"
-post_hook = 'bat cache --build 2>/dev/null; notify-send "Matugen" "bat theme updated" 2>/dev/null || true'
-
-[templates.cava]
-input_path = "~/.config/matugen/templates/cava-colors.ini"
-output_path = "~/.config/cava/themes/matugen"
-post_hook = "pkill -USR1 cava 2>/dev/null || true"
-
-[templates.obs]
-input_path = "~/.config/matugen/templates/matugen.obt"
-output_path = "~/.config/obs-studio/themes/matugen.obt"
-post_hook = 'notify-send "Matugen" "OBS theme updated — restart OBS or re-select Matugen in Settings → Appearance" 2>/dev/null || true'
-
-# -----------------------------------------------------------------------------
-# Qt / Kvantum / KDE apps (KWrite, Kate, Dolphin, etc.)
-# -----------------------------------------------------------------------------
-[templates.kvantum_kvconfig]
-input_path = "~/.config/matugen/templates/kvantum-colors.kvconfig"
-output_path = "~/.config/Kvantum/matugen/matugen.kvconfig"
-post_hook = 'notify-send "Matugen" "Kvantum theme updated — restart Qt apps" 2>/dev/null || true'
-
-[templates.kvantum_svg]
-input_path = "~/.config/matugen/templates/kvantum-colors.svg"
-output_path = "~/.config/Kvantum/matugen/matugen.svg"
-
-[templates.qt6ct]
-input_path = "~/.config/matugen/templates/qtct-colors.conf"
-output_path = "~/.config/qt6ct/colors/matugen.conf"
-post_hook = 'notify-send "Matugen" "qt6ct colors updated — restart Qt apps" 2>/dev/null || true'
 
 [templates.qt5ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt5ct/colors/matugen.conf"
 post_hook = 'notify-send "Matugen" "qt5ct colors updated — restart Qt apps" 2>/dev/null || true'
 
-# Optional but useful for some KDE apps
-[templates.kde_colors]
-input_path = "~/.config/matugen/templates/archive/Matugen.colors"
-output_path = "~/.local/share/color-schemes/Matugen.colors"
+## Optional but useful for some KDE apps (disabled — template file missing, breaks matugen)
+##[templates.kde_colors]
+##input_path = "~/.config/matugen/templates/archive/Matugen.colors"
+##output_path = "~/.local/share/color-schemes/Matugen.colors"
+
+[templates.qt6ct]
+input_path = "~/.config/matugen/templates/qtct-colors.conf"
+output_path = "~/.config/qt6ct/colors/matugen.conf"
+post_hook = 'notify-send "Matugen" "qt6ct colors updated — restart Qt apps" 2>/dev/null || true'
+
+
+[templates.rofi]
+input_path = "~/.config/matugen/templates/rofi-colors.rasi"
+output_path = "~/.config/rofi/colors.rasi"
+
+
+[templates.tmux]
+input_path = "~/.config/matugen/templates/tmux-colors.conf"
+output_path = "~/.config/tmux/generated.conf"
+post_hook = "tmux source-file ~/.config/tmux/tmux.conf 2>/dev/null || true"
+
+
+[templates.waypaper]
+input_path = "~/.config/matugen/templates/waypaper-style.css"
+output_path = "~/.config/waypaper/colors/matugen.css"
+# Note: Waypaper may need to be restarted to pick up the new stylesheet
+
+
+[templates.wlogout]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/wlogout/colors.css"
+
+
+[templates.yazi]
+input_path = "~/.config/matugen/templates/yazi-theme.toml"
+output_path = "~/.config/yazi/theme.toml"
+
+# Neovim (Material You via mini.base16)
 
 # -----------------------------------------------------------------------------
 # Global post-processing
