@@ -404,11 +404,11 @@ sudo pacman -S --needed --noconfirm \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     media-player-info nm-connection-editor pacutils \
-    overskride \
+    \
     doxygen \
     dust \
     e2fsprogs \
-    ex-vi-compat
+    ex-vi-compat # overskride \
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
