@@ -1,42 +1,39 @@
-/* Minimal standalone theme for tight 2x2 color splotches.
-   Pure tiles, minimal gaps and padding. "Four square court" style.
-   No text, no scrollbar, icons only.
-*/
+/* Color splotch grid — fuzzel-matched matugen colors */
 
 configuration {
     show-icons: true;
+    font:       "Agave Nerd Font Propo 16";
 }
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
 
 window {
     width: 460px;
-    background-color: #0f0f0f;
-    border-radius: 4px;
 }
 
 mainbox {
-    background-color: #0f0f0f;
-    padding: 2px;
+    padding:  4px;
+    children: ["listview"];
 }
 
 listview {
-    display-columns: 2;
+    columns:       2;
     fixed-columns: true;
-    lines: 2;
-    spacing: 2px;
-    padding: 1px;
-    background-color: transparent;
-    scrollbar: false;
+    lines:         2;
+    spacing:       4px;
+    padding:       2px;
+    scrollbar:     false;
 }
 
 element {
-    background-color: transparent;
     padding: 0px;
-    margin: 0px;
-    border: 0;
+    margin:  0px;
+    border:  0px;
 }
 
 element-icon {
-    size: 225px;
+    size:   225px;
     margin: 0px;
 }
 

@@ -53,9 +53,13 @@ hl.layer_rule({
     match = { namespace = "^rofi$" },
     blur = true,
     blur_popups = true,
-    ignore_alpha = 0.08,     -- light blur (higher value = less aggressive blur-through)
+    ignore_alpha = 0.10,     -- match fuzzel: semi-transparent surface + live blur
     order = 50,              -- sits between normal layers and wlogout
 })
+
+-- Same blur strength as fuzzel / waypaper (matches yazi-in-kitty look)
+hl.exec_cmd("hyprctl keyword layerrule 'blurpasses 4, ^rofi$'")
+hl.exec_cmd("hyprctl keyword layerrule 'blursize 8, ^rofi$'")
 
 hl.layer_rule({
     match = { namespace = "^waypaper$" },

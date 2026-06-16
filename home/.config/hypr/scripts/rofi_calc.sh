@@ -1,2 +1,3 @@
-pkill -x rofi 2>/dev/null; rofi -show calc -modi calc -no-show-match -no-sort -replace
-
+#!/bin/bash
+# Calculator launcher — numpad by default, keyboard mode with --classic
+exec "$HOME/.config/hypr/scripts/rofi_calc_pad.sh" "$@"

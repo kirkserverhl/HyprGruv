@@ -1,8 +1,9 @@
+@import "../../shared/base.css";
+
 * {
   font-family:
     "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
     sans-serif;
-  font-size: 18px;
   font-weight: bold;
 }
 

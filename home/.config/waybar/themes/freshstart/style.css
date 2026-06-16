@@ -9,8 +9,8 @@
  * ----------------------------------------------------- 
 */
 
-/* --- Import matugen-waybar colors (rainbow + Material You roles) --- */
-@import "../../colors/matugen-waybar.css";
+/* --- Shared base (waypaper colors, 16px font, spacing) --- */
+@import "../../shared/base.css";
 
 /* ============================================= */
 /*                MAIN WINDOW                    */
@@ -51,7 +51,6 @@ window#waybar {
   font-family:
     "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
     sans-serif;
-  font-size: 18px;
   font-weight: bold;
   border: none;
   border-radius: 0px;

@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodically check hyprgruv repo for updates (laptop deploy target)
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

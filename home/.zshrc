@@ -4,7 +4,7 @@
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
 export PATH="$HOME/.config/hyprgruv/scripts:$PATH"
-export PATH=Z"HOME/scripts:$PATH"
+export PATH="$HOME/scripts:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
 export TERMINAL=kitty
 
@@ -49,6 +49,14 @@ export ZSH="$HOME/.oh-my-zsh"
 # Test
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+
+# =====================================================
+# Hyprgruv deployment (desktop → git → laptop)
+# =====================================================
+alias hgpkg='bash ~/.hyprgruv/sync-packages.sh'
+alias hgadd='bash ~/.hyprgruv/sync-packages.sh add'
+alias hgdeploy='bash ~/.hyprgruv/lib/scripts/repo-sync-deploy.sh --full'
+alias hgupdates='bash ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt'
 
 # =====================================================
 # Aliases
@@ -136,6 +144,10 @@ alias hyprerror='hyprctl configerrors'
 
 # Unlock Faillock
 alias unlock='~/.config/hypr/scripts/unlockroot.sh'
+alias fail='faillock --reset'
+alias cleanup='~/.hyprgruv/lib/scripts/cleanup.sh'
+alias doom='~/scripts/doom.sh'
+alias updates='~/.config/hypr/scripts/installupdates.sh'
 
 # =====================================================
 # Functions

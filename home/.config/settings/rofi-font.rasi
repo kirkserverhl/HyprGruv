@@ -1,4 +1,4 @@
 /* Single source of truth for Rofi font (managed by apply-fonts.sh) */
 configuration {
-    font: "Agave Nerd Font Propo 11";
+    font: "Agave Nerd Font Propo 16";
 }

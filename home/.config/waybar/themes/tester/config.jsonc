@@ -1,0 +1,17 @@
+/*
+ * tester theme — minimal styling shell for the shared layout.
+ * Edit shared/layout.jsonc to change module arrangement for all themes using it.
+ */
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 5,
+  "margin-bottom": 0,
+  "margin-left": 14,
+  "margin-right": 14,
+
+  "height": 32,
+  "reload_style_on_change": true,
+
+  "include": ["~/.config/waybar/shared/layout.jsonc"]
+}

@@ -26,6 +26,7 @@ fi
 # Show Rofi menu
 chosen=$(printf '%s\n' "${configs[@]}" | rofi -dmenu \
     -i \
+    -config ~/.config/rofi/config-compact.rasi \
     -p "Window Layout" \
     -mesg "Select window rules / formatting to apply" \
     -theme-str 'window {width: 520px;}' )

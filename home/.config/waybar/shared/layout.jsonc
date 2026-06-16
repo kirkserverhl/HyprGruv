@@ -1,0 +1,34 @@
+/*
+ * Canonical Waybar module layout.
+ *
+ * Themes include this file and only override bar chrome (height, margins, etc.)
+ * and style.css. Module definitions live in shared/*.json; arrangement lives here.
+ *
+ * Example theme config.jsonc:
+ *   {
+ *     "layer": "top",
+ *     "position": "top",
+ *     "height": 42,
+ *     "reload_style_on_change": true,
+ *     "include": ["~/.config/waybar/shared/layout.jsonc"]
+ *   }
+ */
+{
+  "include": [
+    "~/.config/waybar/shared/workspaces.json",
+    "~/.config/waybar/shared/dunst.json",
+    "~/.config/waybar/shared/apps.json",
+    "~/.config/waybar/shared/settings.json",
+    "~/.config/waybar/shared/soundsettings.json",
+    "~/.config/waybar/shared/updates.json",
+    "~/.config/waybar/shared/cpu_info.json",
+    "~/.config/waybar/shared/power_settings.json",
+    "~/.config/waybar/shared/clock.json"
+  ],
+
+  "spacing": 6,
+
+  "modules-left": ["group/apps", "group/settings", "group/sound", "custom/media"],
+  "modules-center": ["hyprland/workspaces", "custom/special", "custom/notification"],
+  "modules-right": ["group/clock", "custom/updates", "group/cpu-info", "group/power"]
+}

@@ -1,184 +1,81 @@
-/*****----- Configuration -----*****/
+/* Colorscheme wallpaper picker — fuzzel-matched grid */
+
 configuration {
-    show-icons:                 true;
-    font:                       "sans-serif 11";
+    show-icons: true;
 }
 
-/*****----- Global Properties -----*****/
-/* Use live matugen Material You colors (generated to ~/.config/rofi/colors.rasi) */
-@import "~/.config/rofi/colors.rasi"
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
 
-/* Map Material 3 tokens to the names this theme expects (minimal visual change) */
-* {
-    bg0:  @surface-container-lowest;
-    bg1:  @surface-container-low;
-    bg2:  @surface-container;
-    bg3:  @surface-container-high;
-    bg4:  @surface-container-highest;
-
-    text: @on-surface;
-    blue: @primary;                 /* accent/selection highlight */
-
-    grey0: @outline;
-    grey1: @outline-variant;
-    grey2: @on-surface-variant;
-}
-
-/*****----- Main Window -----*****/
 window {
-    transparency:                "real";
-    location:                    center;
-    anchor:                      center;
-    fullscreen:                  false;
-    width:                       58%;
-    height:                      76%;        /* give enough vertical room for input + 3 full rows of cards */
-    x-offset:                    0px;
-    y-offset:                    0px;
-    enabled:                     true;
-    margin:                      0px;
-    padding:                     0px;        /* minimal */
-    border:                      1px solid;
-    border-radius:               14px;
-    border-color:                @bg2;
-    background-color:            @bg0;
-    cursor:                      "default";
+    width:    58%;
+    height:   76%;
+    location: center;
+    anchor:   center;
 }
 
-/*****----- Main Box -----*****/
 mainbox {
-    enabled:                     true;
-    spacing:                     4px;        /* minimal gap */
-    margin:                      0px;
-    padding:                     6px 8px 8px 8px;   /* very reduced */
-    border:                      0px;
-    border-radius:               0px;
-    border-color:                @blue;
-    background-color:            transparent;
-    children:                    [ "inputbar", "listview" ];
+    spacing:  4px;
+    padding:  6px 8px 8px 8px;
+    children: ["inputbar", "listview"];
 }
 
-/*****----- Inputbar -----*****/
 inputbar {
-    enabled:                     true;
-    spacing:                     4px;
-    margin:                      0px;
-    padding:                     4px 8px;    /* very compact search bar */
-    border:                      0px;
-    border-radius:               6px;
-    border-color:                @blue;
-    background-color:            @bg1;
-    text-color:                  @text;
-    children:                    [ "prompt", "entry" ];
+    padding:  4px 8px;
+    children: ["prompt", "entry"];
 }
 
 prompt {
-    enabled:                     true;
-    padding:                     0px;
-    background-color:            transparent;
-    text-color:                  @blue;
+    text-color: @prompt-color;
 }
 
 entry {
-    enabled:                     true;
-    background-color:            transparent;
-    text-color:                  @text;
-    cursor:                      text;
-    placeholder:                 "Search wallpapers...";
-    placeholder-color:           @grey1;
+    placeholder: "Search wallpapers...";
 }
 
-/*****----- Listview -----*****/
 listview {
-    enabled:                     true;
-    columns:                     4;          /* 3 rows x 4 columns scrolling grid */
-    lines:                       3;
-    cycle:                       true;
-    dynamic:                     false;    /* important for stable grid with dmenu icons */
-    scrollbar:                   true;
-    layout:                      vertical;
-    reverse:                     false;
-    fixed-height:                false;    /* let Rofi calculate proper row height; prevents clipping */
-    fixed-columns:               true;
-    flow:                        horizontal;  /* row-by-row filling, good for keyboard nav */
-    
-    spacing:                     5px;       /* tight between cards */
-    margin:                      0px;
-    padding:                     2px 4px;   /* minimal outer padding */
-    border:                      0px;
-    border-radius:               0px;
-    border-color:                @blue;
-    background-color:            transparent;
-    text-color:                  @text;
-    cursor:                      "default";
+    columns:       4;
+    lines:         3;
+    cycle:         true;
+    dynamic:       false;
+    scrollbar:     true;
+    fixed-height:  false;
+    fixed-columns: true;
+    flow:          horizontal;
+    spacing:       5px;
+    padding:       2px 4px;
 }
 
 scrollbar {
-    handle-width:                6px;
-    handle-color:                @primary;
-    border-radius:               3px;
-    background-color:            @bg2;
+    handle-width:     6px;
+    handle-color:     @primary;
+    border-radius:    3px;
+    background-color: @surface-container;
 }
 
-/*****----- Elements -----*****/
 element {
-    enabled:                     true;
-    spacing:                     1px;        /* icon to filename */
-    margin:                      0px;
-    padding:                     2px;       /* minimal card padding */
-    border:                      1px solid;
-    border-radius:               6px;
-    border-color:                transparent;
-    background-color:            @bg1;
-    text-color:                  @text;
-    orientation:                 vertical;
-    cursor:                      pointer;
-}
-
-element normal.normal {
-    background-color:            @bg1;
-    text-color:                  @text;
-    border-color:                transparent;
+    spacing:       1px;
+    padding:       2px;
+    border:        1px solid;
+    border-radius: 6px;
+    border-color:  transparent;
+    orientation:   vertical;
 }
 
 element selected.normal {
-    background-color:            @bg2;
-    text-color:                  @blue;
-    border-color:                @primary;   /* use live matugen primary */
+    background-color: @surface-container-high;
+    text-color:       @primary;
+    border-color:     @primary;
 }
 
 element-icon {
-    background-color:            transparent;
-    text-color:                  inherit;
-    size:                        155px;      /* 4-col grid, leaves room for 3 full rows + input */
-    cursor:                      inherit;
-    border-radius:               5px;
+    size:          155px;
+    border-radius: 5px;
 }
 
 element-text {
-    background-color:            transparent;
-    text-color:                  inherit;
-    highlight:                   inherit;
-    cursor:                      inherit;
-    vertical-align:              0.5;
-    horizontal-align:            0.5;
-    font:                        "sans-serif 8";
-    padding:                     0px 3px 1px 3px;   /* almost zero vertical to protect row height */
-}
-
-/*****----- Message -----*****/
-error-message {
-    padding:                     30px;
-    border:                      0px solid;
-    border-radius:               15px;
-    border-color:                @blue;
-    background-color:            @bg0;
-    text-color:                  @text;
-}
-
-textbox {
-    background-color:            transparent;
-    text-color:                  @text;
-    vertical-align:              0.5;
-    horizontal-align:            0.5;
-    highlight:                   none;
+    font:              "Agave Nerd Font Propo 8";
+    padding:           0px 3px 1px 3px;
+    vertical-align:    0.5;
+    horizontal-align:  0.5;
 }

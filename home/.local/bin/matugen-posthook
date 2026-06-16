@@ -433,15 +433,7 @@ elif [ -s "$STARSHIP_OUT" ]; then
     echo ":: [posthook] Starship config left to matugen template ($STARSHIP_OUT)"
 fi
 
-# Keep the legacy root waybar/colors.css in sync with the matugen one.
-# The only time we intentionally skip this is the explicit "disable matugen entirely" marker.
-if [ -f ~/.cache/matugen/no-matugen-this-time ]; then
-    echo "[posthook] Skipping waybar colors sync (no-matugen-this-time marker — run palette.sh or change wallpaper to clear)"
-else
-    if [ -f ~/.config/waybar/colors/matugen.css ]; then
-        cp -f ~/.config/waybar/colors/matugen.css ~/.config/waybar/colors.css 2>/dev/null || true
-    fi
-fi
+# Waybar themes import colors/matugen-waybar.css via shared/base.css — no root colors.css sync needed.
 
 # Note: waybar-transparent-this-time is handled by set_wallpaper.sh (and palette.sh)
 # *after* a full matugen run. The posthook always writes the complete themed file;

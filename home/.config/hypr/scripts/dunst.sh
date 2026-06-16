@@ -58,6 +58,7 @@ show_missed_menu() {
 
     local choice
     choice=$(printf '%s\n' "${labels[@]}" | rofi -dmenu -i \
+        -config ~/.config/rofi/config-compact.rasi \
         -p "Missed Notifications (5s)" \
         -lines 12 -width 70 2>/dev/null || true)
 

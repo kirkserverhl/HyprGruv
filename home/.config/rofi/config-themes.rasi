@@ -1,69 +1,36 @@
-/* ============================================= */
-/* Rofi Configuration - Matugen Compatible       */
-/* ============================================= */
+/* Theme switcher — fuzzel-matched */
 
 configuration {
-    modi: "drun,run";
-    show-icons: true;
-    icon-theme: "kora";
-    display-drun: "APPS";
-    display-run: "RUN";
+    modi:                "drun,run";
+    show-icons:          true;
+    icon-theme:          "kora";
+    display-drun:        "APPS";
+    display-run:         "RUN";
     drun-display-format: "{name}";
-    scroll-method: 1;
+    scroll-method:       1;
 }
 
-/* Standard matugen colors + font + (no blurred bg for this simple theme picker) */
-@import "~/.config/rofi/colors.rasi"
-@import "~/.config/settings/rofi-font.rasi"
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
 
-/* Window */
 window {
-    width: 420px;
-    x-offset: 0px;
+    width:    420px;
     y-offset: 65px;
-    border: 2px;
-    border-color: @primary;
-    border-radius: 12px;
-    background-color: @background;
-    transparency: "real";
+    location: center;
+    anchor:   center;
 }
 
-/* Mainbox */
 mainbox {
-    background-color: transparent;
-    children: [ "listbox" ];
+    children: ["listbox"];
 }
 
-/* Inputbar */
-inputbar {
-    padding: 12px;
-    background-color: @surface_variant;
-    text-color: @on_surface;
+listbox {
+    children: ["inputbar", "listview"];
 }
 
-entry {
-    background-color: transparent;
-    text-color: inherit;
-}
-
-/* Listview */
 listview {
-    padding: 8px;
-    background-color: transparent;
-    spacing: 4px;
-}
-
-/* Elements */
-element {
-    padding: 10px;
-    border-radius: 8px;
-    background-color: transparent;
-    text-color: @on_surface;
-}
-
-element selected {
-    background-color: @primary;
-    text-color: @on_primary;
+    lines:        10;
+    fixed-height: true;
 }
 
 element normal.urgent {

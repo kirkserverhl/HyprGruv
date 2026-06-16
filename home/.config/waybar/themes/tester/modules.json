@@ -1,0 +1,16 @@
+{
+  "custom/blank-left": {
+    "format": " ",
+    "tooltip": false
+  },
+
+  "custom/blank-center": {
+    "format": " ",
+    "tooltip": false
+  },
+
+  "custom/blank-right": {
+    "format": " ",
+    "tooltip": false
+  }
+}

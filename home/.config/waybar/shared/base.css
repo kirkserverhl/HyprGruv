@@ -1,0 +1,106 @@
+/*
+ * Shared base styles for all Waybar themes.
+ * Import this first in every theme style.css.
+ *
+ * Colors: matugen palette via colors/matugen-waybar.css
+ *          (GTK mirror of colors/matugen.css)
+ * Font:   16px Agave Nerd Font Propo
+ * Spacing: even gaps between top-level groups; wider gaps inside drawer groups when expanded
+ */
+
+@import "../colors/matugen-waybar.css";
+
+* {
+  font-family:
+    "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
+    sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  color: @on_surface;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+  background-color: transparent;
+  color: @on_surface;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+  background: transparent;
+}
+
+/*
+ * Outer spacing between top-level modules and groups.
+ * Complements "spacing" in layout.jsonc (config gap + light CSS margin).
+ */
+.modules-left > widget,
+.modules-center > widget,
+.modules-right > widget {
+  margin: 0 2px;
+}
+
+label.module {
+  margin: 0 2px;
+  padding: 0 2px;
+}
+
+/*
+ * Drawer groups — wider internal spacing when children expand.
+ * Outer gaps (layout spacing + .modules-* > widget) stay unchanged.
+ */
+#group-apps,
+#group-settings,
+#group-sound,
+#group-clock,
+#group-cpu-info,
+#group-power {
+  margin: 0;
+  padding: 0 2px;
+}
+
+#group-apps label.module,
+#group-settings label.module,
+#group-sound label.module,
+#group-clock label.module,
+#group-cpu-info label.module,
+#group-power label.module,
+#group-apps widget,
+#group-settings widget,
+#group-sound widget,
+#group-clock widget,
+#group-cpu-info widget,
+#group-power widget {
+  margin: 0 4px;
+  padding: 0 4px;
+}
+
+#group-apps widget.not-apps,
+#group-settings widget.not-settings,
+#group-sound widget.not-sound,
+#group-clock widget.not-clock,
+#group-cpu-info widget.not-system,
+#group-power widget.not-power {
+  margin: 0 4px;
+  padding: 0 4px;
+}
+
+#group-apps:hover label.module,
+#group-settings:hover label.module,
+#group-sound:hover label.module,
+#group-clock:hover label.module,
+#group-cpu-info:hover label.module,
+#group-power:hover label.module,
+#group-apps:hover widget,
+#group-settings:hover widget,
+#group-sound:hover widget,
+#group-clock:hover widget,
+#group-cpu-info:hover widget,
+#group-power:hover widget {
+  margin: 0 5px;
+  padding: 0 5px;
+}

@@ -1,4 +1,5 @@
-/* Waypaper Stylesheet - Managed by Matugen */
+/* Matugen stylesheet (Qt/QSS) — Managed by Matugen */
+/* Waybar uses the GTK mirror: colors/matugen-waybar.css */
 /* 
    Designed for Hyprland blur + isolated transparency on the Waypaper window only.
    Main backgrounds are transparent / low alpha so the compositor blur shows through.

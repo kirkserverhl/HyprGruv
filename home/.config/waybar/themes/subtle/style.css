@@ -5,15 +5,14 @@
 ## YouTube: https://youtube.com/@sane1090x
 */
 
-/* --- Import Material-You colors --- */
-@import "../../colors/matugen.css";
+/* --- Shared base (waypaper colors, 16px font, spacing) --- */
+@import "../../shared/base.css";
 
 /* --- Global settings --- */
 * {
   font-family:
     "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
     sans-serif;
-  font-size: 18px;
   font-weight: bold;
 }
 

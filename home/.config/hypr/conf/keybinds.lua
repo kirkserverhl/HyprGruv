@@ -115,7 +115,7 @@ hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd('grim -g "$(slurp)" /tmp/merc
 hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))
 
 -- Launcher
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("pkill -x fuzzel 2>/dev/null; fuzzel"))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/fuzzel-apps.sh"))
 
 -- Wallpaper / bar / monitor / theme
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))

@@ -2,7 +2,7 @@
 
 # Waybar launcher — respects the last layout chosen via waybar-layout-switcher (CTRL+W).
 # Falls back to "subtle" if no saved layout or the saved one is invalid.
-# Available themes: alchemy, subtle, ultra_minimal, velvetline, freshstart
+# Available themes: alchemy, subtle, ultra_minimal, velvetline, freshstart, tester
 
 STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/waybar/last_layout"
 LAYOUTS_DIR="$HOME/.config/waybar/themes"

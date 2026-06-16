@@ -24,6 +24,7 @@ done
 
 chosen=$(printf '%s\n' "${options[@]}" | rofi -dmenu \
     -i \
+    -config ~/.config/rofi/config-compact.rasi \
     -p "Monitor Configuration" \
     -mesg "Select setup or create new one" \
     -theme-str 'window {width: 500px;}' )
@@ -59,6 +60,7 @@ if [[ "$chosen" == "➕ Create new from current setup"* ]]; then
 
     # Ask for a name for the new config
     new_name=$(rofi -dmenu -p "Name this configuration (no spaces)" \
+        -config ~/.config/rofi/config-compact.rasi \
         -mesg "Example: home-dual, office-triple, laptop-only" \
         -theme-str 'window {width: 450px;}')
 

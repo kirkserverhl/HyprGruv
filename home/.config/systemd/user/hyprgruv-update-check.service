@@ -1,0 +1,11 @@
+[Unit]
+Description=Check hyprgruv git repo for remote updates
+After=network-online.target
+
+[Service]
+Type=oneshot
+Environment=HYPRGRUV_DIR=%h/.hyprgruv
+ExecStart=%h/.hyprgruv/lib/scripts/repo-update-check.sh --prompt-if-needed
+
+[Install]
+WantedBy=default.target

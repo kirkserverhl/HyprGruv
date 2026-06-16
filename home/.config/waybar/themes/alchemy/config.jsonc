@@ -1,7 +1,7 @@
 {
   "include": [
     "~/.config/waybar/shared/workspaces.json",
-    "~/.config/waybar/shared/clock.json"
+    "~/.config/waybar/shared/clock.json",
   ],
 
   "layer": "top",
@@ -9,7 +9,15 @@
   "margin-top": 13,
   "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/special"],
   "modules-center": ["custom/notification", "custom/media"],
-  "modules-right": ["custom/pacman", "custom/weather", "pulseaudio", "battery", "network", "power-profiles-daemon", "clock"],
+  "modules-right": [
+    "custom/pacman",
+    "custom/weather",
+    "pulseaudio",
+    "battery",
+    "network",
+    "power-profiles-daemon",
+    "clock",
+  ],
   "height": 40,
 
   "custom/notification": {
@@ -23,29 +31,31 @@
       "inhibited-notification": "<span foreground='red'><sup></sup></span>",
       "inhibited-none": "",
       "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-      "dnd-inhibited-none": ""
+      "dnd-inhibited-none": "",
     },
     "return-type": "json",
     "exec-if": "which swaync-client",
     "exec": "swaync-client -swb",
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
-    "escape": true
+    "escape": true,
   },
 
   "custom/launcher": {
     "format": "",
-    "on-click": "bash /home/$USER/.config/waybar/scripts/app-launcher.sh",
-    "tooltip-format": "Launch your favorite apps"
+    "on-click": "pkill -x fuzzel 2>/dev/null; fuzzel",
+    "on-click-right": "kitty",
+    "tooltip-format": "Launch your favorite apps",
   },
 
   "custom/pacman": {
     "format": "  {}",
     "interval": "once",
     "exec": "checkupdates | wc -l",
-    "on-click": "update-system",
+    "on-click": "bash home/$USER/.config/hypr/scripts/updates.sh",
+    "on-click-right": "kitty pacseek"
     "signal": 8,
-    "tooltip-format": "{} updates available"
+    "tooltip-format": "{} updates available",
   },
 
   "custom/media": {
@@ -58,14 +68,14 @@
     "smooth-scrolling-threshold": 1, // This value was tested using a trackpad, it should be lowered if using a mouse.
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
-    "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null" // Script in resources/custom_modules folder
+    "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null", // Script in resources/custom_modules folder
   },
 
   "battery": {
     "format": "{icon}  {capacity}%",
     "format-charging": "󰂄  {capacity}%",
     "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-    "tooltip-format": "Battery is at {capacity}%" 
+    "tooltip-format": "Battery is at {capacity}%",
   },
 
   "pulseaudio": {
@@ -82,9 +92,9 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": ["󰖀", "󰕾"]
+      "default": ["󰖀", "󰕾"],
     },
-    "tooltip-format": "Volume: {volume}%"
+    "tooltip-format": "Volume: {volume}%",
   },
 
   "network": {
@@ -95,7 +105,9 @@
     "format-disconnected": "󰤭  Disconnected",
     "max-length": 50,
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "tooltip-format": "Connected to {essid}"
+    "on-click": "kitty nm-connection-editor",
+    //"on-click-right":""
+    "tooltip-format": "Internet Connections}",
   },
 
   "hyprland/workspaces": {
@@ -109,7 +121,7 @@
       "5": "5",
       "6": "6",
       "7": "7",
-      "8": "8"
+      "8": "8",
     },
     "all-outputs": false,
     "persistent-only": true,
@@ -120,15 +132,15 @@
       "DVI-I-1": [3, 4],
       "HDMI-A-1": [5, 6],
       "DVI-I-2": [7, 8],
-      "*": [1, 2]
+      "*": [1, 2],
     },
-    "sort-by-number": true
+    "sort-by-number": true,
   },
 
   "backlight": {
     "device": "intel_backlight",
     "format": "{icon}   {percent}%",
-    "format-icons": ["󰃞", "󰃟", "󰃠"]
+    "format-icons": ["󰃞", "󰃟", "󰃠"],
   },
 
   "custom/weather": {
@@ -136,7 +148,7 @@
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
-    "interval": 3600
+    "interval": 3600,
   },
 
   "power-profiles-daemon": {
@@ -147,32 +159,32 @@
       "default": "",
       "performance": "󰠠",
       "balanced": "󰚀",
-      "power-saver": "󰌪"
-    }
+      "power-saver": "󰌪",
+    },
   },
 
   "hyprland/window": {
     "format": "{class}",
     "separate-outputs": true,
     "icon": true,
-    "icon-size": 18
-},
-  
+    "icon-size": 18,
+  },
+
   "cpu": {
     "interval": 10,
     "format": "    {}%",
-    "max-length": 10
+    "max-length": 10,
   },
 
   "memory": {
     "interval": 30,
     "format": "    {}%",
-    "max-length": 10
+    "max-length": 10,
   },
 
   "disk": {
     "interval": 30,
     "format": "   {percentage_used}% used on {path}",
-    "path": "/"
-  }
+    "path": "/",
+  },
 }

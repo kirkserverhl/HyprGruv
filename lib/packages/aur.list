@@ -1,0 +1,31 @@
+# Hyprgruv aur packages — one per line
+# Lines starting with # are ignored.
+
+python-pywalfox
+bibata-cursor-theme-bin
+brave-bin
+google-chrome
+ghostty-git
+ghostty-shell-integration-git
+ghostty-terminfo-git
+tmux-continuum-git
+tmux-fingers
+tmux-language-server
+tmux-resurrect-git
+tmux-tad
+tmuxai
+tmuxinator
+hyprshot
+aylurs-gtk-shell-git
+wlogout
+atuin
+displaylink
+masterpdfeditor
+timeshift-autosnap
+vscodium-bin
+pacseek-bin
+wl-clip-persist
+wl-clipboard-history-git
+wdisplays
+xsettingsd
+udiskie-dmenu-git

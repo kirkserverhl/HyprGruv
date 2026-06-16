@@ -45,10 +45,10 @@ if [[ -f "$ROFI_FONT_FILE" ]]; then
     cat > "$ROFI_FONT_FILE" << EOF
 /* Single source of truth for Rofi font (managed by apply-fonts.sh) */
 configuration {
-    font: "$FONT_UI 11";
+    font: "$FONT_UI ${FONT_SIZE_LAUNCHER:-16}";
 }
 EOF
-    echo "  ✓ Updated $ROFI_FONT_FILE → $FONT_UI 11"
+    echo "  ✓ Updated $ROFI_FONT_FILE → $FONT_UI ${FONT_SIZE_LAUNCHER:-16}"
 fi
 
 # Also keep the newer fonts.rasi in sync
@@ -58,17 +58,23 @@ cat > "$ROFI_FONTS_FILE" << EOF
    Source: ~/.config/settings/fonts.sh  (FONT_UI role)
 */
 configuration {
-    font: "$FONT_UI 11";
+    font: "$FONT_UI ${FONT_SIZE_LAUNCHER:-16}";
 }
 EOF
-echo "  ✓ Updated $ROFI_FONTS_FILE → $FONT_UI 11"
+echo "  ✓ Updated $ROFI_FONTS_FILE → $FONT_UI ${FONT_SIZE_LAUNCHER:-16}"
+
+FUZZEL_CHROME_RASI="$HOME/.config/rofi/shared/fuzzel-chrome.rasi"
+if [[ -f "$FUZZEL_CHROME_RASI" ]]; then
+    sed -i "s|font: \".*\";|font: \"$FONT_UI ${FONT_SIZE_LAUNCHER:-16}\";|" "$FUZZEL_CHROME_RASI"
+    echo "  ✓ Updated $FUZZEL_CHROME_RASI → $FONT_UI ${FONT_SIZE_LAUNCHER:-16}"
+fi
 
 # =============================================================================
 # 2. FUZZEL (app launcher menu) → UI font
 # =============================================================================
 FUZZEL_INI="$HOME/.config/fuzzel/fuzzel.ini"
 if [[ -f "$FUZZEL_INI" ]]; then
-    sed -i "s|^font=.*|font=$FONT_UI:size=12.5|" "$FUZZEL_INI"
+    sed -i "s|^font=.*|font=$FONT_UI:size=${FONT_SIZE_LAUNCHER:-16}|" "$FUZZEL_INI"
     echo "  ✓ Updated $FUZZEL_INI → $FONT_UI"
 fi
 

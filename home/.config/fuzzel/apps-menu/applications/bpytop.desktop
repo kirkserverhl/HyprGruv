@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=bpytop
+Comment=Resource monitor
+Exec=bpytop
+Icon=utilities-system-monitor
+Terminal=true
+Categories=System;Monitor;

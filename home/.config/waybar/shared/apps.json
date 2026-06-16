@@ -1,0 +1,57 @@
+{
+  "custom/appmenu": {
+    "format": "\uf303",
+    "on-click": "pkill rofi || rofi -show drun -replace",
+    "on-click-right": "~/.config/hypr/scripts/fuzzel-apps.sh",
+    "tooltip-format": "Left: App Launcher\nRight: Favorites"
+  },
+
+  "custom/tools": {
+    "format": " \ueb52 ",
+    "on-click": "pkill rofi || rofi -show drun -replace",
+    "tooltip-format": "Tools & Utilities"
+  },
+
+  "custom/cliphist": {
+    "format": " \udb80\udd4c ",
+    "on-click": "~/.config/hypr/scripts/hyprshot.sh",
+    "on-click-right": "~/.config/hypr/scripts/cliphist.sh",
+    "tooltip-format": "Left: Screenshot\nRight: Clipboard history"
+  },
+
+  "custom/hypridle": {
+    "format": " \uf023 ",
+    "return-type": "json",
+    "escape": true,
+    "exec-on-event": true,
+    "interval": 60,
+    "exec": "~/.config/hypr/scripts/hypridle.sh status",
+    "on-click": "~/.config/hypr/scripts/hypridle.sh toggle",
+    "on-click-right": "hyprlock",
+    "tooltip": false
+  },
+
+  "custom/hyprsunset": {
+    "format": "\ue4dc",
+    "tooltip-format": "Toggle screen shader",
+    "on-click": "~/.config/hypr/scripts/hyprshade.sh",
+    "on-click-right": "sleep 0.5; ~/.config/hypr/scripts/hyprshade.sh rofi"
+  },
+
+  "group/apps": {
+    "orientation": "horizontal",
+    "tooltip-format": "Left: App Launcher\nRight: Favorites",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-apps",
+      "transition-left-to-right": true
+    },
+    "modules": [
+      "custom/appmenu",
+      "custom/tools",
+      "custom/cliphist",
+      "custom/hypridle",
+      "custom/hyprsunset"
+    ]
+  }
+}

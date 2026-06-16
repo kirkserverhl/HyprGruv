@@ -1,0 +1,70 @@
+/* Touch-friendly calculator pad — fuzzel-matched 4×6 button grid */
+
+configuration {
+    font: "Agave Nerd Font Propo 18";
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+
+window {
+    width:    460px;
+    location: center;
+    anchor:   center;
+}
+
+mainbox {
+    spacing:  8px;
+    padding:  14px;
+    children: ["inputbar", "message", "listview"];
+}
+
+inputbar {
+    padding: 10px 12px;
+}
+
+message {
+    enabled: true;
+    margin:  0px 0px 6px 0px;
+    padding: 0px;
+    children: ["textbox"];
+}
+
+textbox {
+    padding:          12px 14px;
+    background-color: @surface-container-low;
+    text-color:       @foreground;
+    border-radius:    10px;
+    horizontal-align: 0.5;
+    vertical-align:   0.5;
+}
+
+listview {
+    columns:       4;
+    lines:         6;
+    fixed-columns: true;
+    fixed-height:  true;
+    flow:          horizontal;
+    spacing:       6px;
+    padding:       2px;
+    scrollbar:     false;
+}
+
+element {
+    padding:          16px 10px;
+    margin:             0px;
+    border-radius:      10px;
+    horizontal-align:   0.5;
+    background-color:   @surface-container;
+}
+
+element selected.normal {
+    background-color: @primary;
+    text-color:       @on-primary;
+}
+
+element-text {
+    horizontal-align: 0.5;
+    vertical-align:   0.5;
+    font:             "Agave Nerd Font Propo 20";
+}

@@ -1,0 +1,174 @@
+/* =============================================================================
+   Fuzzel-matched Rofi chrome
+   =============================================================================
+   Semi-transparent matugen surface + primary border/selection.
+   No pre-rendered blurred wallpaper — Hyprland layerrule blur handles the rest.
+   Import after shared/standard.rasi; override window width/location per launcher.
+============================================================================= */
+
+/* Font synced with fuzzel via apply-fonts.sh (FONT_UI + FONT_SIZE_LAUNCHER) */
+configuration {
+    font: "Agave Nerd Font Propo 16";
+}
+
+* {
+    background:        @surface-alpha;
+    foreground:        @on-surface;
+    color11:           @primary;
+    selected:          @primary;
+    selected-fg:       @on-primary;
+    background-alt:    @surface-container;
+    prompt-color:      @secondary;
+    placeholder-color: @outline;
+}
+
+window {
+    spacing:          0px;
+    padding:          0px;
+    margin:           0px;
+    border:           2px;
+    border-color:     @primary;
+    border-radius:    14px;
+    background-color: @surface-alpha;
+    transparency:     "real";
+    cursor:           "default";
+    enabled:          true;
+    fullscreen:       false;
+}
+
+mainbox {
+    enabled:          true;
+    spacing:          0px;
+    margin:           0px;
+    padding:          10px;
+    background-color: transparent;
+}
+
+inputbar {
+    enabled:          true;
+    spacing:          10px;
+    padding:          10px 14px;
+    border-radius:    8px;
+    background-color: transparent;
+    text-color:       @foreground;
+    children:         [ "textbox-prompt-colon", "entry" ];
+}
+
+textbox-prompt-colon {
+    enabled:          true;
+    expand:           false;
+    padding:          0px 8px 0px 0px;
+    str:              "›";
+    background-color: transparent;
+    text-color:       @prompt-color;
+}
+
+entry {
+    enabled:           true;
+    background-color:  transparent;
+    text-color:        @foreground;
+    cursor:            text;
+    placeholder:       "Search";
+    placeholder-color: @placeholder-color;
+}
+
+listview {
+    enabled:          true;
+    columns:          1;
+    cycle:            true;
+    dynamic:          true;
+    scrollbar:        false;
+    layout:           vertical;
+    spacing:          4px;
+    padding:          6px;
+    margin:           0px;
+    background-color: transparent;
+    border:           0px;
+}
+
+element {
+    enabled:          true;
+    padding:          10px 12px;
+    margin:           2px 0px;
+    cursor:           pointer;
+    background-color: transparent;
+    border-radius:    8px;
+    border:           0px;
+}
+
+element normal.normal,
+element normal.urgent,
+element normal.active,
+element alternate.normal,
+element alternate.urgent,
+element alternate.active {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+
+element selected.normal,
+element selected.urgent,
+element selected.active {
+    background-color: @color11;
+    text-color:       @selected-fg;
+}
+
+element-icon {
+    background-color: transparent;
+    text-color:       inherit;
+    size:             28px;
+    cursor:           inherit;
+}
+
+element-text {
+    background-color: transparent;
+    text-color:       inherit;
+    cursor:           inherit;
+    vertical-align:   0.5;
+    horizontal-align: 0.0;
+}
+
+message {
+    background-color: transparent;
+    border:           0px;
+    margin:           8px 0px 0px 0px;
+    padding:          0px;
+    spacing:          0px;
+    border-radius:    8px;
+}
+
+textbox {
+    padding:          12px;
+    margin:           0px;
+    border-radius:    8px;
+    background-color: transparent;
+    text-color:       @foreground;
+}
+
+error-message {
+    padding:          12px;
+    border-radius:    14px;
+    background-color: transparent;
+    text-color:       @foreground;
+}
+
+button {
+    padding:          10px;
+    border-radius:    8px;
+    background-color: transparent;
+    text-color:       inherit;
+    cursor:           pointer;
+    border:           0px;
+}
+
+button selected {
+    background-color: @color11;
+    text-color:       @selected-fg;
+}
+
+mode-switcher {
+    enabled:          true;
+    spacing:          12px;
+    background-color: transparent;
+    text-color:       @foreground;
+}

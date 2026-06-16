@@ -6,8 +6,7 @@
 # pywal is only kept temporarily for programs that haven't been migrated yet.
 #
 # OVERHAUL GOAL (as clarified):
-#   The *only* thing that loads a processed version of the wallpaper as an
-#   image file is the rofi 50x30 blur generator.
+#   No pre-rendered blurred/cropped wallpaper variants are generated anymore.
 #
 #   SDDM (and anything else) reads the *central* default:
 #     ~/.config/settings/default_wp.png
@@ -35,20 +34,19 @@ DEFAULT_WP="$HOME/Pictures/Wallpapers/lady.png"
 DEFAULT_WALLPAPER_FILE="$HOME/.config/settings/default"
 
 # ------------------------------------------------------------------
-# The only blurred wallpaper we still generate.
-# Used exclusively by rofi menus (see RASI_FILE below).
-# All other tools (SDDM, wlogout, hyprlock) no longer need pre-blurred assets.
+# DISABLED: blurred + square/cropped wallpaper generation (no longer used).
+# Rofi and other menus now use live compositor blur instead of pre-rendered assets.
 # ------------------------------------------------------------------
-BLURRED_WALLPAPER="$BLURRED_WALLPAPER_FILE"
-SQUARE_WALLPAPER="$SQUARE_WALLPAPER_FILE"
-RASI_FILE="$ROFI_WALLPAPER_RASI_FILE"
+# BLURRED_WALLPAPER="$BLURRED_WALLPAPER_FILE"
+# SQUARE_WALLPAPER="$SQUARE_WALLPAPER_FILE"
+# RASI_FILE="$ROFI_WALLPAPER_RASI_FILE"
 
 WALLPAPER_EFFECT_FILE="$HOME/.config/settings/wallpaper-effect.sh"
-BLUR_FILE="$HOME/.config/settings/blur.sh"
+# BLUR_FILE="$HOME/.config/settings/blur.sh"
 USE_CACHE_FILE="$HOME/.config/settings/wallpaper_cache"
 
 # ------------------- Defaults -------------------
-BLUR="50x30"
+# BLUR="50x30"
 FORCE_GENERATE=0
 USE_CACHE=0
 GRAYSCALE_THRESHOLD=0.08
@@ -56,10 +54,10 @@ GRAYSCALE_THRESHOLD=0.08
 # ------------------- Setup -------------------
 mkdir -p "$GENERATED_DIR" "$CACHE_DIR"
 
-if [ -f "$BLUR_FILE" ]; then
-    BLUR=$(cat "$BLUR_FILE" | tr -d '[:space:]' | grep -oE '^[0-9]+x[0-9]+' || true)
-fi
-[ -z "$BLUR" ] && BLUR="20x8"   # sane default if file is empty/garbage
+# if [ -f "$BLUR_FILE" ]; then
+#     BLUR=$(cat "$BLUR_FILE" | tr -d '[:space:]' | grep -oE '^[0-9]+x[0-9]+' || true)
+# fi
+# [ -z "$BLUR" ] && BLUR="20x8"   # sane default if file is empty/garbage
 
 if [ -f "$USE_CACHE_FILE" ]; then
     USE_CACHE=1
@@ -89,7 +87,8 @@ if [ -f "$WAYPAPER_LOCK" ]; then
 fi
 
 touch "$WAYPAPER_LOCK"
-trap 'rm -f "$WAYPAPER_LOCK"' EXIT
+release_lock() { rm -f "$WAYPAPER_LOCK"; }
+trap release_lock EXIT
 
 # ------------------- Determine Wallpaper -------------------
 if [ -n "${1:-}" ]; then
@@ -175,12 +174,16 @@ fi
 echo ":: Running pywal (legacy, being phased out)..."
 wal -q -i "$WALLPAPER" || echo ":: pywal failed (non-fatal)"
 
-echo ":: Applying automatic matugen palette from current wallpaper..."
-# Non-interactive default: Dark Standard (tonal-spot) + source color 1.
-# palette.sh is kept for manual use (Ctrl+P) but is no longer launched here.
-# Waybar colors are managed separately (waybar-theme.sh / theme switcher).
+echo ":: Applying matugen palette from current wallpaper..."
+# Shows rofi palette + source-color chooser when a display is available (waypaper GUI
+# and terminal). Falls back to auto source color 1 if cancelled or headless.
+# palette.sh (Ctrl+P) remains the full gum-based chooser with waybar transparency step.
 
 if command -v matugen >/dev/null 2>&1; then
+    # Release lock before slow matugen work so rapid GUI wallpaper picks are not dropped.
+    release_lock
+    trap - EXIT
+
     "$HOME/.config/hypr/scripts/apply-matugen-auto.sh" "$WALLPAPER" || true
 
     # Respect persistent "I want transparent waybar on top of whatever palette" choice
@@ -248,70 +251,48 @@ if command -v pywalfox >/dev/null 2>&1; then
     pywalfox update || true
 fi
 
-# ------------------- Generate Derived Assets -------------------
+# ------------------- Generate Derived Assets (DISABLED) -------------------
 #
-# UNIFIED WALLPAPER VARIANT STRATEGY
+# Blurred full-size + square/cropped variants are no longer generated.
+# Rofi, wlogout, hyprlock, and SDDM all use live blur or the raw wallpaper now.
 #
-# Strict rule:
-#   The *only* processed wallpaper image file we generate and let anything load is:
+# BLUR_CACHE_NAME="blur-${BLUR}-${EFFECT}-${WALLPAPER_FILENAME}.png"
+# BLUR_CACHE_PATH="$GENERATED_DIR/$BLUR_CACHE_NAME"
 #
-#     1. The 50x30 rofi blur variant (for rofi menus)
+# if [ -f "$BLUR_CACHE_PATH" ] && [ "$FORCE_GENERATE" -eq 0 ] && [ "$USE_CACHE" -eq 1 ]; then
+#     echo ":: Using cached blurred wallpaper (rofi)"
+# else
+#     echo ":: Generating the only allowed pre-blurred asset (rofi 50x30)..."
+#     magick "$USED_WALLPAPER" \
+#         -resize 1920x1080^ \
+#         -gravity center \
+#         -extent 1920x1080 \
+#         -resize 75% \
+#         "$BLURRED_WALLPAPER" 2>/dev/null || true
 #
-#   SDDM gets the actual raw wallpaper exported directly by update-sddm-wallpaper.sh
-#   (no blurred variant; the script forces FullBlur=false + real wallpaper).
+#     if [ "$BLUR" != "0x0" ]; then
+#         magick "$BLURRED_WALLPAPER" -blur "$BLUR" "$BLURRED_WALLPAPER" 2>/dev/null || true
+#     fi
+#     cp "$BLURRED_WALLPAPER" "$BLUR_CACHE_PATH" 2>/dev/null || true
+# fi
+# cp "$BLUR_CACHE_PATH" "$BLURRED_WALLPAPER" 2>/dev/null || true
 #
-#   All other tools must use live/real-time methods:
-#     - Wlogout: live grim screenshot + Hyprland layerrule blur (see conf/layerrules.lua)
-#     - Hyprlock (triggered by hypridle): loads the raw wallpaper directly + its own blur_passes
+# SQUARE_CACHE="$GENERATED_DIR/square-$WALLPAPER_FILENAME.png"
+# if [ -f "$SQUARE_CACHE" ] && [ "$FORCE_GENERATE" -eq 0 ] && [ "$USE_CACHE" -eq 1 ]; then
+#     echo ":: Using cached square wallpaper"
+# else
+#     echo ":: Generating square wallpaper..."
+#     magick "$WALLPAPER" -gravity Center -extent 1:1 "$SQUARE_WALLPAPER" 2>/dev/null || true
+#     cp "$SQUARE_WALLPAPER" "$SQUARE_CACHE" 2>/dev/null || true
+# fi
 #
-# This section is responsible only for generating the single allowed pre-blurred asset (rofi).
+# echo "* { current-image: url(\"$BLURRED_WALLPAPER\", height); }" > "$RASI_FILE"
+# pkill rofi 2>/dev/null || true
 #
-BLUR_CACHE_NAME="blur-${BLUR}-${EFFECT}-${WALLPAPER_FILENAME}.png"
-BLUR_CACHE_PATH="$GENERATED_DIR/$BLUR_CACHE_NAME"
-
-if [ -f "$BLUR_CACHE_PATH" ] && [ "$FORCE_GENERATE" -eq 0 ] && [ "$USE_CACHE" -eq 1 ]; then
-    echo ":: Using cached blurred wallpaper (rofi)"
-else
-    echo ":: Generating the only allowed pre-blurred asset (rofi 50x30)..."
-    # Use the same high-quality scaling approach as the SDDM asset for consistency
-    magick "$USED_WALLPAPER" \
-        -resize 1920x1080^ \
-        -gravity center \
-        -extent 1920x1080 \
-        -resize 75% \
-        "$BLURRED_WALLPAPER" 2>/dev/null || true
-
-    if [ "$BLUR" != "0x0" ]; then
-        magick "$BLURRED_WALLPAPER" -blur "$BLUR" "$BLURRED_WALLPAPER" 2>/dev/null || true
-    fi
-    cp "$BLURRED_WALLPAPER" "$BLUR_CACHE_PATH" 2>/dev/null || true
-fi
-cp "$BLUR_CACHE_PATH" "$BLURRED_WALLPAPER" 2>/dev/null || true
-
-# Square wallpaper
-SQUARE_CACHE="$GENERATED_DIR/square-$WALLPAPER_FILENAME.png"
-if [ -f "$SQUARE_CACHE" ] && [ "$FORCE_GENERATE" -eq 0 ] && [ "$USE_CACHE" -eq 1 ]; then
-    echo ":: Using cached square wallpaper"
-else
-    echo ":: Generating square wallpaper..."
-    magick "$WALLPAPER" -gravity Center -extent 1:1 "$SQUARE_WALLPAPER" 2>/dev/null || true
-    cp "$SQUARE_WALLPAPER" "$SQUARE_CACHE" 2>/dev/null || true
-fi
-
-# Rofi .rasi
-echo "* { current-image: url(\"$BLURRED_WALLPAPER\", height); }" > "$RASI_FILE"
-
-# Kill any running rofi so the next launch picks up the freshly generated blurred background.
-# This fixes the very common "rofi shows the previous wallpaper blurred" issue.
-pkill rofi 2>/dev/null || true
-
-echo ":: Generated assets:"
-echo "   - $BLURRED_WALLPAPER   ← The only pre-blurred variant (rofi menus)"
-echo "   - $SQUARE_WALLPAPER"
-echo "   - $RASI_FILE"
-echo ""
-echo "   SDDM: central default ($DEFAULT_WP_PNG)  [all themes reference this]"
-echo "   Wlogout + Hyprlock (via hypridle) → live layers + real-time blur only."
+# echo ":: Generated assets:"
+# echo "   - $BLURRED_WALLPAPER   ← The only pre-blurred variant (rofi menus)"
+# echo "   - $SQUARE_WALLPAPER"
+# echo "   - $RASI_FILE"
 
 echo ":: Wallpaper processing complete!"
 

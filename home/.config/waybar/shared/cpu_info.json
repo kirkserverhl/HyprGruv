@@ -1,0 +1,64 @@
+{
+  "network": {
+    "interface": "wlo1",
+    "format": "{ifname}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "\udb80\ude00",
+    "format-disconnected": "\udb82\udd2d",
+    "max-length": 50,
+    "format-icons": [
+      "\udb82\udd2f",
+      "\udb82\udd1f",
+      "\udb82\udd22",
+      "\udb82\udd25",
+      "\udb82\udd28"
+    ],
+    "tooltip-format": "Network Manager",
+    "on-click": "~/.config/hypr/scripts/networkmanager.sh"
+  },
+
+  "custom/system": {
+    "format": "\udb81\udc93",
+    "tooltip": false
+  },
+
+  "cpu": {
+    "interval": 2,
+    "format": "\udb83\udee0 {usage}%",
+    "tooltip": true
+  },
+
+  "memory": {
+    "format": "\uefc5 {percentage}%"
+  },
+
+  "disk": {
+    "interval": 30,
+    "format": "\uf0c7 {percentage_used}%",
+    "path": "/"
+  },
+
+  "hyprland/language": {
+    "format": "/ K {short}"
+  },
+
+  "group/cpu-info": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-system",
+      "transition-left-to-right": false
+    },
+    "on-click": "~/.config/hypr/scripts/bpytop.sh",
+    "on-click-right": "~/.config/hypr/scripts/htop.sh",
+    "tooltip-format": "Left: Btop\nRight: Htop",
+    "modules": [
+      "custom/system",
+      "cpu",
+      "memory",
+      "disk",
+      "hyprland/language",
+      "network"
+    ]
+  }
+}

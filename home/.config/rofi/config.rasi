@@ -2,8 +2,7 @@
 @import "~/.config/rofi/shared/standard.rasi"
 
 /**
- * Rofi Configuration — Matugen + standard shared includes
- * (font, colors, and blurred wallpaper background)
+ * Rofi Configuration — Matugen + fuzzel-matched theme (live blur, no wallpaper image)
  */
 
 configuration {

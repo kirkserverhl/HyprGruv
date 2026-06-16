@@ -1,0 +1,72 @@
+{
+  "pulseaudio": {
+    "format": "{icon}",
+    "format-bluetooth": "\udb80\udcb1",
+    "format-muted": "\udb81\udd81",
+    "scroll-step": 1,
+    "on-click": "pavucontrol",
+    "on-click-right": "pavucontrol",
+    "ignored-sinks": ["Easy Effects Sink"],
+    "format-icons": {
+      "headphone": "\uf025",
+      "hands-free": "\uf590",
+      "headset": "\udb80\udece",
+      "phone": "\uf095",
+      "portable": "\uf095",
+      "car": "\uf1b9",
+      "default": ["\udb81\udd80", "\udb81\udd7e"]
+    },
+    "tooltip-format": "Volume: {volume}%"
+  },
+
+  "bluetooth": {
+    "format-on": "\udb80\udcaf",
+    "format-disabled": "\udb80\udcb2",
+    "format-connected": "\udb80\udcb1",
+    "format-connected-battery": "{icon}",
+    "format-icons": [
+      "\udb82\udd3e",
+      "\udb82\udd3f",
+      "\udb82\udd40",
+      "\udb82\udd41",
+      "\udb82\udd42",
+      "\udb82\udd43",
+      "\udb82\udd44",
+      "\udb82\udd45",
+      "\udb82\udd46",
+      "\udb82\udd48"
+    ],
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\n{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\n{device_address}\n{device_battery_percentage}%",
+    "on-click": "blueman-manager",
+    "on-click-right": "blueman-manager"
+  },
+
+  "custom/media": {
+    "format": "{}",
+    "escape": true,
+    "return-type": "json",
+    "hide-empty-text": true,
+    "max-length": 40,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl stop",
+    "smooth-scrolling-threshold": 1,
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null",
+    "tooltip": true
+  },
+
+  "group/sound": {
+    "orientation": "horizontal",
+    "tooltip-format": "Left: Volume\nRight: Pavucontrol",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-sound",
+      "transition-left-to-right": true
+    },
+    "modules": ["pulseaudio", "bluetooth"]
+  }
+}

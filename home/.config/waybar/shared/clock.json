@@ -1,9 +1,35 @@
 {
   "clock": {
     "format": "{:%H:%M}",
-    "format-alt": "{:%B %-d %Y %H:%M}",
+    "format-alt": "{:%A %B %-d}  {:%H:%M}",
     "interval": 1,
-    "on-click": "mode",
-    "tooltip": false
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
+    "calendar": {
+      "format": {
+        "today": "<span color='#fAfBfC'><b>{}</b></span>"
+      }
+    },
+    "actions": {
+      "on-click": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    },
+    "on-click-right": "~/.config/waybar/scripts/toggle-weather.sh"
+  },
+
+  "custom/weather": {
+    "exec": "${HOME}/.config/waybar/scripts/get-weather.sh",
+    "exec-if": "test -f ${HOME}/.cache/waybar-weather-visible",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600,
+    "signal": 9
+  },
+
+  "group/clock": {
+    "orientation": "horizontal",
+    "tooltip-format": "Left: Date\nRight: Weather",
+    "modules": ["clock", "custom/weather"]
   }
 }

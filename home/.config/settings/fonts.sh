@@ -37,6 +37,8 @@ export FONT_HEADER_FULL="$FONT_HEADER ${FONT_SIZE_HEADER:-Regular}"
 export FONT_SIZE_TEXT=12
 export FONT_SIZE_UI=12.5
 export FONT_SIZE_HEADER=13
+# Fuzzel + Rofi launcher menus (kept in sync)
+export FONT_SIZE_LAUNCHER=16
 
 # Family-only versions (no size) for tools that add their own size
 export FONT_TEXT_FAMILY="$FONT_TEXT"

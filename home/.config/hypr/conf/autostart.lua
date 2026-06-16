@@ -47,6 +47,10 @@ hl.on("hyprland.start", function()
 	-- Post-install wizard runs from install.sh (before reboot). No auto kitty popup on login.
 	-- Manual re-run: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
+	-- Hyprgruv deploy target (laptop): touch ~/.config/hyprgruv/deploy-target
+	-- Then: systemctl --user enable --now hyprgruv-update-check.timer
+	hl.exec_cmd("sleep 90 && ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt-if-needed &")
+
 	-- Auto-mount
 	hl.exec_cmd("udiskie")
 

@@ -57,10 +57,11 @@ input_path = "~/.config/matugen/templates/colors.css"
 output_path = "~/.config/waybar/colors/matugen-waybar.css"
 post_hook = "true"  # reloaded in apply-matugen-auto.sh after all priority files land
 
-[templates.waybarstar]
-input_path = "~/.config/matugen/templates/waypaper-style.css"
-output_path = "~/.config/waybar/colors/matugen.css"
-post_hook = "true"
+## Legacy waybarstar template — input file never existed; waybar uses colors.css → matugen-waybar.css
+##[templates.waybarstar]
+##input_path = "~/.config/matugen/templates/waybar-style.css"
+##output_path = "~/.config/waybar/colors/matugen.css"
+##post_hook = "true"
 
 [templates.terminal_sequences]
 input_path = "~/.config/matugen/templates/terminal-sequences"
@@ -220,10 +221,11 @@ input_path = "~/.config/matugen/templates/pavucontrol.css"
 output_path = "~/.config/pavucontrol/pavucontrol.css"
 
 
-[templates.pywalfox]
-input_path = "~/.config/matugen/templates/pywalfox-colors.json"
-output_path = "~/.cache/wal/colors.json"
-post_hook = "pywalfox update"
+## pywal/pywalfox removed — Firefox theming uses templates.firefox_* instead
+##[templates.pywalfox]
+##input_path = "~/.config/matugen/templates/pywalfox-colors.json"
+##output_path = "~/.cache/wal/colors.json"
+##post_hook = "pywalfox update"
 
 
 [templates.qt5ct]
