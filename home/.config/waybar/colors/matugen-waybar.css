@@ -7,11 +7,6 @@
 @define-color primary #b1c5ff;
 @define-color on_primary #172e60;
 @define-color primary_container #304578;
-@define-color on_primary_container #dae2ff;
-
-@define-color on_background #e2e2e9;
-@define-color on_secondary_container #c5c6d0;
-@define-color source_color #b1c5ff;
 
 @define-color secondary #c0c6dd;
 @define-color on_secondary #2a3042;
