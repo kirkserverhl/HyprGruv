@@ -2,38 +2,38 @@
 
 /* Standard Material You roles */
 @define-color background rgba(0,0,0,0.0);
-@define-color foreground #dde4e1;
+@define-color foreground #dee4de;
 
-@define-color primary #82d5c8;
-@define-color on_primary #003731;
-@define-color primary_container #005048;
+@define-color primary #8cd5b4;
+@define-color on_primary #003827;
+@define-color primary_container #00513a;
 
-@define-color secondary #b1ccc6;
-@define-color on_secondary #1c3531;
-@define-color secondary_container #334b47;
+@define-color secondary #b3ccbe;
+@define-color on_secondary #1f352b;
+@define-color secondary_container #354b41;
 
-@define-color tertiary #adcae6;
-@define-color on_tertiary #153349;
-@define-color tertiary_container #2d4960;
+@define-color tertiary #a6ccdf;
+@define-color on_tertiary #083544;
+@define-color tertiary_container #254b5b;
 
 @define-color error #ffb4ab;
 @define-color on_error #690005;
 
 @define-color surface rgba(0,0,0,0.0);
-@define-color on_surface #dde4e1;
-@define-color surface_variant #3f4947;
-@define-color on_surface_variant #bec9c6;
+@define-color on_surface #dee4de;
+@define-color surface_variant #404944;
+@define-color on_surface_variant #bfc9c2;
 
 @define-color surface_container rgba(0,0,0,0.0);
 @define-color surface_container_high rgba(0,0,0,0.0);
 
 /* Rainbow palette to match Starship matugen-rainbow.toml */
-@define-color color_orange #82d5c8;
-@define-color color_yellow #adcae6;
-@define-color color_aqua   #b1ccc6;
-@define-color color_blue   #005048;
+@define-color color_orange #8cd5b4;
+@define-color color_yellow #a6ccdf;
+@define-color color_aqua   #b3ccbe;
+@define-color color_blue   #00513a;
 
-@define-color color_on_orange #003731;
-@define-color color_on_yellow #153349;
-@define-color color_on_aqua   #1c3531;
-@define-color color_on_blue   #9ef2e4;
+@define-color color_on_orange #003827;
+@define-color color_on_yellow #083544;
+@define-color color_on_aqua   #1f352b;
+@define-color color_on_blue   #a7f2cf;
