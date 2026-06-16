@@ -443,6 +443,14 @@ bind m run "cut -c3- '#{TMUX_CONF}' | sh -s _toggle_mouse" \; display 'mouse #{?
 #set -g status-position top
 
 
+# -- learning cheat sheet (prints in-pane like fastfetch; scroll up to reference) -
+# Runs as a normal shell command, then leaves you at a fresh prompt.
+# prefix + ? prints it again. Set @learning_cheatsheet off when done.
+set -g @learning_cheatsheet on
+set-hook -g after-new-session 'run-shell -b "pane=$(tmux list-panes -t #{session_name} -F #{pane_id} | head -1); $HOME/.config/tmux/show-cheatsheet.sh \"$pane\""'
+bind ? run-shell "$HOME/.config/tmux/show-cheatsheet.sh" #!important
+
+
 # -- tpm -----------------------------------------------------------------------
 
 # while I don't use tpm myself, many people requested official support so here

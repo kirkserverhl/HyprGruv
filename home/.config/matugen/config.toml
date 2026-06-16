@@ -54,9 +54,13 @@ post_hook = 'touch ~/.config/starship/matugen-rainbow.toml 2>/dev/null; echo "[m
 
 [templates.waybar]
 input_path = "~/.config/matugen/templates/colors.css"
-output_path = "~/.config/waybar/colors/matugen.css"
+output_path = "~/.config/waybar/colors/matugen-waybar.css"
 post_hook = "true"  # reloaded in apply-matugen-auto.sh after all priority files land
 
+[templates.waybarstar]
+input_path = "~/.config/matugen/templates/waypaper-style.css"
+output_path = "~/.config/waybar/colors/matugen.css"
+post_hook = "true"
 
 [templates.terminal_sequences]
 input_path = "~/.config/matugen/templates/terminal-sequences"

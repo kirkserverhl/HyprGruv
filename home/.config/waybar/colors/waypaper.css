@@ -1,0 +1,104 @@
+/* Waypaper Stylesheet - Managed by Matugen */
+/* 
+   Designed for Hyprland blur + isolated transparency on the Waypaper window only.
+   Main backgrounds are transparent / low alpha so the compositor blur shows through.
+   Matches your matugen colors + Agave Nerd Font Propo.
+   Does NOT affect nvim, browsers, etc.
+*/
+
+QMainWindow,
+QWidget#centralWidget,
+QWidget#centralwidget {
+    /* Let Hyprland's blur show through */
+    background-color: transparent;
+}
+
+/* Base font + text */
+QWidget {
+    color: #e2e2e9;
+    font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", sans-serif;
+    font-size: 11pt;
+}
+
+/* The wallpaper grid — this is where you see the blur behind the thumbnails */
+QListWidget {
+    /* Tuned to ~0.90 opacity using matugen surface to match Kitty background_opacity 0.9 + global blur when running yazi */
+    background-color: #121318e6;
+    border: 1px solid #44464f;
+    border-radius: 10px;
+}
+
+/* Thumbnails themselves are transparent so blur is visible behind them */
+QListWidget::item {
+    background-color: transparent;
+    border-radius: 6px;
+}
+
+QListWidget::item:selected {
+    background-color: #b1c5ff;
+    color: #172e60;
+    border-radius: 8px;
+}
+
+/* Controls stay more solid for usability */
+QPushButton {
+    background-color: #304578;
+    color: #dae2ff;
+    border: 1px solid #8f9099;
+    border-radius: 6px;
+    padding: 6px 14px;
+}
+
+QPushButton:hover {
+    background-color: #b1c5ff;
+    color: #172e60;
+}
+
+QPushButton:pressed {
+    background-color: #304578;
+}
+
+QLabel {
+    color: #e2e2e9;
+    background-color: transparent;
+}
+
+QLineEdit {
+    background-color: #282a2f;
+    color: #e2e2e9;
+    border: 1px solid #8f9099;
+    border-radius: 6px;
+    padding: 5px 8px;
+    selection-background-color: #b1c5ff;
+}
+
+QComboBox {
+    background-color: #1e1f25;
+    color: #e2e2e9;
+    border: 1px solid #8f9099;
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #282a2f;
+    color: #e2e2e9;
+    selection-background-color: #b1c5ff;
+}
+
+/* Scrollbars - tuned for consistency with yazi-in-kitty transparency */
+QScrollBar:vertical {
+    background: #1e1f25b3;  /* ~0.70 alpha for subtle scrollbar */
+    width: 8px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: #8f9099;
+    border-radius: 4px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #44464f;
+}

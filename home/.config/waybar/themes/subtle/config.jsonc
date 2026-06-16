@@ -6,15 +6,20 @@
 */
 
 {
+  "include": [
+    "~/.config/waybar/shared/workspaces.json",
+    "~/.config/waybar/shared/clock.json"
+  ],
+
   "layer": "top",
   "position": "top",
   "margin-top": 13,
   "reload_style_on_change": true,
 
   // Individual islands
-  "modules-left": ["clock", "group/expand"],
-  "modules-center": ["custom/media", "custom/media-separator", "hyprland/workspaces"],
-  "modules-right": ["pulseaudio", "bluetooth", "network", "battery"],
+  "modules-left": ["group/expand"],
+  "modules-center": ["custom/media", "custom/media-separator", "hyprland/workspaces", "custom/special"],
+  "modules-right": ["pulseaudio", "bluetooth", "network", "battery", "clock"],
 
   // Separator
   "custom/media-separator": {
@@ -84,23 +89,17 @@
       "default": "",
       "empty": ""
     },
+    "on-click": "activate",
+    "all-outputs": false,
+    "persistent-only": true,
+    "show-special": false,
+    "ignore-workspaces": ["special:.*"],
     "persistent-workspaces": {
-      "*": [1, 2, 3, 4, 5]
-    }
-  },
-
-  "clock": {
-    "format": "{:%H:%M}",
-    "interval": 1,
-    "tooltip-format": "<tt>{calendar}</tt>",
-    "calendar": {
-      "format": {
-        "today": "<span color='#fAfBfC'><b>{}</b></span>"
-      }
-    },
-    "actions": {
-      "on-click-right": "shift_down",
-      "on-click": "shift_up"
+      "DP-1": [1, 2],
+      "DVI-I-1": [3, 4],
+      "HDMI-A-1": [5, 6],
+      "DVI-I-2": [7, 8],
+      "*": [1, 2]
     }
   },
 

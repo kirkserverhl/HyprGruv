@@ -1,0 +1,48 @@
+/*
+ * freshstart theme - rich modules layout with matugen-waybar rainbow styling
+ */
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 5,
+  "margin-bottom": 0,
+  "margin-left": 14,
+  "margin-right": 14,
+  "spacing": 0,
+  "height": 42,
+  "reload_style_on_change": true,
+
+  "include": [
+    "~/.config/waybar/shared/workspaces.json",
+    "~/.config/waybar/shared/clock.json",
+    "~/.config/settings/waybar-quicklinks.json",
+    "~/.config/waybar/themes/freshstart/modules.json"
+  ],
+
+  "modules-left": [
+    "custom/appmenu",
+    "custom/keybindings",
+    "group/settings",
+    "group/links",
+    "group/quicklinks",
+    "custom/empty",
+    "custom/media"
+  ],
+
+  "modules-center": [
+    "hyprland/workspaces",
+    "custom/special"
+  ],
+
+  "modules-right": [
+    "custom/updates",
+    "pulseaudio",
+    "network",
+    "bluetooth",
+    "group/hardware",
+    "group/tools",
+    "tray",
+    "custom/exit",
+    "clock"
+  ]
+}

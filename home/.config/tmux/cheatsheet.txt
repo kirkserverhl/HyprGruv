@@ -1,0 +1,47 @@
+tmux learning cheat sheet (oh-my-tmux)
+══════════════════════════════════════
+
+Prefix = Ctrl-b   (also Ctrl-a as a second prefix)
+
+Sessions
+  Ctrl-b d              detach (session keeps running)
+  Ctrl-b s              session list (pick with arrows)
+  Ctrl-b $              rename session
+  Ctrl-b Ctrl-c         new session (oh-my-tmux)
+  Ctrl-b Ctrl-f         find/switch session (oh-my-tmux)
+  Ctrl-b BTab           last session (oh-my-tmux)
+
+Windows (tabs)
+  Ctrl-b c              new window
+  Ctrl-b ,              rename window
+  Ctrl-b w              window list
+  Ctrl-b n / p          next / previous window
+  Ctrl-b Ctrl-h / Ctrl-l   previous / next window (oh-my-tmux)
+  Ctrl-b &              kill window (confirm)
+
+Panes (splits)
+  Ctrl-b -              split horizontal (top / bottom)
+  Ctrl-b _              split vertical (left / right)
+  Ctrl-b h j k l        move between panes
+  Ctrl-b H J K L        resize pane
+  Ctrl-b x              kill pane (confirm)
+  Ctrl-b z              zoom pane (toggle)
+  Ctrl-b { }            swap pane with previous / next
+  Ctrl-b q              show pane numbers (then press number)
+  Ctrl-b o              cycle panes
+  Ctrl-b ;              last pane
+
+Copy / scroll
+  Ctrl-b [              copy mode (scroll + select)
+  Enter                 copy mode (oh-my-tmux)
+  q                     quit copy mode
+  v                     start selection (vi mode)
+  y                     copy selection
+
+Config / help
+  Ctrl-b ?              print this cheat sheet again (scroll up to read it)
+  Ctrl-b r              reload tmux config (oh-my-tmux)
+
+When you're comfortable, turn off auto-display:
+  tmux set -g @learning_cheatsheet off
+  (add that line to ~/.config/tmux/tmux.conf.local to make it permanent)

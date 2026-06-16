@@ -1,10 +1,12 @@
-@import "../matugen/matugen-waybar.css";
+@import "../../colors/matugen.css";
 
 * {
   border: none;
   border-radius: 0px;
-  font-family: "SF Pro Display", "JetBrainsMono Nerd Font Propo";
-  font-size: 16px;
+  font-family:
+    "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
+    sans-serif;
+  font-size: 18px;
   min-height: 0;
   font-weight: bold;
 }
@@ -49,7 +51,6 @@ tooltip label {
   color: @surface;
   min-width: 50px;
   transition: all 0.3s ease-in-out;
-  font-size: 13px;
   border-radius: 5px;
 }
 
@@ -93,3 +94,21 @@ tooltip label {
   margin: 0 12px 0 0;
 }
 
+#custom-special {
+  padding: 0 6px;
+  margin: 0 3px;
+  border-radius: 50px;
+  color: @on_surface_variant;
+  background: @surface_bright;
+  transition: all 0.3s ease-in-out;
+}
+
+#custom-special.active {
+  background-color: @primary;
+  color: @surface;
+}
+
+#custom-special:hover {
+  background-color: @on_secondary_container;
+  color: @surface;
+}

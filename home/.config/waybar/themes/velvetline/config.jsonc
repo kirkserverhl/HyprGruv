@@ -1,15 +1,21 @@
 {
+  "include": [
+    "~/.config/waybar/shared/workspaces.json",
+    "~/.config/waybar/shared/clock.json"
+  ],
+
   "layer": "top",
   "position": "top",
   "margin-top": 12,
 
-  "modules-left": ["custom/launcher", "clock", "custom/media", "custom/weather"],
+  "modules-left": ["custom/launcher", "custom/media", "custom/weather"],
   "modules-center": [
     "custom/notification",
     "hyprland/workspaces",
+    "custom/special",
     "power-profiles-daemon"
   ],
-  "modules-right": ["custom/pacman", "pulseaudio", "network", "battery"],
+  "modules-right": ["custom/pacman", "pulseaudio", "network", "battery", "clock"],
 
   "hyprland/workspaces": {
     "format": "{id}",
@@ -20,7 +26,18 @@
     },
     "on-click": "activate",
     "on-scroll-down": "hyprctl dispatch workspace e+1",
-    "on-scroll-up": "hyprctl dispatch workspace e-1"
+    "on-scroll-up": "hyprctl dispatch workspace e-1",
+    "all-outputs": false,
+    "persistent-only": true,
+    "show-special": false,
+    "ignore-workspaces": ["special:.*"],
+    "persistent-workspaces": {
+      "DP-1": [1, 2],
+      "DVI-I-1": [3, 4],
+      "HDMI-A-1": [5, 6],
+      "DVI-I-2": [7, 8],
+      "*": [1, 2]
+    }
   },
 
   "custom/weather": {
@@ -116,21 +133,6 @@
     "max-length": 50,
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "tooltip-format": "Connected to {essid}"
-  },
-
-  "clock": {
-    "format": "󰥔  {:%I:%M %p}",
-    "interval": 1,
-    "tooltip-format": "<tt>{calendar}</tt>",
-    "calendar": {
-      "format": {
-        "today": "<span color='#fAfBfC'><b>{}</b></span>"
-      }
-    },
-    "actions": {
-      "on-click-right": "shift_down",
-      "on-click": "shift_up"
-    }
   },
 
   "power-profiles-daemon": {

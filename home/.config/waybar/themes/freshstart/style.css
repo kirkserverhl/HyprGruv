@@ -9,12 +9,8 @@
  * ----------------------------------------------------- 
 */
 
-/* -----------------------------------------------------
- * Matugen colors (dynamic from wallpaper)
- * The calling style.css (or theme style) already imports colors/matugen.css first.
- * We keep a second import here for safety when this file is used standalone,
- * pointing at the matugen version instead of the old pywal colors.css.
- * ----------------------------------------------------- */
+/* --- Import matugen-waybar colors (rainbow + Material You roles) --- */
+@import "../../colors/matugen-waybar.css";
 
 /* ============================================= */
 /*                MAIN WINDOW                    */
@@ -53,10 +49,10 @@ window#waybar {
 
 * {
   font-family:
-    "Agave Nerd Font Propo", "Fira Sans Semibold", "Font Awesome 6 Free",
-    FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-  font-size: 17px;
-  font-weight: 500;
+    "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
+    sans-serif;
+  font-size: 18px;
+  font-weight: bold;
   border: none;
   border-radius: 0px;
   min-height: 0;
@@ -88,8 +84,6 @@ window#waybar {
   margin: 3px 4px;
   padding: 0px 2px;
   border: none;
-  font-weight: 500;
-  font-size: 17px;
 }
 
 #workspaces button {
@@ -101,8 +95,6 @@ window#waybar {
   background-color: transparent;
   transition: all 0.2s ease;
   opacity: 0.95;
-  font-size: 17px;
-  font-weight: 600;
 }
 
 /* Visual grouping for 2-workspace pairs (1-2 | 3-4 | 5-6 | 7-8) */
@@ -116,7 +108,6 @@ window#waybar {
   background-color: @source_color;
   color: @on_surface;
   opacity: 1;
-  font-weight: 700;
 }
 
 #workspaces button:hover {
@@ -132,15 +123,12 @@ window#waybar {
   border-radius: 12px;
   padding: 0 12px;
   margin: 3px 4px;
-  font-weight: 700;
-  font-size: 17px;
   min-width: 28px;
 }
 
 #custom-special.active {
   background-color: @source_color;
   color: @on_surface;
-  font-weight: 700;
 }
 
 #custom-special:hover {
@@ -175,8 +163,6 @@ tooltip label {
   padding: 2px 10px 0px 10px;
   border-radius: 12px;
   color: @on_secondary_container;
-  font-size: 17px;
-  font-weight: normal;
   opacity: 0.8;
 }
 
@@ -194,7 +180,6 @@ window#waybar.empty #window {
   /* minimal vertical for floating bar */
   padding: 0px;
   border-radius: 15px;
-  font-weight: normal;
   font-style: normal;
   opacity: 0.8;
   border: 3px solid @surface_container;
@@ -257,8 +242,6 @@ window#waybar.empty #window {
 #custom-quicklink10,
 #custom-waybarthemes {
   margin-right: 14px;
-  font-size: 20px;
-  font-weight: bold;
   opacity: 0.8;
   color: @on_surface;
 }
@@ -298,16 +281,12 @@ window#waybar.empty #window {
 
 #idle_inhibitor {
   margin-right: 17px;
-  font-size: 20px;
-  font-weight: bold;
   opacity: 0.8;
   color: @on_surface_variant;
 }
 
 #idle_inhibitor.activated {
   margin-right: 15px;
-  font-size: 20px;
-  font-weight: bold;
   opacity: 0.8;
   color: #dc2f2f;
 }
@@ -318,7 +297,6 @@ window#waybar.empty #window {
 
 #custom-appmenu {
   background-color: @source_color;
-  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 0px 10px 0px 10px;
@@ -335,7 +313,6 @@ window#waybar.empty #window {
 #custom-exit {
   margin: 0px 13px 0px 0px;
   padding: 0px;
-  font-size: 20px;
   color: @primary;
   opacity: 0.8;
 }
@@ -420,7 +397,6 @@ window#waybar.empty #window {
 #language {
   margin: 0px;
   padding: 0px;
-  font-size: 17px;
   color: @on_surface;
 }
 
@@ -434,7 +410,6 @@ window#waybar.empty #window {
 
 #clock {
   background-color: @source_color;
-  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 1px 10px 0px 10px;
@@ -450,7 +425,6 @@ window#waybar.empty #window {
 
 #backlight {
   background-color: @source_color;
-  font-size: 17px;
   color: @on_surface_variant;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
@@ -476,7 +450,6 @@ window#waybar.empty #window {
 
 #network {
   background-color: transparent;
-  font-size: 17px;
   color: @on_surface_variant;
   padding: 2px 10px 0px 10px;
   margin: 3px 15px 3px 0px;
@@ -503,7 +476,6 @@ window#waybar.empty #window {
 #bluetooth.on,
 #bluetooth.connected {
   background-color: @source_color;
-  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
@@ -524,7 +496,6 @@ window#waybar.empty #window {
 
 #battery {
   background-color: @source_color;
-  font-size: 17px;
   color: @on_surface;
   border-radius: 15px;
   padding: 2px 15px 0px 10px;
@@ -803,7 +774,6 @@ window#waybar.empty #window {
   border-radius: 8px;
   padding: 2px 10px 0 10px;
   margin: 3px 4px;
-  font-size: 17px;
   opacity: 0.95;
 }
 

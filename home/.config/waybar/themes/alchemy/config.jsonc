@@ -1,10 +1,15 @@
 {
+  "include": [
+    "~/.config/waybar/shared/workspaces.json",
+    "~/.config/waybar/shared/clock.json"
+  ],
+
   "layer": "top",
   "position": "top",
   "margin-top": 13,
-  "modules-left": ["custom/launcher", "clock", "hyprland/workspaces"],
+  "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/special"],
   "modules-center": ["custom/notification", "custom/media"],
-  "modules-right": ["custom/pacman", "custom/weather", "pulseaudio", "battery", "network", "power-profiles-daemon"],
+  "modules-right": ["custom/pacman", "custom/weather", "pulseaudio", "battery", "network", "power-profiles-daemon", "clock"],
   "height": 40,
 
   "custom/notification": {
@@ -63,12 +68,6 @@
     "tooltip-format": "Battery is at {capacity}%" 
   },
 
-  "clock": {
-    "format": "󰥔  {:%I:%M %p}",
-    "format-alt": "󰥔  {:%a, %d. %b  %I:%M %p}",
-    "tooltip-format": "Date: {:%Y-%m-%d}"
-  },
-
   "pulseaudio": {
     "format": "{icon}  {volume}%",
     "format-bluetooth": "󰂱 {volume}%",
@@ -110,12 +109,18 @@
       "5": "5",
       "6": "6",
       "7": "7",
-      "8": "8",
-      "9": "9",
-      "10": "10"
+      "8": "8"
     },
+    "all-outputs": false,
+    "persistent-only": true,
+    "show-special": false,
+    "ignore-workspaces": ["special:.*"],
     "persistent-workspaces": {
-      "*": 5 // 5 workspaces by default on every monitor
+      "DP-1": [1, 2],
+      "DVI-I-1": [3, 4],
+      "HDMI-A-1": [5, 6],
+      "DVI-I-2": [7, 8],
+      "*": [1, 2]
     },
     "sort-by-number": true
   },

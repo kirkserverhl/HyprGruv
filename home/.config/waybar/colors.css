@@ -1,39 +1,104 @@
-/* Matugen colors for Waybar + other apps */
+/* Waypaper Stylesheet - Managed by Matugen */
+/* 
+   Designed for Hyprland blur + isolated transparency on the Waypaper window only.
+   Main backgrounds are transparent / low alpha so the compositor blur shows through.
+   Matches your matugen colors + Agave Nerd Font Propo.
+   Does NOT affect nvim, browsers, etc.
+*/
 
-/* Standard Material You roles */
-@define-color background #121318;
-@define-color foreground #e3e2e9;
+QMainWindow,
+QWidget#centralWidget,
+QWidget#centralwidget {
+    /* Let Hyprland's blur show through */
+    background-color: transparent;
+}
 
-@define-color primary #b3c5ff;
-@define-color on_primary #192e60;
-@define-color primary_container #314578;
+/* Base font + text */
+QWidget {
+    color: #e3e2e9;
+    font-family: "Agave Nerd Font Propo", "JetBrainsMono Nerd Font Propo", sans-serif;
+    font-size: 11pt;
+}
 
-@define-color secondary #c1c6dd;
-@define-color on_secondary #2a3042;
-@define-color secondary_container #414659;
+/* The wallpaper grid — this is where you see the blur behind the thumbnails */
+QListWidget {
+    /* Tuned to ~0.90 opacity using matugen surface to match Kitty background_opacity 0.9 + global blur when running yazi */
+    background-color: #121318e6;
+    border: 1px solid #45464f;
+    border-radius: 10px;
+}
 
-@define-color tertiary #e1bbdc;
-@define-color on_tertiary #422741;
-@define-color tertiary_container #5a3d58;
+/* Thumbnails themselves are transparent so blur is visible behind them */
+QListWidget::item {
+    background-color: transparent;
+    border-radius: 6px;
+}
 
-@define-color error #ffb4ab;
-@define-color on_error #690005;
+QListWidget::item:selected {
+    background-color: #b4c4ff;
+    color: #1b2d61;
+    border-radius: 8px;
+}
 
-@define-color surface #121318;
-@define-color on_surface #e3e2e9;
-@define-color surface_variant #45464f;
-@define-color on_surface_variant #c5c6d0;
+/* Controls stay more solid for usability */
+QPushButton {
+    background-color: #334478;
+    color: #dbe1ff;
+    border: 1px solid #8f909a;
+    border-radius: 6px;
+    padding: 6px 14px;
+}
 
-@define-color surface_container #1e1f25;
-@define-color surface_container_high #292a2f;
+QPushButton:hover {
+    background-color: #b4c4ff;
+    color: #1b2d61;
+}
 
-/* Rainbow palette to match Starship matugen-rainbow.toml */
-@define-color color_orange #b3c5ff;
-@define-color color_yellow #e1bbdc;
-@define-color color_aqua   #c1c6dd;
-@define-color color_blue   #314578;
+QPushButton:pressed {
+    background-color: #334478;
+}
 
-@define-color color_on_orange #192e60;
-@define-color color_on_yellow #422741;
-@define-color color_on_aqua   #2a3042;
-@define-color color_on_blue   #dae1ff;
+QLabel {
+    color: #e3e2e9;
+    background-color: transparent;
+}
+
+QLineEdit {
+    background-color: #292a2f;
+    color: #e3e2e9;
+    border: 1px solid #8f909a;
+    border-radius: 6px;
+    padding: 5px 8px;
+    selection-background-color: #b4c4ff;
+}
+
+QComboBox {
+    background-color: #1e1f25;
+    color: #e3e2e9;
+    border: 1px solid #8f909a;
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #292a2f;
+    color: #e3e2e9;
+    selection-background-color: #b4c4ff;
+}
+
+/* Scrollbars - tuned for consistency with yazi-in-kitty transparency */
+QScrollBar:vertical {
+    background: #1e1f25b3;  /* ~0.70 alpha for subtle scrollbar */
+    width: 8px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: #8f909a;
+    border-radius: 4px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #45464f;
+}

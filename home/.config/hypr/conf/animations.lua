@@ -1,28 +1,93 @@
--- conf/animations.lua
--- Converted from conf/animations/00-default.conf
+local animations = {
+	-- MS Standard scheme spatial
+	hl_curve = {
+		["md3_spatial_fast"] = { type = "spring", mass = 1, stiffness = 600, damping = 49 },
+		["md3_spatial_default"] = { type = "spring", mass = 1, stiffness = 300, damping = 35 },
+		["md3_spatial_slow"] = { type = "spring", mass = 1, stiffness = 160, damping = 25 },
 
--- Bezier curves (old "bezier = name, x1,y1,x2,y2" become hl.curve)
-hl.curve("wind",      { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
-hl.curve("winIn",     { type = "bezier", points = { {0.1, 1.1},  {0.1, 1.1}  } })
-hl.curve("winOut",    { type = "bezier", points = { {0.3, -0.3}, {0, 1}      } })
-hl.curve("liner",     { type = "bezier", points = { {1, 1},      {1, 1}      } })
-hl.curve("overshot",  { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
-hl.curve("smoothOut", { type = "bezier", points = { {0.5, 0},    {0.99, 0.99} } })
-hl.curve("smoothIn",  { type = "bezier", points = { {0.5, -0.5}, {0.68, 1.5} } })
+		["md3_effects_fast"] = { type = "spring", mass = 1, stiffness = 3800, damping = 123 },
+		["md3_effects_default"] = { type = "spring", mass = 1, stiffness = 1600, damping = 80 },
+		["md3_effects_slow"] = { type = "spring", mass = 1, stiffness = 800, damping = 57 },
 
--- Animations (old "animation = name, on/off, speed, curve, style")
-hl.animation({ leaf = "windows",     enabled = true, speed = 6, bezier = "wind",     style = "slide" })
-hl.animation({ leaf = "windowsIn",   enabled = true, speed = 5, bezier = "winIn",    style = "slide" })
-hl.animation({ leaf = "windowsOut",  enabled = true, speed = 3, bezier = "smoothOut", style = "slide" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "wind",     style = "slide" })
-hl.animation({ leaf = "border",      enabled = true, speed = 1, bezier = "liner" })
-hl.animation({ leaf = "borderangle", enabled = true, speed = 25, bezier = "liner", style = "loop" })
-hl.animation({ leaf = "fade",        enabled = true, speed = 3, bezier = "smoothOut" })
-hl.animation({ leaf = "workspaces",  enabled = true, speed = 5, bezier = "overshot" })
+		["md3_standard"] = { type = "bezier", points = { 0.2, 0.0, 0.0, 1.0 } },
+		["md3_emphasized_accel"] = { type = "bezier", points = { 0.3, 0.0, 0.8, 0.15 } },
+	},
 
--- Newer workspace variants (0.42+)
-hl.animation({ leaf = "workspacesIn",  enabled = true, speed = 5, bezier = "winIn",  style = "slide" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 5, bezier = "winOut", style = "slide" })
+	hl_animation = {
+		windowsIn = {
+			leaf = "windowsIn",
+			enabled = true,
+			speed = 5,
+			spring = "md3_spatial_default",
+			style = "popin 92%",
+		},
+		windowsOut = {
+			leaf = "windowsOut",
+			enabled = true,
+			speed = 5,
+			spring = "md3_spatial_default",
+			style = "popin 92%",
+		},
+		windowsMove = {
+			leaf = "windowsMove",
+			enabled = true,
+			speed = 3,
+			spring = "md3_spatial_default",
+			style = "popin 92%",
+		},
+		layersIn = {
+			leaf = "layersIn",
+			enabled = true,
+			speed = 3,
+			bezier = "md3_standard",
+			style = "slide",
+		},
+		layersOut = {
+			leaf = "layersOut",
+			enabled = true,
+			speed = 2.5,
+			bezier = "md3_emphasized_accel",
+			style = "slide",
+		},
+		fade = {
+			leaf = "fade",
+			enabled = true,
+			speed = 2,
+			spring = "md3_effects_default",
+		},
+		fadeOut = {
+			leaf = "fadeOut",
+			enabled = true,
+			speed = 2,
+			spring = "md3_spatial_default",
+		},
+		border = {
+			leaf = "border",
+			enabled = true,
+			speed = 2,
+			spring = "md3_effects_default",
+		},
+		borderangle = {
+			leaf = "borderangle",
+			enabled = false,
+			speed = 2,
+			spring = "md3_effects_default",
+		},
+		workspaces = {
+			leaf = "workspaces",
+			enabled = true,
+			speed = 5,
+			spring = "md3_spatial_default",
+			style = "slide",
+		},
+		specialWorkspace = {
+			leaf = "specialWorkspace",
+			enabled = true,
+			speed = 3.5,
+			spring = "md3_spatial_fast",
+			style = "slidevert",
+		},
+	},
+}
 
--- You can also define springs if you prefer the new spring system:
--- hl.curve("mySpring", { type = "spring", mass = 1, stiffness = 80, dampening = 12 })
+return animations

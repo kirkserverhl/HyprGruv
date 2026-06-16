@@ -1,0 +1,44 @@
+/* Matugen colors for Waybar + other apps */
+
+/* Standard Material You roles */
+@define-color background #121318;
+@define-color foreground #e2e2e9;
+
+@define-color primary #b1c5ff;
+@define-color on_primary #172e60;
+@define-color primary_container #304578;
+@define-color on_primary_container #dae2ff;
+
+@define-color on_background #e2e2e9;
+@define-color on_secondary_container #c5c6d0;
+@define-color source_color #b1c5ff;
+
+@define-color secondary #c0c6dd;
+@define-color on_secondary #2a3042;
+@define-color secondary_container #404659;
+
+@define-color tertiary #e1bbdd;
+@define-color on_tertiary #412742;
+@define-color tertiary_container #5a3d59;
+
+@define-color error #ffb4ab;
+@define-color on_error #690005;
+
+@define-color surface #121318;
+@define-color on_surface #e2e2e9;
+@define-color surface_variant #44464f;
+@define-color on_surface_variant #c5c6d0;
+
+@define-color surface_container #1e1f25;
+@define-color surface_container_high #282a2f;
+
+/* Rainbow palette to match Starship matugen-rainbow.toml */
+@define-color color_orange #b1c5ff;
+@define-color color_yellow #e1bbdd;
+@define-color color_aqua   #c0c6dd;
+@define-color color_blue   #304578;
+
+@define-color color_on_orange #172e60;
+@define-color color_on_yellow #412742;
+@define-color color_on_aqua   #2a3042;
+@define-color color_on_blue   #dae2ff;

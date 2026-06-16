@@ -8,7 +8,57 @@
     },
     "on-click": "activate",
     "on-scroll-down": "hyprctl dispatch workspace e+1",
-    "on-scroll-up": "hyprctl dispatch workspace e-1"
+    "on-scroll-up": "hyprctl dispatch workspace e-1",
+    "all-outputs": false,
+    "persistent-only": true,
+    "show-special": false,
+    "ignore-workspaces": ["special:.*"],
+    "persistent-workspaces": {
+      "DP-1": [1, 2],
+      "DVI-I-1": [3, 4],
+      "HDMI-A-1": [5, 6],
+      "DVI-I-2": [7, 8],
+      "*": [1, 2]
+    }
+  },
+  "custom/empty": {
+    "format": " ",
+    "tooltip": false
+  },
+  "custom/keybindings": {
+    "format": "\uf11c",
+    "on-click": "~/.config/hypr/scripts/keybinds.sh",
+    "tooltip": false
+  },
+  "custom/chatgpt": {
+    "format": " ",
+    "on-click": "~/.config/settings/ai.sh",
+    "tooltip-format": "AI Support"
+  },
+  "custom/wallpaper": {
+    "format": "\uf03e",
+    "on-click": "waypaper",
+    "on-click-right": "~/.config/hypr/scripts/decorations.sh",
+    "tooltip-format": "Left: Wallpaper\nRight: Decorations"
+  },
+  "custom/waybarthemes": {
+    "format": "\uf141",
+    "on-click": "~/.config/hypr/scripts/themeswitcher.sh",
+    "on-click-right": "~/.config/hypr/scripts/animations.sh",
+    "tooltip-format": "Left: Waybar themes\nRight: Animations"
+  },
+  "group/links": {
+    "orientation": "horizontal",
+    "modules": ["custom/chatgpt", "custom/empty"]
+  },
+  "group/settings": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-memory",
+      "transition-left-to-right": true
+    },
+    "modules": ["custom/settings", "custom/waybarthemes", "custom/wallpaper"]
   },
   "hyprland/window": {
     "format": "{class}",
@@ -25,20 +75,7 @@
     "on-click-right": "~/.config/hypr/scripts/launch.sh",
     "tooltip-format": "Left: Open Rofi \nRight: Open Apps"
   },
-  "clock": {
-    "format": "\udb82\udd54  {:%I:%M %p}",
-    "interval": 1,
-    "tooltip-format": "<tt>{calendar}</tt>",
-    "calendar": {
-      "format": {
-        "today": "<span color='#fAfBfC'><b>{}</b></span>"
-      }
-    },
-    "actions": {
-      "on-click-right": "shift_down",
-      "on-click": "shift_up"
-    }
-  },
+
   "custom/system": {
     "format": " \ue473 ",
     "tooltip": false
@@ -333,7 +370,6 @@
     "exec": "date +%H:%M",
     "tooltip": false
   },
-  "reload_style_on_change": true,
   "temperature": {
     "critical-threshold": 80,
     "format": "\uf2c9"

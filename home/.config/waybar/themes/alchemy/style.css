@@ -1,10 +1,10 @@
-@import url("../../colors/matugen.css");
+@import url("../../colors/matugen-waybar.css");
 
 * {
   font-family:
     "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
     sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   border-radius: 50px;
   font-weight: bold;
 }
@@ -59,6 +59,24 @@ window#waybar {
 #workspaces button.urgent {
   background-color: @error;
   color: @on_error;
+}
+
+#custom-special {
+  color: @outline;
+  padding: 0 8px;
+  margin-left: 4px;
+  transition: all 0.3s ease;
+}
+
+#custom-special.active {
+  background-color: @primary_fixed_dim;
+  color: @on_primary_fixed;
+  border-radius: 50px;
+  padding: 5px 12px;
+}
+
+#custom-special:hover {
+  background-color: @surface_container_high;
 }
 
 #battery,

@@ -1,0 +1,10 @@
+{
+  "custom/special": {
+    "exec": "~/.config/waybar/scripts/special-workspace.sh",
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "hyprctl dispatch togglespecialworkspace scratchpad",
+    "interval": 2,
+    "tooltip": true
+  }
+}
