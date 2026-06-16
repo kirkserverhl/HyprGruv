@@ -389,8 +389,8 @@ sudo pacman -S --needed --noconfirm \
 
 sudo pacman -S --needed --noconfirm \
     hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
-    hyremoji hyprcursor hyprpicker hyprsunset \
-    hyprlockwaybar hyprshot hyprtoolkit \
+    hyprcursor hyprpicker hyprsunset \
+    hyprlock waybar hyprshot hyprtoolkit \
     fuzzel wl-clipboard grim slurp brightnessctl \
     polkit-gnome gnome-keyring ncdu \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
