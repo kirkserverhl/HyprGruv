@@ -18,65 +18,45 @@ USER_HOME="$REAL_HOME"
 # ===================================================================
 # update-sddm-wallpaper.sh
 #
-# Keeps the SDDM greeter background(s) pointing at your current desktop wallpaper
-# using a *central* stable path so multiple themes all see the same "default".
+# Copies or converts the current waypaper wallpaper into the sugar-candy theme:
+#   /usr/share/sddm/themes/sugar-candy/sddm-wallpaper.png
 #
-# Central image (maintained by set_wallpaper.sh on every waypaper change):
-#   ~/.config/settings/default_wp.png
+# Non-PNG sources are converted with ImageMagick. PNG sources are hard-copied.
+# theme.conf Background= is kept pointed at that path, and matugen colors are synced.
 #
-# Recommended one-time setup for any SDDM theme (sugar-candy, pixie, eos-breeze, etc.):
-#   Background="/home/kirk/.config/settings/default_wp.png"
-#   FullBlur="false"
-#
-# This script (elevated) can also force the above + sync matugen colors into
-# the theme.conf files, and ensures the sddm user can read files under $HOME.
+# Triggered automatically from waypaper via set_wallpaper.sh (post_command).
+# Runs as your user — no sudo prompt. (Your sugar-candy theme dir is user-owned.)
 #
 # Usage:
 #   update-sddm-wallpaper.sh [path/to/wallpaper]
-#   update-sddm-wallpaper.sh --setup
-#
-# --setup : One-time action. Run it as your normal user. It will use sudo
-#           (preferred) or pkexec to elevate, install a narrow NOPASSWD rule
-#           for this script, then perform the update using your real $HOME.
+#   update-sddm-wallpaper.sh --setup   # optional legacy NOPASSWD rule if theme is root-owned
 
 # --- Load your existing helpers for consistent look ---
 source "${USER_HOME:-$HOME}/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "${USER_HOME:-$HOME}/.config/hypr/scripts/colors.sh" 2>/dev/null || true
-
-# Without --setup, the script needs root (sudo/pkexec) for writing
-# into /usr/share/sddm/themes. The recommended flow is to run
-#   ~/.config/hypr/scripts/update-sddm-wallpaper.sh --setup
-# as your normal user (it will ask for sudo/pkexec). After that,
-# waypaper post-commands can update silently.
 # ===================================================================
 
 set -euo pipefail
 
-# --- Self-reexec with privileges if needed (best effort) ---
+THEME_DIR="/usr/share/sddm/themes/sugar-candy"
+
+theme_is_writable() {
+    [ -d "$THEME_DIR" ] && [ -w "$THEME_DIR" ]
+}
+
 maybe_elevate() {
-    if [ "$EUID" -eq 0 ]; then
-        return 0
-    fi
+    [ "$EUID" -eq 0 ] && return 0
+    theme_is_writable && return 0
 
     SUDOERS_MARKER="/etc/sudoers.d/99-sddm-wallpaper-${REAL_USER:-$USER}"
-
-    # If we have the passwordless sudoers rule (from --setup), prefer sudo -n
-    # so the background waypaper call stays completely silent.
-    if [ -f "$SUDOERS_MARKER" ]; then
+    if [ -f "$SUDOERS_MARKER" ] && command -v sudo >/dev/null 2>&1; then
         exec sudo -n -- "$0" "$@"
     fi
 
-    # Prefer sudo (more reliable for these scripts and matches the NOPASSWD rule we create).
-    # pkexec can fail with "Not authorized" on some systems (PolicyKit restrictions, KDE, etc.).
-    if command -v sudo >/dev/null 2>&1; then
-        exec sudo "$0" "$@"
-    elif command -v pkexec >/dev/null 2>&1; then
-        exec pkexec "$0" "$@"
-    else
-        echo "ERROR: Neither sudo nor pkexec available to elevate." >&2
-        echo "Try:  sudo $0 $*" >&2
-        exit 1
-    fi
+    echo "ERROR: Cannot write to $THEME_DIR (not writable and no passwordless sudo rule)." >&2
+    echo "Fix ownership: sudo chown -R ${REAL_USER}:${REAL_USER} $THEME_DIR" >&2
+    echo "Or run once: $0 --setup" >&2
+    exit 1
 }
 
 # Handle --setup (one-time). We prefer that you run this *without* an
@@ -144,36 +124,100 @@ if [ "${1:-}" = "--setup" ]; then
     shift
 fi
 
-# If not root at this point, try to elevate (pkexec/sudo will re-exec us)
-if [ "$EUID" -ne 0 ]; then
-    maybe_elevate "$@"
-fi
+maybe_elevate "$@"
 
+expand_path() {
+    local p="${1//\"/}"
+    p="${p#"${p%%[![:space:]]*}"}"
+    p="${p%"${p##*[![:space:]]}"}"
+    # Use ${p:2} not ${p#~/} — bash expands ~ in the prefix pattern and breaks paths.
+    if [[ "$p" == "~/"* ]]; then
+        printf '%s\n' "$USER_HOME/${p:2}"
+    elif [[ "$p" == "~" ]]; then
+        printf '%s\n' "$USER_HOME"
+    else
+        printf '%s\n' "$p"
+    fi
+}
 
-# --- Resolve source wallpaper ---
-# Always look under the *real* user's home (even if we are root right now).
+read_waypaper_wallpaper() {
+    local ini="$USER_HOME/.config/waypaper/config.ini" line
+    [ -f "$ini" ] || return 1
+    line=$(grep -m1 '^wallpaper[[:space:]]*=[[:space:]]*' "$ini" 2>/dev/null | cut -d= -f2- || true)
+    [ -n "$line" ] || return 1
+    expand_path "$line"
+}
+
+# --- Resolve source wallpaper (waypaper config is the source of truth) ---
 if [ -n "${1:-}" ] && [ "$1" != "--setup" ]; then
-    SOURCE="$1"
+    SOURCE=$(expand_path "$1")
+elif wp=$(read_waypaper_wallpaper); then
+    SOURCE="$wp"
 elif [ -f "$USER_HOME/.config/last_wallpaper.txt" ]; then
-    SOURCE=$(cat "$USER_HOME/.config/last_wallpaper.txt" | tr -d '\n\r')
+    SOURCE=$(expand_path "$(cat "$USER_HOME/.config/last_wallpaper.txt" | tr -d '\n\r')")
 elif [ -f "$USER_HOME/.config/settings/default" ]; then
-    SOURCE=$(cat "$USER_HOME/.config/settings/default" | tr -d '\n\r')
+    SOURCE=$(expand_path "$(cat "$USER_HOME/.config/settings/default" | tr -d '\n\r')")
 else
-    echo "No wallpaper source available (looked in $USER_HOME/.config/settings/...)" >&2
+    echo "No wallpaper source available (looked in $USER_HOME/.config/waypaper/config.ini)" >&2
     notify-send "SDDM Wallpaper" "Failed: no current wallpaper in cache" -u critical 2>/dev/null || true
     exit 1
 fi
 
-# Central stable location (the one you point all theme.confs at).
-# set_wallpaper.sh already maintains this, but we defensively refresh it here too
-# (this part runs as root when elevated, but the file is user-owned).
+# User-local canonical copy (hyprlock, wlogout, etc. — maintained by set_wallpaper.sh).
 CENTRAL_DEFAULT="$USER_HOME/.config/settings/default_wp.png"
 
-THEME_DIR="/usr/share/sddm/themes/sugar-candy"
-TARGET_DIR="$THEME_DIR/Backgrounds"
-TARGET_FILE="$TARGET_DIR/sddm-wallpaper.png"   # kept for compat / old references
+TARGET_FILE="$THEME_DIR/sddm-wallpaper.png"
 THEME_CONF="$THEME_DIR/theme.conf"
-OLD_BLURRED="$TARGET_DIR/sddm-blurred.png"
+LEGACY_TARGET="$THEME_DIR/Backgrounds/sddm-wallpaper.png"
+OLD_BLURRED="$THEME_DIR/Backgrounds/sddm-blurred.png"
+
+# Install waypaper's current wallpaper into the sugar-candy theme folder.
+# PNG sources are hard-copied (fast, no re-encode). Other formats are converted to PNG.
+ensure_sddm_qt6_compat() {
+    local qml meta
+    for qml in "$THEME_DIR"/Main.qml "$THEME_DIR"/Components/*.qml; do
+        [ -f "$qml" ] || continue
+        if grep -q 'import QtGraphicalEffects 1.0' "$qml" 2>/dev/null; then
+            sed -i 's|import QtGraphicalEffects 1.0|import Qt5Compat.GraphicalEffects|g' "$qml"
+            echo ":: Patched Qt6 compat in $(basename "$qml")"
+        fi
+    done
+
+    meta="$THEME_DIR/metadata.desktop"
+    if [ -f "$meta" ] && ! grep -q '^QtVersion=6' "$meta" 2>/dev/null; then
+        echo 'QtVersion=6' >> "$meta"
+        echo ":: Set QtVersion=6 in metadata.desktop"
+    fi
+}
+
+install_sddm_theme_wallpaper() {
+    local src="$1" dest="$2"
+    local ext="${src##*.}"
+    ext="${ext,,}"
+
+    rm -f "$dest"
+
+    if [ "$ext" = "png" ]; then
+        cp -f -- "$src" "$dest"
+        echo ":: Hard-copied PNG wallpaper → $dest"
+        return 0
+    fi
+
+    if command -v magick >/dev/null 2>&1; then
+        magick "$src" -strip -interlace none -quality 92 "$dest"
+        echo ":: Converted ${ext} → PNG at $dest"
+        return 0
+    fi
+
+    if command -v convert >/dev/null 2>&1; then
+        convert "$src" -strip -quality 92 "$dest"
+        echo ":: Converted ${ext} → PNG at $dest (legacy convert)"
+        return 0
+    fi
+
+    echo "ERROR: Source is .$ext but ImageMagick is not installed for PNG conversion." >&2
+    return 1
+}
 
 if [ ! -f "$SOURCE" ]; then
     echo "Source wallpaper not found: $SOURCE" >&2
@@ -182,46 +226,39 @@ if [ ! -f "$SOURCE" ]; then
 fi
 
 echo ":: Source: $SOURCE"
-echo ":: Ensuring central default: $CENTRAL_DEFAULT"
+echo ":: Ensuring user-local default: $CENTRAL_DEFAULT"
 
-# Refresh the central canonical image (PNG normalized). This is what SDDM themes read.
+# Keep the user-local canonical PNG in sync (non-fatal if this fails).
 if command -v magick >/dev/null 2>&1; then
-    magick "$SOURCE" -strip -quality 92 "$CENTRAL_DEFAULT" 2>/dev/null || cp -f "$SOURCE" "$CENTRAL_DEFAULT"
+    magick "$SOURCE" -strip -interlace none -quality 92 "$CENTRAL_DEFAULT" 2>/dev/null \
+        || cp -f -- "$SOURCE" "$CENTRAL_DEFAULT"
 else
-    cp -f "$SOURCE" "$CENTRAL_DEFAULT"
+    cp -f -- "$SOURCE" "$CENTRAL_DEFAULT"
 fi
 chmod 644 "$CENTRAL_DEFAULT" 2>/dev/null || true
-# Make sure the real user owns the central image (we may have created it while root)
-chown "$REAL_USER:$REAL_USER" "$CENTRAL_DEFAULT" 2>/dev/null || true
+[ "$EUID" -eq 0 ] && chown "$REAL_USER:$REAL_USER" "$CENTRAL_DEFAULT" 2>/dev/null || true
 
-# Also keep the per-sugar-candy copy (harmless, some people may still reference it directly)
 if [ -d "$THEME_DIR" ]; then
-    mkdir -p "$TARGET_DIR"
-    if command -v magick >/dev/null 2>&1; then
-        magick "$SOURCE" -quality 92 "$TARGET_FILE" 2>/dev/null || cp -f "$SOURCE" "$TARGET_FILE"
-    else
-        cp -f "$SOURCE" "$TARGET_FILE"
-    fi
+    ensure_sddm_qt6_compat
+    install_sddm_theme_wallpaper "$SOURCE" "$TARGET_FILE"
     chmod 644 "$TARGET_FILE" 2>/dev/null || true
-    echo ":: Also updated per-theme copy: $TARGET_FILE (for compat)"
+    [ "$EUID" -eq 0 ] && chown "$REAL_USER:$REAL_USER" "$TARGET_FILE" 2>/dev/null || true
 fi
 
-# Allow sddm user to traverse the real user's home and the settings dir
-# (needed to read the central default_wp.png even when ~ is 700).
-if id sddm >/dev/null 2>&1; then
-    setfacl -m u:sddm:x "$USER_HOME" 2>/dev/null || true
-    setfacl -m u:sddm:x "$USER_HOME/.config" 2>/dev/null || true
-    setfacl -m u:sddm:x "$USER_HOME/.config/settings" 2>/dev/null || true
-fi
+# Drop legacy Backgrounds/ copy so only the theme-root path is used.
+[ -e "$LEGACY_TARGET" ] && rm -f "$LEGACY_TARGET" && echo ":: Removed legacy $LEGACY_TARGET"
 
-# Update theme.conf(s) to point at the *central* stable default (so multiple themes
-# all follow the same file that gets updated on wallpaper changes).
-# We set an absolute path so it works even when the theme is in /usr/share.
-CENTRAL_BG="$USER_HOME/.config/settings/default_wp.png"
+SDDM_BG="$TARGET_FILE"
 
 if [ -f "$THEME_CONF" ]; then
-    # Point at the central canonical wallpaper (the key change for "same path, file updates")
-    sed -i "s|^Background=.*|Background=\"${CENTRAL_BG}\"|" "$THEME_CONF"
+    sed -i "s|^Background=.*|Background=\"${SDDM_BG}\"|" "$THEME_CONF"
+
+    if command -v magick >/dev/null 2>&1; then
+        WP_W=$(magick identify -format '%w' "$TARGET_FILE" 2>/dev/null || echo "1920")
+        WP_H=$(magick identify -format '%h' "$TARGET_FILE" 2>/dev/null || echo "1080")
+        sed -i "s|^ScreenWidth=.*|ScreenWidth=\"${WP_W}\"|" "$THEME_CONF"
+        sed -i "s|^ScreenHeight=.*|ScreenHeight=\"${WP_H}\"|" "$THEME_CONF"
+    fi
 
     # Disable full-screen blur; we want the real wallpaper visible
     sed -i 's|^FullBlur=.*|FullBlur="false"|' "$THEME_CONF"
@@ -252,14 +289,8 @@ if [ -f "$THEME_CONF" ]; then
         echo ":: theme.conf colors + font updated from matugen"
     fi
 
-    echo ":: theme.conf updated → Background=${CENTRAL_BG} (FullBlur=false)"
+    echo ":: theme.conf updated → Background=${SDDM_BG} (FullBlur=false)"
 fi
-
-# If you use *other* SDDM themes and want this script to also fix their Background=
-# lines to the same central path, add more THEME_CONF=... + sed blocks here (or
-# generalize with a list of theme dirs). Example:
-# OTHER_THEME_CONF="/usr/share/sddm/themes/your-other-theme/theme.conf"
-# [ -f "$OTHER_THEME_CONF" ] && sed -i "s|^Background=.*|Background=\"${CENTRAL_BG}\"|" "$OTHER_THEME_CONF" || true
 
 # Remove any leftover legacy blurred SDDM background (we use the raw wallpaper instead)
 if [ -f "$OLD_BLURRED" ]; then
@@ -268,6 +299,6 @@ if [ -f "$OLD_BLURRED" ]; then
 fi
 
 WALL_NAME=$(basename "$SOURCE")
-echo ":: SDDM now uses central default: $CENTRAL_DEFAULT"
-echo ":: (current image from: $WALL_NAME — takes effect on next login)"
-notify-send "SDDM" "Login wallpaper → $WALL_NAME (central default)" -t 2500 2>/dev/null || true
+echo ":: SDDM sugar-candy wallpaper: $TARGET_FILE"
+echo ":: (from: $WALL_NAME — takes effect on next login)"
+notify-send "SDDM" "Login wallpaper → $WALL_NAME" -t 2500 2>/dev/null || true

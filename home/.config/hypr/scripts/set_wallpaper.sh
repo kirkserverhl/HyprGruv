@@ -129,6 +129,9 @@ echo ":: Updated canonical default (for SDDM etc.): $DEFAULT_WP_PNG"
 # Optional: also keep the convenience sourcable script in sync if needed (it just points at the png)
 source "$HOME/.config/settings/default_wp.sh" 2>/dev/null || true
 
+# SDDM first — don't wait for matugen/color work to finish.
+"$HOME/.config/hypr/scripts/update-sddm-wallpaper.sh" "$WALLPAPER" || true
+
 # ------------------- Wallpaper Effects -------------------
 if [ -f "$WALLPAPER_EFFECT_FILE" ]; then
     EFFECT=$(cat "$WALLPAPER_EFFECT_FILE")
@@ -295,20 +298,3 @@ fi
 # echo "   - $RASI_FILE"
 
 echo ":: Wallpaper processing complete!"
-
-# -----------------------------------------------------------------------------
-# SDDM background update
-# -----------------------------------------------------------------------------
-# The main work for the *image pixels* is already done above (we wrote
-# ~/.config/settings/default_wp.png).
-#
-# This call (self-elevating) mainly ensures:
-#   - sddm can traverse into your homedir to read the central default
-#   - theme.conf files (sugar-candy + any others you add) point at the central path
-#   - matugen colors are synced into the greeter
-#
-# Because the Background= now points at a stable user-controlled path,
-# future wallpaper changes only need to update the png file (no more
-# rewriting theme.conf for the wallpaper itself).
-"$HOME/.config/hypr/scripts/update-sddm-wallpaper.sh" "$WALLPAPER" || true &
-disown 2>/dev/null || true
