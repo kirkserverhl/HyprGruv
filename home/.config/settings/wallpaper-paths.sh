@@ -1,0 +1,13 @@
+#!/bin/bash
+# Central wallpaper state paths (replaces ~/.config/settings/cache).
+
+WALLPAPER_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/hyprgruv/wallpaper"
+WALLPAPER_GENERATED_DIR="$WALLPAPER_CACHE_DIR/generated"
+CURRENT_WALLPAPER_FILE="$HOME/.config/last_wallpaper.txt"
+WAYPAPER_LOCK_FILE="$WALLPAPER_CACHE_DIR/waypaper-running"
+BLURRED_WALLPAPER_FILE="$WALLPAPER_CACHE_DIR/blurred_wallpaper.png"
+SQUARE_WALLPAPER_FILE="$WALLPAPER_CACHE_DIR/square_wallpaper.png"
+ROFI_WALLPAPER_RASI_FILE="$HOME/.config/settings/rofi-wallpaper.rasi"
+
+export WALLPAPER_CACHE_DIR WALLPAPER_GENERATED_DIR CURRENT_WALLPAPER_FILE
+export WAYPAPER_LOCK_FILE BLURRED_WALLPAPER_FILE SQUARE_WALLPAPER_FILE ROFI_WALLPAPER_RASI_FILE

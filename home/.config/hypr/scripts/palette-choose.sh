@@ -16,7 +16,7 @@
 
 set +e
 
-CURRENT_WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
+CURRENT_WP_CACHE="$HOME/.config/last_wallpaper.txt"
 DEFAULT_WP="$HOME/Pictures/Wallpapers/gruvbox_image46.png"
 
 if [[ -f "$CURRENT_WP_CACHE" ]]; then

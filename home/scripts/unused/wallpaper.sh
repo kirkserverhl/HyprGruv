@@ -41,12 +41,14 @@ fi
 # -----------------------------------------------------
 
 force_generate=0
-generatedversions="$HOME/.config/settings/cache/wallpaper-generated"
-waypaperrunning="$HOME/.config/settings/cache/waypaper-running"
-cachefile="$HOME/.config/settings/cache/current_wallpaper"
-blurredwallpaper="$HOME/.config/settings/cache/blurred_wallpaper.png"
-squarewallpaper="$HOME/.config/settings/cache/square_wallpaper.png"
-rasifile="$HOME/.config/settings/cache/current_wallpaper.rasi"
+# shellcheck source=/home/kirk/.config/settings/wallpaper-paths.sh
+source "$HOME/.config/settings/wallpaper-paths.sh"
+generatedversions="$WALLPAPER_GENERATED_DIR"
+waypaperrunning="$WAYPAPER_LOCK_FILE"
+cachefile="$CURRENT_WALLPAPER_FILE"
+blurredwallpaper="$BLURRED_WALLPAPER_FILE"
+squarewallpaper="$SQUARE_WALLPAPER_FILE"
+rasifile="$ROFI_WALLPAPER_RASI_FILE"
 blurfile="$HOME/.config/settings/blur.sh"
 defaultwallpaper="$HOME/wallpaper/default.jpg"
 wallpapereffect="$HOME/.config/settings/wallpaper-effect.sh"

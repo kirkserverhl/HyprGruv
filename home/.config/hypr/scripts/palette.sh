@@ -50,7 +50,7 @@ printf '\e]2;Color Palette\a' 2>/dev/null || true
 # non-zero in normal interactive use and would kill the script.
 
 # --- Find current wallpaper (your reliable cache) ---
-CURRENT_WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
+CURRENT_WP_CACHE="$HOME/.config/last_wallpaper.txt"
 DEFAULT_WP="$HOME/Pictures/Wallpapers/gruvbox_image46.png"
 
 if [[ -f "$CURRENT_WP_CACHE" ]]; then

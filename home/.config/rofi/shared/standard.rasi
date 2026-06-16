@@ -18,5 +18,5 @@
 
 @import "~/.config/rofi/colors.rasi"
 @import "~/.config/settings/rofi-font.rasi"
-@import "~/.config/settings/cache/current_wallpaper.rasi"
+@import "~/.config/settings/rofi-wallpaper.rasi"
 @import "~/.config/settings/rofi-border.rasi"

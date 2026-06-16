@@ -22,7 +22,7 @@ set -euo pipefail
 WALLPAPER="${1:-}"
 DESIRED_COUNT="${2:-4}"
 if [[ -z "$WALLPAPER" ]]; then
-    CURRENT_WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
+    CURRENT_WP_CACHE="$HOME/.config/last_wallpaper.txt"
     if [[ -f "$CURRENT_WP_CACHE" ]]; then
         WALLPAPER=$(cat "$CURRENT_WP_CACHE")
     elif [ -f "$HOME/.config/settings/default" ]; then

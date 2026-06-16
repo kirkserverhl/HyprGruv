@@ -28,8 +28,9 @@ log() {
 }
 
 if [[ -z "$WALLPAPER" ]]; then
-    WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
-    [[ -f "$WP_CACHE" ]] && WALLPAPER=$(cat "$WP_CACHE")
+    # shellcheck source=/home/kirk/.config/settings/wallpaper-paths.sh
+    source "$HOME/.config/settings/wallpaper-paths.sh"
+    [[ -f "$CURRENT_WALLPAPER_FILE" ]] && WALLPAPER=$(cat "$CURRENT_WALLPAPER_FILE")
 fi
 
 if [[ -z "$WALLPAPER" || ! -f "$WALLPAPER" ]]; then

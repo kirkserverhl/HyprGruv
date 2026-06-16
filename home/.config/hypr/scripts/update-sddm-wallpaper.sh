@@ -154,8 +154,8 @@ fi
 # Always look under the *real* user's home (even if we are root right now).
 if [ -n "${1:-}" ] && [ "$1" != "--setup" ]; then
     SOURCE="$1"
-elif [ -f "$USER_HOME/.config/settings/cache/current_wallpaper" ]; then
-    SOURCE=$(cat "$USER_HOME/.config/settings/cache/current_wallpaper" | tr -d '\n\r')
+elif [ -f "$USER_HOME/.config/last_wallpaper.txt" ]; then
+    SOURCE=$(cat "$USER_HOME/.config/last_wallpaper.txt" | tr -d '\n\r')
 elif [ -f "$USER_HOME/.config/settings/default" ]; then
     SOURCE=$(cat "$USER_HOME/.config/settings/default" | tr -d '\n\r')
 else

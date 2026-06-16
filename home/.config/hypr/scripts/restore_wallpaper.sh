@@ -11,8 +11,10 @@
 
 set -uo pipefail
 
-CACHE="$HOME/.config/settings/cache/current_wallpaper"
-LEGACY_LAST="$HOME/.config/last_wallpaper.txt"
+# shellcheck source=/home/kirk/.config/settings/wallpaper-paths.sh
+source "$HOME/.config/settings/wallpaper-paths.sh"
+CACHE="$CURRENT_WALLPAPER_FILE"
+LEGACY_LAST="$CURRENT_WALLPAPER_FILE"
 WAYPAPER_CONFIG="$HOME/.config/waypaper/config.ini"
 
 echo "[restore_wallpaper] starting at $(date)"

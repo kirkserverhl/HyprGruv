@@ -163,7 +163,7 @@ load_matugen_colors() {
         if command -v matugen >/dev/null 2>&1; then
             local wp
             wp=""
-            [[ -f "$HOME/.config/settings/cache/current_wallpaper" ]] && wp=$(cat "$HOME/.config/settings/cache/current_wallpaper")
+            [[ -f "$HOME/.config/last_wallpaper.txt" ]] && wp=$(cat "$HOME/.config/last_wallpaper.txt")
             if [[ -n "$wp" && -f "$wp" ]]; then
                 local json
                 json=$(matugen image "$wp" --mode dark --json hex 2>/dev/null | sed '/^ok$/d' | jq -c '.colors.default' 2>/dev/null || true)

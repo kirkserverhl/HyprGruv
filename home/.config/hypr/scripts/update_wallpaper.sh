@@ -4,7 +4,7 @@
 LOG_FILE="$HOME/.config/hypr/scripts/update_wallpaper.log"
 
 # Path to the file containing the wallpaper path
-CURRENT_WALLPAPER_FILE="$HOME/.config/settings/cache/current_wallpaper"
+CURRENT_WALLPAPER_FILE="$HOME/.config/last_wallpaper.txt"
 DEFAULT_WALLPAPER_FILE="$HOME/.config/settings/default"
 
 echo "Running update_wallpaper.sh on $(date)" >>"$LOG_FILE"

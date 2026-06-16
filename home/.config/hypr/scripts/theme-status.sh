@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
+WP_CACHE="$HOME/.config/last_wallpaper.txt"
 STARSHIP_CFG="${STARSHIP_CONFIG:-$HOME/.config/starship/matugen-rainbow.toml}"
 KITTY_CFG="$HOME/.config/kitty/colors.conf"
 

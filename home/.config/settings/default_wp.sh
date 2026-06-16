@@ -23,7 +23,7 @@ DEFAULT_WALLPAPER="$HOME/.config/settings/default_wp.png"
 
 # Also expose the *source* path (the original chosen file) if you want it.
 # This is the last desktop wallpaper you explicitly picked.
-CURRENT_SOURCE_WALLPAPER_FILE="$HOME/.config/settings/cache/current_wallpaper"
+CURRENT_SOURCE_WALLPAPER_FILE="$HOME/.config/last_wallpaper.txt"
 if [ -f "$CURRENT_SOURCE_WALLPAPER_FILE" ]; then
     CURRENT_SOURCE_WALLPAPER=$(cat "$CURRENT_SOURCE_WALLPAPER_FILE")
 else

@@ -4,7 +4,7 @@
 LOG_FILE="$HOME/scripts/update_wallpaper.log"
 
 # Path to the file containing the wallpaper path
-CURRENT_WALLPAPER_FILE="$HOME/.config/settings/cache/current_wallpaper"
+CURRENT_WALLPAPER_FILE="$HOME/.config/last_wallpaper.txt"
 
 echo "Running update_wallpaper.sh on $(date)" >> "$LOG_FILE"
 

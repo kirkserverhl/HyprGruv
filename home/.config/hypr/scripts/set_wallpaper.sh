@@ -24,10 +24,13 @@
 set -uo pipefail
 
 # ------------------- Paths -------------------
-GENERATED_DIR="$HOME/.config/settings/cache/wallpaper-generated"
-CACHE_DIR="$HOME/.config/settings/cache"
-CURRENT_WP_CACHE="$CACHE_DIR/current_wallpaper"
-WAYPAPER_LOCK="$CACHE_DIR/waypaper-running"
+# shellcheck source=/home/kirk/.config/settings/wallpaper-paths.sh
+source "$HOME/.config/settings/wallpaper-paths.sh"
+
+GENERATED_DIR="$WALLPAPER_GENERATED_DIR"
+CACHE_DIR="$WALLPAPER_CACHE_DIR"
+CURRENT_WP_CACHE="$CURRENT_WALLPAPER_FILE"
+WAYPAPER_LOCK="$WAYPAPER_LOCK_FILE"
 DEFAULT_WP="$HOME/Pictures/Wallpapers/lady.png"
 DEFAULT_WALLPAPER_FILE="$HOME/.config/settings/default"
 
@@ -36,11 +39,9 @@ DEFAULT_WALLPAPER_FILE="$HOME/.config/settings/default"
 # Used exclusively by rofi menus (see RASI_FILE below).
 # All other tools (SDDM, wlogout, hyprlock) no longer need pre-blurred assets.
 # ------------------------------------------------------------------
-BLURRED_WALLPAPER="$CACHE_DIR/blurred_wallpaper.png"
-
-SQUARE_WALLPAPER="$CACHE_DIR/square_wallpaper.png"
-
-RASI_FILE="$CACHE_DIR/current_wallpaper.rasi"
+BLURRED_WALLPAPER="$BLURRED_WALLPAPER_FILE"
+SQUARE_WALLPAPER="$SQUARE_WALLPAPER_FILE"
+RASI_FILE="$ROFI_WALLPAPER_RASI_FILE"
 
 WALLPAPER_EFFECT_FILE="$HOME/.config/settings/wallpaper-effect.sh"
 BLUR_FILE="$HOME/.config/settings/blur.sh"
