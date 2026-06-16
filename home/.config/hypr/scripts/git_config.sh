@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+toilet -f graffiti Git Config | lsd-print
 
 # Constants
 EMAIL="kirkserverhl@gmail.com"
@@ -12,40 +10,40 @@ CLONE_DIR="$HOME/.hyprgruv"
 
 # Step 1: Install Git
 if ! command -v git &>/dev/null; then
-	echo "Git not found. Installing..." | lsd-print
-	sudo pacman -S git --noconfirm
+    echo "Git not found. Installing..." | lsd-print
+    sudo pacman -S git --noconfirm
 else
-	echo "Git is already installed." | lsd-print
+    echo "Git is already installed." | lsd-print
 fi
 
 # Step 2: Clone the Dotfiles Repository
 if [ ! -d "$CLONE_DIR" ]; then
-	echo "Cloning repository..." | lsd-print
-	git clone "$REPO_URL" "$CLONE_DIR"
+    echo "Cloning repository..." | lsd-print
+    git clone "$REPO_URL" "$CLONE_DIR"
 else
-	echo "Repository already cloned." | lsd-print
+    echo "Repository already cloned." | lsd-print
 fi
 
 # Step 3: Create Symbolic Links
 cd "$CLONE_DIR" || {
-	echo "Failed to navigate to repository directory."
-	exit 1
+    echo "Failed to navigate to repository directory."
+    exit 1
 }
 if command -v stow &>/dev/null; then
-	echo "Creating symbolic links using stow..." | lsd-print
-	stow .
+    echo "Creating symbolic links using stow..." | lsd-print
+    stow .
 else
-	echo "GNU Stow not found. Creating symbolic links manually..." | lsd-print
-	ln -sf "$CLONE_DIR/.config/somefile" "$HOME/.config/somefile"
+    echo "GNU Stow not found. Creating symbolic links manually..." | lsd-print
+    ln -sf "$CLONE_DIR/.config/somefile" "$HOME/.config/somefile"
 fi
 
 # Step 4: Generate SSH Key Pair
 SSH_KEY="$HOME/.ssh/id_ed25519"
 if [ ! -f "$SSH_KEY" ]; then
-	echo "Generating SSH key..." | lsd-print
-	ssh-keygen -t ed25519 -C "$EMAIL" -f "$SSH_KEY" -N ""
+    echo "Generating SSH key..." | lsd-print
+    ssh-keygen -t ed25519 -C "$EMAIL" -f "$SSH_KEY" -N ""
 else
-	echo "SSH key already exists." | lsd-print
+    echo "SSH key already exists." | lsd-print
 fi
 
 # Step 5: Add SSH Key to SSH Agent
@@ -65,10 +63,10 @@ git remote set-url origin "$GIT_SSH_REMOTE"
 
 # Step 8: Test SSH Connection
 if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
-	echo "SSH connection successful." | lsd-print
+    echo "SSH connection successful." | lsd-print
 else
-	echo "Error: SSH connection failed. Ensure the key is added to GitHub and try again." | lsd-print
-	exit 1
+    echo "Error: SSH connection failed. Ensure the key is added to GitHub and try again." | lsd-print
+    exit 1
 fi
 
 # Step 9: Set Up a .gitignore File

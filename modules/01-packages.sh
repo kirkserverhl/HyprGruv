@@ -2,8 +2,19 @@
 # 01-packages.sh — install base/desktop packages for Hyprgruv
 # Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Thunar).
 
+sleep 2
+clear
+
 set -euo pipefail
 IFS=$'\n\t'
+__________               __
+\______   _____    ____ |  | ______    ____   ____   ______
+ |     ___\__  \ _/ ___\|  |/ \__  \  / ___\_/ __ \ /  ___/
+ |    |    / __ \\  \___|    < / __ \/ /_/  \  ___/ \___ \
+ |____|   (____  /\___  |__|_ (____  \___  / \___  /____  >
+               \/     \/     \/    \/_____/      \/     \/
+
+echo ""
 
 # Resolve repo root from inside modules/
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

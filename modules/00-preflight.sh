@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 # 00-preflight.sh — ensure base system prep on pure Arch (Hyprland installed after yay in 01-packages)
+sleep 2
+clear
+
 set -euo pipefail
 IFS=$'\n\t'
+__________             __________.__  .__       .__     __
+\______   _______  ____\_   _____|  | |__| ____ |  |___/  |
+ |     ___\_  __ _/ __ \|    __) |  | |  |/ ___\|  |  \   __\
+ |    |    |  | \\  ___/|     \  |  |_|  / /_/  |   Y  |  |
+ |____|    |__|   \___  \___  /  |____|__\___  /|___|  |__|
+                      \/    \/          /_____/      \/
+
+echo ""
 
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Load helpers

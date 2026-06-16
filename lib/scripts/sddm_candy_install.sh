@@ -10,10 +10,12 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # Load helpers
 if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"; exit 1
+    echo "[ERROR] Missing: $HYPR_DIR/lib/common.sh"
+    exit 1
 fi
 if [[ ! -f "$HYPR_DIR/lib/state.sh" ]]; then
-  echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"; exit 1
+    echo "[ERROR] Missing: $HYPR_DIR/lib/state.sh"
+    exit 1
 fi
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/common.sh"
@@ -27,23 +29,23 @@ source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 # ------------------------------------------------------------
 # Paths
 # ------------------------------------------------------------
-ASSET_DIR="$HYPR_DIR/assets/sddm"                     # theme assets shipped in repo
-THEMES_DIR="/usr/share/sddm/themes"                   # system themes dir
-CONF_DIR="/etc/sddm.conf.d"                           # per-system SDDM config
-THEME_NAME="sugar-candy"                              # directory name of the theme
-THEME_SRC="$ASSET_DIR/$THEME_NAME"                    # source theme folder
-CONF_FILE="$CONF_DIR/10-theme.conf"                   # we’ll set Current there
+ASSET_DIR="$HYPR_DIR/assets/sddm"   # theme assets shipped in repo
+THEMES_DIR="/usr/share/sddm/themes" # system themes dir
+CONF_DIR="/etc/sddm.conf.d"         # per-system SDDM config
+THEME_NAME="sugar-candy"            # directory name of the theme
+THEME_SRC="$ASSET_DIR/$THEME_NAME"  # source theme folder
+CONF_FILE="$CONF_DIR/10-theme.conf" # we’ll set Current there
 
-display_header "SDDM: Sugar Candy Theme"
+toilet -f graffiti SDDM Theme | lsd-print
 
 # Sanity checks
 if [[ ! -d "$ASSET_DIR" ]]; then
-  log_error "Assets not found: $ASSET_DIR"
-  exit 1
+    log_error "Assets not found: $ASSET_DIR"
+    exit 1
 fi
 if [[ ! -d "$THEME_SRC" ]]; then
-  log_error "Theme directory not found: $THEME_SRC"
-  exit 1
+    log_error "Theme directory not found: $THEME_SRC"
+    exit 1
 fi
 
 # Ensure target directories
@@ -55,36 +57,36 @@ sudo install -d -m 0755 "$CONF_DIR"
 # These can cause the greeter to pick the wrong theme (eos-breeze) or have stray Autologin sections.
 log_status "Removing conflicting SDDM drop-in configs (EndeavourOS remnants, KDE settings, etc.)"
 for bad in \
-  "$CONF_DIR/10-endeavouros.conf" \
-  "$CONF_DIR/kde_settings.conf" \
-  "$CONF_DIR/sddm.conf" \
-  "$CONF_DIR/00-default.conf"; do
-  if [[ -f "$bad" ]]; then
-    sudo rm -f "$bad"
-    log_status "Removed: $bad"
-  fi
+    "$CONF_DIR/10-endeavouros.conf" \
+    "$CONF_DIR/kde_settings.conf" \
+    "$CONF_DIR/sddm.conf" \
+    "$CONF_DIR/00-default.conf"; do
+    if [[ -f "$bad" ]]; then
+        sudo rm -f "$bad"
+        log_status "Removed: $bad"
+    fi
 done
 
 # Also remove any main /etc/sddm.conf if it is empty or minimal (drop-ins are preferred)
 if [[ -f /etc/sddm.conf && ! -s /etc/sddm.conf ]]; then
-  sudo rm -f /etc/sddm.conf
+    sudo rm -f /etc/sddm.conf
 fi
 
 # Install/copy the theme directory
 log_status "Installing theme to $THEMES_DIR/$THEME_NAME"
 if [[ -d "$THEMES_DIR/$THEME_NAME" ]]; then
-  # Replace contents safely
-  sudo rm -rf "$THEMES_DIR/$THEME_NAME"
+    # Replace contents safely
+    sudo rm -rf "$THEMES_DIR/$THEME_NAME"
 fi
 sudo cp -a "$THEME_SRC" "$THEMES_DIR/"
 
 # If you ship any SDDM snippets (backgrounds, etc.)
 # e.g., ASSET_DIR may also include a background file (sddm.jpg/png)
 for img in "$ASSET_DIR"/sddm.*; do
-  if [[ -f "$img" ]]; then
-    log_status "Copying background $(basename "$img") into theme dir"
-    sudo cp -a "$img" "$THEMES_DIR/$THEME_NAME/"
-  fi
+    if [[ -f "$img" ]]; then
+        log_status "Copying background $(basename "$img") into theme dir"
+        sudo cp -a "$img" "$THEMES_DIR/$THEME_NAME/"
+    fi
 done
 
 # Write a clean theme drop-in (after cleanup)
@@ -118,4 +120,3 @@ echo "To exit the test, press Ctrl+C."
 
 sleep 0.5
 exit 0
-

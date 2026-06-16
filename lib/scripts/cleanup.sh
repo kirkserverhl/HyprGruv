@@ -6,12 +6,11 @@ HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
-# --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+toilet -f graffiti Cleanup | lsd-print
+
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-                             ###########
+###########
 RESET="\e[0m"                # Reset  ##
 GREEN="\e[38;2;142;192;124m" # 8ec07c ##  **Notes
 CYAN="\e[38;2;69;133;136m"   # 458588 ##

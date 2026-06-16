@@ -21,7 +21,9 @@ source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 
 install_platform="$(cat ~/.config/hypr/scripts/platform.sh)"
-print_header "Updates"
+
+toilet -f graffiti Updates | lsd-print
+
 echo
 
 # ------------------------------------------------------

@@ -142,7 +142,7 @@ source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
 
-display_header "SHELL"
+toilet -f graffiti Shell | lsd-print
 
 # ------------------------------------------------------------
 # Prompt user
@@ -231,3 +231,4 @@ set_login_shell "$selected_shell_path" || exit 1
 
 gum spin --spinner dot --title "Shell changed. Please log out/in to apply." -- sleep 2
 exit 0
+
