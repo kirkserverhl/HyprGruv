@@ -188,6 +188,8 @@ OFFICIAL_PKGS=(
     pavucontrol
     gum
     fuzzel
+    toilet
+    toilet-fonts
 
     # Greeter / display manager (SDDM, no Plasma/KDE bits)
     sddm

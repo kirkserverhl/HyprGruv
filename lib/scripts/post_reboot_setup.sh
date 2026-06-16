@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# post_reboot_setup.sh — run modules 03–05 after first boot into Hyprland
+# post_reboot_setup.sh — run modules 03–05 (install wizard / first Hyprland login)
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -19,15 +19,23 @@ source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
 mkdir -p "$ASSET_DIR/logs"
-LOGFILE="$ASSET_DIR/logs/post_reboot_$(date +"%Y%m%d_%H%M%S").log"
-exec > >(tee -a "$LOGFILE") 2>&1
+if [[ "${RUN_FROM_INSTALL:-0}" == "1" ]]; then
+  LOGFILE="${INSTALL_LOGFILE:-$ASSET_DIR/logs/install.log}"
+else
+  LOGFILE="$ASSET_DIR/logs/post_reboot_$(date +"%Y%m%d_%H%M%S").log"
+  exec > >(tee -a "$LOGFILE") 2>&1
+fi
 
 post_reboot_needed() {
   if [[ "${FORCE:-0}" == "1" || "${RE_RUN:-0}" == "1" ]]; then
     return 0
   fi
+  if [[ "${RUN_FROM_INSTALL:-0}" == "1" ]]; then
+    is_completed "Stow configuration" || return 1
+    is_completed "Post-reboot setup" && return 1
+    return 0
+  fi
   is_completed "Post-reboot setup" && return 1
-  # Pre-reboot phase must have finished (stow is the last pre-reboot step)
   is_completed "Stow configuration" || return 1
   return 0
 }
@@ -41,6 +49,7 @@ run_module() {
   local module="$1"
   local name="$2"
   local path="$HYPR_DIR/modules/$module"
+  local module_exit=0
 
   if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]] && is_completed "$name"; then
     log_status "Skipping $name (already completed)"
@@ -49,26 +58,31 @@ run_module() {
 
   display_header "$name"
 
-  if [[ -x "$path" ]]; then
-    "$path"
-  else
-    bash "$path"
-  fi
+  set +e
+  bash "$path" 2>&1 | tee -a "$LOGFILE"
+  module_exit=${PIPESTATUS[0]}
+  set -e
 
-  if [[ $? -eq 0 ]]; then
+  if [[ $module_exit -eq 0 ]]; then
     mark_completed "$name"
     log_success "$name completed successfully"
     return 0
   else
-    log_error "$name failed"
+    log_error "$name failed (exit $module_exit)"
     return 1
   fi
 }
 
 clear
-display_header "Hyprgruv — Post-reboot Setup"
-echo ""
-log_status "Welcome back! Wallpaper/theming runs first, then SDDM, monitors, GRUB, shell, and defaults."
+if [[ "${RUN_FROM_INSTALL:-0}" == "1" ]]; then
+  display_header "Hyprgruv — Setup Wizard"
+  echo ""
+  log_status "Running full setup before reboot (EndeavourOS / graphical install path)."
+else
+  display_header "Hyprgruv — Post-reboot Setup"
+  echo ""
+  log_status "Welcome back! Wallpaper/theming runs first, then SDDM, monitors, GRUB, shell, and defaults."
+fi
 log_status "Logs: $LOGFILE"
 echo ""
 sleep 1.5
@@ -88,10 +102,21 @@ run_module "04-config.sh" "Interactive config" || exit 1
 sleep 1
 
 if [[ -f "$HYPR_DIR/modules/05-setup_defaults.sh" ]]; then
-  display_header "Setup defaults"
-  bash "$HYPR_DIR/modules/05-setup_defaults.sh" || log_warning "05-setup_defaults.sh finished with warnings"
-  mark_completed "Setup defaults"
-  log_success "Setup defaults completed"
+  if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]] && is_completed "Setup defaults"; then
+    log_status "Skipping Setup defaults (already completed)"
+  else
+    display_header "Setup defaults"
+    set +e
+    bash "$HYPR_DIR/modules/05-setup_defaults.sh" 2>&1 | tee -a "$LOGFILE"
+    defaults_exit=${PIPESTATUS[0]}
+    set -e
+    if [[ $defaults_exit -eq 0 ]]; then
+      mark_completed "Setup defaults"
+      log_success "Setup defaults completed"
+    else
+      log_warning "05-setup_defaults.sh finished with warnings"
+    fi
+  fi
 else
   log_warning "05-setup_defaults.sh not found"
 fi
@@ -126,5 +151,7 @@ echo -e "\n   Full keybinds: Win + K  or type 'keybinds' in a terminal"
 echo -e "\n   Re-run this wizard any time:"
 echo -e "     FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
 
-echo ""
-read -rp "Press Enter to close this window…" _ || true
+if [[ "${RUN_FROM_INSTALL:-0}" != "1" ]]; then
+  echo ""
+  read -rp "Press Enter to close this window…" _ || true
+fi

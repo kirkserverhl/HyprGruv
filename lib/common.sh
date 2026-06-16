@@ -31,13 +31,21 @@ log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 # LS Terminal Colors
 export LSCOLORS=GxFxCxDxbxegedabagaced
 
-# Simple functional display_header (gum if available for a bit of polish, otherwise plain)
+# display_header — toilet + lsd-print when available (see header.sh after stow)
 display_header() {
+    local title="${1:-}"
+    [[ -z "$title" ]] && return 0
     echo ""
-    if command -v gum >/dev/null 2>&1; then
-        echo "$1" | gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --bold
+    if command -v toilet >/dev/null 2>&1; then
+        if command -v lsd-print >/dev/null 2>&1; then
+            toilet -f graffiti "$title" | lsd-print
+        else
+            toilet -f graffiti "$title"
+        fi
+    elif command -v gum >/dev/null 2>&1; then
+        echo "$title" | gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --bold
     else
-        echo "=== $1 ==="
+        echo "=== $title ==="
     fi
     echo ""
 }
@@ -103,7 +111,7 @@ show_error() {
     gum style --foreground "$COLOR_ERROR" --bold "✗ $1"
 }
 
-# display_header is defined above; no figlet/lsd-print dependency (kept functional + optional gum polish)
+# display_header uses toilet + lsd-print when installed (header.sh matches after stow)
 
 # ============================================================
 # Pure Arch sanitization helpers (for users moving away from EndeavourOS or other derivatives)

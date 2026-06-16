@@ -47,7 +47,7 @@ if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]]; then
   if is_completed "Install packages" || is_completed "Stow configuration"; then
     log_warning "Previous install state detected (packages or stow marked complete)."
     log_warning "Normal runs will SKIP completed pre-reboot modules."
-    log_warning "Post-reboot setup (SDDM, monitors, GRUB, shell, defaults) runs on first Hyprland login."
+    log_warning "Full setup wizard runs near the end of install.sh (before optional reboot)."
     log_warning "To force a full re-test (re-run packages + reach stow):  FORCE=1 ./install.sh"
     log_warning "To reach/re-test stow *without* re-doing the heavy package step: SKIP_PACKAGES=1 FORCE=1 ./install.sh"
     log_warning "For a completely clean state this run: RESET_STATE=1 FORCE=1 ./install.sh"
@@ -150,15 +150,37 @@ fi
 sleep 1
 
 # ============================================================
-# Final sync before reboot (pre-reboot phase complete)
+# Full setup wizard (03–05) — run before reboot when possible
+# Ideal for EndeavourOS: clone repo in KDE, run install.sh in one go.
 # ============================================================
-display_header "Pre-reboot sync"
-log_status "Pre-reboot install complete. Running final system sync before reboot..."
+if [[ "${SKIP_SETUP_WIZARD:-0}" != "1" ]]; then
+  display_header "Setup Wizard"
+  log_status "Running full setup (SDDM, monitors, GRUB, shell, defaults)…"
+  set +e
+  RUN_FROM_INSTALL=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
+  wizard_exit=$?
+  set -e
+  if [[ $wizard_exit -eq 0 ]]; then
+    log_success "Setup wizard completed"
+  else
+    log_warning "Setup wizard finished with errors (exit $wizard_exit)"
+    log_status "Retry: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
+  fi
+else
+  log_warning "SKIP_SETUP_WIZARD=1 — wizard deferred to first Hyprland login"
+fi
+sleep 1
+
+# ============================================================
+# Final sync (optional reboot follows)
+# ============================================================
+display_header "Final sync"
+log_status "Running final system sync…"
 if command -v yay >/dev/null 2>&1; then
-  yay -Syu --noconfirm || log_warning "yay -Syu reported issues (continuing to reboot)"
+  yay -Syu --noconfirm || log_warning "yay -Syu reported issues (continuing)"
 else
   log_warning "yay not found — falling back to pacman -Syu"
-  sudo pacman -Syu --noconfirm || log_warning "pacman -Syu reported issues (continuing to reboot)"
+  sudo pacman -Syu --noconfirm || log_warning "pacman -Syu reported issues (continuing)"
 fi
 sleep 1
 
@@ -169,7 +191,7 @@ mark_completed "Pre-reboot install"
 # ============================================================
 display_header "Summary"
 sleep .5
-log_success "Pre-reboot installation completed successfully!"
+log_success "Hyprgruv installation completed!"
 sleep 1
 echo "Completed steps:"
 
@@ -184,33 +206,48 @@ else
 fi
 sleep 1.5
 
-log_status "Rebooting now. Post-reboot setup will start automatically on first Hyprland login."
-sleep 2
-
 # ============================================================
-# Post-reboot instructions (printed before reboot)
+# Reboot — skipped on graphical sessions (e.g. EndeavourOS KDE)
 # ============================================================
-cat << 'EOF'
+should_reboot() {
+  [[ "${SKIP_REBOOT:-0}" == "1" ]] && return 1
+  [[ "${FORCE_REBOOT:-0}" == "1" ]] && return 0
+  # Already in a desktop session: no forced reboot
+  [[ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]] && return 1
+  return 0
+}
 
-Pre-reboot install complete (preflight, packages, stow).
+if should_reboot; then
+  log_status "Rebooting now to finish SDDM / display manager handoff…"
+  sleep 2
+  cat << 'EOF'
 
-After reboot:
-  1. Log in via SDDM — select the Hyprland session (not uwsm-managed)
-  2. A terminal wizard will open automatically to finish setup:
-     - SDDM, monitors, GRUB, shell, defaults (opening wallpaper applied pre-reboot)
+Install complete. Rebooting…
 
-If the wizard does not appear, run manually:
-  bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
-
-Re-run the wizard any time:
+After reboot, log in via SDDM and select the Hyprland session.
+If anything was skipped, run:
   FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
-Chaotic-AUR setup happens during package install (01-packages.sh).
-VM users: guest tools are installed in 01-packages.sh for SDDM/display stability.
+EOF
+  sleep 3
+  sudo reboot
+else
+  cat << 'EOF'
+
+Install complete — reboot skipped (graphical session detected).
+
+Next steps:
+  1. Log out of your current session (KDE / etc.)
+  2. At SDDM, select the Hyprland session
+  3. If the wizard did not run, use:
+       FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+
+Force reboot now:  FORCE_REBOOT=1 ./install.sh
+Skip wizard:       SKIP_SETUP_WIZARD=1 ./install.sh
+Skip reboot:         SKIP_REBOOT=1 ./install.sh
 
 EOF
-
-sleep 3
-sudo reboot
+  log_success "Done — log out and pick Hyprland at SDDM when ready."
+fi
 
 
