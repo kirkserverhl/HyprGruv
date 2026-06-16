@@ -60,10 +60,6 @@ hl.config({
 	},
 })
 
--- Plugin direct .so load (from misc.conf) - keep if you still use the hot-edge plugin
--- Note: in Lua era you can also manage via hyprpm
--- hl.exec_cmd("hyprctl plugin load /home/.config/hypr/hypr-hot-edge/build/hypr-hot-edge.so")
-
 -- Dynamic border colors (matugen aware).
 -- Borders must be re-applied on config.reloaded because the initial hl.config
 -- above no longer bakes in colors at module parse time.

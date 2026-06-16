@@ -71,8 +71,7 @@ Dispatchers live under `hl.dsp.*` (see wiki for full list).
 
 1. Start Hyprland with the new config and check for errors (they pop up as notifications).
 2. Look for `TODO` comments in `conf/keybinds.lua` and `conf/windowrules.lua` and fill in anything you miss.
-3. If you use the hot-edge plugin or other direct `.so` loads, verify they still work.
-4. For full theme switching (your many animation/decor presets), you can now do it much more elegantly in Lua with functions + `hl.config(...)` + `hl.animation(...)` calls.
+3. For full theme switching (your many animation/decor presets), you can now do it much more elegantly in Lua with functions + `hl.config(...)` + `hl.animation(...)` calls.
 
 ## LSP / Editor support (highly recommended)
 

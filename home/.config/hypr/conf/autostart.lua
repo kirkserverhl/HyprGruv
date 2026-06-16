@@ -15,9 +15,6 @@ hl.on("config.reloaded", reload_hyprpm)
 
 -- Run on every Hyprland start (use hl.on for the event)
 hl.on("hyprland.start", function()
-	-- Hot corners (custom reliable implementation)
-	hl.exec_cmd(SCRIPTS .. "/start-hyprcorners.sh")
-
 	-- Polkit
 	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 

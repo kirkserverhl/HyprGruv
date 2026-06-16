@@ -74,10 +74,3 @@ hl.config({
         },
     }
 })
-
--- Hot-edge plugin (direct .so from misc.conf)
--- hl.config({
---     plugin = {
---         ["hot-edge"] = { ... }   -- if the plugin supports it
---     }
--- })

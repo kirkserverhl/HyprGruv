@@ -43,10 +43,3 @@ end
 
 hl.on("hyprland.start", apply_hyprbars)
 hl.on("config.reloaded", apply_hyprbars)
-
--- Hot-edge plugin (direct .so from misc.conf)
--- hl.config({
---     plugin = {
---         ["hot-edge"] = { ... }   -- if the plugin supports it
---     }
--- })
