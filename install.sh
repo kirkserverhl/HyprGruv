@@ -64,6 +64,7 @@ run_module() {
     local module="$1"
     local name="$2"
     local path="$HYPR_DIR/modules/$module"
+    local module_exit=0
 
     if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]] && is_completed "$name"; then
         log_status "Skipping $name (already completed)"
@@ -72,18 +73,22 @@ run_module() {
 
     display_header "$name"
 
-    if [[ -x "$path" ]]; then
-        "$path"
-    else
-        bash "$path"
-    fi
+    # Run via bash and capture exit explicitly. Child modules must not inherit the
+    # install.sh `exec > >(tee …)` redirect alone — combined with pipefail in modules
+    # that can SIGPIPE/exit non-zero even when the module succeeds standalone.
+    set +e
+    bash "$path" 2>&1 | tee -a "$LOGFILE"
+    module_exit=${PIPESTATUS[0]}
+    set -e
 
-    if [[ $? -eq 0 ]]; then
+    if [[ $module_exit -eq 0 ]]; then
         mark_completed "$name"
         log_success "$name completed successfully"
         return 0
     else
-        log_error "$name failed"
+        log_error "$name failed (exit $module_exit)"
+        log_error "Module log: $LOGFILE"
+        log_error "Re-run directly: bash $path"
         return 1
     fi
 }
@@ -107,7 +112,14 @@ if [[ "${SKIP_PACKAGES:-0}" == "1" ]]; then
         mark_completed "Install packages"
     fi
 else
-    run_module "01-packages.sh" "Install packages" || exit 1
+    if ! run_module "01-packages.sh" "Install packages"; then
+        if [[ "${CONTINUE_ON_PACKAGE_FAIL:-1}" == "1" ]]; then
+            log_warning "Install packages reported errors — continuing to stow (set CONTINUE_ON_PACKAGE_FAIL=0 to stop here)"
+            mark_completed "Install packages"
+        else
+            exit 1
+        fi
+    fi
 fi
 sleep 1
 

@@ -18,6 +18,19 @@ source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
 say() { echo -e "$*"; }
 
+# Install one AUR package without tripping set -e (command substitution + failed yay exits otherwise)
+install_aur_pkg() {
+    local pkg="$1"
+    local output
+    if output=$(yay -S --needed --noconfirm "$pkg" 2>&1); then
+        say "  ✓ $pkg"
+        return 0
+    fi
+    log_warning "AUR package failed: $pkg"
+    echo "$output" | tail -12 | sed 's/^/    | /'
+    return 1
+}
+
 ensure_pacman_keyring() {
     # If listing keys fails (or perms wrong), reinit the keyring from scratch.
     # This directly addresses the "you do not have sufficient permissions to read the pacman keyring" error.
@@ -412,29 +425,7 @@ sudo pacman -S --needed --noconfirm \
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
-log_status "Installing AUR packages…"
-# Install one-by-one so a single problematic/flaky AUR package (common during
-# This helps ensure we always reach (and can test) the stow step.
-AUR_FAILED=()
-for pkg in "${AUR_PKGS[@]}"; do
-    output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
-    if [ $? -eq 0 ]; then
-        say "  ✓ $pkg"
-    else
-        log_warning "AUR package failed: $pkg"
-        # Show the tail of the error output for diagnosis (e.g. checksum fail, conflicts)
-        echo "$output" | tail -8 | sed 's/^/    | /'
-        AUR_FAILED+=("$pkg")
-    fi
-done
-if ((${#AUR_FAILED[@]})); then
-    log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
-else
-    say "All AUR packages installed successfully."
-fi
-
-# Rust AUR builds (e.g. lsd-print-git) need an active default toolchain.
-# Common on fresh/VM installs where rustup is present but no default is set.
+# Rust AUR builds (e.g. lsd-print-git) need an active default toolchain *before* yay.
 if command -v rustup >/dev/null 2>&1; then
     log_status "Setting rustup default toolchain to stable (for Rust AUR builds)…"
     if rustup default stable; then
@@ -444,6 +435,19 @@ if command -v rustup >/dev/null 2>&1; then
     fi
 else
     log_warning "rustup not in PATH — skipping 'rustup default stable'"
+fi
+
+log_status "Installing AUR packages…"
+# Install one-by-one so a single problematic/flaky AUR package does not abort the installer.
+AUR_FAILED=()
+for pkg in "${AUR_PKGS[@]}"; do
+    install_aur_pkg "$pkg" || AUR_FAILED+=("$pkg")
+done
+if ((${#AUR_FAILED[@]})); then
+    log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
+    log_warning "Install continues — re-run later: yay -S --needed <package>"
+else
+    say "All AUR packages installed successfully."
 fi
 
 # ------------------------------------------------------------------
@@ -495,16 +499,19 @@ done
 if ((${#MISSING[@]})); then
     log_status "Installing missing essentials one-by-one (resilient)..."
     for pkg in "${MISSING[@]}"; do
-        output=$(yay -S --needed --noconfirm "$pkg" 2>&1)
-        if [ $? -eq 0 ]; then
-            say "  ✓ $pkg (essential)"
+        if install_aur_pkg "$pkg"; then
+            say "    (essential)"
         else
             log_warning "Essential package failed: $pkg (continuing; may need manual install later)"
-            echo "$output" | tail -8 | sed 's/^/    | /'
         fi
     done
 else
     say "All essential packages are already installed."
 fi
 sleep 0.2
+
+if ((${#AUR_FAILED[@]})); then
+    log_warning "Install packages finished with ${#AUR_FAILED[@]} AUR failure(s) — proceeding to stow."
+fi
 mark_completed "Install packages"
+exit 0
