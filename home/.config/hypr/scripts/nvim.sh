@@ -1,3 +1,3 @@
 #!/bin/bash
 
-$(cat ~/.config/hypr/scripts/terminal.sh) -e nvim
+exec "$("$HOME/.config/hypr/scripts/terminal.sh" --print)" -e nvim

@@ -46,7 +46,31 @@ ensure_wdisplays() {
   fi
   log_success "wdisplays installed successfully."
 }
-ensure_wdisplays
+
+ensure_wlr_randr() {
+  if command -v wlr-randr >/dev/null 2>&1; then
+    return 0
+  fi
+  log_status "wlr-randr not found — installing…"
+  if sudo pacman -Si wlr-randr >/dev/null 2>&1; then
+    sudo pacman -S --needed --noconfirm wlr-randr
+  elif command -v yay >/dev/null 2>&1; then
+    yay -S --needed --noconfirm wlr-randr
+  else
+    log_error "wlr-randr not available in pacman repos and yay is not installed."
+    log_error "Install manually: sudo pacman -S wlr-randr"
+    return 1
+  fi
+  hash -r 2>/dev/null || true
+  if ! command -v wlr-randr >/dev/null 2>&1; then
+    log_error "Install appeared to complete but wlr-randr command still not found."
+    return 1
+  fi
+  log_success "wlr-randr installed successfully."
+}
+
+ensure_wdisplays || exit 1
+ensure_wlr_randr || exit 1
 
 # Open wdisplays in floating window (assuming Hyprland rules handle floating)
 wdisplays &

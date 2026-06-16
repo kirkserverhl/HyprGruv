@@ -11,7 +11,7 @@ LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-first-run.lock"
 resolve_terminal() {
   local term="kitty"
   if [[ -x "$HOME/.config/hypr/scripts/terminal.sh" ]]; then
-    term="$("$HOME/.config/hypr/scripts/terminal.sh" 2>/dev/null || echo kitty)"
+    term="$("$HOME/.config/hypr/scripts/terminal.sh" --print 2>/dev/null || echo kitty)"
   elif [[ -x "$HYPR_DIR/defaults/terminal.sh" ]]; then
     term="$("$HYPR_DIR/defaults/terminal.sh" 2>/dev/null || echo kitty)"
   fi
