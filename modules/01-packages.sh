@@ -204,7 +204,6 @@ OFFICIAL_PKGS=(
     # bluez
     # bluez-utils
     # blueman
-    overskride
     atuin
     bpytop
     clang
@@ -408,7 +407,7 @@ sudo pacman -S --needed --noconfirm \
     doxygen \
     dust \
     e2fsprogs \
-    ex-vi-compat # overskride \
+    ex-vi-compat
 
 log_status "Installing official repo packages…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
