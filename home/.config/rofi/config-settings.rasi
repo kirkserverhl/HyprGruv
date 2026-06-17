@@ -1,0 +1,76 @@
+/* HyprGruv Settings — wlogout-inspired icon grid */
+
+configuration {
+    show-icons:      true;
+    icon-theme:      "Gruvbox Plus Dark";
+    hover-select:    false;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+    cycle:           false;
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+
+window {
+    width:    520px;
+    location: center;
+    anchor:   center;
+}
+
+mainbox {
+    spacing:  8px;
+    padding:  14px;
+    children: ["inputbar", "listview"];
+}
+
+inputbar {
+    children: [ "prompt", "entry" ];
+    padding:  0 0 6px 0;
+}
+
+prompt {
+    enabled:    true;
+    text-color: @prompt-color;
+    padding:    0 8px 0 0;
+}
+
+entry {
+    placeholder: "Filter...";
+}
+
+listview {
+    columns:      2;
+    lines:        3;
+    fixed-height: true;
+    cycle:        false;
+    dynamic:      false;
+    layout:       vertical;
+    spacing:      8px;
+    padding:      4px;
+}
+
+element {
+    orientation:   vertical;
+    padding:         14px 10px;
+    border-radius:   18px;
+    background-color: @background-alt;
+}
+
+element selected {
+    background-color: @selected;
+    text-color:       @selected-fg;
+    border-radius:    18px;
+}
+
+element-icon {
+    size:              56px;
+    horizontal-align:  0.5;
+    margin:            0 0 6px 0;
+}
+
+element-text {
+    horizontal-align: 0.5;
+    vertical-align:   0.5;
+    margin:           0;
+}
