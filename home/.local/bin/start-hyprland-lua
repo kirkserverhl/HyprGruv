@@ -12,6 +12,6 @@ if [[ ! -f "$LUA_CFG" ]]; then
     exit 1
 fi
 
-echo "[hypr-lua] Starting Hyprland with explicit Lua config: $LUA_CFG" >&2
+echo "[hypr-lua] Starting Hyprland via start-hyprland with Lua config: $LUA_CFG" >&2
 
-exec /usr/bin/Hyprland -c "$LUA_CFG" "$@"
+exec /usr/bin/start-hyprland -- -c "$LUA_CFG" "$@"

@@ -4,29 +4,6 @@ RightButton;NoModifier=org.kde.contextmenu
 [ActionPlugins][1]
 RightButton;NoModifier=org.kde.contextmenu
 
-[Containments][1]
-ItemGeometries-1920x1080=
-ItemGeometriesHorizontal=
-activityId=8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4
-formfactor=0
-immutability=1
-lastScreen=0
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.slideshow
-
-[Containments][1][General]
-positions={"1920x1080":[]}
-
-[Containments][1][Wallpaper][org.kde.image][General]
-Image=/home/kirk/.hyprgruv/home/wallpaper/space_walk.png
-
-[Containments][1][Wallpaper][org.kde.slideshow][General]
-Image=file:///home/kirk/.local/share/wallpapers/Ant-Dark-wallpapers/Ant-Dark.jpg
-SlideInterval=600
-SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/,/home/kirk/wallpaper/
-UncheckedSlides=/usr/share/wallpapers/Next/,/usr/share/wallpapers/EndeavourOS/,/home/kirk/wallpaper/Gruvbox-Dark Color Palette - color-hex.com.png,/home/kirk/wallpaper/guitar.png,/home/kirk/wallpaper/port.png,/home/kirk/wallpaper/gruvbox_stripes_arch.png
-
 [Containments][2]
 activityId=
 formfactor=2
@@ -74,7 +51,7 @@ immutability=1
 plugin=org.kde.plasma.icontasks
 
 [Containments][2][Applets][5][Configuration][General]
-launchers=preferred://filemanager,applications:org.kde.konsole.desktop,applications:firefox.desktop
+launchers=preferred://filemanager,applications:firefox.desktop
 
 [Containments][2][Applets][6]
 immutability=1
@@ -167,14 +144,25 @@ DialogHeight=540
 DialogWidth=720
 
 [Containments][2][Applets][7][General]
-extraItems=org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.mediacontroller,org.kde.kscreen,org.kde.plasma.volume
-knownItems=org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.kdeconnect,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.mediacontroller,org.kde.kscreen,org.kde.plasma.volume
+extraItems=org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.mediacontroller,org.kde.kscreen,org.kde.plasma.volume
+knownItems=org.kde.plasma.bluetooth,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.notifications,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.keyboardlayout,org.kde.plasma.networkmanagement,org.kde.plasma.printmanager,org.kde.plasma.mediacontroller,org.kde.kscreen,org.kde.plasma.volume
 
 [Containments][2][General]
 AppletOrder=3;4;5;6;7;20;21
 
-[Containments][25]
-activityId=8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4
+[Containments][28]
+ItemGeometries-1920x1080=
+ItemGeometriesHorizontal=
+activityId=bcca0c93-99a1-4b72-a652-354af2ebfa4e
+formfactor=0
+immutability=1
+lastScreen=0
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
+[Containments][29]
+activityId=bcca0c93-99a1-4b72-a652-354af2ebfa4e
 formfactor=0
 immutability=1
 lastScreen=1
@@ -182,14 +170,8 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
-[Containments][25][General]
-positions={"1080x1920":[],"1920x1080":[]}
-
-[Containments][25][Wallpaper][org.kde.image][General]
-Image=/home/kirk/.hyprgruv/home/wallpaper/space_walk.png
-
-[Containments][26]
-activityId=8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4
+[Containments][30]
+activityId=bcca0c93-99a1-4b72-a652-354af2ebfa4e
 formfactor=0
 immutability=1
 lastScreen=2
@@ -197,19 +179,8 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
-[Containments][26][ConfigDialog]
-DialogHeight=630
-DialogWidth=810
-
-[Containments][26][General]
-positions={"3840x2160":[]}
-
-[Containments][26][Wallpaper][org.kde.image][General]
-Image=file:///home/kirk/wallpaper/default.jpeg
-SlidePaths=/home/kirk/.local/share/wallpapers/,/usr/share/wallpapers/
-
-[Containments][27]
-activityId=8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4
+[Containments][31]
+activityId=bcca0c93-99a1-4b72-a652-354af2ebfa4e
 formfactor=0
 immutability=1
 lastScreen=3
@@ -219,4 +190,4 @@ wallpaperplugin=org.kde.image
 
 [ScreenMapping]
 itemsOnDisabledScreens=
-screenMapping=desktop:/brave-kajebgjangihfbkjfejcanhanjmmbcfd-Default.desktop,1,8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4
+screenMapping=desktop:/Wallpapers,1,bcca0c93-99a1-4b72-a652-354af2ebfa4e,desktop:/brave-kajebgjangihfbkjfejcanhanjmmbcfd-Default.desktop,1,8871aa33-96dc-4a3b-a8e3-b7b2a66a13c4,desktop:/brave-kajebgjangihfbkjfejcanhanjmmbcfd-Default.desktop,1,bcca0c93-99a1-4b72-a652-354af2ebfa4e

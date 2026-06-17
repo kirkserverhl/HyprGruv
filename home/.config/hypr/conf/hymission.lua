@@ -36,7 +36,6 @@ end
 apply_hymission()
 
 hl.on("hyprland.start", function()
-	os.execute("hyprpm reload >/dev/null 2>&1 || true")
 	apply_hymission()
 end)
 

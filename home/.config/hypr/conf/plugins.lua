@@ -60,8 +60,7 @@ end
 -- Re-register buttons after preReload clears them on `hyprctl reload`.
 apply_hyprbars()
 
--- On login, autostart's hyprpm reload is async — ensure plugin is loaded first.
+-- On login, autostart reloads hyprpm; re-apply buttons once plugins are available.
 hl.on("hyprland.start", function()
-	os.execute("hyprpm reload >/dev/null 2>&1 || true")
 	apply_hyprbars()
 end)

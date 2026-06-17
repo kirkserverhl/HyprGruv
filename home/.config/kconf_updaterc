@@ -31,9 +31,9 @@ done=remove_deprecated_gtk4_option,kwin-6.0-reset-active-mouse-screen-x11,kwin-6
 mtime=1778684197
 
 [kwin.upd]
-ctime=1780016793
+ctime=1781323951
 done=kwin-6.1-remove-gridview-expose-shortcuts-x11,kwin-6.0-reset-active-mouse-screen,kwin-6.0-delete-desktop-switching-shortcuts,kwin-6.0-remove-breeze-tabbox-default,kwin-6.1-remove-gridview-expose-shortcuts,kwin-6.5-showpaint-changes-x11,kwin-6.5-showpaint-changes
-mtime=1779959012
+mtime=1780924414
 
 [migrate-calendar-to-plugin-id.upd]
 ctime=1779233997

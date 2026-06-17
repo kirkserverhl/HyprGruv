@@ -13,4 +13,4 @@ fi
 
 echo "[hypr-legacy] Starting Hyprland with explicit config: $CONF" >&2
 
-exec /usr/bin/Hyprland -c "$CONF" "$@"
+exec /usr/bin/start-hyprland -- -c "$CONF" "$@"

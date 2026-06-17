@@ -8,15 +8,21 @@ local HOTCORNERS = SCRIPTS .. "/launch-hotcorners.sh"
 local POLKIT_AGENT = SCRIPTS .. "/launch-hyprpolkitagent.sh"
 
 local function start_polkit_agent()
-	os.execute(POLKIT_AGENT .. " >/dev/null 2>&1 &")
+	hl.exec_cmd(POLKIT_AGENT)
 end
 
 local function start_hotcorners()
-	os.execute(HOTCORNERS .. " >/dev/null 2>&1")
+	hl.exec_cmd(HOTCORNERS)
 end
 
 local function reload_hyprpm()
 	hl.exec_cmd(HYPRPM_RELOAD)
+end
+
+local function start_systemd_session()
+	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP")
+	hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP")
+	hl.exec_cmd("systemctl --user start hyprland-session.target")
 end
 
 -- Hyprpm: every new Hyprland session (login) and after config reload
@@ -25,7 +31,10 @@ hl.on("config.reloaded", reload_hyprpm)
 
 -- Run on every Hyprland start (use hl.on for the event)
 hl.on("hyprland.start", function()
-	-- Polkit (Hyprland-native agent)
+	-- systemd graphical session (portal, polkit units, XDG autostart)
+	start_systemd_session()
+
+	-- Polkit (Hyprland-native agent; single instance via launch script)
 	start_polkit_agent()
 
 	-- Idle + bar (or nothingless if that was the last choice via the toggle)
@@ -39,14 +48,12 @@ hl.on("hyprland.start", function()
 	-- Cleanup
 	hl.exec_cmd(SCRIPTS .. "/cleanup.sh")
 
-	-- Restart wallpaper system cleanly on every start
+	-- Restart wallpaper daemons, then restore canonical default_wp.png on login.
 	hl.exec_cmd("killall -q waypaper-daemon awww-daemon waypaper-engine 2>/dev/null || true")
+	hl.exec_cmd("sleep 0.5 && awww-daemon &")
 	hl.exec_cmd("waypaper-engine daemon &")
-
-	-- Restore last wallpaper + re-apply matugen/colors on every login/start.
-	-- Uses our script so we get both the image *and* the full post-processing (matugen etc.)
-	-- with auto matugen (Dark Standard + source color 1); palette.sh is manual only (Ctrl+P).
-	hl.exec_cmd("sleep 1.5 && ~/.config/hypr/scripts/restore_wallpaper.sh &")
+	-- No waypaper post_command on login — palette/matugen only when switching wallpapers.
+	hl.exec_cmd("~/.config/hypr/scripts/restore_wallpaper.sh &")
 
 	-- Cursor theme
 	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic-Gruvbox 24")
@@ -77,6 +84,10 @@ hl.on("hyprland.start", function()
 	-- hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")
 end)
 
+hl.on("hyprland.shutdown", function()
+	os.execute("systemctl --user stop hyprland-session.target && sleep 0.1")
+end)
+
 -- HyprSunset
 hl.exec_cmd("hyprsunset --temperature 9000")
 
@@ -84,9 +95,6 @@ hl.exec_cmd("hyprsunset --temperature 9000")
 hl.on("config.reloaded", function()
 	hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")
 end)
-
--- Start/restart on every config parse (login + hyprctl reload)
-start_hotcorners()
 
 -- One-time things that were plain "exec" (not exec-once) in original main file
 -- moved to main hyprland.lua
