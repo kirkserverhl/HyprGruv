@@ -93,10 +93,8 @@ hl.bind(mod .. " + V",            hl.dsp.window.float({ action = "toggle" }))
 -- Also use explicit config for the alternate lock bind so matugen colors (primary/secondary) are always loaded
 hl.bind(mod .. " + L",            hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"))
 
--- Waybar <-> Hyprbars (mutually exclusive)
+-- Bar mode cycle: Waybar → Hyprbars → None → Waybar (ALT+W)
 hl.bind(mod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-bar-mode.sh"))
--- Hide/show both bars (restores last mode: waybar or hyprbars)
-hl.bind("CTRL + ALT + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-bars-off.sh"))
 hl.bind("CTRL + W",       hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
 
 -- Special workspace (scratchpad)
@@ -122,10 +120,9 @@ hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-apps.sh"))
 hl.bind(mod     .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-full.sh"))
 hl.bind("CTRL + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-keybinds.sh"))
 
--- Wallpaper / bar / monitor / theme
+-- Wallpaper / bar / monitor / theme (bar cycle: ALT+W only)
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))
-hl.bind(mainMod .. " + CTRL + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-waybar.sh"))
-hl.bind(mod     .. " + M",        hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
+hl.bind(mod     .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
 hl.bind(mainMod .. " + T",        hl.dsp.exec_cmd("pkill -x rofi 2>/dev/null; ~/.config/colorschemes/rofi-launcher.sh"))
 
 -- Misc tools

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Hide/show all bars (Waybar + Hyprbars). Bound to CTRL+ALT+W.
+# Legacy hide/show toggle (superseded by ALT+W cycle in toggle-bar-mode.sh).
+# Kept for manual/script use: bash ~/.config/hypr/scripts/toggle-bars-off.sh
 
 set -euo pipefail
 

@@ -2,10 +2,15 @@
 # Blitz mode — minimal, work-focused Hyprland profile.
 set -euo pipefail
 
-ROFI_CONFIG="$HOME/.config/rofi/config-settings.rasi"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=/dev/null
+source "$SCRIPT_DIR/hyprgruv-rofi-grid.sh"
+
 SETTINGS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv-settings"
 [[ -d "$SETTINGS_DIR" ]] || SETTINGS_DIR="$HOME/.hyprgruv/home/.config/hyprgruv-settings"
-ICONS="$SETTINGS_DIR/icons"
+export HYPRGRUV_ICONS_DIR="$SETTINGS_DIR/icons"
+export HYPRGRUV_ROFI_CONFIG="$HOME/.config/rofi/config-settings.rasi"
+
 BLITZ_SCRIPT="$HOME/.config/hypr/scripts/blitz-mode.sh"
 
 blitz_active() {
@@ -15,15 +20,11 @@ blitz_active() {
 status="normal"
 blitz_active && status="blitz"
 
-menu=$(
-    printf '%b' \
-        "Enable Blitz\0icon\x1f${ICONS}/blitz.png\n" \
-        "Disable Blitz (reload)\0icon\x1f${ICONS}/settings.png\n" \
-        "Status: ${status}\0icon\x1f${ICONS}/system.png\n" \
-        "Back\0icon\x1f${ICONS}/back.png\n"
-)
-
-chosen=$(printf '%b' "$menu" | rofi -dmenu -i -show-icons -config "$ROFI_CONFIG" -p "Blitz Mode" || true)
+chosen=$(hyprgruv_rofi_pick "Blitz Mode" \
+    "Enable Blitz|blitz|on" \
+    "Disable Blitz (reload)|settings|off" \
+    "Status: ${status}|system|status" \
+    "Back|back|back") || exit 0
 [[ -z "${chosen:-}" ]] && exit 0
 
 case "$chosen" in

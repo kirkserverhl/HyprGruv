@@ -13,21 +13,54 @@ fi
 ICONS_DIR="$SETTINGS_DIR/icons"
 ROFI_CONFIG="$HOME/.config/rofi/config-settings.rasi"
 HYPRGRUV_DIR="${HYPRGRUV_DIR:-$HOME/.hyprgruv}"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv-settings"
+DISABLE_FILE="$STATE_DIR/welcome-disabled"
+SKIP_TOGGLE_FILE="$STATE_DIR/welcome-skip-enabled"
+mkdir -p "$STATE_DIR"
 
-START_MENU="${1:-}"
+WELCOME_MODE=0
+START_MENU=""
+for arg in "$@"; do
+    case "$arg" in
+        --welcome) WELCOME_MODE=1 ;;
+        styling|settings|system) START_MENU="$arg" ;;
+    esac
+done
+[[ "${HYPRGRUV_SETTINGS_WELCOME:-}" == "1" ]] && WELCOME_MODE=1
+
+welcome_skip_label() {
+    if [[ -f "$SKIP_TOGGLE_FILE" ]]; then
+        printf '%s' "☑ Don't show welcome on startup"
+    else
+        printf '%s' "☐ Don't show welcome on startup"
+    fi
+}
+
+welcome_toggle_skip() {
+    if [[ -f "$SKIP_TOGGLE_FILE" ]]; then
+        rm -f "$SKIP_TOGGLE_FILE"
+    else
+        touch "$SKIP_TOGGLE_FILE"
+    fi
+}
+
+welcome_on_exit() {
+    if [[ -f "$SKIP_TOGGLE_FILE" ]]; then
+        touch "$DISABLE_FILE"
+        rm -f "$SKIP_TOGGLE_FILE"
+    fi
+}
 
 # ---------------------------------------------------------------------------
-# Menu helpers
+# Menu helpers (square 2×2 / 3×3 grid via hyprgruv-rofi-grid.sh)
 # ---------------------------------------------------------------------------
+# shellcheck source=/dev/null
+source "$SCRIPT_DIR/hyprgruv-rofi-grid.sh"
+export HYPRGRUV_ICONS_DIR="$ICONS_DIR"
+export HYPRGRUV_ROFI_CONFIG="$ROFI_CONFIG"
+
 rofi_pick() {
-    local prompt="$1"
-    shift
-    local input=""
-    for entry in "$@"; do
-        IFS='|' read -r label icon _ <<< "$entry"
-        input+="${label}\0icon\x1f${ICONS_DIR}/${icon}.png\n"
-    done
-    printf '%b' "$input" | rofi -dmenu -i -show-icons -config "$ROFI_CONFIG" -p "$prompt" 2>/dev/null || true
+    hyprgruv_rofi_pick "$@"
 }
 
 run_bg() {
@@ -128,20 +161,39 @@ menu_system() {
 }
 
 menu_main() {
+    local prompt="HyprGruv Settings"
+    [[ "$WELCOME_MODE" == "1" ]] && prompt="HyprGruv Settings — Welcome"
+
     while true; do
         local choice
-        choice=$(rofi_pick "HyprGruv Settings" \
-            "Styling|styling|styling" \
-            "Settings|settings|settings" \
-            "System|system|system" \
-            "Exit|exit|exit")
-        [[ -z "${choice:-}" ]] && return 0
+        local -a entries=(
+            "Styling|styling|styling"
+            "Settings|settings|settings"
+            "System|system|system"
+        )
+
+        if [[ "$WELCOME_MODE" == "1" ]]; then
+            entries+=("$(welcome_skip_label)|settings|welcome_skip")
+        fi
+        entries+=("Exit|exit|exit")
+
+        choice=$(rofi_pick "$prompt" "${entries[@]}") || return 0
+        if [[ -z "${choice:-}" ]]; then
+            [[ "$WELCOME_MODE" == "1" ]] && welcome_on_exit
+            return 0
+        fi
 
         case "$choice" in
             Styling) menu_styling ;;
             Settings) menu_settings ;;
             System) menu_system ;;
-            Exit) return 0 ;;
+            "☐ Don't show welcome on startup"|"☑ Don't show welcome on startup")
+                welcome_toggle_skip
+                ;;
+            Exit)
+                [[ "$WELCOME_MODE" == "1" ]] && welcome_on_exit
+                return 0
+                ;;
         esac
     done
 }

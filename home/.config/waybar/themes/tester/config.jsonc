@@ -1,11 +1,41 @@
 /*
  * tester theme — minimal styling shell for the shared layout.
- * Edit shared/layout.jsonc to change module arrangement for all themes using it.
+ * HyprGruv Settings gear is a standalone module (not inside group/settings drawer).
  */
 {
   "reload_style_on_change": true,
   "include": [
     "~/.config/waybar/shared/bar-chrome.jsonc",
-    "~/.config/waybar/shared/layout.jsonc"
-  ]
+    "~/.config/waybar/shared/layout.jsonc",
+    "~/.config/waybar/themes/tester/modules.json"
+  ],
+
+  "modules-left": [
+    "group/apps",
+    "custom/hyprgruv-settings",
+    "custom/waybarthemes",
+    "custom/wallpaper",
+    "group/sound",
+    "custom/media"
+  ],
+
+  "custom/hyprgruv-settings": {
+    "format": "\udb81\udc93",
+    "on-click": "~/.config/hypr/scripts/waybar-hyprgruv-settings.sh",
+    "tooltip-format": "HyprGruv Settings"
+  },
+
+  "custom/waybarthemes": {
+    "format": "\uf141",
+    "on-click": "~/.config/hypr/scripts/themeswitcher.sh",
+    "on-click-right": "~/.config/hypr/scripts/animations.sh",
+    "tooltip-format": "Waybar themes\nRight: Animations"
+  },
+
+  "custom/wallpaper": {
+    "format": "\uf03e",
+    "on-click": "waypaper",
+    "on-click-right": "~/.config/hypr/scripts/decorations.sh",
+    "tooltip-format": "Wallpaper\nRight: Decorations"
+  }
 }

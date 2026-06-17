@@ -191,6 +191,25 @@ else
 fi
 sleep 1
 
+display_header "Package manifest sync"
+log_status "Installing packages from HyprGruv manifest (sync-packages)…"
+set +e
+if [[ -f "$HYPR_DIR/sync-packages.sh" ]]; then
+  bash "$HYPR_DIR/sync-packages.sh" sync 2>&1 | tee -a "$LOGFILE"
+  pkg_sync_exit=${PIPESTATUS[0]}
+else
+  log_warning "sync-packages.sh not found — skipping manifest sync"
+  pkg_sync_exit=0
+fi
+set -e
+if [[ ${pkg_sync_exit:-0} -eq 0 ]]; then
+  log_success "Package manifest sync completed"
+  mark_completed "Package manifest sync"
+else
+  log_warning "Package manifest sync finished with warnings (exit ${pkg_sync_exit})"
+fi
+sleep 1
+
 mark_completed "Pre-reboot install"
 
 # ============================================================
@@ -232,6 +251,9 @@ if should_reboot; then
 Install complete. Rebooting…
 
 After reboot, log in via SDDM and select the Hyprland session.
+HyprGruv will sync packages and open Settings on first login.
+(Uncheck "Don't show welcome on startup" in Settings to skip future welcomes.)
+
 If anything was skipped, run:
   FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 

@@ -107,6 +107,19 @@ hl.window_rule({
     pin = true,
 })
 
+-- HyprGruv first-login welcome (package sync + settings handoff)
+hl.window_rule({
+    name = "hyprgruv-welcome",
+    match = {
+        class = "^(dotfiles-floating)$",
+        title = "^(HyprGruv Welcome)$",
+    },
+    float = true,
+    center = true,
+    size = {760, 420},
+    pin = true,
+})
+
 -- Color Palette chooser (manual via Ctrl+P → palette.sh)
 -- Uses a compact size tuned for the 70c x 24c kitty overrides inside palette.sh
 -- plus explicit title match for precision (the script forces the title via OSC).

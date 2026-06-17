@@ -1,4 +1,4 @@
-/* HyprGruv Settings — wlogout-inspired icon grid */
+/* HyprGruv Settings — square icon grid (wlogout-style) */
 
 configuration {
     show-icons:      true;
@@ -13,48 +13,50 @@ configuration {
 @import "~/.config/rofi/shared/fuzzel-chrome.rasi"
 
 window {
-    width:    520px;
     location: center;
     anchor:   center;
 }
 
 mainbox {
-    spacing:  8px;
-    padding:  14px;
+    spacing:  10px;
+    padding:  16px;
     children: ["inputbar", "listview"];
 }
 
 inputbar {
-    children: [ "prompt", "entry" ];
-    padding:  0 0 6px 0;
+    children: [ "prompt" ];
+    padding:  0 0 4px 0;
 }
 
 prompt {
     enabled:    true;
     text-color: @prompt-color;
-    padding:    0 8px 0 0;
+    padding:    0;
 }
 
 entry {
-    placeholder: "Filter...";
+    enabled: false;
 }
 
 listview {
     columns:      2;
-    lines:        3;
+    lines:        2;
     fixed-height: true;
+    fixed-columns: true;
     cycle:        false;
     dynamic:      false;
     layout:       vertical;
-    spacing:      8px;
-    padding:      4px;
+    spacing:      10px;
+    padding:      2px;
 }
 
 element {
-    orientation:   vertical;
-    padding:         14px 10px;
-    border-radius:   18px;
+    orientation:      vertical;
+    padding:          16px 12px;
+    border-radius:    18px;
     background-color: @background-alt;
+    min-width:        120px;
+    min-height:       120px;
 }
 
 element selected {
@@ -64,9 +66,9 @@ element selected {
 }
 
 element-icon {
-    size:              56px;
-    horizontal-align:  0.5;
-    margin:            0 0 6px 0;
+    size:             52px;
+    horizontal-align: 0.5;
+    margin:           0 0 8px 0;
 }
 
 element-text {

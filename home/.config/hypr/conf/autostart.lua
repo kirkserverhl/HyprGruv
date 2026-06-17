@@ -61,7 +61,12 @@ hl.on("hyprland.start", function()
 	-- Workspace monitor setup script
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
 
-	-- Post-install wizard runs from install.sh (before reboot). No auto kitty popup on login.
+	-- First-login welcome: package sync + HyprGruv Settings (opt-out via menu checkbox).
+	-- Manual re-run: bash ~/.config/hypr/scripts/hyprgruv-welcome.sh
+	-- Re-enable after opt-out: rm ~/.local/state/hyprgruv-settings/welcome-disabled
+	hl.exec_cmd("sleep 5 && " .. SCRIPTS .. "/hyprgruv-welcome.sh &")
+
+	-- Post-install wizard runs from install.sh (before reboot).
 	-- Manual re-run: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 	-- Hyprgruv deploy target (laptop): touch ~/.config/hyprgruv/deploy-target

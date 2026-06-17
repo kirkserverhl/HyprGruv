@@ -8,3 +8,6 @@ assets/logs/
 
 # Oh My Zsh is installed locally by lib/scripts/oh_my_zsh.sh — never stow the upstream tree
 home/.oh-my-zsh/
+
+# Orphan npm vendor trees (reinstall via package.json if needed)
+home/node_modules/

@@ -150,6 +150,8 @@ echo -e "  Win + ENTER         Terminal
 echo -e "\n   Full keybinds: Win + K  or type 'keybinds' in a terminal"
 echo -e "\n   Re-run this wizard any time:"
 echo -e "     FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
+echo -e "\n   On first Hyprland login, HyprGruv will sync packages and open Settings."
+echo -e "   Uncheck \"Don't show welcome on startup\" in Settings to skip future welcomes."
 
 if [[ "${RUN_FROM_INSTALL:-0}" != "1" ]]; then
   echo ""
