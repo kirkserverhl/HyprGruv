@@ -18,8 +18,13 @@ fi
 # If they lack their own style.css, they will follow freshstart.css + matugen (and the modules from the lua backup).
 mapfile -t LAYOUTS < <(find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d -exec sh -c '
   d=$1
+  name=$(basename "$d")
+  # spacer is internal (Hyprbars reserved strip), not a user-facing theme
+  if [[ "$name" == "spacer" ]]; then
+    exit 0
+  fi
   if [[ -f "$d/config.jsonc" || -f "$d/config" ]]; then
-    printf "%s\n" "$(basename "$d")"
+    printf "%s\n" "$name"
   fi
 ' _ {} \; | sort)
 ((${#LAYOUTS[@]})) || {

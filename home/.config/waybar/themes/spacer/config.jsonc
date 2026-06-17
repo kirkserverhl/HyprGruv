@@ -1,0 +1,12 @@
+/*
+ * Invisible top strip — reserves the same layer area as Waybar while Hyprbars is active.
+ */
+{
+  "reload_style_on_change": true,
+  "exclusive": true,
+  "include": ["~/.config/waybar/shared/bar-chrome.jsonc"],
+  "spacing": 0,
+  "modules-left": [],
+  "modules-center": [],
+  "modules-right": []
+}

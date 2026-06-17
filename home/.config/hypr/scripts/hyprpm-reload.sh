@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 # hyprpm-reload.sh — load hyprpm plugins once Hyprland's socket is ready.
-# Safe to call from config.reloaded (initial parse or hyprctl reload).
+# Called on session start only (not every config reload — that caused a hyprbars loop).
 
 set -euo pipefail
 
-if ! command -v hyprpm >/dev/null 2>&1; then
-	exit 0
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/waybar"
+GUARD_FILE="$STATE_DIR/bar_mode_guard"
+
+if [[ -f "$GUARD_FILE" ]]; then
+    exit 0
 fi
 
-# hyprpm talks to the compositor over the hyprctl socket; during first config
-# parse that socket may not exist yet — wait briefly, then bail instead of hang.
+if ! command -v hyprpm >/dev/null 2>&1; then
+    exit 0
+fi
+
 for _ in $(seq 1 50); do
-	if hyprctl version >/dev/null 2>&1; then
-		hyprpm reload >/dev/null 2>&1 || true
-		exit 0
-	fi
-	sleep 0.2
+    if hyprctl version >/dev/null 2>&1; then
+        hyprpm reload >/dev/null 2>&1 || true
+        exit 0
+    fi
+    sleep 0.2
 done
 
 exit 0

@@ -1,0 +1,14 @@
+/*
+ * Shared top-bar geometry for Waybar + Hyprbars parity.
+ * height (32) + margin-top (5) = 37px reserved zone per monitor.
+ * Keep in sync with ~/.config/hypr/conf/plugins.lua (bar_height).
+ */
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 5,
+  "margin-bottom": 0,
+  "margin-left": 14,
+  "margin-right": 14,
+  "height": 32
+}

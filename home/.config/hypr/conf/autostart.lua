@@ -25,9 +25,9 @@ local function start_systemd_session()
 	hl.exec_cmd("systemctl --user start hyprland-session.target")
 end
 
--- Hyprpm: every new Hyprland session (login) and after config reload
+-- Hyprpm: session start only. Do NOT hook config.reloaded — plugin unload reloads
+-- config and previously re-triggered hyprpm + apply-bar-mode in an infinite loop.
 hl.on("hyprland.start", reload_hyprpm)
-hl.on("config.reloaded", reload_hyprpm)
 
 -- Run on every Hyprland start (use hl.on for the event)
 hl.on("hyprland.start", function()
@@ -39,7 +39,7 @@ hl.on("hyprland.start", function()
 
 	-- Idle + bar (or nothingless if that was the last choice via the toggle)
 	hl.exec_cmd(
-		'hypridle & sh -c \'s=${XDG_STATE_HOME:-$HOME/.local/state}/waybar/last_layout; if [ "$(cat "$s" 2>/dev/null)" = nothingless ]; then nothingless &; else ~/.config/waybar/scripts/launch.sh; fi\''
+		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; if [ "$(cat "$st/last_layout" 2>/dev/null)" = nothingless ]; then nothingless &; elif [ "$(cat "$st/bar_mode" 2>/dev/null)" != hyprbars ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ~/.config/hypr/scripts/sync-bar-mode.sh\''
 	)
 
 	-- Clipboard history (images)

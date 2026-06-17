@@ -37,6 +37,10 @@ if [[ ! -f "$css" ]]; then
 fi
 
 killall -9 waybar 2>/dev/null || true
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+    pgrep -x waybar >/dev/null || break
+    sleep 0.05
+done
 killall -9 dunst 2>/dev/null || true
 
 dunst &

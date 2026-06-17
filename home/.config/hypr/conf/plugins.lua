@@ -4,25 +4,23 @@
 
 local HOME = os.getenv("HOME") or ""
 
-local function apply_hyprbars()
-	if hl.plugin.hyprbars == nil then
-		return
-	end
+-- add_button appends; never call register twice on the same plugin instance.
+local buttons_registered = false
 
-	local colors = require("colors.init").load()
-
+local function apply_hyprbars_config(colors)
 	hl.config({
 		plugin = {
 			hyprbars = {
-				bar_height = 33,
-				bar_color = colors.bg1,
-				bar_blur = true,
+				-- Match waybar shared/bar-chrome.jsonc height (32)
+				bar_height = 32,
+				bar_color = "rgba(00000000)",
+				bar_blur = false,
 				bar_title_enabled = true,
 				bar_text_size = 14,
-				bar_text_font = "Agave Nerd Font",
+				bar_text_font = "Agave Nerd Font Propo",
 				bar_text_align = "center",
 				bar_buttons_alignment = "left",
-				bar_padding = 15,
+				bar_padding = 14,
 				bar_button_padding = 6,
 				icon_on_hover = true,
 				col = {
@@ -32,8 +30,13 @@ local function apply_hyprbars()
 			},
 		},
 	})
+end
 
-	-- fg_color is required by the Lua add_button API (icons show on hover).
+local function register_hyprbars_buttons(colors)
+	if buttons_registered or hl.plugin.hyprbars == nil then
+		return
+	end
+
 	hl.plugin.hyprbars.add_button({
 		bg_color = colors.hyprbar_close,
 		fg_color = colors.hyprbar_close_fg,
@@ -55,12 +58,39 @@ local function apply_hyprbars()
 		icon = "+",
 		action = "hyprctl dispatch fullscreen 1",
 	})
+
+	buttons_registered = true
 end
 
--- Re-register buttons after preReload clears them on `hyprctl reload`.
-apply_hyprbars()
+local function apply_hyprbars()
+	if hl.plugin.hyprbars == nil then
+		return
+	end
 
--- On login, autostart reloads hyprpm; re-apply buttons once plugins are available.
-hl.on("hyprland.start", function()
-	apply_hyprbars()
+	local colors = require("colors.init").load()
+	apply_hyprbars_config(colors)
+	register_hyprbars_buttons(colors)
+end
+
+local function apply_hyprbars_config_only()
+	if hl.plugin.hyprbars == nil then
+		return
+	end
+	local colors = require("colors.init").load()
+	apply_hyprbars_config(colors)
+end
+
+-- config.reloaded must not re-add buttons (plugin instance keeps them → duplicates).
+hl.on("config.reloaded", function()
+	apply_hyprbars_config_only()
 end)
+
+function reset_hyprbars_buttons()
+	buttons_registered = false
+end
+
+-- Only call after a fresh `hyprctl plugin load`.
+function reapply_hyprbars()
+	buttons_registered = false
+	apply_hyprbars()
+end

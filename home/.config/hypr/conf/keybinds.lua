@@ -93,7 +93,10 @@ hl.bind(mod .. " + V",            hl.dsp.window.float({ action = "toggle" }))
 -- Also use explicit config for the alternate lock bind so matugen colors (primary/secondary) are always loaded
 hl.bind(mod .. " + L",            hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"))
 
-hl.bind(mod .. " + W", hl.dsp.exec_cmd("killall waybar || waybar"))
+-- Waybar <-> Hyprbars (mutually exclusive)
+hl.bind(mod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-bar-mode.sh"))
+-- Hide/show both bars (restores last mode: waybar or hyprbars)
+hl.bind("CTRL + ALT + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-bars-off.sh"))
 hl.bind("CTRL + W",       hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
 
 -- Special workspace (scratchpad)
