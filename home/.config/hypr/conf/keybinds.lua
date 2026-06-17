@@ -114,8 +114,10 @@ hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd('grim -g "$(slurp)" /tmp/merc
 -- Clip history
 hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))
 
--- Launcher
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/fuzzel-apps.sh"))
+-- Launchers: Super+Space = favorites, Alt+Space = all apps, Ctrl+Space = keybinds
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-apps.sh"))
+hl.bind(mod     .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-full.sh"))
+hl.bind("CTRL + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-keybinds.sh"))
 
 -- Wallpaper / bar / monitor / theme
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))
@@ -189,10 +191,7 @@ hl.bind(mainMod .. " + SHIFT + E", hl.dsp.window.move({ workspace = "empty" }))
 hl.bind(mainMod .. " + Tab", hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" }))
 
--- Mission Control (hymission plugin)
-hl.bind(mod .. " + grave",       hl.dsp.exec_cmd("hymission:toggle forceall"))
-hl.bind(mod .. " + SHIFT + grave", hl.dsp.exec_cmd("hymission:toggle onlycurrentworkspace"))
-hl.bind(mod .. " + down",        hl.dsp.exec_cmd("hymission:toggle forceall"))
+-- Mission Control keybinds live in conf/hymission.lua (uses hl.plugin.hymission API)
 
 -- Move all windows to workspace (script)
 for i = 1, 9 do

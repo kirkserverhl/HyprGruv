@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Searchable Hyprland keybind reference (parsed from Lua config)
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+pkill -x fuzzel 2>/dev/null || true
+
+mapfile -t entries < <("$SCRIPT_DIR/parse-keybinds.py")
+
+if ((${#entries[@]} == 0)); then
+    hyprctl notify 3 3000 0 "No keybinds found in Lua config"
+    exit 1
+fi
+
+selected=$(
+    printf '%s\n' "${entries[@]}" |
+        fuzzel -d \
+            --prompt="⌨  " \
+            --width=52 \
+            --lines=18 \
+            --match-mode=fzf
+)
+
+if [[ -n "${selected:-}" ]]; then
+    printf '%s' "$selected" | wl-copy
+    hyprctl notify 0 2500 0 "fontsize:13,Copied: $selected"
+fi

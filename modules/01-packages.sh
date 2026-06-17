@@ -245,12 +245,13 @@ sudo pacman -S --needed --noconfirm \
     hyprcursor hyprpicker hyprsunset \
     hyprlock waybar hyprshot hyprtoolkit \
     atuin fuzzel wl-clipboard grim slurp brightnessctl \
-    polkit-gnome gnome-keyring ncdu \
+    hyprpolkitagent gnome-keyring ncdu \
     kitty thunar thunar-volman thunar-archive-plugin tumbler \
     mpv networkmanager nm-connection-editor pavucontrol sddm \
     obsidian yazi \
     piper stow \
     qt6-declarative qt5-declarative qt6ct rustup \
+    gtk3 gobject-introspection python-cairo python-gobject \
     powerdevil \
     sl zsh \
     starship \
@@ -331,7 +332,7 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
     log_success "VM guest integration packages + services processed"
 fi
 
-ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout aylurs-gtk-shell-git)
+ESSENTIAL_CHECK=(brave-bin hyprshot python-pywalfox qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout aylurs-gtk-shell-git cbonsai-git aphototoollibre dipc hypremoji)
 # (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do

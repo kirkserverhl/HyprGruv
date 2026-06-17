@@ -139,7 +139,7 @@ pipewire-jack
 pipewire-pulse
 plasma-desktop
 plasma-wayland-protocols-git
-polkit-kde-agent
+hyprpolkitagent
 powerpill
 progress-git
 python-ansicolor

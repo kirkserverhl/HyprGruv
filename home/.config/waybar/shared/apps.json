@@ -1,9 +1,9 @@
 {
   "custom/appmenu": {
     "format": "\uf303",
-    "on-click": "pkill rofi || rofi -show drun -replace",
+    "on-click": "~/.config/hypr/scripts/fuzzel-full.sh",
     "on-click-right": "~/.config/hypr/scripts/fuzzel-apps.sh",
-    "tooltip-format": "Left: App Launcher\nRight: Favorites"
+    "tooltip-format": "Left: All Apps\nRight: Favorites"
   },
 
   "custom/tools": {
@@ -40,7 +40,7 @@
 
   "group/apps": {
     "orientation": "horizontal",
-    "tooltip-format": "Left: App Launcher\nRight: Favorites",
+    "tooltip-format": "Left: All Apps\nRight: Favorites",
     "drawer": {
       "transition-duration": 300,
       "children-class": "not-apps",

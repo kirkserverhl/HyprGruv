@@ -81,6 +81,7 @@ require("conf.gestures")
 ---- PLUGINS ---
 ----------------
 require("conf.plugins")
+require("conf.hymission")
 
 ---------------------
 ---- KEYBINDINGS ----

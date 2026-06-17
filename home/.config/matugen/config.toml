@@ -200,7 +200,7 @@ post_hook = 'notify-send "Matugen" "OBS theme updated — restart OBS or re-sele
 input_path = "~/.config/matugen/templates/obsidian.css"
 output_path = "~/.config/obsidian/matugen.css"
 post_hook = '''
-    # Copy to known vaults (add more paths as needed)
+    OBS_CSS="$HOME/.config/obsidian/matugen.css"
     for vault in \
         "$HOME/Documents/Obsidian" \
         "$HOME/Obsidian" \
@@ -208,11 +208,39 @@ post_hook = '''
         "$HOME/Documents/hyprcourse/Hyprland"; do
         if [ -d "$vault/.obsidian" ]; then
             mkdir -p "$vault/.obsidian/snippets"
-            cp "~/.config/obsidian/matugen.css" "$vault/.obsidian/snippets/matugen.css"
-            echo "[matugen] Copied Obsidian theme to $vault"
+            cp "$OBS_CSS" "$vault/.obsidian/snippets/matugen.css"
+            python3 - "$vault/.obsidian/appearance.json" <<'PY'
+import json, sys, os
+
+path = sys.argv[1]
+data = {}
+if os.path.isfile(path):
+    with open(path, encoding="utf-8") as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            data = {}
+
+snippets = list(data.get("enabledCssSnippets") or [])
+if "matugen" in snippets:
+    snippets.remove("matugen")
+data["enabledCssSnippets"] = snippets
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2)
+    f.write("\n")
+
+snippets.append("matugen")
+data["enabledCssSnippets"] = snippets
+if not data.get("theme"):
+    data["theme"] = "obsidian"
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2)
+    f.write("\n")
+PY
+            echo "[matugen] Copied Obsidian theme to $vault (snippet toggled for reload)"
         fi
     done
-    notify-send "Matugen" "Obsidian theme updated" 2>/dev/null || true
+    notify-send "Matugen" "Obsidian theme updated — reload if colors look stale" 2>/dev/null || true
 '''
 
 

@@ -4,6 +4,16 @@
 
 local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
 local HYPRPM_RELOAD = SCRIPTS .. "/hyprpm-reload.sh"
+local HOTCORNERS = SCRIPTS .. "/launch-hotcorners.sh"
+local POLKIT_AGENT = SCRIPTS .. "/launch-hyprpolkitagent.sh"
+
+local function start_polkit_agent()
+	os.execute(POLKIT_AGENT .. " >/dev/null 2>&1 &")
+end
+
+local function start_hotcorners()
+	os.execute(HOTCORNERS .. " >/dev/null 2>&1")
+end
 
 local function reload_hyprpm()
 	hl.exec_cmd(HYPRPM_RELOAD)
@@ -15,8 +25,8 @@ hl.on("config.reloaded", reload_hyprpm)
 
 -- Run on every Hyprland start (use hl.on for the event)
 hl.on("hyprland.start", function()
-	-- Polkit
-	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+	-- Polkit (Hyprland-native agent)
+	start_polkit_agent()
 
 	-- Idle + bar (or nothingless if that was the last choice via the toggle)
 	hl.exec_cmd(
@@ -57,6 +67,9 @@ hl.on("hyprland.start", function()
 	-- Dunst
 	hl.exec_cmd("dunst")
 
+	-- Bottom-corner hot zones → hymission Mission Control
+	start_hotcorners()
+
 	-- cava-bg: Wayland-native audio visualizer as desktop background (dynamic colors from wallpaper)
 	-- hl.exec_cmd("cava-bg on")
 
@@ -71,6 +84,9 @@ hl.exec_cmd("hyprsunset --temperature 9000")
 hl.on("config.reloaded", function()
 	hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")
 end)
+
+-- Start/restart on every config parse (login + hyprctl reload)
+start_hotcorners()
 
 -- One-time things that were plain "exec" (not exec-once) in original main file
 -- moved to main hyprland.lua

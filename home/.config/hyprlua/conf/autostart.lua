@@ -15,8 +15,8 @@ hl.on("config.reloaded", reload_hyprpm)
 
 -- Run on every Hyprland start (use hl.on for the event)
 hl.on("hyprland.start", function()
-    -- Polkit
-    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    -- Polkit (Hyprland-native agent)
+    os.execute(SCRIPTS .. "/launch-hyprpolkitagent.sh >/dev/null 2>&1 &")
 
     -- Idle + bar
     hl.exec_cmd("hypridle & waybar")

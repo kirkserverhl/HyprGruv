@@ -1,39 +1,39 @@
 /* Matugen colors for Waybar + other apps */
 
 /* Standard Material You roles */
-@define-color background #121318;
-@define-color foreground #e2e2e9;
+@define-color background #131313;
+@define-color foreground #e2e2e2;
 
-@define-color primary #b0c6ff;
-@define-color on_primary #152e60;
-@define-color primary_container #2e4578;
+@define-color primary #ffffff;
+@define-color on_primary #1b1b1b;
+@define-color primary_container #d4d4d4;
 
-@define-color secondary #c0c6dc;
-@define-color on_secondary #293042;
-@define-color secondary_container #404659;
+@define-color secondary #c6c6c6;
+@define-color on_secondary #1b1b1b;
+@define-color secondary_container #474747;
 
-@define-color tertiary #e0bbde;
-@define-color on_tertiary #412742;
-@define-color tertiary_container #593d5a;
+@define-color tertiary #e2e2e2;
+@define-color on_tertiary #1b1b1b;
+@define-color tertiary_container #919191;
 
 @define-color error #ffb4ab;
 @define-color on_error #690005;
 
-@define-color surface #121318;
-@define-color on_surface #e2e2e9;
-@define-color surface_variant #44464f;
-@define-color on_surface_variant #c5c6d0;
+@define-color surface #131313;
+@define-color on_surface #e2e2e2;
+@define-color surface_variant #474747;
+@define-color on_surface_variant #c6c6c6;
 
-@define-color surface_container #1e1f25;
-@define-color surface_container_high #282a2f;
+@define-color surface_container #1f1f1f;
+@define-color surface_container_high #2a2a2a;
 
 /* Rainbow palette to match Starship matugen-rainbow.toml */
-@define-color color_orange #b0c6ff;
-@define-color color_yellow #e0bbde;
-@define-color color_aqua   #c0c6dc;
-@define-color color_blue   #2e4578;
+@define-color color_orange #ffffff;
+@define-color color_yellow #e2e2e2;
+@define-color color_aqua   #c6c6c6;
+@define-color color_blue   #d4d4d4;
 
-@define-color color_on_orange #152e60;
-@define-color color_on_yellow #412742;
-@define-color color_on_aqua   #293042;
-@define-color color_on_blue   #d9e2ff;
+@define-color color_on_orange #1b1b1b;
+@define-color color_on_yellow #1b1b1b;
+@define-color color_on_aqua   #1b1b1b;
+@define-color color_on_blue   #000000;

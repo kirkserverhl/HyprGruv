@@ -138,9 +138,14 @@ function M.load()
         return "rgb(" .. h .. ")"
     end
 
-    colors.hyprbar_close    = normalize_color(to_rgb(starship.color_red)    or to_rgb(starship.red),    "rgb(ffb4ab)")
-    colors.hyprbar_minimize = normalize_color(to_rgb(starship.color_yellow) or to_rgb(starship.yellow), "rgb(eab9d2)")
-    colors.hyprbar_maximize = normalize_color(to_rgb(starship.color_green)  or to_rgb(starship.green),  "rgb(c6c4dd)")
+    -- Hyprbars buttons — matugen semantic roles (subtle, wallpaper-aware)
+    colors.hyprbar_close    = normalize_color(colors.error     or to_rgb(starship.color_red),   "rgb(ffb4ab)")
+    colors.hyprbar_minimize = normalize_color(colors.secondary or to_rgb(starship.color_aqua) or to_rgb(starship.color_yellow), "rgb(c6c6c6)")
+    colors.hyprbar_maximize = normalize_color(colors.tertiary    or to_rgb(starship.color_green), "rgb(e2e2e2)")
+
+    colors.hyprbar_close_fg    = normalize_color(colors.on_error    or colors.on_background, "rgb(690005)")
+    colors.hyprbar_minimize_fg = normalize_color(colors.on_secondary  or colors.on_background, "rgb(1b1b1b)")
+    colors.hyprbar_maximize_fg = normalize_color(colors.on_tertiary   or colors.on_background, "rgb(1b1b1b)")
 
     return colors
 end

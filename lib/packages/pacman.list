@@ -27,6 +27,7 @@ lazygit
 starship
 gum
 fuzzel
+papirus-icon-theme
 toilet
 toilet-fonts
 sl
@@ -49,7 +50,7 @@ waybar
 xdg-desktop-portal-hyprland
 xdg-desktop-portal
 swaybg
-polkit-gnome
+hyprpolkitagent
 gnome-keyring
 pipewire
 wireplumber
@@ -63,7 +64,10 @@ uv
 qt6ct
 qt6-declarative
 qt5-declarative
-papirus-icon-theme
+gtk3
+gobject-introspection
+python-cairo
+python-gobject
 adw-gtk-theme
 jq
 curl

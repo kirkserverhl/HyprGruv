@@ -2,6 +2,8 @@
 # Lines starting with # are ignored.
 
 python-pywalfox
+aphototoollibre
+cbonsai-git
 bibata-cursor-theme-bin
 brave-bin
 google-chrome
@@ -20,6 +22,8 @@ aylurs-gtk-shell-git
 wlogout
 atuin
 displaylink
+dipc
+hypremoji
 masterpdfeditor
 timeshift-autosnap
 vscodium-bin
