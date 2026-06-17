@@ -9,8 +9,7 @@ if pgrep -x waybar >/dev/null; then
     # Waybar is running → toggle visibility
     pkill -SIGUSR1 waybar
 else
-    # Waybar not running → start with last chosen theme (also kills nothingless if it was up)
-    pkill -x nothingless 2>/dev/null || true
+    # Waybar not running → start with last chosen theme
     pkill -x waybar 2>/dev/null || true
     sleep 0.15
     ~/.config/waybar/scripts/launch.sh

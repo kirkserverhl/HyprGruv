@@ -249,13 +249,6 @@ input_path = "~/.config/matugen/templates/pavucontrol.css"
 output_path = "~/.config/pavucontrol/pavucontrol.css"
 
 
-## pywal/pywalfox removed — Firefox theming uses templates.firefox_* instead
-##[templates.pywalfox]
-##input_path = "~/.config/matugen/templates/pywalfox-colors.json"
-##output_path = "~/.cache/wal/colors.json"
-##post_hook = "pywalfox update"
-
-
 [templates.qt5ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt5ct/colors/matugen.conf"

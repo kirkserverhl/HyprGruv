@@ -128,9 +128,6 @@ hl.bind(mainMod .. " + CTRL + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-waybar.sh"
 hl.bind(mod     .. " + M",        hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
 hl.bind(mainMod .. " + T",        hl.dsp.exec_cmd("pkill -x rofi 2>/dev/null; ~/.config/colorschemes/rofi-launcher.sh"))
 
--- NothingLess <-> Waybar toggle (ALT+SHIFT+N). Keeps CTRL+W purely for Waybar theme switching.
-hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-nothingless.sh"))
-
 -- Misc tools
 hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(SCRIPTS .. "/unlockroot.sh"))
 hl.bind(mod     .. " + N", hl.dsp.exec_cmd("~/.local/bin/night-mode.sh"))

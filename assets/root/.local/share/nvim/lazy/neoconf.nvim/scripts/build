@@ -1,3 +1,0 @@
-#!/bin/env bash
-
-nvim --cmd "set rtp^=." -l "lua/neoconf/build/init.lua"

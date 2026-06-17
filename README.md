@@ -1,128 +1,203 @@
 ⚠️ Beta Version - Under Construction ⚠️
 
-Use at your own risk! We’re working hard to stabilize this project, but it’s a work in progress. Save your work frequently and consider running in an isolated environment to avoid any unexpected issues.  
+Use at your own risk. Save your work frequently and consider testing in a VM first.
 
-
-🔥 For the best experience, we strongly recommend testing in a virtual machine with the following specs:  
-
+**Recommended VM specs**
 
 ```bash
-Hypervisor: Any modern hypervisor (e.g., VirtualBox, VMware, Hyper-V)  
-RAM: Minimum 4GB (8GB or more for smooth performance)  
-Storage: At least 40GB free disk space
+Hypervisor: VirtualBox, VMware, QEMU/KVM, or Hyper-V
+RAM:        4GB minimum (8GB+ recommended)
+Storage:    40GB+ free disk space
 ```
 
+# HyprGruv
 
-# HyprGruv 🚀
-
-Hyprland Arch Linux featuring GruvBox!
+Hyprland on Arch Linux with Gruvbox theming.
 
 Developed by Kirk Bass
 
-## Prerequisites:
+## Prerequisites
 
-Ventoy USB: Create a bootable USB using Ventoy and add the latest Arch Linux ISO to it.
+- Ventoy USB with the latest Arch Linux ISO (or another boot method)
+- Wired or wireless internet during installation
 
-Ensure Internet Access: Wired or wireless connection for installation.
+## Step 1: Boot Arch Linux
 
+Boot the Arch ISO (Normal Mode → `archinstall` medium if using the guided installer).
 
-## Step 1: Install Arch Linux
+## Step 2: Install Arch Linux
 
-Insert the Ventoy USB when the computer is off, turn on your device and you will choose the the Arch Linux ISO from the option menu.
-
-Select Normal Mode in the boot menu and then choose archinstall-medium.
-
-## Step 2: Install Arch Linux 
-
-Launch the Arch Linux guided installer with:
+Launch the guided installer:
 
 ```bash
 archinstall
 ```
 
-## Configure Installation:
+Suggested options (adjust to taste):
 
-Choose mirrors: US / back
-Disk Configuration: Partitioning, Use best-effort, choose drive, btrfs (or ext4), no btrfs subvolumes, use compression, no separate home partition / back
-Swap: enabled
-Bootloader: grub
-Choose Hostname & Password
-Create User Account, password, give sudo privileges / confirm & exit
-Profile: Type, Desktop, Hyprland, polkit / back
-Audio: Pipewire
-Network Configuration: Use NetworkManager
-Additional Packages: firefox
-Choose Timezone
-Install
+| Setting | Recommendation |
+|---------|----------------|
+| Mirrors | US or your region |
+| Disk | btrfs or ext4, compression on, no separate `/home` unless you want it |
+| Swap | enabled |
+| Bootloader | grub |
+| Profile | Desktop → Hyprland, polkit enabled |
+| Audio | PipeWire |
+| Network | NetworkManager |
+| Extra packages | `git` (firefox is installed later by Hyprgruv) |
+| Timezone | your locale |
 
-Once installation is completed use the following commands to reboot:
+When finished, exit the installer and reboot. Remove the USB when powered off.
 
-"Would you like to chroot?"    
+## Step 3: First login and run Hyprgruv
 
-```sh
-no
-shutdown -–now
-```
+At SDDM, choose **Hyprland** (not uwsm-managed) and log in with the user you created.
 
-When the device is powered off remove the Ventoy usb and restart the device.
+Open a terminal (`Win + Q` before install completes; `Win + Enter` after) and run:
 
-
-
-## Step 3: Login and Configuration
-
-When Arch linux boots up you are greeted with the SDDM sign-on screen.
-
-In top left of screen choose 'Hyprland' for session, not (uwsm-managed)
-
-Use the user credentials created durring the archinstall to login!
-
-Open terminal with keybind:   
-```sh
-Win + Q
-```    
- > temporary, after install   Win + ENTER
-
-Run the following (example — you can clone or copy the tree anywhere, but the canonical location on this machine is ~/.hyprgruv):
-
-```sh
+```bash
 sudo pacman -S git
-# Option A: fresh clone
 git clone https://github.com/KirkserverHL/move.git ~/.hyprgruv
-cd ~/.hyprgruv/
-./install.sh
-
-# Option B: if you already have the tree in Downloads/move-main or elsewhere
-cp -a ~/Downloads/move-main ~/.hyprgruv   # or rsync, etc.
-cd ~/.hyprgruv/
+cd ~/.hyprgruv
 ./install.sh
 ```
 
-The installer detects its own location via HYPR_DIR (dirname of the script + ../..), so it works from ~/.hyprgruv, ~/Downloads/move-main, or any checkout. The old hard requirement for ~/.hyprgruv is no longer strict, but that's still the master copy on this system.  
+If you already have the tree elsewhere, copy or symlink it to `~/.hyprgruv` and run `./install.sh` from there.
 
-## Tips
+## What `install.sh` does
 
-To move windows you can use: Win + Left Mouse
-**permanent bind, works before and after install
+The installer runs in one pass. On a graphical session (e.g. EndeavourOS KDE), the setup wizard runs **before** reboot; on a TTY-only install it may reboot first.
 
-To close windows during install use:  Win + C
-** temporary bind, after install use:  Win + Q
+### Pre-reboot modules
 
-> be careful closing unnecessary windows during install
+| Step | Module | What it does |
+|------|--------|--------------|
+| 1 | `00-preflight.sh` | Arch sanity checks, multilib, mirror/keyring repair, EndeavourOS cleanup |
+| 2 | `01-packages.sh` | Installs yay, optional Chaotic-AUR, core Hyprland stack, then `lib/packages/pacman.list` + `aur.list` |
+| 3 | `02-stow.sh` | Stows `home/` configs into `$HOME` (with timestamped backup) |
+| 4 | `default_wp.sh` | Opening wallpaper + first matugen palette (skipped with `SKIP_WALLPAPER=1`) |
+| 5 | `post_reboot_setup.sh` | Full setup wizard (modules 03–05) when `SKIP_SETUP_WIZARD` is unset |
+| 6 | Final sync | `yay -Syu` or `pacman -Syu` |
+| 7 | Reboot | Skipped when a graphical session is detected (`WAYLAND_DISPLAY` / `DISPLAY` set) |
 
-** after install a list of keydinds is available using:
- ‘Win + K’ or by typing ‘keybinds’ in the terminal.
+### Setup wizard (`post_reboot_setup.sh`)
 
+Can also be run manually after login:
 
-## Post-Installation
+```bash
+FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+```
 
-The initial install will install the base packages and configure the zsh or bash shell configuration.  At this point the device will reboot to complete configurations.  
-When the device reboots the next half of the installation, configuration, will begin in which personal preferences and extras can be configured.
+| Step | Script | What it does |
+|------|--------|--------------|
+| Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, initial theme |
+| System | `03-setup.sh` | Hyprpm plugins; enables SDDM + Sugar Candy theme; VM GRUB tweaks |
+| Interactive | `04-config.sh` | Optional: SDDM theme, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
+| Defaults | `05-setup_defaults.sh` | Choose default terminal, browser, and editor |
 
-If the script does not finish either ~/.dotfiles/install.sh or ~/.dotfiles/config.sh can be ran manually or at any time to change the original configurations.
+Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.
 
- > Please note that full configuration will require a restart.
->
->
+## Package lists (canonical source)
 
-💡 Feedback is welcome! If you encounter issues or have suggestions, please open an issue on this repository.  
-Test
+Package names are **not** maintained in `assets/README/package.list` anymore. The single source of truth is:
+
+```
+lib/packages/pacman.list   # official repos
+lib/packages/aur.list      # AUR (via yay)
+lib/packages/new.list      # staging — test before promoting
+```
+
+`01-packages.sh` also installs a small hardcoded core set (Hyprland, pipewire, kitty, thunar, mpv, etc.) before syncing the manifest lists.
+
+### Cross-device package sync
+
+```bash
+# Preview what would install
+bash ~/.hyprgruv/sync-packages.sh --dry-run
+
+# Install missing packages from all lists
+bash ~/.hyprgruv/sync-packages.sh
+
+# Stage a new package, then sync
+bash ~/.hyprgruv/sync-packages.sh add <package> --install
+
+# Promote from staging to confirmed
+bash ~/.hyprgruv/sync-packages.sh promote <package> --to pacman
+bash ~/.hyprgruv/sync-packages.sh promote <package> --to aur
+```
+
+## Install environment variables
+
+| Variable | Effect |
+|----------|--------|
+| `FORCE=1` | Re-run completed modules |
+| `RESET_STATE=1` | Clear install state and start fresh |
+| `SKIP_PACKAGES=1` | Skip `01-packages.sh` (configs only) |
+| `SKIP_WALLPAPER=1` | Skip opening wallpaper / matugen step |
+| `SKIP_SETUP_WIZARD=1` | Skip modules 03–05 during install |
+| `SKIP_REBOOT=1` | Never reboot at end of install |
+| `FORCE_REBOOT=1` | Reboot even in a graphical session |
+| `SKIP_CHAOTIC=1` | Skip Chaotic-AUR bootstrap in packages step |
+| `CONTINUE_ON_PACKAGE_FAIL=0` | Stop install if packages step fails (default: continue) |
+
+Examples:
+
+```bash
+# Re-test stow without reinstalling packages
+SKIP_PACKAGES=1 FORCE=1 ./install.sh
+
+# Clean state, full re-run
+RESET_STATE=1 FORCE=1 ./install.sh
+
+# Re-run wizard only
+FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+```
+
+## Tips during install
+
+- Move windows: `Win + Left Mouse` (works before and after install)
+- Close windows during install: `Win + C` (after install: `Win + Q`)
+- Full keybind list after install: `Win + K` or type `keybinds` in a terminal
+
+## Post-installation
+
+After a successful run you should have:
+
+- Hyprland session at SDDM (Sugar Candy greeter)
+- Stowed configs under `~/.config/hypr`, waybar, rofi, etc.
+- Matugen-driven theming tied to wallpaper changes
+- Optional extras from the interactive wizard (Atuin, zram, GRUB theme, …)
+
+If anything was skipped, re-run the wizard:
+
+```bash
+FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+```
+
+Legacy paths like `~/.dotfiles/install.sh` are no longer used.
+
+## Repository layout
+
+```
+.hyprgruv/
+├── install.sh                 # Main entry point
+├── sync-packages.sh           # Wrapper → lib/scripts/sync-packages.sh
+├── lib/
+│   ├── common.sh              # Shared helpers
+│   ├── state.sh               # Install state tracking
+│   ├── packages/              # pacman.list, aur.list, new.list, manifest.sh
+│   └── scripts/               # Setup helpers (grub, shell, waypaper, …)
+├── modules/
+│   ├── 00-preflight.sh
+│   ├── 01-packages.sh
+│   ├── 02-stow.sh
+│   ├── 03-setup.sh
+│   ├── 04-config.sh
+│   └── 05-setup_defaults.sh
+├── home/                      # Stow package (user configs)
+└── assets/                    # SDDM themes, GRUB assets, install logs
+```
+
+## Feedback
+
+Issues and suggestions: open an issue on the repository.

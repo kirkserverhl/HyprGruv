@@ -27,9 +27,5 @@ fi
 echo "Setting wallpaper to: $CURRENT_WALLPAPER" >> "$LOG_FILE"
 waypaper --wallpaper "$CURRENT_WALLPAPER" >> "$LOG_FILE" 2>&1
 
-# If you use pywal, you can regenerate the colorscheme as well
-# Uncomment the following line if you want to use pywal
-# pywal -i "$CURRENT_WALLPAPER" >> "$LOG_FILE" 2>&1
-
 echo "Wallpaper update complete." >> "$LOG_FILE"
 

@@ -1,15 +1,10 @@
-First Open firefox and navigate to about:config in the URL bar
-
-Set toolkit.legacyUserProfileCustomizations.stylesheets to "True"
-
-Next Install the Transparency Firefox theme by Double clicking to open the 'darkreader.xpi' file:"
-
-dolphin ~/.mozilla/firefox/default/chrome >/dev/null 2>&1
-
-gum spin --title "Openinng Darkreader location... " -- sleep 5
-
-echo "    Open the dark reader extension again, click Settings, go to the Advanced tab, and enable Synchronize site fixes
-
-Close and reopen firefox and the theme should be applied."
-
-echo "The final step to configure firefox is to "
+# Firefox theming (HyprGruv / matugen)
+#
+# See assets/README/THEMING.md for the full guide.
+#
+# 1. about:config → toolkit.legacyUserProfileCustomizations.stylesheets = true
+# 2. about:profiles → note your profile folder name
+# 3. Update profile paths in ~/.config/matugen/config.toml (firefox templates)
+# 4. Change wallpaper or run: matugen image ~/Pictures/Wallpapers/<image>
+# 5. Restart Firefox
+# 6. Uninstall Dark Reader and pywalfox extensions if still present

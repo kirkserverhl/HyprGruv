@@ -1,1 +1,0 @@
-print(require("neogen").version)

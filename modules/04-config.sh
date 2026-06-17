@@ -54,8 +54,8 @@ run_step() {
     local path="$1"
     local title="$2"
     log_status "Starting: $title"
-    # Do NOT wrap in gum spin here. These sub-scripts (shell.sh, monitor.sh, etc.)
-    # are interactive (gum choose/confirm, wdisplays GUI, read prompts, etc.).
+    # Do NOT wrap in gum spin here. These sub-scripts (shell.sh, grub.sh, etc.)
+    # are interactive (gum choose/confirm, GUI tools, read prompts, etc.).
     # Wrapping them in gum spin breaks TTY / nested gum input and causes apparent stalls/hangs.
     bash "$path"
     log_success "$title completed"
@@ -91,25 +91,6 @@ else
     else
         _say "SDDM configuration skipped."
     fi
-fi
-sleep 1
-clear
-
-# ----------------------- Monitors ----------------------------
-echo ""
-display_header "Monitors"
-sleep 0.5
-if _confirm "  🖥️   Configure monitor setup?"; then
-    _say "Starting monitor setup…"
-    script="$SCRIPTS_DIR/monitor.sh"
-    if [[ -f "$script" ]]; then
-        run_step "$script" "Monitor Setup"
-    else
-        log_error "Script not found: $script"
-        exit 2
-    fi
-else
-    _say "Monitor setup skipped."
 fi
 sleep 1
 clear

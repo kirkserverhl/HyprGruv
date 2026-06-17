@@ -1,115 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<style>
-.r1 {font-weight: bold}
-.r2 {font-weight: bold; text-decoration: underline}
-.r3 {color: #808080; text-decoration-color: #808080}
-.r4 {color: #800080; text-decoration-color: #800080}
-.r5 {color: #00ffff; text-decoration-color: #00ffff}
-body {
-    color: #000000;
-    background-color: #ffffff;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HyprGruv — Install Guide</title>
+  <style>
+    :root {
+      --bg: #1d2021;
+      --fg: #ebdbb2;
+      --muted: #a89984;
+      --accent: #83a598;
+      --orange: #fe8019;
+      --green: #b8bb26;
+      --border: #3c3836;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 2rem 1.5rem 3rem;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+      max-width: 52rem;
+      margin-inline: auto;
+    }
+    h1, h2, h3 { color: var(--orange); font-weight: 700; margin-top: 2rem; }
+    h1 { font-size: 1.75rem; border-bottom: 2px solid var(--border); padding-bottom: .5rem; }
+    h2 { font-size: 1.25rem; }
+    a { color: var(--accent); }
+    code, pre {
+      font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #282828;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #282828; color: var(--green); }
+    .beta {
+      background: #3c2a1e;
+      border: 1px solid #d65d0e;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .muted { color: var(--muted); }
+    ul { padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+  </style>
 </head>
 <body>
-    <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><code style="font-family:inherit">┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                                                       <span class="r1">HyprGruv 🚀</span>                                                       ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-Hyprland Arch Linux featuring GruvBox!                                                                                     
+  <div class="beta">⚠️ <strong>Beta</strong> — under active development. Test in a VM when possible (4GB+ RAM, 40GB+ disk).</div>
 
-Developed by Kirk Bass                                                                                                     
+  <h1>HyprGruv 🚀</h1>
+  <p>Hyprland on Arch Linux with Gruvbox theming.<br>
+  <span class="muted">Developed by Kirk Bass</span></p>
 
+  <h2>Prerequisites</h2>
+  <ul>
+    <li>Arch Linux ISO on a Ventoy USB (or other boot method)</li>
+    <li>Internet access during installation</li>
+  </ul>
 
-                                                      <span class="r2">Prerequisites:</span>                                                       
+  <h2>Step 1–2: Install Arch Linux</h2>
+  <p>Boot the ISO and run the guided installer:</p>
+  <pre>archinstall</pre>
+  <p>Suggested options:</p>
+  <table>
+    <tr><th>Setting</th><th>Recommendation</th></tr>
+    <tr><td>Disk</td><td>btrfs or ext4, compression on</td></tr>
+    <tr><td>Swap</td><td>enabled</td></tr>
+    <tr><td>Bootloader</td><td>grub</td></tr>
+    <tr><td>Profile</td><td>Desktop → Hyprland, polkit</td></tr>
+    <tr><td>Audio</td><td>PipeWire</td></tr>
+    <tr><td>Network</td><td>NetworkManager</td></tr>
+    <tr><td>Extra packages</td><td><code>git</code> (firefox installed by Hyprgruv)</td></tr>
+  </table>
+  <p>Reboot when finished. Remove the USB.</p>
 
-Ventoy USB: Create a bootable USB using Ventoy and add the latest Arch Linux ISO to it.                                    
+  <h2>Step 3: Run Hyprgruv</h2>
+  <p>At SDDM choose <strong>Hyprland</strong> (not uwsm-managed). Open a terminal (<code>Win+Q</code> during install; <code>Win+Enter</code> after).</p>
+  <pre>sudo pacman -S git
+git clone https://github.com/KirkserverHL/move.git ~/.hyprgruv
+cd ~/.hyprgruv
+./install.sh</pre>
 
-Ensure Internet Access: Wired or wireless connection for installation.                                                     
+  <h2>Install pipeline</h2>
+  <p>On graphical sessions the full wizard runs in one pass before reboot. On TTY-only installs, reboot may happen first.</p>
+  <table>
+    <tr><th>Step</th><th>Module / script</th><th>Purpose</th></tr>
+    <tr><td>1</td><td><code>00-preflight.sh</code></td><td>Arch prep, keyring, multilib</td></tr>
+    <tr><td>2</td><td><code>01-packages.sh</code></td><td>yay, optional Chaotic-AUR, core stack + manifest lists</td></tr>
+    <tr><td>3</td><td><code>02-stow.sh</code></td><td>Stow <code>home/</code> configs into <code>$HOME</code></td></tr>
+    <tr><td>4</td><td><code>default_wp.sh</code></td><td>Opening wallpaper + matugen palette</td></tr>
+    <tr><td>5</td><td><code>post_reboot_setup.sh</code></td><td>Setup wizard (03–05)</td></tr>
+    <tr><td>6</td><td>Final sync</td><td><code>yay -Syu</code> or <code>pacman -Syu</code></td></tr>
+    <tr><td>7</td><td>Reboot</td><td>Skipped when a graphical session is detected</td></tr>
+  </table>
 
+  <h2>Setup wizard</h2>
+  <p>Re-run anytime:</p>
+  <pre>FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh</pre>
+  <table>
+    <tr><th>Step</th><th>Script</th><th>Purpose</th></tr>
+    <tr><td>Wallpaper</td><td><code>waypaper_setup.sh</code></td><td>waypaper stack, optional repo download</td></tr>
+    <tr><td>System</td><td><code>03-setup.sh</code></td><td>Hyprpm, SDDM + Sugar Candy theme</td></tr>
+    <tr><td>Interactive</td><td><code>04-config.sh</code></td><td>GRUB, shell, Atuin, Pacseek, SSH, zram, cleanup</td></tr>
+    <tr><td>Defaults</td><td><code>05-setup_defaults.sh</code></td><td>Default terminal, browser, editor</td></tr>
+  </table>
+  <p class="muted">Monitor layout is configured in Hyprland (<code>conf/monitors.lua</code>, <code>save-monitor-layout.sh</code>) — not part of the installer.</p>
 
-                                                <span class="r2">Step 1: Install Arch Linux</span>                                                 
+  <h2>Package lists</h2>
+  <p>Canonical lists (not <code>assets/README/package.list</code>):</p>
+  <pre>lib/packages/pacman.list   # official repos
+lib/packages/aur.list      # AUR
+lib/packages/new.list      # staging</pre>
+  <pre>bash ~/.hyprgruv/sync-packages.sh --dry-run
+bash ~/.hyprgruv/sync-packages.sh</pre>
 
-Insert the Ventoy USB when the computer is off, turn on your device and you will choose the the Arch Linux ISO from the    
-option menu.                                                                                                               
+  <h2>Environment variables</h2>
+  <table>
+    <tr><th>Variable</th><th>Effect</th></tr>
+    <tr><td><code>FORCE=1</code></td><td>Re-run completed modules</td></tr>
+    <tr><td><code>RESET_STATE=1</code></td><td>Clear install state</td></tr>
+    <tr><td><code>SKIP_PACKAGES=1</code></td><td>Skip package install</td></tr>
+    <tr><td><code>SKIP_WALLPAPER=1</code></td><td>Skip opening wallpaper step</td></tr>
+    <tr><td><code>SKIP_SETUP_WIZARD=1</code></td><td>Skip modules 03–05</td></tr>
+    <tr><td><code>SKIP_REBOOT=1</code></td><td>Never reboot at end</td></tr>
+    <tr><td><code>FORCE_REBOOT=1</code></td><td>Reboot even in graphical session</td></tr>
+  </table>
 
+  <h2>Tips</h2>
+  <ul>
+    <li>Move windows: <code>Win + Left Mouse</code></li>
+    <li>Close during install: <code>Win + C</code> → after install: <code>Win + Q</code></li>
+    <li>Keybind list: <code>Win + K</code> or type <code>keybinds</code></li>
+  </ul>
 
-                                                <span class="r2">Step 2: Install Arch Linux</span>                                                 
+  <h2>Theming</h2>
+  <p>Wallpaper-driven colors via <strong>matugen</strong>. See <a href="THEMING.md">THEMING.md</a> for Firefox setup, manual palette pickers, and troubleshooting.</p>
+  <p>Firefox one-time: enable <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> in <code>about:config</code>, fix your profile path in <code>~/.config/matugen/config.toml</code>, then change wallpaper once.</p>
 
-Launch the Arch Linux guided installer with:                                                                               
+  <h2>Post-installation</h2>
+  <p>Log out and select Hyprland at SDDM. If anything was skipped:</p>
+  <pre>FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh</pre>
+  <p class="muted">Legacy paths like <code>~/.dotfiles/install.sh</code> are no longer used.</p>
 
-                                                                                                                           
- archinstall                                                                                                               
-                                                                                                                           
-
-
-                                                  <span class="r2">Configure Installation:</span>                                                  
-
-Choose mirrors: US / back Disk Configuration: Partitioning, Use best-effort, choose drive, btrfs (or ext4), no btrfs       
-subvolumes, use compression, no separate home partition / back Swap: enabled Bootloader: grub Choose Hostname &amp; Password   
-Create User Account, password, give sudo privileges / confirm &amp; exit Profile: Type, Desktop, Hyprland, polkit / back Audio:
-Pipewire Network Configuration: Use NetworkManager Additional Packages: firefox Choose Timezone Install                    
-
-Once installation is completed use the following commands to reboot:                                                       
-
-&quot;Would you like to chroot?&quot;                                                                                                
-
-                                                                                                                           
- no                                                                                                                        
- shutdown<span class="r3"> </span>-–now                                                                                                            
-                                                                                                                           
-
-When the device is powered off remove the Ventoy usb and restart the device.                                               
-
-
-                                              <span class="r2">Step 3: Login and Configuration</span>                                              
-
-When Arch linux boots up you are greeted with the SDDM sign-on screen.                                                     
-
-In top left of screen choose &#x27;Hyprland&#x27; for session, not (uwsm-managed)                                                    
-
-Use the user credentials created durring the archinstall to login!                                                         
-
-Open terminal with keybind:                                                                                                
-
-                                                                                                                           
- Win<span class="r3"> </span>+<span class="r3"> </span>Q                                                                                                                   
-                                                                                                                           
-
-<span class="r4">▌ temporary, after install   Win + ENTER                                                                                 </span>
-
-Run the following string of commands Line:                                                                                 
-
-                                                                                                                           
- sudo<span class="r3"> </span>pacman<span class="r3"> </span>-S<span class="r3"> </span>git<span class="r3"> </span>&amp;&amp;                                                                                                     
- git<span class="r3"> </span>clone<span class="r3"> </span>https://github.com/kirkserverhl/hyprgruv.git<span class="r3"> </span>~/.hyprgruv<span class="r3"> </span>&amp;&amp;                                                     
- <span class="r5">cd</span><span class="r3"> </span>~/.hyprgruv/                                                                                                           
- ./install.sh                                                                                                              
-                                                                                                                           
-
-
-                                                           <span class="r2">Tips</span>                                                            
-
-To move windows you can use: Win + Left Mouse **permanent bind, works before and after install                             
-
-To close windows during install use:  Win + C ** temporary bind, after install use:  Win + Q                               
-
-<span class="r4">▌ be careful closing unnecessary windows during install                                                                  </span>
-
-** after install a list of keydinds is available using: ‘Win + K’ or by typing ‘keybinds’ in the terminal.                 
-
-
-                                                     <span class="r2">Post-Installation</span>                                                     
-
-The initial install will install the base packages and configure the zsh or bash shell configuration.  At this point the   
-device will need to be rebooted for full configuration to take place.                                                      
-
-<span class="r4">▌ Please note that full configuration will require a restart.                                                            </span>
-
-Open firefox and navigate to about:config in the URL bar. Set toolkit.legacyUserProfileCustomizations.stylesheets to true  
-</code></pre>
 </body>
 </html>

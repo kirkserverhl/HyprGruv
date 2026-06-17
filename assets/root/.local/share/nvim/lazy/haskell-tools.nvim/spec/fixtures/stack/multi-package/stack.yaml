@@ -1,5 +1,0 @@
-resolver: lts-20.8
-
-packages:
-- ./sub1/
-- ./sub2/

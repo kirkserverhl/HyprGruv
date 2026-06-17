@@ -5,7 +5,6 @@ set -euo pipefail
 
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/waybar"
 BAR_MODE_FILE="$STATE_DIR/bar_mode"
-LAYOUT_FILE="$STATE_DIR/last_layout"
 HYPRBARS="/var/cache/hyprpm/kirk/hyprland-plugins/hyprbars.so"
 NOTIFY=${NOTIFY:-notify-send}
 
@@ -88,10 +87,6 @@ if [[ "$mode" == "waybar" ]]; then
     [[ "$NOTIFY" = ":" ]] || $NOTIFY "Bar" "Hyprbars" -t 1500
 else
     echo "waybar" > "$BAR_MODE_FILE"
-    pkill -x nothingless 2>/dev/null || true
-    if [[ -f "$LAYOUT_FILE" ]] && [[ "$(cat "$LAYOUT_FILE")" == "nothingless" ]]; then
-        rm -f "$LAYOUT_FILE"
-    fi
     unload_hyprbars
     sleep 0.1
     "$HOME/.config/waybar/scripts/launch.sh"

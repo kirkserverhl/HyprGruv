@@ -81,7 +81,7 @@ if [[ "${RUN_FROM_INSTALL:-0}" == "1" ]]; then
 else
   display_header "Hyprgruv — Post-reboot Setup"
   echo ""
-  log_status "Welcome back! Wallpaper/theming runs first, then SDDM, monitors, GRUB, shell, and defaults."
+  log_status "Welcome back! Wallpaper/theming runs first, then SDDM, GRUB, shell, and defaults."
 fi
 log_status "Logs: $LOGFILE"
 echo ""

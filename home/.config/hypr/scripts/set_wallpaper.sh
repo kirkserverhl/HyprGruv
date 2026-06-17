@@ -3,7 +3,6 @@
 # Hyprland Wallpaper Post-Command for Waypaper (Matugen-focused)
 # ===================================================================
 # Primary color source: Matugen
-# pywal is only kept temporarily for programs that haven't been migrated yet.
 #
 # OVERHAUL GOAL (as clarified):
 #   No pre-rendered blurred/cropped wallpaper variants are generated anymore.
@@ -174,9 +173,6 @@ if [ ! -f "$PREPROCESSED_WALLPAPER" ] || [ "$FORCE_GENERATE" -eq 1 ]; then
 fi
 
 # ------------------- Color Generation -------------------
-echo ":: Running pywal (legacy, being phased out)..."
-wal -q -i "$WALLPAPER" || echo ":: pywal failed (non-fatal)"
-
 echo ":: Applying matugen palette from current wallpaper..."
 # Shows rofi palette + source-color chooser when a display is available (waypaper GUI
 # and terminal). Falls back to auto source color 1 if cancelled or headless.
@@ -248,11 +244,6 @@ rm -f "$HOME/.cache/matugen/waybar-dark-text" \
 # echo ":: Generating Waypaper stylesheet... (disabled to avoid GTK QSS crash)"
 # mkdir -p ~/.config/waypaper
 # ... (original Matugen QSS generator removed)
-
-# Optional: pywalfox (legacy)
-if command -v pywalfox >/dev/null 2>&1; then
-    pywalfox update || true
-fi
 
 # ------------------- Generate Derived Assets (DISABLED) -------------------
 #

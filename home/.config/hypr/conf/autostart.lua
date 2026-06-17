@@ -37,9 +37,9 @@ hl.on("hyprland.start", function()
 	-- Polkit (Hyprland-native agent; single instance via launch script)
 	start_polkit_agent()
 
-	-- Idle + bar (or nothingless if that was the last choice via the toggle)
+	-- Idle + bar
 	hl.exec_cmd(
-		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; if [ "$(cat "$st/last_layout" 2>/dev/null)" = nothingless ]; then nothingless &; elif [ "$(cat "$st/bar_mode" 2>/dev/null)" != hyprbars ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ~/.config/hypr/scripts/sync-bar-mode.sh\''
+		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; if [ "$(cat "$st/bar_mode" 2>/dev/null)" != hyprbars ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ~/.config/hypr/scripts/sync-bar-mode.sh\''
 	)
 
 	-- Clipboard history (images)

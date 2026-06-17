@@ -1,2 +1,0 @@
-loops:
-  check: nix flake check -L

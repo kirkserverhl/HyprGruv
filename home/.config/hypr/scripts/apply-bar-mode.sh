@@ -10,10 +10,6 @@ HYPRBARS="/var/cache/hyprpm/kirk/hyprland-plugins/hyprbars.so"
 mkdir -p "$STATE_DIR"
 rm -f "$STATE_DIR/bar_mode_guard" "$STATE_DIR/bar_mode.lock"
 
-if pgrep -x nothingless >/dev/null 2>&1; then
-    exit 0
-fi
-
 mode="waybar"
 if [[ -f "$BAR_MODE_FILE" ]]; then
     mode=$(cat "$BAR_MODE_FILE")

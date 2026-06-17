@@ -1,11 +1,35 @@
 hyprgruv/
-├── install.sh             # Main entry point script
+├── install.sh                 # Main entry point
+├── sync-packages.sh           # Package sync wrapper
 ├── lib/
-│   ├── common.sh          # Shared functions, variables, styling
-│   └── state.sh           # State management functions
+│   ├── common.sh              # Shared functions, variables, styling
+│   ├── state.sh               # Install state (completed steps, choices)
+│   ├── packages/
+│   │   ├── pacman.list        # Official-repo packages (canonical)
+│   │   ├── aur.list           # AUR packages (canonical)
+│   │   ├── new.list           # Staging list
+│   │   ├── manifest.sh        # Loads lists for install + sync
+│   │   └── manifest-lib.sh    # add/promote/list helpers
+│   └── scripts/               # Setup helpers invoked by modules
+│       ├── post_reboot_setup.sh
+│       ├── waypaper_setup.sh
+│       ├── default_wp.sh
+│       ├── sync-packages.sh
+│       ├── sddm_candy_install.sh
+│       ├── grub.sh
+│       ├── shell.sh
+│       └── …
 ├── modules/
-│   ├── 01-packages.sh     # Package installation
-│   ├── 02-stow.sh         # Configuration file management
-│   ├── 03-assets.sh       # Assets installation
-│   └── 04-config.sh       # Interactive configuration
-└── assets/                # Static files
+│   ├── 00-preflight.sh        # Arch prep, keyring, multilib
+│   ├── 01-packages.sh         # yay, chaotic, pacman + AUR manifest
+│   ├── 02-stow.sh             # Stow home/ → $HOME
+│   ├── 03-setup.sh            # Hyprpm, SDDM enable + theme
+│   ├── 04-config.sh           # Interactive optional steps
+│   └── 05-setup_defaults.sh   # Default terminal/browser/editor
+├── home/                      # GNU stow package (dotfiles)
+└── assets/                    # Static assets (SDDM, GRUB, logs)
+
+Install flow:
+  install.sh → 00 → 01 → 02 → default_wp.sh → post_reboot_setup.sh → sync → reboot?
+
+post_reboot_setup.sh → waypaper_setup → 03 → 04 → 05

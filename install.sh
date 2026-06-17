@@ -162,7 +162,7 @@ sleep 1
 # ============================================================
 if [[ "${SKIP_SETUP_WIZARD:-0}" != "1" ]]; then
   display_header "Setup Wizard"
-  log_status "Running full setup (SDDM, monitors, GRUB, shell, defaults)…"
+  log_status "Running full setup (SDDM, GRUB, shell, defaults)…"
   set +e
   RUN_FROM_INSTALL=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
   wizard_exit=$?
