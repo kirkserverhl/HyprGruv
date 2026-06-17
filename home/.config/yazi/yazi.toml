@@ -1,7 +1,11 @@
 # Yazi main configuration
 # See https://yazi-rs.github.io/docs/configuration/yazi/
 
-[manager]
+[mgr]
+# Pane widths: [parent, current, preview] as proportions of total width.
+# Default is [1, 4, 3] — middle pane is very wide, leaving empty space before preview.
+ratio = [ 2, 2, 5 ]
+
 # Show hidden files (dotfiles) by default
 show_hidden = true
 

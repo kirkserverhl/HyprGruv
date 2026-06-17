@@ -5,3 +5,6 @@ assets/user_choices.txt
 
 # Install logs (local only)
 assets/logs/
+
+# Oh My Zsh is installed locally by lib/scripts/oh_my_zsh.sh — never stow the upstream tree
+home/.oh-my-zsh/

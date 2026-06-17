@@ -118,7 +118,7 @@ clear
 echo ""
 display_header "Shell"
 sleep 0.5
-if _confirm "  🐚   Configure the Shell?"; then
+if _confirm "  🐚   Configure the Shell? (zsh, Oh My Zsh, custom plugins)"; then
     _say "Starting shell setup…"
     script="$SCRIPTS_DIR/shell.sh"
     if [[ -f "$script" ]]; then

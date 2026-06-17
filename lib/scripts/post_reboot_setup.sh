@@ -140,7 +140,7 @@ fi
 
 echo -e "\n   Hyprgruv setup is complete!\n        Common keybinds:"
 echo -e "  Win + ENTER         Terminal
-  Win + B             Browser
+  Win + B             Brave  |  Alt + B Chrome  |  Win + Alt + B Firefox
   Win + F             Thunar
   Win + N             NeoVim
   Win + Q             Close Window

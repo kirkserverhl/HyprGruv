@@ -3,13 +3,9 @@
 # =====================================================
 export EDITOR="nvim"
 export SUDO_EDITOR="$EDITOR"
-export PATH="$HOME/.config/hyprgruv/scripts:$PATH"
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/bin:$HOME/scripts:$HOME/.local/bin:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
 export TERMINAL=kitty
-
-# Test Path
-export PATH="/home/$USER/.local/bin:$PATH"
 
 if command -v bat >/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
@@ -43,11 +39,7 @@ setopt extended_history hist_expire_dups_first hist_ignore_all_dups \
 
 unsetopt correct
 
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Test
-# Path to your Oh My Zsh installation.
+# Path to your Oh My Zsh installation (installed by shell.sh wizard, not stowed).
 export ZSH="$HOME/.oh-my-zsh"
 
 # =====================================================
@@ -102,16 +94,9 @@ alias gpl='git pull'
 alias gsp='git stash && git pull'
 alias ping='ping -c 5'
 alias fastping='ping -c 100 -i .2'
-alias keybinds='nvim ~/.config/hypr/conf/keybindings/default.conf'
+alias keybinds='nvim ~/.config/hypr/conf/keybinds.lua'
 alias reload='hyprctl reload'
-alias hyprscripts= '$EDITOR ~/.config/hypr/scripts'
-
-# Zoxide
-alias za='zoxide add'
-alias zr='zoxide remove'
-alias zl='zoxide query -l'
-alias zi='zoxide query -i'
-
+alias hyprscripts='$EDITOR ~/.config/hypr/scripts'
 
 # YAY
 alias i="yay -S"
@@ -130,11 +115,13 @@ plugins=(
     zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"
 
-# --- zsh-autosuggestions settings ---
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+  # --- zsh-autosuggestions settings ---
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+  ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+fi
 
 # Matugen Palette Output
 alias palette='~/.config/hypr/scripts/palette.sh'
@@ -163,14 +150,26 @@ extract() {
       *.tar.bz2) tar xvjf "$f" ;;
       *.tar.gz)  tar xvzf "$f" ;;
       *.bz2)     bunzip2 "$f" ;;
-      *.rar)     unrar x "$f" ;;
+      *.rar)
+        if command -v unrar >/dev/null; then
+          unrar x "$f"
+        else
+          echo "unrar not installed — cannot extract: $f"
+        fi
+        ;;
       *.gz)      gunzip "$f" ;;
       *.tar)     tar xvf "$f" ;;
       *.tbz2)    tar xvjf "$f" ;;
       *.tgz)     tar xvzf "$f" ;;
       *.zip)     unzip "$f" ;;
       *.Z)       uncompress "$f" ;;
-      *.7z)      7z x "$f" ;;
+      *.7z)
+        if command -v 7z >/dev/null; then
+          7z x "$f"
+        else
+          echo "7z not installed — cannot extract: $f"
+        fi
+        ;;
       *)         echo "Don't know how to extract: $f" ;;
     esac
   done
@@ -194,6 +193,7 @@ alias whatismyip='whatsmyip'
 
 # Yazi wrapper
 function y() {
+  command -v yazi >/dev/null || { echo "yazi not installed"; return 1; }
   local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
   yazi "$@" --cwd-file="$tmp"
   if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
@@ -205,22 +205,31 @@ function y() {
 # =====================================================
 # FZF
 # =====================================================
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+if [[ -f ~/.fzf.zsh ]]; then
+  source ~/.fzf.zsh
+elif [[ -f /usr/share/fzf/completion.zsh ]]; then
+  source /usr/share/fzf/completion.zsh
+  source /usr/share/fzf/key-bindings.zsh
+fi
 
 # =====================================================
 # Zoxide
 # =====================================================
 if command -v zoxide >/dev/null; then
   eval "$(zoxide init zsh)"
+  alias za='zoxide add'
+  alias zr='zoxide remove'
+  alias zl='zoxide query -l'
+  alias zi='zoxide query -i'
 fi
-
-# (Terminal colors are now applied early via the OSC sequences file above)
 
 # =====================================================
 # Prompt (Starship)
 # =====================================================
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship/matugen-rainbow.toml}"
-eval "$(starship init zsh)"
+if command -v starship >/dev/null; then
+  eval "$(starship init zsh)"
+fi
 
 # =====================================================
 # Fastfetch intro
@@ -233,23 +242,20 @@ fi
 # =====================================================
 # The Fuck
 # =====================================================
-eval "$(thefuck --alias)"
+if command -v thefuck >/dev/null; then
+  eval "$(thefuck --alias)"
+fi
 
 # =====================================================
 # Atuin (keep near the end)
 # =====================================================
-eval "$(atuin init zsh)"
-. "$HOME/.atuin/bin/env"
+if command -v atuin >/dev/null; then
+  [[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
+  eval "$(atuin init zsh)"
+fi
 
 # Control + Backspace
 bindkey '^H' backward-kill-word
-
-export PATH="$HOME/bin:$PATH"
-
-export CLUTTER_BACKEND=wayland
-
-
-
 
 # >>> grok installer >>>
 export PATH="$HOME/.grok/bin:$PATH"
@@ -258,4 +264,3 @@ autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
 
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
-export PATH="$HOME/bin:$PATH"

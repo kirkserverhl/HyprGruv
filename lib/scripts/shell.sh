@@ -176,42 +176,10 @@ if [[ "$shell" == "zsh" ]]; then
         exit 1
     }
 
-    # Oh My Zsh plugins (only if Oh My Zsh is installed)
-    ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-    if [[ -d "$HOME/.oh-my-zsh" ]]; then
-        mkdir -p "$ZSH_CUSTOM_DIR/plugins"
-
-        if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]]; then
-            echo "Installing zsh-autosuggestions"
-            git clone https://github.com/zsh-users/zsh-autosuggestions \
-                "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
-        else
-            echo "zsh-autosuggestions already installed"
-        fi
-
-        if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]]; then
-            echo "Installing zsh-syntax-highlighting"
-            git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-                "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
-        else
-            echo "zsh-syntax-highlighting already installed"
-        fi
-
-        if [[ ! -d "$ZSH_CUSTOM_DIR/plugins/fast-syntax-highlighting" ]]; then
-            echo "Installing fast-syntax-highlighting"
-            git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
-                "$ZSH_CUSTOM_DIR/plugins/fast-syntax-highlighting"
-        else
-            echo "fast-syntax-highlighting already installed"
-        fi
-
-        echo ""
-        log_status "Add the plugins to your ~/.zshrc, e.g.:"
-        echo "  plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)"
-    else
-        log_status "Oh My Zsh not detected (~/.oh-my-zsh). Skipping plugin installs."
-        echo "To install it later:  sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
-    fi
+    # Oh My Zsh: official installer + custom plugins (see lib/scripts/oh_my_zsh.sh)
+    # shellcheck source=/dev/null
+    source "$HYPR_DIR/lib/scripts/oh_my_zsh.sh"
+    setup_oh_my_zsh_interactive || true
 fi
 
 # ------------------------------------------------------------
