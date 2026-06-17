@@ -69,10 +69,6 @@ hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh find")) 
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh new-tab")) -- new tab
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh new-window")) -- new window
 
--- === LAUNCHERS ===
-hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
-hl.bind(mod .. " + Return", hl.dsp.exec_cmd("ghostty"))
-
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave")) -- Brave
 hl.bind(mod .. " + B", hl.dsp.exec_cmd("google-chrome-stable")) -- Chrome
 
