@@ -22,6 +22,7 @@ source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
 # ============================================================
 mkdir -p "$ASSET_DIR/logs"
 LOGFILE="$ASSET_DIR/logs/install_$(date +"%Y%m%d_%H%M%S").log"
+export HYPRGRUV_LOGFILE="$LOGFILE"
 exec > >(tee -a "$LOGFILE") 2>&1
 
 # ============================================================
@@ -174,34 +175,15 @@ fi
 sleep 1
 
 # ============================================================
-# Final sync (optional reboot follows)
+# Refresh package databases (no full upgrade — 01-packages already
+# installed the manifest with --needed; -Syu would re-touch every pkg)
 # ============================================================
 display_header "Final sync"
-log_status "Running final system sync…"
+log_status "Refreshing package databases…"
 if command -v yay >/dev/null 2>&1; then
-    yay -Syu --noconfirm || log_warning "yay -Syu reported issues (continuing)"
+    yay -Sy --noconfirm || log_warning "yay -Sy reported issues (continuing)"
 else
-    log_warning "yay not found — falling back to pacman -Syu"
-    sudo pacman -Syu --noconfirm || log_warning "pacman -Syu reported issues (continuing)"
-fi
-sleep 1
-
-display_header "Package manifest sync"
-log_status "Installing packages from HyprGruv manifest (sync-packages)…"
-set +e
-if [[ -f "$HYPR_DIR/sync-packages.sh" ]]; then
-    bash "$HYPR_DIR/sync-packages.sh" sync --skip-new --yes --foreground 2>&1 | tee -a "$LOGFILE"
-    pkg_sync_exit=${PIPESTATUS[0]}
-else
-    log_warning "sync-packages.sh not found — skipping manifest sync"
-    pkg_sync_exit=0
-fi
-set -e
-if [[ ${pkg_sync_exit:-0} -eq 0 ]]; then
-    log_success "Package manifest sync completed"
-    mark_completed "Package manifest sync"
-else
-    log_warning "Package manifest sync finished with warnings (exit ${pkg_sync_exit})"
+    sudo pacman -Sy --noconfirm || log_warning "pacman -Sy reported issues (continuing)"
 fi
 sleep 1
 

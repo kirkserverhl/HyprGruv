@@ -72,7 +72,9 @@ prompt_install_oh_my_zsh() {
   if oh_my_zsh_installed; then
     return 0
   fi
-  if command -v gum >/dev/null 2>&1; then
+  if declare -F gum_confirm_prompt >/dev/null 2>&1; then
+    gum_confirm_prompt "Install Oh My Zsh? (official installer → ~/.oh-my-zsh)"
+  elif command -v gum >/dev/null 2>&1; then
     gum confirm "Install Oh My Zsh? (official installer → ~/.oh-my-zsh)"
   else
     local ans
@@ -86,6 +88,16 @@ setup_oh_my_zsh_interactive() {
     log_status "Oh My Zsh present — ensuring custom plugins only"
     install_oh_my_zsh_plugins
     return 0
+  fi
+
+  if declare -F hyprgruv_section_transition >/dev/null 2>&1; then
+    hyprgruv_section_transition "zsh selected" status
+    hyprgruv_section_intro "Oh My Zsh"
+  else
+    clear
+    echo ""
+    display_header "Oh My Zsh" 2>/dev/null || echo "=== Oh My Zsh ==="
+    echo ""
   fi
 
   if prompt_install_oh_my_zsh; then

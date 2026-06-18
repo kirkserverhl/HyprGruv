@@ -35,6 +35,10 @@ say() { echo -e "$*"; }
 install_aur_pkg() {
     local pkg="$1"
     local output
+    if pacman -Qq "$pkg" &>/dev/null; then
+        say "  ✓ $pkg (already installed)"
+        return 0
+    fi
     if output=$(yay -S --needed --noconfirm "$pkg" 2>&1); then
         say "  ✓ $pkg"
         return 0
@@ -238,37 +242,11 @@ if pacman -Qq jack2 &>/dev/null; then
     sudo pacman -Rdd --noconfirm jack2 2>/dev/null || true
 fi
 
-# Install the PipeWire audio stack (including jack replacement) in its own
-# transaction first. This keeps dependency resolution clean.
+# Install PipeWire first (jack2 conflict) — full manifest follows in one pass.
 sudo pacman -S --needed --noconfirm \
     pipewire pipewire-pulse pipewire-jack wireplumber
 
-sudo pacman -S --needed --noconfirm \
-    hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
-    hyprcursor hyprpicker hyprsunset \
-    hyprlock waybar hyprshot hyprtoolkit \
-    atuin fuzzel wl-clipboard grim slurp brightnessctl \
-    hyprpolkitagent gnome-keyring ncdu \
-    kitty thunar thunar-volman thunar-archive-plugin tumbler \
-    mpv networkmanager nm-connection-editor pavucontrol sddm \
-    obsidian yazi \
-    piper stow \
-    qt6-declarative qt5-declarative qt6ct rustup \
-    gtk3 gobject-introspection python-cairo python-gobject \
-    powerdevil \
-    sl zsh \
-    starship \
-    noto-fonts ttf-dejavu \
-    ttf-agave-nerd ttf-heavydata-nerd ttf-sharetech-mono-nerd otf-font-awesome \
-    git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
-    media-player-info nm-connection-editor pacutils \
-    tmux tmuxinator \
-    doxygen \
-    dust \
-    e2fsprogs \
-    ex-vi-compat
-
-log_status "Installing official repo packages…"
+log_status "Installing official repo packages from manifest…"
 sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
 
 # Rust AUR builds need an active default toolchain *before* yay.

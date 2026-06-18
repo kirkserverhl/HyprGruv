@@ -27,8 +27,10 @@
 # Paths
 # -----------------------------------------------------------------------------
 MATUGEN_HYPR_CONF="${HOME}/.config/hypr/colors/custom/matugen.conf"
+MATUGEN_HYPR_CONF_REPO="${HYPRGRUV_DIR:-${HYPR_DIR:-$HOME/.hyprgruv}}/home/.config/hypr/colors/custom/matugen.conf"
 MATUGEN_JSON="${HOME}/.cache/matugen/current.json"
 MATUGEN_CACHE_DIR="${HOME}/.cache/matugen"
+MATUGEN_DEFAULT_COLORS="${HYPRGRUV_DIR:-${HYPR_DIR:-$HOME/.hyprgruv}}/lib/defaults/matugen-colors.sh"
 
 # -----------------------------------------------------------------------------
 # Color storage (populated by load_matugen_colors)
@@ -89,7 +91,9 @@ _load_from_cache_shell() {
 }
 
 _load_from_hypr_conf() {
-    [[ -f "$MATUGEN_HYPR_CONF" ]] || return 1
+    local conf="$MATUGEN_HYPR_CONF"
+    [[ -f "$conf" ]] || conf="$MATUGEN_HYPR_CONF_REPO"
+    [[ -f "$conf" ]] || return 1
 
     while IFS= read -r line || [[ -n "$line" ]]; do
         case "$line" in
@@ -115,7 +119,7 @@ _load_from_hypr_conf() {
             '$surface_dim ='*)             MATUGEN_COLORS[surface_dim]=$(_hex_from_rgba_line "$line") ;;
             '$surface_bright ='*)          MATUGEN_COLORS[surface_bright]=$(_hex_from_rgba_line "$line") ;;
         esac
-    done < "$MATUGEN_HYPR_CONF"
+    done < "$conf"
 
     return 0
 }
@@ -157,6 +161,11 @@ load_matugen_colors() {
         : # success from hyprland matugen.conf
     elif _load_from_json; then
         : # fell back to JSON cache
+    elif [[ -f "$MATUGEN_DEFAULT_COLORS" ]]; then
+        # shellcheck source=/dev/null
+        set -a
+        source "$MATUGEN_DEFAULT_COLORS" 2>/dev/null || true
+        set +a
     else
         # Last resort: try to ask matugen for the current wallpaper's colors
         # (slow, only if everything else failed)
@@ -225,8 +234,14 @@ gum_apply_matugen_theme() {
     export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
 
     # Choose / filter
-    export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
-    export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_PRIMARY}"
+    export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
+    export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
+    export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+    export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+    export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
+    export GUM_CHOOSE_CURSOR_PREFIX="› "
+    export GUM_CHOOSE_SELECTED_PREFIX="✓ "
+    export GUM_CHOOSE_UNSELECTED_PREFIX="  "
     export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
 
     # Spinner / progress

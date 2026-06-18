@@ -78,14 +78,22 @@ export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INST
 
 _hyprgruv_load_matugen_colors() {
     local colors_sh="${HOME}/.config/hyprgruv/scripts/colors.sh"
-    if [[ -f "$colors_sh" ]]; then
-        # shellcheck source=/dev/null
-        source "$colors_sh" 2>/dev/null && return 0
-    fi
+    local repo_colors="${HYPR_DIR}/lib/defaults/matugen-colors.sh"
     if [[ -f "${HOME}/.cache/matugen/colors.sh" ]]; then
         # shellcheck source=/dev/null
         set -a
         source "${HOME}/.cache/matugen/colors.sh" 2>/dev/null || true
+        set +a
+        return 0
+    fi
+    if [[ -f "$colors_sh" ]]; then
+        # shellcheck source=/dev/null
+        source "$colors_sh" 2>/dev/null && return 0
+    fi
+    if [[ -f "$repo_colors" ]]; then
+        # shellcheck source=/dev/null
+        set -a
+        source "$repo_colors" 2>/dev/null || true
         set +a
         return 0
     fi
@@ -121,8 +129,14 @@ if ! declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
         export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
         export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
         export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
-        export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
-        export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
+        export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
+        export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+        export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+        export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
+        export GUM_CHOOSE_CURSOR_PREFIX="› "
+        export GUM_CHOOSE_SELECTED_PREFIX="✓ "
+        export GUM_CHOOSE_UNSELECTED_PREFIX="  "
         export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
         export GUM_SPIN_SPINNER_FOREGROUND="${COLOR_PRIMARY}"
         export GUM_SPIN_TITLE_FOREGROUND="${COLOR_ON_SURFACE}"
@@ -130,6 +144,85 @@ if ! declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
         export GUM_PAGER_FOREGROUND="${COLOR_ON_SURFACE}"
     }
 fi
+
+# True when the session can open the controlling terminal (needed for gum UI under tee logging).
+_hyprgruv_has_tty() {
+    [[ -e /dev/tty ]] && { : </dev/tty; } 2>/dev/null
+}
+
+# Run interactive scripts with a real TTY so gum can render confirm/choose UI.
+# install.sh and post_reboot_setup.sh pipe stdout to tee for logging, which hides gum boxes.
+hyprgruv_run_interactive() {
+    local path="$1"
+    local logfile="${2:-${HYPRGRUV_LOGFILE:-}}"
+    local -a cmd=(bash "$path")
+
+    if _hyprgruv_has_tty; then
+        if [[ -n "$logfile" ]] && command -v script >/dev/null 2>&1; then
+            script -q -e -a "$logfile" -c "$(printf '%q ' "${cmd[@]}")" </dev/tty >/dev/tty
+            return $?
+        fi
+        "${cmd[@]}" </dev/tty >/dev/tty
+        return $?
+    fi
+
+    log_warning "No controlling TTY — gum UI may be minimal; prompts still accept y/n and arrow keys."
+
+    if [[ -n "$logfile" ]]; then
+        "${cmd[@]}" 2>&1 | tee -a "$logfile"
+        return "${PIPESTATUS[0]}"
+    fi
+    "${cmd[@]}"
+}
+
+gum_confirm_prompt() {
+    local prompt="$1"
+    shift || true
+    gum_apply_matugen_theme 2>/dev/null || true
+    if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
+        gum confirm "$prompt" \
+            --affirmative "  Yes  " --negative "  No  " \
+            "$@" </dev/tty >/dev/tty
+    else
+        gum confirm "$prompt" \
+            --affirmative "  Yes  " --negative "  No  " \
+            "$@"
+    fi
+}
+
+gum_choose_prompt() {
+    gum_apply_matugen_theme 2>/dev/null || true
+    if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
+        gum choose "$@" </dev/tty >/dev/tty
+    else
+        gum choose "$@"
+    fi
+}
+
+# Wipe noisy script output, then show a clean hand-off into the next prompt.
+# Typical flow: transition → section_intro → gum confirm/choose.
+hyprgruv_section_transition() {
+    local message="${1:-}"
+    local kind="${2:-success}"
+
+    sleep 0.3
+    clear
+    echo ""
+    if [[ -n "$message" ]]; then
+        case "$kind" in
+            success) log_success "$message" ;;
+            status)  log_status "$message" ;;
+            *)       echo "$message" ;;
+        esac
+        echo ""
+    fi
+}
+
+hyprgruv_section_intro() {
+    local title="$1"
+    display_header "$title"
+    sleep 0.3
+}
 
 if command -v gum >/dev/null 2>&1; then
     if declare -F load_matugen_colors >/dev/null 2>&1; then

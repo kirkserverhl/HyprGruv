@@ -25,6 +25,7 @@ else
   LOGFILE="$ASSET_DIR/logs/post_reboot_$(date +"%Y%m%d_%H%M%S").log"
   exec > >(tee -a "$LOGFILE") 2>&1
 fi
+export HYPRGRUV_LOGFILE="$LOGFILE"
 
 post_reboot_needed() {
   if [[ "${FORCE:-0}" == "1" || "${RE_RUN:-0}" == "1" ]]; then
@@ -45,6 +46,8 @@ if ! post_reboot_needed; then
   exit 0
 fi
 
+_HYPRGRUV_PENDING_HANDOFF=""
+
 run_module() {
   local module="$1"
   local name="$2"
@@ -56,16 +59,21 @@ run_module() {
     return 0
   fi
 
-  display_header "$name"
+  if [[ -n "$_HYPRGRUV_PENDING_HANDOFF" ]]; then
+    hyprgruv_section_transition "$_HYPRGRUV_PENDING_HANDOFF"
+    _HYPRGRUV_PENDING_HANDOFF=""
+  fi
+
+  hyprgruv_section_intro "$name"
 
   set +e
-  bash "$path" 2>&1 | tee -a "$LOGFILE"
-  module_exit=${PIPESTATUS[0]}
+  hyprgruv_run_interactive "$path" "$LOGFILE"
+  module_exit=$?
   set -e
 
   if [[ $module_exit -eq 0 ]]; then
     mark_completed "$name"
-    log_success "$name completed successfully"
+    _HYPRGRUV_PENDING_HANDOFF="$name completed successfully"
     return 0
   else
     log_error "$name failed (exit $module_exit)"
@@ -88,8 +96,9 @@ echo ""
 sleep 1.5
 
 if [[ -f "$HYPR_DIR/lib/scripts/waypaper_setup.sh" ]]; then
-  display_header "Wallpaper setup"
+  hyprgruv_section_intro "Wallpaper setup"
   bash "$HYPR_DIR/lib/scripts/waypaper_setup.sh" || log_warning "waypaper_setup.sh finished with warnings"
+  _HYPRGRUV_PENDING_HANDOFF="Wallpaper setup completed"
 else
   log_warning "waypaper_setup.sh not found"
 fi
@@ -105,14 +114,18 @@ if [[ -f "$HYPR_DIR/modules/05-setup_defaults.sh" ]]; then
   if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]] && is_completed "Setup defaults"; then
     log_status "Skipping Setup defaults (already completed)"
   else
-    display_header "Setup defaults"
+    if [[ -n "$_HYPRGRUV_PENDING_HANDOFF" ]]; then
+      hyprgruv_section_transition "$_HYPRGRUV_PENDING_HANDOFF"
+      _HYPRGRUV_PENDING_HANDOFF=""
+    fi
+    hyprgruv_section_intro "Setup defaults"
     set +e
-    bash "$HYPR_DIR/modules/05-setup_defaults.sh" 2>&1 | tee -a "$LOGFILE"
-    defaults_exit=${PIPESTATUS[0]}
+    hyprgruv_run_interactive "$HYPR_DIR/modules/05-setup_defaults.sh" "$LOGFILE"
+    defaults_exit=$?
     set -e
     if [[ $defaults_exit -eq 0 ]]; then
       mark_completed "Setup defaults"
-      log_success "Setup defaults completed"
+      _HYPRGRUV_PENDING_HANDOFF="Setup defaults completed"
     else
       log_warning "05-setup_defaults.sh finished with warnings"
     fi
@@ -124,7 +137,11 @@ sleep 1
 
 mark_completed "Post-reboot setup"
 
-display_header "Summary"
+if [[ -n "$_HYPRGRUV_PENDING_HANDOFF" ]]; then
+  hyprgruv_section_transition "$_HYPRGRUV_PENDING_HANDOFF"
+  _HYPRGRUV_PENDING_HANDOFF=""
+fi
+hyprgruv_section_intro "Summary"
 log_success "Post-reboot configuration complete!"
 echo ""
 echo "Completed steps:"

@@ -115,7 +115,7 @@ set_login_shell() {
     fi
 
     log_warning "Login shell is still $current"
-    if gum confirm "Try again using sudo?"; then
+    if gum_confirm_prompt "Try again using sudo?"; then
         if sudo chsh -s "$target" "$user" || sudo usermod -s "$target" "$user"; then
             current="$(getent passwd "$user" | cut -d: -f7)"
             if [[ "$current" == "$target" ]]; then
@@ -142,16 +142,17 @@ source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
 
-display_header "Shell"
+if [[ "${HYPRGRUV_FROM_CONFIG:-0}" != "1" ]]; then
+    hyprgruv_section_intro "Shell"
+fi
 
 # ------------------------------------------------------------
 # Prompt user
 # ------------------------------------------------------------
-echo ""
 echo "Please select your preferred shell"
-sleep 0.5
+echo ""
 
-shell="$(gum choose "zsh" "bash" "CANCEL")"
+shell="$(gum_choose_prompt "zsh" "bash" "CANCEL")"
 selected_shell_path=""
 
 # ------------------------------------------------------------
