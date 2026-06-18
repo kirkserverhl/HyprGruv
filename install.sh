@@ -26,6 +26,16 @@ exec > >(tee -a "$LOGFILE") 2>&1
 # Welcome Screen
 # ============================================================
 clear
+
+ /   |   \ ___._______________ /  ____________ __ _____  __
+/    ~    <   |  \____ \_  __ /   \  __\_  __ |  |  \  \/ /
+\    Y    /\___  |  |_> |  | \\    \_\  |  | \|  |  /\   /
+ \___|_  / / ____|   __/|__|   \______  |__|  |____/  \_/
+       \/  \/    |__|                 \/
+
+
+
+
 echo ""
 log_status "Welcome to Hyprland Gruvbox Installation!"
 log_status "Logs will be saved to: $LOGFILE"
