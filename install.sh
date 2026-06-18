@@ -196,18 +196,9 @@ display_header "Summary"
 sleep .5
 log_success "Hyprgruv installation completed!"
 sleep 1
-echo "Completed steps:"
-
-if command_exists jq; then
-    jq -r '.completed_steps[]' "$STATE_FILE" | while read -r step; do
-        echo "  ✅ $step"
-    done
-else
-    while read -r step; do
-        echo "  ✅ $step"
-    done <"$ASSET_DIR/completed_steps.txt"
-fi
-sleep 1.5
+hyprgruv_print_completed_steps
+hyprgruv_print_setup_footer install
+sleep 1
 
 # ============================================================
 # Next steps — interactive menu (45s timeout → reboot)
@@ -241,7 +232,7 @@ EOF
 do_install_rerun_wizard() {
     log_status "Re-running setup wizard…"
     set +e
-    FORCE=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
+    FORCE=1 RUN_FROM_INSTALL=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
     local wiz_exit=$?
     set -e
     if [[ $wiz_exit -eq 0 ]]; then

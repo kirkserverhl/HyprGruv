@@ -410,3 +410,59 @@ detect_vm() {
 # Run detection on every source of common.sh (lightweight, idempotent)
 detect_vm
 
+# Shared install/setup closing output (avoid duplicating across install.sh + post_reboot_setup.sh)
+hyprgruv_print_completed_steps() {
+    echo "Completed steps:"
+    if command_exists jq && [[ -f "${STATE_FILE:-}" ]]; then
+        jq -r '.completed_steps[]' "$STATE_FILE" | while read -r step; do
+            echo "  ✅ $step"
+        done
+    elif [[ -f "${ASSET_DIR:-}/completed_steps.txt" ]]; then
+        while read -r step; do
+            echo "  ✅ $step"
+        done <"$ASSET_DIR/completed_steps.txt"
+    fi
+}
+
+hyprgruv_print_common_keybinds() {
+    cat <<'EOF'
+
+Common keybinds:
+  Win + ENTER         Terminal
+  Win + B             Brave  |  Alt + B Chrome  |  Win + Alt + B Firefox
+  Win + F             Thunar
+  Win + N             NeoVim
+  Win + Q             Close Window
+  Win + SPACE         Fuzzel Launcher
+  Win + CTRL + Q      Logout
+
+Full keybinds: Win + K  or type 'keybinds' in a terminal
+EOF
+}
+
+# mode: install (invoked from install.sh) | standalone (post-reboot wizard alone)
+hyprgruv_print_setup_footer() {
+    local mode="${1:-standalone}"
+
+    hyprgruv_print_common_keybinds
+
+    case "$mode" in
+    install)
+        cat <<'EOF'
+
+On first Hyprland login, HyprGruv syncs packages in the background and opens Settings.
+EOF
+        ;;
+    *)
+        cat <<'EOF'
+
+Re-run this wizard any time:
+  FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+
+On first Hyprland login, HyprGruv syncs packages in the background and opens Settings.
+Uncheck "Don't show welcome on startup" in Settings to skip future welcomes.
+EOF
+        ;;
+    esac
+}
+

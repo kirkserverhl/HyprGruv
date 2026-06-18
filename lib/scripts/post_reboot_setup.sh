@@ -137,40 +137,19 @@ sleep 1
 
 mark_completed "Post-reboot setup"
 
-if [[ -n "$_HYPRGRUV_PENDING_HANDOFF" ]]; then
-  hyprgruv_section_transition "$_HYPRGRUV_PENDING_HANDOFF"
-  _HYPRGRUV_PENDING_HANDOFF=""
-fi
-hyprgruv_section_intro "Summary"
-log_success "Post-reboot configuration complete!"
-echo ""
-echo "Completed steps:"
-if command_exists jq; then
-  jq -r '.completed_steps[]' "$STATE_FILE" | while read -r step; do
-    echo "  ✅ $step"
-  done
+if [[ "${RUN_FROM_INSTALL:-0}" == "1" ]]; then
+  log_success "Setup wizard complete — continuing install…"
 else
-  while read -r step; do
-    echo "  ✅ $step"
-  done < "$ASSET_DIR/completed_steps.txt"
-fi
-
-echo -e "\n   Hyprgruv setup is complete!\n        Common keybinds:"
-echo -e "  Win + ENTER         Terminal
-  Win + B             Brave  |  Alt + B Chrome  |  Win + Alt + B Firefox
-  Win + F             Thunar
-  Win + N             NeoVim
-  Win + Q             Close Window
-  Win + SPACE         Fuzzel Launcher
-  Win + CTRL + Q      Logout"
-
-echo -e "\n   Full keybinds: Win + K  or type 'keybinds' in a terminal"
-echo -e "\n   Re-run this wizard any time:"
-echo -e "     FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
-echo -e "\n   On first Hyprland login, HyprGruv will sync packages and open Settings."
-echo -e "   Uncheck \"Don't show welcome on startup\" in Settings to skip future welcomes."
-
-if [[ "${RUN_FROM_INSTALL:-0}" != "1" ]]; then
+  if [[ -n "$_HYPRGRUV_PENDING_HANDOFF" ]]; then
+    hyprgruv_section_transition "$_HYPRGRUV_PENDING_HANDOFF"
+    _HYPRGRUV_PENDING_HANDOFF=""
+  fi
+  hyprgruv_section_intro "Summary"
+  log_success "Post-reboot configuration complete!"
+  echo ""
+  hyprgruv_print_completed_steps
+  echo ""
+  hyprgruv_print_setup_footer standalone
   echo ""
   read -rp "Press Enter to close this window…" _ || true
 fi
