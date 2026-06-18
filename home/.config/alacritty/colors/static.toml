@@ -1,0 +1,35 @@
+# Static fallback colors for Alacritty
+# Exact match to ghostty/colors/static.conf (Kitty noir-style high-contrast theme)
+# Used when matugen has not been run or you want a fixed theme.
+
+[colors.primary]
+background = "#0e0e0e"
+foreground = "#e2e2e2"
+
+[colors.cursor]
+cursor = "#ffffff"
+text = "#1b1b1b"
+
+[colors.selection]
+text = "#1b1b1b"
+background = "#c6c6c6"
+
+[colors.normal]
+black = "#131313"
+red = "#000000"
+green = "#ababab"
+yellow = "#474747"
+blue = "#e2e2e2"
+magenta = "#3b3b3b"
+cyan = "#e2e2e2"
+white = "#c6c6c6"
+
+[colors.bright]
+black = "#353535"
+red = "#1a1a1a"
+green = "#c6c6c6"
+yellow = "#5e5e5e"
+blue = "#ffffff"
+magenta = "#c6c6c6"
+cyan = "#e2e2e2"
+white = "#e2e2e2"

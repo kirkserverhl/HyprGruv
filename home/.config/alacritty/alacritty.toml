@@ -1,0 +1,75 @@
+# Alacritty Configuration
+# Ported from Kitty + Ghostty configs
+#
+# Managed as part of dotfiles in ~/.hyprgruv
+# Symlinked to ~/.config/alacritty/alacritty.toml
+#
+# Reload: live_config_reload watches this file (default on).
+# Colors update via matugen → colors/matugen.toml
+
+[general]
+live_config_reload = true
+import = [
+  "colors/static.toml",
+  "colors/matugen.toml",
+]
+
+[font]
+normal = { family = "ShureTechMono Nerd Font", style = "Regular" }
+bold = { style = "Bold" }
+italic = { style = "Italic" }
+bold_italic = { style = "Bold Italic" }
+size = 12.0
+builtin_box_drawing = true
+
+[window]
+opacity = 0.9
+padding = { x = 4, y = 4 }
+dynamic_padding = true
+decorations = "Full"
+# Let Hyprland size windows; ghostty/kitty initial sizes are hints only on tiling WMs.
+dimensions = { columns = 0, lines = 0 }
+
+[cursor]
+style = { shape = "Block", blinking = "On" }
+blink_interval = 500
+unfocused_hollow = true
+
+[scrolling]
+history = 10000
+multiplier = 1
+
+[bell]
+duration = 0
+
+[mouse]
+hide_when_typing = true
+
+[selection]
+semantic_escape_chars = ":@-./_~?&=%+#"
+
+[terminal]
+# Launch the dev tmux layout on startup; reuses session "dev" if it already exists.
+# alacritty -e … overrides this (e.g. yazi.sh helper scripts).
+shell = { program = "/bin/bash", args = ["-lc", "~/.config/tmux/dev-workspace.sh"] }
+
+[keyboard]
+bindings = [
+  # Clipboard (kitty: kitty_mod+c/v → ctrl+shift+c/v)
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+
+  # Scrolling (kitty: kitty_mod+k/j and page keys)
+  { key = "K", mods = "Control|Shift", action = "ScrollLineUp" },
+  { key = "J", mods = "Control|Shift", action = "ScrollLineDown" },
+  { key = "PageUp", mods = "Control|Shift", action = "ScrollPageUp" },
+  { key = "PageDown", mods = "Control|Shift", action = "ScrollPageDown" },
+  { key = "Home", mods = "Control|Shift", action = "ScrollToTop" },
+  { key = "End", mods = "Control|Shift", action = "ScrollToBottom" },
+
+  # Font size (kitty: kitty_mod+plus/minus/backspace)
+  { key = "Plus", mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "=", mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control|Shift", action = "DecreaseFontSize" },
+  { key = "Backspace", mods = "Control|Shift", action = "ResetFontSize" },
+]

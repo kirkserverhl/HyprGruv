@@ -79,7 +79,7 @@ def humanize_command(cmd: str) -> str:
         "brave": "Open Brave",
         "google-chrome-stable": "Open Chrome",
         "firefox": "Open Firefox",
-        "ghostty": "Open Ghostty",
+        "alacritty": "Open Alacritty",
         "dolphin": "Open Dolphin",
         "mac-shortcut.sh": "Mac-style shortcut",
     }

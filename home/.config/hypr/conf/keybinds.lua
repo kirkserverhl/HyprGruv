@@ -71,7 +71,7 @@ hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh new-wind
 -- === TERMINALS & LAUNCHERS ===
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
-hl.bind(mod     .. " + Return", hl.dsp.exec_cmd("ghostty"))
+hl.bind(mod     .. " + Return", hl.dsp.exec_cmd("alacritty"))
 
 -- Browsers: Super+B = default (~/.config/settings/browser.sh), Alt+B = Chrome, Super+Alt+B = Firefox
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh"))
