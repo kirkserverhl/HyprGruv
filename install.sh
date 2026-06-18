@@ -190,7 +190,7 @@ display_header "Package manifest sync"
 log_status "Installing packages from HyprGruv manifest (sync-packages)…"
 set +e
 if [[ -f "$HYPR_DIR/sync-packages.sh" ]]; then
-    bash "$HYPR_DIR/sync-packages.sh" sync 2>&1 | tee -a "$LOGFILE"
+    bash "$HYPR_DIR/sync-packages.sh" sync --skip-new 2>&1 | tee -a "$LOGFILE"
     pkg_sync_exit=${PIPESTATUS[0]}
 else
     log_warning "sync-packages.sh not found — skipping manifest sync"

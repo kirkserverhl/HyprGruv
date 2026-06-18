@@ -33,7 +33,6 @@ toilet-fonts
 sl
 kitty
 alacritty
-ghostty
 tmux
 hyprland
 hyprpicker
@@ -113,7 +112,6 @@ firefox
 libreoffice-fresh
 timeshift
 noto-fonts
-ttf-nerd-fonts-symbols
 ttf-dejavu
 ttf-agave-nerd
 ttf-heavydata-nerd

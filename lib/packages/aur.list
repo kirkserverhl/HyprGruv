@@ -1,34 +1,26 @@
 # Hyprgruv aur packages — one per line
 # Lines starting with # are ignored.
 
-aphototoollibre
-cbonsai-git
+atuin
 bibata-cursor-gruvbox-git
-gruvbox-plus-icon-theme-git
 brave-bin
+cbonsai-git
+dipc
+displaylink
 google-chrome
-ghostty-git
-ghostty-shell-integration-git
-ghostty-terminfo-git
+gruvbox-plus-icon-theme-git
+hyprshot
+pacseek-bin
+timeshift-autosnap
 tmux-continuum-git
 tmux-fingers
 tmux-language-server
-tmux-resurrect-git
 tmux-tad
-tmuxai
 tmuxinator
-hyprshot
-aylurs-gtk-shell-git
-wlogout
-atuin
-displaylink
-dipc
-hypremoji
-timeshift-autosnap
 vscodium-bin
-pacseek-bin
 wl-clip-persist
 wl-clipboard-history-git
 wdisplays
+wlogout
 xsettingsd
 udiskie-dmenu-git

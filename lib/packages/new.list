@@ -1,2 +1,9 @@
-# Hyprgruv new packages — one per line
+# Hyprgruv potential packages — optional, not auto-installed during install.sh
+# Install on demand: bash ~/.hyprgruv/sync-packages.sh --new-only
+# Excluded: overskride, hypremoji/smile, ghostty-*-git variants (official ghostty → setup defaults wizard), tmux-resurrect,
+#           aylurs-gtk-shell-git (libastal), jetbrains-mono, ttf-nerd-fonts-symbols, tesseract (+ data packs)
 # Lines starting with # are ignored.
+
+aphototoollibre  # A Photo Tool Libre (AUR)
+easyeffects
+qt6-virtualkeyboard

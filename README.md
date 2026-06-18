@@ -93,7 +93,7 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 | Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, initial theme |
 | System | `03-setup.sh` | Hyprpm plugins; enables SDDM + Sugar Candy theme; VM GRUB tweaks |
 | Interactive | `04-config.sh` | Optional: SDDM theme, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
-| Defaults | `05-setup_defaults.sh` | Choose default terminal, browser, and editor |
+| Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/ghostty/…), browser, and editor; offers to install if missing |
 
 Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.
 
@@ -104,10 +104,44 @@ Package names are **not** maintained in `assets/README/package.list` anymore. Th
 ```
 lib/packages/pacman.list   # official repos
 lib/packages/aur.list      # AUR (via yay)
-lib/packages/new.list      # staging — test before promoting
+lib/packages/new.list      # potential optional packages (not auto-installed by install.sh)
 ```
 
 `01-packages.sh` also installs a small hardcoded core set (Hyprland, pipewire, kitty, thunar, mpv, etc.) before syncing the manifest lists.
+
+### Potential packages (for review)
+
+These live in `lib/packages/new.list`. They are **not** installed during `./install.sh` (final sync uses `--skip-new`). Install on demand when you want to try one:
+
+```bash
+bash ~/.hyprgruv/sync-packages.sh --new-only
+```
+
+| Package | Repo | Notes |
+|---------|------|-------|
+| `aphototoollibre` | AUR | A Photo Tool Libre — photo editor; not auto-installed |
+| `easyeffects` | official | PipeWire audio effects |
+| `qt6-virtualkeyboard` | official | SDDM Sugar Candy on-screen keyboard |
+
+**Excluded from install (by design):**
+
+| Item | Reason |
+|------|--------|
+| `overskride` | Use `blueman-manager` (waybar Bluetooth click) instead |
+| `hypremoji` / `smile` | Emoji picker removed from default install and keybinds |
+| `ghostty-git`, `ghostty-shell-integration-git`, `ghostty-terminfo-git` | Use official `ghostty` via setup defaults wizard instead |
+| `tmux-resurrect`, `tmux-resurrect-git` | Flaky AUR build; dropped from auto-install |
+| `tmuxai` | Removed from auto-install |
+| `aylurs-gtk-shell-git` (AGS) | Pulls slow `libastal*` source builds; not used (waybar stack) |
+| `ttf-jetbrains-mono`, `ttf-jetbrains-mono-nerd` | Not used; Agave / ShureTechMono / HeavyData are defaults |
+| `ttf-nerd-fonts-symbols` | Redundant — full nerd fonts below already include icon glyphs |
+| `tesseract`, `tesseract-data-*` | OCR not used; removed by `purge_excluded_packages()` if present |
+
+To add or remove potentials, edit `lib/packages/new.list` or run:
+
+```bash
+bash ~/.hyprgruv/sync-packages.sh add <package> --new
+```
 
 ### Cross-device package sync
 
@@ -115,13 +149,16 @@ lib/packages/new.list      # staging — test before promoting
 # Preview what would install
 bash ~/.hyprgruv/sync-packages.sh --dry-run
 
-# Install missing packages from all lists
-bash ~/.hyprgruv/sync-packages.sh
+# Install missing packages from confirmed lists (skips potentials)
+bash ~/.hyprgruv/sync-packages.sh --skip-new
 
-# Stage a new package, then sync
-bash ~/.hyprgruv/sync-packages.sh add <package> --install
+# Install only potential/optional packages
+bash ~/.hyprgruv/sync-packages.sh --new-only
 
-# Promote from staging to confirmed
+# Stage a potential package for review
+bash ~/.hyprgruv/sync-packages.sh add <package> --new
+
+# Promote from potential → confirmed
 bash ~/.hyprgruv/sync-packages.sh promote <package> --to pacman
 bash ~/.hyprgruv/sync-packages.sh promote <package> --to aur
 ```

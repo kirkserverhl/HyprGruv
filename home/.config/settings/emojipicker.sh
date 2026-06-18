@@ -1,1 +1,1 @@
-smile
+# Emoji picker removed from default install (hypremoji/smile optional)

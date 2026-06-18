@@ -4,7 +4,7 @@
 # Package lists (one name per line):
 #   lib/packages/pacman.list  — confirmed official-repo packages
 #   lib/packages/aur.list     — confirmed AUR packages (via yay)
-#   lib/packages/new.list     — staging: test here before promoting
+#   lib/packages/new.list     — potential optional packages (not auto-installed by install.sh)
 #
 # Workflow:
 #   1. Stage:  bash ~/.hyprgruv/sync-packages.sh add <package>

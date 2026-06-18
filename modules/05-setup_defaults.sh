@@ -31,7 +31,7 @@ fi
 gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --border double --border-foreground "${COLOR_OUTLINE:-#6c7086}" --align center --width 50 --margin "1 2" --padding "2 4" "Set Default Programs" 2>/dev/null || echo "=== Set Default Programs ==="
 
 # Supported mappings (choice:package for install)
-declare -A terms=(["kitty"]="kitty" ["alacritty"]="alacritty" ["wezterm"]="wezterm" ["foot"]="foot")
+declare -A terms=(["kitty"]="kitty" ["alacritty"]="alacritty" ["ghostty"]="ghostty" ["wezterm"]="wezterm" ["foot"]="foot")
 declare -A browsers=(["brave"]="brave-bin" ["firefox"]="firefox" ["chromium"]="chromium" ["chrome"]="google-chrome")
 declare -A browser_cmds=(["brave"]="brave" ["firefox"]="firefox" ["chromium"]="chromium" ["chrome"]="google-chrome-stable")
 declare -A editors=(["nvim"]="neovim" ["vim"]="vim" ["nano"]="nano")
@@ -68,7 +68,7 @@ install_pkg() {
 }
 
 # Choose terminal (supported + other)
-TERMINAL=$(gum choose "kitty" "alacritty" "wezterm" "foot" "other")
+TERMINAL=$(gum choose "kitty" "alacritty" "ghostty" "wezterm" "foot" "other")
 if [ "$TERMINAL" = "other" ]; then
     TERMINAL=$(gum input --placeholder "Enter terminal command")
 fi

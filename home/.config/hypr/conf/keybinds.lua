@@ -87,7 +87,6 @@ hl.bind(mod     .. " + T", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh bpytop"))
 hl.bind(mainMod .. " + " .. mod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh pacseek"))
 hl.bind(mod     .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind("CTRL + P",        hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh"))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("hypremoji -s ~/.config/hypremoji/matugen.css"))
 hl.bind(mod     .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"))
 
 -- === ACTIONS ===
@@ -170,7 +169,6 @@ hl.bind("F2",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), { locked = tr
 hl.bind("F3",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),     { locked = true, repeating = true })
 hl.bind("F4",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),     { locked = true, repeating = true })
 hl.bind("F5",  hl.dsp.exec_cmd("[fullscreen] kitty --class cmatrix -e cmatrix"))
-hl.bind("F6",  hl.dsp.exec_cmd("hypremoji -s ~/.config/hypremoji/matugen.css"))
 hl.bind("F7",  hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
 hl.bind("F8",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"))
 hl.bind("F9",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })

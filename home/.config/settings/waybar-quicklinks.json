@@ -26,11 +26,6 @@
     "on-click": "~/.config/hyprgruv/scripts/rofi_calc.sh",
     "tooltip-format": "Open calculator"
   },
-  "custom/quicklink6": {
-    "format": "",
-    "on-click": "~/.config/settings/emojipicker.sh",
-    "tooltip-format": " Hypremoji"
-  },
   "custom/quicklinkempty": {},
   "group/quicklinks": {
     "orientation": "horizontal",

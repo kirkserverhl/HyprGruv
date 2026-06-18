@@ -66,18 +66,7 @@ hl.window_rule({ name = "rofi-float",      match = { class = "^(rofi|Rofi)$" }, 
 -- hl.window_rule({ name = "alacritty-float", match = { class = "^(alacritty)$" },  float = true })
 -- hl.window_rule({ name = "ghostty-float",   match = { class = "^(ghostty)$" },    float = true })
 
--- Emoji picker (hypremoji)
--- Top-right, comfortably under waybar (waybar is ~34-42px + margin-top:5)
--- NOTE: Using broad match temporarily so it reliably floats (like smile did).
--- Please run the diagnostic command and share output so we can tighten it.
-hl.window_rule({
-    name = "hypremoji-float",
-    match = { class = ".*hypremoji.*", title = ".*[Ee]moji.*" },
-    float = true,
-    pin = true,
-    size = { 340, 420 },
-    move = { "(monitor_w*1)-window_w-20", "48" },
-})
+-- Emoji picker removed from default install (hypremoji/smile optional)
 
 -- (old) smile emoji picker rule kept for reference
 -- hl.window_rule({
