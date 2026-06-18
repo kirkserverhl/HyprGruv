@@ -57,7 +57,7 @@ Open a terminal (`Win + Q` before install completes; `Win + Enter` after) and ru
 
 ```bash
 sudo pacman -S git
-git clone https://github.com/KirkserverHL/move.git ~/.hyprgruv
+git clone https://github.com/kirkserverhl/hyprgruv.git ~/.hyprgruv
 cd ~/.hyprgruv
 ./install.sh
 ```
