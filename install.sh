@@ -27,13 +27,13 @@ exec > >(tee -a "$LOGFILE") 2>&1
 # ============================================================
 clear
 
-  ___ ___                       ________
+echo "  ___ ___                       ________
  /   |   \ ___._______________ /  ____________ __ _____  __
 /    ~    <   |  \____ \_  __ /   \  __\_  __ |  |  \  \/ /
 \    Y    /\___  |  |_> |  | \\    \_\  |  | \|  |  /\   /
  \___|_  / / ____|   __/|__|   \______  |__|  |____/  \_/
        \/  \/    |__|                 \/
-
+"
 echo ""
 log_status "Welcome to Hyprland Gruvbox Installation!"
 log_status "Logs will be saved to: $LOGFILE"
@@ -45,23 +45,23 @@ clear
 # Re-run / testing guidance (addresses "skips packages/stow on re-runs")
 # ============================================================
 if [[ "${RESET_STATE:-0}" == "1" || "${RESET:-0}" == "1" ]]; then
-  log_warning "RESET_STATE=1 — clearing previous completed steps (fresh test run)"
-  rm -f "$STATE_FILE" "$ASSET_DIR/completed_steps.txt" "$ASSET_DIR/user_choices.txt" 2>/dev/null || true
-  # init_state (from state.sh) recreates a fresh install_state.json on next access
+    log_warning "RESET_STATE=1 — clearing previous completed steps (fresh test run)"
+    rm -f "$STATE_FILE" "$ASSET_DIR/completed_steps.txt" "$ASSET_DIR/user_choices.txt" 2>/dev/null || true
+    # init_state (from state.sh) recreates a fresh install_state.json on next access
 fi
 
 if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]]; then
-  if is_completed "Install packages" || is_completed "Stow configuration"; then
-    log_warning "Previous install state detected (packages or stow marked complete)."
-    log_warning "Normal runs will SKIP completed pre-reboot modules."
-    log_warning "Full setup wizard runs near the end of install.sh (before optional reboot)."
-    log_warning "To force a full re-test (re-run packages + reach stow):  FORCE=1 ./install.sh"
-    log_warning "To reach/re-test stow *without* re-doing the heavy package step: SKIP_PACKAGES=1 FORCE=1 ./install.sh"
-    log_warning "For a completely clean state this run: RESET_STATE=1 FORCE=1 ./install.sh"
-    log_warning "To re-run post-reboot wizard: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
-    echo ""
-    sleep 1.5
-  fi
+    if is_completed "Install packages" || is_completed "Stow configuration"; then
+        log_warning "Previous install state detected (packages or stow marked complete)."
+        log_warning "Normal runs will SKIP completed pre-reboot modules."
+        log_warning "Full setup wizard runs near the end of install.sh (before optional reboot)."
+        log_warning "To force a full re-test (re-run packages + reach stow):  FORCE=1 ./install.sh"
+        log_warning "To reach/re-test stow *without* re-doing the heavy package step: SKIP_PACKAGES=1 FORCE=1 ./install.sh"
+        log_warning "For a completely clean state this run: RESET_STATE=1 FORCE=1 ./install.sh"
+        log_warning "To re-run post-reboot wizard: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
+        echo ""
+        sleep 1.5
+    fi
 fi
 
 # ============================================================
@@ -139,20 +139,20 @@ sleep 1
 # waypaper config are in place.
 # ============================================================
 if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
-  display_header "Opening Wallpaper"
-  log_status "Applying opening wallpaper and default matugen theme…"
-  set +e
-  bash "$HYPR_DIR/lib/scripts/default_wp.sh"
-  wp_exit=$?
-  set -e
-  if [[ $wp_exit -eq 0 ]]; then
-    log_success "Opening wallpaper and matugen theme applied"
-    mark_completed "Opening wallpaper"
-  else
-    log_warning "default_wp.sh finished with warnings (post-reboot setup can retry)"
-  fi
+    display_header "Opening Wallpaper"
+    log_status "Applying opening wallpaper and default matugen theme…"
+    set +e
+    bash "$HYPR_DIR/lib/scripts/default_wp.sh"
+    wp_exit=$?
+    set -e
+    if [[ $wp_exit -eq 0 ]]; then
+        log_success "Opening wallpaper and matugen theme applied"
+        mark_completed "Opening wallpaper"
+    else
+        log_warning "default_wp.sh finished with warnings (post-reboot setup can retry)"
+    fi
 else
-  log_warning "SKIP_WALLPAPER=1 — skipping opening wallpaper step"
+    log_warning "SKIP_WALLPAPER=1 — skipping opening wallpaper step"
 fi
 sleep 1
 
@@ -161,20 +161,20 @@ sleep 1
 # Ideal for EndeavourOS: clone repo in KDE, run install.sh in one go.
 # ============================================================
 if [[ "${SKIP_SETUP_WIZARD:-0}" != "1" ]]; then
-  display_header "Setup Wizard"
-  log_status "Running full setup (SDDM, GRUB, shell, defaults)…"
-  set +e
-  RUN_FROM_INSTALL=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
-  wizard_exit=$?
-  set -e
-  if [[ $wizard_exit -eq 0 ]]; then
-    log_success "Setup wizard completed"
-  else
-    log_warning "Setup wizard finished with errors (exit $wizard_exit)"
-    log_status "Retry: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
-  fi
+    display_header "Setup Wizard"
+    log_status "Running full setup (SDDM, GRUB, shell, defaults)…"
+    set +e
+    RUN_FROM_INSTALL=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
+    wizard_exit=$?
+    set -e
+    if [[ $wizard_exit -eq 0 ]]; then
+        log_success "Setup wizard completed"
+    else
+        log_warning "Setup wizard finished with errors (exit $wizard_exit)"
+        log_status "Retry: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
+    fi
 else
-  log_warning "SKIP_SETUP_WIZARD=1 — wizard skipped (run manually: bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh)"
+    log_warning "SKIP_SETUP_WIZARD=1 — wizard skipped (run manually: bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh)"
 fi
 sleep 1
 
@@ -184,10 +184,10 @@ sleep 1
 display_header "Final sync"
 log_status "Running final system sync…"
 if command -v yay >/dev/null 2>&1; then
-  yay -Syu --noconfirm || log_warning "yay -Syu reported issues (continuing)"
+    yay -Syu --noconfirm || log_warning "yay -Syu reported issues (continuing)"
 else
-  log_warning "yay not found — falling back to pacman -Syu"
-  sudo pacman -Syu --noconfirm || log_warning "pacman -Syu reported issues (continuing)"
+    log_warning "yay not found — falling back to pacman -Syu"
+    sudo pacman -Syu --noconfirm || log_warning "pacman -Syu reported issues (continuing)"
 fi
 sleep 1
 
@@ -195,18 +195,18 @@ display_header "Package manifest sync"
 log_status "Installing packages from HyprGruv manifest (sync-packages)…"
 set +e
 if [[ -f "$HYPR_DIR/sync-packages.sh" ]]; then
-  bash "$HYPR_DIR/sync-packages.sh" sync 2>&1 | tee -a "$LOGFILE"
-  pkg_sync_exit=${PIPESTATUS[0]}
+    bash "$HYPR_DIR/sync-packages.sh" sync 2>&1 | tee -a "$LOGFILE"
+    pkg_sync_exit=${PIPESTATUS[0]}
 else
-  log_warning "sync-packages.sh not found — skipping manifest sync"
-  pkg_sync_exit=0
+    log_warning "sync-packages.sh not found — skipping manifest sync"
+    pkg_sync_exit=0
 fi
 set -e
 if [[ ${pkg_sync_exit:-0} -eq 0 ]]; then
-  log_success "Package manifest sync completed"
-  mark_completed "Package manifest sync"
+    log_success "Package manifest sync completed"
+    mark_completed "Package manifest sync"
 else
-  log_warning "Package manifest sync finished with warnings (exit ${pkg_sync_exit})"
+    log_warning "Package manifest sync finished with warnings (exit ${pkg_sync_exit})"
 fi
 sleep 1
 
@@ -228,7 +228,7 @@ if command_exists jq; then
 else
     while read -r step; do
         echo "  ✅ $step"
-    done < "$ASSET_DIR/completed_steps.txt"
+    done <"$ASSET_DIR/completed_steps.txt"
 fi
 sleep 1.5
 
@@ -236,17 +236,17 @@ sleep 1.5
 # Reboot — skipped on graphical sessions (e.g. EndeavourOS KDE)
 # ============================================================
 should_reboot() {
-  [[ "${SKIP_REBOOT:-0}" == "1" ]] && return 1
-  [[ "${FORCE_REBOOT:-0}" == "1" ]] && return 0
-  # Already in a desktop session: no forced reboot
-  [[ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]] && return 1
-  return 0
+    [[ "${SKIP_REBOOT:-0}" == "1" ]] && return 1
+    [[ "${FORCE_REBOOT:-0}" == "1" ]] && return 0
+    # Already in a desktop session: no forced reboot
+    [[ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]] && return 1
+    return 0
 }
 
 if should_reboot; then
-  log_status "Rebooting now to finish SDDM / display manager handoff…"
-  sleep 2
-  cat << 'EOF'
+    log_status "Rebooting now to finish SDDM / display manager handoff…"
+    sleep 2
+    cat <<'EOF'
 
 Install complete. Rebooting…
 
@@ -258,10 +258,10 @@ If anything was skipped, run:
   FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 EOF
-  sleep 3
-  sudo reboot
+    sleep 3
+    sudo reboot
 else
-  cat << 'EOF'
+    cat <<'EOF'
 
 Install complete — reboot skipped (graphical session detected).
 
@@ -276,7 +276,5 @@ Skip wizard:       SKIP_SETUP_WIZARD=1 ./install.sh
 Skip reboot:         SKIP_REBOOT=1 ./install.sh
 
 EOF
-  log_success "Done — log out and pick Hyprland at SDDM when ready."
+    log_success "Done — log out and pick Hyprland at SDDM when ready."
 fi
-
-
