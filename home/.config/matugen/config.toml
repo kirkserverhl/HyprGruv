@@ -213,6 +213,8 @@ post_hook = '''
 import json, sys, os
 
 path = sys.argv[1]
+text_font = os.environ.get("FONT_TEXT", "ShureTechMono Nerd Font")
+ui_font = os.environ.get("FONT_UI", "Agave Nerd Font Propo")
 data = {}
 if os.path.isfile(path):
     with open(path, encoding="utf-8") as f:
@@ -220,6 +222,10 @@ if os.path.isfile(path):
             data = json.load(f)
         except json.JSONDecodeError:
             data = {}
+
+data["textFontFamily"] = text_font
+data["interfaceFontFamily"] = ui_font
+data["monospaceFontFamily"] = text_font
 
 snippets = list(data.get("enabledCssSnippets") or [])
 if "matugen" in snippets:

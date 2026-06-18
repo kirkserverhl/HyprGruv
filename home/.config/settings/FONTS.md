@@ -37,6 +37,7 @@ Single source of truth: **`~/.config/settings/fonts.sh`**
 - Wlogout
 - GTK 3/4
 - Hyprland plugin bars (hyprbars)
+- Obsidian (vault `appearance.json` + matugen snippet headings/body)
 - SDDM patcher script (sugar-candy theme)
 - `fonts.env` (for shell scripts)
 - `fonts.rasi` (Rofi)

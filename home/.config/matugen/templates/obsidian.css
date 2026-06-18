@@ -132,6 +132,33 @@
     --graph-line:           {{colors.outline_variant.default.hex}};
     --graph-background:     {{colors.background.default.hex}};
 
+    /* ── Typography (fonts.sh: UI = Agave, TEXT = ShureTechMono) ─ */
+    --font-interface-theme: "Agave Nerd Font Propo", sans-serif;
+    --font-text-theme: "ShureTechMono Nerd Font", monospace;
+    --font-monospace-theme: "ShureTechMono Nerd Font", monospace;
+
+}
+
+/* Document body text */
+.markdown-source-view.mod-cm6 .cm-scroller,
+.markdown-preview-view .markdown-preview-sizer {
+    font-family: var(--font-text-theme) !important;
+}
+
+/* Document headings → UI font (Agave) */
+.markdown-source-view.mod-cm6 .cm-header.cm-header-1,
+.markdown-source-view.mod-cm6 .cm-header.cm-header-2,
+.markdown-source-view.mod-cm6 .cm-header.cm-header-3,
+.markdown-source-view.mod-cm6 .cm-header.cm-header-4,
+.markdown-source-view.mod-cm6 .cm-header.cm-header-5,
+.markdown-source-view.mod-cm6 .cm-header.cm-header-6,
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-preview-view h5,
+.markdown-preview-view h6 {
+    font-family: var(--font-interface-theme) !important;
 }
 
 /* ── Active line highlight ─────────────────────────────────── */

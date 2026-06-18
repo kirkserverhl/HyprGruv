@@ -42,7 +42,7 @@ Generated colors land in app config paths; post-hooks reload where possible
 | tmux | `~/.config/tmux/generated.conf` |
 | yazi | `~/.config/yazi/theme.toml` |
 | wlogout | `~/.config/wlogout/colors.css` |
-| Obsidian | `~/.config/obsidian/matugen.css` (+ vault snippets) |
+| Obsidian | `~/.config/obsidian/matugen.css` (+ vault snippets); fonts via `apply-fonts.sh` → Agave headings, ShureTechMono body |
 | Firefox | `~/.mozilla/firefox/<profile>/chrome/userChrome.css` |
 | Chrome user CSS | `~/.config/chrome/matugen-theme.user.css` |
 | SDDM | via `update-sddm-wallpaper.sh` on wallpaper change |

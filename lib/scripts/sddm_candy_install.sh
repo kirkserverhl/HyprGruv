@@ -85,7 +85,9 @@ for bad in \
     "$CONF_DIR/sddm.conf" \
     "$CONF_DIR/00-default.conf" \
     "$CONF_DIR/05-x11-greeter.conf" \
-    "$CONF_DIR/10-theme.conf"; do
+    "$CONF_DIR/10-theme.conf" \
+    "$CONF_DIR/sddm-hyprland.conf" \
+    "$CONF_DIR/sddm-user.conf"; do
     if [[ -f "$bad" ]]; then
         sudo rm -f "$bad"
         log_status "Removed: $bad"

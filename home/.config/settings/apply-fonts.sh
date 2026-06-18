@@ -199,7 +199,14 @@ if [[ -x "$HOME/.config/settings/waypaper-engine-fonts.sh" ]]; then
 fi
 
 # =============================================================================
-# 12. Optional: write a small env file that other scripts can source easily
+# 12. OBSIDIAN — document text + heading fonts
+# =============================================================================
+if [[ -x "$HOME/.config/settings/obsidian-fonts.sh" ]]; then
+    "$HOME/.config/settings/obsidian-fonts.sh"
+fi
+
+# =============================================================================
+# 13. Optional: write a small env file that other scripts can source easily
 # =============================================================================
 ENV_FILE="$HOME/.config/settings/fonts.env"
 cat > "$ENV_FILE" << EOF
