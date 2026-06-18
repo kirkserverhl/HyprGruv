@@ -38,25 +38,6 @@ ensure_gum() {
         }
     fi
 }
-ensure_gum || true
-ensure_zsh || true
-
-# --- Ensure 'sddm' is installed (handles SKIP_PACKAGES or partial runs) ---
-ensure_sddm() {
-    if pacman -Qq sddm &>/dev/null; then return 0; fi
-    log_status "sddm not found. Installing…"
-    if command -v yay >/dev/null 2>&1; then
-        yay -S --needed --noconfirm sddm || {
-            log_error "Failed to install sddm"
-            return 1
-        }
-    else
-        sudo pacman -S --needed --noconfirm sddm || {
-            log_error "Failed to install sddm"
-            return 1
-        }
-    fi
-}
 
 # --- Ensure 'zsh' (many scripts and user workflow depend on it; shell.sh will choose it) ---
 ensure_zsh() {
@@ -75,12 +56,41 @@ ensure_zsh() {
     fi
 }
 
-run_with_spinner() {
-    local cmd="$1"
-    if command -v gum >/dev/null 2>&1; then
-        gum spin --title "Running: ${cmd}" -- bash -c "$cmd"
+# --- Ensure 'sddm' is installed (handles SKIP_PACKAGES or partial runs) ---
+ensure_sddm() {
+    if pacman -Qq sddm &>/dev/null; then return 0; fi
+    log_status "sddm not found. Installing…"
+    if command -v yay >/dev/null 2>&1; then
+        yay -S --needed --noconfirm sddm || {
+            log_error "Failed to install sddm"
+            return 1
+        }
     else
-        bash -c "$cmd"
+        sudo pacman -S --needed --noconfirm sddm || {
+            log_error "Failed to install sddm"
+            return 1
+        }
+    fi
+}
+
+ensure_gum || true
+ensure_zsh || true
+
+# gum spin hides sudo prompts and long build output — use it only for quick scripts.
+run_setup_script() {
+    local script_path="$1"
+    local script_name="$2"
+
+    if [[ "$script_name" == "hyprpm.sh" ]]; then
+        log_status "Running: $script_path (live output — plugin build may take several minutes)"
+        bash "$script_path"
+        return $?
+    fi
+
+    if command -v gum >/dev/null 2>&1; then
+        gum spin --title "Running: ${script_path}" -- bash "$script_path"
+    else
+        bash "$script_path"
     fi
 }
 
@@ -134,7 +144,7 @@ for entry in "${ORDERED_SCRIPTS[@]}"; do
     [[ -x "$script_path" ]] || chmod +x "$script_path"
 
     log_status "Starting: $description"
-    if run_with_spinner "\"$script_path\""; then
+    if run_setup_script "$script_path" "$script_name"; then
         log_success "$description completed"
     else
         log_error "$description failed"

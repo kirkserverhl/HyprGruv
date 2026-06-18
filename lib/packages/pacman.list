@@ -35,6 +35,8 @@ kitty
 alacritty
 tmux
 hyprland
+hyprland-protocols
+cmake
 hyprpicker
 hyprcursor
 hyprsunset

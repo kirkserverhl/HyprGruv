@@ -41,6 +41,14 @@ ensure_build_deps() {
     fi
 }
 
+ensure_hyprpm_cache_owned() {
+    local cache_root="/var/cache/hyprpm/${USER}"
+    if [[ -d "$cache_root" ]] && [[ ! -w "$cache_root" ]]; then
+        log_status "Fixing hyprpm cache ownership (root-owned cache blocks plugin state writes)"
+        sudo chown -R "${USER}:${USER}" "$cache_root"
+    fi
+}
+
 add_repo() {
     local url="$1"
     log_status "Adding repository: $url"
@@ -84,6 +92,7 @@ main() {
     fi
 
     ensure_hyprpm
+    ensure_hyprpm_cache_owned
     ensure_build_deps
 
     add_repo "$HYPRLAND_PLUGINS_REPO"
