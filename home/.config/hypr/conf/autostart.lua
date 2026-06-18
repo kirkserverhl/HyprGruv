@@ -58,7 +58,7 @@ hl.on("hyprland.start", function()
 	-- Workspace monitor setup script
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
 
-	-- First-login welcome: package sync + HyprGruv Settings (opt-out via menu checkbox).
+	-- First-login welcome: background package sync + HyprGruv Settings (opt-out via menu checkbox).
 	-- Manual re-run: bash ~/.config/hyprgruv/scripts/hyprgruv-welcome.sh
 	-- Re-enable after opt-out: rm ~/.local/state/hyprgruv-settings/welcome-disabled
 	hl.exec_cmd("sleep 5 && " .. SCRIPTS .. "/hyprgruv-welcome.sh &")

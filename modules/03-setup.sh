@@ -100,6 +100,8 @@ declare -a ORDERED_SCRIPTS=(
     # Temporarily commented out (hangs on waypaper in pre-graphical / no-compositor context).
     # Use SKIP_WALLPAPER=1 to control, or manually run after first Hyprland login.
     # "default_wp.sh|Load default wallpaper"
+    # Builds hyprbars + hymission via hyprpm update (no reload — Hyprland not running yet).
+    # Session load: ~/.config/hyprgruv/scripts/hyprpm-reload.sh (autostart.lua).
     "hyprpm.sh|Install Hyprpm plugins"
 )
 
