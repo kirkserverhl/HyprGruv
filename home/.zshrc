@@ -10,6 +10,10 @@ export QT_QPA_PLATFORMTHEME=qt6ct
 : "${TERMINAL:=kitty}"
 : "${BROWSER:=firefox}"
 
+# Grok Build + matugen truecolor in kitty (see ~/.grok/docs/user-guide/21-terminal-support.md)
+: "${COLORTERM:=truecolor}"
+export COLORTERM
+
 if command -v bat >/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 fi
@@ -23,11 +27,25 @@ gpgconf --launch gpg-agent >/dev/null 2>&1
 # Matugen Terminal Colors (OSC sequences)
 # =====================================================
 # Non-kitty terminals only. Kitty uses ~/.config/kitty/colors.conf
-# (reloaded on wallpaper change via reload-kitty-colors.sh / SIGUSR1).
+# (reloaded on wallpaper change via matugen-posthook-terminal.sh / SIGUSR1).
 # Applying OSC here in kitty would override colors.conf and fight matugen.
 if [[ -z "${KITTY_WINDOW_ID:-}" ]]; then
     [[ -f ~/.config/terminal-sequences ]] && cat ~/.config/terminal-sequences
 fi
+
+# Live reload when matugen finishes (matugen-posthook-terminal.sh bumps reload-stamp)
+_matugen_live_reload() {
+    local stamp="$HOME/.cache/matugen/reload-stamp"
+    local applied="$HOME/.cache/matugen/.reload-applied"
+    [[ -f "$stamp" ]] || return
+    [[ ! -f "$applied" || "$stamp" -nt "$applied" ]] || return
+
+    if [[ -z "${KITTY_WINDOW_ID:-}" && -f "$HOME/.config/terminal-sequences" ]]; then
+        cat "$HOME/.config/terminal-sequences"
+    fi
+    touch -r "$stamp" "$applied" 2>/dev/null || cp -f "$stamp" "$applied" 2>/dev/null || true
+}
+precmd_functions+=(_matugen_live_reload)
 
 # =====================================================
 # History

@@ -39,26 +39,7 @@ log() {
 }
 
 reload_visible_themes() {
-    if [[ -f "$STARSHIP_MATUGEN" ]]; then
-        touch "$STARSHIP_MATUGEN" 2>/dev/null || true
-        if [[ -L "$STARSHIP_ACTIVE" ]]; then
-            active_target=$(readlink -f "$STARSHIP_ACTIVE" 2>/dev/null || true)
-            if [[ "$active_target" == "$STARSHIP_MATUGEN" || "$(basename "$active_target" 2>/dev/null)" == matugen-rainbow.toml ]]; then
-                ln -sfn "$STARSHIP_MATUGEN" "$STARSHIP_ACTIVE" 2>/dev/null || true
-                touch "$STARSHIP_ACTIVE" 2>/dev/null || true
-            fi
-        elif [[ ! -e "$STARSHIP_ACTIVE" ]]; then
-            ln -sfn "$STARSHIP_MATUGEN" "$STARSHIP_ACTIVE" 2>/dev/null || true
-        fi
-    fi
-
-    if [[ -f "$WAYBAR_COLORS" ]]; then
-        cp -f "$WAYBAR_COLORS" "$HOME/.config/waybar/colors.css" 2>/dev/null || true
-    fi
-
-    "$SCRIPTS/reload-kitty-colors.sh" 2>/dev/null || true
-    timeout 3 hyprctl reload 2>/dev/null || true
-    pkill -SIGUSR2 waybar 2>/dev/null || true
+    "$SCRIPTS/reload-matugen-visible.sh" 2>/dev/null || true
 }
 
 on_exit() {

@@ -29,33 +29,34 @@ set = false
 # -----------------------------------------------------------------------------
 # Templates — priority first (most visible on wallpaper change):
 #   kitty → hyprland → starship → waybar → terminal_sequences
-# Remaining templates follow (parallel export; order still prefers UI-first).
+# Each has a focused post_hook in ~/.config/hyprgruv/scripts/matugen-posthook-*.sh
+# Cache hits use reload-matugen-visible.sh to run the same hooks without re-exporting.
 # -----------------------------------------------------------------------------
 
 [templates.kitty]
 input_path = "~/.config/matugen/templates/kitty-colors.conf"
 output_path = "~/.config/kitty/colors.conf"
-post_hook = "true"
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-terminal.sh"
 
 
 [templates.hyprland]
 input_path = "~/.config/matugen/templates/hyprland-colors.conf"
 output_path = "~/.config/hypr/colors/custom/matugen.conf"
-post_hook = "true"  # hyprctl reload deferred to apply-matugen-auto.sh
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-hyprland.sh"
 
 # Dedicated colors for hyprlock (clean separation from main Hyprland colors)
 
 [templates.starship_rainbow]
 input_path = "~/.config/matugen/templates/starship-rainbow.toml"
 output_path = "~/.config/starship/matugen-rainbow.toml"
-post_hook = 'touch ~/.config/starship/matugen-rainbow.toml 2>/dev/null; echo "[matugen] starship-rainbow template processed for $(basename "{{image}}")" >> ~/.cache/matugen.log'
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-starship.sh"
 
-# Terminal OSC color sequences (applied in .zshrc on new shells)
+# Terminal OSC color sequences (applied in .zshrc on new shells + live via reload-stamp)
 
 [templates.waybar]
 input_path = "~/.config/matugen/templates/colors.css"
 output_path = "~/.config/waybar/colors/matugen-waybar.css"
-post_hook = "true"  # reloaded in apply-matugen-auto.sh after all priority files land
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-waybar.sh"
 
 ## Legacy waybarstar template — input file never existed; waybar uses colors.css → matugen-waybar.css
 ##[templates.waybarstar]
@@ -66,11 +67,7 @@ post_hook = "true"  # reloaded in apply-matugen-auto.sh after all priority files
 [templates.terminal_sequences]
 input_path = "~/.config/matugen/templates/terminal-sequences"
 output_path = "~/.config/terminal-sequences"
-post_hook = '''
-    # OSC for non-kitty shells only (.zshrc). Kitty reload runs once in set_wallpaper.sh
-    # after starship + kitty files are both written (avoids kitty updating before starship).
-    true
-'''
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-terminal.sh"
 
 
 [templates.bat]
@@ -109,7 +106,7 @@ output_path = "~/.config/chrome/matugen-theme.user.css"
 [templates.dunst]
 input_path = "~/.config/matugen/templates/dunst.conf"
 output_path = "~/.config/dunst/dunstrc"
-post_hook = 'killall dunst 2>/dev/null; dunst &'
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-dunst.sh"
 
 
 [templates.firefox]
