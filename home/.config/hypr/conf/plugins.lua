@@ -1,13 +1,19 @@
 -- conf/plugins.lua
 -- Hyprbars plugin configuration for Hyprland 0.55+ Lua config.
--- hl.keyword does NOT work with the Lua parser — use hl.config + hl.plugin.hyprbars.
+-- Buttons are registered once during config parse (never in hl.on handlers —
+-- those accumulate across reloads and duplicate buttons).
 
-local HOME = os.getenv("HOME") or ""
+local SCRIPTS = require("conf.scripts_path").get()
 
--- add_button appends; never call register twice on the same plugin instance.
-local buttons_registered = false
+local TOGGLE_SIZE = SCRIPTS .. "/hyprbars-toggle-size.sh"
 
-local function apply_hyprbars_config(colors)
+local function apply_hyprbars()
+	if hl.plugin.hyprbars == nil then
+		return
+	end
+
+	local colors = require("colors.init").load()
+
 	hl.config({
 		plugin = {
 			hyprbars = {
@@ -26,71 +32,34 @@ local function apply_hyprbars_config(colors)
 				col = {
 					text = colors.fg,
 				},
-				on_double_click = "hyprctl dispatch fullscreen 1",
+				on_double_click = "hyprctl dispatch 'hl.dsp.window.fullscreen()'",
 			},
 		},
 	})
-end
 
-local function register_hyprbars_buttons(colors)
-	if buttons_registered or hl.plugin.hyprbars == nil then
-		return
-	end
-
+	-- Left: close | Middle: float toggle | Right: minimize/maximize toggle
+	-- Hyprland 0.55+ needs hl.dsp dispatch strings (plain killactive/togglefloat do not fire).
 	hl.plugin.hyprbars.add_button({
 		bg_color = colors.hyprbar_close,
 		fg_color = colors.hyprbar_close_fg,
 		size = 15,
 		icon = "✕",
-		action = "hyprctl dispatch killactive",
+		action = "hyprctl dispatch 'hl.dsp.window.close()'",
 	})
 	hl.plugin.hyprbars.add_button({
 		bg_color = colors.hyprbar_minimize,
 		fg_color = colors.hyprbar_minimize_fg,
 		size = 15,
-		icon = "−",
-		action = HOME .. "/.config/hypr/scripts/hyprbars-minimize.sh",
+		icon = "⧉",
+		action = "hyprctl dispatch 'hl.dsp.window.float({ action = \"toggle\" })'",
 	})
 	hl.plugin.hyprbars.add_button({
 		bg_color = colors.hyprbar_maximize,
 		fg_color = colors.hyprbar_maximize_fg,
 		size = 15,
 		icon = "+",
-		action = "hyprctl dispatch fullscreen 1",
+		action = "bash " .. TOGGLE_SIZE,
 	})
-
-	buttons_registered = true
 end
 
-local function apply_hyprbars()
-	if hl.plugin.hyprbars == nil then
-		return
-	end
-
-	local colors = require("colors.init").load()
-	apply_hyprbars_config(colors)
-	register_hyprbars_buttons(colors)
-end
-
-local function apply_hyprbars_config_only()
-	if hl.plugin.hyprbars == nil then
-		return
-	end
-	local colors = require("colors.init").load()
-	apply_hyprbars_config(colors)
-end
-
--- config.reloaded must not re-add buttons (plugin instance keeps them → duplicates).
-hl.on("config.reloaded", function()
-	apply_hyprbars_config_only()
-end)
-
-function reset_hyprbars_buttons()
-	buttons_registered = false
-end
-
--- Only call after a fresh `hyprctl plugin load`.
-function reapply_hyprbars()
-	buttons_registered = false
-	apply_hyprbars()
-end
+apply_hyprbars()

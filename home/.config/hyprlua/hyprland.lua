@@ -10,7 +10,7 @@
 --
 -- This is a best-effort conversion of the *active* configuration chain only.
 -- All the variant presets (animations/*, decorations/*, etc.) were left out.
--- Scripts are referenced from the original ~/.config/hypr/scripts (no duplication).
+-- Scripts are referenced from the original ~/.config/hyprgruv/scripts (no duplication).
 
 -- === Path setup so requires work from SDDM ===
 local config_dir = debug.getinfo(1, "S").source:match("^@(.*/)") or (os.getenv("HOME") .. "/.config/hyprlua/")
@@ -22,7 +22,7 @@ local colors = require("colors.init").load()
 
 -- Make common paths available
 local HOME = os.getenv("HOME") or ""
-local SCRIPTS = HOME .. "/.config/hypr/scripts"
+local SCRIPTS = HOME .. "/.config/hyprgruv/scripts"
 
 -- You can (and should) split further. All requires below are relative
 -- to ~/.config/hyprlua or in Lua path.

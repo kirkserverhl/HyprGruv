@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$HOME/.config/hypr/scripts/settings-blur.sh" "$@"
+exec "$HOME/.config/hyprgruv/scripts/settings-blur.sh" "$@"

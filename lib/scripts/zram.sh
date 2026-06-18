@@ -31,8 +31,8 @@ ensure_cmd() {
 
 ensure_cmd gum "Installing gum…" gum
 
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 
 display_header "ZRam"

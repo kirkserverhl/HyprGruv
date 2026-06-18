@@ -29,8 +29,10 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 # --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
+    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
+    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 # Arch sanity
 if ! command -v pacman >/dev/null 2>&1; then

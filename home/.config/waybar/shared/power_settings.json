@@ -1,7 +1,7 @@
 {
   "custom/power": {
     "format": "\udb81\udc25 ",
-    "on-click": "~/.config/hypr/scripts/launch-wlogout.sh",
+    "on-click": "~/.config/hyprgruv/scripts/launch-wlogout.sh",
     "tooltip-format": "Power Menu"
   },
 

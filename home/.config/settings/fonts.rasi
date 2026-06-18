@@ -2,5 +2,5 @@
    Source: ~/.config/settings/fonts.sh  (FONT_UI role)
 */
 configuration {
-    font: "Agave Nerd Font Propo 11";
+    font: "Agave Nerd Font Propo 16";
 }

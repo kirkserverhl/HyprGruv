@@ -1,0 +1,65 @@
+#!/bin/bash
+# __________                                      
+# \______   \_____    ____   _____ _____    ____  
+#  |     ___/\__  \ _/ ___\ /     \\__  \  /    \ 
+#  |    |     / __ \\  \___|  Y Y  \/ __ \|   |  \
+#  |____|    (____  /\___  >__|_|  (____  /___|  /
+#                 \/     \/      \/     \/     \/ 
+
+# --- Load your existing helpers for consistent look ---
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
+command -v gum_apply_matugen_theme >/dev/null 2>&1 && gum_apply_matugen_theme 2>/dev/null || true
+
+sleep 1
+clear
+display_header "pacman.conf"
+echo
+echo ":: This script will activate or deactivate additions for your pacman.conf."
+echo 
+if grep -Fq "#ParallelDownloads" /etc/pacman.conf
+then
+    if gum confirm "Do you want to activate parallel downloads?" ;then
+        sudo sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+    else
+        echo ":: Activation of parallel downloads skipped."
+    fi
+else
+    echo ":: Parallel downloads are already activated."
+fi
+
+if grep -Fxq "#Color" /etc/pacman.conf
+then
+    if gum confirm "Do you want to activate colors?" ;then
+        sudo sed -i 's/^#Color/Color/' /etc/pacman.conf
+    else
+        echo ":: Activation of Color skipped."
+    fi
+else
+    echo ":: Color is already activated."
+fi
+
+if grep -Fxq "#VerbosePkgLists" /etc/pacman.conf
+then
+    if gum confirm "Do you want to activate VerbosePkgLists?" ;then
+        sudo sed -i 's/^#VerbosePkgLists/VerbosePkgLists/' /etc/pacman.conf
+    else
+        echo ":: Activation of VerbosePkgLists skipped."
+    fi
+else
+    echo ":: VerbosePkgLists is already activated."
+fi
+
+if grep -Fxq "ILoveCandy" /etc/pacman.conf
+then
+    echo ":: ILoveCandy is already activated."
+else
+    if gum confirm "Do you want to activate ILoveCandy?" ;then
+        sudo sed -i '/^ParallelDownloads = .*/a ILoveCandy' /etc/pacman.conf
+    else
+        echo ":: Activation of ILoveCandy skipped."
+    fi
+fi
+echo
+echo "Press [ENTER] to close."
+read

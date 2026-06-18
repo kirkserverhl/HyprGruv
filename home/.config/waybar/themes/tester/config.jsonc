@@ -21,21 +21,21 @@
 
   "custom/hyprgruv-settings": {
     "format": "\udb81\udc93",
-    "on-click": "~/.config/hypr/scripts/waybar-hyprgruv-settings.sh",
+    "on-click": "~/.config/hyprgruv/scripts/waybar-hyprgruv-settings.sh",
     "tooltip-format": "HyprGruv Settings"
   },
 
   "custom/waybarthemes": {
     "format": "\uf141",
-    "on-click": "~/.config/hypr/scripts/themeswitcher.sh",
-    "on-click-right": "~/.config/hypr/scripts/animations.sh",
+    "on-click": "~/.config/hyprgruv/scripts/themeswitcher.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/animations.sh",
     "tooltip-format": "Waybar themes\nRight: Animations"
   },
 
   "custom/wallpaper": {
     "format": "\uf03e",
     "on-click": "waypaper",
-    "on-click-right": "~/.config/hypr/scripts/decorations.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/decorations.sh",
     "tooltip-format": "Wallpaper\nRight: Decorations"
   }
 }

@@ -1,17 +1,20 @@
-local decorations = {
-	screen_shader = os.getenv("HOME") .. "/.config/hypr/shaders/cinematic.frog",
+local HOME = os.getenv("HOME") or ""
 
-	rounding = 25,
-	rounding_power = 1.0,
+local decorations = {
+	-- Active preset was rounding-more-blur (10px, not 25)
+	rounding = 10,
+	rounding_power = 2.0,
 
 	active_opacity = 1.0,
-	inactive_opacity = 1.0,
+	inactive_opacity = 0.97,
+	fullscreen_opacity = 1.0,
 
 	shadow = {
 		enabled = true,
-		range = 28,
+		range = 30,
 		render_power = 3,
-		color = 0x80900a0a,
+		-- Neutral shadow — 0x80900a0a had a red tint that haloed every window
+		color = 0x66000000,
 	},
 
 	blur = {
@@ -24,4 +27,9 @@ local decorations = {
 	},
 }
 
-return decorations
+local screen_shader = HOME .. "/.config/hypr/shaders/cinematic.frog"
+if io.open(screen_shader, "r") then
+	decorations.screen_shader = screen_shader
+end
+
+hl.config({ decoration = decorations })

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$HOME/.config/hypr/scripts/hyprgruv-settings.sh" "$@"
+exec "$HOME/.config/hyprgruv/scripts/hyprgruv-settings.sh" "$@"

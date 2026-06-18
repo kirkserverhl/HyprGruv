@@ -3,7 +3,7 @@
 -- Full file was 285 lines. Only the most important / frequently used binds converted.
 -- Extend as needed using the hl.dsp.* API documented in the wiki.
 
-local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
+local SCRIPTS = os.getenv("HOME") .. "/.config/hyprgruv/scripts"
 local mainMod = "SUPER"
 local mod     = "ALT"
 

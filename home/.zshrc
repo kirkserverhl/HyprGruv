@@ -99,7 +99,7 @@ alias ping='ping -c 5'
 alias fastping='ping -c 100 -i .2'
 alias keybinds='nvim ~/.config/hypr/conf/keybinds.lua'
 alias reload='hyprctl reload'
-alias hyprscripts='$EDITOR ~/.config/hypr/scripts'
+alias hyprscripts='$EDITOR ~/.config/hyprgruv/scripts'
 
 # YAY
 alias i="yay -S"
@@ -127,17 +127,17 @@ if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
 fi
 
 # Matugen Palette Output
-alias palette='~/.config/hypr/scripts/palette.sh'
+alias palette='~/.config/hyprgruv/scripts/palette.sh'
 
 # Errors
 alias hyprerror='hyprctl configerrors'
 
 # Unlock Faillock
-alias unlock='~/.config/hypr/scripts/unlockroot.sh'
+alias unlock='~/.config/hyprgruv/scripts/unlockroot.sh'
 alias fail='faillock --reset'
 alias cleanup='~/.hyprgruv/lib/scripts/cleanup.sh'
-alias doom='~/scripts/doom.sh'
-alias updates='~/.config/hypr/scripts/installupdates.sh'
+alias doom='~/.config/hyprgruv/scripts/unused/home-scripts/doom.sh'
+alias updates='~/.config/hyprgruv/scripts/installupdates.sh'
 
 # =====================================================
 # Functions

@@ -170,7 +170,7 @@ done
 # 9. SDDM (sugar-candy theme) - update the patcher script itself
 #    The actual theme.conf gets written at wallpaper change time.
 # =============================================================================
-SDDM_PATCHER="$HOME/.config/hypr/scripts/update-sddm-wallpaper.sh"
+SDDM_PATCHER="$HOME/.config/hyprgruv/scripts/update-sddm-wallpaper.sh"
 if [[ -f "$SDDM_PATCHER" ]]; then
     # Change the hardcoded HeavyData line to use our central variable
     sed -i 's|Font="HeavyData Nerd Font"|Font="'"$FONT_HEADER"'"|g' "$SDDM_PATCHER"
@@ -189,7 +189,17 @@ for plugin_lua in "$HOME/.config/hypr/conf/plugins.lua" "$HOME/.config/hyprlua/c
 done
 
 # =============================================================================
-# 11. Optional: write a small env file that other scripts can source easily
+# 11. WAYPAPER — GTK classic + waypaper-engine (both follow fonts.sh)
+# =============================================================================
+if [[ -x "$HOME/.config/settings/waypaper-rebuild-style.sh" ]]; then
+    "$HOME/.config/settings/waypaper-rebuild-style.sh"
+fi
+if [[ -x "$HOME/.config/settings/waypaper-engine-fonts.sh" ]]; then
+    "$HOME/.config/settings/waypaper-engine-fonts.sh"
+fi
+
+# =============================================================================
+# 12. Optional: write a small env file that other scripts can source easily
 # =============================================================================
 ENV_FILE="$HOME/.config/settings/fonts.env"
 cat > "$ENV_FILE" << EOF

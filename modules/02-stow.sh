@@ -124,6 +124,12 @@ log_status "Applying configurations with GNU Stow (--adopt, with ignores)"
 
 log_success "Stow succeeded for non-conflicting paths"
 
+# Hyprland configs reference ~/.config/hyprgruv/scripts — ensure that tree exists.
+if ! bash "$HYPR_DIR/lib/scripts/ensure-dotfiles.sh"; then
+    log_error "hyprgruv dotfiles missing after stow (keybinds will fail)"
+    exit 1
+fi
+
 # --------------------------------------------------------------------
 # Recreate the previously ignored items as symlinks in $HOME
 # --------------------------------------------------------------------

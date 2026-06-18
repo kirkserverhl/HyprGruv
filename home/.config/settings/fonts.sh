@@ -37,6 +37,10 @@ export FONT_HEADER_FULL="$FONT_HEADER ${FONT_SIZE_HEADER:-Regular}"
 export FONT_SIZE_TEXT=12
 export FONT_SIZE_UI=12.5
 export FONT_SIZE_HEADER=13
+# Waypaper GTK (toolbar = UI, search/tooltips = TEXT)
+export FONT_SIZE_WAYPAPER_UI=11
+export FONT_SIZE_WAYPAPER_TEXT=11
+export FONT_SIZE_WAYPAPER_TOOLTIP=10
 # Fuzzel + Rofi launcher menus (kept in sync)
 export FONT_SIZE_LAUNCHER=16
 

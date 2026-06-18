@@ -23,7 +23,7 @@ hl.env("LIBVA_DRIVER_NAME", "radeonsi")
 -- hl.env("WLR_RENDERER_ALLOW_SOFTWARE", "1")
 
 -- From main hyprland.conf
-local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
+local SCRIPTS = require("conf.scripts_path").get()
 hl.env("TERMINAL", SCRIPTS .. "/terminal.sh")
 hl.env("BROWSER", SCRIPTS .. "/browser.sh")
 hl.env("FILEMANAGER", SCRIPTS .. "/filemanager.sh")

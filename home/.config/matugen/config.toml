@@ -279,7 +279,7 @@ post_hook = "tmux source-file ~/.config/tmux/tmux.conf 2>/dev/null || true"
 [templates.waypaper]
 input_path = "~/.config/matugen/templates/waypaper-style.css"
 output_path = "~/.config/waypaper/colors/matugen.css"
-# Note: Waypaper may need to be restarted to pick up the new stylesheet
+post_hook = "~/.config/settings/waypaper-rebuild-style.sh"
 
 
 [templates.wlogout]

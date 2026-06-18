@@ -450,6 +450,9 @@ set -g @learning_cheatsheet on
 set-hook -g after-new-session 'run-shell -b "pane=$(tmux list-panes -t #{session_name} -F #{pane_id} | head -1); $HOME/.config/tmux/show-cheatsheet.sh \"$pane\""'
 bind ? run-shell "$HOME/.config/tmux/show-cheatsheet.sh" #!important
 
+# Dev workspace: nvim | cmatrix / yazi (same layout as dev-workspace.sh)
+bind D run-shell "bash ~/.config/tmux/dev-workspace.sh" #!important
+
 
 # -- tpm -----------------------------------------------------------------------
 

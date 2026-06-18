@@ -21,8 +21,8 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 # --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 display_header "Default Wallpaper"
 
@@ -113,7 +113,7 @@ if ! pgrep -f "waypaper-engine.*daemon" >/dev/null 2>&1; then
   fi
 fi
 
-SET_WALLPAPER="$HOME/.config/hypr/scripts/set_wallpaper.sh"
+SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
 
 # ------------------------------------------------------------
 # Apply wallpaper + first matugen palette (Dark Standard, source color 1)

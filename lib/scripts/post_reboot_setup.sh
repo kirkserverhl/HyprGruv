@@ -15,8 +15,8 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 # --- Load helpers for consistent look (available after stow) ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 mkdir -p "$ASSET_DIR/logs"
 if [[ "${RUN_FROM_INSTALL:-0}" == "1" ]]; then

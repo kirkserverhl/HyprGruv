@@ -22,7 +22,7 @@ This is the source template for a dynamic Plymouth boot splash that pulls colors
 
 2. Run the setup helper (creates the sudoers rule + prints the remaining steps):
    ```bash
-   ~/.config/hypr/scripts/update-plymouth-theme.sh --setup
+   ~/.config/hyprgruv/scripts/update-plymouth-theme.sh --setup
    ```
 
 3. Edit `/etc/mkinitcpio.conf` and add `plymouth` to the HOOKS array.

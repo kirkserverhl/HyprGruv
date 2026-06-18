@@ -15,6 +15,9 @@ esac
 
 pane="${1:-$(tmux display -p '#{pane_id}')}"
 
+sess="$(tmux display -p -t "$pane" '#{session_name}' 2>/dev/null || true)"
+[[ "$sess" == "dev" ]] && exit 0
+
 # Wait for an interactive shell so the command runs at a real prompt.
 for _ in {1..50}; do
   cmd="$(tmux display -p -t "$pane" '#{pane_current_command}' 2>/dev/null || true)"

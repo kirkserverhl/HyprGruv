@@ -24,8 +24,10 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 # --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
+    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
+    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 say() { echo -e "$*"; }
 
@@ -256,6 +258,7 @@ sudo pacman -S --needed --noconfirm \
     sl zsh \
     starship \
     noto-fonts ttf-nerd-fonts-symbols ttf-dejavu \
+    ttf-agave-nerd ttf-heavydata-nerd ttf-sharetech-mono-nerd otf-font-awesome \
     git base-devel reflector jq curl fastfetch btop duf dust ncdu man-db man-pages \
     media-player-info nm-connection-editor pacutils \
     tmux tmuxinator \
@@ -360,7 +363,7 @@ fi
 # On a fresh install, hypr configs are not stowed yet — install.sh runs
 # default_wp.sh after stow, immediately before reboot.
 if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
-    if [[ -x "$HOME/.config/hypr/scripts/set_wallpaper.sh" ]]; then
+    if [[ -x "$HOME/.config/hyprgruv/scripts/set_wallpaper.sh" ]]; then
         log_status "Applying opening wallpaper and default matugen theme…"
         bash "$HYPR_DIR/lib/scripts/default_wp.sh" || log_warning "default_wp.sh finished with warnings"
     else

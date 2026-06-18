@@ -14,8 +14,8 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 [[ -f "$HYPR_DIR/lib/state.sh" ]] && source "$HYPR_DIR/lib/state.sh"
 
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]] && declare -F is_completed >/dev/null 2>&1 && is_completed "Wallpaper setup"; then
   log_status "Wallpaper setup already completed (FORCE=1 to re-run)"

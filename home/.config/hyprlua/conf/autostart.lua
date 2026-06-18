@@ -2,7 +2,7 @@
 -- Converted from conf/autostart.conf
 -- Most exec-once become hl.on("hyprland.start", function() hl.exec_cmd(...) end)
 
-local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
+local SCRIPTS = os.getenv("HOME") .. "/.config/hyprgruv/scripts"
 local HYPRPM_RELOAD = SCRIPTS .. "/hyprpm-reload.sh"
 
 local function reload_hyprpm()

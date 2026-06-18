@@ -7,8 +7,10 @@ HYPR_DIR="${HYPRGRUV_DIR:-$HOME/.hyprgruv}"
 [[ -f "$HYPR_DIR/lib/state.sh" ]] && source "$HYPR_DIR/lib/state.sh"
 
 # --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
+    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
+    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 command -v gum_apply_matugen_theme >/dev/null 2>&1 && gum_apply_matugen_theme 2>/dev/null || true
 
 display_header "Defaults"

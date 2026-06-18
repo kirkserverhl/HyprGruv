@@ -6,7 +6,7 @@
 
 hl.config({
 	general = {
-		gaps_in = 8,
+		gaps_in = 5,
 		gaps_out = 8,
 		border_size = 3,
 
@@ -65,11 +65,19 @@ hl.config({
 -- above no longer bakes in colors at module parse time.
 local function apply_borders()
 	local colors = require("colors.init").load()
+	-- Use matugen semantic roles — not source_color (wallpaper seed can be a loud
+	-- off-palette orange that reads as a red ring around every focused window).
 	hl.config({
 		general = {
 			col = {
-				active_border = colors.source_color or "rgba(33ccffee) rgba(00ff99ee) 45deg",
-				inactive_border = colors.tertiary or "rgba(595959aa)",
+				active_border = {
+					colors = {
+						colors.primary or "rgba(33ccffee)",
+						colors.secondary or colors.tertiary or "rgba(00ff99ee)",
+					},
+					angle = 45,
+				},
+				inactive_border = colors.outline_variant or colors.outline or "rgba(595959aa)",
 			},
 		},
 	})

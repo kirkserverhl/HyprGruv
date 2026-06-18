@@ -115,6 +115,10 @@ timeshift
 noto-fonts
 ttf-nerd-fonts-symbols
 ttf-dejavu
+ttf-agave-nerd
+ttf-heavydata-nerd
+ttf-sharetech-mono-nerd
+otf-font-awesome
 mpv
 media-player-info
 piper

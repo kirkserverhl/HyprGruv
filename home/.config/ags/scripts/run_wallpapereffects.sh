@@ -1,2 +1,2 @@
 #!/bin/bash
-$HOME/.config/hypr/scripts/wallpaper-effects.sh
+$HOME/.config/hyprgruv/scripts/wallpaper-effects.sh

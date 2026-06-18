@@ -10,10 +10,17 @@
 --
 -- This is a best-effort conversion of the *active* configuration chain only.
 -- All the variant presets (animations/*, decorations/*, etc.) were left out.
--- Scripts are referenced from the original ~/.config/hypr/scripts (no duplication).
+-- Scripts are referenced from the original ~/.config/hyprgruv/scripts (no duplication).
 
--- === Path setup so requires work from SDDM ===
-local config_dir = debug.getinfo(1, "S").source:match("^@(.*/)") or (os.getenv("HOME") .. "/.config/hypr/")
+-- === Path setup so requires work from SDDM / symlinks / reload ===
+-- Do not use debug.getinfo() here: Hyprland's loader can report a bad source
+-- path (e.g. /home/kirk/config/... missing the dot in .config), which breaks
+-- require("conf.*") for all modules.
+local HOME = os.getenv("HOME") or ""
+local config_dir = (os.getenv("XDG_CONFIG_HOME") or (HOME .. "/.config")) .. "/hypr/"
+if not config_dir:match("/$") then
+    config_dir = config_dir .. "/"
+end
 package.path = config_dir .. "?.lua;" .. config_dir .. "?/init.lua;" .. package.path
 -- =============================================
 
@@ -29,8 +36,7 @@ local _ = require("colors.init").load()  -- result unused here; modules that nee
 local fonts = require("conf.fonts").load()
 
 -- Make common paths available
-local HOME = os.getenv("HOME") or ""
-local SCRIPTS = HOME .. "/.config/hypr/scripts"
+local SCRIPTS = require("conf.scripts_path").get()
 
 -- You can (and should) split further. All requires below are relative
 -- to ~/.config/hypr or in Lua path.

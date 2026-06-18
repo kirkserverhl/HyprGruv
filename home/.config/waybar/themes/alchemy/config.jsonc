@@ -21,24 +21,13 @@
   "height": 40,
 
   "custom/notification": {
-    "tooltip": false,
-    "format": "{icon}",
-    "format-icons": {
-      "notification": "<span foreground='red'><sup></sup></span>",
-      "none": "",
-      "dnd-notification": "<span foreground='red'><sup></sup></span>",
-      "dnd-none": "",
-      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
-      "inhibited-none": "",
-      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-      "dnd-inhibited-none": "",
-    },
+    "format": "{}",
     "return-type": "json",
-    "exec-if": "which swaync-client",
-    "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
-    "escape": true,
+    "exec": "$HOME/.config/waybar/scripts/dunst.sh",
+    "on-click": "$HOME/.config/waybar/scripts/dunst.sh left",
+    "on-click-right": "$HOME/.config/waybar/scripts/dunst.sh right",
+    "interval": 10,
+    "tooltip": true
   },
 
   "custom/launcher": {
@@ -52,7 +41,7 @@
     "format": "  {}",
     "interval": "once",
     "exec": "checkupdates | wc -l",
-    "on-click": "bash home/$USER/.config/hypr/scripts/updates.sh",
+    "on-click": "bash home/$USER/.config/hyprgruv/scripts/updates.sh",
     "on-click-right": "kitty pacseek"
     "signal": 8,
     "tooltip-format": "{} updates available",

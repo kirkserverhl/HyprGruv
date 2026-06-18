@@ -103,14 +103,14 @@ Firefox theming is matugen-only (`templates/firefox-colors.css` and per-site `us
 - Icons: Papirus (set in install / stow)
 - Qt: `qt5ct` / `qt6ct` with matugen color files; Kvantum `matugen` scheme for some apps
 
-Run `~/.config/hypr/scripts/gtk.sh` if you need to re-apply GTK settings manually.
+Run `~/.config/hyprgruv/scripts/gtk.sh` if you need to re-apply GTK settings manually.
 
 ## Plymouth / boot splash
 
 Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 ```bash
-~/.config/hypr/scripts/update-plymouth-theme.sh
+~/.config/hyprgruv/scripts/update-plymouth-theme.sh
 ```
 
 (requires root for initramfs rebuild)

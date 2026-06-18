@@ -14,7 +14,7 @@
       "\udb82\udd28"
     ],
     "tooltip-format": "Network Manager",
-    "on-click": "~/.config/hypr/scripts/networkmanager.sh"
+    "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh"
   },
 
   "custom/system": {
@@ -49,8 +49,8 @@
       "children-class": "not-system",
       "transition-left-to-right": false
     },
-    "on-click": "~/.config/hypr/scripts/bpytop.sh",
-    "on-click-right": "~/.config/hypr/scripts/htop.sh",
+    "on-click": "~/.config/hyprgruv/scripts/bpytop.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/htop.sh",
     "tooltip-format": "Left: Btop\nRight: Htop",
     "modules": [
       "custom/system",

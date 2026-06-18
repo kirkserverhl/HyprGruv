@@ -2,7 +2,7 @@
 -- Converted from conf/autostart.conf
 -- Most exec-once become hl.on("hyprland.start", function() hl.exec_cmd(...) end)
 
-local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
+local SCRIPTS = require("conf.scripts_path").get()
 local HYPRPM_RELOAD = SCRIPTS .. "/hyprpm-reload.sh"
 local HOTCORNERS = SCRIPTS .. "/launch-hotcorners.sh"
 local POLKIT_AGENT = SCRIPTS .. "/launch-hyprpolkitagent.sh"
@@ -39,21 +39,18 @@ hl.on("hyprland.start", function()
 
 	-- Idle + bar
 	hl.exec_cmd(
-		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; if [ "$(cat "$st/bar_mode" 2>/dev/null)" != hyprbars ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ~/.config/hypr/scripts/sync-bar-mode.sh\''
+		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; if [ "$(cat "$st/bar_mode" 2>/dev/null)" != hyprbars ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
 	)
 
 	-- Clipboard history (images)
 	hl.exec_cmd("wl-paste --type image --watch cliphist store")
-
-	-- Cleanup
-	hl.exec_cmd(SCRIPTS .. "/cleanup.sh")
 
 	-- Restart wallpaper daemons, then restore canonical default_wp.png on login.
 	hl.exec_cmd("killall -q waypaper-daemon awww-daemon waypaper-engine 2>/dev/null || true")
 	hl.exec_cmd("sleep 0.5 && awww-daemon &")
 	hl.exec_cmd("waypaper-engine daemon &")
 	-- No waypaper post_command on login — palette/matugen only when switching wallpapers.
-	hl.exec_cmd("~/.config/hypr/scripts/restore_wallpaper.sh &")
+	hl.exec_cmd(SCRIPTS .. "/restore_wallpaper.sh &")
 
 	-- Cursor theme
 	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic-Gruvbox 24")
@@ -62,7 +59,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
 
 	-- First-login welcome: package sync + HyprGruv Settings (opt-out via menu checkbox).
-	-- Manual re-run: bash ~/.config/hypr/scripts/hyprgruv-welcome.sh
+	-- Manual re-run: bash ~/.config/hyprgruv/scripts/hyprgruv-welcome.sh
 	-- Re-enable after opt-out: rm ~/.local/state/hyprgruv-settings/welcome-disabled
 	hl.exec_cmd("sleep 5 && " .. SCRIPTS .. "/hyprgruv-welcome.sh &")
 

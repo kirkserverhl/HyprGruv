@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec "$HOME/.config/hyprgruv/scripts/dev-workspace.sh" "$@"

@@ -3,7 +3,7 @@
 -- Full file was 285 lines. Only the most important / frequently used binds converted.
 -- Extend as needed using the hl.dsp.* API documented in the wiki.
 
-local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
+local SCRIPTS = os.getenv("HOME") .. "/.config/hyprgruv/scripts"
 local mainMod = "SUPER"
 local mod     = "ALT"
 
@@ -49,7 +49,7 @@ hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
 -- Super+letter is translated to Ctrl+letter in the focused app (Mac Cmd behavior).
 -- Ctrl+C/V/X/Z still work natively when pressed directly — these are additive.
 --
--- Implemented via ~/.config/hypr/scripts/mac-shortcut.sh which calls
+-- Implemented via ~/.config/hyprgruv/scripts/mac-shortcut.sh which calls
 -- hl.dsp.send_shortcut (Hyprland 0.55+ Lua API). Terminals get Ctrl+Shift+C/V
 -- for copy/paste so Ctrl+C is not interpreted as SIGINT.
 
@@ -65,6 +65,7 @@ hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh k"))
 
 -- === TERMINALS & LAUNCHERS ===
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
+hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
 hl.bind(mod     .. " + Return", hl.dsp.exec_cmd("ghostty"))
 
 -- Browsers: Super+B = default (~/.config/settings/browser.sh), Alt+B = Chrome, Super+Alt+B = Firefox

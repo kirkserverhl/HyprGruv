@@ -1,13 +1,13 @@
 "custom/wallpaper": {
 "format": "\uf03e",
 "on-click": "waypaper",
-"on-click-right": "~/.config/hypr/scripts/decorations.sh",
+"on-click-right": "~/.config/hyprgruv/scripts/decorations.sh",
 "tooltip-format": "Left: Wallpaper\nRight: Decorations"
 },
 "custom/waybarthemes": {
 "format": "\uf141",
-"on-click": "~/.config/hypr/scripts/themeswitcher.sh",
-"on-click-right": "~/.config/hypr/scripts/animations.sh",
+"on-click": "~/.config/hyprgruv/scripts/themeswitcher.sh",
+"on-click-right": "~/.config/hyprgruv/scripts/animations.sh",
 "tooltip-format": "Left: Waybar themes\nRight: Animations"
 },
 

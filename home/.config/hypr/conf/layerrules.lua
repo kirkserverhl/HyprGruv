@@ -1,7 +1,7 @@
 -- conf/layerrules.lua
 -- Real-time layer blur rules + explicit stacking order.
 --
--- Runtime tuning: ~/.config/hypr/scripts/apply-hypr-blur.sh (blur-tuner / hyprgruv-settings)
+-- Runtime tuning: ~/.config/hyprgruv/scripts/apply-hypr-blur.sh (blur-tuner / hyprgruv-settings)
 -- updates these named rules via hyprctl eval after load.
 --
 -- Desired layer hierarchy (top to bottom):

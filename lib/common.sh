@@ -13,6 +13,9 @@ BOLD="\e[1m"
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ASSET_DIR="$HYPR_DIR/assets"
 SCRIPTS="$HYPR_DIR/lib/scripts"
+INSTALL_SCRIPTS="$HYPR_DIR/lib/scripts"
+DOTFILES_SCRIPTS="${DOTFILES_SCRIPTS:-$HOME/.config/hyprgruv/scripts}"
+REPO_DOTFILES_SCRIPTS="$HYPR_DIR/home/.config/hyprgruv/scripts"
 BACKUP_DIR="$HOME/.local/backup/hyprgruv"
 
 alias ls='ls --color=auto'
@@ -68,13 +71,13 @@ run_command() {
 	fi
 }
 # Source this at the beginning of each script
-export HYPR_DIR ASSET_DIR BACKUP_DIR
+export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INSTALL_SCRIPTS
 
 
 # ============== Matugen + Gum Styling ==============
 
 _hyprgruv_load_matugen_colors() {
-    local colors_sh="${HOME}/.config/hypr/scripts/colors.sh"
+    local colors_sh="${HOME}/.config/hyprgruv/scripts/colors.sh"
     if [[ -f "$colors_sh" ]]; then
         # shellcheck source=/dev/null
         source "$colors_sh" 2>/dev/null && return 0

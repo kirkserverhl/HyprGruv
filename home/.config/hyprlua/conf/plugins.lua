@@ -27,7 +27,7 @@ hl.config({
             -- Buttons (macOS style)
             ["hyprbars-button"] = {
                 { color = "rgb(ff5f57)", size = 15, action = "hyprctl dispatch killactive" },
-                { color = "rgb(ffbd2e)", size = 15, action = "~/.config/hypr/scripts/hyprbars-minimize.sh" },
+                { color = "rgb(ffbd2e)", size = 15, action = "~/.config/hyprgruv/scripts/hyprbars-minimize.sh" },
                 { color = "rgb(27c93f)", size = 15, action = "hyprctl dispatch fullscreen 1" },
             },
 

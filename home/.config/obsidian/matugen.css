@@ -6,113 +6,113 @@
 .theme-dark, .theme-light {
 
     /* ── Material You RGB helpers ──────────────────────────── */
-    --mat-bg-rgb:             25, 18, 13;
-    --mat-surface-rgb:        25, 18, 13;
-    --mat-on-surface-rgb:     240, 223, 214;
-    --mat-primary-rgb:        255, 183, 131;
-    --mat-on-primary-rgb:     79, 37, 0;
+    --mat-bg-rgb:             26, 17, 15;
+    --mat-surface-rgb:        26, 17, 15;
+    --mat-on-surface-rgb:     241, 223, 218;
+    --mat-primary-rgb:        255, 181, 158;
+    --mat-on-primary-rgb:     85, 32, 13;
 
     /* ── Core Backgrounds ──────────────────────────────────── */
-    --background-primary:           #19120d;
-    --background-primary-alt:       #19120d;
-    --background-secondary:         #221a15;
-    --background-secondary-alt:     #261e18;
+    --background-primary:           #1a110f;
+    --background-primary-alt:       #1a110f;
+    --background-secondary:         #231917;
+    --background-secondary-alt:     #271d1b;
 
     /* ── Titlebar ──────────────────────────────────────────── */
-    --titlebar-background:          #19120d;
-    --titlebar-background-focused:  #221a15;
-    --titlebar-text-color:          #f0dfd6;
+    --titlebar-background:          #1a110f;
+    --titlebar-background-focused:  #231917;
+    --titlebar-text-color:          #f1dfda;
 
     /* ── Borders & Dividers ────────────────────────────────── */
-    --background-modifier-border:         #52443b;
-    --background-modifier-border-focus:   #9f8d83;
-    --background-modifier-border-hover:   #9f8d83;
+    --background-modifier-border:         #53433f;
+    --background-modifier-border-focus:   #a08d87;
+    --background-modifier-border-hover:   #a08d87;
 
     /* ── Text Colors ───────────────────────────────────────── */
-    --text-normal:      #f0dfd6;
-    --text-muted:       #d6c3b7;
-    --text-faint:       #9f8d83;
-    --text-on-accent:   #4f2500;
-    --text-selection:   rgba(255, 183, 131, 0.25);
+    --text-normal:      #f1dfda;
+    --text-muted:       #d8c2bc;
+    --text-faint:       #a08d87;
+    --text-on-accent:   #55200d;
+    --text-selection:   rgba(255, 181, 158, 0.25);
 
     /* ── Accent & Interactive ──────────────────────────────── */
-    --interactive-accent:           #ffb783;
-    --interactive-accent-hover:     #6d390b;
-    --interactive-accent-rgb:       255, 183, 131;
-    --text-accent:                  #ffb783;
-    --text-accent-hover:            #6d390b;
+    --interactive-accent:           #ffb59e;
+    --interactive-accent-hover:     #723521;
+    --interactive-accent-rgb:       255, 181, 158;
+    --text-accent:                  #ffb59e;
+    --text-accent-hover:            #723521;
 
     /* ── Hover & Active Modifiers ──────────────────────────── */
     --background-modifier-hover:          rgba(var(--mat-on-surface-rgb), 0.06);
     --background-modifier-active-hover:   rgba(var(--mat-primary-rgb), 0.15);
-    --background-modifier-success:        #464920;
+    --background-modifier-success:        #52461a;
     --background-modifier-error:          #93000a;
     --background-modifier-error-hover:    #ffb4ab;
 
     /* ── Obsidian Color Scale (--color-base-XX) ────────────── */
-    --color-base-00:    #19120d;
-    --color-base-05:    #19120d;
-    --color-base-10:    #140d08;
-    --color-base-20:    #221a15;
-    --color-base-25:    #261e18;
-    --color-base-30:    #312822;
-    --color-base-35:    #3c332d;
-    --color-base-40:    #52443b;
-    --color-base-50:    #9f8d83;
-    --color-base-60:    #d6c3b7;
-    --color-base-70:    #f0dfd6;
-    --color-base-100:   #f0dfd6;
+    --color-base-00:    #1a110f;
+    --color-base-05:    #1a110f;
+    --color-base-10:    #140c0a;
+    --color-base-20:    #231917;
+    --color-base-25:    #271d1b;
+    --color-base-30:    #322825;
+    --color-base-35:    #3d322f;
+    --color-base-40:    #53433f;
+    --color-base-50:    #a08d87;
+    --color-base-60:    #d8c2bc;
+    --color-base-70:    #f1dfda;
+    --color-base-100:   #f1dfda;
 
     /* ── Semantic Colors ───────────────────────────────────── */
     --color-red:        #ffb4ab;
-    --color-orange:     #c7ca94;
-    --color-yellow:     #e4bfa7;
-    --color-green:      #464920;
-    --color-cyan:       #5b412f;
-    --color-blue:       #ffb783;
-    --color-purple:     #e4bfa7;
-    --color-pink:       #c7ca94;
+    --color-orange:     #d7c68d;
+    --color-yellow:     #e7bdb1;
+    --color-green:      #52461a;
+    --color-cyan:       #5d4036;
+    --color-blue:       #ffb59e;
+    --color-purple:     #e7bdb1;
+    --color-pink:       #d7c68d;
 
     /* ── Headings ──────────────────────────────────────────── */
-    --h1-color:     #ffb783;
-    --h2-color:     #ffb783;
-    --h3-color:     #e4bfa7;
-    --h4-color:     #c7ca94;
-    --h5-color:     #d6c3b7;
-    --h6-color:     #9f8d83;
+    --h1-color:     #ffb59e;
+    --h2-color:     #ffb59e;
+    --h3-color:     #e7bdb1;
+    --h4-color:     #d7c68d;
+    --h5-color:     #d8c2bc;
+    --h6-color:     #a08d87;
 
     /* ── Links ─────────────────────────────────────────────── */
-    --link-color:           #ffb783;
-    --link-color-hover:     #ffdcc5;
-    --link-external-color:  #c7ca94;
-    --link-unresolved-color: #9f8d83;
+    --link-color:           #ffb59e;
+    --link-color-hover:     #ffdbd0;
+    --link-external-color:  #d7c68d;
+    --link-unresolved-color: #a08d87;
 
     /* ── Tags ──────────────────────────────────────────────── */
-    --tag-color:            #ffdcc5;
-    --tag-background:       #6d390b;
-    --tag-border-color:     #ffb783;
-    --tag-color-hover:      #4f2500;
-    --tag-background-hover: #ffb783;
+    --tag-color:            #ffdbd0;
+    --tag-background:       #723521;
+    --tag-border-color:     #ffb59e;
+    --tag-color-hover:      #55200d;
+    --tag-background-hover: #ffb59e;
 
     /* ── Checkboxes ────────────────────────────────────────── */
-    --checkbox-color:           #ffb783;
-    --checkbox-color-hover:     #6d390b;
-    --checkbox-border-color:    #9f8d83;
-    --checkbox-marker-color:    #4f2500;
+    --checkbox-color:           #ffb59e;
+    --checkbox-color-hover:     #723521;
+    --checkbox-border-color:    #a08d87;
+    --checkbox-marker-color:    #55200d;
 
     /* ── Code Blocks ───────────────────────────────────────── */
-    --code-background:  #221a15;
-    --code-normal:      #f0dfd6;
-    --code-comment:     #9f8d83;
-    --code-function:    #ffb783;
+    --code-background:  #231917;
+    --code-normal:      #f1dfda;
+    --code-comment:     #a08d87;
+    --code-function:    #ffb59e;
     --code-important:   #ffb4ab;
-    --code-keyword:     #e4bfa7;
-    --code-operator:    #c7ca94;
-    --code-property:    #d6c3b7;
-    --code-punctuation: #52443b;
-    --code-string:      #c7ca94;
+    --code-keyword:     #e7bdb1;
+    --code-operator:    #d7c68d;
+    --code-property:    #d8c2bc;
+    --code-punctuation: #53433f;
+    --code-string:      #d7c68d;
     --code-tag:         #ffb4ab;
-    --code-value:       #e4bfa7;
+    --code-value:       #e7bdb1;
 
     /* ── Scrollbar ─────────────────────────────────────────── */
     --scrollbar-thumb-bg:           rgba(var(--mat-on-surface-rgb), 0.12);
@@ -121,16 +121,16 @@
 
     /* ── Inputs ────────────────────────────────────────────── */
     --input-shadow: none;
-    --input-shadow-hover: 0 0 0 2px #9f8d83;
+    --input-shadow-hover: 0 0 0 2px #a08d87;
 
     /* ── Graph View ────────────────────────────────────────── */
-    --graph-node:           #ffb783;
-    --graph-node-unresolved: #9f8d83;
-    --graph-node-focused:   #ffdcc5;
-    --graph-node-tag:       #e4bfa7;
-    --graph-node-attachment: #c7ca94;
-    --graph-line:           #52443b;
-    --graph-background:     #19120d;
+    --graph-node:           #ffb59e;
+    --graph-node-unresolved: #a08d87;
+    --graph-node-focused:   #ffdbd0;
+    --graph-node-tag:       #e7bdb1;
+    --graph-node-attachment: #d7c68d;
+    --graph-line:           #53433f;
+    --graph-background:     #1a110f;
 
 }
 

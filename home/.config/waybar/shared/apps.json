@@ -1,8 +1,8 @@
 {
   "custom/appmenu": {
     "format": "\uf303",
-    "on-click": "~/.config/hypr/scripts/fuzzel-full.sh",
-    "on-click-right": "~/.config/hypr/scripts/fuzzel-apps.sh",
+    "on-click": "~/.config/hyprgruv/scripts/fuzzel-full.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/fuzzel-apps.sh",
     "tooltip-format": "Left: All Apps\nRight: Favorites"
   },
 
@@ -14,8 +14,8 @@
 
   "custom/cliphist": {
     "format": " \udb80\udd4c ",
-    "on-click": "~/.config/hypr/scripts/hyprshot.sh",
-    "on-click-right": "~/.config/hypr/scripts/cliphist.sh",
+    "on-click": "~/.config/hyprgruv/scripts/hyprshot.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/cliphist.sh",
     "tooltip-format": "Left: Screenshot\nRight: Clipboard history"
   },
 
@@ -25,8 +25,8 @@
     "escape": true,
     "exec-on-event": true,
     "interval": 60,
-    "exec": "~/.config/hypr/scripts/hypridle.sh status",
-    "on-click": "~/.config/hypr/scripts/hypridle.sh toggle",
+    "exec": "~/.config/hyprgruv/scripts/hypridle.sh status",
+    "on-click": "~/.config/hyprgruv/scripts/hypridle.sh toggle",
     "on-click-right": "hyprlock",
     "tooltip": false
   },
@@ -34,8 +34,8 @@
   "custom/hyprsunset": {
     "format": "\ue4dc",
     "tooltip-format": "Toggle screen shader",
-    "on-click": "~/.config/hypr/scripts/hyprshade.sh",
-    "on-click-right": "sleep 0.5; ~/.config/hypr/scripts/hyprshade.sh rofi"
+    "on-click": "~/.config/hyprgruv/scripts/hyprshade.sh",
+    "on-click-right": "sleep 0.5; ~/.config/hyprgruv/scripts/hyprshade.sh rofi"
   },
 
   "group/apps": {

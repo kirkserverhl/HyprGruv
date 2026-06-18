@@ -22,7 +22,10 @@ BOLD="\e[1m"                 # Bold   ##
 sleep 1
 
 # Prefer user's aur helper script if present in the tree, else default to yay
-AUR_SCRIPT="$HYPR_DIR/home/.config/hypr/scripts/aur.sh"
+AUR_SCRIPT="${REPO_DOTFILES_SCRIPTS:-$HYPR_DIR/home/.config/hyprgruv/scripts}/aur.sh"
+if [[ ! -f "$AUR_SCRIPT" ]]; then
+    AUR_SCRIPT="${DOTFILES_SCRIPTS:-$HOME/.config/hyprgruv/scripts}/aur.sh"
+fi
 if [[ -f "$AUR_SCRIPT" ]]; then
     aur_helper="$(cat "$AUR_SCRIPT" | tr -d ' \t\r\n')"
 else

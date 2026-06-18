@@ -121,10 +121,9 @@ esac
 pgrep kitty | xargs -r kill -SIGUSR1 > /dev/null 2>&1
 echo ""
 
-# SwayNC theme
-echo -e "${CYAN}-> Applying SwayNC theme...${NC}"
-cp "$THEME_DIR/swaync/colors.css" "$HOME/.config/swaync/colors/colors.css" > /dev/null 2>&1
-pkill swaync > /dev/null 2>&1 && swaync > /dev/null 2>&1 & disown
+# Dunst — colors come from matugen dunstrc; restart to pick up config changes
+echo -e "${CYAN}-> Restarting Dunst...${NC}"
+pkill dunst > /dev/null 2>&1 && dunst > /dev/null 2>&1 & disown
 echo ""
 
 # wlogout theme

@@ -1,11 +1,11 @@
 {
   "custom/updates": {
-    "exec": "~/.config/hypr/scripts/updates.sh waybar",
+    "exec": "~/.config/hyprgruv/scripts/updates.sh waybar",
     "interval": 1800,
     "return-type": "json",
     "format": "{}",
-    "on-click": "kitty --class hypr-updates -e ~/.config/hypr/scripts/installupdates.sh",
-    "on-click-right": "~/.config/hypr/scripts/software.sh",
+    "on-click": "kitty --class hypr-updates -e ~/.config/hyprgruv/scripts/installupdates.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/software.sh",
     "tooltip-format": "Left: Updates\nRight: Pacseek"
   }
 }

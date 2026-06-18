@@ -27,7 +27,7 @@
   },
   "custom/keybindings": {
     "format": "\uf11c",
-    "on-click": "~/.config/hypr/scripts/keybinds.sh",
+    "on-click": "~/.config/hyprgruv/scripts/keybinds.sh",
     "tooltip": false
   },
   "custom/chatgpt": {
@@ -38,13 +38,13 @@
   "custom/wallpaper": {
     "format": "\uf03e",
     "on-click": "waypaper",
-    "on-click-right": "~/.config/hypr/scripts/decorations.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/decorations.sh",
     "tooltip-format": "Left: Wallpaper\nRight: Decorations"
   },
   "custom/waybarthemes": {
     "format": "\uf141",
-    "on-click": "~/.config/hypr/scripts/themeswitcher.sh",
-    "on-click-right": "~/.config/hypr/scripts/animations.sh",
+    "on-click": "~/.config/hyprgruv/scripts/themeswitcher.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/animations.sh",
     "tooltip-format": "Left: Waybar themes\nRight: Animations"
   },
   "group/links": {
@@ -72,7 +72,7 @@
   "custom/appmenuicon": {
     "format": "\uf303",
     "on-click": "sleep 0.2;rofi -show drun -replace",
-    "on-click-right": "~/.config/hypr/scripts/launch.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/launch.sh",
     "tooltip-format": "Left: Open Rofi \nRight: Open Apps"
   },
 
@@ -169,25 +169,25 @@
   },
   "custom/settings": {
     "format": "\udb81\udc93",
-    "on-click": "~/.config/hypr/scripts/waybar-theme.sh",
+    "on-click": "~/.config/hyprgruv/scripts/waybar-theme.sh",
     "tooltip": false
   },
   "custom/power": {
     "format": "\udb81\udc25 ",
-    "on-click": "~/.config/hypr/scripts/launch-wlogout.sh",
+    "on-click": "~/.config/hyprgruv/scripts/launch-wlogout.sh",
     "tooltip": false
   },
   "custom/updates": {
-    "exec": "~/.config/hypr/scripts/updates.sh",
+    "exec": "~/.config/hyprgruv/scripts/updates.sh",
     "interval": 1800,
     "return-type": "json",
     "format": "{}",
-    "on-click": "~/.config/hypr/scripts/installupdates.sh",
+    "on-click": "~/.config/hyprgruv/scripts/installupdates.sh",
     "tooltip-format": "Install Updates"
   },
   "custom/exit": {
     "format": " \uf011  ",
-    "on-click": "~/.config/hypr/scripts/wlogout.sh",
+    "on-click": "~/.config/hyprgruv/scripts/wlogout.sh",
     "tooltip-format": "Power Menu"
   },
   "custom/media": {
@@ -214,8 +214,8 @@
   "custom/hyprshade": {
     "format": "\ue4dc",
     "tooltip-format": "Toggle Screen Shader \ud83d\udd76\ufe0f",
-    "on-click": "~/.config/hypr/scripts/hyprshade.sh",
-    "on-click-right": "sleep 0.5; ~/.config/hypr/scripts/hyprshade.sh rofi"
+    "on-click": "~/.config/hyprgruv/scripts/hyprshade.sh",
+    "on-click-right": "sleep 0.5; ~/.config/hyprgruv/scripts/hyprshade.sh rofi"
   },
   "custom/hypridle": {
     "format": " \uf023 ",
@@ -223,8 +223,8 @@
     "escape": true,
     "exec-on-event": true,
     "interval": 60,
-    "exec": "~/.config/hypr/scripts/hypridle.sh status",
-    "on-click": "~/.config/hypr/scripts/hypridle.sh toggle",
+    "exec": "~/.config/hyprgruv/scripts/hypridle.sh status",
+    "on-click": "~/.config/hyprgruv/scripts/hypridle.sh toggle",
     "on-click-right": "hyprlock"
   },
   "keyboard-state": {
@@ -242,8 +242,8 @@
   },
   "custom/cliphist": {
     "format": " \udb80\udd4c ",
-    "on-click": "~/.config/hypr/scripts/cliphist.sh",
-    "on-click-right": "~/.config/hypr/scripts/cliphist.sh d",
+    "on-click": "~/.config/hyprgruv/scripts/cliphist.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/cliphist.sh d",
     "tooltip-format": "Clipboard \nLeft: Screenshot\nRight: History"
   },
   "custom/tools": {

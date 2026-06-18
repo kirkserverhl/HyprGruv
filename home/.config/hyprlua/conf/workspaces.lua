@@ -18,7 +18,7 @@ hl.workspace_rule({ workspace = 8, monitor = "desc:LG Electronics LG TV", persis
 hl.workspace_rule({
     workspace = "special:scratchpad",
     persistent = true,
-    on_created_empty = os.getenv("HOME") .. "/.config/hypr/scripts/terminal.sh"
+    on_created_empty = os.getenv("HOME") .. "/.config/hyprgruv/scripts/terminal.sh"
 })
 
 -- "Smart gaps" examples (uncomment if desired)

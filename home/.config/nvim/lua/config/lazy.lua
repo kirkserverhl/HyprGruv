@@ -16,6 +16,15 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
+    -- startify shim must load before LazyVim extras (snacks_picker hooks alpha)
+    {
+      "goolord/alpha-nvim",
+      opts = function()
+        local dashboard = require("alpha.themes.startify")
+        dashboard.section.buttons = dashboard.section.top_buttons
+        return dashboard
+      end,
+    },
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import/override with your plugins

@@ -87,6 +87,16 @@ def install_patched_app():
 
 
 def main():
+    # Match centralized font roles for any GTK fallbacks outside CSS.
+    fonts_env = os.path.expanduser("~/.config/settings/fonts.env")
+    if os.path.isfile(fonts_env):
+        with open(fonts_env, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if line.startswith("FONT_UI="):
+                    ui = line.split("=", 1)[1].strip().strip('"')
+                    os.environ.setdefault("GTK_FONT_NAME", f"{ui} 11")
+
     if not USE_SYSTEM and install_patched_app():
         pass  # patched successfully
     else:

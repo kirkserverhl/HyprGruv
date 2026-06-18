@@ -67,8 +67,8 @@ ensure_rustup_toolchain() {
   return 1
 }
 
-source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 
 display_header "ATUIN"

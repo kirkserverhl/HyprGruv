@@ -31,9 +31,9 @@ matugen image "$IMAGE"
 
 # Refresh waybar
 pkill waybar
-$HOME/.config/hypr/scripts/launch.sh >/dev/null 2>&1 &
+$HOME/.config/hyprgruv/scripts/launch.sh >/dev/null 2>&1 &
 
-# Refresh swaync
+# Refresh dunst
 pkill dunst
 dunst >/dev/null 2>&1 &
 

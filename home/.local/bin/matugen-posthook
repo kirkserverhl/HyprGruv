@@ -52,7 +52,7 @@ if [[ ! -f "$WALLPAPER" ]]; then
 fi
 
 if [[ -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
-    EXTRACTOR="$HOME/.config/hypr/scripts/extract-good-source-colors.sh"
+    EXTRACTOR="$HOME/.config/hyprgruv/scripts/extract-good-source-colors.sh"
     SRC="#a78a9d"
     if [[ -x "$EXTRACTOR" ]]; then
         SRC=$("$EXTRACTOR" "$WALLPAPER" 1 2>/dev/null | head -1)
@@ -170,7 +170,7 @@ PYEOF
 
     # gum.env — pre-baked GUM_* exports for installer scripts / subprocesses
     GUM_ENV="${CACHE_DIR}/gum.env"
-    COLORS_SH="${HOME}/.config/hypr/scripts/colors.sh"
+    COLORS_SH="${HOME}/.config/hyprgruv/scripts/colors.sh"
     if [[ -f "$COLORS_SH" ]]; then
         {
             echo "#!/usr/bin/env bash"
@@ -473,12 +473,12 @@ fi
 # -----------------------------------------------------------------------------
 # TTY (virtual console) palette - so Ctrl+Alt+F3 etc. match the current theme
 # -----------------------------------------------------------------------------
-"$HOME/.config/hypr/scripts/tty-theme.sh" 2>/dev/null || true &
+"$HOME/.config/hyprgruv/scripts/tty-theme.sh" 2>/dev/null || true &
 
 # -----------------------------------------------------------------------------
 # Plymouth splash theme (if installed and configured)
 # This is backgrounded because it may need to elevate for /usr/share
 # -----------------------------------------------------------------------------
-"$HOME/.config/hypr/scripts/update-plymouth-theme.sh" 2>/dev/null || true &
+"$HOME/.config/hyprgruv/scripts/update-plymouth-theme.sh" 2>/dev/null || true &
 
 echo "Matugen post-hook completed for: $(basename "$WALLPAPER" 2>/dev/null || echo "$WALLPAPER")"
