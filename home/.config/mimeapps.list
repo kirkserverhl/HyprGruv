@@ -6,11 +6,11 @@ text/plain=kate.desktop;
 [Default Applications]
 application/fits=gimp.desktop;
 application/json=org.kde.kwrite.desktop;
-application/pdf=net.code-industry.masterpdfeditor5.desktop
-application/pdf=net.code-industry.masterpdfeditor5.desktop;
+application/pdf=libreoffice-writer.desktop
+application/pdf=libreoffice-writer.desktop;
 application/postscript=gimp.desktop;
-application/x-bzpdf=net.code-industry.masterpdfeditor5.desktop
-application/x-gzpdf=net.code-industry.masterpdfeditor5.desktop
+application/x-bzpdf=libreoffice-writer.desktop
+application/x-gzpdf=libreoffice-writer.desktop
 application/x-xpinstall=google-chrome-stable;
 application/xml=google-chrome-stable;
 image/avif=org.kde.gwenview.desktop;

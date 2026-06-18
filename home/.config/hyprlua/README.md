@@ -49,7 +49,7 @@ This directory contains a conversion of your original `~/.config/hypr` setup to 
 
 - All the **variant presets** (animations/01-*, decorations/*, windows/*, layouts/laptop.conf, etc.). Only the currently active ones were ported.
 - Some very obscure or duplicate keybinds and windowrules (see TODO comments in the files).
-- `hyprlock.conf`, `hypridle.conf`, `hyprpaper.conf` — these still use their own formats (not Lua yet).
+- `hyprlock.conf`, `hypridle.conf` — these still use their own formats (not Lua yet).
 - Most of the `scripts/` directory — they are referenced by absolute path from the original `~/.config/hypr/scripts`. This keeps things working without duplication.
 
 ## Important Lua API notes (from your old config)

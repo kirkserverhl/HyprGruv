@@ -111,6 +111,7 @@ menu_settings() {
         local choice
         choice=$(rofi_pick "Settings" \
             "Settings|setup|setup" \
+            "Blur|waypaper|blur" \
             "Blitz|blitz|blitz" \
             "Hyprsunset|hyprsunset|hyprsunset" \
             "Back|back|back")
@@ -119,6 +120,9 @@ menu_settings() {
         case "$choice" in
             Settings)
                 exec "$SCRIPT_DIR/settings-run-setup.sh"
+                ;;
+            Blur)
+                exec "$SCRIPT_DIR/settings-blur.sh"
                 ;;
             Blitz)
                 exec "$SCRIPT_DIR/settings-blitz.sh"

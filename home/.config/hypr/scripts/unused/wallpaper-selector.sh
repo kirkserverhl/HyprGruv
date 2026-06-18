@@ -62,7 +62,7 @@ for wp in "${wallpapers[@]}"; do
 done
 
 # Show rofi with icons (matugen-themed, 4x3 minimal grid)
-selected=$(echo -en "$menu_options" | rofi -dmenu -i -p "Wallpaper" -show-icons -theme ~/.local/share/rofi/themes/wallpapers.rasi)
+selected=$(echo -en "$menu_options" | rofi -dmenu -i -p "Wallpaper" -show-icons -theme "$HOME/legacy/rofi/share-themes/wallpapers.rasi")
 
 if [ -z "$selected" ]; then
     exit 0

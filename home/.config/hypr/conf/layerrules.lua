@@ -1,6 +1,9 @@
 -- conf/layerrules.lua
 -- Real-time layer blur rules + explicit stacking order.
 --
+-- Runtime tuning: ~/.config/hypr/scripts/apply-hypr-blur.sh (blur-tuner / hyprgruv-settings)
+-- updates these named rules via hyprctl eval after load.
+--
 -- Desired layer hierarchy (top to bottom):
 --   1. Wlogout + Hyprlock (via hypridle)   → absolute top ("top top layer")
 --   2. Waypaper + Rofi app launcher       → below the above two
@@ -8,60 +11,50 @@
 --
 -- Goal: Stop relying on pre-generated blurred wallpaper images.
 -- Instead, let Hyprland blur whatever is behind these tools when they activate.
+--
+-- Note: Hyprland 0.55 layer rules do not support per-layer blur size/passes.
+-- Layer blur strength follows decoration.blur; ignore_alpha controls visibility.
 
 -- ============================================
 -- WLOGOUT (power/logout menu)
 -- ============================================
--- When wlogout appears, blur everything behind it.
 hl.layer_rule({
     name = "wlogout-blur",
     match = { namespace = "^wlogout$" },
     blur = true,
     blur_popups = true,
-    ignore_alpha = 0.0001,   -- very low = lets the strong compositor blur show through
+    ignore_alpha = 0.0001,
     dim_around = true,
-    xray = true,             -- often improves blur quality behind overlays
-    order = 200,             -- absolute top layer (above hyprlock)
-
+    xray = true,
+    order = 200,
 })
 
 -- ============================================
 -- HYPRLOCK (triggered by hypridle)
 -- ============================================
--- When hypridle locks the session, hyprlock takes over.
--- This rule ensures the desktop/wallpaper behind the lock UI is blurred.
---
--- Note: hyprlock also has its own `blur_passes` in hyprlock.conf.
--- Combining compositor layer blur + hyprlock internal blur gives a nice effect.
 hl.layer_rule({
     name = "hyprlock-blur",
     match = { namespace = "^hyprlock$" },
     blur = true,
     blur_popups = true,
-    order = 150,             -- very high, just below wlogout (200)
+    ignore_alpha = 0.05,
+    order = 150,
 })
-
--- (Already using ^hyprlock$ above for precision)
 
 -- ============================================
 -- ROFI (application launcher / menus) + WAYPAPER
 -- ============================================
--- - Below wlogout (200) and hyprlock (150)
--- - Above normal layers (waybar, notifications, etc.)
--- - Minimal/light blur behind it (not the heavy security blur used for wlogout)
 hl.layer_rule({
+    name = "rofi-blur",
     match = { namespace = "^rofi$" },
     blur = true,
     blur_popups = true,
-    ignore_alpha = 0.10,     -- match fuzzel: semi-transparent surface + live blur
-    order = 50,              -- sits between normal layers and wlogout
+    ignore_alpha = 0.10,
+    order = 50,
 })
 
--- Same blur strength as fuzzel / waypaper (matches yazi-in-kitty look)
-hl.exec_cmd("hyprctl keyword layerrule 'blurpasses 4, ^rofi$'")
-hl.exec_cmd("hyprctl keyword layerrule 'blursize 8, ^rofi$'")
-
 hl.layer_rule({
+    name = "waypaper-blur",
     match = { namespace = "^waypaper$" },
     blur = true,
     blur_popups = true,
@@ -69,22 +62,15 @@ hl.layer_rule({
     order = 50,
 })
 
--- Force the same blur strength as the global decoration blur (so it matches yazi-in-kitty look)
-hl.exec_cmd("hyprctl keyword layerrule 'blurpasses 4, ^waypaper$'")
-hl.exec_cmd("hyprctl keyword layerrule 'blursize 8, ^waypaper$'")
-
--- Fuzzel (app launcher, Super+Space) - match the blur/transparency of yazi running in kitty
+-- Fuzzel (app launcher, Super+Space)
 hl.layer_rule({
+    name = "fuzzel-blur",
     match = { namespace = "^fuzzel$" },
     blur = true,
     blur_popups = true,
     ignore_alpha = 0.10,
     order = 50,
 })
-
--- Use the exact same blur strength as the global decoration blur for consistency with yazi-in-kitty
-hl.exec_cmd("hyprctl keyword layerrule 'blurpasses 4, ^fuzzel$'")
-hl.exec_cmd("hyprctl keyword layerrule 'blursize 8, ^fuzzel$'")
 
 -- ============================================
 -- Future / Nice to have during overhaul

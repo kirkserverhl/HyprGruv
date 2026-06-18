@@ -21,10 +21,10 @@ WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
 # === Choose your preferred look ===
 # 3 rows × 4 columns image grid using matugen colors + blurred wallpaper background
-THEME="$HOME/.config/rofi/themes/wallSelect.rasi"
+THEME="$HOME/legacy/rofi/themes/wallSelect.rasi"
 
 # Alternative style:
-# THEME="$HOME/.config/rofi/config-wallpaper.rasi"
+# THEME="$HOME/legacy/rofi/config-wallpaper.rasi"
 
 WAYPAPER_CMD="${HOME}/.local/bin/waypaper"
 if [ ! -x "$WAYPAPER_CMD" ]; then

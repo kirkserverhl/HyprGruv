@@ -55,16 +55,6 @@ run = 'piper -- bat -p --color=always "$1"'
 
 Note that certain distributions might use a different name than `bat`, like Debian and Ubuntu use `batcat`, so please adjust accordingly.
 
-### Preview Markdown with [`glow`](https://github.com/charmbracelet/glow)
-
-```toml
-[[plugin.prepend_previewers]]
-url = "*.md"
-run = 'piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'
-```
-
-Note that there's [a bug in Glow v2.0](https://github.com/charmbracelet/glow/issues/440#issuecomment-2307992634) that causes slight color differences between tty and non-tty environments.
-
 ### Preview directory tree with [`eza`](https://github.com/eza-community/eza)
 
 ```toml

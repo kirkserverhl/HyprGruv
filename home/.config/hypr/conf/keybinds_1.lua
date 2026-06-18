@@ -67,19 +67,19 @@ hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh k"))
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mod     .. " + Return", hl.dsp.exec_cmd("ghostty"))
 
--- Browsers: Super+B = Brave, Alt+B = Chrome, Super+Alt+B = Firefox (Ctrl+B left for tmux)
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave"))
+-- Browsers: Super+B = default (~/.config/settings/browser.sh), Alt+B = Chrome, Super+Alt+B = Firefox
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh"))
 hl.bind(mod     .. " + B", hl.dsp.exec_cmd("google-chrome-stable"))
 hl.bind(mainMod .. " + " .. mod .. " + B", hl.dsp.exec_cmd("firefox"))
 
-hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd("kitty yazi"))
-hl.bind(mainMod .. " + F", hl.dsp.exec_cmd("dolphin"))
+hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh yazi"))
+hl.bind(mainMod .. " + F", hl.dsp.exec_cmd(SCRIPTS .. "/filemanager.sh"))
 
-hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("kitty nvim"))
-hl.bind(mod     .. " + H", hl.dsp.exec_cmd("kitty htop"))
-hl.bind(mod     .. " + T", hl.dsp.exec_cmd("kitty bpytop"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh"))
+hl.bind(mod     .. " + H", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh htop"))
+hl.bind(mod     .. " + T", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh bpytop"))
 
-hl.bind(mainMod .. " + " .. mod .. " + P", hl.dsp.exec_cmd("kitty pacseek"))
+hl.bind(mainMod .. " + " .. mod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh pacseek"))
 hl.bind(mod     .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind("CTRL + P",        hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("hypremoji -s ~/.config/hypremoji/matugen.css"))
@@ -107,10 +107,6 @@ hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special" })
 -- quickshot.sh = instant region → clipboard (fast path)
 hl.bind(mod     .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"))
-
--- Merchant OCR (iAccess profile screenshots → formatted clipboard block)
--- SUPER + SHIFT + M : region select → OCR → pretty merchant details copied
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd('grim -g "$(slurp)" /tmp/merchant.png && ~/bin/merchant-ocr.py /tmp/merchant.png'))
 
 -- Clip history
 hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))

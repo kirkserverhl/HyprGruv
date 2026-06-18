@@ -26,7 +26,7 @@ hl.env("LIBVA_DRIVER_NAME", "radeonsi")
 local SCRIPTS = os.getenv("HOME") .. "/.config/hypr/scripts"
 hl.env("TERMINAL", SCRIPTS .. "/terminal.sh")
 hl.env("BROWSER", SCRIPTS .. "/browser.sh")
-hl.env("FILEMANAGER", SCRIPTS .. "/filemanagers.sh")  -- note: original had typo "filemanagers.sh"
+hl.env("FILEMANAGER", SCRIPTS .. "/filemanager.sh")
 
 -- Misc from other places
 hl.env("XDG_MENU_PREFIX", "plasma-")

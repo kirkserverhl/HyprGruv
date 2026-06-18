@@ -79,8 +79,7 @@ rofi_cfg=""
 for cand in \
     "$HOME/.config/rofi/config-themes.rasi" \
     "$HOME/.config/rofi/config-compact.rasi" \
-    "$HOME/.config/rofi/config-short.rasi" \
-    "$HOME/.config/rofi/config.rasi"
+    "$HOME/.config/rofi/config-short.rasi"
 do
     [[ -f "$cand" ]] && { rofi_cfg="$cand"; break; }
 done

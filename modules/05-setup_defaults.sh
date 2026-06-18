@@ -9,8 +9,11 @@ HYPR_DIR="${HYPRGRUV_DIR:-$HOME/.hyprgruv}"
 # --- Load your existing helpers for consistent look ---
 source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
+command -v gum_apply_matugen_theme >/dev/null 2>&1 && gum_apply_matugen_theme 2>/dev/null || true
 
 display_header "Defaults"
+
+SETTINGS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/settings"
 
 # Ensure gum is present (05 can be run standalone or after SKIP_PACKAGES)
 if ! command -v gum >/dev/null 2>&1; then
@@ -22,13 +25,33 @@ if ! command -v gum >/dev/null 2>&1; then
     fi
 fi
 
-# Style header
-gum style --foreground 212 --border double --align center --width 50 --margin "1 2" --padding "2 4" "Set Default Programs" 2>/dev/null || echo "=== Set Default Programs ==="
+# Style header (matugen primary)
+gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --border double --border-foreground "${COLOR_OUTLINE:-#6c7086}" --align center --width 50 --margin "1 2" --padding "2 4" "Set Default Programs" 2>/dev/null || echo "=== Set Default Programs ==="
 
-# Supported mappings (cmd:pkg)
+# Supported mappings (choice:package for install)
 declare -A terms=(["kitty"]="kitty" ["alacritty"]="alacritty" ["wezterm"]="wezterm" ["foot"]="foot")
 declare -A browsers=(["brave"]="brave-bin" ["firefox"]="firefox" ["chromium"]="chromium" ["chrome"]="google-chrome")
+declare -A browser_cmds=(["brave"]="brave" ["firefox"]="firefox" ["chromium"]="chromium" ["chrome"]="google-chrome-stable")
 declare -A editors=(["nvim"]="neovim" ["vim"]="vim" ["nano"]="nano")
+
+write_setting() {
+    local name="$1"
+    local value="$2"
+    mkdir -p "$SETTINGS_DIR"
+    printf '%s\n' "$value" >"$SETTINGS_DIR/${name}.sh"
+}
+
+remove_legacy_defaults() {
+    local dir
+    for dir in \
+        "$HYPR_DIR/defaults" \
+        "$HYPR_DIR/modules/defaults" \
+        "$HOME/defaults"; do
+        [[ -d "$dir" ]] || continue
+        rm -f "$dir/terminal.sh" "$dir/browser.sh" "$dir/editor.sh"
+        rmdir "$dir" 2>/dev/null || true
+    done
+}
 
 # Install function (pacman for official, yay for AUR if available)
 install_pkg() {
@@ -54,52 +77,38 @@ if [ "${terms[$TERMINAL]}" ] && ! command -v "$TERMINAL" >/dev/null; then
 fi
 
 # Choose browser (supported + other)
-BROWSER=$(gum choose "brave" "firefox" "chromium" "chrome" "other")
-if [ "$BROWSER" = "other" ]; then
-    BROWSER=$(gum input --placeholder "Enter browser command")
+BROWSER_CHOICE=$(gum choose "brave" "firefox" "chromium" "chrome" "other")
+if [ "$BROWSER_CHOICE" = "other" ]; then
+    BROWSER_CMD=$(gum input --placeholder "Enter browser command")
+else
+    BROWSER_CMD="${browser_cmds[$BROWSER_CHOICE]}"
 fi
 
 # Install if supported and missing
-if [ "${browsers[$BROWSER]}" ] && ! command -v "$BROWSER" >/dev/null; then
-    gum confirm "Install $BROWSER?" && install_pkg "${browsers[$BROWSER]}"
+if [ "${browsers[$BROWSER_CHOICE]}" ] && ! command -v "$BROWSER_CMD" >/dev/null; then
+    gum confirm "Install $BROWSER_CHOICE?" && install_pkg "${browsers[$BROWSER_CHOICE]}"
 fi
 
 # Choose editor (supported + other)
 EDITOR_CHOICE=$(gum choose "nvim" "vim" "nano" "other")
 if [ "$EDITOR_CHOICE" = "other" ]; then
-    EDITOR_CHOICE=$(gum input --placeholder "Enter editor command")
+    EDITOR_CMD=$(gum input --placeholder "Enter editor command")
+else
+    EDITOR_CMD="$EDITOR_CHOICE"
 fi
 
 # Install if supported and missing
-if [ "${editors[$EDITOR_CHOICE]}" ] && ! command -v "$EDITOR_CHOICE" >/dev/null; then
+if [ "${editors[$EDITOR_CHOICE]}" ] && ! command -v "$EDITOR_CMD" >/dev/null; then
     gum confirm "Install $EDITOR_CHOICE?" && install_pkg "${editors[$EDITOR_CHOICE]}"
 fi
 
-# Create defaults dir
-mkdir -p defaults
+write_setting terminal "$TERMINAL"
+write_setting browser "$BROWSER_CMD"
+write_setting editor "$EDITOR_CMD"
+remove_legacy_defaults
 
-# Write terminal.sh
-cat >defaults/terminal.sh <<EOF
-#!/bin/sh
-echo "$TERMINAL"
-EOF
-chmod +x defaults/terminal.sh
-
-# Write browser.sh
-cat >defaults/browser.sh <<EOF
-#!/bin/sh
-echo "$BROWSER"
-EOF
-chmod +x defaults/browser.sh
-
-# Write editor.sh
-cat >defaults/editor.sh <<EOF
-#!/bin/sh
-echo "$EDITOR_CHOICE"
-EOF
-chmod +x defaults/editor.sh
-
-gum style --foreground green "Defaults set: Terminal=$TERMINAL, Browser=$BROWSER, Editor=$EDITOR_CHOICE"
+gum style --foreground "${COLOR_SECONDARY:-${COLOR_PRIMARY:-#a6e3a1}}" "Defaults saved to $SETTINGS_DIR"
+gum style --foreground "${COLOR_ON_SURFACE:-#cdd6f4}" "Terminal=$TERMINAL, Browser=$BROWSER_CMD, Editor=$EDITOR_CMD"
 
 if declare -F mark_completed >/dev/null 2>&1; then
     mark_completed "Setup defaults"

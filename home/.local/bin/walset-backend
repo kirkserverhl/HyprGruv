@@ -15,9 +15,10 @@ IMAGE="$1"
 # Send notification to the user
 notify-send "Changing Theme" "Applying new wallpaper and updating colors, please wait until confirmation..."
 
-# Set wallpaper
-#swww img "$IMAGE" --transition-type center
-hyprctl hyprpaper wallpaper "[],$IMAGE"
+# Set wallpaper (awww — see ~/.config/settings/wallpaper-engine.sh)
+if command -v awww >/dev/null 2>&1; then
+    awww img "$IMAGE" >/dev/null 2>&1 || true
+fi
 
 # Generate pywal colors
 wal -i "$IMAGE" -n -s -t -e

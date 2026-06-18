@@ -71,20 +71,69 @@ run_command() {
 export HYPR_DIR ASSET_DIR BACKUP_DIR
 
 
-# ============== Matugen + Gum Styling (Added for consistency) ==============
+# ============== Matugen + Gum Styling ==============
 
-# Source matugen colors if available
-if [ -f ~/.cache/matugen/colors.sh ]; then
-    source ~/.cache/matugen/colors.sh
-elif [ -f ~/.config/hypr/colors.conf ]; then
-    source ~/.config/hypr/colors.conf
+_hyprgruv_load_matugen_colors() {
+    local colors_sh="${HOME}/.config/hypr/scripts/colors.sh"
+    if [[ -f "$colors_sh" ]]; then
+        # shellcheck source=/dev/null
+        source "$colors_sh" 2>/dev/null && return 0
+    fi
+    if [[ -f "${HOME}/.cache/matugen/colors.sh" ]]; then
+        # shellcheck source=/dev/null
+        set -a
+        source "${HOME}/.cache/matugen/colors.sh" 2>/dev/null || true
+        set +a
+        return 0
+    fi
+    if [[ -f "${HOME}/.config/hypr/colors.conf" ]]; then
+        # shellcheck source=/dev/null
+        source "${HOME}/.config/hypr/colors.conf" 2>/dev/null && return 0
+    fi
+    return 1
+}
+
+_hyprgruv_load_matugen_colors || true
+
+# Fallback semantic colors (matugen cache may omit a few aliases)
+: "${COLOR_PRIMARY:="#89b4fa"}"
+: "${COLOR_ON_PRIMARY:="#1e1e2e"}"
+: "${COLOR_SECONDARY:="#89b4fa"}"
+: "${COLOR_SURFACE:="#1e1e2e"}"
+: "${COLOR_ON_SURFACE:="#cdd6f4"}"
+: "${COLOR_SURFACE_CONTAINER:="#252535"}"
+: "${COLOR_ON_SURFACE_VARIANT:="#bac2de"}"
+: "${COLOR_SUCCESS:="${COLOR_TERTIARY:-#a6e3a1}"}"
+: "${COLOR_ERROR:="${COLOR_ERROR:-#f38ba8}"}"
+: "${COLOR_TEXT:="${COLOR_TEXT:-${COLOR_ON_SURFACE:-#cdd6f4}}"}"
+
+# gum_apply_matugen_theme lives in colors.sh; provide a fallback if only the cache was sourced
+if ! declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
+    gum_apply_matugen_theme() {
+        export GUM_CONFIRM_PROMPT="? "
+        export GUM_CONFIRM_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+        export GUM_CONFIRM_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+        export GUM_CONFIRM_UNSELECTED_BACKGROUND="${COLOR_SURFACE_CONTAINER}"
+        export GUM_CONFIRM_UNSELECTED_FOREGROUND="${COLOR_ON_SURFACE}"
+        export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
+        export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_SPIN_SPINNER_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_SPIN_TITLE_FOREGROUND="${COLOR_ON_SURFACE}"
+        export GUM_TABLE_HEADER_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_PAGER_FOREGROUND="${COLOR_ON_SURFACE}"
+    }
 fi
 
-# Fallback colors
-: "${COLOR_PRIMARY:="#89b4fa"}"
-: "${COLOR_SUCCESS:="#a6e3a1"}"
-: "${COLOR_ERROR:="#f38ba8"}"
-: "${COLOR_TEXT:="#cdd6f4"}"
+if command -v gum >/dev/null 2>&1; then
+    if declare -F load_matugen_colors >/dev/null 2>&1; then
+        load_matugen_colors
+    fi
+    gum_apply_matugen_theme
+fi
 
 # Enhanced print functions using gum (for modern scripts)
 print_section() {

@@ -332,7 +332,7 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
     log_success "VM guest integration packages + services processed"
 fi
 
-ESSENTIAL_CHECK=(brave-bin hyprshot qt5-declarative wlogout xsettingsd displaylink masterpdfeditor timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout aylurs-gtk-shell-git cbonsai-git aphototoollibre dipc hypremoji)
+ESSENTIAL_CHECK=(brave-bin hyprshot qt5-declarative wlogout xsettingsd displaylink timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout aylurs-gtk-shell-git cbonsai-git aphototoollibre dipc hypremoji)
 # (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do

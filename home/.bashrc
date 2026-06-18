@@ -8,11 +8,14 @@
 # =====================================================
 # Core Environment
 # =====================================================
-export EDITOR="nvim"
-export SUDO_EDITOR="$EDITOR"
 export PATH="$HOME/bin:$HOME/scripts:$HOME/.local/bin:$PATH"
 export QT_QPA_PLATFORMTHEME=qt6ct
-export TERMINAL=kitty
+# shellcheck source=/dev/null
+[[ -f "$HOME/.config/settings/load-defaults.sh" ]] && source "$HOME/.config/settings/load-defaults.sh"
+: "${EDITOR:=nvim}"
+: "${SUDO_EDITOR:=$EDITOR}"
+: "${TERMINAL:=kitty}"
+: "${BROWSER:=firefox}"
 
 if command -v bat >/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"

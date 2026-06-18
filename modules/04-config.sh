@@ -24,17 +24,8 @@ source "$HYPR_DIR/lib/state.sh"
 
 display_header "Config"
 
-# ------------------------------------------------------------
-# Optional gum theming (colors)
-# ------------------------------------------------------------
+# gum theming comes from common.sh → colors.sh / ~/.cache/matugen/colors.sh
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
-export GUM_CONFIRM_SELECTED_BACKGROUND="#458588"
-export GUM_CONFIRM_SELECTED_FOREGROUND="#0f1010"
-export GUM_CONFIRM_UNSELECTED_BACKGROUND="#0f1010"
-export GUM_CONFIRM_UNSELECTED_FOREGROUND="#282828"
-export GUM_INPUT_CURSOR_FOREGROUND="#282828"
-export GUM_INPUT_PROMPT_FOREGROUND="#8FC17B"
-export GUM_SPIN_SPINNER_FOREGROUND="#749D91"
 
 # ------------------------------------------------------------
 # Helpers: gum fallbacks + printing

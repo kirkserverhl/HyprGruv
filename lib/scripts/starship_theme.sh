@@ -4,12 +4,13 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Resolve repo root from lib/scripts/
-HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # --- Load your existing helpers for consistent look ---
 source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
-"
+command -v gum_apply_matugen_theme >/dev/null 2>&1 && gum_apply_matugen_theme 2>/dev/null || true
+
 REPO_THEMES_DIR="$HYPR_DIR/home/.config/starship"
 USER_THEMES_DIR="$HOME/.config/starship"
 STARSHIP_CONFIG="$HOME/.config/starship.toml"

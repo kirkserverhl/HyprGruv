@@ -60,7 +60,7 @@ fi
 
 # Build menu with star on current
 menu=$(printf "%s\n" "${LAYOUTS[@]}" | awk -v c="$current" '{print ($0==c?"| ":"  ")$0}')
-chosen=$(echo "$menu" | rofi -dmenu -i -p "Select Layout" -theme ~/.local/share/rofi/themes/minimal.rasi | sed 's/^| //; s/^  //')
+chosen=$(echo "$menu" | rofi -dmenu -i -p "Select Layout" -config "$HOME/.config/rofi/config-compact.rasi" | sed 's/^| //; s/^  //')
 [[ -z "${chosen:-}" ]] && exit 0
 
 cfg_src=""

@@ -133,9 +133,19 @@ echo -e "${CYAN}-> Applying wlogout theme...${NC}"
 cp "$THEME_DIR/wlogout/colors.css" "$HOME/.config/wlogout/colors/colors.css" >/dev/null 2>&1
 echo ""
 
-# Rofi theme
+# Rofi colors — active path: ~/.config/rofi/colors.rasi (imported by shared/standard.rasi)
 echo -e "${CYAN}-> Applying Rofi theme...${NC}"
-cp "$THEME_DIR/rofi/colors.rasi" "$HOME/.local/share/rofi/colors/colors.rasi" >/dev/null 2>&1
+if [[ -f "$THEME_DIR/rofi/colors.rasi" ]]; then
+    rofi_src=""
+    if grep -q '@theme' "$THEME_DIR/rofi/colors.rasi" 2>/dev/null; then
+        rofi_src=$(grep '@theme' "$THEME_DIR/rofi/colors.rasi" | head -1 | sed -E 's/.*"([^"]+)".*/\1/' | sed "s|^~|$HOME|")
+    fi
+    if [[ -n "$rofi_src" && -f "$rofi_src" ]]; then
+        cp "$rofi_src" "$HOME/.config/rofi/colors.rasi" >/dev/null 2>&1
+    else
+        cp "$THEME_DIR/rofi/colors.rasi" "$HOME/.config/rofi/colors.rasi" >/dev/null 2>&1
+    fi
+fi
 echo ""
 
 # NvChad theme

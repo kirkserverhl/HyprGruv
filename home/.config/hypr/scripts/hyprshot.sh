@@ -25,8 +25,8 @@ source ~/.config/hypr/scripts/screenshot-filename.sh
 # Screenshot Folder
 source ~/.config/hypr/scripts/screenshot-folder.sh
 
-# Screenshot Editor (if you still want to use it)
-export EDITOR="$(cat ~/.config/hypr/scripts/screenshot-editor.sh)" # renamed for clarity
+# Screenshot Editor — uses ~/.config/settings/editor.sh
+export EDITOR="$("$HOME/.config/hypr/scripts/editor.sh" --print)"
 
 # Options
 option_1="Immediate"

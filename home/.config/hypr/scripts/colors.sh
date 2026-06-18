@@ -21,7 +21,7 @@
 #
 # This file is safe to source multiple times.
 
-set -euo pipefail
+# Library file — avoid strict errexit here (breaks callers that source us).
 
 # -----------------------------------------------------------------------------
 # Paths

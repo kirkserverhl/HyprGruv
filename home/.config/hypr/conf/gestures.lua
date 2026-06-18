@@ -7,7 +7,7 @@ hl.gesture({
     fingers = 4,
     direction = "down",
     action = function()
-        hl.exec_cmd("kitty")
+        hl.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/terminal.sh")
     end
 })
 

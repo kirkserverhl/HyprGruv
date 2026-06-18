@@ -2,37 +2,27 @@
 # terminal.sh — launch the user's preferred terminal (Super+Return, scratchpad, etc.)
 set -euo pipefail
 
-SETTINGS_FILE="${HOME}/.config/settings/terminal.sh"
-DEFAULTS_FILE="${HYPRGRUV_DIR:-${HOME}/.hyprgruv}/defaults/terminal.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 resolve_terminal() {
-  local term=""
+    local term
+    term="$("$SCRIPT_DIR/read-setting.sh" terminal kitty)"
 
-  if [[ -f "$SETTINGS_FILE" ]]; then
-    term="$(tr -d '[:space:]' < "$SETTINGS_FILE")"
-  fi
+    for candidate in "$term" ghostty kitty alacritty foot wezterm; do
+        if command -v "$candidate" >/dev/null 2>&1; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
 
-  if [[ -z "$term" && -x "$DEFAULTS_FILE" ]]; then
-    term="$("$DEFAULTS_FILE" 2>/dev/null || true)"
-  fi
-
-  [[ -n "$term" ]] || term="kitty"
-
-  for candidate in "$term" ghostty alacritty foot wezterm; do
-    if command -v "$candidate" >/dev/null 2>&1; then
-      echo "$candidate"
-      return 0
-    fi
-  done
-
-  echo "xterm"
+    printf '%s\n' "xterm"
 }
 
 TERM_CMD="$(resolve_terminal)"
 
 if [[ "${1:-}" == "--print" ]]; then
-  echo "$TERM_CMD"
-  exit 0
+    printf '%s\n' "$TERM_CMD"
+    exit 0
 fi
 
 exec "$TERM_CMD" "$@"

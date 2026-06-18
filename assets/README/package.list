@@ -9,4 +9,4 @@
 # Sync:     bash ~/.hyprgruv/sync-packages.sh
 #
 # This file is kept only as a historical reference. Many entries here are
-# no longer installed by Hyprgruv (e.g. hyprpaper, dunst, dolphin, grimblast-git).
+# no longer installed by Hyprgruv (e.g. dunst, dolphin, grimblast-git).

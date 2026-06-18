@@ -79,6 +79,9 @@ hl.on("hyprland.start", function()
 	-- Dunst
 	hl.exec_cmd("dunst")
 
+	-- Saved blur profile (overrides decorations.lua defaults after load)
+	hl.exec_cmd(SCRIPTS .. "/apply-hypr-blur.sh")
+
 	-- Bottom-corner hot zones → hymission Mission Control
 	start_hotcorners()
 
@@ -99,6 +102,7 @@ hl.exec_cmd("hyprsunset --temperature 9000")
 -- Non-once (run on every reload) items from original
 hl.on("config.reloaded", function()
 	hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")
+	hl.exec_cmd(SCRIPTS .. "/apply-hypr-blur.sh")
 end)
 
 -- One-time things that were plain "exec" (not exec-once) in original main file
