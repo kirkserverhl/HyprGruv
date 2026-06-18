@@ -21,6 +21,11 @@ hyprpm_quiet() {
     [[ "${HYPRPM_QUIET:-0}" == "1" || "${1:-}" == "--quiet" ]]
 }
 
+# hyprpm needs a live Hyprland socket for version/hash and state writes.
+hyprland_session_ready() {
+    [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]] && hyprctl version >/dev/null 2>&1
+}
+
 ensure_hyprpm() {
     if command -v hyprpm >/dev/null 2>&1; then
         return 0
@@ -92,6 +97,21 @@ main() {
     fi
 
     ensure_hyprpm
+
+    if ! hyprland_session_ready; then
+        if verify_plugins; then
+            if ! hyprpm_quiet "${1:-}"; then
+                log_success "Hyprpm plugins already built (will load on Hyprland login)"
+            fi
+            return 0
+        fi
+        if ! hyprpm_quiet "${1:-}"; then
+            log_warning "Hyprland is not running — cannot build hyprpm plugins during install."
+            log_status "Plugins will be built on your first Hyprland login (hyprpm-reload.sh)."
+        fi
+        return 0
+    fi
+
     ensure_hyprpm_cache_owned
     ensure_build_deps
 
@@ -108,7 +128,7 @@ main() {
 
     build_plugins
 
-    if verify_plugins; then
+    if ! verify_plugins; then
         log_error "Plugin build verification failed — check hyprpm output above"
         return 1
     fi
