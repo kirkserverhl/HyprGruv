@@ -18,6 +18,10 @@ IFS=$'\n\t'
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 MANIFEST="$HYPR_DIR/lib/packages/manifest.sh"
 MANIFEST_LIB="$HYPR_DIR/lib/packages/manifest-lib.sh"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv"
+LOG_DIR="$STATE_DIR/logs"
+PIDFILE="$STATE_DIR/sync-packages.pid"
+mkdir -p "$LOG_DIR"
 
 # shellcheck source=/dev/null
 [[ -f "$HYPR_DIR/lib/common.sh" ]] && source "$HYPR_DIR/lib/common.sh"
@@ -49,7 +53,14 @@ Sync options:
   --skip-new             Skip new.list
   --include-gpu          Include GPU driver packages
   --include-vm           Include VM guest packages
+  --yes, -y              Skip confirmation prompt
+  --foreground           Run installs in this shell (blocks until done)
+  --background           Run installs in background after confirmation
   --help                 Show this help
+
+Interactive sync (default): preview missing packages, confirm, then
+install in the background so you can close the terminal. Logs live in
+~/.local/state/hyprgruv/logs/
 
 Examples:
   ~/.hyprgruv/sync-packages.sh add helix --install
@@ -194,14 +205,23 @@ NEW_ONLY=0
 SKIP_NEW=0
 INCLUDE_GPU=0
 INCLUDE_VM=0
+YES=0
+FOREGROUND=0
+BACKGROUND=0
+EXECUTE=0
+SYNC_ARGS=()
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-    --dry-run) DRY_RUN=1 ;;
-    --new-only) NEW_ONLY=1 ;;
-    --skip-new) SKIP_NEW=1 ;;
-    --include-gpu) INCLUDE_GPU=1 ;;
-    --include-vm) INCLUDE_VM=1 ;;
+    --dry-run) DRY_RUN=1; SYNC_ARGS+=(--dry-run) ;;
+    --new-only) NEW_ONLY=1; SYNC_ARGS+=(--new-only) ;;
+    --skip-new) SKIP_NEW=1; SYNC_ARGS+=(--skip-new) ;;
+    --include-gpu) INCLUDE_GPU=1; SYNC_ARGS+=(--include-gpu) ;;
+    --include-vm) INCLUDE_VM=1; SYNC_ARGS+=(--include-vm) ;;
+    --yes | -y) YES=1; SYNC_ARGS+=(--yes) ;;
+    --foreground) FOREGROUND=1; SYNC_ARGS+=(--foreground) ;;
+    --background) BACKGROUND=1; SYNC_ARGS+=(--background) ;;
+    --execute) EXECUTE=1 ;;
     --help | -h)
         usage
         exit 0
@@ -216,6 +236,106 @@ while [[ $# -gt 0 ]]; do
 done
 
 say() { echo -e "$*"; }
+
+filter_missing_pkgs() {
+    local pkg missing=()
+    for pkg in "$@"; do
+        pkg_installed "$pkg" || missing+=("$pkg")
+    done
+    printf '%s\n' "${missing[@]}"
+}
+
+confirm_sync() {
+    local prompt="$1"
+    if command -v gum &>/dev/null; then
+        declare -F gum_apply_matugen_theme &>/dev/null && gum_apply_matugen_theme
+        gum confirm "$prompt"
+        return $?
+    fi
+    local ans
+    read -rp "$prompt [y/N]: " ans
+    [[ "$ans" =~ ^[Yy]$ ]]
+}
+
+want_background() {
+    [[ $BACKGROUND -eq 1 ]] && return 0
+    [[ $FOREGROUND -eq 1 ]] && return 1
+    [[ -t 0 && -t 1 ]]
+}
+
+sync_already_running() {
+    local pid
+    [[ -f "$PIDFILE" ]] || return 1
+    pid="$(<"$PIDFILE")"
+    kill -0 "$pid" 2>/dev/null
+}
+
+prime_sudo_for_background() {
+    log_status "Caching sudo credentials for background install…"
+    sudo -v || {
+        log_error "sudo authentication failed — cannot start background sync"
+        return 1
+    }
+    sudo pacman -Sy --noconfirm || log_warning "pacman -Sy reported issues (continuing)"
+}
+
+spawn_background_sync() {
+    local logfile pid
+    logfile="$LOG_DIR/sync-packages_$(date +%Y%m%d_%H%M%S).log"
+
+    if sync_already_running; then
+        log_warning "Package sync already running (PID $(<"$PIDFILE"))"
+        log_status "Tail the log: tail -f $LOG_DIR/sync-packages_*.log"
+        return 0
+    fi
+
+    nohup bash "${BASH_SOURCE[0]}" --execute "${SYNC_ARGS[@]}" >"$logfile" 2>&1 &
+    pid=$!
+    printf '%s\n' "$pid" >"$PIDFILE"
+
+    log_success "Package sync started in background (PID $pid)"
+    say "  Log: $logfile"
+    say "  Follow: tail -f $logfile"
+    if command -v notify-send &>/dev/null; then
+        notify-send -a "Hyprgruv" -i "system-software-update" \
+            "Package sync started" \
+            "Installing packages in the background. Log: $logfile"
+    fi
+}
+
+notify_sync_complete() {
+    local status="$1" detail="$2"
+    if ! command -v notify-send &>/dev/null; then
+        return 0
+    fi
+    if [[ "$status" == ok ]]; then
+        notify-send -a "Hyprgruv" -i "emblem-default" \
+            "Package sync complete" "$detail"
+    else
+        notify-send -a "Hyprgruv" -i "dialog-warning" \
+            "Package sync finished with issues" "$detail"
+    fi
+}
+
+show_sync_preview() {
+    local pkg
+    say "Packages to install:"
+    if ((${#PACMAN_MISSING[@]})); then
+        say ""
+        say "  Official (${#PACMAN_MISSING[@]}):"
+        for pkg in "${PACMAN_MISSING[@]}"; do
+            say "    • $pkg"
+        done
+    fi
+    if ((${#AUR_MISSING[@]})); then
+        say ""
+        say "  AUR (${#AUR_MISSING[@]}):"
+        for pkg in "${AUR_MISSING[@]}"; do
+            say "    • $pkg"
+        done
+    fi
+    say ""
+}
 
 run_cmd() {
     if [[ $DRY_RUN -eq 1 ]]; then
@@ -428,14 +548,61 @@ if ((${#_vm[@]})); then
     mapfile -t PACMAN_INSTALL < <(dedupe_sorted "${PACMAN_INSTALL[@]}" "${_vm[@]}")
 fi
 
-# --- Run ---
+# --- Preview / confirm / dispatch ---
+mapfile -t PACMAN_MISSING < <(filter_missing_pkgs "${PACMAN_INSTALL[@]}")
+mapfile -t AUR_MISSING < <(filter_missing_pkgs "${AUR_INSTALL[@]}")
+
 display_header "Package Sync" 2>/dev/null || say ""
 say "Manifest: $MANIFEST"
 say "Official: ${#PACMAN_INSTALL[@]}  |  AUR: ${#AUR_INSTALL[@]}  |  New (staging): ${#NEW_PKGS[@]}"
+say "Missing:  ${#PACMAN_MISSING[@]} official  |  ${#AUR_MISSING[@]} AUR"
 [[ $DRY_RUN -eq 1 ]] && log_warning "Dry-run mode — no packages will be installed"
 say ""
 
-if [[ $DRY_RUN -eq 0 ]]; then
+if [[ $DRY_RUN -eq 1 ]]; then
+    show_sync_preview
+    if ((${#PACMAN_MISSING[@]} + ${#AUR_MISSING[@]} == 0)); then
+        log_success "All manifest packages are already installed"
+    else
+        log_status "Would install ${#PACMAN_MISSING[@]} official and ${#AUR_MISSING[@]} AUR package(s)"
+    fi
+    exit 0
+fi
+
+if ((${#PACMAN_MISSING[@]} + ${#AUR_MISSING[@]} == 0)); then
+    log_success "All manifest packages are already installed"
+    exit 0
+fi
+
+show_sync_preview
+
+if [[ $EXECUTE -eq 0 ]]; then
+    if [[ $YES -eq 0 ]]; then
+        if ! confirm_sync "Install ${#PACMAN_MISSING[@]} official and ${#AUR_MISSING[@]} AUR package(s)?"; then
+            log_status "Package sync cancelled"
+            exit 0
+        fi
+    fi
+
+    if want_background; then
+        prime_sudo_for_background || exit 1
+        spawn_background_sync
+        exit 0
+    fi
+fi
+
+# --- Execute installs ---
+cleanup_sync_pidfile() {
+    rm -f "$PIDFILE"
+}
+
+trap cleanup_sync_pidfile EXIT
+
+if [[ $EXECUTE -eq 1 ]]; then
+    printf '%s\n' "$$" >"$PIDFILE"
+fi
+
+if [[ $EXECUTE -eq 0 ]]; then
     log_status "Refreshing package databases…"
     sudo pacman -Sy --noconfirm || log_warning "pacman -Sy reported issues (continuing)"
 fi
@@ -443,15 +610,15 @@ fi
 pacman_ok=0
 aur_ok=0
 
-if ((${#PACMAN_INSTALL[@]})); then
-    install_pacman_batch "${PACMAN_INSTALL[@]}" && pacman_ok=1 || pacman_ok=0
+if ((${#PACMAN_MISSING[@]})); then
+    install_pacman_batch "${PACMAN_MISSING[@]}" && pacman_ok=1 || pacman_ok=0
 else
     pacman_ok=1
     log_status "No official packages to install"
 fi
 
-if ((${#AUR_INSTALL[@]})); then
-    install_aur_one_by_one "${AUR_INSTALL[@]}" && aur_ok=1 || aur_ok=0
+if ((${#AUR_MISSING[@]})); then
+    install_aur_one_by_one "${AUR_MISSING[@]}" && aur_ok=1 || aur_ok=0
 else
     aur_ok=1
     log_status "No AUR packages to install"
@@ -460,8 +627,10 @@ fi
 say ""
 if [[ $pacman_ok -eq 1 && $aur_ok -eq 1 ]]; then
     log_success "Package sync complete"
+    notify_sync_complete ok "Installed ${#PACMAN_MISSING[@]} official and ${#AUR_MISSING[@]} AUR package(s)."
     exit 0
 fi
 
 log_warning "Package sync finished with some failures — review output above"
+notify_sync_complete fail "Some packages failed — check ~/.local/state/hyprgruv/logs/"
 exit 1

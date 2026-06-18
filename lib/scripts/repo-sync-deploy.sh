@@ -158,7 +158,7 @@ main() {
         if [[ $DRY_RUN -eq 1 ]]; then
             run_cmd bash "$HYPR_DIR/lib/scripts/sync-packages.sh" --dry-run
         else
-            bash "$HYPR_DIR/lib/scripts/sync-packages.sh"
+            bash "$HYPR_DIR/lib/scripts/sync-packages.sh" --yes --background
         fi
     fi
 
