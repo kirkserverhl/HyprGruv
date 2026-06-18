@@ -31,7 +31,7 @@ ensure_cmd() {
 
 ensure_cmd gum "Installing gum…" gum
 
-toilet -f graffiti Pacseek | lsd-print
+display_header "Pacseek"
 
 gum_apply_matugen_theme
 

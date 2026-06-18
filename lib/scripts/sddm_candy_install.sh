@@ -35,7 +35,7 @@ THEME_NAME="sugar-candy"
 THEME_SRC="$ASSET_DIR/$THEME_NAME"
 CONF_SRC="$ASSET_DIR/sddm.conf.d"
 
-toilet -f graffiti SDDM Theme | lsd-print
+display_header "SDDM Theme"
 
 ensure_sddm() {
     if pacman -Qq sddm &>/dev/null; then

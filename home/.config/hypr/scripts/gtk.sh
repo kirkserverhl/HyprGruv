@@ -16,7 +16,13 @@ icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
 cursor_theme="$(grep 'gtk-cursor-theme-name' "$config" | sed 's/.*\s*=\s*//')"
 cursor_size="$(grep 'gtk-cursor-theme-size' "$config" | sed 's/.*\s*=\s*//')"
 font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
-terminal=$(cat $HOME/scripts/terminal.sh)
+if [[ -f "$HOME/.config/settings/terminal.sh" ]]; then
+    terminal=$(cat "$HOME/.config/settings/terminal.sh")
+elif [[ -f "${HYPRGRUV_DIR:-$HOME/.hyprgruv}/defaults/terminal.sh" ]]; then
+    terminal=$("${HYPRGRUV_DIR:-$HOME/.hyprgruv}/defaults/terminal.sh")
+else
+    terminal="kitty"
+fi
 
 echo $gtk_theme
 echo $icon_theme

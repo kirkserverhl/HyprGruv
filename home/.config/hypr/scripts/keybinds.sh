@@ -80,7 +80,7 @@ parse_keybinds() {
   keybinds_hint+="󰌓 ▏󰖳 + 󰘶 + 󰰁              HyprShade (BlueFilter)\n"
   keybinds_hint+="━━━━━━━━━━━━━━━━━━ Windows ━━━━━━━━━━━━━━━━━━\n"
   keybinds_hint+="󰌓 ▏󰖳 + 󰰜                  Kill Active Window\n"
-  keybinds_hint+="󰌓 ▏󰖳 + 󰯻                  Fullscreen\n"
+  keybinds_hint+="󰌓 ▏CTRL + 󰯻               Fullscreen\n"
   keybinds_hint+="󰌓 ▏󰖳 + 󰰢                  Toggle Split\n"
   keybinds_hint+="󰌓 ▏󰖳 + 󰰥                  Toggle Floating\n"
   keybinds_hint+="󰌓 ▏󰖳 + SHIFT + 󰰥          Toggle Group Float\n"

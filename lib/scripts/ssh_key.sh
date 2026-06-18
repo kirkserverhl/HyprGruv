@@ -36,7 +36,7 @@ source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 
-toilet -f graffiti SSH Key | lsd-print
+display_header "SSH Key"
 
 SSH_DIR="$HOME/.ssh"
 SSH_KEY="$SSH_DIR/id4me"

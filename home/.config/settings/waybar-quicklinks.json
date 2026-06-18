@@ -12,7 +12,7 @@
   },
   "custom/quicklink3": {
     "format": "",
-    "on-click": "~/scripts/filemanager.sh",
+    "on-click": "~/.config/settings/filemanager.sh",
     "on-click-right": "~/.config/hypr/scripts/yazi.sh",
     "tooltip-format": "Left:    Dolphin  \nRight:   Yazi "
   },

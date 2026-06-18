@@ -35,7 +35,7 @@ source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 
-toilet -f graffiti ZRam | lsd-print
+display_header "ZRam"
 
 ZRAM_CONF="/etc/systemd/zram-generator.conf"
 

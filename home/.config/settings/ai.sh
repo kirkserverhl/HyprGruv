@@ -1,1 +1,1 @@
-$(cat ~/scripts/browser.sh) --new-window  https://grok.com/?checkout=success
+$(cat ~/.config/settings/browser.sh) --new-window  https://grok.com/?checkout=success

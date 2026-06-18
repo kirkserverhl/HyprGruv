@@ -28,12 +28,12 @@ sleep 0.5
 themestyle="/gruv;/gruv/colored"
 
 # -----------------------------------------------------
-# Get current theme information from ~/scripts/waybar-theme.sh
+# Get current theme information from ~/.config/hypr/scripts/waybar-theme.sh
 # -----------------------------------------------------
 if [ -f ~/.config/hypr/scripts/waybar-theme.sh ]; then
     themestyle=$(cat ~/.config/settings/waybar-theme.sh)
 else
-    touch ~/.config/hypr/settings/waybar-theme.sh
+    touch ~/.config/settings/waybar-theme.sh
     echo "$themestyle" >~/.config/settings/waybar-theme.sh
 fi
 

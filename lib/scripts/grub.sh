@@ -26,7 +26,7 @@ source "$HYPR_DIR/lib/state.sh"
 source "$HOME/.config/hypr/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 
-toilet -f graffiti Grub Theme | lsd-print
+display_header "Grub Theme"
 
 # ------------------------------------------------------------
 # Paths

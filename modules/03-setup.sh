@@ -20,7 +20,7 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
-toilet -f graffiti Setup | lsd-print
+display_header "Setup"
 
 # --- Ensure 'gum' available (fallback to plain bash if not) ---
 ensure_gum() {
@@ -85,7 +85,7 @@ run_with_spinner() {
 }
 
 # Scripts directory (from common.sh or fallback)
-SCRIPTS_DIR="${SCRIPTS:-$HYPR_DIR/scripts}"
+SCRIPTS_DIR="${SCRIPTS:-$HYPR_DIR/lib/scripts}"
 if [[ ! -d "$SCRIPTS_DIR" ]]; then
     log_error "Scripts directory not found: $SCRIPTS_DIR"
     exit 1

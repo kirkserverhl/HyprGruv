@@ -142,7 +142,7 @@ source "$HOME/.config/hypr/scripts/colors.sh" 2>/dev/null || true
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to change your default shell? "
 
-toilet -f graffiti Shell | lsd-print
+display_header "Shell"
 
 # ------------------------------------------------------------
 # Prompt user

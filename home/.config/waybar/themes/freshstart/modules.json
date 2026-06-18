@@ -182,12 +182,12 @@
     "interval": 1800,
     "return-type": "json",
     "format": "{}",
-    "on-click": "~/.config/hypr/settings/installupdates.sh",
+    "on-click": "~/.config/hypr/scripts/installupdates.sh",
     "tooltip-format": "Install Updates"
   },
   "custom/exit": {
     "format": " \uf011  ",
-    "on-click": "~/scripts/wlogout.sh",
+    "on-click": "~/.config/hypr/scripts/wlogout.sh",
     "tooltip-format": "Power Menu"
   },
   "custom/media": {
@@ -214,8 +214,8 @@
   "custom/hyprshade": {
     "format": "\ue4dc",
     "tooltip-format": "Toggle Screen Shader \ud83d\udd76\ufe0f",
-    "on-click": "~/scripts/hyprshade.sh",
-    "on-click-right": "sleep 0.5; ~/scripts/hyprshade.sh rofi"
+    "on-click": "~/.config/hypr/scripts/hyprshade.sh",
+    "on-click-right": "sleep 0.5; ~/.config/hypr/scripts/hyprshade.sh rofi"
   },
   "custom/hypridle": {
     "format": " \uf023 ",
@@ -223,8 +223,8 @@
     "escape": true,
     "exec-on-event": true,
     "interval": 60,
-    "exec": "~/scripts/hypridle.sh status",
-    "on-click": "~/scripts/hypridle.sh toggle",
+    "exec": "~/.config/hypr/scripts/hypridle.sh status",
+    "on-click": "~/.config/hypr/scripts/hypridle.sh toggle",
     "on-click-right": "hyprlock"
   },
   "keyboard-state": {

@@ -6,7 +6,7 @@ HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
-toilet -f graffiti Cleanup | lsd-print
+display_header "Cleanup"
 
 gum_apply_matugen_theme
 export GUM_CONFIRM_PROMPT="? Would you like to perform a system cleanup? "
@@ -22,7 +22,7 @@ BOLD="\e[1m"                 # Bold   ##
 sleep 1
 
 # Prefer user's aur helper script if present in the tree, else default to yay
-AUR_SCRIPT="$HYPR_DIR/home/scripts/aur.sh"
+AUR_SCRIPT="$HYPR_DIR/home/.config/hypr/scripts/aur.sh"
 if [[ -f "$AUR_SCRIPT" ]]; then
     aur_helper="$(cat "$AUR_SCRIPT" | tr -d ' \t\r\n')"
 else

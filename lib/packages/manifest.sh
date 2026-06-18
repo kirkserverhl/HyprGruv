@@ -33,7 +33,7 @@ _manifest_load_list() {
     while IFS= read -r line || [[ -n "$line" ]]; do
         line="${line%%#*}"
         line="${line// /}"
-        [[ -n "$line" ]] && _out+=("$line")
+        if [[ -n "$line" ]]; then _out+=("$line"); fi
     done <"$file"
 }
 

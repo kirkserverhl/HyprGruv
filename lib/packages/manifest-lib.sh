@@ -25,7 +25,7 @@ manifest_read_list() {
     while IFS= read -r line || [[ -n "$line" ]]; do
         line="${line%%#*}"
         line="${line// /}"
-        [[ -n "$line" ]] && printf '%s\n' "$line"
+        if [[ -n "$line" ]]; then printf '%s\n' "$line"; fi
     done <"$file"
 }
 
@@ -94,7 +94,7 @@ manifest_remove_package() {
             found=1
             continue
         fi
-        [[ -n "$line" ]] && kept+=("$line")
+        if [[ -n "$line" ]]; then kept+=("$line"); fi
     done <"$file"
 
     if [[ $found -eq 0 ]]; then
