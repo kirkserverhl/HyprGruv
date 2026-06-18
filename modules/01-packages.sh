@@ -128,6 +128,16 @@ sleep 0.15
 # This is the most common source of "target not found" in VM install tests.
 repair_official_repos
 
+# Hyprland first — before chaotic/yay/AUR work so a partial run still leaves a bootable session.
+log_status "Installing Hyprland early (before AUR/chaotic setup)…"
+sudo pacman -S --needed --noconfirm \
+    hyprland xdg-desktop-portal xdg-desktop-portal-hyprland
+if ! pacman -Qq hyprland &>/dev/null; then
+    log_error "Hyprland is not installed — cannot continue"
+    exit 1
+fi
+log_success "Hyprland core stack ready"
+
 # Fix any stale/broken chaotic-aur entry from previous failed runs
 # (section present but no mirrorlist file -> pacman parse error on refresh)
 if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacman.d/chaotic-mirrorlist ]]; then

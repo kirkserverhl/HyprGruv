@@ -210,48 +210,123 @@ fi
 sleep 1.5
 
 # ============================================================
-# Reboot — skipped on graphical sessions (e.g. EndeavourOS KDE)
+# Next steps — interactive menu (45s timeout → reboot)
 # ============================================================
-should_reboot() {
-    [[ "${SKIP_REBOOT:-0}" == "1" ]] && return 1
-    [[ "${FORCE_REBOOT:-0}" == "1" ]] && return 0
-    # Already in a desktop session: no forced reboot
-    [[ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ]] && return 1
-    return 0
-}
-
-if should_reboot; then
-    log_status "Rebooting now to finish SDDM / display manager handoff…"
-    sleep 2
+do_install_reboot() {
     cat <<'EOF'
-
-Install complete. Rebooting…
 
 After reboot, log in via SDDM and select the Hyprland session.
 HyprGruv will sync packages and open Settings on first login.
-(Uncheck "Don't show welcome on startup" in Settings to skip future welcomes.)
 
-If anything was skipped, run:
+EOF
+    log_status "Rebooting now to finish SDDM / display manager handoff…"
+    sleep 2
+    sudo reboot
+}
+
+do_install_exit() {
+    cat <<'EOF'
+
+Next: log out of your current session, then at SDDM select the Hyprland session.
+HyprGruv will sync packages and open Settings on first login.
+
+If anything was skipped later:
   FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 EOF
-    sleep 3
-    sudo reboot
-else
+    log_success "Done — log out and pick Hyprland at SDDM when ready."
+    exit 0
+}
+
+do_install_rerun_wizard() {
+    log_status "Re-running setup wizard…"
+    set +e
+    FORCE=1 INSTALL_LOGFILE="$LOGFILE" bash "$HYPR_DIR/lib/scripts/post_reboot_setup.sh"
+    local wiz_exit=$?
+    set -e
+    if [[ $wiz_exit -eq 0 ]]; then
+        log_success "Setup wizard finished"
+    else
+        log_warning "Setup wizard finished with errors (exit $wiz_exit)"
+    fi
+    prompt_install_finish
+}
+
+prompt_install_finish() {
+    local choice=""
+    local timeout=45
+    local remaining=$timeout
+    local default_action="reboot"
+
+    [[ "${SKIP_REBOOT:-0}" == "1" ]] && default_action="exit"
+
+    display_header "Next Steps"
     cat <<'EOF'
 
-Install complete — reboot skipped (graphical session detected).
+Installation complete. Choose what to do next:
 
-Next steps:
-  1. Log out of your current session (KDE / etc.)
-  2. At SDDM, select the Hyprland session
-  3. Hyprland will not auto-open a setup terminal. If anything was skipped:
-       FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
-
-Force reboot now:  FORCE_REBOOT=1 ./install.sh
-Skip wizard:       SKIP_SETUP_WIZARD=1 ./install.sh
-Skip reboot:         SKIP_REBOOT=1 ./install.sh
+  1) Reboot now (recommended — finish SDDM / Hyprland handoff)
+  2) Exit without rebooting (log out manually and pick Hyprland at SDDM)
+  3) Re-run setup wizard (SDDM, GRUB, shell, defaults)
 
 EOF
-    log_success "Done — log out and pick Hyprland at SDDM when ready."
+
+    if [[ "$default_action" == "reboot" ]]; then
+        log_status "Auto-reboot in ${timeout}s if no selection…"
+    else
+        log_status "SKIP_REBOOT=1 — auto-exit in ${timeout}s if no selection…"
+    fi
+    echo ""
+
+    while ((remaining > 0)) && [[ -z "$choice" ]]; do
+        printf '\r  Enter 1, 2, or 3'
+        if [[ "$default_action" == "reboot" ]]; then
+            printf ' (auto-reboot in %2ds): ' "$remaining"
+        else
+            printf ' (auto-exit in %2ds): ' "$remaining"
+        fi
+        if read -t 1 -r choice </dev/tty 2>/dev/null; then
+            printf '\n'
+            break
+        fi
+        ((remaining--)) || true
+    done
+
+    if [[ -z "$choice" ]]; then
+        printf '\n'
+        if [[ "$default_action" == "reboot" ]]; then
+            log_status "No selection — rebooting now (timeout)"
+            do_install_reboot
+        else
+            log_status "No selection — exiting (timeout)"
+            do_install_exit
+        fi
+        return
+    fi
+
+    case "$choice" in
+    1)
+        do_install_reboot
+        ;;
+    2)
+        do_install_exit
+        ;;
+    3)
+        do_install_rerun_wizard
+        ;;
+    *)
+        log_warning "Invalid choice '$choice' — using default"
+        if [[ "$default_action" == "reboot" ]]; then
+            do_install_reboot
+        else
+            do_install_exit
+        fi
+        ;;
+    esac
+}
+
+if [[ "${FORCE_REBOOT:-0}" == "1" ]]; then
+    do_install_reboot
+else
+    prompt_install_finish
 fi

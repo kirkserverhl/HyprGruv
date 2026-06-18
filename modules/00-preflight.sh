@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 00-preflight.sh — ensure base system prep on pure Arch (Hyprland installed after yay in 01-packages)
+# 00-preflight.sh — ensure base system prep on pure Arch (Hyprland installed first)
 sleep 2
 clear
 
@@ -149,6 +149,16 @@ if pacman -Qq jack2 &>/dev/null; then
     sudo pacman -Rdd --noconfirm jack2 2>/dev/null || true
 fi
 
+# Hyprland must be available before the rest of the desktop stack.
+HYPRLAND_CORE_PKGS=(hyprland xdg-desktop-portal xdg-desktop-portal-hyprland)
+log_status "Installing Hyprland (priority — first desktop package)…"
+ensure_pkg "${HYPRLAND_CORE_PKGS[@]}"
+if ! pkg_installed hyprland; then
+    log_error "Hyprland failed to install during preflight — aborting"
+    exit 1
+fi
+log_success "Hyprland core stack installed"
+
 log_status "Installing core packages"
 ensure_pkg "${BASE_PKGS[@]}"
 
@@ -199,5 +209,5 @@ if [[ -d "$PREFLIGHT_DIR" ]]; then
     fi
 fi
 
-mark_completed "Preflight"
+mark_completed "Preflight: Hyprland base"
 log_success "Preflight check completed."
