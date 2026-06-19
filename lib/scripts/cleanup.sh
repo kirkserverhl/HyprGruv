@@ -6,6 +6,9 @@ HYPR_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
+sleep 1
+clear
+
 display_header "Cleanup"
 
 gum_apply_matugen_theme
@@ -18,8 +21,6 @@ YELLOW="\e[38;2;215;153;33m" # d79921 ##
 RED="\e[38;2;204;36;29m"     # cc241d ##
 GRAY="\e[38;2;60;56;54m"     # 3c3836 ##
 BOLD="\e[1m"                 # Bold   ##
-
-sleep 1
 
 # Prefer user's aur helper script if present in the tree, else default to yay
 AUR_SCRIPT="${REPO_DOTFILES_SCRIPTS:-$HYPR_DIR/home/.config/hyprgruv/scripts}/aur.sh"
@@ -64,6 +65,6 @@ echo ""
 duf -theme ansi || df -h
 echo ""
 read -rp "Press Enter to exit…" _ || true
-sleep 2
+sleep 1
 clear
-command -v fastfetch >/dev/null && fastfetch || command -v neofetch >/dev/null && neofetch || true
+nerdfetch
