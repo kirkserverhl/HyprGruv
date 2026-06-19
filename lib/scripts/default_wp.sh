@@ -20,10 +20,6 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
-# --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
-
 display_header "Default Wallpaper"
 
 # Respect SKIP_WALLPAPER (handy for non-graphical install phases or laptop testing)
@@ -79,23 +75,39 @@ ensure_matugen
 # Resolve canonical opening wallpaper
 # ------------------------------------------------------------
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
-WALLPAPER="$WALLPAPER_DIR/default.png"
 STOWED_DEFAULT="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
+SETTINGS_DEFAULT="$HYPR_DIR/home/.config/settings/default_wp.png"
+SDDM_DEFAULT="$HYPR_DIR/assets/sddm/sugar-candy/sddm-wallpaper.png"
 
 mkdir -p "$WALLPAPER_DIR"
 
-if [[ ! -f "$WALLPAPER" && -f "$STOWED_DEFAULT" ]]; then
-  cp -a "$STOWED_DEFAULT" "$WALLPAPER"
-  log_status "Seeded default wallpaper into $WALLPAPER_DIR"
-fi
+_hyprgruv_resolve_opening_wallpaper() {
+  local candidate
+  for candidate in \
+    "$WALLPAPER_DIR/default.png" \
+    "$STOWED_DEFAULT" \
+    "$SETTINGS_DEFAULT" \
+    "$SDDM_DEFAULT" \
+    "$HOME/.config/settings/default_wp.png"; do
+    [[ -f "$candidate" ]] || continue
+    echo "$candidate"
+    return 0
+  done
+  find "$WALLPAPER_DIR" -maxdepth 1 -type f \
+    \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
+    2>/dev/null | head -1
+}
 
-if [[ ! -f "$WALLPAPER" ]]; then
-  WALLPAPER="$STOWED_DEFAULT"
-fi
-
-if [[ ! -f "$WALLPAPER" ]]; then
-  log_error "Required wallpaper not found: $WALLPAPER"
+WALLPAPER="$(_hyprgruv_resolve_opening_wallpaper || true)"
+if [[ -z "$WALLPAPER" || ! -f "$WALLPAPER" ]]; then
+  log_error "No opening wallpaper found (expected $WALLPAPER_DIR/default.png or repo seed)"
   exit 1
+fi
+
+if [[ "$WALLPAPER" != "$WALLPAPER_DIR/default.png" ]]; then
+  cp -a "$WALLPAPER" "$WALLPAPER_DIR/default.png"
+  log_status "Seeded default wallpaper into $WALLPAPER_DIR"
+  WALLPAPER="$WALLPAPER_DIR/default.png"
 fi
 
 log_status "Opening wallpaper: $(basename "$WALLPAPER")"
