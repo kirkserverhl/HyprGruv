@@ -38,6 +38,15 @@ home/.config/window-geometry.conf
 home/.config/xdg-desktop-portal-kderc
 home/.config/KDE/
 
+# Neovim runtime data (plugins, mason, parsers) — belongs in ~/.local/share/nvim
+home/.config/rofi/apps-menu/nvim/
+
+# Rofi apps-menu machine state (only applications/*.desktop is config)
+home/.config/rofi/apps-menu/Trash/
+home/.config/rofi/apps-menu/atuin/
+home/.config/rofi/apps-menu/gvfs-metadata/
+home/.config/rofi/apps-menu/mimeapps.list
+
 # Runtime / machine state
 home/.config/dconf/
 home/.config/last_wallpaper.txt

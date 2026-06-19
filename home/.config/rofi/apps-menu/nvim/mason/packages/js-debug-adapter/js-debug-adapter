@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-exec node "/home/kirk/.config/rofi/apps-menu/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js" "$@"
