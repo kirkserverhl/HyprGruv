@@ -38,22 +38,22 @@ palette = 'matugen'
 # Rainbow palette — vivid accent slots (primary → tertiary → secondary → container)
 # =============================================================================
 [palettes.matugen]
-color_fg0 = '#e8e2d4'
-color_bg1 = '#222017'
-color_bg3 = '#2c2a21'
+color_fg0 = '#e1e2e9'
+color_bg1 = '#1d2024'
+color_bg3 = '#282a2f'
 
-color_orange = '#d8c76f'
-color_yellow = '#a8d0b5'
-color_aqua   = '#d0c7a2'
-color_blue   = '#524700'
+color_orange = '#a8c8ff'
+color_yellow = '#dbbce1'
+color_aqua   = '#bdc7dc'
+color_blue   = '#254777'
 
-color_on_orange = '#383000'
-color_on_yellow = '#133724'
-color_on_aqua   = '#363116'
+color_on_orange = '#06305f'
+color_on_yellow = '#3e2845'
+color_on_aqua   = '#273141'
 
-color_green  = '#d0c7a2'
+color_green  = '#bdc7dc'
 color_red    = '#ffb4ab'
-color_purple = '#a8d0b5'
+color_purple = '#dbbce1'
 
 # =============================================================================
 # OS

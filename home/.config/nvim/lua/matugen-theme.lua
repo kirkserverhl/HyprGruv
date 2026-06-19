@@ -9,39 +9,39 @@ end
 
 base16.setup({
   palette = {
-    base00 = "#100e07",
-    base01 = "#1e1c13",  -- lighter bg, inactive borders
-    base02 = "#222017",
-    base03 = "#4a4739",
-    base04 = "#ccc6b5",
-    base05 = "#e8e2d4",
-    base06 = "#333027",
-    base07 = "#3c3930",
+    base00 = "#0c0e13",
+    base01 = "#191c20",  -- lighter bg, inactive borders
+    base02 = "#1d2024",
+    base03 = "#43474e",
+    base04 = "#c4c6cf",
+    base05 = "#e1e2e9",
+    base06 = "#2e3035",
+    base07 = "#37393e",
     base08 = "#ffb4ab",
-    base09 = "#a8d0b5",
-    base0A = "#d0c7a2",
-    base0B = "#d8c76f",
-    base0C = "#2a4e39",
-    base0D = "#d8c76f",
-    base0E = "#4d472b",
-    base0F = "#857b4a",
+    base09 = "#dbbce1",
+    base0A = "#bdc7dc",
+    base0B = "#a8c8ff",
+    base0C = "#563e5d",
+    base0D = "#a8c8ff",
+    base0E = "#3e4758",
+    base0F = "#89b4fa",
   },
   use_cterm = false,
   plugins = { default = true },
 })
 
 vim.api.nvim_set_hl(0, "Visual", {
-  bg = "#222017",
-  fg = "#e8e2d4",
+  bg = "#1d2024",
+  fg = "#e1e2e9",
 })
 -- base03 — muted text / comments
-vim.api.nvim_set_hl(0, "Comment", { fg = "#4a4739", italic = true })
-vim.api.nvim_set_hl(0, "@comment", { fg = "#4a4739", italic = true })
-vim.api.nvim_set_hl(0, "CursorLine", { bg = "#1e1c13" })
+vim.api.nvim_set_hl(0, "Comment", { fg = "#43474e", italic = true })
+vim.api.nvim_set_hl(0, "@comment", { fg = "#43474e", italic = true })
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#191c20" })
 
 vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ffb4ab" })
-vim.api.nvim_set_hl(0, "DiagnosticWarn",  { fg = "#a8d0b5" })
-vim.api.nvim_set_hl(0, "DiagnosticInfo",  { fg = "#d8c76f" })
-vim.api.nvim_set_hl(0, "DiagnosticHint",  { fg = "#2a4e39" })
+vim.api.nvim_set_hl(0, "DiagnosticWarn",  { fg = "#dbbce1" })
+vim.api.nvim_set_hl(0, "DiagnosticInfo",  { fg = "#a8c8ff" })
+vim.api.nvim_set_hl(0, "DiagnosticHint",  { fg = "#563e5d" })
 
 pcall(function() require("lualine").setup({}) end)
