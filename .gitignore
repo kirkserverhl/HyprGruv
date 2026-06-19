@@ -11,3 +11,39 @@ home/.oh-my-zsh/
 
 # Orphan npm vendor trees (reinstall via package.json if needed)
 home/node_modules/
+
+# KDE/Plasma session (not used on Hyprland)
+home/.config/bluedevilglobalrc
+home/.config/kglobalshortcutsrc
+home/.config/kwinrc
+home/.config/kwinoutputconfig.json
+home/.config/kscreenlockerrc
+home/.config/ksmserverrc
+home/.config/ksplashrc
+home/.config/plasma-*
+home/.config/plasmarc
+home/.config/plasmashellrc
+home/.config/plasmanotifyrc
+home/.config/kconf_updaterc
+home/.config/kiorc
+home/.config/kservicemenurc
+home/.config/ktimezonedrc
+home/.config/kuiviewerrc
+home/.config/systemmonitorrc
+home/.config/systemsettingsrc
+home/.config/Designerrc
+home/.config/filetypesrc
+home/.config/trashrc
+home/.config/window-geometry.conf
+home/.config/xdg-desktop-portal-kderc
+home/.config/KDE/
+
+# Runtime / machine state
+home/.config/dconf/
+home/.config/last_wallpaper.txt
+home/.config/*history*
+home/.config/**/.current-theme
+home/.config/**/*.db
+home/.config/**/*.db-*
+home/.config/**/error.log
+home/.config/atuin/atuin-receipt.json
