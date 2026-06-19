@@ -1,12 +1,12 @@
 #!/bin/bash
 # common.sh
 
-# ANSI color codes
+# ANSI color codes (Gruvbox dark)
 RESET="\e[0m"
-GREEN="\e[38;2;142;192;124m"
-CYAN="\e[38;2;69;133;136m"
-YELLOW="\e[38;2;215;153;33m"
-RED="\e[38;2;204;36;29m"
+GREEN="\e[38;2;184;187;38m"
+CYAN="\e[38;2;131;165;152m"
+YELLOW="\e[38;2;250;189;47m"
+RED="\e[38;2;251;73;52m"
 BOLD="\e[1m"
 
 # Base directories
@@ -130,7 +130,12 @@ display_header() {
     local title="${1:-}"
     [[ -z "$title" ]] && return 0
     echo ""
-    echo "=== $title ==="
+    if command -v gum >/dev/null 2>&1; then
+        echo "$title" | gum style --foreground "${COLOR_PRIMARY:-#fe8019}" --bold 2>/dev/null \
+            || echo "=== $title ==="
+    else
+        echo "=== $title ==="
+    fi
     echo ""
 }
 # Check if command exists
@@ -155,9 +160,52 @@ run_command() {
 export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INSTALL_SCRIPTS
 
 
-# ============== Gum prompts (install path — no matugen/header theming) ==============
+# ============== Install theming (static Gruvbox — no matugen/colors.sh) ==============
 
-gum_apply_matugen_theme() { :; }
+_hyprgruv_load_install_colors() {
+    local gruvbox="${HYPR_DIR}/lib/defaults/gruvbox-install-colors.sh"
+    if [[ -f "$gruvbox" ]]; then
+        # shellcheck source=/dev/null
+        source "$gruvbox"
+        return 0
+    fi
+    : "${COLOR_PRIMARY:="#fe8019"}"
+    : "${COLOR_ON_PRIMARY:="#282828"}"
+    : "${COLOR_SURFACE:="#282828"}"
+    : "${COLOR_ON_SURFACE:="#ebdbb2"}"
+    : "${COLOR_SURFACE_CONTAINER:="#3c3836"}"
+    : "${COLOR_ON_SURFACE_VARIANT:="#a89984"}"
+    : "${COLOR_SUCCESS:="#b8bb26"}"
+    : "${COLOR_ERROR:="#fb4934"}"
+    : "${COLOR_TEXT:="#ebdbb2"}"
+    : "${COLOR_OUTLINE:="#504945"}"
+}
+
+_hyprgruv_load_install_colors
+
+gum_apply_matugen_theme() {
+    export GUM_CONFIRM_PROMPT="? "
+    export GUM_CONFIRM_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+    export GUM_CONFIRM_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+    export GUM_CONFIRM_UNSELECTED_BACKGROUND="${COLOR_SURFACE_CONTAINER}"
+    export GUM_CONFIRM_UNSELECTED_FOREGROUND="${COLOR_ON_SURFACE}"
+    export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
+    export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
+    export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
+    export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
+    export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
+    export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+    export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+    export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
+    export GUM_CHOOSE_CURSOR_PREFIX="› "
+    export GUM_CHOOSE_SELECTED_PREFIX="✓ "
+    export GUM_CHOOSE_UNSELECTED_PREFIX="  "
+    export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
+    export GUM_SPIN_SPINNER_FOREGROUND="${COLOR_PRIMARY}"
+    export GUM_SPIN_TITLE_FOREGROUND="${COLOR_ON_SURFACE}"
+    export GUM_TABLE_HEADER_FOREGROUND="${COLOR_PRIMARY}"
+    export GUM_PAGER_FOREGROUND="${COLOR_ON_SURFACE}"
+}
 
 # True when the session can open the controlling terminal (needed for gum UI under tee logging).
 _hyprgruv_has_tty() {
@@ -192,6 +240,7 @@ hyprgruv_run_interactive() {
 gum_confirm_prompt() {
     local prompt="$1"
     shift || true
+    gum_apply_matugen_theme 2>/dev/null || true
     if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
         gum confirm "$prompt" \
             --affirmative "  Yes  " --negative "  No  " \
@@ -204,6 +253,7 @@ gum_confirm_prompt() {
 }
 
 gum_choose_prompt() {
+    gum_apply_matugen_theme 2>/dev/null || true
     if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
         gum choose "$@" </dev/tty >/dev/tty
     else
@@ -223,25 +273,50 @@ hyprgruv_section_transition() {
 }
 
 hyprgruv_section_intro() {
-    log_status "$1"
+    display_header "$1"
 }
 
 print_section() {
     echo ""
-    echo "== $1 =="
+    if command -v gum >/dev/null 2>&1; then
+        echo "$1" | gum style --foreground "${COLOR_PRIMARY}" --bold 2>/dev/null || echo "== $1 =="
+    else
+        echo "== $1 =="
+    fi
 }
 
 print_box() {
-    echo "$1"
+    if command -v gum >/dev/null 2>&1; then
+        echo "$1" | gum style \
+            --foreground "${COLOR_TEXT}" \
+            --border rounded \
+            --border-foreground "${COLOR_PRIMARY}" \
+            --padding "1 3" \
+            --width 95 2>/dev/null || echo "$1"
+    else
+        echo "$1"
+    fi
 }
 
 show_success() {
-    log_success "$1"
+    if command -v gum >/dev/null 2>&1; then
+        gum style --foreground "${COLOR_SUCCESS}" --bold "✓ $1" 2>/dev/null || log_success "$1"
+    else
+        log_success "$1"
+    fi
 }
 
 show_error() {
-    log_error "$1"
+    if command -v gum >/dev/null 2>&1; then
+        gum style --foreground "${COLOR_ERROR}" --bold "✗ $1" 2>/dev/null || log_error "$1"
+    else
+        log_error "$1"
+    fi
 }
+
+if command -v gum >/dev/null 2>&1; then
+    gum_apply_matugen_theme
+fi
 
 # ============================================================
 # Pure Arch sanitization helpers (for users moving away from EndeavourOS or other derivatives)
