@@ -271,5 +271,5 @@ if [[ "${1:-}" == "--gum" || "${1:-}" == "gum" ]]; then
     gum_apply_matugen_theme
 fi
 
-# Export the main function names so they are available after sourcing
-export -f load_matugen_colors gum_apply_matugen_theme gum_use_matugen 2>/dev/null || true
+# Do not export -f these functions: child bash scripts inherit incomplete
+# definitions via BASH_FUNC_* and crash under set -u during install.

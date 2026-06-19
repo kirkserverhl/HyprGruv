@@ -168,9 +168,16 @@ export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INST
 
 # ============== Matugen + Gum Styling ==============
 
+# colors.sh can export -f load_matugen_colors into the parent shell environment.
+# Child install scripts inherit only the function body (helpers stay behind),
+# which breaks under set -u with "environment: line N: … command not found".
+unset -f load_matugen_colors gum_apply_matugen_theme gum_use_matugen \
+    _load_from_cache_shell _load_from_hypr_conf _load_from_json 2>/dev/null || true
+
 _hyprgruv_load_matugen_colors() {
-    local colors_sh="${HOME}/.config/hyprgruv/scripts/colors.sh"
-    local repo_colors="${HYPR_DIR}/lib/defaults/matugen-colors.sh"
+    local colors_sh="${DOTFILES_SCRIPTS}/colors.sh"
+    local repo_colors_sh="${REPO_DOTFILES_SCRIPTS}/colors.sh"
+    local repo_defaults="${HYPR_DIR}/lib/defaults/matugen-colors.sh"
     if [[ -f "${HOME}/.cache/matugen/colors.sh" ]]; then
         # shellcheck source=/dev/null
         set -a
@@ -182,10 +189,14 @@ _hyprgruv_load_matugen_colors() {
         # shellcheck source=/dev/null
         source "$colors_sh" 2>/dev/null && return 0
     fi
-    if [[ -f "$repo_colors" ]]; then
+    if [[ -f "$repo_colors_sh" ]]; then
+        # shellcheck source=/dev/null
+        source "$repo_colors_sh" 2>/dev/null && return 0
+    fi
+    if [[ -f "$repo_defaults" ]]; then
         # shellcheck source=/dev/null
         set -a
-        source "$repo_colors" 2>/dev/null || true
+        source "$repo_defaults" 2>/dev/null || true
         set +a
         return 0
     fi
@@ -317,9 +328,6 @@ hyprgruv_section_intro() {
 }
 
 if command -v gum >/dev/null 2>&1; then
-    if declare -F load_matugen_colors >/dev/null 2>&1; then
-        load_matugen_colors
-    fi
     gum_apply_matugen_theme
 fi
 
