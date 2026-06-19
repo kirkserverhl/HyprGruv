@@ -10,14 +10,12 @@ STARSHIP_ACTIVE="${HOME}/.config/starship.toml"
 
 touch "$STARSHIP_MATUGEN" 2>/dev/null || true
 
-if [[ -L "$STARSHIP_ACTIVE" ]]; then
-    active_target=$(readlink -f "$STARSHIP_ACTIVE" 2>/dev/null || true)
-    if [[ "$active_target" == "$STARSHIP_MATUGEN" || "$(basename "$active_target" 2>/dev/null)" == matugen-rainbow.toml ]]; then
-        ln -sfn "$STARSHIP_MATUGEN" "$STARSHIP_ACTIVE" 2>/dev/null || true
-        touch "$STARSHIP_ACTIVE" 2>/dev/null || true
-    fi
-elif [[ ! -e "$STARSHIP_ACTIVE" ]]; then
+# Waypaper / matugen always use the rainbow template — keep the active symlink aligned
+# unless the user explicitly picked a different theme via ~/.config/starship/theme.sh.
+mkdir -p "$(dirname "$STARSHIP_ACTIVE")"
+if [[ ! -e "$STARSHIP_ACTIVE" ]] || [[ -L "$STARSHIP_ACTIVE" ]]; then
     ln -sfn "$STARSHIP_MATUGEN" "$STARSHIP_ACTIVE" 2>/dev/null || true
+    touch "$STARSHIP_ACTIVE" 2>/dev/null || true
 fi
 
 # Force an immediate prompt redraw in open shells (starship re-reads config each draw)

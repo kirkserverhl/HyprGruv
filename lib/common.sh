@@ -323,28 +323,6 @@ purge_endeavouros_remnants() {
   log_success "EndeavourOS remnants removed from pacman configuration."
 }
 
-# Remove packages Hyprgruv never installs (leftovers from old dotfiles / manual installs).
-# Respects DRY_RUN=1 / TEST_MODE=1.
-purge_excluded_packages() {
-  local -a installed=()
-  local pkg
-
-  while IFS= read -r pkg; do
-    [[ -n "$pkg" ]] && installed+=("$pkg")
-  done < <(pacman -Qq 2>/dev/null | grep -E '^tesseract(-|$)' || true)
-
-  ((${#installed[@]})) || return 0
-
-  if [[ "${DRY_RUN:-0}" == "1" || "${TEST_MODE:-0}" == "1" ]]; then
-    log_warning "DRY_RUN/TEST_MODE active — would remove excluded packages: ${installed[*]}"
-    return 0
-  fi
-
-  log_status "Removing excluded packages (not in Hyprgruv manifest): ${installed[*]}"
-  sudo pacman -Rns --noconfirm "${installed[@]}" 2>/dev/null \
-    || sudo pacman -Rdd --noconfirm "${installed[@]}" 2>/dev/null \
-    || log_warning "Some excluded packages could not be removed: ${installed[*]}"
-}
 
 # ============================================================
 # VM / Hypervisor detection (used for guest tools, GRUB video
@@ -433,7 +411,7 @@ Common keybinds:
   Win + F             Thunar
   Win + N             NeoVim
   Win + Q             Close Window
-  Win + SPACE         Fuzzel Launcher
+  Win + SPACE         App launcher (favorites)
   Win + CTRL + Q      Logout
 
 Full keybinds: Win + K  or type 'keybinds' in a terminal

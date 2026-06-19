@@ -74,7 +74,7 @@ post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-terminal.sh"
 [templates.bat]
 input_path = "~/.config/matugen/templates/bat.tmTheme"
 output_path = "~/.config/bat/themes/Matugen.tmTheme"
-post_hook = 'bat cache --build 2>/dev/null; ~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "bat theme updated"'
+post_hook = 'bat cache --build 2>/dev/null'
 
 
 [templates.btop]
@@ -88,10 +88,28 @@ post_hook = '''
     # Update configs to use the new theme
     sed -i 's/^color_theme = .*/color_theme = "matugen"/' "$HOME/.config/btop/btop.conf" 2>/dev/null || true
     sed -i 's/^color_theme=".*"/color_theme="+matugen"/' "$HOME/.config/bpytop/bpytop.conf" 2>/dev/null || true
-
-    ~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "btop / bpytop theme updated"
 '''
 
+
+[templates.pacseek]
+input_path = "~/.config/matugen/templates/pacseek-colors.json"
+output_path = "~/.config/pacseek/colors.json"
+post_hook = '''
+    cfg="$HOME/.config/pacseek/config.json"
+    if [[ -f "$cfg" ]] && command -v python3 >/dev/null 2>&1; then
+        python3 - "$cfg" <<'PY'
+import json, sys
+path = sys.argv[1]
+with open(path, encoding="utf-8") as f:
+    data = json.load(f)
+data["ColorScheme"] = "Custom"
+data["Transparent"] = True
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(data, f, indent="\t")
+    f.write("\n")
+PY
+    fi
+'''
 
 [templates.cava]
 input_path = "~/.config/matugen/templates/cava-colors.ini"
@@ -153,7 +171,7 @@ input_path = "~/.config/matugen/templates/ghostty-colors.conf"
 output_path = "~/.config/ghostty/colors/matugen.conf"
 # Ghostty has no reliable external reload signal from CLI in current versions.
 # Press ctrl+shift+, inside Ghostty (or bind a global hotkey) to reload after theme changes.
-post_hook = "~/.config/hyprgruv/scripts/matugen-notify.sh -a matugen 'Ghostty' 'Theme updated — reload with ctrl+shift+,'"
+post_hook = "true"
 
 
 [templates.gtk3]
@@ -181,7 +199,7 @@ output_path = "~/.config/hypr/hyprlock/colors/matugen.conf"
 [templates.kvantum_kvconfig]
 input_path = "~/.config/matugen/templates/kvantum-colors.kvconfig"
 output_path = "~/.config/Kvantum/matugen/matugen.kvconfig"
-post_hook = '~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "Kvantum theme updated — restart Qt apps"'
+
 
 
 [templates.kvantum_svg]
@@ -199,7 +217,7 @@ post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
 [templates.obs]
 input_path = "~/.config/matugen/templates/matugen.obt"
 output_path = "~/.config/obs-studio/themes/matugen.obt"
-post_hook = '~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "OBS theme updated — restart OBS or re-select Matugen in Settings → Appearance"'
+
 
 # -----------------------------------------------------------------------------
 # Qt / Kvantum / KDE apps (KWrite, Kate, Dolphin, etc.)
@@ -255,7 +273,6 @@ PY
             echo "[matugen] Copied Obsidian theme to $vault (snippet toggled for reload)"
         fi
     done
-    ~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "Obsidian theme updated — reload if colors look stale"
 '''
 
 
@@ -267,7 +284,7 @@ output_path = "~/.config/pavucontrol/pavucontrol.css"
 [templates.qt5ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt5ct/colors/matugen.conf"
-post_hook = '~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "qt5ct colors updated — restart Qt apps"'
+
 
 ## Optional but useful for some KDE apps (disabled — template file missing, breaks matugen)
 ##[templates.kde_colors]
@@ -277,7 +294,7 @@ post_hook = '~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "qt5ct color
 [templates.qt6ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt6ct/colors/matugen.conf"
-post_hook = '~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "qt6ct colors updated — restart Qt apps"'
+
 
 
 [templates.rofi]

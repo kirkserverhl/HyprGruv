@@ -207,6 +207,19 @@ priority_files_ok() {
     [[ -s "$KITTY_COLORS" && -s "$HYPR_COLORS" && -s "$STARSHIP_MATUGEN" && -s "$WAYBAR_COLORS" ]]
 }
 
+# Detect legacy starship layouts (posthook fallback / base16 remap) that left empty
+# colored wedges before git/lang/docker segments.
+starship_format_stale() {
+    [[ -f "$STARSHIP_MATUGEN" ]] || return 0
+    if grep -q 'auto-generated via posthook' "$STARSHIP_MATUGEN" 2>/dev/null; then
+        return 0
+    fi
+    awk '/^format = """$/,/^"""$/' "$STARSHIP_MATUGEN" 2>/dev/null | grep -qE \
+        'fg:color_(yellow bg:color_aqua|aqua bg:color_blue|blue bg:color_bg3|bg3 bg:color_bg1)' \
+        && return 0
+    return 1
+}
+
 write_manifest() {
     local mode="${1:-run}"
     local primary="${2:-}"
@@ -268,13 +281,17 @@ wait_for_priority_templates() {
     return 0
 }
 
-if cache_hit; then
+if cache_hit && ! starship_format_stale; then
     log "CACHE HIT $(basename "$WALLPAPER") source=$MATUGEN_SRC — reloading visible themes only"
     THEME_RAN=1
     THEME_OK=1
     write_manifest "cache-hit"
-    timeout 1 notify-send -a matugen "Theme (cached)" "Visible apps reloaded. Starship updates on next prompt." 2>/dev/null || true
+    timeout 1 notify-send -a matugen -r 9001 "Theme applied" "Palette reloaded from cache. Starship updates on next prompt." 2>/dev/null || true
     exit 0
+fi
+
+if cache_hit && starship_format_stale; then
+    log "CACHE HIT but starship prompt layout is stale — regenerating templates"
 fi
 
 THEME_START=$(date +%s)
@@ -298,6 +315,10 @@ jq -n \
         source_hex: $source_hex,
         source_index: $source_index
     }' > "$CACHE_DIR/pending-run.json"
+
+if [[ "$MATUGEN_METHOD" == "image" ]]; then
+    echo "matugen" >"$CACHE_DIR/yazi-icon-mode"
+fi
 
 run_matugen_logged() {
     local -a cmd=("$@")
@@ -352,9 +373,9 @@ if priority_files_ok; then
     primary=$(grep -m1 '^color_orange' "$STARSHIP_MATUGEN" 2>/dev/null | sed -E "s/.*= *['\"]?([^'\"]+)['\"]?.*/\1/" || echo "unknown")
     log "DONE primary=$primary source=$MATUGEN_SRC"
     echo ":: Theme applied (primary accent: $primary)"
-    timeout 1 notify-send -a matugen "Theme updated" "Palette applied. Hyprland borders + Waybar reloaded." 2>/dev/null || true
+    timeout 1 notify-send -a matugen -r 9001 "Theme applied" "Palette updated. Hyprland, Waybar, and app themes reloaded." 2>/dev/null || true
 else
     log "ERROR: matugen did not refresh priority templates for $(basename "$WALLPAPER") (exit=$matugen_exit)"
     echo ":: Theme apply failed — colors may still be from the previous wallpaper" >&2
-    timeout 1 notify-send -a matugen "Theme failed" "Palette did not apply. Try again or check ~/.cache/matugen/matugen.log" 2>/dev/null || true
+    timeout 1 notify-send -a matugen -r 9001 -u critical "Theme failed" "Palette did not apply. Try again or check ~/.cache/matugen/matugen.log" 2>/dev/null || true
 fi

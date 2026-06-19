@@ -16,7 +16,7 @@
 	"SearchBy": "Name",
 	"CacheExpiry": 10,
 	"DisableCache": false,
-	"ColorScheme": "Simp1e-Gruvbox-Light",
+	"ColorScheme": "Custom",
 	"BorderStyle": "Double",
 	"ShowPkgbuildCommand": "curl -s \"{url}\"|less",
 	"ShowPkgbuildInternally": true,
@@ -27,7 +27,7 @@
 	"FeedMaxItems": 5,
 	"SaveWindowLayout": false,
 	"LeftProportion": 4,
-	"Transparent": false,
+	"Transparent": true,
 	"PackageColumnWidth": 0,
 	"EnableAutoSuggest": false,
 	"SepDepsWithNewLine": true

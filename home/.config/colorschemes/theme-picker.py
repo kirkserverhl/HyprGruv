@@ -29,6 +29,7 @@ from wallpaper_picker_support import (
     THUMB_ASPECT_H,
     THUMB_ASPECT_W,
     THEME_LABELS,
+    WAYPAPER_MODE,
     ThemeEntry,
     cover_pixbuf,
     init_waypaper_window,
@@ -36,6 +37,7 @@ from wallpaper_picker_support import (
     load_active_themes,
     load_stylesheet,
     preview_pixbuf_for,
+    random_waypaper_preview,
     resolve_wallpaper_dir,
     thumb_css_overrides,
     uniform_footer_button,
@@ -148,8 +150,8 @@ class ThemePicker(Gtk.Window):
         continue_btn.connect("clicked", lambda *_: self._apply_selection())
         footer.pack_start(continue_btn, False, False, 0)
 
-        hint = Gtk.Label(label="Enter · choose wallpaper")
-        footer.pack_start(hint, False, False, 0)
+        self.hint_label = Gtk.Label(label="Enter · choose wallpaper")
+        footer.pack_start(self.hint_label, False, False, 0)
 
         footer_align.add(footer)
         self.main_box.connect("key-press-event", self._on_key_press)
@@ -176,6 +178,10 @@ class ThemePicker(Gtk.Window):
             return
         entry = self.themes[self.selected_index]
         self.selection_label.set_text(entry.label)
+        if entry.theme_id == WAYPAPER_MODE:
+            self.hint_label.set_text("Enter · open Waypaper GUI")
+        else:
+            self.hint_label.set_text("Enter · choose wallpaper")
 
     def _stable_viewport_width(self) -> int:
         width = self.get_allocation().width
@@ -366,6 +372,13 @@ def build_theme_entries() -> list[ThemeEntry]:
                 preview_path = random.choice(images)
         label = THEME_LABELS.get(theme_id, theme_id.replace("-", " ").title())
         entries.append(ThemeEntry(theme_id=theme_id, label=label, preview_path=preview_path))
+    entries.append(
+        ThemeEntry(
+            theme_id=WAYPAPER_MODE,
+            label="Waypaper",
+            preview_path=random_waypaper_preview(),
+        ),
+    )
     return entries
 
 

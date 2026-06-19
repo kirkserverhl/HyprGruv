@@ -8,12 +8,12 @@
 
 if [[ "$1" == "exit" ]]; then
 	echo ":: Exit"
-	if [[ -f "$FILE" ]]; then
-		rm $FILE
-	fi
-	sleep 0.5
-	killall -9 Hyprland
-	sleep 2
+	# Close wlogout before compositor teardown (avoids blur/render races on layer-shell).
+	pkill -x wlogout 2>/dev/null || true
+	sleep 0.3
+	# Graceful session end — returns to SDDM without a crash report.
+	hyprctl dispatch exit
+	exit 0
 fi
 
 if [[ "$1" == "lock" ]]; then

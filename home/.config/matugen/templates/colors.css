@@ -52,14 +52,24 @@
 @define-color urgent @base08;
 @define-color on_urgent @base00;
 
-@define-color color_orange @base09;
-@define-color color_yellow @base0A;
-@define-color color_aqua   @base0C;
-@define-color color_blue   @base0F;
-@define-color color_on_orange @base00;
-@define-color color_on_yellow @base00;
-@define-color color_on_aqua   @base00;
-@define-color color_on_blue   @base00;
+/*
+ * Starship matugen-rainbow parity — same slots as starship-rainbow.toml [palettes.matugen]
+ * Names are legacy (color_orange = primary slot, not literal orange).
+ */
+@define-color color_fg0 {{colors.on_surface.dark.hex}};
+@define-color color_bg1 {{colors.surface_container.dark.hex}};
+@define-color color_bg3 {{colors.surface_container_high.dark.hex}};
+@define-color color_orange {{colors.primary.dark.hex}};
+@define-color color_yellow {{colors.tertiary.dark.hex}};
+@define-color color_aqua   {{colors.secondary.dark.hex}};
+@define-color color_blue   {{colors.primary_container.dark.hex}};
+@define-color color_on_orange {{colors.on_primary.dark.hex}};
+@define-color color_on_yellow {{colors.on_tertiary.dark.hex}};
+@define-color color_on_aqua   {{colors.on_secondary.dark.hex}};
+@define-color color_on_blue   {{colors.on_surface.dark.hex}};
+@define-color color_green  {{colors.secondary.dark.hex}};
+@define-color color_red    {{colors.error.dark.hex}};
+@define-color color_purple {{colors.tertiary.dark.hex}};
 
 /* Material You semantic aliases (referenced by waybar themes) */
 @define-color error_container {{colors.error_container.dark.hex}};

@@ -1,0 +1,42 @@
+/* Full app launcher (drun + run) — waypaper-matched chrome */
+
+configuration {
+    modi:                       "drun,run";
+    show-icons:                 true;
+    icon-theme:                 "Gruvbox-Plus-Dark";
+    application-fallback-icon:  "application-x-executable";
+    display-drun:               "APPS";
+    display-run:                  "RUN";
+    drun-display-format:        "{name}";
+    scroll-method:              1;
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+
+window {
+    width:    520px;
+    location: center;
+    anchor:   center;
+}
+
+mainbox {
+    children: ["listbox"];
+}
+
+listbox {
+    children: ["inputbar", "listview"];
+}
+
+entry {
+    placeholder: "Search apps...";
+}
+
+listview {
+    lines:        12;
+    fixed-height: true;
+}
+
+element-icon {
+    size: 28px;
+}

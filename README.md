@@ -109,6 +109,8 @@ lib/packages/new.list      # potential optional packages (not auto-installed by 
 
 `01-packages.sh` also installs a small hardcoded core set (Hyprland, pipewire, kitty, thunar, mpv, etc.) before syncing the manifest lists.
 
+**Required AUR highlight:** `aylurs-gtk-shell-git` (AGS) is in `aur.list` and retried in `ESSENTIAL_CHECK`. The dotfiles ship `~/.config/ags/` (power menu, display switcher, sidebar). Waybar remains the primary bar, but AGS must be installed for those layer-shell widgets — including the power menu in `~/.config/ags/power-menu.js`. Keybinds and waybar still launch `wlogout` via `launch-wlogout.sh`; both packages are installed.
+
 ### Potential packages (for review)
 
 These live in `lib/packages/new.list`. They are **not** installed during `./install.sh` (final sync uses `--skip-new`). Install on demand when you want to try one:
@@ -132,10 +134,8 @@ bash ~/.hyprgruv/sync-packages.sh --new-only
 | `ghostty-git`, `ghostty-shell-integration-git`, `ghostty-terminfo-git` | Use official `ghostty` via setup defaults wizard instead |
 | `tmux-resurrect`, `tmux-resurrect-git` | Flaky AUR build; dropped from auto-install |
 | `tmuxai` | Removed from auto-install |
-| `aylurs-gtk-shell-git` (AGS) | Pulls slow `libastal*` source builds; not used (waybar stack) |
 | `ttf-jetbrains-mono`, `ttf-jetbrains-mono-nerd` | Not used; Agave / ShureTechMono / HeavyData are defaults |
 | `ttf-nerd-fonts-symbols` | Redundant — full nerd fonts below already include icon glyphs |
-| `tesseract`, `tesseract-data-*` | OCR not used; removed by `purge_excluded_packages()` if present |
 
 To add or remove potentials, edit `lib/packages/new.list` or run:
 

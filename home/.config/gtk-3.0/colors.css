@@ -2,22 +2,22 @@
  * GTK Colors — Base16 (Material You → base00–base0f)
  */
 
-@define-color base00 #090f10;
-@define-color base01 #161d1d;
-@define-color base02 #1a2121;
-@define-color base03 #3f4949;
-@define-color base04 #bec8c9;
-@define-color base05 #dde4e3;
-@define-color base06 #2b3232;
-@define-color base07 #343a3b;
+@define-color base00 #0b0e13;
+@define-color base01 #191c20;
+@define-color base02 #1d2024;
+@define-color base03 #43474e;
+@define-color base04 #c3c6cf;
+@define-color base05 #e1e2e8;
+@define-color base06 #2e3135;
+@define-color base07 #36393e;
 @define-color base08 #ffb4ab;
-@define-color base09 #b5c7e9;
-@define-color base0A #b1cccd;
-@define-color base0B #80d4d8;
-@define-color base0C #364764;
-@define-color base0D #80d4d8;
-@define-color base0E #324b4c;
-@define-color base0F #458588;
+@define-color base09 #d7bde4;
+@define-color base0A #bbc7db;
+@define-color base0B #a1c9fd;
+@define-color base0C #533f5f;
+@define-color base0D #a1c9fd;
+@define-color base0E #3c4858;
+@define-color base0F #5e81ac;
 
 @define-color accent_color @base0D;
 @define-color accent_fg_color @base00;

@@ -4,13 +4,13 @@
 
 [global]
 monitor = 0
-follow = none
+follow = mouse
 width = 400
 height = (0, 400)
-origin = top-center
-offset = (10, 20)
+origin = top-right
+offset = (20, 20)
 scale = 0
-notification_limit = 0
+notification_limit = 3
 progress_bar = true
 progress_bar_height = 10
 progress_bar_frame_width = 1
@@ -57,29 +57,29 @@ mouse_right_click = close_all
 # Base16 colors
 # ============================================
 
-frame_color = "#80d4d8"
-highlight = "#80d4d8"
-separator_color = "#3f4949"
+frame_color = "#a1c9fd"
+highlight = "#a1c9fd"
+separator_color = "#43474e"
 
 # base03 — muted notification text
 [urgency_low]
-background = "#1a2121"
-foreground = "#3f4949"
-frame_color = "#3f4949"
-highlight = "#b5c7e9"
+background = "#1d2024"
+foreground = "#43474e"
+frame_color = "#43474e"
+highlight = "#d7bde4"
 timeout = 6
 
 [urgency_normal]
-background = "#161d1d"
-foreground = "#dde4e3"
-frame_color = "#80d4d8"
-highlight = "#80d4d8"
+background = "#191c20"
+foreground = "#e1e2e8"
+frame_color = "#a1c9fd"
+highlight = "#a1c9fd"
 timeout = 8
 
 # base08 — urgent / critical notifications (error)
 [urgency_critical]
 background = "#ffb4ab"
-foreground = "#090f10"
+foreground = "#0b0e13"
 frame_color = "#ffb4ab"
 highlight = "#ffb4ab"
 timeout = 0

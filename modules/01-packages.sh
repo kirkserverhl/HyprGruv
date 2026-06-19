@@ -147,7 +147,6 @@ fi
 
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
 purge_endeavouros_remnants || true
-purge_excluded_packages || true
 
 # Install yay (AUR helper) as early as possible in the packages phase.
 # This ensures the "Installing yay" step is visible near the beginning (when needed)
@@ -324,7 +323,7 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
     log_success "VM guest integration packages + services processed"
 fi
 
-ESSENTIAL_CHECK=(brave-bin hyprshot qt5-declarative wlogout xsettingsd displaylink timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout cbonsai-git dipc)
+ESSENTIAL_CHECK=(aylurs-gtk-shell-git brave-bin hyprshot qt5-declarative wlogout xsettingsd displaylink timeshift-autosnap vscodium-bin wl-clip-persist wdisplays wl-clipboard-history-git wlogout cbonsai-git dipc)
 # (otf-apple-sf-pro, pacseek-bin, udiskie-dmenu-git etc. removed for now to avoid flaky builds/conflicts during testing)
 MISSING=()
 for pkg in "${ESSENTIAL_CHECK[@]}"; do

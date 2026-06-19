@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # dev-workspace.sh — tmux dev layout (3 panes):
 #   +----------+----------+
-#   | cheatsheet| yazi    |  top-right (2/3 height)
-#   | + shell  +----------+
-#   | (left    | cmatrix  |  bottom-right (1/3 height)
-#   |  half)   |          |
+#   | nvim     | yazi     |  top-right (2/3 height)
+#   | (left    +----------+
+#   |  half)   | cmatrix  |  bottom-right (1/3 height)
+#   |          |          |
 #   +----------+----------+
 #
 # Each run creates a new session (dev-1, dev-2, …). Switch between them with Ctrl-b s.
@@ -18,6 +18,7 @@ SESSION_PREFIX="${TMUX_DEV_PREFIX:-dev}"
 WINDOW_NAME="${TMUX_DEV_WINDOW:-workspace}"
 EXPECTED_PANES=3
 CMATRIX_PANE="${HOME}/.config/tmux/cmatrix-pane.sh"
+EDITOR_CMD="${HOME}/.config/hyprgruv/scripts/editor.sh"
 RESET=false
 NO_ATTACH=false
 RESET_SESSION=""
@@ -105,9 +106,16 @@ create_dev_session() {
     tmux new-session -d -s "$SESSION_NAME" -c "$START_DIR" -n "$WINDOW_NAME"
     tmux set-option -t "$SESSION_NAME" @learning_cheatsheet off
 
-    # Pane 1: left half (tmux cheat sheet + shell, via .zshrc). Pane 2: yazi. Pane 3: cmatrix.
+    # Pane 1: nvim (left half). Pane 2: yazi. Pane 3: cmatrix.
     tmux split-window -h -t "${SESSION_NAME}:${WINDOW_NAME}" -p 50 -c "$START_DIR"
     tmux split-window -v -t "${SESSION_NAME}:${WINDOW_NAME}.2" -p 34 -c "$START_DIR"
+
+    if [[ -x "$EDITOR_CMD" ]]; then
+        tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.1" \
+            "$("$EDITOR_CMD" --print)" Enter
+    elif command -v nvim >/dev/null; then
+        tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.1" "nvim" Enter
+    fi
 
     tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.2" \
         "${HOME}/.config/hyprgruv/scripts/yazi-matugen.sh" Enter

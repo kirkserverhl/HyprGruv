@@ -117,4 +117,3 @@ fi
 [[ -s "$GROK_THEME" ]] || exit 0
 
 touch "$GROK_THEME" 2>/dev/null || true
-~/.config/hyprgruv/scripts/matugen-notify.sh "Matugen" "Grok theme file updated (~/.grok/themes/matugen.toml)" 2>/dev/null || true

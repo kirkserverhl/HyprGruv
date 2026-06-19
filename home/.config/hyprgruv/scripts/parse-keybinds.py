@@ -67,6 +67,8 @@ def normalize_combo(combo: str) -> str:
 def humanize_command(cmd: str) -> str:
     name = Path(cmd.split()[0]).name if cmd else cmd
     friendly = {
+        "rofi-apps.sh": "Favorites app launcher",
+        "rofi-full.sh": "Full app launcher",
         "fuzzel-apps.sh": "Favorites app launcher",
         "fuzzel-full.sh": "Full app launcher",
         "fuzzel-keybinds.sh": "Keybind reference menu",

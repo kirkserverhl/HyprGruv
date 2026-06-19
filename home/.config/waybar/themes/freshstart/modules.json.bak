@@ -1,0 +1,377 @@
+{
+  "hyprland/workspaces": {
+    "format": "{id}",
+    "format-icons": {
+      "active": "",
+      "default": "",
+      "urgent": ""
+    },
+    "on-click": "activate",
+    "on-scroll-down": "hyprctl dispatch workspace e+1",
+    "on-scroll-up": "hyprctl dispatch workspace e-1",
+    "all-outputs": false,
+    "persistent-only": true,
+    "show-special": false,
+    "ignore-workspaces": ["special:.*"],
+    "persistent-workspaces": {
+      "DP-1": [1, 2],
+      "DVI-I-1": [3, 4],
+      "HDMI-A-1": [5, 6],
+      "DVI-I-2": [7, 8],
+      "*": [1, 2]
+    }
+  },
+  "custom/empty": {
+    "format": " ",
+    "tooltip": false
+  },
+  "custom/keybindings": {
+    "format": "\uf11c",
+    "on-click": "~/.config/hyprgruv/scripts/keybinds.sh",
+    "tooltip": false
+  },
+  "custom/chatgpt": {
+    "format": " ",
+    "on-click": "~/.config/settings/ai.sh",
+    "tooltip-format": "AI Support"
+  },
+  "custom/wallpaper": {
+    "format": "\uf03e",
+    "on-click": "waypaper",
+    "on-click-right": "~/.config/hyprgruv/scripts/decorations.sh",
+    "tooltip-format": "Left: Wallpaper\nRight: Decorations"
+  },
+  "custom/waybarthemes": {
+    "format": "\uf141",
+    "on-click": "~/.config/hyprgruv/scripts/themeswitcher.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/animations.sh",
+    "tooltip-format": "Left: Waybar themes\nRight: Animations"
+  },
+  "group/links": {
+    "orientation": "horizontal",
+    "modules": ["custom/chatgpt", "custom/empty"]
+  },
+  "group/settings": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-memory",
+      "transition-left-to-right": true
+    },
+    "modules": ["custom/settings", "custom/waybarthemes", "custom/wallpaper"]
+  },
+  "hyprland/window": {
+    "format": "{class}",
+    "separate-outputs": true
+  },
+  "custom/appmenu": {
+    "format": "\udb82\udcc7",
+    "on-click": "pkill rofi || rofi -show drun -replace",
+    "tooltip": false
+  },
+  "custom/appmenuicon": {
+    "format": "\uf303",
+    "on-click": "sleep 0.2;rofi -show drun -replace",
+    "on-click-right": "~/.config/hyprgruv/scripts/launch.sh",
+    "tooltip-format": "Left: Open Rofi \nRight: Open Apps"
+  },
+
+  "custom/system": {
+    "format": " \ue473 ",
+    "tooltip": false
+  },
+  "cpu": {
+    "format": "\udb83\udee0",
+    "tooltip": true
+  },
+  "memory": {
+    "format": "\uefc5"
+  },
+  "disk": {
+    "interval": 30,
+    "format": "\uf0c7   {percentage_used}% used on {path}",
+    "path": "/"
+  },
+  "battery": {
+    "format": "{icon}   {capacity}%",
+    "format-charging": "\udb80\udc84  {capacity}%",
+    "format-icons": [
+      "\udb80\udc7a",
+      "\udb80\udc7b",
+      "\udb80\udc7c",
+      "\udb80\udc7d",
+      "\udb80\udc7e",
+      "\udb80\udc7f",
+      "\udb80\udc80",
+      "\udb80\udc81",
+      "\udb80\udc82",
+      "\udb80\udc79"
+    ],
+    "tooltip-format": "Battery is at {capacity}%"
+  },
+  "network": {
+    "interface": "wlo1",
+    "format": "{ifname}",
+    "format-wifi": "{icon}  {essid}",
+    "format-ethernet": "\udb80\ude00  {ipaddr}/{cidr}",
+    "format-disconnected": "\udb82\udd2d  Disconnected",
+    "max-length": 50,
+    "format-icons": [
+      "\udb82\udd2f",
+      "\udb82\udd1f",
+      "\udb82\udd22",
+      "\udb82\udd25",
+      "\udb82\udd28"
+    ],
+    "tooltip-format": "Connected to {essid}"
+  },
+  "pulseaudio": {
+    "format": "{icon}  {volume}%",
+    "format-bluetooth": "\udb80\udcb1 {volume}%",
+    "format-muted": "\udb81\udd81",
+    "scroll-step": 1,
+    "on-click": "~/.config/waybar/scripts/volume-menu.sh",
+    "on-click-right": "pavucontrol",
+    "ignored-sinks": ["Easy Effects Sink"],
+    "format-icons": {
+      "headphone": "\uf025",
+      "hands-free": "\uf590",
+      "headset": "\udb80\udece",
+      "phone": "\uf095",
+      "portable": "\uf095",
+      "car": "\uf1b9",
+      "default": ["\udb81\udd80", "\udb81\udd7e"]
+    },
+    "tooltip-format": "Volume: {volume}%"
+  },
+  "bluetooth": {
+    "format-on": "\udb80\udcaf",
+    "format-disabled": "\udb80\udcb2",
+    "format-connected": "\udb80\udcb1",
+    "format-connected-battery": "{icon}",
+    "format-icons": [
+      "\udb82\udd3e",
+      "\udb82\udd3f",
+      "\udb82\udd40",
+      "\udb82\udd41",
+      "\udb82\udd42",
+      "\udb82\udd43",
+      "\udb82\udd44",
+      "\udb82\udd45",
+      "\udb82\udd46",
+      "\udb82\udd48"
+    ],
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\n{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\n{device_address}\n{device_battery_percentage}%",
+    "on-click-right": "blueman-manager"
+  },
+  "custom/settings": {
+    "format": "\udb81\udc93",
+    "on-click": "~/.config/hyprgruv/scripts/waybar-theme.sh",
+    "tooltip": false
+  },
+  "custom/power": {
+    "format": "\udb81\udc25 ",
+    "on-click": "~/.config/hyprgruv/scripts/launch-wlogout.sh",
+    "tooltip": false
+  },
+  "custom/updates": {
+    "exec": "~/.config/hyprgruv/scripts/updates.sh",
+    "interval": 1800,
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "~/.config/hyprgruv/scripts/installupdates.sh",
+    "tooltip-format": "Install Updates"
+  },
+  "custom/exit": {
+    "format": " \uf011  ",
+    "on-click": "~/.config/hyprgruv/scripts/wlogout.sh",
+    "tooltip-format": "Power Menu"
+  },
+  "custom/media": {
+    "format": "{}",
+    "escape": true,
+    "return-type": "json",
+    "max-length": 40,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl stop",
+    "smooth-scrolling-threshold": 1,
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null"
+  },
+  "group/media": {
+    "orientation": "horizontal",
+    "modules": ["pulseaudio", "bluetooth", "custom/media"]
+  },
+  "custom/notifications": {
+    "format": "\ueaa2",
+    "exec": "~/.config/waybar/scripts/notifications.sh",
+    "interval": 5
+  },
+  "custom/hyprshade": {
+    "format": "\ue4dc",
+    "tooltip-format": "Toggle Screen Shader \ud83d\udd76\ufe0f",
+    "on-click": "~/.config/hyprgruv/scripts/hyprshade.sh",
+    "on-click-right": "sleep 0.5; ~/.config/hyprgruv/scripts/hyprshade.sh rofi"
+  },
+  "custom/hypridle": {
+    "format": " \uf023 ",
+    "return-type": "json",
+    "escape": true,
+    "exec-on-event": true,
+    "interval": 60,
+    "exec": "~/.config/hyprgruv/scripts/hypridle.sh status",
+    "on-click": "~/.config/hyprgruv/scripts/hypridle.sh toggle",
+    "on-click-right": "hyprlock"
+  },
+  "keyboard-state": {
+    "numlock": true,
+    "capslock": true,
+    "format": "{name} {icon}",
+    "format-icons": {
+      "locked": " \uf023 ",
+      "unlocked": " \uf09c "
+    }
+  },
+  "tray": {
+    "icon-size": 14,
+    "spacing": 10
+  },
+  "custom/cliphist": {
+    "format": " \udb80\udd4c ",
+    "on-click": "~/.config/hyprgruv/scripts/cliphist.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/cliphist.sh d",
+    "tooltip-format": "Clipboard \nLeft: Screenshot\nRight: History"
+  },
+  "custom/tools": {
+    "format": " \ueb52 ",
+    "on-click": "pkill rofi || rofi -show drun -replace",
+    "tooltip-format": "Tools & Utilities"
+  },
+  "hyprland/language": {
+    "format": "/ K {short}"
+  },
+  "group/hardware": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-memory",
+      "transition-left-to-right": false
+    },
+    "modules": ["custom/system", "disk", "cpu", "memory", "hyprland/language"]
+  },
+  "group/tools": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-memory",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/tools",
+      "custom/cliphist",
+      "custom/hypridle",
+      "custom/hyprshade"
+    ]
+  },
+  "group/network": {
+    "orientation": "horizontal",
+    "modules": ["network", "group/hardware", "group/tools"]
+  },
+  "custom/notification": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "$HOME/.config/waybar/scripts/dunst.sh",
+    "on-click": "$HOME/.config/waybar/scripts/dunst.sh left",
+    "on-click-right": "$HOME/.config/waybar/scripts/dunst.sh right",
+    "interval": 10,
+    "tooltip": true
+  },
+  "custom/launcher": {
+    "format": "\uf303",
+    "on-click": "bash /home/$USER/.config/waybar/scripts/app_launcher.sh",
+    "tooltip-format": "Launch your favorite apps"
+  },
+  "custom/pacman": {
+    "format": "\udb80\udd62  {}",
+    "interval": "once",
+    "exec": "checkupdates | wc -l",
+    "on-click": "update-system",
+    "signal": 8,
+    "tooltip-format": "{} updates available"
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{icon}   {percent}%",
+    "format-icons": ["\udb80\udcde", "\udb80\udcdf", "\udb80\udce0"]
+  },
+  "custom/weather": {
+    "exec": "${HOME}/.config/waybar/scripts/get-weather.sh Raleigh+NC",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600
+  },
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power mode: {profile}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "\uf0e7",
+      "performance": "\udb82\udc20",
+      "balanced": "\udb81\ude80",
+      "power-saver": "\udb80\udf2a"
+    }
+  },
+  "custom/media-separator": {
+    "exec": "~/.config/waybar/scripts/media_separator.sh",
+    "interval": 1,
+    "return-type": "json",
+    "tooltip": false
+  },
+  "custom/expand": {
+    "format": "\udb82\udf2b",
+    "tooltip-format": "Expand drawer..."
+  },
+  "custom/expandleft": {
+    "format": "\udb82\udf29",
+    "tooltip-format": "Expand drawer..."
+  },
+  "group/expand": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 600,
+      "transition-to-left": true,
+      "click-to-reveal": true
+    },
+    "modules": [
+      "custom/expand",
+      "custom/pacman",
+      "custom/weather",
+      "custom/notification",
+      "power-profiles-daemon"
+    ]
+  },
+  "group/expandleft": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 600,
+      "transition-to-left": true,
+      "click-to-reveal": true
+    },
+    "modules": ["custom/expandleft", "custom/media"]
+  },
+  "custom/time": {
+    "format": "{}",
+    "interval": 5,
+    "exec": "date +%H:%M",
+    "tooltip": false
+  },
+  "temperature": {
+    "critical-threshold": 80,
+    "format": "\uf2c9"
+  }
+}

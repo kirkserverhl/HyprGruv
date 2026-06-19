@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-# Full fuzzel launcher — all installed apps
-pkill -x fuzzel 2>/dev/null
-exec fuzzel -n fuzzel "$@"
+# Back-compat wrapper — full launcher is rofi now.
+exec "$(dirname "${BASH_SOURCE[0]}")/rofi-full.sh" "$@"

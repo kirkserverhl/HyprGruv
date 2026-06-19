@@ -1,6 +1,6 @@
 {
   "custom/appmenu": {
-    "format": "\uf303",
+    "format": " \uf303 ",
     "on-click": "~/.config/hyprgruv/scripts/fuzzel-full.sh",
     "on-click-right": "~/.config/hyprgruv/scripts/fuzzel-apps.sh",
     "tooltip-format": "Left: All Apps\nRight: Favorites"
@@ -55,3 +55,4 @@
     ]
   }
 }
+

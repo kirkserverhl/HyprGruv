@@ -83,7 +83,7 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Launchers
-hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-apps.sh"))
+hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh"))
 -- Super+Return: plain kitty (or default terminal from ~/.config/settings/terminal.sh)
 hl.bind(mainMod .. " + Return",       hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh"))
@@ -102,7 +102,7 @@ hl.bind(mainMod .. " + S",            hl.dsp.workspace.toggle_special())
 hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special" }))
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G",            toggle_gaps)
-hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd("$HOME/.local/bin/waypaper"))
+hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh"))
 hl.bind(mainMod .. " + Tab",          hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" }))
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
@@ -135,7 +135,7 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(SCRIPTS .. "/reload-dev-session.sh"))
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Launchers (alt)
-hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-full.sh"))
+hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"))
 hl.bind(altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
 hl.bind(altMod .. " + B",      hl.dsp.exec_cmd("google-chrome-stable"))
 hl.bind(mainMod .. " + " .. altMod .. " + B", hl.dsp.exec_cmd("firefox"))
@@ -148,7 +148,6 @@ hl.bind(altMod .. " + R", hl.dsp.exec_cmd("hyprctl reload; hyprctl notify 0 2000
 -- Screenshots / theme / monitors
 hl.bind(altMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd(SCRIPTS .. "/base16-palette.sh"))
-hl.bind(altMod .. " + T",     hl.dsp.exec_cmd("pkill -x rofi 2>/dev/null; ~/.config/colorschemes/rofi-launcher.sh"))
 hl.bind(altMod .. " + M",     hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
 hl.bind(altMod .. " + N",     hl.dsp.exec_cmd("~/.local/bin/night-mode.sh"))
 
@@ -177,7 +176,7 @@ hl.bind(altMod .. " + H",            hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh ht
 hl.bind(altMod .. " + SHIFT + T",    hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh bpytop"))
 hl.bind(altMod .. " + P",            hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(altMod .. " + C",            hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"))
-hl.bind(mainMod .. " + " .. altMod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh pacseek"))
+hl.bind(mainMod .. " + " .. altMod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/software.sh"))
 
 -- Notifications (alt = full menu)
 hl.bind(altMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh menu"))

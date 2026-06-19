@@ -29,6 +29,8 @@ fi
 
 CURRENT_THEME_FILE="$HOME/.config/colorschemes/.current-theme"
 echo "$THEME" >"$CURRENT_THEME_FILE"
+mkdir -p "$HOME/.cache/matugen"
+echo "preset:$THEME" >"$HOME/.cache/matugen/yazi-icon-mode"
 rm -f "$HOME/.config/colorschemes/.use-preset-colors" 2>/dev/null || true
 
 echo -e "${GREEN}Applying theme: $THEME${NC}\n"

@@ -50,6 +50,10 @@ hl.config({
 		mouse_move_enables_dpms = true,
 	},
 
+	debug = {
+		vfr = false, -- sync to monitor refresh; reduces tearing
+	},
+
 	ecosystem = {
 		no_update_news = true, -- was ecosystem:no_update_news
 		no_donation_nag = true,

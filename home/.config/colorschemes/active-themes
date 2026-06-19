@@ -1,4 +1,4 @@
-# Themes shown in the Alt+T switcher (one id per line).
+# Themes shown in the Super+W switcher (one id per line).
 # Move unused theme folders to ~/.config/colorschemes/unused/ to keep them out of the way.
 catppuccin
 gruvbox-dark

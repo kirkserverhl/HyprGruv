@@ -37,7 +37,7 @@ local function apply_hyprbars()
 		},
 	})
 
-	-- Left: close | Middle: float toggle | Right: minimize/maximize toggle
+	-- Left: close (pink) | Middle: float (grey) | Right: maximize (blue) — starship rainbow slots 1–3
 	-- Hyprland 0.55+ needs hl.dsp dispatch strings (plain killactive/togglefloat do not fire).
 	hl.plugin.hyprbars.add_button({
 		bg_color = colors.hyprbar_close,

@@ -119,9 +119,11 @@ element selected.active {
 }
 
 element-icon {
+    enabled:          true;
     background-color: transparent;
     text-color:       inherit;
     size:             28px;
+    margin:           0 10px 0 0;
     cursor:           inherit;
 }
 

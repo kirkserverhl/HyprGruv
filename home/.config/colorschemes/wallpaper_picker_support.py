@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import random
 import re
 import subprocess
 from dataclasses import dataclass
@@ -41,7 +42,10 @@ SCROLLBAR_RESERVE = 14
 RESIZE_DEBOUNCE_MS = 120
 FOOTER_BUTTON_WIDTH = 96
 FOOTER_CONTROL_HEIGHT = 32
+WAYPAPER_MODE = "__waypaper__"
+WAYPAPER_BIN = HOME / ".local/bin/waypaper"
 MATUGEN_STYLE = HOME / ".config/waypaper/colors/matugen.css"
+WAYPAPER_CONFIG = HOME / ".config/waypaper/config.ini"
 
 THEME_LABELS = {
     "catppuccin": "Catppuccin",
@@ -83,16 +87,59 @@ def resolve_wallpaper_dir(theme: str) -> Path | None:
     return fallback if fallback.is_dir() else None
 
 
-def list_wallpapers(directory: Path) -> list[str]:
+def list_wallpapers(directory: Path, *, include_subfolders: bool = False) -> list[str]:
     if get_image_paths:
-        paths = get_image_paths("awww", [directory], False, False, False, False)
+        paths = get_image_paths(
+            "awww",
+            [directory],
+            include_subfolders,
+            False,
+            False,
+            False,
+        )
         return sorted(paths)
     exts = {".jpg", ".jpeg", ".png", ".webp", ".svg"}
+    if include_subfolders:
+        return sorted(
+            str(p)
+            for p in directory.rglob("*")
+            if p.is_file() and p.suffix.lower() in exts
+        )
     return sorted(
         str(p)
         for p in directory.iterdir()
         if p.is_file() and p.suffix.lower() in exts
     )
+
+
+def resolve_waypaper_folder() -> Path | None:
+    """Waypaper wallpaper root from ~/.config/waypaper/config.ini (folder key)."""
+    folder = HOME / "Wallpapers"
+    if WAYPAPER_CONFIG.is_file():
+        for line in WAYPAPER_CONFIG.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line.startswith("folder ="):
+                continue
+            raw = line.split("=", 1)[1].strip()
+            folder = Path(raw).expanduser()
+            break
+    return folder if folder.is_dir() else None
+
+
+def random_waypaper_preview() -> str | None:
+    """Random thumbnail from the Waypaper library (respects subfolders setting)."""
+    folder = resolve_waypaper_folder()
+    if not folder:
+        return None
+    include_subfolders = True
+    if WAYPAPER_CONFIG.is_file():
+        for line in WAYPAPER_CONFIG.read_text(encoding="utf-8").splitlines():
+            line = line.strip().lower()
+            if line.startswith("subfolders ="):
+                include_subfolders = line.split("=", 1)[1].strip() in {"true", "1", "yes"}
+                break
+    images = list_wallpapers(folder, include_subfolders=include_subfolders)
+    return random.choice(images) if images else None
 
 
 def get_monitors() -> list[str]:
@@ -162,6 +209,17 @@ def uniform_footer_button(
     button.set_size_request(width, FOOTER_CONTROL_HEIGHT)
     button.get_style_context().add_class("footer-control")
     return button
+
+
+def launch_waypaper() -> None:
+    """Open the full Waypaper GUI (detached from the theme switcher)."""
+    cmd = [str(WAYPAPER_BIN)] if WAYPAPER_BIN.is_file() else ["waypaper"]
+    subprocess.Popen(
+        cmd,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
 
 
 def selection_border_colors() -> tuple[str, str]:

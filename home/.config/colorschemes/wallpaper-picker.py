@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import os
 import random
-import re
 import subprocess
 import sys
 import threading
@@ -18,6 +17,12 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("GdkPixbuf", "2.0")
 from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
 
+from wallpaper_picker_support import (
+    FOOTER_CONTROL_HEIGHT,
+    load_stylesheet,
+    uniform_footer_button,
+)
+
 try:
     from waypaper.common import cache_image, get_cached_image_path, get_image_paths
 except ImportError:
@@ -28,8 +33,6 @@ except ImportError:
 HOME = Path.home()
 COLORSCHEMES = (HOME / ".config/colorschemes").resolve()
 CACHE_DIR = HOME / ".cache" / "colorschemes-wallpaper-thumbs"
-STYLE_FILE = HOME / ".config" / "waypaper" / "style.css"
-MATUGEN_CONF = HOME / ".config/hypr/colors/custom/matugen.conf"
 AWWW_SCRIPT = COLORSCHEMES / "awww-wallpaper.sh"
 STATE_FILE = COLORSCHEMES / ".wallpaper-state"
 MONITOR_STATE = COLORSCHEMES / ".wallpaper-monitor"
@@ -84,102 +87,6 @@ def get_monitors() -> list[str]:
             if name:
                 monitors.append(name)
     return monitors
-
-
-def _resolve_matugen_color(name: str, aliases: dict[str, str]) -> str | None:
-    value = aliases.get(name)
-    if not value:
-        return None
-    if value.startswith("$"):
-        return _resolve_matugen_color(value[1:], aliases)
-    match = re.fullmatch(r"rgba\(([0-9a-fA-F]{8})\)", value)
-    if match:
-        return f"#{match.group(1)[:6]}"
-    if re.fullmatch(r"#[0-9a-fA-F]{6}", value):
-        return value
-    return None
-
-
-def selection_border_colors() -> tuple[str, str]:
-    """Primary + secondary from matugen (matches Hyprland active border tones)."""
-    primary = "#80d4d8"
-    secondary = "#324b4c"
-    if not MATUGEN_CONF.is_file():
-        return primary, secondary
-    aliases: dict[str, str] = {}
-    for line in MATUGEN_CONF.read_text().splitlines():
-        match = re.match(r"^\s*\$([A-Za-z0-9_]+)\s*=\s*(.+?)\s*$", line)
-        if match:
-            aliases[match.group(1)] = match.group(2).strip()
-    primary = _resolve_matugen_color("primary", aliases) or primary
-    secondary = _resolve_matugen_color("secondary", aliases) or secondary
-    return primary, secondary
-
-
-def thumb_css_overrides() -> bytes:
-    primary, secondary = selection_border_colors()
-    return f"""
-    #wallpaper-content {{
-        padding: 0;
-        margin: 0;
-    }}
-    #wallpaper-preview {{
-        padding: 0;
-        margin: 0;
-    }}
-    #wallpaper-footer {{
-        padding: 0;
-        margin: 0;
-    }}
-    grid frame.wallpaper-cell {{
-        padding: 0;
-        margin: 0;
-        border: none;
-        background-color: transparent;
-    }}
-    grid frame.wallpaper-cell > border {{
-        border: {CELL_BORDER}px solid transparent;
-        border-radius: 8px;
-        background-color: transparent;
-        padding: 0;
-        margin: 0;
-    }}
-    grid frame.wallpaper-cell:hover > border {{
-        background-color: alpha({primary}, 0.10);
-    }}
-    grid frame.wallpaper-cell.selected > border {{
-        border: {CELL_BORDER}px solid {primary};
-        background-color: alpha({secondary}, 0.40);
-        box-shadow: inset 0 0 0 1px alpha({secondary}, 0.95),
-                    0 0 0 1px {primary},
-                    0 0 12px alpha({primary}, 0.55);
-    }}
-    .wallpaper-cell image {{
-        padding: 0;
-        margin: 0;
-        border-radius: 5px;
-    }}
-    """.encode()
-
-
-def load_stylesheet() -> None:
-    """Load waypaper style.css (matugen colors + blurred panel alpha)."""
-    provider = Gtk.CssProvider()
-    fallback = b".highlighted-button { border: 1px solid @theme_selected_bg_color; }"
-    thumb_overrides = thumb_css_overrides()
-    try:
-        if STYLE_FILE.is_file():
-            css = STYLE_FILE.read_bytes() + thumb_overrides
-            provider.load_from_data(css)
-        else:
-            raise OSError(f"missing stylesheet: {STYLE_FILE}")
-    except Exception:
-        provider.load_from_data(fallback + thumb_overrides)
-    Gtk.StyleContext.add_provider_for_screen(
-        Gdk.Screen.get_default(),
-        provider,
-        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
-    )
 
 
 def _tag_widget(widget: Gtk.Widget, name: str) -> None:
@@ -362,8 +269,6 @@ class WallpaperPicker(Gtk.Window):
         footer = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         self.search_entry = Gtk.Entry()
         self.search_entry.set_placeholder_text("Search...")
-        from wallpaper_picker_support import FOOTER_CONTROL_HEIGHT, uniform_footer_button
-
         self.search_entry.set_size_request(220, FOOTER_CONTROL_HEIGHT)
         self.search_entry.connect("changed", self._on_search_changed)
         self.search_entry.connect("key-press-event", self._on_key_press)

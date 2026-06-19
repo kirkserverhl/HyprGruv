@@ -1,0 +1,49 @@
+/*
+ * freshstart theme - rich modules layout with matugen-waybar rainbow styling
+ * TESTING: tester theme module layout (restore from *.bak to revert)
+ */
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 5,
+  "margin-bottom": 0,
+  "margin-left": 14,
+  "margin-right": 14,
+  "spacing": 0,
+  "height": 42,
+  "reload_style_on_change": true,
+
+  "include": [
+    "~/.config/waybar/shared/layout.jsonc",
+    "~/.config/waybar/themes/freshstart/modules.json"
+  ],
+
+  "modules-left": [
+    "group/apps",
+    "custom/hyprgruv-settings",
+    "custom/waybarthemes",
+    "custom/wallpaper",
+    "group/sound",
+    "custom/media"
+  ],
+
+  "custom/hyprgruv-settings": {
+    "format": "\udb81\udc93",
+    "on-click": "~/.config/hyprgruv/scripts/waybar-hyprgruv-settings.sh",
+    "tooltip-format": "HyprGruv Settings"
+  },
+
+  "custom/waybarthemes": {
+    "format": "\uf141",
+    "on-click": "~/.config/hyprgruv/scripts/themeswitcher.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/animations.sh",
+    "tooltip-format": "Waybar themes\nRight: Animations"
+  },
+
+  "custom/wallpaper": {
+    "format": "\uf03e",
+    "on-click": "waypaper",
+    "on-click-right": "~/.config/hyprgruv/scripts/decorations.sh",
+    "tooltip-format": "Wallpaper\nRight: Decorations"
+  }
+}

@@ -75,7 +75,7 @@ parse_keybinds() {
   keybinds_hint+="󰌓 ▏󰖳 + SHIFT + 󰯲          Open Clipboard History\n"
   keybinds_hint+="󰌓 ▏󰖳 + Print              Screenshot\n"
   keybinds_hint+="󰌓 ▏󰖳 + Shift + 󰰢          Screenshot\n"
-  keybinds_hint+="󰌓 ▏󰖳 + 󰰮                  Waypaper GUI (backend/folder/settings)\n"
+  keybinds_hint+="󰌓 ▏󰖳 + 󰰮                  Theme Switcher (Theme or Waypaper)\n"
   keybinds_hint+="󰌓 ▏󰖳 + SHIFT + 󰰮           Fast Rofi Wallpaper Grid\n"
   keybinds_hint+="󰌓 ▏󰖳 + 󰘶 + 󰰁              HyprShade (BlueFilter)\n"
   keybinds_hint+="━━━━━━━━━━━━━━━━━━ Windows ━━━━━━━━━━━━━━━━━━\n"

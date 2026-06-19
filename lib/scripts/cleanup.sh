@@ -35,8 +35,7 @@ fi
 
 echo ""
 
-# Drop packages Hyprgruv never ships (e.g. leftover tesseract from old installs).
-purge_excluded_packages || true
+
 
 # Safe cleanup: cache only by default. Orphan removal is commented for safety.
 if command -v "$aur_helper" >/dev/null 2>&1; then
