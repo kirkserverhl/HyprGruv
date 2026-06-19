@@ -41,7 +41,6 @@ YAML_MAP: dict[str, str] = {
     "e-ink": "grayscale-dark.yaml",
     "coast-gruv": "gruvbox-dark-hard.yaml",
     "forest-night": "everforest-dark-hard.yaml",
-    "ink-minimal": "grayscale-dark.yaml",
     "warm-stone": "gruvbox-dark-medium.yaml",
 }
 
@@ -50,7 +49,6 @@ INHERIT: dict[str, str] = {
     "coast-gruv": "gruvbox-dark",
     "warm-stone": "gruvbox-dark",
     "forest-night": "everforest-dark",
-    "ink-minimal": "e-ink",
 }
 
 RAINBOW_ORDER = [
@@ -180,7 +178,6 @@ SEGMENT_FG: dict[str, dict[str, str]] = {
     "forest-night": {"color_bg3": "#83c092"},
     "noir": {"color_bg3": "#b9bdc2"},
     "e-ink": {"color_bg3": "#bcbcbc"},
-    "ink-minimal": {"color_bg3": "#bcbcbc"},
     "coast-gruv": {"color_bg3": "#83a598"},
     "warm-stone": {"color_bg3": "#83a598"},
 }

@@ -56,7 +56,6 @@ THEME_LABELS = {
     "e-ink": "E-Ink",
     "coast-gruv": "Coast Gruv",
     "forest-night": "Forest Night",
-    "ink-minimal": "Ink Minimal",
     "warm-stone": "Warm Stone",
 }
 

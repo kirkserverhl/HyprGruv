@@ -2,7 +2,9 @@
 # reload-kitty-colors.sh — push latest matugen kitty colors into open windows
 #
 # Kitty reads ~/.config/kitty/colors/custom/matugen.conf (included from kitty.conf).
-# SIGUSR1 reloads the config without restarting windows.
+# Equivalent to Ctrl+Shift+F5 (load-config) in each open kitty window:
+#   - SIGUSR1 reloads all instances
+#   - kitty @ load-config is the remote-control fallback per PID
 
 set -euo pipefail
 

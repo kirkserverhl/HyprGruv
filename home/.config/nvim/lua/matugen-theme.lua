@@ -1,4 +1,4 @@
--- Preset theme: gruvbox-dark — static palette (not Material You)
+-- Preset theme: coast-gruv — static palette (not Material You)
 
 local ok, base16 = pcall(require, "mini.base16")
 if not ok then

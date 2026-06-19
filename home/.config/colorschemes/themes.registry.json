@@ -51,12 +51,6 @@
       "status": "personal"
     },
     {
-      "id": "ink-minimal",
-      "label": "Ink Minimal",
-      "wallpaper_folder": "e-ink",
-      "status": "personal"
-    },
-    {
       "id": "warm-stone",
       "label": "Warm Stone",
       "wallpaper_folder": "gruvbox-dark",

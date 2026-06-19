@@ -2,8 +2,8 @@
 /* Maps to current wallpaper colors. Run matugen to update. */
 
 :root {
-  --primary-col: #ffb4a9;
-  --primary-col-glow: #ffb4a9aa;
+  --primary-col: #f4bd6f;
+  --primary-col-glow: #f4bd6faa;
 
   /* Muted gray for borders etc. */
   --gray: #7c6f64;

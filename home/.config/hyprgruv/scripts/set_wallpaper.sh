@@ -264,4 +264,7 @@ rm -f "$HOME/.cache/matugen/waybar-dark-text" \
 # echo "   - $SQUARE_WALLPAPER"
 # echo "   - $RASI_FILE"
 
+# Safety net: palette.sh / preset flows may have updated kitty colors already.
+"$HOME/.config/hyprgruv/scripts/reload-kitty-colors.sh" 2>/dev/null || true
+
 echo ":: Wallpaper processing complete!"

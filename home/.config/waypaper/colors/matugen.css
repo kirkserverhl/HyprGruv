@@ -16,7 +16,7 @@ scrolledwindow {
 /* All action buttons — top row, bottom row, slideshow */
 button,
 togglebutton {
-    background-color: #574419;
+    background-color: #3a4c2a;
     color: #ebdbb2;
     border: 1px solid #928374;
     border-radius: 6px;
@@ -25,17 +25,17 @@ togglebutton {
 
 button:hover,
 togglebutton:hover {
-    background-color: #ffb4a9;
+    background-color: #f4bd6f;
     color: #1d2021;
 }
 
 button:active,
 togglebutton:active {
-    background-color: #574419;
+    background-color: #3a4c2a;
 }
 
 togglebutton:checked {
-    background-color: #ffb4a9;
+    background-color: #f4bd6f;
     color: #1d2021;
 }
 
@@ -47,7 +47,7 @@ combobox button {
 }
 
 combobox button:hover {
-    background-color: alpha(#ffb4a9, 0.15);
+    background-color: alpha(#f4bd6f, 0.15);
     color: #ebdbb2;
 }
 
@@ -65,7 +65,7 @@ entry {
 }
 
 entry selection {
-    background-color: #ffb4a9;
+    background-color: #f4bd6f;
     color: #1d2021;
 }
 
@@ -116,7 +116,7 @@ scrollbar slider:hover {
 
 /* Wallpaper grid */
 .highlighted-button {
-    border: 2px solid #ffb4a9;
+    border: 2px solid #f4bd6f;
     border-radius: 8px;
 }
 
@@ -128,6 +128,6 @@ grid button {
 }
 
 grid button:hover {
-    background-color: alpha(#ffb4a9, 0.15);
+    background-color: alpha(#f4bd6f, 0.15);
     border-radius: 6px;
 }

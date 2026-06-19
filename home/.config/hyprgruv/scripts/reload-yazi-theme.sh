@@ -18,6 +18,7 @@ set -euo pipefail
 
 JSON="${HOME}/.cache/matugen/current.json"
 THEME="${HOME}/.config/yazi/theme.toml"
+YAZI_CONFIG="${HOME}/.config/matugen/yazi-only.toml"
 ICON_MODE_FILE="${HOME}/.cache/matugen/yazi-icon-mode"
 ICON_CACHE="${HOME}/.cache/matugen/yazi-icons-matugen.toml"
 TEMPLATES="${HOME}/.config/matugen/templates"
@@ -137,8 +138,8 @@ regen_theme() {
     before=""
     [[ -f "$THEME" ]] && before=$(stat -c '%Y' "$THEME" 2>/dev/null || echo "")
 
-    # Runs all matugen templates; we only need theme.toml updated.
-    matugen json "$JSON" -q --continue-on-error 2>/dev/null || true
+    # Yazi-only config — never run the full matugen.toml here (would reload waybar, hypr, gtk, etc.).
+    matugen json "$JSON" -c "$YAZI_CONFIG" -q --continue-on-error 2>/dev/null || true
 
     [[ -f "$THEME" ]] || {
         echo "[reload-yazi] theme.toml missing after matugen json" >&2

@@ -17,12 +17,12 @@
 
 @define-color base08 #cc241d;
 @define-color base09 #b16286;
-@define-color base0A #302e2d;
+@define-color base0A #333230;
 @define-color base0B #32302f;
-@define-color base0C #33312f;
-@define-color base0D #343230;
-@define-color base0E #373432;
-@define-color base0F #3a3634;
+@define-color base0C #32302f;
+@define-color base0D #32302f;
+@define-color base0E #32302f;
+@define-color base0F #32302f;
 
 @define-color background @base00;
 @define-color foreground @base05;

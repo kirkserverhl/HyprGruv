@@ -387,6 +387,10 @@ PY
                         ;;
                 esac
 
+                # Matugen template post_hooks may have fired already; reload again so
+                # every open kitty picks up colors.conf changes (same as Ctrl+Shift+F5).
+                "$HOME/.config/hyprgruv/scripts/reload-kitty-colors.sh" 2>/dev/null || true
+
                 sleep 0.6
                 exit 0
             else

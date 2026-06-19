@@ -14,7 +14,7 @@
 				<key>foreground</key>
 				<string>#ebdbb2</string>
 				<key>caret</key>
-				<string>#ffb4a9</string>
+				<string>#f4bd6f</string>
 				<key>lineHighlight</key>
 				<string>#282828</string>
 				<key>selection</key>
@@ -44,7 +44,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#ffb4a9</string>
+				<string>#f4bd6f</string>
 			</dict>
 		</dict>
 
@@ -56,7 +56,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#5d3f3b</string>
+				<string>#56442a</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
@@ -70,7 +70,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#ffb4a9</string>
+				<string>#f4bd6f</string>
 			</dict>
 		</dict>
 
@@ -82,7 +82,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#e7bdb7</string>
+				<string>#ddc2a1</string>
 			</dict>
 		</dict>
 

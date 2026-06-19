@@ -10,8 +10,8 @@ cursor = "{{colors.primary.dark.hex}}"
 text = "{{colors.surface_container_lowest.dark.hex}}"
 
 [colors.selection]
-text = "{{colors.inverse_on_surface.dark.hex}}"
-background = "{{colors.surface_container.dark.hex}}"
+text = "{{colors.surface_container_lowest.dark.hex}}"
+background = "{{colors.primary.dark.hex}}"
 
 [colors.normal]
 black = "{{colors.surface_container_lowest.dark.hex}}"

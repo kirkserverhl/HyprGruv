@@ -1,4 +1,4 @@
-/* Preset theme: gruvbox-dark — static palette (not Material You) */
+/* Preset theme: coast-gruv — static palette (not Material You) */
 @define-color base00 #1d2021;
 @define-color base01 #282828;
 @define-color base02 #3c3836;
@@ -45,7 +45,7 @@
 @define-color urgent @base08;
 @define-color on_urgent @base00;
 
-/* Shared spectrum — Starship + Waybar + Hyprbars (from ~/.config/colorschemes/gruvbox-dark/spectrum.json) */
+/* Shared spectrum — Starship + Waybar + Hyprbars (from ~/.config/colorschemes/coast-gruv/spectrum.json) */
 /* order: orange → yellow → aqua → blue → grey → dark grey */
 @define-color color_fg0 #fbf1c7;
 @define-color color_bg1 #3c3836;

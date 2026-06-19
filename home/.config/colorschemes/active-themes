@@ -1,4 +1,4 @@
-# Ten curated themes (Super+W). Palette is fixed per theme — wallpapers never re-roll colors.
+# Nine curated themes (Super+W). Palette is fixed per theme — wallpapers never re-roll colors.
 # Edit ~/.config/colorschemes/themes.registry.json for labels and wallpaper folders.
 # Refine a palette: palette-customize.sh → save to theme slot.
 gruvbox-dark
@@ -9,5 +9,4 @@ noir
 e-ink
 coast-gruv
 forest-night
-ink-minimal
 warm-stone

@@ -12,12 +12,12 @@
 @define-color base07 #665c54;
 @define-color base08 #cc241d;
 @define-color base09 #b16286;
-@define-color base0A #e7bdb7;
-@define-color base0B #ffb4a9;
-@define-color base0C #574419;
-@define-color base0D #ffb4a9;
-@define-color base0E #5d3f3b;
-@define-color base0F #cb251d;
+@define-color base0A #ddc2a1;
+@define-color base0B #f4bd6f;
+@define-color base0C #3a4c2a;
+@define-color base0D #f4bd6f;
+@define-color base0E #56442a;
+@define-color base0F #88693e;
 
 @define-color accent_color @base0D;
 @define-color accent_fg_color @base00;

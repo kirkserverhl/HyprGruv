@@ -23,17 +23,17 @@
     
     --base09: #b16286;
     
-    --base0a: #302e2d;
+    --base0a: #333230;
     
     --base0b: #32302f;
     
-    --base0c: #33312f;
+    --base0c: #32302f;
     
-    --base0d: #343230;
+    --base0d: #32302f;
     
-    --base0e: #373432;
+    --base0e: #32302f;
     
-    --base0f: #3a3634;
+    --base0f: #32302f;
     
 
     
@@ -57,22 +57,22 @@
     
     --base09-rgb: 177 98 134;
     
-    --base0a-rgb: 48 46 45;
+    --base0a-rgb: 51 50 48;
     
     --base0b-rgb: 50 48 47;
     
-    --base0c-rgb: 51 49 47;
+    --base0c-rgb: 50 48 47;
     
-    --base0d-rgb: 52 50 48;
+    --base0d-rgb: 50 48 47;
     
-    --base0e-rgb: 55 52 50;
+    --base0e-rgb: 50 48 47;
     
-    --base0f-rgb: 58 54 52;
+    --base0f-rgb: 50 48 47;
     
 
     /* Legacy Material roles (for older userChrome rules) */
     
-    --background: #1a1110;
+    --background: #18120b;
     
     --error: #cc241d;
     
@@ -80,11 +80,11 @@
     
     --inverse_on_surface: #3c3836;
     
-    --inverse_primary: #904a41;
+    --inverse_primary: #805610;
     
-    --inverse_surface: #f1dedc;
+    --inverse_surface: #ede0d4;
     
-    --on_background: #f1dedc;
+    --on_background: #ede0d4;
     
     --on_error: #1d2021;
     
@@ -92,19 +92,19 @@
     
     --on_primary: #1d2021;
     
-    --on_primary_container: #ffdad5;
+    --on_primary_container: #ffddb3;
     
-    --on_primary_fixed: #3b0906;
+    --on_primary_fixed: #291800;
     
-    --on_primary_fixed_variant: #73342c;
+    --on_primary_fixed_variant: #633f00;
     
     --on_secondary: #1d2021;
     
-    --on_secondary_container: #ffdad5;
+    --on_secondary_container: #fbdebc;
     
-    --on_secondary_fixed: #2c1512;
+    --on_secondary_fixed: #271904;
     
-    --on_secondary_fixed_variant: #5d3f3b;
+    --on_secondary_fixed_variant: #56442a;
     
     --on_surface: #ebdbb2;
     
@@ -112,37 +112,37 @@
     
     --on_tertiary: #1d2021;
     
-    --on_tertiary_container: #fcdfa6;
+    --on_tertiary_container: #d4eabb;
     
-    --on_tertiary_fixed: #251a00;
+    --on_tertiary_fixed: #102004;
     
-    --on_tertiary_fixed_variant: #574419;
+    --on_tertiary_fixed_variant: #3a4c2a;
     
-    --outline: #a08c89;
+    --outline: #9c8f80;
     
     --outline_variant: #7c6f64;
     
-    --primary: #ffb4a9;
+    --primary: #f4bd6f;
     
-    --primary_container: #73342c;
+    --primary_container: #633f00;
     
-    --primary_fixed: #ffdad5;
+    --primary_fixed: #ffddb3;
     
-    --primary_fixed_dim: #ffb4a9;
+    --primary_fixed_dim: #f4bd6f;
     
     --scrim: #000000;
     
-    --secondary: #e7bdb7;
+    --secondary: #ddc2a1;
     
-    --secondary_container: #5d3f3b;
+    --secondary_container: #56442a;
     
-    --secondary_fixed: #ffdad5;
+    --secondary_fixed: #fbdebc;
     
-    --secondary_fixed_dim: #e7bdb7;
+    --secondary_fixed_dim: #ddc2a1;
     
     --shadow: #000000;
     
-    --source_color: #cb251d;
+    --source_color: #88693e;
     
     --surface: #1d2021;
     
@@ -150,31 +150,31 @@
     
     --surface_container: #3c3836;
     
-    --surface_container_high: #322826;
+    --surface_container_high: #2f2921;
     
-    --surface_container_highest: #3d3231;
+    --surface_container_highest: #3b342b;
     
     --surface_container_low: #282828;
     
     --surface_container_lowest: #1d2021;
     
-    --surface_dim: #1a1110;
+    --surface_dim: #18120b;
     
-    --surface_tint: #ffb4a9;
+    --surface_tint: #f4bd6f;
     
-    --surface_variant: #534341;
+    --surface_variant: #4f4539;
     
     --tertiary: #b16286;
     
-    --tertiary_container: #574419;
+    --tertiary_container: #3a4c2a;
     
-    --tertiary_fixed: #fcdfa6;
+    --tertiary_fixed: #d4eabb;
     
-    --tertiary_fixed_dim: #dfc38c;
+    --tertiary_fixed_dim: #b8cea1;
     
 
     
-    --background-rgb: 26 17 16;
+    --background-rgb: 24 18 11;
     
     --error-rgb: 204 36 29;
     
@@ -182,11 +182,11 @@
     
     --inverse_on_surface-rgb: 60 56 54;
     
-    --inverse_primary-rgb: 144 74 65;
+    --inverse_primary-rgb: 128 86 16;
     
-    --inverse_surface-rgb: 241 222 220;
+    --inverse_surface-rgb: 237 224 212;
     
-    --on_background-rgb: 241 222 220;
+    --on_background-rgb: 237 224 212;
     
     --on_error-rgb: 29 32 33;
     
@@ -194,19 +194,19 @@
     
     --on_primary-rgb: 29 32 33;
     
-    --on_primary_container-rgb: 255 218 213;
+    --on_primary_container-rgb: 255 221 179;
     
-    --on_primary_fixed-rgb: 59 9 6;
+    --on_primary_fixed-rgb: 41 24 0;
     
-    --on_primary_fixed_variant-rgb: 115 52 44;
+    --on_primary_fixed_variant-rgb: 99 63 0;
     
     --on_secondary-rgb: 29 32 33;
     
-    --on_secondary_container-rgb: 255 218 213;
+    --on_secondary_container-rgb: 251 222 188;
     
-    --on_secondary_fixed-rgb: 44 21 18;
+    --on_secondary_fixed-rgb: 39 25 4;
     
-    --on_secondary_fixed_variant-rgb: 93 63 59;
+    --on_secondary_fixed_variant-rgb: 86 68 42;
     
     --on_surface-rgb: 235 219 178;
     
@@ -214,37 +214,37 @@
     
     --on_tertiary-rgb: 29 32 33;
     
-    --on_tertiary_container-rgb: 252 223 166;
+    --on_tertiary_container-rgb: 212 234 187;
     
-    --on_tertiary_fixed-rgb: 37 26 0;
+    --on_tertiary_fixed-rgb: 16 32 4;
     
-    --on_tertiary_fixed_variant-rgb: 87 68 25;
+    --on_tertiary_fixed_variant-rgb: 58 76 42;
     
-    --outline-rgb: 160 140 137;
+    --outline-rgb: 156 143 128;
     
     --outline_variant-rgb: 124 111 100;
     
-    --primary-rgb: 255 180 169;
+    --primary-rgb: 244 189 111;
     
-    --primary_container-rgb: 115 52 44;
+    --primary_container-rgb: 99 63 0;
     
-    --primary_fixed-rgb: 255 218 213;
+    --primary_fixed-rgb: 255 221 179;
     
-    --primary_fixed_dim-rgb: 255 180 169;
+    --primary_fixed_dim-rgb: 244 189 111;
     
     --scrim-rgb: 0 0 0;
     
-    --secondary-rgb: 231 189 183;
+    --secondary-rgb: 221 194 161;
     
-    --secondary_container-rgb: 93 63 59;
+    --secondary_container-rgb: 86 68 42;
     
-    --secondary_fixed-rgb: 255 218 213;
+    --secondary_fixed-rgb: 251 222 188;
     
-    --secondary_fixed_dim-rgb: 231 189 183;
+    --secondary_fixed_dim-rgb: 221 194 161;
     
     --shadow-rgb: 0 0 0;
     
-    --source_color-rgb: 203 37 29;
+    --source_color-rgb: 136 105 62;
     
     --surface-rgb: 29 32 33;
     
@@ -252,26 +252,26 @@
     
     --surface_container-rgb: 60 56 54;
     
-    --surface_container_high-rgb: 50 40 38;
+    --surface_container_high-rgb: 47 41 33;
     
-    --surface_container_highest-rgb: 61 50 49;
+    --surface_container_highest-rgb: 59 52 43;
     
     --surface_container_low-rgb: 40 40 40;
     
     --surface_container_lowest-rgb: 29 32 33;
     
-    --surface_dim-rgb: 26 17 16;
+    --surface_dim-rgb: 24 18 11;
     
-    --surface_tint-rgb: 255 180 169;
+    --surface_tint-rgb: 244 189 111;
     
-    --surface_variant-rgb: 83 67 65;
+    --surface_variant-rgb: 79 69 57;
     
     --tertiary-rgb: 177 98 134;
     
-    --tertiary_container-rgb: 87 68 25;
+    --tertiary_container-rgb: 58 76 42;
     
-    --tertiary_fixed-rgb: 252 223 166;
+    --tertiary_fixed-rgb: 212 234 187;
     
-    --tertiary_fixed_dim-rgb: 223 195 140;
+    --tertiary_fixed_dim-rgb: 184 206 161;
     
 }

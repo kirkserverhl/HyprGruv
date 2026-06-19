@@ -1,0 +1,10 @@
+# Minimal matugen config — yazi theme.toml only (no global run_after / other templates).
+# Used by reload-yazi-theme.sh --regen so dev-workspace yazi launch cannot re-theme the desktop.
+
+[config]
+block_prefix = "<*"
+block_postfix = "*>"
+
+[templates.yazi]
+input_path = "~/.config/matugen/templates/yazi-theme.toml"
+output_path = "~/.config/yazi/theme.toml"
