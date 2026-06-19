@@ -11,6 +11,14 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
+: "${CONTINUE_ON_PACKAGE_FAIL:=$(( HYPRGRUV_STRICT == 1 ? 0 : 1 ))}"
+
+hyprgruv_strict_banner
+hyprgruv_forbid_skip_var SKIP_PACKAGES
+hyprgruv_forbid_skip_var SKIP_WALLPAPER
+hyprgruv_forbid_skip_var SKIP_SETUP_WIZARD
+hyprgruv_forbid_skip_var SKIP_CHAOTIC
+
 # --- Load your existing helpers for consistent look ---
 source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
     || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
@@ -145,6 +153,7 @@ if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
         log_success "Opening wallpaper and matugen theme applied"
         mark_completed "Opening wallpaper"
     else
+        hyprgruv_strict_abort "default_wp.sh failed (exit $wp_exit)"
         log_warning "default_wp.sh finished with warnings (post-reboot setup can retry)"
     fi
 else
@@ -166,6 +175,7 @@ if [[ "${SKIP_SETUP_WIZARD:-0}" != "1" ]]; then
     if [[ $wizard_exit -eq 0 ]]; then
         log_success "Setup wizard completed"
     else
+        hyprgruv_strict_abort "Setup wizard failed (exit $wizard_exit)"
         log_warning "Setup wizard finished with errors (exit $wizard_exit)"
         log_status "Retry: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
     fi
@@ -180,11 +190,8 @@ sleep 1
 # ============================================================
 display_header "Final sync"
 log_status "Refreshing package databases…"
-if command -v yay >/dev/null 2>&1; then
-    yay -Sy --noconfirm || log_warning "yay -Sy reported issues (continuing)"
-else
-    sudo pacman -Sy --noconfirm || log_warning "pacman -Sy reported issues (continuing)"
-fi
+hyprgruv_require_cmd yay
+yay -Sy --noconfirm || hyprgruv_strict_abort "yay -Sy failed"
 sleep 1
 
 mark_completed "Pre-reboot install"

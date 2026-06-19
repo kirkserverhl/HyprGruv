@@ -9,7 +9,7 @@
 #   • FONT_TEXT    → Terminals (Kitty, Ghostty) + browser text feel + dunst bodies
 #                    Currently: ShureTechMono Nerd Font
 #
-#   • FONT_UI      → App menus, Waybar, Fuzzel, Rofi, GTK apps, most "normal" UI
+#   • FONT_UI      → App menus, Waybar, Rofi, GTK apps, most "normal" UI
 #                    Currently: Agave Nerd Font Propo (excellent for menus)
 #
 #   • FONT_HEADER  → SDDM login screen, Hyprlock (big time/date + important labels),
@@ -41,7 +41,7 @@ export FONT_SIZE_HEADER=13
 export FONT_SIZE_WAYPAPER_UI=11
 export FONT_SIZE_WAYPAPER_TEXT=11
 export FONT_SIZE_WAYPAPER_TOOLTIP=10
-# Fuzzel + Rofi launcher menus (kept in sync)
+# Rofi launcher menus
 export FONT_SIZE_LAUNCHER=16
 
 # Family-only versions (no size) for tools that add their own size

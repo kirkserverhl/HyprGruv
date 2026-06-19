@@ -41,17 +41,25 @@ if ! command -v pacman >/dev/null 2>&1; then
 fi
 
 log_status "Running preflight checks for Hyprland base…"
+hyprgruv_strict_banner
 
 # ------------------------ helpers ------------------------
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
 repo_has() { pacman -Si "$1" &>/dev/null; }
 
 # Purge EndeavourOS (or other distro) remnants early — supports migrating away to pure Arch.
-purge_endeavouros_remnants || true
+if ! purge_endeavouros_remnants; then
+    hyprgruv_strict_abort "Failed to purge EndeavourOS remnants"
+fi
 ensure_pkg() {
     local pkgs=()
+    local p
     for p in "$@"; do pkg_installed "$p" || pkgs+=("$p"); done
-    ((${#pkgs[@]})) && sudo pacman -S --noconfirm --needed "${pkgs[@]}" || true
+    ((${#pkgs[@]})) || return 0
+    if sudo pacman -S --noconfirm --needed "${pkgs[@]}"; then
+        return 0
+    fi
+    hyprgruv_strict_abort "pacman install failed: ${pkgs[*]}"
 }
 
 ensure_multilib_enabled() {
@@ -93,7 +101,7 @@ ensure_multilib_enabled() {
 # ------------------ minimal pacman prep ------------------
 # Only multilib for 32-bit libs if needed. Chaotic-AUR setup (with mirrorlist) is
 # handled later in 01-packages.sh so we never have a broken Include.
-ensure_multilib_enabled || true
+ensure_multilib_enabled || hyprgruv_strict_abort "Failed to enable multilib repository"
 
 # ------------------ detect GPU + packages ----------------
 GPU_VENDOR="generic"
@@ -139,14 +147,21 @@ if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
 fi
 
 log_status "Refreshing package databases"
-sudo pacman -Syu --noconfirm
+sudo pacman -Syu --noconfirm || hyprgruv_strict_abort "pacman -Syu failed during preflight"
 
 # Preempt the common pipewire-jack vs jack2 conflict (same issue that can appear
 # later in 01-packages). Remove legacy jack2 if present so the PipeWire
 # implementation can satisfy the 'jack' dependency without prompts or failures.
 if pacman -Qq jack2 &>/dev/null; then
     log_status "Removing conflicting jack2 (will use pipewire-jack instead)..."
-    sudo pacman -Rdd --noconfirm jack2 2>/dev/null || true
+    sudo pacman -Rdd --noconfirm jack2 || hyprgruv_strict_abort "Failed to remove conflicting jack2"
+fi
+
+# AUR helper must exist before leaving preflight (01 may be skipped/fail; stow/setup use yay).
+log_status "Ensuring yay (AUR helper) is available…"
+if ! ensure_yay; then
+    log_error "yay is required but could not be installed — aborting preflight"
+    exit 1
 fi
 
 # Hyprland must be available before the rest of the desktop stack.
@@ -179,8 +194,9 @@ ensure_pkg "${OPT_EXTRAS[@]}"
 
 # ---------------------- services ----------------------
 log_status "Enabling services"
-sudo systemctl enable --now NetworkManager.service
-sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service 2>/dev/null || true
+sudo systemctl enable --now NetworkManager.service || hyprgruv_strict_abort "Failed to enable NetworkManager"
+sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service \
+    || hyprgruv_strict_abort "Failed to enable PipeWire services"
 # SDDM enable moved to after packages in 03-setup for direct flow (Hyprland/Sddm after yay)
 
 # Chaotic-AUR (with its own mirrorlist) is set up in 01-packages.sh after the pkgs are fetched via direct URL.
@@ -208,6 +224,15 @@ if [[ -d "$PREFLIGHT_DIR" ]]; then
         done <"$PREFLIGHT_DIR/env"
     fi
 fi
+
+hyprgruv_require_cmd yay
+hyprgruv_require_cmd git
+hyprgruv_require_cmd makepkg
+hyprgruv_verify_pkgs \
+    hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
+    networkmanager pipewire pipewire-pulse pipewire-jack wireplumber \
+    gvfs noto-fonts mesa git base-devel
+hyprgruv_require_service_enabled NetworkManager.service
 
 mark_completed "Preflight: Hyprland base"
 log_success "Preflight check completed."

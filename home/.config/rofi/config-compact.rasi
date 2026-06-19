@@ -1,4 +1,4 @@
-/* Compact launcher / keybind hint picker — fuzzel-matched */
+/* Compact launcher / keybind hint picker — launcher-matched */
 
 configuration {
     modi:                "drun,run,filebrowser,keys";
@@ -17,7 +17,7 @@ configuration {
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
-@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
     width:    600px;

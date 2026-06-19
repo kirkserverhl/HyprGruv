@@ -31,7 +31,6 @@ Generated colors land in app config paths; post-hooks reload where possible
 | Waybar | `~/.config/waybar/colors/matugen-waybar.css` |
 | Starship | `~/.config/starship/matugen-rainbow.toml` |
 | Rofi | `~/.config/rofi/colors.rasi` |
-| Fuzzel | `~/.config/fuzzel/colors.ini` |
 | GTK 3/4 | `~/.config/gtk-3.0/colors.css`, `gtk-4.0/colors.css` |
 | Qt (qt5ct/qt6ct) | `~/.config/qt5ct/colors/matugen.conf`, `qt6ct/...` |
 | Kvantum | `~/.config/Kvantum/matugen/` |

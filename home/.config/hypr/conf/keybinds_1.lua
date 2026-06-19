@@ -114,9 +114,9 @@ hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"))
 hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))
 
 -- Launchers: Super+Space = favorites, Alt+Space = all apps, Ctrl+Space = keybinds
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-apps.sh"))
-hl.bind(mod     .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-full.sh"))
-hl.bind("CTRL + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-keybinds.sh"))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh"))
+hl.bind(mod     .. " + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"))
+hl.bind("CTRL + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh"))
 
 -- Wallpaper / bar / monitor / theme (bar cycle: ALT+W only)
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("waypaper"))

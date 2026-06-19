@@ -18,6 +18,8 @@ source "$HYPR_DIR/lib/state.sh"
 echo ""
 
 log_status "Starting configuration stowing process"
+hyprgruv_strict_banner
+hyprgruv_require_cmd yay
 
 # Paths
 REPO_DIR="$HYPR_DIR"
@@ -72,11 +74,12 @@ if ! command_exists stow; then
     fi
 
     if command -v yay >/dev/null 2>&1; then
-        yay -S --needed --noconfirm stow
+        yay -S --needed --noconfirm stow || hyprgruv_strict_abort "Failed to install stow via yay"
     else
-        sudo pacman -S --needed --noconfirm stow
+        sudo pacman -S --needed --noconfirm stow || hyprgruv_strict_abort "Failed to install stow via pacman"
     fi
 fi
+hyprgruv_require_cmd stow
 
 # Back up top-level entries under home/ that would be affected
 log_status "Backing up existing files that would be replaced"
@@ -117,10 +120,12 @@ for pat in "${IGNORE_PATTERNS[@]}"; do
 done
 
 log_status "Applying configurations with GNU Stow (--adopt, with ignores)"
-(
+if ! (
     cd "$REPO_DIR"
     stow "${STOW_ARGS[@]}"
-)
+); then
+    hyprgruv_strict_abort "GNU stow failed"
+fi
 
 log_success "Stow succeeded for non-conflicting paths"
 
@@ -150,7 +155,7 @@ for link in "${!GTK_LINKS[@]}"; do
         ln -sfn "$target" "$link"
         log_status "Linked: $link -> $target"
     else
-        log_error "Missing theme asset: $target (install Gruvbox-Dark GTK theme?)"
+        hyprgruv_strict_abort "Missing theme asset: $target (install Gruvbox-Dark GTK theme?)"
     fi
 done
 
@@ -176,8 +181,11 @@ elif [[ -f "$REPO_DIR/$PKG_DIR/.config/starship/$STARSHIP_THEME" ]]; then
     ln -sfn "$HOME/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship.toml"
     log_status "Installed and linked starship theme: $STARSHIP_THEME"
 else
-    log_error "starship theme $STARSHIP_THEME not found in $HOME or repo; skip linking"
+    hyprgruv_strict_abort "starship theme $STARSHIP_THEME not found in $HOME or repo"
 fi
+
+hyprgruv_require_cmd stow
+[[ -d "$HOME/.config/hyprgruv/scripts" ]] || hyprgruv_strict_abort "hyprgruv scripts missing after stow"
 
 log_success "Configuration files applied"
 log_status "Backup saved to: $BACKUP_DIR"

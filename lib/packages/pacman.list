@@ -26,7 +26,6 @@ nvim
 lazygit
 starship
 gum
-fuzzel
 papirus-icon-theme
 toilet
 toilet-fonts
@@ -124,5 +123,3 @@ media-player-info
 piper
 obsidian
 awww
-waypaper
-waypaper-engine

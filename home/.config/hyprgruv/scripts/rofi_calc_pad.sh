@@ -1,6 +1,6 @@
 #!/bin/bash
 # Touch/mouse-friendly calculator pad for Rofi.
-# Uses qalc for evaluation and keeps fuzzel-matched styling via config-calc-pad.rasi.
+# Uses qalc for evaluation and keeps launcher-matched styling via config-calc-pad.rasi.
 #
 # Usage:
 #   rofi_calc_pad.sh          → numpad mode (default)

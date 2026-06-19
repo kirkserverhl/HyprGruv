@@ -1,3 +1,3 @@
-#!/bin/bash
-
-rofi -show drun -config "$HOME/.config/rofi/config-compact.rasi"
+#!/usr/bin/env bash
+# Waybar app menu — delegates to the shared rofi full launcher.
+exec "$HOME/.config/hyprgruv/scripts/rofi-full.sh" "$@"

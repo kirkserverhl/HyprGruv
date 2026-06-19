@@ -194,7 +194,7 @@ hl.bind(altMod .. " + minus", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_fa
 hl.bind("CTRL + F",     hl.dsp.window.fullscreen())
 hl.bind("CTRL + P",     hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh"))
 hl.bind("CTRL + W",     hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
-hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/fuzzel-keybinds.sh"))
+hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh"))
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- MAC BRIDGE (lowest priority — optional Cmd muscle memory → Ctrl in app)

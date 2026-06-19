@@ -1,5 +1,5 @@
 /* =============================================================================
-   Waypaper-matched panel chrome (fuzzel + rofi launchers)
+   Waypaper-matched panel chrome (rofi launchers)
    =============================================================================
    Same matugen surface transparency and blur treatment as waypaper/theme-picker:
      • window @surface-alpha (90% surface_container_lowest)
@@ -9,7 +9,7 @@
    Import after shared/standard.rasi; override window width/location per launcher.
 ============================================================================= */
 
-/* Font synced with fuzzel via apply-fonts.sh (FONT_UI + FONT_SIZE_LAUNCHER) */
+/* Font synced via apply-fonts.sh (FONT_UI + FONT_SIZE_LAUNCHER) */
 configuration {
     font: "Agave Nerd Font Propo 16";
 }

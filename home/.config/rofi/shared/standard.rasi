@@ -1,15 +1,15 @@
 /* =============================================================================
-   Standard Rofi Includes — Matugen + Fuzzel-matched styling
+   Standard Rofi Includes — Matugen + launcher-matched styling
    =============================================================================
    Import this in your Rofi configs for unified theming.
 
    This pulls in:
      • Matugen Material You colors (written by matugen to ~/.config/rofi/colors.rasi)
      • Single source of truth font (edit ~/.config/settings/fonts.sh then run apply-fonts.sh)
-     • Shared border width (2px, matches fuzzel)
+     • Shared border width (2px, matches launcher chrome)
 
    For waypaper-matched panel chrome (live blur, same transparency), also import:
-     @import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+     @import "~/.config/rofi/shared/launcher-chrome.rasi"
 ============================================================================= */
 
 @import "~/.config/rofi/colors.rasi"

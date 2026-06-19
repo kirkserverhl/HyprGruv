@@ -1,4 +1,4 @@
-/* Color splotch grid — fuzzel-matched matugen colors */
+/* Color splotch grid — launcher-matched matugen colors */
 
 configuration {
     show-icons: true;
@@ -6,7 +6,7 @@ configuration {
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
-@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
     width: 460px;

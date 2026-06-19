@@ -43,8 +43,12 @@ install_aur_pkg() {
         say "  ✓ $pkg"
         return 0
     fi
-    log_warning "AUR package failed: $pkg"
+    log_error "AUR package failed: $pkg"
     echo "$output" | tail -12 | sed 's/^/    | /'
+    if hyprgruv_strict_enabled; then
+        hyprgruv_strict_abort "AUR package failed: $pkg"
+    fi
+    log_warning "AUR package failed (continuing — HYPRGRUV_STRICT=0): $pkg"
     return 1
 }
 
@@ -60,21 +64,6 @@ ensure_pacman_keyring() {
         sudo chown -R root:root /etc/pacman.d/gnupg 2>/dev/null || true
         sudo chmod 700 /etc/pacman.d/gnupg 2>/dev/null || true
     fi
-}
-
-ensure_yay() {
-    if command -v yay >/dev/null 2>&1; then return 0; fi
-    log_status "Installing yay (AUR helper)…"
-    sudo pacman -Syu --needed --noconfirm git base-devel
-    tmpdir="$(mktemp -d)"
-    pushd "$tmpdir" >/dev/null
-    git clone https://aur.archlinux.org/yay.git
-    pushd yay >/dev/null
-    makepkg -si --noconfirm
-    popd >/dev/null
-    popd >/dev/null
-    rm -rf "$tmpdir"
-    log_success "yay installed."
 }
 
 # Ensure the fundamental Arch repos ([core], [extra], [multilib]) are present
@@ -122,6 +111,8 @@ OFFICIAL_PKGS=("${PACMAN_PKGS[@]}")
 
 # -------------------- run --------------------
 say "   📦️  Installing essential packages…"
+hyprgruv_strict_banner
+hyprgruv_forbid_skip_var SKIP_CHAOTIC
 sleep 0.15
 
 # Make sure we have working official repos + a usable mirrorlist *before* anything else.
@@ -146,17 +137,23 @@ if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && [[ ! -f /etc/pacma
 fi
 
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
-purge_endeavouros_remnants || true
+purge_endeavouros_remnants || hyprgruv_strict_abort "Failed to purge EndeavourOS remnants"
 
 # Install yay (AUR helper) as early as possible in the packages phase.
 # This ensures the "Installing yay" step is visible near the beginning (when needed)
 # and that we can use yay for anything that requires it right away.
 # (Previously this was buried after ~200 lines of chaotic setup + refreshes.)
 log_status "Ensuring yay (AUR helper) is available early…"
-ensure_yay
+ensure_yay || {
+    log_error "yay is required but could not be installed — aborting packages step"
+    exit 1
+}
 
 if [[ "${SKIP_CHAOTIC:-0}" == "1" ]]; then
-    log_warning "SKIP_CHAOTIC=1 — skipping Chaotic-AUR keyring bootstrap and repo enable (you said you might not need it right now)"
+    log_warning "SKIP_CHAOTIC=1 — skipping Chaotic-AUR keyring bootstrap and repo enable"
+    if hyprgruv_strict_enabled; then
+        hyprgruv_strict_abort "SKIP_CHAOTIC=1 is forbidden while HYPRGRUV_STRICT=1"
+    fi
 else
     log_status "Ensuring pacman keyring is usable"
     ensure_pacman_keyring
@@ -165,8 +162,10 @@ else
     # the refresh and before the Hyprland/core package installs.
     # Robust to VM/network flakiness: only enable [chaotic-aur] if the bootstrap pkgs actually install.
     log_status "Installing Chaotic-AUR from the beginning..."
-    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || true
-    sudo pacman-key --lsign-key 3056513887B78AEB || true
+    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com \
+        || hyprgruv_strict_abort "Failed to receive Chaotic-AUR key"
+    sudo pacman-key --lsign-key 3056513887B78AEB \
+        || hyprgruv_strict_abort "Failed to locally sign Chaotic-AUR key"
 
     CHAOTIC_BOOTSTRAP_OK=0
     if sudo pacman -U --noconfirm \
@@ -175,7 +174,8 @@ else
         CHAOTIC_BOOTSTRAP_OK=1
         log_success "Chaotic-AUR keyring + mirrorlist installed successfully"
     else
-        log_warning "Chaotic-AUR bootstrap download/install failed (common on VMs with NAT/latency). Will skip repo for now."
+        hyprgruv_strict_abort "Chaotic-AUR bootstrap download/install failed"
+        log_warning "Chaotic-AUR bootstrap download/install failed — skipping repo"
     fi
 
     # Add the repo section ONLY if we successfully got the mirrorlist file
@@ -225,18 +225,13 @@ if grep -q '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null; then
     sudo sed -i '/^\[chaotic-aur\]/,/^$/d' /etc/pacman.conf || true
     sudo rm -f /var/lib/pacman/sync/chaotic-aur.db* 2>/dev/null || true
 fi
-sudo pacman -Syy --noconfirm || log_warning "pacman -Syy reported issues (continuing)"
+sudo pacman -Syy --noconfirm || hyprgruv_strict_abort "pacman -Syy failed"
 
 # Make sure we have a fresh arch keyring (helps with signature issues in fresh/VM installs)
-sudo pacman -S --needed --noconfirm archlinux-keyring 2>/dev/null || true
+sudo pacman -S --needed --noconfirm archlinux-keyring || hyprgruv_strict_abort "archlinux-keyring install failed"
 
-# Final sanity: if basic packages still aren't visible, the test environment probably
-# has no usable network/mirrors. We warn loudly instead of letting 50 "target not found" scroll by.
 if ! pacman -Si git >/dev/null 2>&1; then
-    log_error "Official repos still cannot resolve basic packages (e.g. git)."
-    log_error "Check your VM network, /etc/pacman.d/mirrorlist, and pacman.conf."
-    log_error "You can try: sudo pacman -Syyu  then re-run this installer with FORCE=1"
-    # We continue (some environments recover on the next -S), but the upcoming list will likely fail.
+    hyprgruv_strict_abort "Official repos cannot resolve basic packages (e.g. git) — check VM network/mirrors"
 fi
 
 # yay was already ensured early (see top of this file). We keep the comment for history.
@@ -248,15 +243,17 @@ log_status "Installing Hyprland and core dependencies…"
 # removal causes "unresolvable package conflicts" (as seen in VM testing).
 if pacman -Qq jack2 &>/dev/null; then
     log_status "Removing conflicting jack2 package (replaced by pipewire-jack)..."
-    sudo pacman -Rdd --noconfirm jack2 2>/dev/null || true
+    sudo pacman -Rdd --noconfirm jack2 || hyprgruv_strict_abort "Failed to remove conflicting jack2"
 fi
 
 # Install PipeWire first (jack2 conflict) — full manifest follows in one pass.
 sudo pacman -S --needed --noconfirm \
-    pipewire pipewire-pulse pipewire-jack wireplumber
+    pipewire pipewire-pulse pipewire-jack wireplumber \
+    || hyprgruv_strict_abort "PipeWire stack install failed"
 
 log_status "Installing official repo packages from manifest…"
-sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}"
+sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}" \
+    || hyprgruv_strict_abort "Official manifest package install failed"
 
 # Rust AUR builds need an active default toolchain *before* yay.
 if command -v rustup >/dev/null 2>&1; then
@@ -264,7 +261,7 @@ if command -v rustup >/dev/null 2>&1; then
     if rustup default stable; then
         log_success "rustup default stable"
     else
-        log_warning "rustup default stable failed — run manually if Rust AUR builds fail"
+        hyprgruv_strict_abort "rustup default stable failed"
     fi
 else
     log_warning "rustup not in PATH — skipping 'rustup default stable'"
@@ -277,8 +274,8 @@ for pkg in "${AUR_PKGS[@]}"; do
     install_aur_pkg "$pkg" || AUR_FAILED+=("$pkg")
 done
 if ((${#AUR_FAILED[@]})); then
+    hyprgruv_strict_abort "AUR install failures (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
     log_warning "Some AUR packages failed (${#AUR_FAILED[@]}): ${AUR_FAILED[*]}"
-    log_warning "Install continues — re-run later: yay -S --needed <package>"
 else
     say "All AUR packages installed successfully."
 fi
@@ -311,7 +308,8 @@ if [[ "${IS_VM:-false}" == "true" ]]; then
     esac
 
     if ((${#GUEST_PKGS[@]})); then
-        sudo pacman -S --needed --noconfirm "${GUEST_PKGS[@]}" || log_warning "Some guest packages may have failed to install"
+        sudo pacman -S --needed --noconfirm "${GUEST_PKGS[@]}" \
+            || hyprgruv_strict_abort "VM guest package install failed: ${GUEST_PKGS[*]}"
     fi
 
     # Enable the corresponding services (safe if the unit doesn't exist)
@@ -335,7 +333,7 @@ if ((${#MISSING[@]})); then
         if install_aur_pkg "$pkg"; then
             say "    (essential)"
         else
-            log_warning "Essential package failed: $pkg (continuing; may need manual install later)"
+            hyprgruv_strict_abort "Essential package failed: $pkg"
         fi
     done
 else
@@ -343,9 +341,8 @@ else
 fi
 sleep 0.2
 
-if ((${#AUR_FAILED[@]})); then
-    log_warning "Install packages finished with ${#AUR_FAILED[@]} AUR failure(s) — proceeding to stow."
-fi
+hyprgruv_require_cmd yay
+hyprgruv_require_pkg hyprland
 
 # Opening wallpaper + first matugen palette.
 # On a fresh install, hypr configs are not stowed yet — install.sh runs
@@ -353,7 +350,7 @@ fi
 if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
     if [[ -x "$HOME/.config/hyprgruv/scripts/set_wallpaper.sh" ]]; then
         log_status "Applying opening wallpaper and default matugen theme…"
-        bash "$HYPR_DIR/lib/scripts/default_wp.sh" || log_warning "default_wp.sh finished with warnings"
+        bash "$HYPR_DIR/lib/scripts/default_wp.sh" || hyprgruv_strict_abort "default_wp.sh failed during packages step"
     else
         log_status "Opening wallpaper deferred until after stow (install.sh, before reboot)"
     fi

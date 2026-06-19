@@ -3,8 +3,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+THEME="${HOME}/.config/rofi/config-compact.rasi"
 
-pkill -x fuzzel 2>/dev/null || true
+pkill -x rofi 2>/dev/null || true
 
 mapfile -t entries < <("$SCRIPT_DIR/parse-keybinds.py")
 
@@ -15,11 +16,7 @@ fi
 
 selected=$(
     printf '%s\n' "${entries[@]}" |
-        fuzzel -n fuzzel -d \
-            --prompt="⌨  " \
-            --width=52 \
-            --lines=18 \
-            --match-mode=fzf
+        rofi -dmenu -i -p "⌨  " -config "${THEME}"
 )
 
 if [[ -n "${selected:-}" ]]; then

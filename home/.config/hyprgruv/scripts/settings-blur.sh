@@ -161,7 +161,7 @@ menu_hyprlock_bg() {
 
 set_layer_blur_all() {
     local value="$1"
-    for layer in rofi fuzzel waypaper wlogout hyprlock; do
+    for layer in rofi waypaper wlogout hyprlock; do
         cfg_set "layer_${layer}_blur" "$value"
     done
 }
@@ -178,7 +178,6 @@ apply_preset() {
         cfg_set decoration_vibrancy 0.15
         set_layer_blur_all 1
         cfg_set layer_rofi_ignore_alpha 0.12
-        cfg_set layer_fuzzel_ignore_alpha 0.12
         cfg_set layer_waypaper_ignore_alpha 0.12
         cfg_set layer_wlogout_ignore_alpha 0.02
         cfg_set layer_hyprlock_ignore_alpha 0.08
@@ -194,7 +193,6 @@ apply_preset() {
         cfg_set decoration_vibrancy 0.2
         set_layer_blur_all 1
         cfg_set layer_rofi_ignore_alpha 0.10
-        cfg_set layer_fuzzel_ignore_alpha 0.10
         cfg_set layer_waypaper_ignore_alpha 0.10
         cfg_set layer_wlogout_ignore_alpha 0.0001
         cfg_set layer_hyprlock_ignore_alpha 0.05
@@ -210,7 +208,6 @@ apply_preset() {
         cfg_set decoration_vibrancy 0.25
         set_layer_blur_all 1
         cfg_set layer_rofi_ignore_alpha 0.06
-        cfg_set layer_fuzzel_ignore_alpha 0.06
         cfg_set layer_waypaper_ignore_alpha 0.06
         cfg_set layer_wlogout_ignore_alpha 0.0001
         cfg_set layer_hyprlock_ignore_alpha 0.03
@@ -226,7 +223,6 @@ apply_preset() {
         cfg_set decoration_vibrancy 0.3
         set_layer_blur_all 1
         cfg_set layer_rofi_ignore_alpha 0.04
-        cfg_set layer_fuzzel_ignore_alpha 0.04
         cfg_set layer_waypaper_ignore_alpha 0.04
         cfg_set layer_wlogout_ignore_alpha 0.0001
         cfg_set layer_hyprlock_ignore_alpha 0.02
@@ -261,7 +257,6 @@ show_status() {
     notify-send "Blur settings" \
         "Windows: enabled=$(cfg_get decoration_enabled 1) size=$(cfg_get decoration_size 10) passes=$(cfg_get decoration_passes 3)
 Rofi: blur=$(layer_blur_label rofi) alpha=$(cfg_get layer_rofi_ignore_alpha 0.10)
-Fuzzel: blur=$(layer_blur_label fuzzel) alpha=$(cfg_get layer_fuzzel_ignore_alpha 0.10)
 Config: $CONF"
 }
 
@@ -269,7 +264,6 @@ while true; do
     choice=$(rofi_menu "Blur tuner" \
         "Global window blur" \
         "Layer: Rofi" \
-        "Layer: Fuzzel" \
         "Layer: Waypaper" \
         "Layer: Wlogout" \
         "Layer: Hyprlock" \
@@ -284,7 +278,6 @@ while true; do
     case "$choice" in
     "Global window blur") menu_global ;;
     "Layer: Rofi") menu_layer rofi "Rofi" ;;
-    "Layer: Fuzzel") menu_layer fuzzel "Fuzzel" ;;
     "Layer: Waypaper") menu_layer waypaper "Waypaper" ;;
     "Layer: Wlogout") menu_layer wlogout "Wlogout" ;;
     "Layer: Hyprlock") menu_layer hyprlock "Hyprlock" ;;

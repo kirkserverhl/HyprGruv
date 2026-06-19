@@ -155,11 +155,6 @@ input_path = "~/.config/matugen/websites/youtube.css"
 output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/websites/youtube.css"
 
 
-[templates.fuzzel]
-input_path = "~/.config/matugen/templates/fuzzel.ini"
-output_path = "~/.config/fuzzel/colors.ini"
-
-
 [templates.alacritty]
 input_path = "~/.config/matugen/templates/alacritty-colors.toml"
 output_path = "~/.config/alacritty/colors/matugen.toml"

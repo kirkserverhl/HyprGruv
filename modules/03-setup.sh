@@ -21,6 +21,7 @@ source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
 
 display_header "Setup"
+hyprgruv_strict_banner
 
 # --- Ensure 'gum' available (fallback to plain bash if not) ---
 ensure_gum() {
@@ -56,8 +57,9 @@ ensure_zsh() {
     fi
 }
 
-ensure_gum || true
-ensure_zsh || true
+ensure_gum || hyprgruv_strict_abort "Failed to install gum"
+ensure_zsh || hyprgruv_strict_abort "Failed to install zsh"
+hyprgruv_require_cmd zsh
 
 # gum spin hides sudo prompts and long build output — use it only for quick scripts.
 run_setup_script() {
@@ -143,14 +145,15 @@ done
 
 # SDDM package, enable, and Sugar Candy theme — all in sddm_candy_install.sh
 log_status "Configuring SDDM (display manager + Sugar Candy theme)..."
-bash "$SCRIPTS_DIR/sddm_candy_install.sh" || true
+bash "$SCRIPTS_DIR/sddm_candy_install.sh" || hyprgruv_strict_abort "SDDM setup failed (sddm_candy_install.sh)"
+hyprgruv_require_pkg sddm
 
 # For VMs we force the GRUB cmdline / boot compatibility tweaks here
 # (nomodeset etc.) so SDDM can take over the display on first reboot,
 # even if the user later skips the interactive GRUB theme question.
 if [[ "${IS_VM:-false}" == "true" ]]; then
     log_status "VM detected — forcing GRUB compatibility (so SDDM loads from boot)"
-    APPLY_GRUB_THEME=0 bash "$SCRIPTS_DIR/grub.sh" || true
+    APPLY_GRUB_THEME=0 bash "$SCRIPTS_DIR/grub.sh" || hyprgruv_strict_abort "VM GRUB compatibility setup failed"
 fi
 
 mark_completed "Setup system"

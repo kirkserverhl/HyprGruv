@@ -20,7 +20,7 @@ source "$FONTS_SH"
 
 echo "==> Applying fonts from central config:"
 echo "    TEXT   : $FONT_TEXT  (terminals, dunst, etc.)"
-echo "    UI     : $FONT_UI    (menus, waybar, fuzzel, rofi, gtk)"
+echo "    UI     : $FONT_UI    (menus, waybar, rofi, gtk)"
 echo "    HEADER : $FONT_HEADER (sddm, hyprlock big elements, wlogout)"
 echo
 
@@ -63,23 +63,14 @@ configuration {
 EOF
 echo "  ✓ Updated $ROFI_FONTS_FILE → $FONT_UI ${FONT_SIZE_LAUNCHER:-16}"
 
-FUZZEL_CHROME_RASI="$HOME/.config/rofi/shared/fuzzel-chrome.rasi"
-if [[ -f "$FUZZEL_CHROME_RASI" ]]; then
-    sed -i "s|font: \".*\";|font: \"$FONT_UI ${FONT_SIZE_LAUNCHER:-16}\";|" "$FUZZEL_CHROME_RASI"
-    echo "  ✓ Updated $FUZZEL_CHROME_RASI → $FONT_UI ${FONT_SIZE_LAUNCHER:-16}"
+LAUNCHER_CHROME_RASI="$HOME/.config/rofi/shared/launcher-chrome.rasi"
+if [[ -f "$LAUNCHER_CHROME_RASI" ]]; then
+    sed -i "s|font: \".*\";|font: \"$FONT_UI ${FONT_SIZE_LAUNCHER:-16}\";|" "$LAUNCHER_CHROME_RASI"
+    echo "  ✓ Updated $LAUNCHER_CHROME_RASI → $FONT_UI ${FONT_SIZE_LAUNCHER:-16}"
 fi
 
 # =============================================================================
-# 2. FUZZEL (app launcher menu) → UI font
-# =============================================================================
-FUZZEL_INI="$HOME/.config/fuzzel/fuzzel.ini"
-if [[ -f "$FUZZEL_INI" ]]; then
-    sed -i "s|^font=.*|font=$FONT_UI:size=${FONT_SIZE_LAUNCHER:-16}|" "$FUZZEL_INI"
-    echo "  ✓ Updated $FUZZEL_INI → $FONT_UI"
-fi
-
-# =============================================================================
-# 3. WAYBAR - main active styles (Agave = UI role)
+# 2. WAYBAR - main active styles (Agave = UI role)
 #    We update the primary ones. Theme variants may still need manual love.
 # =============================================================================
 WAYBAR_BASES=(

@@ -1,4 +1,4 @@
-/* Colorscheme theme picker — fuzzel-matched */
+/* Colorscheme theme picker — launcher-matched */
 
 configuration {
     show-icons: false;
@@ -6,7 +6,7 @@ configuration {
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
-@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
     width: 500px;

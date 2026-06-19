@@ -14,6 +14,10 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
+hyprgruv_strict_banner
+hyprgruv_forbid_skip_var SKIP_WALLPAPER
+hyprgruv_require_cmd yay
+
 # --- Load helpers for consistent look (available after stow) ---
 source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
 source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
@@ -97,10 +101,10 @@ sleep 1.5
 
 if [[ -f "$HYPR_DIR/lib/scripts/waypaper_setup.sh" ]]; then
   hyprgruv_section_intro "Wallpaper setup"
-  bash "$HYPR_DIR/lib/scripts/waypaper_setup.sh" || log_warning "waypaper_setup.sh finished with warnings"
+  bash "$HYPR_DIR/lib/scripts/waypaper_setup.sh" || hyprgruv_strict_abort "waypaper_setup.sh failed"
   _HYPRGRUV_PENDING_HANDOFF="Wallpaper setup completed"
 else
-  log_warning "waypaper_setup.sh not found"
+  hyprgruv_strict_abort "waypaper_setup.sh not found"
 fi
 sleep 1
 
@@ -127,11 +131,11 @@ if [[ -f "$HYPR_DIR/modules/05-setup_defaults.sh" ]]; then
       mark_completed "Setup defaults"
       _HYPRGRUV_PENDING_HANDOFF="Setup defaults completed"
     else
-      log_warning "05-setup_defaults.sh finished with warnings"
+      hyprgruv_strict_abort "05-setup_defaults.sh failed (exit $defaults_exit)"
     fi
   fi
 else
-  log_warning "05-setup_defaults.sh not found"
+  hyprgruv_strict_abort "05-setup_defaults.sh not found"
 fi
 sleep 1
 

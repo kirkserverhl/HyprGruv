@@ -6,7 +6,7 @@ configuration {
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
-@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
     width:  980px;

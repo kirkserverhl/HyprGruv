@@ -69,9 +69,7 @@ def humanize_command(cmd: str) -> str:
     friendly = {
         "rofi-apps.sh": "Favorites app launcher",
         "rofi-full.sh": "Full app launcher",
-        "fuzzel-apps.sh": "Favorites app launcher",
-        "fuzzel-full.sh": "Full app launcher",
-        "fuzzel-keybinds.sh": "Keybind reference menu",
+        "rofi-keybinds.sh": "Keybind reference menu",
         "terminal.sh": "Open terminal",
         "dev-workspace.sh": "Open dev tmux workspace",
         "hyprshot.sh": "Screenshot menu",

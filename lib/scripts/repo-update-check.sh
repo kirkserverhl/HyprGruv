@@ -125,18 +125,7 @@ pick_menu() {
         return
     fi
 
-    if command -v fuzzel &>/dev/null; then
-        printf '%s\n' \
-            "Pull updates ($count commits)" \
-            "Pull + sync packages" \
-            "Pull + sync packages + restow (full deploy)" \
-            "View incoming commits" \
-            "Dismiss until next push" \
-            "Remind me in 1 hour" | fuzzel -d -p "Hyprgruv updates" -l 6
-        return
-    fi
-
-    echo "[ERROR] rofi or fuzzel required for interactive prompt" >&2
+    echo "[ERROR] rofi required for interactive prompt" >&2
     return 1
 }
 

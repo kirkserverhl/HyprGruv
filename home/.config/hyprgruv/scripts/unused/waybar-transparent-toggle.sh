@@ -3,7 +3,7 @@
 #
 # Make waybar transparent (see wallpaper through it) while keeping the
 # full current matugen semantic palette active for *everything else*
-# (starship, gtk, terminals, hyprland borders, fuzzel, etc.).
+# (starship, gtk, terminals, hyprland borders, rofi, etc.).
 #
 # This is the "minimal setup" path the user wanted.
 #

@@ -61,8 +61,9 @@
 
   "custom/launcher": {
     "format": "",
-    "on-click": "bash /home/$USER/.config/waybar/scripts/app_launcher.sh",
-    "tooltip-format": "Launch your favorite apps"
+    "on-click": "~/.config/hyprgruv/scripts/rofi-full.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/rofi-apps.sh",
+    "tooltip-format": "Left: All Apps\nRight: Favorites"
   },
 
   "custom/media": {

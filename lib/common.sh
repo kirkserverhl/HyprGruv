@@ -31,6 +31,70 @@ log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${RESET} $1"; }
 log_error() { echo -e "${RED}[ERROR]${RESET} $1"; }
 
+# Fail-fast install mode (default on for VM testing). Set HYPRGRUV_STRICT=0 to relax.
+: "${HYPRGRUV_STRICT:=1}"
+export HYPRGRUV_STRICT
+
+hyprgruv_strict_enabled() { [[ "${HYPRGRUV_STRICT:-1}" == "1" ]]; }
+
+hyprgruv_strict_abort() {
+    local msg="${1:-install step failed}"
+    log_error "$msg"
+    if hyprgruv_strict_enabled; then
+        log_error "HYPRGRUV_STRICT=1 — aborting (set HYPRGRUV_STRICT=0 to continue past non-fatal issues)"
+        exit 1
+    fi
+    log_warning "Continuing despite error (HYPRGRUV_STRICT=0)"
+    return 0
+}
+
+hyprgruv_strict_banner() {
+    if hyprgruv_strict_enabled; then
+        log_status "HYPRGRUV_STRICT=1 — fail-fast mode (no skip flags, no soft-fail continues)"
+    else
+        log_warning "HYPRGRUV_STRICT=0 — relaxed mode (warnings may continue install)"
+    fi
+}
+
+hyprgruv_forbid_skip_var() {
+    local var_name="$1"
+    local label="${2:-$var_name}"
+    if hyprgruv_strict_enabled && [[ "${!var_name:-0}" == "1" ]]; then
+        hyprgruv_strict_abort "${label}=1 is forbidden while HYPRGRUV_STRICT=1"
+    fi
+}
+
+hyprgruv_require_cmd() {
+    local cmd="$1"
+    command -v "$cmd" &>/dev/null && return 0
+    hyprgruv_strict_abort "Required command not found: $cmd"
+}
+
+hyprgruv_require_pkg() {
+    local pkg="$1"
+    pacman -Qq "$pkg" &>/dev/null && return 0
+    hyprgruv_strict_abort "Required package not installed: $pkg"
+}
+
+hyprgruv_verify_pkgs() {
+    local missing=()
+    local pkg
+    for pkg in "$@"; do
+        pacman -Qq "$pkg" &>/dev/null || missing+=("$pkg")
+    done
+    if ((${#missing[@]})); then
+        hyprgruv_strict_abort "Required packages missing: ${missing[*]}"
+    fi
+}
+
+hyprgruv_require_service_enabled() {
+    local unit="$1"
+    if systemctl is-enabled "$unit" &>/dev/null; then
+        return 0
+    fi
+    hyprgruv_strict_abort "Required systemd unit not enabled: $unit"
+}
+
 # LS Terminal Colors
 export LSCOLORS=GxFxCxDxbxegedabagaced
 
@@ -321,6 +385,31 @@ purge_endeavouros_remnants() {
   ' "$conf" 2>/dev/null || true
 
   log_success "EndeavourOS remnants removed from pacman configuration."
+}
+
+# Install yay from AUR when missing (idempotent). Used in preflight and packages.
+ensure_yay() {
+    command -v yay &>/dev/null && return 0
+    log_status "Installing yay (AUR helper)…"
+    sudo pacman -S --needed --noconfirm git base-devel || return 1
+    local tmpdir
+    tmpdir="$(mktemp -d)"
+    if ! (
+        cd "$tmpdir"
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si --noconfirm
+    ); then
+        rm -rf "$tmpdir"
+        log_error "yay build/install failed"
+        return 1
+    fi
+    rm -rf "$tmpdir"
+    if ! command -v yay &>/dev/null; then
+        log_error "yay installation failed (binary not on PATH)"
+        return 1
+    fi
+    log_success "yay installed."
 }
 
 

@@ -6,7 +6,7 @@
 # Right click → rofi menu of the last ~10 notifications (selection re-shows it)
 #
 # Icons: 󰂚 (normal), 󰂛 (paused / Do Not Disturb)
-# Requires: dunst, jq, rofi (or fuzzel)
+# Requires: dunst, jq, rofi
 
 set -euo pipefail
 

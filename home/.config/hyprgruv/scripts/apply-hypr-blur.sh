@@ -108,7 +108,6 @@ apply_decoration() {
 
 apply_layers() {
     apply_layer_rule "rofi-blur" "^rofi$" 50 rofi 0.10
-    apply_layer_rule "fuzzel-blur" "^(fuzzel|launcher)$" 50 fuzzel 0.10
     apply_layer_rule "waypaper-blur" "^waypaper$" 50 waypaper 0.10
     apply_layer_rule "wlogout-blur" "^wlogout$" 200 wlogout 0.0001 \
         ", dim_around = true, xray = true"

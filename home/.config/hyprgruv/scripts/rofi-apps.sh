@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Curated app launcher — only ~/.config/fuzzel/apps-menu/applications/
+# Curated app launcher — only ~/.config/rofi/apps-menu/applications/
 set -euo pipefail
 
 pkill -x rofi 2>/dev/null || true
 
-APPS_MENU="${HOME}/.config/fuzzel/apps-menu"
-ICON_LOOKUP="${HOME}/.config/fuzzel/icon-lookup"
-USER_ICON_LOOKUP="${HOME}/.config/fuzzel/user-icon-lookup"
+APPS_MENU="${HOME}/.config/rofi/apps-menu"
+ICON_LOOKUP="${HOME}/.config/rofi/icon-lookup"
+USER_ICON_LOOKUP="${HOME}/.config/rofi/user-icon-lookup"
 SYSTEM_ICONS="${ICON_LOOKUP}/icons"
 USER_ICONS="${USER_ICON_LOOKUP}/icons"
 THEME="${HOME}/.config/rofi/config-apps.rasi"

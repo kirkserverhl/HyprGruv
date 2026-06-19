@@ -359,26 +359,6 @@ dedupe_sorted() {
     printf '%s\n' "$@" | awk 'NF && !seen[$0]++' | sort -u
 }
 
-ensure_yay() {
-    command -v yay &>/dev/null && return 0
-    log_status "yay not found — installing AUR helper…"
-    run_cmd sudo pacman -S --needed --noconfirm git base-devel
-    local tmpdir
-    tmpdir="$(mktemp -d)"
-    (
-        cd "$tmpdir"
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si --noconfirm
-    )
-    rm -rf "$tmpdir"
-    command -v yay &>/dev/null || {
-        log_error "yay installation failed"
-        return 1
-    }
-    log_success "yay is available"
-}
-
 gpu_pacman_pkgs() {
     local vendor="${1:-generic}"
     case "$vendor" in

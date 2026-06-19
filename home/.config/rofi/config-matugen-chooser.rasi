@@ -1,4 +1,4 @@
-/* Matugen palette / source-color chooser — fuzzel-matched */
+/* Matugen palette / source-color chooser — launcher-matched */
 
 configuration {
     show-icons:      true;
@@ -10,7 +10,7 @@ configuration {
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
-@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
     width:    420px;
