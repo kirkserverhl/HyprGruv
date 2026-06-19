@@ -1,19 +1,8 @@
 #!/usr/bin/env bash
 # 00-preflight.sh — ensure base system prep on pure Arch (Hyprland installed first)
-sleep 2
-clear
 
 set -euo pipefail
 IFS=$'\n\t'
-
-# __________             __________.__  .__       .__     __
-# \______   _______  ____\_   _____|  | |__| ____ |  |___/  |
-#  |     ___\_  __ _/ __ \|    __) |  | |  |/ ___\|  |  \   __\
-#  |    |    |  | \\  ___/|     \  |  |_|  / /_/  |   Y  |  |
-#  |____|    |__|   \___  \___  /  |____|__\___  /|___|  |__|
-#                       \/    \/          /_____/      \/
-
-echo ""
 
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Load helpers
@@ -27,12 +16,6 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 }
 source "$HYPR_DIR/lib/common.sh"
 source "$HYPR_DIR/lib/state.sh"
-
-# --- Load your existing helpers for consistent look ---
-source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 # Arch sanity
 if ! command -v pacman >/dev/null 2>&1; then

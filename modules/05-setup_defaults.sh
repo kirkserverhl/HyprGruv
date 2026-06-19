@@ -6,13 +6,6 @@ HYPR_DIR="${HYPRGRUV_DIR:-$HOME/.hyprgruv}"
 # shellcheck source=/dev/null
 [[ -f "$HYPR_DIR/lib/state.sh" ]] && source "$HYPR_DIR/lib/state.sh"
 
-# --- Load your existing helpers for consistent look ---
-source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
-command -v gum_apply_matugen_theme >/dev/null 2>&1 && gum_apply_matugen_theme 2>/dev/null || true
-
 SETTINGS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/settings"
 
 # Ensure gum is present (05 can be run standalone or after SKIP_PACKAGES)
@@ -25,8 +18,7 @@ if ! command -v gum >/dev/null 2>&1; then
     fi
 fi
 
-hyprgruv_section_intro "Defaults"
-gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --border double --border-foreground "${COLOR_OUTLINE:-#6c7086}" --align center --width 50 --margin "1 2" --padding "2 4" "Set Default Programs" 2>/dev/null || echo "=== Set Default Programs ==="
+hyprgruv_section_intro "Set default programs"
 echo ""
 
 # Supported mappings (choice:package for install)

@@ -126,22 +126,11 @@ hyprgruv_enable_pipewire_services() {
 # LS Terminal Colors
 export LSCOLORS=GxFxCxDxbxegedabagaced
 
-# display_header — toilet + lsd-print when available (see header.sh after stow)
 display_header() {
     local title="${1:-}"
     [[ -z "$title" ]] && return 0
     echo ""
-    if command -v toilet >/dev/null 2>&1; then
-        if command -v lsd-print >/dev/null 2>&1; then
-            toilet -f graffiti "$title" | lsd-print
-        else
-            toilet -f graffiti "$title"
-        fi
-    elif command -v gum >/dev/null 2>&1; then
-        echo "$title" | gum style --foreground "${COLOR_PRIMARY:-#89b4fa}" --bold
-    else
-        echo "=== $title ==="
-    fi
+    echo "=== $title ==="
     echo ""
 }
 # Check if command exists
@@ -166,87 +155,9 @@ run_command() {
 export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INSTALL_SCRIPTS
 
 
-# ============== Matugen + Gum Styling ==============
+# ============== Gum prompts (install path — no matugen/header theming) ==============
 
-# colors.sh can export -f load_matugen_colors into the parent shell environment.
-# Child install scripts inherit only the function body (helpers stay behind),
-# which breaks under set -u with "environment: line N: … command not found".
-unset -f load_matugen_colors gum_apply_matugen_theme gum_use_matugen \
-    _load_from_cache_shell _load_from_hypr_conf _load_from_json 2>/dev/null || true
-
-_hyprgruv_load_matugen_colors() {
-    local colors_sh="${DOTFILES_SCRIPTS}/colors.sh"
-    local repo_colors_sh="${REPO_DOTFILES_SCRIPTS}/colors.sh"
-    local repo_defaults="${HYPR_DIR}/lib/defaults/matugen-colors.sh"
-    if [[ -f "${HOME}/.cache/matugen/colors.sh" ]]; then
-        # shellcheck source=/dev/null
-        set -a
-        source "${HOME}/.cache/matugen/colors.sh" 2>/dev/null || true
-        set +a
-        return 0
-    fi
-    if [[ -f "$colors_sh" ]]; then
-        # shellcheck source=/dev/null
-        source "$colors_sh" 2>/dev/null && return 0
-    fi
-    if [[ -f "$repo_colors_sh" ]]; then
-        # shellcheck source=/dev/null
-        source "$repo_colors_sh" 2>/dev/null && return 0
-    fi
-    if [[ -f "$repo_defaults" ]]; then
-        # shellcheck source=/dev/null
-        set -a
-        source "$repo_defaults" 2>/dev/null || true
-        set +a
-        return 0
-    fi
-    if [[ -f "${HOME}/.config/hypr/colors.conf" ]]; then
-        # shellcheck source=/dev/null
-        source "${HOME}/.config/hypr/colors.conf" 2>/dev/null && return 0
-    fi
-    return 1
-}
-
-_hyprgruv_load_matugen_colors || true
-
-# Fallback semantic colors (matugen cache may omit a few aliases)
-: "${COLOR_PRIMARY:="#89b4fa"}"
-: "${COLOR_ON_PRIMARY:="#1e1e2e"}"
-: "${COLOR_SECONDARY:="#89b4fa"}"
-: "${COLOR_SURFACE:="#1e1e2e"}"
-: "${COLOR_ON_SURFACE:="#cdd6f4"}"
-: "${COLOR_SURFACE_CONTAINER:="#252535"}"
-: "${COLOR_ON_SURFACE_VARIANT:="#bac2de"}"
-: "${COLOR_SUCCESS:="${COLOR_TERTIARY:-#a6e3a1}"}"
-: "${COLOR_ERROR:="${COLOR_ERROR:-#f38ba8}"}"
-: "${COLOR_TEXT:="${COLOR_TEXT:-${COLOR_ON_SURFACE:-#cdd6f4}}"}"
-
-# gum_apply_matugen_theme lives in colors.sh; provide a fallback if only the cache was sourced
-if ! declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
-    gum_apply_matugen_theme() {
-        export GUM_CONFIRM_PROMPT="? "
-        export GUM_CONFIRM_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
-        export GUM_CONFIRM_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
-        export GUM_CONFIRM_UNSELECTED_BACKGROUND="${COLOR_SURFACE_CONTAINER}"
-        export GUM_CONFIRM_UNSELECTED_FOREGROUND="${COLOR_ON_SURFACE}"
-        export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
-        export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
-        export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
-        export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
-        export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
-        export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
-        export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
-        export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
-        export GUM_CHOOSE_CURSOR_PREFIX="› "
-        export GUM_CHOOSE_SELECTED_PREFIX="✓ "
-        export GUM_CHOOSE_UNSELECTED_PREFIX="  "
-        export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
-        export GUM_SPIN_SPINNER_FOREGROUND="${COLOR_PRIMARY}"
-        export GUM_SPIN_TITLE_FOREGROUND="${COLOR_ON_SURFACE}"
-        export GUM_TABLE_HEADER_FOREGROUND="${COLOR_PRIMARY}"
-        export GUM_PAGER_FOREGROUND="${COLOR_ON_SURFACE}"
-    }
-fi
+gum_apply_matugen_theme() { :; }
 
 # True when the session can open the controlling terminal (needed for gum UI under tee logging).
 _hyprgruv_has_tty() {
@@ -281,7 +192,6 @@ hyprgruv_run_interactive() {
 gum_confirm_prompt() {
     local prompt="$1"
     shift || true
-    gum_apply_matugen_theme 2>/dev/null || true
     if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
         gum confirm "$prompt" \
             --affirmative "  Yes  " --negative "  No  " \
@@ -294,7 +204,6 @@ gum_confirm_prompt() {
 }
 
 gum_choose_prompt() {
-    gum_apply_matugen_theme 2>/dev/null || true
     if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
         gum choose "$@" </dev/tty >/dev/tty
     else
@@ -302,61 +211,37 @@ gum_choose_prompt() {
     fi
 }
 
-# Wipe noisy script output, then show a clean hand-off into the next prompt.
-# Typical flow: transition → section_intro → gum confirm/choose.
 hyprgruv_section_transition() {
     local message="${1:-}"
     local kind="${2:-success}"
-
-    sleep 0.3
-    clear
-    echo ""
-    if [[ -n "$message" ]]; then
-        case "$kind" in
-            success) log_success "$message" ;;
-            status)  log_status "$message" ;;
-            *)       echo "$message" ;;
-        esac
-        echo ""
-    fi
+    [[ -z "$message" ]] && return 0
+    case "$kind" in
+        success) log_success "$message" ;;
+        status)  log_status "$message" ;;
+        *)       echo "$message" ;;
+    esac
 }
 
 hyprgruv_section_intro() {
-    local title="$1"
-    display_header "$title"
-    sleep 0.3
+    log_status "$1"
 }
 
-if command -v gum >/dev/null 2>&1; then
-    gum_apply_matugen_theme
-fi
-
-# Enhanced print functions using gum (for modern scripts)
 print_section() {
-    local title="$1"
     echo ""
-    echo "$title" | gum style --foreground "$COLOR_PRIMARY" --bold
+    echo "== $1 =="
 }
 
 print_box() {
-    local content="$1"
-    echo "$content" | gum style \
-        --foreground "$COLOR_TEXT" \
-        --border rounded \
-        --border-foreground "$COLOR_PRIMARY" \
-        --padding "1 3" \
-        --width 95
+    echo "$1"
 }
 
 show_success() {
-    gum style --foreground "$COLOR_SUCCESS" --bold "✓ $1"
+    log_success "$1"
 }
 
 show_error() {
-    gum style --foreground "$COLOR_ERROR" --bold "✗ $1"
+    log_error "$1"
 }
-
-# display_header uses toilet + lsd-print when installed (header.sh matches after stow)
 
 # ============================================================
 # Pure Arch sanitization helpers (for users moving away from EndeavourOS or other derivatives)

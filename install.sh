@@ -19,12 +19,6 @@ hyprgruv_forbid_skip_var SKIP_WALLPAPER
 hyprgruv_forbid_skip_var SKIP_SETUP_WIZARD
 hyprgruv_forbid_skip_var SKIP_CHAOTIC
 
-# --- Load your existing helpers for consistent look ---
-source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
-
 # ============================================================
 # Setup logging
 # ============================================================

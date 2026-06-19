@@ -2,19 +2,8 @@
 # 01-packages.sh — install base/desktop packages for Hyprgruv
 # Uses a curated "necessary only" list (lean Hyprland + terminal workflow + Thunar).
 
-sleep 2
-clear
-
 set -euo pipefail
 IFS=$'\n\t'
-# __________               __
-# \______   _____    ____ |  | ______    ____   ____   ______
-#  |     ___\__  \ _/ ___\|  |/ \__  \  / ___\_/ __ \ /  ___/
-#  |    |    / __ \\  \___|    < / __ \/ /_/  \  ___/ \___ \
-#  |____|   (____  /\___  |__|_ (____  \___  / \___  /____  >
-#                \/     \/     \/    \/_____/      \/     \/
-
-echo ""
 
 # Resolve repo root from inside modules/
 HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -22,12 +11,6 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
-
-# --- Load your existing helpers for consistent look ---
-source "${REPO_DOTFILES_SCRIPTS}/header.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-source "${REPO_DOTFILES_SCRIPTS}/colors.sh" 2>/dev/null \
-    || source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 say() { echo -e "$*"; }
 
