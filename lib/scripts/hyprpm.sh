@@ -43,12 +43,14 @@ ensure_build_deps() {
 }
 
 ensure_hyprpm_cache_owned() {
+    [[ -n "${USER:-}" ]] || { log_error "USER is unset — cannot prepare hyprpm cache"; return 1; }
     local cache_root="/var/cache/hyprpm/${USER}"
-    if [[ -d "$cache_root" ]] && [[ ! -w "$cache_root" ]]; then
-        log_status "Fixing hyprpm cache ownership (root-owned cache blocks plugin state writes)"
+    # /var/cache/hyprpm is root-owned on fresh installs; hyprpm needs a user-writable tree.
+    if [[ ! -d "$cache_root" ]] || [[ ! -w "$cache_root" ]]; then
+        log_status "Preparing hyprpm cache: $cache_root"
+        sudo mkdir -p "$cache_root"
         sudo chown -R "${USER}:${USER}" "$cache_root"
     fi
-    mkdir -p "$cache_root"
 }
 
 add_repo() {
