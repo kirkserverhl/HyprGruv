@@ -28,10 +28,15 @@ fi
 
 wallpaper=""
 if [[ -x "$WALLPAPER_SCRIPT" ]]; then
-    if ! wallpaper=$(THEME_SWITCHER_APPLY=1 "$WALLPAPER_SCRIPT" "$selected"); then
-        notify-send "Wallpaper picker failed" "Could not open picker for: $selected" -u critical
+    picker_err_file=$(mktemp)
+    if ! wallpaper=$(THEME_SWITCHER_APPLY=1 "$WALLPAPER_SCRIPT" "$selected" 2>"$picker_err_file"); then
+        picker_err=$(head -1 "$picker_err_file")
+        rm -f "$picker_err_file"
+        [[ -z "$picker_err" ]] && picker_err="No wallpapers found for theme"
+        notify-send "Wallpaper picker failed" "Could not open picker for: $selected — $picker_err" -u critical
         exit 1
     fi
+    rm -f "$picker_err_file"
 fi
 
 SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"

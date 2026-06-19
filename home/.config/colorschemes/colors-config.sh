@@ -141,6 +141,16 @@ PY
             --continue-on-error 2>/dev/null || true
     fi
 
+    # Matugen templates overwrite starship/waybar with wallpaper-derived colors.
+    # Themes with spectrum.json use fixed semantic rainbow — restore after matugen.
+    if [[ -f "$theme_dir/spectrum.json" && -f "$GENERATOR" ]]; then
+        python3 "$GENERATOR" "$theme"
+    fi
+
+    if [[ -x "$HOME/.config/hyprgruv/scripts/matugen-posthook-gtk-theme.sh" ]]; then
+        "$HOME/.config/hyprgruv/scripts/matugen-posthook-gtk-theme.sh" || true
+    fi
+
     jq -n \
         --arg wp "$wallpaper" \
         --arg theme "$theme" \

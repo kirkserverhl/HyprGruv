@@ -9,6 +9,15 @@ NOTIFY=${NOTIFY:-notify-send}
 
 mkdir -p "$STATE_DIR"
 
+BAR_MODE_FILE="$STATE_DIR/bar_mode"
+if [[ -f "$BAR_MODE_FILE" ]]; then
+    _bar_mode=$(tr -d '[:space:]' <"$BAR_MODE_FILE")
+    if [[ "$_bar_mode" == "hyprbars" || "$_bar_mode" == "off" ]]; then
+        [[ "$NOTIFY" = ":" ]] || $NOTIFY "Waybar" "Bar is in ${_bar_mode} mode — switch with Alt+W first" -u normal -t 3000
+        exit 0
+    fi
+fi
+
 if [[ ! -d "$LAYOUTS_DIR" ]]; then
     echo "No layouts directory at $LAYOUTS_DIR" >&2
     exit 1
@@ -80,16 +89,9 @@ if [[ ! -f "$css_src" ]]; then
     css_src="$WAYBAR_DIR/freshstart.css"
 fi
 
-ln -sf "$cfg_src" "$WAYBAR_DIR/config.jsonc"
-ln -sf "$css_src" "$WAYBAR_DIR/style.css"
-
 echo "$chosen" >"$STATE_FILE"
 
-# Restart Waybar using the *chosen* theme's (or fallback) files explicitly.
-# (We do this because waybar is typically started with -c/-s pointing at a theme,
-# so just USR2 or root symlinks alone won't switch the active layout.)
-pkill -x waybar 2>/dev/null || true
-sleep 0.2
-waybar -c "$cfg_src" -s "$css_src" &
+# launch.sh starts waybar inside the theme dir so @import "../../shared/…" resolves.
+"$HOME/.config/waybar/scripts/launch.sh"
 
 [[ "$NOTIFY" = ":" ]] || $NOTIFY "Waybar" "Layout: $chosen"

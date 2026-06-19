@@ -1,6 +1,7 @@
 /*
  * freshstart theme — Starship matugen-rainbow pill aesthetic (HyprGruv)
- * Left & right: each 4 segments form their own Starship pill. Center: transparent.
+ * Each rainbow slot is its own top-level module (solid bg per segment).
+ * Same-color drawer groups only; cross-color reveals use CSS sibling hover.
  */
 {
   "layer": "top",
@@ -20,8 +21,10 @@
 
   "modules-left": [
     "group/apps",
-    "group/hyprgruv-settings",
-    "group/sound",
+    "custom/hyprgruv-settings",
+    "group/hyprgruv-drawer",
+    "pulseaudio",
+    "bluetooth",
     "group/notification",
   ],
 
@@ -32,31 +35,15 @@
 
   "modules-center": ["group/center"],
 
-  "group/hyprgruv-settings": {
+  "group/hyprgruv-drawer": {
     "orientation": "horizontal",
-    "tooltip-format": "HyprGruv Settings",
+    "tooltip-format": "HyprGruv extras",
     "drawer": {
       "transition-duration": 300,
-      "children-class": "not-hyprgruv-settings",
-      "transition-left-to-right": true,
-      "click-to-reveal": false,
-    },
-    "modules": [
-      "custom/hyprgruv-settings",
-      "custom/waybarthemes",
-      "custom/wallpaper",
-    ],
-  },
-
-  "group/sound": {
-    "orientation": "horizontal",
-    "tooltip-format": "Left: Volume\nRight: Pavucontrol",
-    "drawer": {
-      "transition-duration": 300,
-      "children-class": "not-sound",
+      "children-class": "not-hyprgruv-drawer",
       "transition-left-to-right": true,
     },
-    "modules": ["pulseaudio", "bluetooth"],
+    "modules": ["custom/waybarthemes", "custom/wallpaper"],
   },
 
   "group/notification": {
@@ -64,6 +51,27 @@
     "orientation": "horizontal",
     "tooltip-format": "Media & Notifications",
     "modules": ["custom/media", "custom/notification"],
+  },
+
+  "modules-right": [
+    "custom/updates",
+    "custom/system",
+    "group/cpu-drawer",
+    "group/power",
+    "group/clock",
+  ],
+
+  "group/cpu-drawer": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-cpu",
+      "transition-left-to-right": false,
+    },
+    "on-click": "~/.config/hyprgruv/scripts/bpytop.sh",
+    "on-click-right": "~/.config/hyprgruv/scripts/htop.sh",
+    "tooltip-format": "Left: Btop\nRight: Htop",
+    "modules": ["cpu", "memory", "disk", "hyprland/language", "network"],
   },
 
   "custom/appmenu": {
@@ -107,15 +115,6 @@
     "tooltip": true,
   },
 
-  /* Right pill: 4 segments — updates | system | power | time/weather */
-  "modules-right": [
-    "custom/updates",
-    "group/cpu-info",
-    "group/power",
-    "group/clock",
-  ],
-
-  /* Spaced formats — {icon} and bare glyphs need literal spaces for Waybar layout */
   "pulseaudio": {
     "format": " {icon} ",
     "format-bluetooth": " \udb80\udcb1 ",
@@ -155,7 +154,6 @@
     "format": " / K {short} ",
   },
 
-  /* Drawer anchors + clock spacer */
   "custom/system": {
     "format": " \udb81\udc93 ",
     "tooltip": false,

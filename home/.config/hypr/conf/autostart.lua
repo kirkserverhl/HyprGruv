@@ -39,7 +39,7 @@ hl.on("hyprland.start", function()
 
 	-- Idle + bar
 	hl.exec_cmd(
-		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; if [ "$(cat "$st/bar_mode" 2>/dev/null)" != hyprbars ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
+		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
 	)
 
 	-- Clipboard history (images)

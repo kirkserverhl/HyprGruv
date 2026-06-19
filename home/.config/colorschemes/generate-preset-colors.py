@@ -162,7 +162,7 @@ def write_waybar(slots: dict[str, str], theme: str) -> None:
 @define-color urgent @base08;
 @define-color on_urgent @base00;
 
-{spectrum.spectrum_css_block(spectrum.resolve_spectrum({k.lower(): v for k, v in s.items()}))}
+{spectrum.spectrum_css_block(spectrum.resolve_spectrum({k.lower(): v for k, v in s.items()}, theme), theme)}
 
 @define-color error_container {s['base08']};
 @define-color inverse_on_surface {s['base06']};
@@ -294,19 +294,9 @@ vim.api.nvim_set_hl(0, "DiagnosticHint", {{ fg = "{s['base0C']}" }})
 
 def write_starship(slots: dict[str, str], theme: str) -> None:
     s = {k.lower(): v for k, v in slots.items()}
-    template = HOME / ".config/matugen/templates/starship-rainbow.toml"
-    out = HOME / ".config/starship/matugen-rainbow.toml"
-    if not template.is_file():
-        return
-
-    text = template.read_text(encoding="utf-8")
-    # Fill any remaining matugen placeholders from base16 slots (legacy template lines).
-    for slot, hx in s.items():
-        for variant in ("dark", "default", "light"):
-            text = text.replace(f"{{{{base16.{slot}.{variant}.hex}}}}", hx)
-    resolved = spectrum.resolve_spectrum(s)
-    text = spectrum.patch_starship_toml(text, resolved)
-    out.write_text(text, encoding="utf-8")
+    resolved = spectrum.resolve_spectrum(s, theme)
+    spectrum.write_rainbow_cache(theme, resolved)
+    spectrum.apply_starship_asset(theme, resolved, s)
 
 
 def write_rofi(slots: dict[str, str], theme: str) -> None:

@@ -55,10 +55,9 @@ label.module {
  */
 #group-apps,
 #group-settings,
-#group-hyprgruv-settings,
-#group-sound,
+#group-hyprgruv-drawer,
 #group-clock,
-#group-cpu-info,
+#group-cpu-drawer,
 #group-power {
   margin: 0;
   padding: 0 2px;
@@ -66,17 +65,15 @@ label.module {
 
 #group-apps label.module,
 #group-settings label.module,
-#group-hyprgruv-settings label.module,
-#group-sound label.module,
+#group-hyprgruv-drawer label.module,
 #group-clock label.module,
-#group-cpu-info label.module,
+#group-cpu-drawer label.module,
 #group-power label.module,
 #group-apps widget,
 #group-settings widget,
-#group-hyprgruv-settings widget,
-#group-sound widget,
+#group-hyprgruv-drawer widget,
 #group-clock widget,
-#group-cpu-info widget,
+#group-cpu-drawer widget,
 #group-power widget {
   margin: 0 4px;
   padding: 0 4px;

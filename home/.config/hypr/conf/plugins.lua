@@ -1,17 +1,50 @@
 -- conf/plugins.lua
 -- Hyprbars plugin configuration for Hyprland 0.55+ Lua config.
--- Buttons are registered once during config parse (never in hl.on handlers —
+-- Buttons are registered once per plugin session (never in hl.on handlers —
 -- those accumulate across reloads and duplicate buttons).
 
 local SCRIPTS = require("conf.scripts_path").get()
 
 local TOGGLE_SIZE = SCRIPTS .. "/hyprbars-toggle-size.sh"
+local buttons_registered = false
+
+local function register_hyprbars_buttons(colors)
+	if buttons_registered or hl.plugin.hyprbars == nil then
+		return
+	end
+
+	-- Left: close (orange) | Middle: float (yellow) | Right: maximize (blue)
+	hl.plugin.hyprbars.add_button({
+		bg_color = colors.hyprbar_close,
+		fg_color = colors.hyprbar_close_fg,
+		size = 15,
+		icon = "✕",
+		action = "hyprctl dispatch 'hl.dsp.window.close()'",
+	})
+	hl.plugin.hyprbars.add_button({
+		bg_color = colors.hyprbar_minimize,
+		fg_color = colors.hyprbar_minimize_fg,
+		size = 15,
+		icon = "⧉",
+		action = "hyprctl dispatch 'hl.dsp.window.float({ action = \"toggle\" })'",
+	})
+	hl.plugin.hyprbars.add_button({
+		bg_color = colors.hyprbar_maximize,
+		fg_color = colors.hyprbar_maximize_fg,
+		size = 15,
+		icon = "+",
+		action = "bash " .. TOGGLE_SIZE,
+	})
+
+	buttons_registered = true
+end
 
 local function apply_hyprbars()
 	if hl.plugin.hyprbars == nil then
 		return
 	end
 
+	package.loaded["colors.init"] = nil
 	local colors = require("colors.init").load()
 
 	hl.config({
@@ -37,29 +70,16 @@ local function apply_hyprbars()
 		},
 	})
 
-	-- Left: close (pink) | Middle: float (grey) | Right: maximize (blue) — starship rainbow slots 1–3
-	-- Hyprland 0.55+ needs hl.dsp dispatch strings (plain killactive/togglefloat do not fire).
-	hl.plugin.hyprbars.add_button({
-		bg_color = colors.hyprbar_close,
-		fg_color = colors.hyprbar_close_fg,
-		size = 15,
-		icon = "✕",
-		action = "hyprctl dispatch 'hl.dsp.window.close()'",
-	})
-	hl.plugin.hyprbars.add_button({
-		bg_color = colors.hyprbar_minimize,
-		fg_color = colors.hyprbar_minimize_fg,
-		size = 15,
-		icon = "⧉",
-		action = "hyprctl dispatch 'hl.dsp.window.float({ action = \"toggle\" })'",
-	})
-	hl.plugin.hyprbars.add_button({
-		bg_color = colors.hyprbar_maximize,
-		fg_color = colors.hyprbar_maximize_fg,
-		size = 15,
-		icon = "+",
-		action = "bash " .. TOGGLE_SIZE,
-	})
+	register_hyprbars_buttons(colors)
+end
+
+-- Called from toggle-bar-mode.sh / apply-bar-mode.sh via hyprctl eval.
+function reset_hyprbars_buttons()
+	buttons_registered = false
+end
+
+function reapply_hyprbars()
+	apply_hyprbars()
 end
 
 apply_hyprbars()

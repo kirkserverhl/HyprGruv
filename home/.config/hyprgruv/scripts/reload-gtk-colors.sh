@@ -14,8 +14,15 @@ GTK3_COLORS="${HOME}/.config/gtk-3.0/colors.css"
 GTK4_COLORS="${HOME}/.config/gtk-4.0/colors.css"
 SCHEMA="org.gnome.desktop.interface"
 
+CURRENT_THEME_FILE="${HOME}/.config/colorschemes/.current-theme"
 gtk_theme="adw-gtk3-dark"
-if [[ -f "$GTK3_SETTINGS" ]]; then
+if [[ -f "$CURRENT_THEME_FILE" ]]; then
+    theme=$(tr -d '[:space:]' <"$CURRENT_THEME_FILE")
+    theme_file="${HOME}/.config/colorschemes/${theme}/gtk-theme"
+    if [[ -n "$theme" && -f "$theme_file" ]]; then
+        gtk_theme=$(tr -d '[:space:]' <"$theme_file")
+    fi
+elif [[ -f "$GTK3_SETTINGS" ]]; then
     gtk_theme="$(grep -E '^gtk-theme-name=' "$GTK3_SETTINGS" | sed -E 's/^gtk-theme-name=//' | tr -d '"' | xargs)"
     [[ -z "$gtk_theme" ]] && gtk_theme="adw-gtk3-dark"
 fi

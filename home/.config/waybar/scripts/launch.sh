@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# Respect bar mode — do not start Waybar when Hyprbars-only or hidden.
+BAR_MODE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/waybar/bar_mode"
+if [[ -f "$BAR_MODE_FILE" ]]; then
+    _bar_mode=$(tr -d '[:space:]' <"$BAR_MODE_FILE")
+    if [[ "$_bar_mode" == "hyprbars" || "$_bar_mode" == "off" ]]; then
+        exit 0
+    fi
+fi
+
 # Waybar launcher — respects the last layout chosen via waybar-layout-switcher (CTRL+W).
 # Falls back to "subtle" if no saved layout or the saved one is invalid.
 # Available themes: alchemy, subtle, ultra_minimal, velvetline, freshstart, tester
@@ -38,7 +47,11 @@ fi
 
 killall -9 waybar 2>/dev/null || true
 for _ in 1 2 3 4 5 6 7 8 9 10; do
-    pgrep -x waybar >/dev/null || break
+    found=0
+    for f in /proc/[0-9]*/comm; do
+        [[ -r "$f" && "$(<"$f")" == "waybar" ]] && found=1 && break
+    done
+    [[ "$found" -eq 0 ]] && break
     sleep 0.05
 done
 killall -9 dunst 2>/dev/null || true
@@ -48,4 +61,5 @@ dunst &
 ln -sf "$cfg" "$WAYBAR_DIR/config.jsonc"
 ln -sf "$css" "$WAYBAR_DIR/style.css"
 
-waybar -c "$cfg" -s "$css" &
+# @import paths in style.css resolve from CWD — run inside the theme folder.
+(cd "$waybar_config_dir" && waybar -c "$(basename "$cfg")" -s style.css) &

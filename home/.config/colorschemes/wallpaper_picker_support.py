@@ -98,6 +98,16 @@ def load_active_themes() -> list[str]:
     return themes or default
 
 
+def _dir_has_wallpapers(directory: Path) -> bool:
+    exts = {".jpg", ".jpeg", ".png", ".webp", ".svg"}
+    try:
+        return any(
+            p.is_file() and p.suffix.lower() in exts for p in directory.iterdir()
+        )
+    except OSError:
+        return False
+
+
 def resolve_wallpaper_dir(theme: str) -> Path | None:
     folder = theme
     if REGISTRY_FILE.is_file():
@@ -114,16 +124,30 @@ def resolve_wallpaper_dir(theme: str) -> Path | None:
     folder_map = {"nord-darker": "nord"}
     if theme in folder_map and folder == theme:
         folder = folder_map[theme]
+
+    candidates: list[Path] = []
     for root in (
         HOME / "themed-wallpapers",
         HOME / "Wallpapers" / "themed-wallpapers",
         HOME / "wallpapers" / "themed-wallpapers",
     ):
-        candidate = root / folder
-        if candidate.is_dir():
-            return candidate
-    fallback = COLORSCHEMES / theme / "wallpapers"
-    return fallback if fallback.is_dir() else None
+        candidates.append(root / folder)
+    candidates.append(COLORSCHEMES / theme / "wallpapers")
+    if folder != theme:
+        candidates.append(COLORSCHEMES / folder / "wallpapers")
+
+    seen: set[Path] = set()
+    for candidate in candidates:
+        try:
+            resolved = candidate.resolve()
+        except OSError:
+            continue
+        if resolved in seen or not resolved.is_dir():
+            continue
+        seen.add(resolved)
+        if _dir_has_wallpapers(resolved):
+            return resolved
+    return None
 
 
 def list_wallpapers(directory: Path, *, include_subfolders: bool = False) -> list[str]:

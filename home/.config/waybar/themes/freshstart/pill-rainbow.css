@@ -1,0 +1,424 @@
+/*
+ * Starship rainbow pills — one solid segment per top-level module.
+ * Collapsed: orange | yellow | aqua | blue (left), bg1 | yellow | blue | orange (right).
+ */
+
+/* --- Base join geometry --- */
+.modules-left > widget,
+.modules-right > widget {
+  border-radius: 0;
+  padding: 3px 10px 1px 10px;
+  margin: 3px -1px;
+  opacity: 1;
+}
+
+#group-apps,
+#group-hyprgruv-drawer,
+#group-cpu-drawer,
+#group-power,
+#group-notification,
+#group-clock,
+#custom-hyprgruv-settings,
+#custom-system,
+#pulseaudio,
+#bluetooth,
+#custom-updates {
+  border-radius: 0;
+  padding: 3px 10px 1px 10px;
+  margin: 3px -1px;
+  opacity: 1;
+}
+
+/* Left cap */
+.modules-left > widget:nth-child(1),
+.modules-left > widget:nth-child(1) > box,
+#group-apps,
+#group-apps > box {
+  border-radius: 20px 0 0 20px;
+  margin: 1px -1px 1px 6px;
+}
+
+/* Left right cap */
+.modules-left > widget:nth-child(6),
+.modules-left > widget:nth-child(6) > box,
+#group-notification,
+#group-notification > box {
+  border-radius: 0 20px 20px 0;
+  margin: 1px 10px 1px -1px;
+}
+
+/* Right left cap */
+.modules-right > widget:nth-child(1),
+.modules-right > widget:nth-child(1) > box,
+#custom-updates {
+  border-radius: 20px 0 0 20px;
+  margin: 1px -1px 1px 10px;
+}
+
+/* Right right cap */
+.modules-right > widget:nth-child(5),
+.modules-right > widget:nth-child(5) > box,
+#group-clock,
+#group-clock > box {
+  border-radius: 0 20px 20px 0;
+  margin: 1px 10px 1px -1px;
+}
+
+/* Middle joins */
+.modules-left > widget:nth-child(2),
+.modules-left > widget:nth-child(3),
+.modules-left > widget:nth-child(4),
+.modules-left > widget:nth-child(5),
+.modules-right > widget:nth-child(2),
+.modules-right > widget:nth-child(3),
+.modules-right > widget:nth-child(4) {
+  border-radius: 0;
+  margin: 1px -1px;
+}
+
+/* ============================================================
+ * Segment fills
+ * ============================================================ */
+
+#group-apps,
+#group-apps > box,
+#group-clock,
+#group-clock > box {
+  background-color: @color_orange;
+  color: @color_on_orange;
+}
+
+#custom-hyprgruv-settings,
+#custom-hyprgruv-settings > box,
+#custom-system,
+#custom-system > box {
+  background-color: @color_yellow;
+  color: @color_on_orange;
+}
+
+#group-hyprgruv-drawer,
+#group-hyprgruv-drawer > box,
+#pulseaudio,
+#pulseaudio > box,
+#group-cpu-drawer,
+#group-cpu-drawer > box {
+  background-color: @color_aqua;
+  color: @color_on_aqua;
+}
+
+#bluetooth,
+#bluetooth > box,
+#group-notification,
+#group-notification > box,
+#group-power,
+#group-power > box {
+  background-color: @color_blue;
+  color: @color_fg0;
+}
+
+#custom-updates,
+#custom-updates > box {
+  background-color: @color_bg1;
+  color: @color_fg0;
+}
+
+#group-apps #custom-appmenu > box,
+#group-apps #custom-tools > box,
+#group-apps #custom-cliphist > box,
+#group-apps #custom-hypridle > box,
+#group-apps #custom-hyprsunset > box,
+#group-clock #clock > box,
+#group-clock #custom-weather > box,
+#group-power #custom-power > box,
+#group-power #power-profiles-daemon > box,
+#group-notification #custom-media > box,
+#group-notification #custom-notification > box {
+  background-color: transparent;
+}
+
+#group-apps label,
+#group-apps label.module,
+#group-clock label,
+#group-clock label.module {
+  background: transparent;
+  color: @color_on_orange;
+}
+
+#custom-hyprgruv-settings label,
+#custom-system label {
+  background: transparent;
+  color: @color_on_orange;
+}
+
+#group-hyprgruv-drawer label,
+#pulseaudio label,
+#group-cpu-drawer label {
+  background: transparent;
+  color: @color_on_aqua;
+}
+
+#bluetooth label,
+#group-notification label,
+#group-power label {
+  background: transparent;
+  color: @color_fg0;
+}
+
+#custom-updates label {
+  background: transparent;
+  color: @color_fg0;
+}
+
+#custom-updates.red label {
+  color: @error;
+}
+
+#pulseaudio.muted label {
+  color: @error;
+}
+
+/* ============================================================
+ * Cross-color reveal — hidden segments until anchor hover
+ * ============================================================ */
+
+.modules-left > widget:nth-child(3),
+#group-hyprgruv-drawer,
+.modules-left > widget:nth-child(5),
+#bluetooth {
+  opacity: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  transition: opacity 300ms ease, padding 300ms ease;
+}
+
+.modules-left > widget:nth-child(2):hover ~ widget:nth-child(3),
+.modules-left > widget:nth-child(3):hover,
+.modules-left > widget:nth-child(4):hover ~ widget:nth-child(5),
+.modules-left > widget:nth-child(5):hover {
+  opacity: 1;
+}
+
+.modules-right > widget:nth-child(3),
+#group-cpu-drawer {
+  opacity: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  transition: opacity 300ms ease, padding 300ms ease;
+}
+
+.modules-right > widget:nth-child(2):hover ~ widget:nth-child(3),
+.modules-right > widget:nth-child(3):hover {
+  opacity: 1;
+}
+
+/* ============================================================
+ * Same-color drawer collapse
+ * ============================================================ */
+
+#group-apps widget.not-apps,
+#group-hyprgruv-drawer widget.not-hyprgruv-drawer,
+#group-cpu-drawer widget.not-cpu,
+#group-power widget.not-power {
+  margin: 0;
+  padding: 0;
+}
+
+#group-apps:hover widget.not-apps,
+#group-hyprgruv-drawer:hover widget.not-hyprgruv-drawer,
+#group-cpu-drawer:hover widget.not-cpu,
+#group-power:hover widget.not-power {
+  margin: 0;
+  padding: 0 10px;
+}
+
+/* ============================================================
+ * Spacing
+ * ============================================================ */
+
+#group-apps,
+.modules-left > widget:nth-child(1) {
+  padding: 0 24px 0 10px;
+}
+
+#custom-hyprgruv-settings,
+.modules-left > widget:nth-child(2) {
+  padding: 0 24px;
+}
+
+#group-hyprgruv-drawer,
+.modules-left > widget:nth-child(3) {
+  padding: 0 24px;
+}
+
+#pulseaudio,
+.modules-left > widget:nth-child(4) {
+  padding: 0 24px;
+}
+
+#bluetooth,
+.modules-left > widget:nth-child(5) {
+  padding: 0 24px;
+}
+
+#group-notification,
+.modules-left > widget:nth-child(6) {
+  padding: 0 10px 0 24px;
+}
+
+#custom-updates,
+.modules-right > widget:nth-child(1) {
+  padding: 0 24px 0 10px;
+}
+
+#custom-system,
+.modules-right > widget:nth-child(2) {
+  padding: 0 24px 0 32px;
+}
+
+#group-cpu-drawer,
+.modules-right > widget:nth-child(3) {
+  padding: 0 24px 0 32px;
+}
+
+#group-power,
+.modules-right > widget:nth-child(4) {
+  padding: 0 24px 0 32px;
+}
+
+#group-clock,
+.modules-right > widget:nth-child(5) {
+  padding: 0 10px 0 32px;
+}
+
+#group-apps widget,
+#group-apps label.module,
+#group-hyprgruv-drawer widget,
+#group-hyprgruv-drawer label.module,
+#group-cpu-drawer widget,
+#group-cpu-drawer label.module,
+#group-power widget,
+#group-power label.module,
+#group-notification widget,
+#group-notification label.module,
+#group-clock widget,
+#group-clock label.module,
+#custom-hyprgruv-settings label,
+#custom-system label,
+#pulseaudio label,
+#bluetooth label {
+  margin: 0;
+  padding: 0 10px;
+}
+
+#group-apps > box,
+#group-hyprgruv-drawer > box,
+#group-cpu-drawer > box,
+#group-power > box,
+#group-notification > box,
+#group-clock > box {
+  margin: 0;
+  padding: 0;
+}
+
+#custom-blank-left,
+#custom-blank-left label {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  background: transparent;
+}
+
+/* ============================================================
+ * Per-icon maroon circle hover
+ * ============================================================ */
+
+#group-apps #custom-appmenu:hover,
+#group-apps #custom-appmenu:hover > box,
+#group-apps #custom-tools:hover,
+#group-apps #custom-tools:hover > box,
+#group-apps #custom-cliphist:hover,
+#group-apps #custom-cliphist:hover > box,
+#group-apps #custom-hypridle:hover,
+#group-apps #custom-hypridle:hover > box,
+#group-apps #custom-hyprsunset:hover,
+#group-apps #custom-hyprsunset:hover > box,
+#custom-hyprgruv-settings:hover,
+#custom-hyprgruv-settings:hover > box,
+#group-hyprgruv-drawer #custom-waybarthemes:hover,
+#group-hyprgruv-drawer #custom-waybarthemes:hover > box,
+#group-hyprgruv-drawer #custom-wallpaper:hover,
+#group-hyprgruv-drawer #custom-wallpaper:hover > box,
+#pulseaudio:hover,
+#pulseaudio:hover > box,
+#bluetooth:hover,
+#bluetooth:hover > box,
+#custom-system:hover,
+#custom-system:hover > box,
+#group-cpu-drawer #cpu:hover,
+#group-cpu-drawer #cpu:hover > box,
+#group-cpu-drawer #memory:hover,
+#group-cpu-drawer #memory:hover > box,
+#group-cpu-drawer #disk:hover,
+#group-cpu-drawer #disk:hover > box,
+#group-cpu-drawer #language:hover,
+#group-cpu-drawer #language:hover > box,
+#group-cpu-drawer #network:hover,
+#group-cpu-drawer #network:hover > box {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  border-radius: 50%;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 4px;
+  margin: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#group-apps #custom-appmenu:hover label,
+#group-apps #custom-appmenu:hover > box *,
+#custom-hyprgruv-settings:hover label,
+#custom-hyprgruv-settings:hover > box *,
+#pulseaudio:hover label,
+#pulseaudio:hover > box *,
+#custom-system:hover label,
+#custom-system:hover > box * {
+  background: transparent;
+  color: @on_primary_container;
+  opacity: 1;
+}
+
+/* ============================================================
+ * Segment hover — grey cap, blue power, orange clock
+ * ============================================================ */
+
+#custom-updates:hover,
+#group-power:hover,
+#group-clock:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#group-power:hover *,
+#group-power:hover > box *,
+#group-clock:hover *,
+#group-clock:hover > box * {
+  background: transparent;
+  color: @on_primary_container;
+}
+
+#custom-updates:hover,
+#custom-updates:hover > box,
+#custom-updates:hover > box > label {
+  border-radius: 20px 0 0 20px;
+}
+
+#group-clock:hover {
+  border-radius: 0 20px 20px 0;
+}
+
+#custom-updates.red:hover label {
+  color: @error;
+}

@@ -132,4 +132,18 @@ else
 fi
 echo ""
 
+# Matugen gtk post-hook may have run during preset apply — enforce slot GTK theme last.
+if [ -f "$THEME_DIR/gtk-theme" ]; then
+    GTK_THEME_NAME=$(cat "$THEME_DIR/gtk-theme")
+    echo -e "${CYAN}-> Confirming GTK theme '$GTK_THEME_NAME'...${NC}"
+    gsettings set org.gnome.desktop.interface gtk-theme "$GTK_THEME_NAME" >/dev/null 2>&1 || true
+    if [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && grep -q '^gtk-theme-name=' "$HOME/.config/gtk-3.0/settings.ini"; then
+        sed -i "s/^gtk-theme-name=.*/gtk-theme-name=${GTK_THEME_NAME}/" "$HOME/.config/gtk-3.0/settings.ini"
+    fi
+fi
+if [[ -x "$HOME/.config/hyprgruv/scripts/reload-gtk-colors.sh" ]]; then
+    "$HOME/.config/hyprgruv/scripts/reload-gtk-colors.sh" >/dev/null 2>&1 || true
+fi
+echo ""
+
 notify-send "Theme Applied" "Successfully switched to: $THEME" -t 5000

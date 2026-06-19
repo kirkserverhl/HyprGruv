@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "description": "everforest-dark semantic rainbow \u2014 orange \u2192 yellow \u2192 aqua \u2192 blue \u2192 grey \u2192 dark grey",
+  "mode": "semantic",
+  "starship": "starship-rainbow.toml",
+  "order": [
+    "color_orange",
+    "color_yellow",
+    "color_aqua",
+    "color_blue",
+    "color_bg3",
+    "color_bg1"
+  ],
+  "slots": {
+    "color_fg0": "base05",
+    "color_bg1": "base02",
+    "color_bg3": "base07",
+    "color_orange": "base0f",
+    "color_yellow": "base0a",
+    "color_aqua": "base0c",
+    "color_blue": "base0e",
+    "color_on_orange": "base05",
+    "color_on_yellow": "base05",
+    "color_on_aqua": "base05",
+    "color_on_blue": "base05",
+    "color_green": "base0b",
+    "color_red": "base08",
+    "color_purple": "base09"
+  },
+  "overrides": {},
+  "segment_fg": {
+    "color_bg3": "#83c092"
+  },
+  "hyprbars": {
+    "close": "color_orange",
+    "minimize": "color_yellow",
+    "maximize": "color_blue",
+    "close_fg": "color_on_orange",
+    "minimize_fg": "color_on_yellow",
+    "maximize_fg": "color_fg0"
+  }
+}
