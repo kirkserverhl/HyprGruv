@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # matugen-posthook-terminal.sh — reload kitty/alacritty + broadcast OSC sequences to open shells
 #
-# Kitty: SIGUSR1 reloads ~/.config/kitty/colors.conf
+# Kitty: SIGUSR1 reloads ~/.config/kitty/colors/custom/matugen.conf
 # Alacritty: live_config_reload picks up ~/.config/alacritty/colors/matugen.toml
 # Other terminals: ~/.zshrc precmd reads reload-stamp and cats terminal-sequences
 

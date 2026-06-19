@@ -36,7 +36,7 @@ set = false
 
 [templates.kitty]
 input_path = "~/.config/matugen/templates/kitty-colors.conf"
-output_path = "~/.config/kitty/colors.conf"
+output_path = "~/.config/kitty/colors/custom/matugen.conf"
 post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-terminal.sh"
 
 

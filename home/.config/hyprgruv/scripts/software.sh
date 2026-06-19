@@ -11,7 +11,7 @@ CLEAN_ENV=(env -u GDK_DEBUG -u GDK_DISABLE GDK_DEBUG= GDK_DISABLE=)
 # pacseek hard-codes tcell.ColorWhite and uses bold markup; matugen's muted color15
 # makes that text nearly invisible on dark backgrounds (yazi sets input colors explicitly).
 kitty_readable_palette() {
-    local colors="$HOME/.config/kitty/colors.conf"
+    local colors="$HOME/.config/kitty/colors/custom/matugen.conf"
     local fg="#eedfe3"
 
     if [[ -f "$colors" ]]; then

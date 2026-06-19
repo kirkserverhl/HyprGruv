@@ -26,7 +26,7 @@ Generated colors land in app config paths; post-hooks reload where possible
 |------------|----------------------|
 | Hyprland | `~/.config/hypr/colors/custom/matugen.conf` |
 | Hyprlock | `~/.config/hypr/hyprlock/colors/matugen.conf` |
-| Kitty | `~/.config/kitty/colors.conf` |
+| Kitty | `~/.config/kitty/colors/custom/matugen.conf` |
 | Ghostty | `~/.config/ghostty/colors/matugen.conf` |
 | Waybar | `~/.config/waybar/colors/matugen-waybar.css` |
 | Starship | `~/.config/starship/matugen-rainbow.toml` |

@@ -26,9 +26,9 @@ gpgconf --launch gpg-agent >/dev/null 2>&1
 # =====================================================
 # Matugen Terminal Colors (OSC sequences)
 # =====================================================
-# Non-kitty terminals only. Kitty uses ~/.config/kitty/colors.conf
+# Non-kitty terminals only. Kitty uses ~/.config/kitty/colors/custom/matugen.conf
 # (reloaded on wallpaper change via matugen-posthook-terminal.sh / SIGUSR1).
-# Applying OSC here in kitty would override colors.conf and fight matugen.
+# Applying OSC here in kitty would override matugen.conf and fight matugen.
 if [[ -z "${KITTY_WINDOW_ID:-}" ]]; then
     [[ -f ~/.config/terminal-sequences ]] && cat ~/.config/terminal-sequences
 fi

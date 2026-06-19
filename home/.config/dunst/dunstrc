@@ -57,29 +57,29 @@ mouse_right_click = close_all
 # Base16 colors
 # ============================================
 
-frame_color = "#a8c8ff"
-highlight = "#a8c8ff"
-separator_color = "#43474e"
+frame_color = "#c6c0ff"
+highlight = "#c6c0ff"
+separator_color = "#47464f"
 
 # base03 — muted notification text
 [urgency_low]
-background = "#1d2024"
-foreground = "#43474e"
-frame_color = "#43474e"
-highlight = "#dbbce1"
+background = "#201f25"
+foreground = "#47464f"
+frame_color = "#47464f"
+highlight = "#ebb8cf"
 timeout = 6
 
 [urgency_normal]
-background = "#191c20"
-foreground = "#e1e2e9"
-frame_color = "#a8c8ff"
-highlight = "#a8c8ff"
+background = "#1c1b20"
+foreground = "#e5e1e9"
+frame_color = "#c6c0ff"
+highlight = "#c6c0ff"
 timeout = 8
 
 # base08 — urgent / critical notifications (error)
 [urgency_critical]
 background = "#ffb4ab"
-foreground = "#0c0e13"
+foreground = "#0e0e13"
 frame_color = "#ffb4ab"
 highlight = "#ffb4ab"
 timeout = 0

@@ -20,7 +20,7 @@ RUNS="$CACHE_DIR/runs"
 EXTRACTOR="$SCRIPTS/extract-good-source-colors.sh"
 CHOOSER="$SCRIPTS/rofi-choose-matugen-style.sh"
 
-KITTY_COLORS="$HOME/.config/kitty/colors.conf"
+KITTY_COLORS="$HOME/.config/kitty/colors/custom/matugen.conf"
 HYPR_COLORS="$HOME/.config/hypr/colors/custom/matugen.conf"
 STARSHIP_MATUGEN="$HOME/.config/starship/matugen-rainbow.toml"
 STARSHIP_ACTIVE="$HOME/.config/starship.toml"

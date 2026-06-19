@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# reload-kitty-colors.sh — push latest matugen colors.conf into open kitty windows
+# reload-kitty-colors.sh — push latest matugen kitty colors into open windows
 #
-# Kitty reads ~/.config/kitty/colors.conf (included from kitty.conf).
+# Kitty reads ~/.config/kitty/colors/custom/matugen.conf (included from kitty.conf).
 # SIGUSR1 reloads the config without restarting windows.
 
 set -euo pipefail
 
-COLORS="$HOME/.config/kitty/colors.conf"
+COLORS="$HOME/.config/kitty/colors/custom/matugen.conf"
 
 if [[ ! -f "$COLORS" ]]; then
     echo "[reload-kitty] No $COLORS — run matugen first" >&2

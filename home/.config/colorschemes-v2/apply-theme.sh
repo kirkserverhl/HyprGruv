@@ -111,8 +111,8 @@ echo ""
 # Terminal theme
 echo -e "${CYAN}-> Applying terminal theme...${NC}"
 case "$THEME" in
-    everforest-dark|gruvbox-dark|catppuccin|tokyo-night|kanagawa|nord-darker|noir|e-ink|nightfox|rose-pine)
-        cp "$THEME_DIR/kitty/colors.conf" "$HOME/.config/kitty/colors/colors.conf" > /dev/null 2>&1
+    everforest-dark|gruvbox-dark|catppuccin|tokyo-night|kanagawa|nord-darker|noir|e-ink|nightfox)
+        cp "$THEME_DIR/kitty/colors.conf" "$HOME/.config/kitty/colors/custom/${THEME}.conf" > /dev/null 2>&1
         ;;
     *)
         echo -e "${YELLOW}-> No terminal theme defined for $THEME. Skipping.${NC}"

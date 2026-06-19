@@ -58,6 +58,12 @@ fi
 #     fi
 # fi
 
+clear
+log_success "Cleanup complete"
+echo ""
 duf -theme ansi || df -h
+echo ""
+read -rp "Press Enter to exit…" _ || true
 sleep 2
 clear
+command -v fastfetch >/dev/null && fastfetch || command -v neofetch >/dev/null && neofetch || true
