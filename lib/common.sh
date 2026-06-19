@@ -95,6 +95,34 @@ hyprgruv_require_service_enabled() {
     hyprgruv_strict_abort "Required systemd unit not enabled: $unit"
 }
 
+hyprgruv_enable_pipewire_services() {
+    # PipeWire ships user units only (/usr/lib/systemd/user/), not system units.
+    local units=(
+        pipewire.socket
+        pipewire-pulse.socket
+        pipewire.service
+        pipewire-pulse.service
+        wireplumber.service
+    )
+
+    if command -v loginctl &>/dev/null && [[ -n "${USER:-}" ]]; then
+        if ! loginctl show-user "$USER" -p Linger --value 2>/dev/null | grep -qx yes; then
+            log_status "Enabling systemd linger for $USER (PipeWire starts at boot)"
+            sudo loginctl enable-linger "$USER" \
+                || log_warning "Could not enable linger for $USER"
+        fi
+    fi
+
+    if systemctl --user is-system-running &>/dev/null; then
+        systemctl --user enable --now "${units[@]}" \
+            || hyprgruv_strict_abort "Failed to enable PipeWire user services"
+    else
+        systemctl --user enable "${units[@]}" \
+            || hyprgruv_strict_abort "Failed to enable PipeWire user services"
+        log_warning "PipeWire enabled for next login (no active user dbus session)"
+    fi
+}
+
 # LS Terminal Colors
 export LSCOLORS=GxFxCxDxbxegedabagaced
 

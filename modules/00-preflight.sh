@@ -186,8 +186,7 @@ ensure_pkg "${OPT_TERMS[@]}"
 # ---------------------- services ----------------------
 log_status "Enabling services"
 sudo systemctl enable --now NetworkManager.service || hyprgruv_strict_abort "Failed to enable NetworkManager"
-sudo systemctl enable --now pipewire.service wireplumber.service pipewire-pulse.service \
-    || hyprgruv_strict_abort "Failed to enable PipeWire services"
+hyprgruv_enable_pipewire_services
 # SDDM enable moved to after packages in 03-setup for direct flow (Hyprland/Sddm after yay)
 
 # Chaotic-AUR (with its own mirrorlist) is set up in 01-packages.sh after the pkgs are fetched via direct URL.
