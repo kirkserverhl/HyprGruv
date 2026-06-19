@@ -1,4 +1,7 @@
 #!/bin/bash
+# Explicit Super+W theme pick — use the theme slot's palette, not a saved active config.
+export THEME_SWITCHER_APPLY=1
+
 # Color codes
 GREEN='\033[1;32m'
 CYAN='\033[1;36m'
@@ -31,7 +34,7 @@ CURRENT_THEME_FILE="$HOME/.config/colorschemes/.current-theme"
 echo "$THEME" >"$CURRENT_THEME_FILE"
 mkdir -p "$HOME/.cache/matugen"
 echo "preset:$THEME" >"$HOME/.cache/matugen/yazi-icon-mode"
-rm -f "$HOME/.config/colorschemes/.use-preset-colors" 2>/dev/null || true
+
 
 echo -e "${GREEN}Applying theme: $THEME${NC}\n"
 notify-send "Theme Switching" "Applying theme: $THEME" -t 3000
@@ -88,17 +91,16 @@ else
 fi
 echo ""
 
-# Matugen: seed from static theme palette, not wallpaper pixels
-SOURCE_HEX="$(get_source_color "$THEME")"
-echo -e "${CYAN}-> Running matugen from static theme seed ($SOURCE_HEX)...${NC}"
-if bash "$SCRIPT_DIR/apply-preset-matugen.sh" "$THEME" "${WALLPAPER:-}"; then
-    echo -e "${CYAN}   Matugen templates updated${NC}"
+# Colors from saved palette.json or active configuration (static — no pywal re-extract).
+echo -e "${CYAN}-> Applying static palette for $THEME...${NC}"
+if bash "$SCRIPT_DIR/apply-preset-assets.sh" "$THEME" "${WALLPAPER:-}"; then
+    echo -e "${CYAN}   Saved palette → starship, waybar, hyprbars, hypr, rofi${NC}"
 else
-    echo -e "${YELLOW}   Matugen failed — some app colors may be stale${NC}"
+    echo -e "${YELLOW}   Palette apply failed — some app colors may be stale${NC}"
 fi
 echo ""
 
-# Wallpaper (visual only; already palette-matched on disk)
+# Wallpaper display (colors already matched above)
 if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
     echo -e "${CYAN}-> Setting wallpaper...${NC}"
     APPLY_MONITOR="all"

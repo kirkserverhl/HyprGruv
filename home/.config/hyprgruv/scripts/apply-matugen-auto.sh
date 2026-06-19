@@ -8,6 +8,11 @@
 #   MATUGEN_CACHE=0             same as MATUGEN_FORCE=1
 #   MATUGEN_NONINTERACTIVE=1    skip rofi palette chooser (auto-pick source color 1)
 #   MATUGEN_ARGS="..."          pre-set matugen flags (skips chooser)
+#   MATUGEN_COLOR_MODE=wal|material|custom  override ~/.cache/matugen/color-mode
+#
+# Color modes:
+#   material — Material You expansion (default for raw photos)
+#   wal      — pywal literal 16-color palette (auto for ~/themed-wallpapers/* dipc outputs)
 
 set -euo pipefail
 
@@ -19,6 +24,9 @@ LOG="$CACHE_DIR/matugen.log"
 RUNS="$CACHE_DIR/runs"
 EXTRACTOR="$SCRIPTS/extract-good-source-colors.sh"
 CHOOSER="$SCRIPTS/rofi-choose-matugen-style.sh"
+WAL_BRIDGE="$SCRIPTS/wal-to-matugen-import.sh"
+COLOR_MODE_FILE="$CACHE_DIR/color-mode"
+WAL_IMPORT_JSON="$CACHE_DIR/wal-import.json"
 
 KITTY_COLORS="$HOME/.config/kitty/colors/custom/matugen.conf"
 HYPR_COLORS="$HOME/.config/hypr/colors/custom/matugen.conf"
@@ -38,6 +46,27 @@ mkdir -p "$CACHE_DIR" "$RUNS"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG"
+}
+
+resolve_color_mode() {
+    if [[ -n "${MATUGEN_COLOR_MODE:-}" ]]; then
+        echo "$MATUGEN_COLOR_MODE"
+        return
+    fi
+    if [[ -f "$COLOR_MODE_FILE" ]]; then
+        local mode
+        mode=$(tr -d '[:space:]' <"$COLOR_MODE_FILE" 2>/dev/null || true)
+        if [[ "$mode" == "wal" || "$mode" == "material" || "$mode" == "custom" ]]; then
+            echo "$mode"
+            return
+        fi
+    fi
+    # dipc palette-filter outputs are already quantized — pywal reads them faithfully
+    if [[ "$WALLPAPER" == *"/themed-wallpapers/"* ]]; then
+        echo "wal"
+        return
+    fi
+    echo "material"
 }
 
 reload_visible_themes() {
@@ -75,6 +104,24 @@ release_apply_lock() {
 
 acquire_apply_lock
 
+# shellcheck source=wallpaper-preset-scope.sh
+source "$SCRIPTS/wallpaper-preset-scope.sh" 2>/dev/null || true
+
+WP_ARG="${1:-}"
+[[ -z "$WP_ARG" || ! -f "$WP_ARG" ]] && [[ -f "$HOME/.config/last_wallpaper.txt" ]] && WP_ARG=$(tr -d '\n' <"$HOME/.config/last_wallpaper.txt")
+
+if declare -F wallpaper_in_preset_scope >/dev/null 2>&1 && wallpaper_in_preset_scope "${WP_ARG:-}"; then
+    THEME=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.current-theme")
+    log "Preset theme $THEME — pywal palette from wallpaper (no Material You)"
+    if [[ -n "$WP_ARG" && -f "$WP_ARG" ]]; then
+        bash "$HOME/.config/colorschemes/sync-palette-from-wallpaper.sh" "$WP_ARG" "$THEME" 2>/dev/null || true
+    else
+        bash "$HOME/.config/colorschemes/apply-preset-assets.sh" "$THEME" 2>/dev/null || true
+    fi
+    THEME_OK=1
+    exit 0
+fi
+
 if [[ -z "$WALLPAPER" ]]; then
     # shellcheck source=/home/kirk/.config/settings/wallpaper-paths.sh
     source "$HOME/.config/settings/wallpaper-paths.sh"
@@ -89,6 +136,19 @@ fi
 if ! command -v matugen >/dev/null 2>&1; then
     log "ERROR: matugen not installed"
     exit 1
+fi
+
+COLOR_MODE=$(resolve_color_mode)
+USER_PALETTE_FILE="$HOME/.config/matugen/user-palette.json"
+if [[ "$COLOR_MODE" == "custom" ]]; then
+    if [[ ! -f "$USER_PALETTE_FILE" ]] || [[ "$(jq -r '.wallpaper // empty' "$USER_PALETTE_FILE" 2>/dev/null)" != "$WALLPAPER" ]]; then
+        log "Custom palette missing or different wallpaper — falling back to wal"
+        COLOR_MODE="wal"
+    fi
+fi
+if [[ "$COLOR_MODE" == "wal" || "$COLOR_MODE" == "custom" ]] && ! command -v wal >/dev/null 2>&1; then
+    log "WARNING: pywal required for wal/custom mode but missing — falling back to material"
+    COLOR_MODE="material"
 fi
 
 rm -f "$CACHE_DIR/no-matugen-this-time" 2>/dev/null || true
@@ -162,7 +222,18 @@ parse_matugen_args() {
 }
 
 STYLE_CHOSEN=0
-if [[ -n "${MATUGEN_ARGS:-}" ]]; then
+if [[ "$COLOR_MODE" == "wal" || "$COLOR_MODE" == "custom" ]]; then
+    MATUGEN_METHOD="wal"
+    MATUGEN_TYPE="pywal"
+    [[ "$COLOR_MODE" == "custom" ]] && MATUGEN_TYPE="custom"
+    MATUGEN_SRC="${GOOD_COLORS[0]}"
+    SOURCE_INDEX=0
+    if [[ "$COLOR_MODE" == "custom" ]]; then
+        log "Custom palette — user base16 from $(basename "$WALLPAPER")"
+    else
+        log "Pywal mode — literal colors from $(basename "$WALLPAPER")"
+    fi
+elif [[ -n "${MATUGEN_ARGS:-}" ]]; then
     parse_matugen_args "$MATUGEN_ARGS"
     STYLE_CHOSEN=1
     log "Using MATUGEN_ARGS: $MATUGEN_ARGS (source=$MATUGEN_SRC)"
@@ -201,7 +272,7 @@ if [[ "$STYLE_CHOSEN" -eq 1 ]]; then
 fi
 
 WP_MTIME=$(stat -c %Y "$WALLPAPER" 2>/dev/null || echo 0)
-CACHE_KEY="${WALLPAPER}|${MATUGEN_METHOD}|${MATUGEN_MODE}|${MATUGEN_TYPE}|${SOURCE_INDEX}|${MATUGEN_SRC}|${WP_MTIME}"
+CACHE_KEY="${WALLPAPER}|${COLOR_MODE}|${MATUGEN_METHOD}|${MATUGEN_MODE}|${MATUGEN_TYPE}|${SOURCE_INDEX}|${MATUGEN_SRC}|${WP_MTIME}"
 
 priority_files_ok() {
     [[ -s "$KITTY_COLORS" && -s "$HYPR_COLORS" && -s "$STARSHIP_MATUGEN" && -s "$WAYBAR_COLORS" ]]
@@ -234,6 +305,7 @@ write_manifest() {
         --arg mode "$mode" \
         --arg matugen_mode "$MATUGEN_MODE" \
         --arg matugen_type "$MATUGEN_TYPE" \
+        --arg color_mode "$COLOR_MODE" \
         --argjson source_index "${SOURCE_INDEX:-0}" \
         --argjson mtime "${WP_MTIME:-0}" \
         --arg at "$(date -Iseconds)" \
@@ -244,6 +316,7 @@ write_manifest() {
             wallpaper_mtime: $mtime,
             primary: $primary,
             mode: $mode,
+            color_mode: $color_mode,
             matugen_mode: $matugen_mode,
             matugen_type: $matugen_type,
             source_index: $source_index,
@@ -303,6 +376,7 @@ THEME_RAN=1
 jq -n \
     --arg wp "$WALLPAPER" \
     --arg method "$MATUGEN_METHOD" \
+    --arg color_mode "$COLOR_MODE" \
     --arg mode "$MATUGEN_MODE" \
     --arg type "$MATUGEN_TYPE" \
     --arg source_hex "$MATUGEN_SRC" \
@@ -310,13 +384,14 @@ jq -n \
     '{
         wallpaper: $wp,
         method: $method,
+        color_mode: $color_mode,
         mode: $mode,
         type: $type,
         source_hex: $source_hex,
         source_index: $source_index
     }' > "$CACHE_DIR/pending-run.json"
 
-if [[ "$MATUGEN_METHOD" == "image" ]]; then
+if [[ "$MATUGEN_METHOD" == "image" || "$MATUGEN_METHOD" == "wal" ]]; then
     echo "matugen" >"$CACHE_DIR/yazi-icon-mode"
 fi
 
@@ -343,7 +418,19 @@ run_matugen_logged() {
 
 set +e
 matugen_exit=0
-if [[ "$MATUGEN_METHOD" == "image" ]]; then
+if [[ "$MATUGEN_METHOD" == "wal" ]]; then
+    if [[ ! -x "$WAL_BRIDGE" ]]; then
+        log "ERROR: wal bridge script missing at $WAL_BRIDGE"
+        exit 1
+    fi
+    "$WAL_BRIDGE" "$WALLPAPER" "$WAL_IMPORT_JSON" >/dev/null
+    log "RUN $(basename "$WALLPAPER") pywal → matugen import → $RUN_LOG"
+    echo ":: Pywal + Matugen: literal palette from $(basename "$WALLPAPER")"
+    run_matugen_logged matugen image "$WALLPAPER" \
+        --import-json "$WAL_IMPORT_JSON" \
+        --source-color-index 0 \
+        --continue-on-error || matugen_exit=$?
+elif [[ "$MATUGEN_METHOD" == "image" ]]; then
     log "RUN $(basename "$WALLPAPER") image mode index=$SOURCE_INDEX source=$MATUGEN_SRC → $RUN_LOG"
     echo ":: Matugen: $MATUGEN_MODE / $MATUGEN_TYPE, source color $((SOURCE_INDEX + 1)) ($MATUGEN_SRC)"
     run_matugen_logged matugen image "$WALLPAPER" \

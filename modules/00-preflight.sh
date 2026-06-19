@@ -47,19 +47,35 @@ hyprgruv_strict_banner
 pkg_installed() { pacman -Qi "$1" &>/dev/null; }
 repo_has() { pacman -Si "$1" &>/dev/null; }
 
+# Seed mirrorlist before any pacman work (bootstrap needs a resolvable hyprland).
+if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
+    log_status "Seeding initial mirrorlist (bootstrap)..."
+    echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
+fi
+
+# yay, hyprland, hyprpm, gum, waypaper, waypaper-engine — before everything else.
+log_status "Installing bootstrap stack first…"
+if ! ensure_bootstrap_stack; then
+    log_error "Bootstrap stack failed — cannot continue preflight"
+    exit 1
+fi
+
 # Purge EndeavourOS (or other distro) remnants early — supports migrating away to pure Arch.
 if ! purge_endeavouros_remnants; then
     hyprgruv_strict_abort "Failed to purge EndeavourOS remnants"
 fi
 ensure_pkg() {
-    local pkgs=()
     local p
-    for p in "$@"; do pkg_installed "$p" || pkgs+=("$p"); done
-    ((${#pkgs[@]})) || return 0
-    if sudo pacman -S --noconfirm --needed "${pkgs[@]}"; then
-        return 0
-    fi
-    hyprgruv_strict_abort "pacman install failed: ${pkgs[*]}"
+    for p in "$@"; do
+        pkg_installed "$p" && continue
+        if ! repo_has "$p"; then
+            log_warning "Skipping $p (not in official repos yet — installed in 01-packages)"
+            continue
+        fi
+        if ! sudo pacman -S --noconfirm --needed "$p"; then
+            hyprgruv_strict_abort "pacman install failed: $p"
+        fi
+    done
 }
 
 ensure_multilib_enabled() {
@@ -137,15 +153,10 @@ for p in "${LIB32_GFX[@]}"; do repo_has "$p" && AVAILABLE_LIB32+=("$p"); done
 BASE_PKGS=(networkmanager pipewire pipewire-pulse pipewire-jack wireplumber gvfs gvfs-mtp noto-fonts ttf-dejavu)
 # Safe fallback for terminals (05-setup_defaults.sh not yet run in this flow; user sets via interactive or manually)
 OPT_TERMS=(kitty alacritty)
-OPT_EXTRAS=(wlogout swaybg hyprlock)
+# wlogout (AUR) and hyprlock install via 01-packages manifest after chaotic/yay are ready.
+# Wallpapers use waypaper/awww — swaybg is not used.
 
 # ---------------------- install ----------------------
-# Ensure mirrorlist is seeded early (same reason as in 01-packages)
-if [[ ! -s /etc/pacman.d/mirrorlist ]]; then
-    log_status "Seeding initial mirrorlist (bootstrap)..."
-    echo 'Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch' | sudo tee /etc/pacman.d/mirrorlist >/dev/null
-fi
-
 log_status "Refreshing package databases"
 sudo pacman -Syu --noconfirm || hyprgruv_strict_abort "pacman -Syu failed during preflight"
 
@@ -156,23 +167,6 @@ if pacman -Qq jack2 &>/dev/null; then
     log_status "Removing conflicting jack2 (will use pipewire-jack instead)..."
     sudo pacman -Rdd --noconfirm jack2 || hyprgruv_strict_abort "Failed to remove conflicting jack2"
 fi
-
-# AUR helper must exist before leaving preflight (01 may be skipped/fail; stow/setup use yay).
-log_status "Ensuring yay (AUR helper) is available…"
-if ! ensure_yay; then
-    log_error "yay is required but could not be installed — aborting preflight"
-    exit 1
-fi
-
-# Hyprland must be available before the rest of the desktop stack.
-HYPRLAND_CORE_PKGS=(hyprland xdg-desktop-portal xdg-desktop-portal-hyprland)
-log_status "Installing Hyprland (priority — first desktop package)…"
-ensure_pkg "${HYPRLAND_CORE_PKGS[@]}"
-if ! pkg_installed hyprland; then
-    log_error "Hyprland failed to install during preflight — aborting"
-    exit 1
-fi
-log_success "Hyprland core stack installed"
 
 log_status "Installing core packages"
 ensure_pkg "${BASE_PKGS[@]}"
@@ -188,9 +182,6 @@ fi
 
 log_status "Installing optional terminals"
 ensure_pkg "${OPT_TERMS[@]}"
-
-log_status "Installing optional extras"
-ensure_pkg "${OPT_EXTRAS[@]}"
 
 # ---------------------- services ----------------------
 log_status "Enabling services"
@@ -226,12 +217,16 @@ if [[ -d "$PREFLIGHT_DIR" ]]; then
 fi
 
 hyprgruv_require_cmd yay
+hyprgruv_require_cmd gum
+hyprgruv_require_cmd hyprpm
 hyprgruv_require_cmd git
 hyprgruv_require_cmd makepkg
+hyprgruv_waypaper_installed || hyprgruv_strict_abort "waypaper not available"
+hyprgruv_require_pkg waypaper-engine
 hyprgruv_verify_pkgs \
     hyprland xdg-desktop-portal xdg-desktop-portal-hyprland \
     networkmanager pipewire pipewire-pulse pipewire-jack wireplumber \
-    gvfs noto-fonts mesa git base-devel
+    gvfs noto-fonts mesa git base-devel hyprland-protocols cmake
 hyprgruv_require_service_enabled NetworkManager.service
 
 mark_completed "Preflight: Hyprland base"

@@ -27,14 +27,18 @@ mkdir -p "$CACHE_DIR"
 # pending-run.json (written by apply-matugen-auto) is authoritative for hex/image
 # mode and the wallpaper being themed — matugen color hex passes no {{image}} path.
 RUN_METHOD="hex"
+RUN_COLOR_MODE="material"
 RUN_MODE="dark"
 RUN_TYPE="scheme-tonal-spot"
 SOURCE_INDEX=0
 SRC_HEX="#a78a9d"
 PENDING_WP=""
+WAL_IMPORT_JSON="${CACHE_DIR}/wal-import.json"
+WAL_BRIDGE="${HOME}/.config/hyprgruv/scripts/wal-to-matugen-import.sh"
 
 if [[ -f "$PENDING_RUN" ]]; then
     RUN_METHOD=$(jq -r '.method // "hex"' "$PENDING_RUN" 2>/dev/null || echo "hex")
+    RUN_COLOR_MODE=$(jq -r '.color_mode // "material"' "$PENDING_RUN" 2>/dev/null || echo "material")
     RUN_MODE=$(jq -r '.mode // "dark"' "$PENDING_RUN" 2>/dev/null || echo "dark")
     RUN_TYPE=$(jq -r '.type // "scheme-tonal-spot"' "$PENDING_RUN" 2>/dev/null || echo "scheme-tonal-spot")
     SOURCE_INDEX=$(jq -r '.source_index // 0' "$PENDING_RUN" 2>/dev/null || echo 0)
@@ -64,7 +68,15 @@ if [[ -f "$FORCE_MONO_FLAG" ]]; then
 fi
 
 if [[ -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
-    if [[ "$RUN_METHOD" == "image" ]]; then
+    if [[ "$RUN_METHOD" == "wal" ]]; then
+        echo ":: [posthook] JSON cache: pywal import ($(basename "$WALLPAPER"))"
+        if [[ -x "$WAL_BRIDGE" ]]; then
+            "$WAL_BRIDGE" "$WALLPAPER" "$WAL_IMPORT_JSON" >/dev/null 2>&1 || true
+        fi
+        if [[ -f "$WAL_IMPORT_JSON" ]] && jq -e '.colors | type == "object"' "$WAL_IMPORT_JSON" >/dev/null 2>&1; then
+            RAW=$(jq -c '.' "$WAL_IMPORT_JSON" 2>/dev/null || true)
+        fi
+    elif [[ "$RUN_METHOD" == "image" ]]; then
         echo ":: [posthook] JSON cache: image mode index=$SOURCE_INDEX type=$RUN_TYPE ($(basename "$WALLPAPER"))"
         RAW=$(matugen image "$WALLPAPER" --mode "$RUN_MODE" --type "$RUN_TYPE" --source-color-index "$SOURCE_INDEX" --dry-run --json hex 2>/dev/null || true)
     else

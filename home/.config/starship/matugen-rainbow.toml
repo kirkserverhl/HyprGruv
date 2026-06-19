@@ -35,25 +35,27 @@ $line_break$character"""
 palette = 'matugen'
 
 # =============================================================================
-# Rainbow palette — vivid accent slots (primary → tertiary → secondary → container)
+# Shared spectrum — source (far left) + 4 palette columns (~/.config/matugen/spectrum.json)
+# source → col1 → col2 → col3 → col4(bg3) → neutral(bg1)
+# color_orange = source seed (base0f)
 # =============================================================================
 [palettes.matugen]
-color_fg0 = '#e1e2e9'
-color_bg1 = '#1d2024'
-color_bg3 = '#282a2f'
+color_fg0 = '#e6e6e6'
+color_bg1 = '#1f1f1f'
+color_bg3 = '#a8a8a8'
 
-color_orange = '#a8c8ff'
-color_yellow = '#dbbce1'
-color_aqua   = '#bdc7dc'
-color_blue   = '#254777'
+color_orange = '#a8a8a8'
+color_yellow = '#555555'
+color_aqua   = '#a8a8a8'
+color_blue   = '#a8a8a8'
 
-color_on_orange = '#06305f'
-color_on_yellow = '#3e2845'
-color_on_aqua   = '#273141'
+color_on_orange = '#0a0a0a'
+color_on_yellow = '#0a0a0a'
+color_on_aqua   = '#0a0a0a'
 
-color_green  = '#bdc7dc'
-color_red    = '#ffb4ab'
-color_purple = '#dbbce1'
+color_green  = '#a8a8a8'
+color_red    = '#555555'
+color_purple = '#bbbbbb'
 
 # =============================================================================
 # OS

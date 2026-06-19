@@ -34,8 +34,14 @@ if [[ -x "$WALLPAPER_SCRIPT" ]]; then
     fi
 fi
 
+SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
+
 if [[ -n "$wallpaper" ]]; then
     "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1
+    # Post-command hook: SDDM/default_wp cache + palette.sh (same as waypaper Ctrl+P flow).
+    if [[ -x "$SET_WALLPAPER" ]]; then
+        SET_WALLPAPER_FORCE_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 &
+    fi
 else
     "$APPLY_SCRIPT" "$selected" >/dev/null 2>&1
 fi

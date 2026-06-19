@@ -27,11 +27,7 @@ hyprland_session_ready() {
 }
 
 ensure_hyprpm() {
-    if command -v hyprpm >/dev/null 2>&1; then
-        return 0
-    fi
-    log_error "hyprpm not found — install hyprland first (00-preflight / 01-packages)"
-    return 1
+    ensure_hyprpm_cmd
 }
 
 ensure_build_deps() {
@@ -52,27 +48,52 @@ ensure_hyprpm_cache_owned() {
         log_status "Fixing hyprpm cache ownership (root-owned cache blocks plugin state writes)"
         sudo chown -R "${USER}:${USER}" "$cache_root"
     fi
+    mkdir -p "$cache_root"
 }
 
 add_repo() {
     local url="$1"
     log_status "Adding repository: $url"
-    hyprpm add "$url" 2>/dev/null || true
+    if hyprpm add "$url" 2>/dev/null; then
+        return 0
+    fi
+    # Repo may already be registered — confirm it appears in hyprpm list.
+    if hyprpm list 2>/dev/null | grep -qF "$url"; then
+        log_status "Repository already registered: $url"
+        return 0
+    fi
+    log_error "hyprpm add failed for: $url"
+    return 1
 }
 
 enable_plugin() {
     local name="$1"
     log_status "Enabling plugin: $name"
-    hyprpm enable "$name" 2>/dev/null || true
+    if hyprpm enable "$name"; then
+        return 0
+    fi
+    if hyprpm list 2>/dev/null | grep -qE "(^|[[:space:]])${name}([[:space:]]|$)"; then
+        log_status "Plugin already enabled: $name"
+        return 0
+    fi
+    log_error "Failed to enable plugin: $name"
+    return 1
 }
 
 build_plugins() {
     log_status "Building hyprpm plugins (hyprpm update)…"
-    if command -v lsd-print >/dev/null 2>&1; then
-        hyprpm update | lsd-print
-    else
-        hyprpm update
+    local output
+    if output=$(hyprpm update 2>&1); then
+        if command -v lsd-print >/dev/null 2>&1; then
+            echo "$output" | lsd-print
+        else
+            echo "$output"
+        fi
+        return 0
     fi
+    log_error "hyprpm update failed"
+    echo "$output" | tail -20 | sed 's/^/    | /'
+    return 1
 }
 
 verify_plugins() {
@@ -91,12 +112,21 @@ verify_plugins() {
     return "$ok"
 }
 
+defer_to_first_login() {
+    if ! hyprpm_quiet "${1:-}"; then
+        log_warning "Hyprland is not running — cannot build hyprpm plugins during install."
+        log_status "Plugins (hyprbars, hymission) will be built on first Hyprland login (hyprpm-reload.sh)."
+    fi
+    return 0
+}
+
 main() {
     if ! hyprpm_quiet "${1:-}"; then
         display_header "Hyprpm Plugins"
     fi
 
     ensure_hyprpm
+    ensure_hyprpm_cache_owned
 
     if ! hyprland_session_ready; then
         if verify_plugins; then
@@ -105,32 +135,31 @@ main() {
             fi
             return 0
         fi
-        if ! hyprpm_quiet "${1:-}"; then
-            log_warning "Hyprland is not running — cannot build hyprpm plugins during install."
-            log_status "Plugins will be built on your first Hyprland login (hyprpm-reload.sh)."
-        fi
+        defer_to_first_login "${1:-}"
         return 0
     fi
 
-    ensure_hyprpm_cache_owned
     ensure_build_deps
 
-    add_repo "$HYPRLAND_PLUGINS_REPO"
+    add_repo "$HYPRLAND_PLUGINS_REPO" || return 1
     sleep 0.2
-    add_repo "$HYMISSION_REPO"
+    add_repo "$HYMISSION_REPO" || return 1
     sleep 0.2
 
     local plugin
     for plugin in "${ENABLED_PLUGINS[@]}"; do
-        enable_plugin "$plugin"
+        enable_plugin "$plugin" || return 1
         sleep 0.1
     done
 
-    build_plugins
+    if ! build_plugins; then
+        log_warning "Plugin build failed during install — deferring to first Hyprland login (hyprpm-reload.sh)"
+        return 0
+    fi
 
     if ! verify_plugins; then
-        log_error "Plugin build verification failed — check hyprpm output above"
-        return 1
+        log_warning "Plugin binaries missing after build — deferring to first Hyprland login (hyprpm-reload.sh)"
+        return 0
     fi
 
     log_success "Hyprpm plugins configured (reload on first Hyprland login)"

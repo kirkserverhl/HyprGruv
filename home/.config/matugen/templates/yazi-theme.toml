@@ -33,12 +33,14 @@ border_style  = { fg = "{{colors.on_surface_variant.dark.hex}}" }
 # : ]]]
 
 
-# : Indicator [[[
+# : Indicator (hovered/selected row marker) [[[
+# Do NOT set bg to surface_container_lowest — it matches [app].overall and hides the bar.
+# `reversed = true` inverts fg/bg for a high-contrast selection strip on the active row.
 
 [indicator]
-parent  = { fg = "{{colors.primary.dark.hex}}", bg = "{{colors.surface_container_lowest.dark.hex}}" }
-current = { fg = "{{colors.tertiary.dark.hex}}", bg = "{{colors.surface_container_lowest.dark.hex}}" }
-preview = { fg = "{{colors.secondary_container.dark.hex}}", bg = "{{colors.surface_container_lowest.dark.hex}}" }
+parent  = { reversed = true }
+current = { reversed = true }
+preview = { underline = true }
 padding = { open = "█", close = "█" }
 
 # : ]]]

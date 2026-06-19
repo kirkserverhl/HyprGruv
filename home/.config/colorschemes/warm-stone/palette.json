@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "theme": "warm-stone",
+  "source": "seed-gruvbox-dark",
+  "base16": {
+    "base00": "#1d2021",
+    "base01": "#282828",
+    "base02": "#3c3836",
+    "base03": "#7c6f64",
+    "base04": "#928374",
+    "base05": "#ebdbb2",
+    "base06": "#3c3836",
+    "base07": "#665c54",
+    "base08": "#cc241d",
+    "base09": "#b16286",
+    "base0A": "#d79921",
+    "base0B": "#98971a",
+    "base0C": "#689d6a",
+    "base0D": "#d65d0e",
+    "base0E": "#458588",
+    "base0F": "#d65d0e"
+  }
+}

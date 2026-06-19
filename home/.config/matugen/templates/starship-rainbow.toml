@@ -35,25 +35,27 @@ $line_break$character"""
 palette = 'matugen'
 
 # =============================================================================
-# Rainbow palette — vivid accent slots (primary → tertiary → secondary → container)
+# Shared spectrum — source (far left) + 4 palette columns (~/.config/matugen/spectrum.json)
+# source → col1 → col2 → col3 → col4(bg3) → neutral(bg1)
+# color_orange = source seed (base0f)
 # =============================================================================
 [palettes.matugen]
-color_fg0 = '{{colors.on_surface.dark.hex}}'
-color_bg1 = '{{colors.surface_container.dark.hex}}'
-color_bg3 = '{{colors.surface_container_high.dark.hex}}'
+color_fg0 = '{{base16.base05.dark.hex}}'
+color_bg1 = '{{base16.base02.dark.hex}}'
+color_bg3 = '{{base16.base0e.dark.hex}}'
 
-color_orange = '{{colors.primary.dark.hex}}'
-color_yellow = '{{colors.tertiary.dark.hex}}'
-color_aqua   = '{{colors.secondary.dark.hex}}'
-color_blue   = '{{colors.primary_container.dark.hex}}'
+color_orange = '{{base16.base0f.dark.hex}}'
+color_yellow = '{{base16.base08.dark.hex}}'
+color_aqua   = '{{base16.base0b.dark.hex}}'
+color_blue   = '{{base16.base0a.dark.hex}}'
 
-color_on_orange = '{{colors.on_primary.dark.hex}}'
-color_on_yellow = '{{colors.on_tertiary.dark.hex}}'
-color_on_aqua   = '{{colors.on_secondary.dark.hex}}'
+color_on_orange = '{{base16.base00.dark.hex}}'
+color_on_yellow = '{{base16.base00.dark.hex}}'
+color_on_aqua   = '{{base16.base00.dark.hex}}'
 
-color_green  = '{{colors.secondary.dark.hex}}'
-color_red    = '{{colors.error.dark.hex}}'
-color_purple = '{{colors.tertiary.dark.hex}}'
+color_green  = '{{base16.base0b.dark.hex}}'
+color_red    = '{{base16.base08.dark.hex}}'
+color_purple = '{{base16.base09.dark.hex}}'
 
 # =============================================================================
 # OS

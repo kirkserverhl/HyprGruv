@@ -1,4 +1,4 @@
-/* Wallpaper picker — waypaper-like 3×3 scrolling grid */
+/* Wallpaper picker — waypaper-like 3×3 scrolling grid (mouse: shared/mouse.rasi) */
 
 configuration {
     show-icons: true;

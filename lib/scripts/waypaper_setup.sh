@@ -26,13 +26,26 @@ display_header "Wallpaper & Theming"
 
 install_wallpaper_packages() {
   local missing=()
+  local pkg
   for pkg in "${WALLPAPER_PKGS[@]}"; do
-    pacman -Qq "$pkg" &>/dev/null || missing+=("$pkg")
+    case "$pkg" in
+    waypaper)
+      hyprgruv_waypaper_installed && continue
+      missing+=("$pkg")
+      ;;
+    *)
+      pacman -Qq "$pkg" &>/dev/null || missing+=("$pkg")
+      ;;
+    esac
   done
   ((${#missing[@]})) || { log_success "waypaper stack already installed"; return 0; }
 
   local official=() aur=()
   for pkg in "${missing[@]}"; do
+    if [[ "$pkg" == "waypaper" ]]; then
+      ensure_waypaper_pkg || return 1
+      continue
+    fi
     if pacman -Si "$pkg" &>/dev/null 2>&1; then
       official+=("$pkg")
     else

@@ -6,12 +6,22 @@ resolve_wallpaper_dir() {
     local folder="$theme"
     local themed_root=""
     local dir=""
+    local registry="$HOME/.config/colorschemes/themes.registry.json"
+
+    if [[ -f "$registry" ]] && command -v jq >/dev/null 2>&1; then
+        local mapped
+        mapped=$(jq -r --arg t "$theme" '.themes[] | select(.id == $t) | .wallpaper_folder // empty' "$registry" 2>/dev/null || true)
+        [[ -n "$mapped" ]] && folder="$mapped"
+    fi
 
     case "$theme" in
-        nord-darker) folder="nord" ;;
+        nord-darker)
+            [[ "$folder" == "$theme" ]] && folder="nord"
+            ;;
     esac
 
     for themed_root in \
+        "$HOME/themed-wallpapers" \
         "$HOME/Wallpapers/themed-wallpapers" \
         "$HOME/wallpapers/themed-wallpapers"; do
         dir="$themed_root/$folder"

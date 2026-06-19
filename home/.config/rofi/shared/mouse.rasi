@@ -1,0 +1,22 @@
+/* =============================================================================
+   Shared mouse interaction (Rofi 2.x / Wayland)
+   =============================================================================
+   Single-click accept without hover-tracking the selection.
+
+   hover-select OFF: moving the mouse no longer hijacks keyboard/scrolling
+   focus — the highlighted row stays put until you click or use keys.
+
+   me-select-entry is cleared so MousePrimary can bind only to me-accept-entry
+   (rofi rejects the same button on both bindings).
+
+   Import via launcher-chrome.rasi (or add this file to any custom rofi theme).
+============================================================================= */
+
+configuration {
+    hover-select:    false;
+    scroll-method:   1;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+    ml-row-up:       "ScrollUp";
+    ml-row-down:     "ScrollDown";
+}

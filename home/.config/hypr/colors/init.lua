@@ -126,8 +126,8 @@ function M.load()
     colors.bg1 = normalize_color(colors.bg1 or colors.surface_container, "rgb(201f25)")
     colors.fg  = normalize_color(colors.fg  or colors.on_background,     "rgb(e5e1e9)")
 
-    -- Hyprbars buttons — left-to-right matches the first three starship rainbow segments:
-    --   close (✕) → color_orange (pink) | float (⧉) → color_yellow (grey) | maximize (+) → color_blue
+    -- Hyprbars buttons — same spectrum as Starship / Waybar (see ~/.config/matugen/spectrum.json):
+    --   close (✕) → source (color_orange/base0f) | minimize (⧉) → palette col1 | maximize (+) → palette col3
     local function to_rgb(hex)
         if not hex then return nil end
         local h = hex:gsub("^#", "")

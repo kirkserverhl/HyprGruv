@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "description": "Matugen-like but backwards: UI spectrum columns are filled from literal wallpaper hues (high hue → low). Starship, Waybar, and Hyprbars share the same inward order.",
+  "wallpaper_only": true,
+  "ui_order": ["purple", "blue", "green", "yellow", "orange", "red"],
+  "note": "Most wallpapers only supply ~4 distinct accents (through yellow). Orange/red columns are omitted — Starship segments past yellow simply do not render.",
+  "columns": [
+    {
+      "hue": "purple",
+      "base16": "base0f",
+      "spectrum": "color_orange",
+      "starship": "os / username",
+      "waybar": "appmenu / pulseaudio (left)",
+      "hyprbars": "close"
+    },
+    {
+      "hue": "blue",
+      "base16": "base08",
+      "spectrum": "color_yellow",
+      "starship": "directory",
+      "waybar": "settings / clock",
+      "hyprbars": "minimize"
+    },
+    {
+      "hue": "green",
+      "base16": "base0b",
+      "spectrum": "color_aqua",
+      "starship": "git",
+      "waybar": "hardware group",
+      "hyprbars": null
+    },
+    {
+      "hue": "yellow",
+      "base16": "base0a",
+      "spectrum": "color_blue",
+      "starship": "languages",
+      "waybar": "media / updates",
+      "hyprbars": "maximize"
+    },
+    {
+      "hue": "orange",
+      "base16": "base0e",
+      "spectrum": "color_bg3",
+      "starship": "docker / env",
+      "waybar": null,
+      "hyprbars": null
+    },
+    {
+      "hue": "red",
+      "base16": "base09",
+      "spectrum": "color_red",
+      "starship": "prompt error",
+      "waybar": "urgent / exit",
+      "hyprbars": null
+    }
+  ],
+  "neutral_tail": {
+    "spectrum": "color_bg1",
+    "base16": "base02",
+    "starship": "time",
+    "source": "muted chrome from wallpaper (not invented)"
+  },
+  "chrome": {
+    "background": "base00",
+    "text": "base05",
+    "muted": "base01"
+  }
+}

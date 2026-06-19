@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "description": "Curated themes: fixed palette per theme, wallpapers only from that theme's folder.",
+  "themes": [
+    {
+      "id": "gruvbox-dark",
+      "label": "Gruvbox",
+      "wallpaper_folder": "gruvbox-dark",
+      "status": "ready"
+    },
+    {
+      "id": "catppuccin",
+      "label": "Catppuccin",
+      "wallpaper_folder": "catppuccin",
+      "status": "ready"
+    },
+    {
+      "id": "nord-darker",
+      "label": "Nord",
+      "wallpaper_folder": "nord",
+      "status": "ready"
+    },
+    {
+      "id": "everforest-dark",
+      "label": "Everforest",
+      "wallpaper_folder": "everforest-dark",
+      "status": "ready"
+    },
+    {
+      "id": "noir",
+      "label": "Noir",
+      "wallpaper_folder": "noir",
+      "status": "ready"
+    },
+    {
+      "id": "e-ink",
+      "label": "E-Ink",
+      "wallpaper_folder": "e-ink",
+      "status": "ready"
+    },
+    {
+      "id": "coast-gruv",
+      "label": "Coast Gruv",
+      "wallpaper_folder": "gruvbox-dark",
+      "status": "personal"
+    },
+    {
+      "id": "forest-night",
+      "label": "Forest Night",
+      "wallpaper_folder": "everforest-dark",
+      "status": "personal"
+    },
+    {
+      "id": "ink-minimal",
+      "label": "Ink Minimal",
+      "wallpaper_folder": "e-ink",
+      "status": "personal"
+    },
+    {
+      "id": "warm-stone",
+      "label": "Warm Stone",
+      "wallpaper_folder": "gruvbox-dark",
+      "status": "personal"
+    }
+  ]
+}

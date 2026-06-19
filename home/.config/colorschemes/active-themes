@@ -1,5 +1,13 @@
-# Themes shown in the Super+W switcher (one id per line).
-# Move unused theme folders to ~/.config/colorschemes/unused/ to keep them out of the way.
-catppuccin
+# Ten curated themes (Super+W). Palette is fixed per theme — wallpapers never re-roll colors.
+# Edit ~/.config/colorschemes/themes.registry.json for labels and wallpaper folders.
+# Refine a palette: palette-customize.sh → save to theme slot.
 gruvbox-dark
+catppuccin
 nord-darker
+everforest-dark
+noir
+e-ink
+coast-gruv
+forest-night
+ink-minimal
+warm-stone

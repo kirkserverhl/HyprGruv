@@ -29,6 +29,7 @@ from wallpaper_picker_support import (
     THUMB_ASPECT_H,
     THUMB_ASPECT_W,
     THEME_LABELS,
+    load_registry_labels,
     WAYPAPER_MODE,
     ThemeEntry,
     cover_pixbuf,
@@ -41,6 +42,7 @@ from wallpaper_picker_support import (
     resolve_wallpaper_dir,
     thumb_css_overrides,
     uniform_footer_button,
+    wrap_clickable_cell,
 )
 
 CACHE_DIR = Path.home() / ".cache" / "colorschemes-theme-thumbs"
@@ -293,8 +295,8 @@ class ThemePicker(Gtk.Window):
             cell_inner.pack_start(name_label, False, False, 0)
             cell_frame.add(cell_inner)
 
-            cell_frame.connect("button-press-event", self._on_cell_pressed, entry.theme_id)
-            self.grid.attach(cell_frame, col, row, 1, 1)
+            cell = wrap_clickable_cell(cell_frame, self._on_cell_pressed, entry.theme_id)
+            self.grid.attach(cell, col, row, 1, 1)
 
         self.grid.show_all()
 
@@ -370,7 +372,8 @@ def build_theme_entries() -> list[ThemeEntry]:
             images = list_wallpapers(wp_dir)
             if images:
                 preview_path = random.choice(images)
-        label = THEME_LABELS.get(theme_id, theme_id.replace("-", " ").title())
+        labels = load_registry_labels()
+        label = labels.get(theme_id, theme_id.replace("-", " ").title())
         entries.append(ThemeEntry(theme_id=theme_id, label=label, preview_path=preview_path))
     entries.append(
         ThemeEntry(

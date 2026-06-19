@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "description": "User-facing role labels mapped to base16 slots. Templates alias into these slots.",
+  "roles": [
+    { "id": "background", "label": "Background / surfaces", "slot": "base00", "hint": "Waybar, windows, desktop base" },
+    { "id": "inactive_border", "label": "Inactive border", "slot": "base01", "hint": "Unfocused window borders" },
+    { "id": "workspace_active", "label": "Active workspace", "slot": "base02", "hint": "Selected workspace pill" },
+    { "id": "muted", "label": "Muted / subtle chrome", "slot": "base03", "hint": "Comments, dim UI chrome" },
+    { "id": "dim_text", "label": "Dim text", "slot": "base04", "hint": "Secondary labels" },
+    { "id": "text", "label": "Main text", "slot": "base05", "hint": "Foreground, icons" },
+    { "id": "light_text", "label": "Light text", "slot": "base06", "hint": "Bright foreground variant" },
+    { "id": "highlight", "label": "Bright highlight", "slot": "base07", "hint": "Strong highlights" },
+    { "id": "urgent", "label": "Urgent / error", "slot": "base08", "hint": "Notifications, critical" },
+    { "id": "tertiary", "label": "Tertiary accent", "slot": "base09", "hint": "Extra accent tone" },
+    { "id": "secondary", "label": "Secondary accent", "slot": "base0a", "hint": "Yellow / warm accent slot" },
+    { "id": "green", "label": "Green / success accent", "slot": "base0b", "hint": "Primary accent family" },
+    { "id": "container", "label": "Container / cyan slot", "slot": "base0c", "hint": "Filled surfaces, lang segment" },
+    { "id": "active_border", "label": "Active window / primary accent", "slot": "base0d", "hint": "Focused border, main accent" },
+    { "id": "magenta", "label": "Magenta / secondary container", "slot": "base0e", "hint": "Secondary filled accent" },
+    { "id": "seed", "label": "Source color (far left)", "slot": "base0f", "hint": "Starship OS/user, Waybar active, Hyprbars close" },
+    { "id": "palette_col1", "label": "Palette column 1", "slot": "base08", "hint": "First main wallpaper accent" },
+    { "id": "palette_col2", "label": "Palette column 2", "slot": "base0b", "hint": "Second main wallpaper accent" },
+    { "id": "palette_col3", "label": "Palette column 3", "slot": "base0a", "hint": "Third main wallpaper accent" },
+    { "id": "palette_col4", "label": "Palette column 4", "slot": "base0e", "hint": "Fourth main wallpaper accent / docker segment" }
+  ]
+}

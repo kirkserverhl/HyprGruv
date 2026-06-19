@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export GEM_PATH="/home/kirk/.config/rofi/apps-menu/nvim/mason/packages/erb-formatter:$GEM_PATH"
+exec /home/kirk/.config/rofi/apps-menu/nvim/mason/packages/erb-formatter/bin/erb-format "$@"

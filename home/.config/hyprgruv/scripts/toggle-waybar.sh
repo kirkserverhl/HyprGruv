@@ -3,7 +3,7 @@
 # Toggle Waybar visibility on Hyprland.
 # Uses SIGUSR1 which Waybar natively supports for show/hide.
 #
-# When (re)starting, it uses launch.sh so you get the last theme chosen via CTRL+W.
+# When (re)starting, it uses launch.sh so you get the last theme chosen via the layout switcher.
 
 if pgrep -x waybar >/dev/null; then
     # Waybar is running → toggle visibility

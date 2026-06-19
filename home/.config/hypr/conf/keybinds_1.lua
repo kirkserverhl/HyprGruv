@@ -97,7 +97,7 @@ hl.bind(mod .. " + L",            hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hy
 
 -- Bar mode cycle: Waybar → Hyprbars → None → Waybar (ALT+W)
 hl.bind(mod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-bar-mode.sh"))
-hl.bind("CTRL + W",       hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
+
 
 -- Special workspace (scratchpad)
 hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special())

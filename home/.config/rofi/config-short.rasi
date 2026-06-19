@@ -6,9 +6,6 @@ configuration {
     icon-theme:          "kora";
     display-drun:        "APPS";
     display-run:         "RUN";
-    hover-select:        true;
-    me-select-entry:     "";
-    me-accept-entry:     "MousePrimary";
     drun-display-format: "{name}";
     window-format:       "{w} · {c} · {t}";
 }

@@ -1,6 +1,9 @@
 # Hyprgruv aur packages — one per line
 # Lines starting with # are ignored.
+# waypaper-git + waypaper-engine: installed in 00-preflight bootstrap (kept here for sync-packages.sh)
 
+waypaper-git
+waypaper-engine
 atuin
 aylurs-gtk-shell-git
 bibata-cursor-gruvbox-git

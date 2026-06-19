@@ -57,7 +57,7 @@ window#waybar {
 
 /* -----------------------------------------------------
  * Center — floating workspace pills + special (velvetline slide)
- * No dark shell — only @color_bg3 movers, @color_fg0 when active
+ * Transparent idle; active shows number; background only on hover
  * ----------------------------------------------------- */
 
 .modules-center,
@@ -81,19 +81,21 @@ window#waybar {
   margin: 1px 0;
 }
 
-/* Workspace pills — grey dot idle, number shows when active */
+/* Workspace pills — transparent idle, number when active, fill on hover */
 #workspaces button {
   padding: 0 6px;
   margin: 0 3px;
   border-radius: 50px;
   color: transparent;
-  background-color: @color_bg3;
+  background-color: transparent;
+  text-shadow: 0 0 6px @base03;
   transition: all 0.3s ease-in-out;
 }
 
 #workspaces button.active {
-  background-color: @color_bg3;
+  background-color: transparent;
   color: @color_fg0;
+  text-shadow: none;
   min-width: 50px;
   font-weight: bold;
   border-radius: 8px;
@@ -101,12 +103,15 @@ window#waybar {
 }
 
 #workspaces button:hover {
+  background-color: @primary_container;
+  color: @on_primary_container;
+  text-shadow: none;
   border-radius: 16px;
   min-width: 50px;
   transition: all 0.3s ease-in-out;
 }
 
-/* Scratchpad — notepad always visible on grey; Starship OS colors when active */
+/* Scratchpad — matches workspace pills: transparent idle, bold when active, fill on hover */
 #custom-special,
 #custom-special > box,
 #custom-special label,
@@ -114,8 +119,8 @@ window#waybar {
   padding: 0 6px;
   margin: 0 3px;
   border-radius: 50px;
-  color: @color_fg0;
-  background-color: @color_bg3;
+  color: @base03;
+  background-color: transparent;
   opacity: 1;
   transition: all 0.3s ease-in-out;
 }
@@ -124,8 +129,8 @@ window#waybar {
 #custom-special.active > box,
 #custom-special.active label,
 #custom-special.active label.module {
-  background-color: @color_orange;
-  color: @color_on_orange;
+  background-color: transparent;
+  color: @color_fg0;
   min-width: 50px;
   font-weight: bold;
   border-radius: 8px;
@@ -137,12 +142,12 @@ window#waybar {
 #custom-special:hover > box,
 #custom-special:hover label,
 #custom-special:hover label.module {
+  background-color: @primary_container;
+  color: @on_primary_container;
   border-radius: 16px;
   min-width: 50px;
   transition: all 0.3s ease-in-out;
 }
-
-/* Scratchpad hover colors — unified maroon block at file end */
 
 #workspaces button.urgent {
   background-color: @error;
@@ -1445,11 +1450,17 @@ window#waybar.empty #window {
 #custom-updates:hover,
 #group-cpu-info:hover,
 #group-power:hover,
-#group-clock:hover,
-#group-center:hover {
+#group-clock:hover {
   background-color: @primary_container;
   color: @on_primary_container;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Center group stays transparent — workspace/special buttons handle their own hover */
+#group-center:hover,
+#group-center:hover > box {
+  background-color: transparent;
+  background: transparent;
 }
 
 .modules-right > widget:nth-child(2):hover *,
@@ -1533,15 +1544,4 @@ window#waybar.empty #window {
   color: @error;
 }
 
-#workspaces button:hover {
-  background-color: @primary_container;
-  color: @on_primary_container;
-}
 
-#custom-special:hover,
-#custom-special:hover > box,
-#custom-special:hover label,
-#custom-special:hover label.module {
-  background-color: @primary_container;
-  color: @on_primary_container;
-}

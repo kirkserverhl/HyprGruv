@@ -10,6 +10,7 @@
 
    For waypaper-matched panel chrome (live blur, same transparency), also import:
      @import "~/.config/rofi/shared/launcher-chrome.rasi"
+   That bundle includes shared/mouse.rasi (single-click menus on Rofi 2.x).
 ============================================================================= */
 
 @import "~/.config/rofi/colors.rasi"

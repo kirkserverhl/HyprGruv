@@ -51,7 +51,16 @@ THEME_LABELS = {
     "catppuccin": "Catppuccin",
     "gruvbox-dark": "Gruvbox",
     "nord-darker": "Nord",
+    "everforest-dark": "Everforest",
+    "noir": "Noir",
+    "e-ink": "E-Ink",
+    "coast-gruv": "Coast Gruv",
+    "forest-night": "Forest Night",
+    "ink-minimal": "Ink Minimal",
+    "warm-stone": "Warm Stone",
 }
+
+REGISTRY_FILE = COLORSCHEMES / "themes.registry.json"
 
 
 @dataclass(frozen=True)
@@ -59,6 +68,22 @@ class ThemeEntry:
     theme_id: str
     label: str
     preview_path: str | None
+
+
+def load_registry_labels() -> dict[str, str]:
+    if not REGISTRY_FILE.is_file():
+        return dict(THEME_LABELS)
+    try:
+        import json
+
+        data = json.loads(REGISTRY_FILE.read_text(encoding="utf-8"))
+        out = dict(THEME_LABELS)
+        for entry in data.get("themes") or []:
+            if isinstance(entry, dict) and entry.get("id") and entry.get("label"):
+                out[str(entry["id"])] = str(entry["label"])
+        return out
+    except (OSError, ValueError):
+        return dict(THEME_LABELS)
 
 
 def load_active_themes() -> list[str]:
@@ -74,9 +99,23 @@ def load_active_themes() -> list[str]:
 
 
 def resolve_wallpaper_dir(theme: str) -> Path | None:
+    folder = theme
+    if REGISTRY_FILE.is_file():
+        try:
+            import json
+
+            data = json.loads(REGISTRY_FILE.read_text(encoding="utf-8"))
+            for entry in data.get("themes") or []:
+                if entry.get("id") == theme and entry.get("wallpaper_folder"):
+                    folder = str(entry["wallpaper_folder"])
+                    break
+        except (OSError, ValueError):
+            pass
     folder_map = {"nord-darker": "nord"}
-    folder = folder_map.get(theme, theme)
+    if theme in folder_map and folder == theme:
+        folder = folder_map[theme]
     for root in (
+        HOME / "themed-wallpapers",
         HOME / "Wallpapers" / "themed-wallpapers",
         HOME / "wallpapers" / "themed-wallpapers",
     ):
@@ -211,6 +250,51 @@ def uniform_footer_button(
     return button
 
 
+def _set_pointer_cursor(widget: Gtk.Widget, *_args) -> bool:
+    window = widget.get_window()
+    if window:
+        window.set_cursor(Gdk.Cursor(widget.get_display(), Gdk.CursorType.HAND2))
+    return False
+
+
+def _clear_pointer_cursor(widget: Gtk.Widget, *_args) -> bool:
+    window = widget.get_window()
+    if window:
+        window.set_cursor(None)
+    return False
+
+
+def _cell_enter(event_box: Gtk.EventBox, _event) -> bool:
+    for child in event_box.get_children():
+        if isinstance(child, Gtk.Frame):
+            child.get_style_context().add_class("hovered")
+    _set_pointer_cursor(event_box)
+    return False
+
+
+def _cell_leave(event_box: Gtk.EventBox, _event) -> bool:
+    for child in event_box.get_children():
+        if isinstance(child, Gtk.Frame):
+            child.get_style_context().remove_class("hovered")
+    _clear_pointer_cursor(event_box)
+    return False
+
+
+def wrap_clickable_cell(
+    cell: Gtk.Widget,
+    handler,
+    *user_data,
+) -> Gtk.EventBox:
+    """Wrap a grid cell so clicks on images/labels reach the handler (GTK3)."""
+    event_box = Gtk.EventBox()
+    event_box.get_style_context().add_class("clickable-cell")
+    event_box.add(cell)
+    event_box.connect("button-press-event", handler, *user_data)
+    event_box.connect("enter-notify-event", _cell_enter)
+    event_box.connect("leave-notify-event", _cell_leave)
+    return event_box
+
+
 def launch_waypaper() -> None:
     """Open the full Waypaper GUI (detached from the theme switcher)."""
     cmd = [str(WAYPAPER_BIN)] if WAYPAPER_BIN.is_file() else ["waypaper"]
@@ -299,15 +383,22 @@ def thumb_css_overrides() -> bytes:
         border: none;
         background-color: transparent;
     }}
+    grid eventbox.clickable-cell {{
+        padding: 0;
+        margin: 0;
+    }}
     grid frame.wallpaper-cell > border {{
         border: {CELL_BORDER}px solid transparent;
         border-radius: 8px;
         background-color: transparent;
         padding: 0;
         margin: 0;
+        transition: all 120ms ease-in-out;
     }}
-    grid frame.wallpaper-cell:hover > border {{
-        background-color: alpha({primary}, 0.10);
+    grid frame.wallpaper-cell.hovered > border {{
+        border: {CELL_BORDER}px solid alpha({primary}, 0.55);
+        background-color: alpha({primary}, 0.14);
+        box-shadow: 0 0 10px alpha({primary}, 0.25);
     }}
     grid frame.wallpaper-cell.selected > border {{
         border: {CELL_BORDER}px solid {primary};
@@ -315,6 +406,13 @@ def thumb_css_overrides() -> bytes:
         box-shadow: inset 0 0 0 1px alpha({secondary}, 0.95),
                     0 0 0 1px {primary},
                     0 0 12px alpha({primary}, 0.55);
+    }}
+    grid frame.wallpaper-cell.selected.hovered > border {{
+        border: {CELL_BORDER}px solid {primary};
+        background-color: alpha({secondary}, 0.52);
+        box-shadow: inset 0 0 0 1px alpha({secondary}, 0.95),
+                    0 0 0 1px {primary},
+                    0 0 16px alpha({primary}, 0.70);
     }}
     .wallpaper-cell image {{
         padding: 0;

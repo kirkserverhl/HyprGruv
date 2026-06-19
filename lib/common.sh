@@ -412,6 +412,115 @@ ensure_yay() {
     log_success "yay installed."
 }
 
+# Installed in 00-preflight before any other installer work.
+# Still listed in lib/packages/*.list for sync-packages.sh — filtered out of 01-packages.sh.
+HYPRGRUV_BOOTSTRAP_PACMAN_PKGS=(
+    hyprland
+    xdg-desktop-portal
+    xdg-desktop-portal-hyprland
+    gum
+    hyprland-protocols
+    cmake
+)
+HYPRGRUV_BOOTSTRAP_AUR_PKGS=(
+    waypaper-git
+    waypaper-engine
+)
+
+hyprgruv_filter_bootstrap_from_manifest() {
+    local -n _pkgs=$1
+    local -a filtered=()
+    local pkg skip
+    for pkg in "${_pkgs[@]}"; do
+        skip=0
+        for b in "${HYPRGRUV_BOOTSTRAP_PACMAN_PKGS[@]}" "${HYPRGRUV_BOOTSTRAP_AUR_PKGS[@]}"; do
+            [[ "$pkg" == "$b" ]] && { skip=1; break; }
+        done
+        ((skip)) || filtered+=("$pkg")
+    done
+    _pkgs=("${filtered[@]}")
+}
+
+hyprgruv_waypaper_installed() {
+    command -v waypaper &>/dev/null && return 0
+    pacman -Qq waypaper &>/dev/null && return 0
+    pacman -Qq waypaper-git &>/dev/null && return 0
+    return 1
+}
+
+ensure_aur_pkg() {
+    local pkg="$1"
+    pacman -Qq "$pkg" &>/dev/null && return 0
+    hyprgruv_require_cmd yay
+    log_status "Installing AUR package: $pkg"
+    yay -S --needed --noconfirm "$pkg"
+}
+
+ensure_waypaper_pkg() {
+    hyprgruv_waypaper_installed && return 0
+    log_status "Installing waypaper…"
+    if pacman -Si waypaper &>/dev/null 2>&1; then
+        sudo pacman -S --needed --noconfirm waypaper
+        return 0
+    fi
+    hyprgruv_require_cmd yay
+    if yay -Si waypaper-git &>/dev/null 2>&1; then
+        yay -S --needed --noconfirm waypaper-git
+    else
+        yay -S --needed --noconfirm waypaper
+    fi
+}
+
+ensure_hyprpm_cmd() {
+    if command -v hyprpm &>/dev/null; then
+        return 0
+    fi
+    log_error "hyprpm not found — install hyprland first (provides /usr/bin/hyprpm)"
+    return 1
+}
+
+# yay → hyprland/hyprpm → gum → waypaper stack. Called at the start of 00-preflight.sh.
+ensure_bootstrap_stack() {
+    log_status "Bootstrapping essential tools (yay, Hyprland, hyprpm, gum, waypaper)…"
+
+    ensure_yay || return 1
+
+    if ! pacman -Si hyprland &>/dev/null 2>&1; then
+        log_status "Refreshing package databases (bootstrap)…"
+        sudo pacman -Sy --noconfirm || return 1
+    fi
+
+    local pkgs=() p
+    for p in "${HYPRGRUV_BOOTSTRAP_PACMAN_PKGS[@]}"; do
+        pacman -Qq "$p" &>/dev/null || pkgs+=("$p")
+    done
+    if ((${#pkgs[@]})); then
+        log_status "Installing bootstrap packages: ${pkgs[*]}"
+        sudo pacman -S --needed --noconfirm "${pkgs[@]}" || return 1
+    fi
+
+    ensure_hyprpm_cmd || return 1
+    log_success "hyprpm available (from hyprland)"
+
+    ensure_waypaper_pkg || return 1
+    local aur_pkg
+    for aur_pkg in "${HYPRGRUV_BOOTSTRAP_AUR_PKGS[@]}"; do
+        # waypaper-git is handled by ensure_waypaper_pkg; skip duplicate install attempt
+        [[ "$aur_pkg" == "waypaper-git" ]] && continue
+        ensure_aur_pkg "$aur_pkg" || return 1
+    done
+
+    hyprgruv_require_cmd yay
+    hyprgruv_require_cmd gum
+    hyprgruv_require_pkg hyprland
+    hyprgruv_require_cmd hyprpm
+    hyprgruv_waypaper_installed || hyprgruv_strict_abort "waypaper binary not available after install"
+    hyprgruv_require_pkg waypaper-engine
+
+    log_success "Bootstrap stack ready (yay, hyprland, hyprpm, gum, waypaper, waypaper-engine)"
+    return 0
+}
+
 
 # ============================================================
 # VM / Hypervisor detection (used for guest tools, GRUB video

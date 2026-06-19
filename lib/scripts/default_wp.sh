@@ -38,23 +38,21 @@ fi
 # Ensure Waypaper is installed
 # ------------------------------------------------------------
 ensure_waypaper_stack() {
-  local pkgs=()
-  for pkg in awww waypaper waypaper-engine; do
-    pacman -Qq "$pkg" &>/dev/null || pkgs+=("$pkg")
-  done
-  ((${#pkgs[@]})) || return 0
+  local need_awww=0
+  pacman -Qq awww &>/dev/null || need_awww=1
 
-  local official=() aur=()
-  for pkg in "${pkgs[@]}"; do
-    if pacman -Si "$pkg" &>/dev/null 2>&1; then official+=("$pkg"); else aur+=("$pkg"); fi
-  done
-
-  log_status "Installing wallpaper stack: ${pkgs[*]}"
-  ((${#official[@]})) && sudo pacman -S --needed --noconfirm "${official[@]}"
-  if ((${#aur[@]})); then
-    command -v yay >/dev/null 2>&1 || { log_error "yay required for ${aur[*]}"; return 1; }
-    yay -S --needed --noconfirm "${aur[@]}"
+  if ((need_awww)); then
+    log_status "Installing awww…"
+    if pacman -Si awww &>/dev/null 2>&1; then
+      sudo pacman -S --needed --noconfirm awww
+    else
+      command -v yay >/dev/null 2>&1 || { log_error "yay required for awww"; return 1; }
+      yay -S --needed --noconfirm awww
+    fi
   fi
+
+  ensure_waypaper_pkg || return 1
+  ensure_aur_pkg waypaper-engine || return 1
 }
 ensure_waypaper_stack
 

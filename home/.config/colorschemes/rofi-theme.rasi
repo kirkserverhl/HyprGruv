@@ -1,4 +1,4 @@
-/* Colorscheme theme picker — launcher-matched */
+/* Colorscheme theme picker — launcher-matched (mouse: shared/mouse.rasi) */
 
 configuration {
     show-icons: false;

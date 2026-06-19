@@ -7,7 +7,10 @@
      • selection @primary / @on-primary (waypaper button hover)
    Hyprland layerrule blur shows through — no pre-rendered wallpaper.
    Import after shared/standard.rasi; override window width/location per launcher.
+   Mouse bindings: shared/mouse.rasi (single-click for all launcher menus).
 ============================================================================= */
+
+@import "~/.config/rofi/shared/mouse.rasi"
 
 /* Font synced via apply-fonts.sh (FONT_UI + FONT_SIZE_LAUNCHER) */
 configuration {
@@ -82,7 +85,7 @@ listview {
     columns:          1;
     cycle:            true;
     dynamic:          true;
-    scrollbar:        false;
+    scrollbar:        true;
     layout:           vertical;
     spacing:          4px;
     padding:          6px;

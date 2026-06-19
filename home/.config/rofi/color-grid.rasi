@@ -1,8 +1,10 @@
 /* Color splotch grid — launcher-matched matugen colors */
 
 configuration {
-    show-icons: true;
-    font:       "Agave Nerd Font Propo 16";
+    show-icons:    true;
+    font:          "Agave Nerd Font Propo 16";
+    hover-select:  false;
+    scroll-method: 1;
 }
 
 @import "~/.config/rofi/shared/standard.rasi"

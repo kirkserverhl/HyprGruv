@@ -75,7 +75,20 @@ while true; do
     echo
 
     # First screen: Pure palette application (waybar transparency is a follow-up step)
+    active_cfg=""
+    if [[ -f "$HOME/.config/colorschemes/.active-config" ]]; then
+        active_cfg=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.active-config")
+    fi
+    if [[ -n "$active_cfg" ]]; then
+        echo "Active config: $active_cfg (wallpaper changes won't re-extract colors)"
+        echo
+    fi
+
     choice=$(gum choose \
+        "Customize — Pywal preview + role picker (recommended)" \
+        "Load saved configuration" \
+        "Save current as configuration" \
+        "Clear active configuration" \
         "Dark - Standard (tonal spot)" \
         "Dark - Vibrant" \
         "Dark - Monochrome" \
@@ -152,6 +165,33 @@ while true; do
                 fi
             done
             continue
+            ;;
+
+        "Customize — Pywal preview + role picker (recommended)")
+            echo
+            echo "Opening palette customizer..."
+            "$HOME/.config/hyprgruv/scripts/palette-customize.sh" "$WALLPAPER" || true
+            break
+            ;;
+
+        "Load saved configuration")
+            bash "$HOME/.config/colorschemes/colors-config.sh" pick || true
+            break
+            ;;
+
+        "Save current as configuration")
+            name=$(gum input --placeholder "my-setup" --header "Configuration name") || name=""
+            [[ -z "$name" ]] && continue
+            label=$(gum input --value "$name" --header "Display label") || label="$name"
+            bash "$HOME/.config/colorschemes/colors-config.sh" save "$name" --label "$label" || true
+            load_now=$(gum choose "Load now" "Save only" --header "Apply this configuration?") || load_now=""
+            [[ "$load_now" == "Load now" ]] && bash "$HOME/.config/colorschemes/colors-config.sh" load "$name" || true
+            break
+            ;;
+
+        "Clear active configuration")
+            bash "$HOME/.config/colorschemes/colors-config.sh" clear || true
+            break
             ;;
 
         "Dark - Standard (tonal spot)")

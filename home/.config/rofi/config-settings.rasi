@@ -1,12 +1,11 @@
 /* HyprGruv Settings — square icon grid (wlogout-style) */
 
 configuration {
-    show-icons:      true;
-    icon-theme:      "Gruvbox Plus Dark";
-    hover-select:    false;
-    me-select-entry: "";
-    me-accept-entry: "MousePrimary";
-    cycle:           false;
+    show-icons:    true;
+    icon-theme:    "Gruvbox Plus Dark";
+    cycle:         false;
+    hover-select:  false;
+    scroll-method: 1;
 }
 
 @import "~/.config/rofi/shared/standard.rasi"

@@ -147,76 +147,63 @@ else
 fi
 
 # ------------------- Preprocess for Matugen -------------------
-# Apply light ImageMagick filtering to improve color extraction quality
-# This runs automatically when setting new wallpapers
+# dipc outputs in ~/themed-wallpapers/ are already palette-filtered — pywal reads
+# them directly. Raw photos still get a light posterize pass for Material You extraction.
+SKIP_MATUGEN_PREPROCESS=0
+if [[ "$WALLPAPER" == *"/themed-wallpapers/"* ]]; then
+    SKIP_MATUGEN_PREPROCESS=1
+elif [[ -f "$HOME/.cache/matugen/color-mode" ]] && [[ "$(tr -d '[:space:]' <"$HOME/.cache/matugen/color-mode")" == "wal" ]]; then
+    SKIP_MATUGEN_PREPROCESS=1
+fi
+
 PREPROCESSED_WALLPAPER="$GENERATED_DIR/matugen-input-$WALLPAPER_FILENAME"
 
-if [ ! -f "$PREPROCESSED_WALLPAPER" ] || [ "$FORCE_GENERATE" -eq 1 ]; then
-    echo ":: Preprocessing wallpaper for better Matugen color extraction..."
-    magick "$WALLPAPER" \
-      -modulate 100,115,100 \
-      -posterize 12 \
-      -contrast-stretch 0.5%x0.5% \
-      -resize 1400x1400\> \
-      "$PREPROCESSED_WALLPAPER"
+if [[ "$SKIP_MATUGEN_PREPROCESS" -eq 0 ]]; then
+    if [ ! -f "$PREPROCESSED_WALLPAPER" ] || [ "$FORCE_GENERATE" -eq 1 ]; then
+        echo ":: Preprocessing wallpaper for better Matugen color extraction..."
+        magick "$WALLPAPER" \
+          -modulate 100,115,100 \
+          -posterize 12 \
+          -contrast-stretch 0.5%x0.5% \
+          -resize 1400x1400\> \
+          "$PREPROCESSED_WALLPAPER"
+    fi
+else
+    echo ":: Skipping matugen preprocess (dipc/pywal wallpaper)"
 fi
 
 # ------------------- Color Generation -------------------
-echo ":: Applying matugen palette from current wallpaper..."
-# Shows rofi palette + source-color chooser when a display is available (waypaper GUI
-# and terminal). Falls back to auto source color 1 if cancelled or headless.
-# palette.sh (Ctrl+P) remains the full gum-based chooser with waybar transparency step.
+echo ":: Running matugen via palette chooser (interactive)..."
+# palette.sh is the same script bound to Ctrl+P in Hyprland. Waypaper's post_command
+# and the theme-switcher wallpaper picker both land here after a wallpaper is chosen.
 
-if command -v matugen >/dev/null 2>&1; then
-    # Release lock before slow matugen work so rapid GUI wallpaper picks are not dropped.
+# shellcheck source=wallpaper-preset-scope.sh
+source "$HOME/.config/hyprgruv/scripts/wallpaper-preset-scope.sh" 2>/dev/null || true
+
+if [[ -f "$HOME/.config/colorschemes/.active-config" ]]; then
+    CONFIG_NAME=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.active-config")
+    echo ":: Saved config ($CONFIG_NAME) active — wallpaper only, colors unchanged"
+elif [[ "${SET_WALLPAPER_FORCE_PALETTE:-0}" != "1" ]] && declare -F wallpaper_in_preset_scope >/dev/null 2>&1 && wallpaper_in_preset_scope "$WALLPAPER"; then
+    CURRENT_THEME=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.current-theme")
+    echo ":: Preset theme ($CURRENT_THEME) — applying saved palette (no re-extract)"
+    bash "$HOME/.config/colorschemes/apply-preset-assets.sh" "$CURRENT_THEME" "$WALLPAPER" 2>/dev/null || true
+elif command -v matugen >/dev/null 2>&1; then
+    # Release lock before the floating kitty + gum UI so rapid GUI picks are not dropped.
     release_lock
     trap - EXIT
 
-    "$HOME/.config/hyprgruv/scripts/apply-matugen-auto.sh" "$WALLPAPER" || true
-
-    # Respect persistent "I want transparent waybar on top of whatever palette" choice
-    if [ -f "$HOME/.cache/matugen/waybar-transparent-this-time" ]; then
-        echo ":: waybar-transparent-this-time marker present — making bar transparent while keeping full colors"
-        python3 - "$HOME/.config/waybar/colors/matugen.css" <<'PY' 2>/dev/null || true
-import sys, re
-path = sys.argv[1]
-with open(path) as f:
-    css = f.read()
-repl = [
-    (r'@define-color background [^;]+;', '@define-color background rgba(0,0,0,0.0);'),
-    (r'@define-color surface [^;]+;',     '@define-color surface rgba(0,0,0,0.0);'),
-    (r'@define-color surface_container [^;]+;', '@define-color surface_container rgba(0,0,0,0.0);'),
-    (r'@define-color surface_container_high [^;]+;', '@define-color surface_container_high rgba(0,0,0,0.0);'),
-]
-for pat, rep in repl:
-    css = re.sub(pat, rep, css)
-with open(path, 'w') as f:
-    f.write(css)
-print("Waybar made transparent (full semantic palette still active for everything else).")
-PY
-        pkill -SIGUSR2 waybar 2>/dev/null || true
-    fi
+    echo ":: Launching palette chooser..."
+    "$HOME/.config/hyprgruv/scripts/palette.sh" || true
 fi
 
 
-# ------------------- Clean defensive sync (new world) -------------------
-# The main matugen call above (or palette.sh when run manually) is responsible
-# for writing the full correct colors via the normal template system.
-# This block just makes sure waybar gets a reload signal, and handles the
-# one clean "transparent bar + full colors elsewhere" case.
-
+# ------------------- Clean defensive sync -------------------
 echo ":: Ensuring waybar sees the latest colors..."
 
 if [ -f "$HOME/.cache/matugen/waybar-transparent-this-time" ]; then
-    # Already post-processed right after the matugen run above.
     echo ":: Transparent waybar marker active (full semantic palette still in use for other apps)"
-else
-    # Normal case — the matugen templates (including the one that writes
-    # ~/.config/waybar/colors/matugen.css) have already done the right thing.
-    true
 fi
 
-# palette.sh is available on demand via Ctrl+P — not part of the waypaper post-command flow.
 pkill -SIGUSR2 waybar 2>/dev/null || true
 
 rm -f "$HOME/.cache/matugen/waybar-dark-text" \

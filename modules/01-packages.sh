@@ -107,7 +107,11 @@ repair_official_repos() {
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/packages/manifest.sh"
 OFFICIAL_PKGS=("${PACMAN_PKGS[@]}")
-# AUR_PKGS sourced from manifest
+AUR_MANIFEST_PKGS=("${AUR_PKGS[@]}")
+# Bootstrap stack (yay, hyprland, hyprpm, gum, waypaper) is installed in 00-preflight.sh.
+# Keep those names in lib/packages/*.list for sync-packages.sh — skip re-install here.
+hyprgruv_filter_bootstrap_from_manifest OFFICIAL_PKGS
+hyprgruv_filter_bootstrap_from_manifest AUR_MANIFEST_PKGS
 
 # -------------------- run --------------------
 say "   📦️  Installing essential packages…"
@@ -119,15 +123,14 @@ sleep 0.15
 # This is the most common source of "target not found" in VM install tests.
 repair_official_repos
 
-# Hyprland first — before chaotic/yay/AUR work so a partial run still leaves a bootable session.
-log_status "Installing Hyprland early (before AUR/chaotic setup)…"
-sudo pacman -S --needed --noconfirm \
-    hyprland xdg-desktop-portal xdg-desktop-portal-hyprland
-if ! pacman -Qq hyprland &>/dev/null; then
-    log_error "Hyprland is not installed — cannot continue"
-    exit 1
-fi
-log_success "Hyprland core stack ready"
+# Bootstrap stack (yay, hyprland, hyprpm, gum, waypaper) was installed in 00-preflight.sh.
+hyprgruv_require_cmd yay
+hyprgruv_require_pkg hyprland
+hyprgruv_require_cmd hyprpm
+hyprgruv_require_cmd gum
+hyprgruv_waypaper_installed || hyprgruv_strict_abort "waypaper not available — re-run 00-preflight.sh"
+hyprgruv_require_pkg waypaper-engine
+log_success "Bootstrap stack verified (from preflight)"
 
 # Fix any stale/broken chaotic-aur entry from previous failed runs
 # (section present but no mirrorlist file -> pacman parse error on refresh)
@@ -138,16 +141,6 @@ fi
 
 # Ensure we are on a pure Arch base (remove EndeavourOS etc. if the user is migrating).
 purge_endeavouros_remnants || hyprgruv_strict_abort "Failed to purge EndeavourOS remnants"
-
-# Install yay (AUR helper) as early as possible in the packages phase.
-# This ensures the "Installing yay" step is visible near the beginning (when needed)
-# and that we can use yay for anything that requires it right away.
-# (Previously this was buried after ~200 lines of chaotic setup + refreshes.)
-log_status "Ensuring yay (AUR helper) is available early…"
-ensure_yay || {
-    log_error "yay is required but could not be installed — aborting packages step"
-    exit 1
-}
 
 if [[ "${SKIP_CHAOTIC:-0}" == "1" ]]; then
     log_warning "SKIP_CHAOTIC=1 — skipping Chaotic-AUR keyring bootstrap and repo enable"
@@ -234,8 +227,7 @@ if ! pacman -Si git >/dev/null 2>&1; then
     hyprgruv_strict_abort "Official repos cannot resolve basic packages (e.g. git) — check VM network/mirrors"
 fi
 
-# yay was already ensured early (see top of this file). We keep the comment for history.
-log_status "Installing Hyprland and core dependencies…"
+log_status "Installing core dependencies…"
 
 # PipeWire JACK handling: pipewire-jack provides the 'jack' virtual package.
 # jack2 is the legacy implementation and they conflict on the jack API.
@@ -270,7 +262,7 @@ fi
 log_status "Installing AUR packages…"
 # Install one-by-one so a single problematic/flaky AUR package does not abort the installer.
 AUR_FAILED=()
-for pkg in "${AUR_PKGS[@]}"; do
+for pkg in "${AUR_MANIFEST_PKGS[@]}"; do
     install_aur_pkg "$pkg" || AUR_FAILED+=("$pkg")
 done
 if ((${#AUR_FAILED[@]})); then

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "wallpaper": "/home/kirk/.hyprgruv/home/.config/colorschemes/e-ink/wallpapers/lines.jpg",
+  "saved_at": "2026-06-19T17:33:00.778629+00:00",
+  "source": "saved-config",
+  "base16": {
+    "base00": "#0a0a0a",
+    "base01": "#141414",
+    "base02": "#1f1f1f",
+    "base03": "#bcbcbc",
+    "base04": "#888888",
+    "base05": "#e6e6e6",
+    "base06": "#1f1f1f",
+    "base07": "#363636",
+    "base08": "#555555",
+    "base09": "#bbbbbb",
+    "base0a": "#777777",
+    "base0b": "#888888",
+    "base0c": "#999999",
+    "base0d": "#555555",
+    "base0e": "#aaaaaa",
+    "base0f": "#666666"
+  }
+}

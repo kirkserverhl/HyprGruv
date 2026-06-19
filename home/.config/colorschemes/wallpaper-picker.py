@@ -21,6 +21,7 @@ from wallpaper_picker_support import (
     FOOTER_CONTROL_HEIGHT,
     load_stylesheet,
     uniform_footer_button,
+    wrap_clickable_cell,
 )
 
 try:
@@ -49,17 +50,9 @@ RESIZE_DEBOUNCE_MS = 120
 
 
 def resolve_wallpaper_dir(theme: str) -> Path | None:
-    folder_map = {"nord-darker": "nord"}
-    folder = folder_map.get(theme, theme)
-    for root in (
-        HOME / "Wallpapers" / "themed-wallpapers",
-        HOME / "wallpapers" / "themed-wallpapers",
-    ):
-        candidate = root / folder
-        if candidate.is_dir():
-            return candidate
-    fallback = COLORSCHEMES / theme / "wallpapers"
-    return fallback if fallback.is_dir() else None
+    from wallpaper_picker_support import resolve_wallpaper_dir as _resolve
+
+    return _resolve(theme)
 
 
 def list_wallpapers(directory: Path) -> list[str]:
@@ -422,8 +415,8 @@ class WallpaperPicker(Gtk.Window):
             align.add(image)
             cell_frame.add(align)
 
-            cell_frame.connect("button-press-event", self._on_cell_pressed, path)
-            self.grid.attach(cell_frame, col, row, 1, 1)
+            cell = wrap_clickable_cell(cell_frame, self._on_cell_pressed, path)
+            self.grid.attach(cell, col, row, 1, 1)
 
         self.grid.show_all()
 

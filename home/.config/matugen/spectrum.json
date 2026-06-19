@@ -1,0 +1,62 @@
+{
+  "version": 3,
+  "description": "Shared spectrum for Starship, Waybar, Hyprbars. Columns are literal wallpaper hues in reversed rainbow order (purple → blue → green → yellow → orange → red). See spectrum-scale.json for the full backwards template.",
+  "wallpaper_only": true,
+  "scale_template": "~/.config/matugen/spectrum-scale.json",
+  "layout": {
+    "source": {
+      "slot": "base0f",
+      "hue": "purple",
+      "label": "Far left — Starship OS/user, Hyprbars close"
+    },
+    "columns": [
+      { "slot": "base08", "hue": "blue", "spectrum": "color_yellow", "label": "Directory / Hyprbars minimize" },
+      { "slot": "base0b", "hue": "green", "spectrum": "color_aqua", "label": "Git segment" },
+      { "slot": "base0a", "hue": "yellow", "spectrum": "color_blue", "label": "Languages / Hyprbars maximize" },
+      { "slot": "base0e", "hue": "orange", "spectrum": "color_bg3", "label": "Docker/env (often missing)" },
+      { "slot": "base09", "hue": "red", "spectrum": "color_red", "label": "Urgent/error (often missing)" }
+    ],
+    "neutral_tail": {
+      "slot": "base02",
+      "spectrum": "color_bg1",
+      "label": "Time segment / muted chrome"
+    }
+  },
+  "order": [
+    "color_orange",
+    "color_yellow",
+    "color_aqua",
+    "color_blue",
+    "color_bg3",
+    "color_bg1"
+  ],
+  "slots": {
+    "color_fg0": "base05",
+    "color_bg1": "base02",
+    "color_bg3": "base0e",
+    "color_orange": "base0f",
+    "color_yellow": "base08",
+    "color_aqua": "base0b",
+    "color_blue": "base0a",
+    "color_on_orange": "base00",
+    "color_on_yellow": "base00",
+    "color_on_aqua": "base00",
+    "color_on_blue": "base05",
+    "color_green": "base0b",
+    "color_red": "base09",
+    "color_purple": "base0f"
+  },
+  "hyprbars": {
+    "close": "color_orange",
+    "minimize": "color_yellow",
+    "maximize": "color_blue"
+  },
+  "starship": {
+    "os_username": "color_orange",
+    "directory": "color_yellow",
+    "git": "color_aqua",
+    "languages": "color_blue",
+    "docker_env": "color_bg3",
+    "time": "color_bg1"
+  }
+}
