@@ -77,7 +77,12 @@ local function apply_borders()
 					},
 					angle = 45,
 				},
-				inactive_border = colors.outline_variant or colors.outline or "rgba(595959aa)",
+				inactive_border = colors.inactive_border
+					or colors.base01
+					or colors.surface_container_low
+					or colors.outline_variant
+					or colors.outline
+					or "rgba(595959aa)",
 			},
 		},
 	})

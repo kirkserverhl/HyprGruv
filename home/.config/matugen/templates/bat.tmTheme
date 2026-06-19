@@ -10,19 +10,18 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>{{colors.background.default.hex}}</string>
+				<string>{{colors.surface_container_lowest.dark.hex}}</string>
 				<key>foreground</key>
-				<string>{{colors.on_surface.default.hex}}</string>
+				<string>{{colors.on_surface.dark.hex}}</string>
 				<key>caret</key>
-				<string>{{colors.primary.default.hex}}</string>
+				<string>{{colors.primary.dark.hex}}</string>
 				<key>lineHighlight</key>
-				<string>{{colors.surface_container.default.hex}}</string>
+				<string>{{colors.surface_container_low.dark.hex}}</string>
 				<key>selection</key>
-				<string>{{colors.primary_container.default.hex}}</string>
+				<string>{{colors.surface_container.dark.hex}}</string>
 			</dict>
 		</dict>
 
-		<!-- Comments -->
 		<dict>
 			<key>name</key>
 			<string>Comment</string>
@@ -31,13 +30,12 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.on_surface_variant.default.hex}}</string>
+				<string>{{colors.outline_variant.dark.hex}}</string>
 				<key>fontStyle</key>
 				<string>italic</string>
 			</dict>
 		</dict>
 
-		<!-- Strings -->
 		<dict>
 			<key>name</key>
 			<string>String</string>
@@ -46,11 +44,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.tertiary.default.hex}}</string>
+				<string>{{colors.primary.dark.hex}}</string>
 			</dict>
 		</dict>
 
-		<!-- Keywords -->
 		<dict>
 			<key>name</key>
 			<string>Keyword</string>
@@ -59,13 +56,12 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.primary.default.hex}}</string>
+				<string>{{colors.secondary_container.dark.hex}}</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
 		</dict>
 
-		<!-- Functions -->
 		<dict>
 			<key>name</key>
 			<string>Function</string>
@@ -74,11 +70,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.secondary.default.hex}}</string>
+				<string>{{colors.primary.dark.hex}}</string>
 			</dict>
 		</dict>
 
-		<!-- Types / Classes -->
 		<dict>
 			<key>name</key>
 			<string>Type</string>
@@ -87,11 +82,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.tertiary.default.hex}}</string>
+				<string>{{colors.secondary.dark.hex}}</string>
 			</dict>
 		</dict>
 
-		<!-- Constants -->
 		<dict>
 			<key>name</key>
 			<string>Constant</string>
@@ -100,11 +94,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.error.default.hex}}</string>
+				<string>{{colors.tertiary.dark.hex}}</string>
 			</dict>
 		</dict>
 
-		<!-- Numbers -->
 		<dict>
 			<key>name</key>
 			<string>Number</string>
@@ -113,11 +106,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.secondary.default.hex}}</string>
+				<string>{{colors.tertiary.dark.hex}}</string>
 			</dict>
 		</dict>
 
-		<!-- Operators -->
 		<dict>
 			<key>name</key>
 			<string>Operator</string>
@@ -126,7 +118,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>{{colors.on_surface.default.hex}}</string>
+				<string>{{colors.on_surface.dark.hex}}</string>
 			</dict>
 		</dict>
 	</array>

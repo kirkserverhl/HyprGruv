@@ -2,24 +2,24 @@
 /* Maps to current wallpaper colors. Run matugen to update. */
 
 :root {
-  --primary-col: {{colors.primary.default.hex}};
-  --primary-col-glow: {{colors.primary.default.hex}}aa;
+  --primary-col: {{colors.primary.dark.hex}};
+  --primary-col-glow: {{colors.primary.dark.hex}}aa;
 
   /* Muted gray for borders etc. */
-  --gray: {{colors.outline_variant.default.hex}};
+  --gray: {{colors.outline_variant.dark.hex}};
 
   /* Main surfaces */
-  --bg-col: {{colors.surface_dim.default.hex}};
-  --input-text-col: {{colors.on_surface.default.hex}};
+  --bg-col: {{colors.surface_container_lowest.dark.hex}};
+  --input-text-col: {{colors.on_surface.dark.hex}};
 
-  --btn-list-col: {{colors.surface_container.default.hex}};
-  --btn-list-col-hover: {{colors.surface_container_high.default.hex}};
-  --btn-list-col-hover-glow: {{colors.surface_container_high.default.hex}}77;
+  --btn-list-col: {{colors.surface_container.dark.hex}};
+  --btn-list-col-hover: {{colors.surface_container_low.dark.hex}};
+  --btn-list-col-hover-glow: {{colors.surface_container_low.dark.hex}}77;
 
-  --btn-nav-col: {{colors.surface_container_high.default.hex}};
-  --btn-nav-col-hover: {{colors.surface_dim.default.hex}};
+  --btn-nav-col: {{colors.surface_container_low.dark.hex}};
+  --btn-nav-col-hover: {{colors.surface_container_lowest.dark.hex}};
 
-  --error: {{colors.error.default.hex}};
+  --error: {{colors.error.dark.hex}};
 
   --emoji-font: "Noto Color Emoji";
 }
@@ -69,13 +69,13 @@ window {
 
 @keyframes shot {
   0% { border: 1px solid var(--primary-col); }
-  50% { border: 1px solid {{colors.on_surface.default.hex}}; }
+  50% { border: 1px solid {{colors.on_surface.dark.hex}}; }
   100% { border: 1px solid transparent; }
 }
 
 entry {
   background-color: var(--btn-list-col);
-  color: {{colors.on_surface.default.hex}};
+  color: {{colors.on_surface.dark.hex}};
   border-radius: 10px;
   padding: 0 15px;
 }
@@ -105,7 +105,7 @@ entry {
 
 .nav_enabled button.active, .nav_enabled button.active:focus {
   background: var(--primary-col);
-  color: {{colors.on_primary.default.hex}};
+  color: {{colors.surface_container_lowest.dark.hex}};
 }
 
 .nav_enabled button.active, .nav_enabled button.active:hover, .nav_enabled button.active:focus {
@@ -143,7 +143,7 @@ entry {
 }
 
 .toast-label {
-  color: {{colors.on_surface.default.hex}};
+  color: {{colors.on_surface.dark.hex}};
   font-weight: 700;
 }
 

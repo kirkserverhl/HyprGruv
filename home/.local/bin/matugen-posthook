@@ -7,7 +7,7 @@
 #   - Produce clean, always-valid cache files that other tools/scripts can consume:
 #       ~/.cache/matugen/current.json          (full matugen JSON)
 #       ~/.cache/matugen/colors.sh             (directly sourceable shell exports)
-#   - Handle grayscale wallpaper edge cases
+#   - Honor ~/.cache/matugen/force-monochrome (set by palette.sh only)
 #
 # These files power dynamic theming for gum, waybar, yazi, etc.
 
@@ -19,64 +19,60 @@ fi
 CACHE_DIR="${HOME}/.cache/matugen"
 JSON_CACHE="${CACHE_DIR}/current.json"
 SHELL_CACHE="${CACHE_DIR}/colors.sh"
-GRAYSCALE_THRESHOLD=0.08
+PENDING_RUN="${CACHE_DIR}/pending-run.json"
+FORCE_MONO_FLAG="${CACHE_DIR}/force-monochrome"
 
 mkdir -p "$CACHE_DIR"
 
-is_mostly_grayscale() {
-    local img="$1"
-    local mean_sat
-    mean_sat=$(magick "$img" -colorspace HSL -channel S -separate -format "%[fx:mean]" info: 2>/dev/null)
+# pending-run.json (written by apply-matugen-auto) is authoritative for hex/image
+# mode and the wallpaper being themed — matugen color hex passes no {{image}} path.
+RUN_METHOD="hex"
+RUN_MODE="dark"
+RUN_TYPE="scheme-tonal-spot"
+SOURCE_INDEX=0
+SRC_HEX="#a78a9d"
+PENDING_WP=""
 
-    [ -z "$mean_sat" ] && return 1
+if [[ -f "$PENDING_RUN" ]]; then
+    RUN_METHOD=$(jq -r '.method // "hex"' "$PENDING_RUN" 2>/dev/null || echo "hex")
+    RUN_MODE=$(jq -r '.mode // "dark"' "$PENDING_RUN" 2>/dev/null || echo "dark")
+    RUN_TYPE=$(jq -r '.type // "scheme-tonal-spot"' "$PENDING_RUN" 2>/dev/null || echo "scheme-tonal-spot")
+    SOURCE_INDEX=$(jq -r '.source_index // 0' "$PENDING_RUN" 2>/dev/null || echo 0)
+    SRC_HEX=$(jq -r '.source_hex // "#a78a9d"' "$PENDING_RUN" 2>/dev/null || echo "#a78a9d")
+    PENDING_WP=$(jq -r '.wallpaper // empty' "$PENDING_RUN" 2>/dev/null || true)
+fi
 
-    if awk "BEGIN { exit !($mean_sat < $GRAYSCALE_THRESHOLD) }"; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-# -----------------------------------------------------------------------------
-# Generate fresh matugen data
-# -----------------------------------------------------------------------------
-MATUGEN_JSON=""
-matugen_args=()
-
-if [[ ! -f "$WALLPAPER" ]]; then
-    echo "[posthook] Color-hex mode — rebuilding JSON cache from current wallpaper + source color 1"
+if [[ -n "$PENDING_WP" && -f "$PENDING_WP" ]]; then
+    WALLPAPER="$PENDING_WP"
+elif [[ ! -f "$WALLPAPER" ]]; then
+    echo "[posthook] No image arg — reading current wallpaper cache"
     WP_CACHE="$HOME/.config/settings/cache/current_wallpaper"
     if [[ -f "$WP_CACHE" ]]; then
         WALLPAPER=$(cat "$WP_CACHE")
     fi
 fi
 
-if [[ -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
-    EXTRACTOR="$HOME/.config/hyprgruv/scripts/extract-good-source-colors.sh"
-    SRC="#a78a9d"
-    if [[ -x "$EXTRACTOR" ]]; then
-        SRC=$("$EXTRACTOR" "$WALLPAPER" 1 2>/dev/null | head -1)
-        [[ -z "$SRC" ]] && SRC="#a78a9d"
-    fi
+# -----------------------------------------------------------------------------
+# Generate fresh matugen data (must match pending-run / apply-matugen-auto)
+# -----------------------------------------------------------------------------
+MATUGEN_JSON=""
+matugen_args=()
 
-    if is_mostly_grayscale "$WALLPAPER"; then
-        echo ":: [posthook] Mostly grayscale wallpaper → neutral source"
-        SRC="#0f0f0f"
-    fi
-
-    echo ":: [posthook] Source color 1: $SRC (from $(basename "$WALLPAPER"))"
-    RAW=$(matugen color hex "$SRC" --mode dark --type scheme-tonal-spot --dry-run --json hex 2>/dev/null || true)
-elif command -v matugen >/dev/null 2>&1; then
-    RAW=""
+if [[ -f "$FORCE_MONO_FLAG" ]]; then
+    RUN_TYPE="scheme-monochrome"
+    echo ":: [posthook] palette.sh monochrome — scheme-monochrome"
 fi
 
-# Legacy image-only path (if something still calls posthook with a bare image path)
-if [[ -z "$RAW" && -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
-    matugen_args=(--mode dark --type scheme-tonal-spot --source-color-index 0 --dry-run)
-    if is_mostly_grayscale "$WALLPAPER"; then
-        matugen_args=(--mode dark --type scheme-tonal-spot --fallback-color "#0f0f0f" --dry-run)
+if [[ -f "$WALLPAPER" ]] && command -v matugen >/dev/null 2>&1; then
+    if [[ "$RUN_METHOD" == "image" ]]; then
+        echo ":: [posthook] JSON cache: image mode index=$SOURCE_INDEX type=$RUN_TYPE ($(basename "$WALLPAPER"))"
+        RAW=$(matugen image "$WALLPAPER" --mode "$RUN_MODE" --type "$RUN_TYPE" --source-color-index "$SOURCE_INDEX" --dry-run --json hex 2>/dev/null || true)
+    else
+        echo ":: [posthook] JSON cache: hex mode source=$SRC_HEX type=$RUN_TYPE"
+        RAW=$(matugen color hex "$SRC_HEX" --mode "$RUN_MODE" --type "$RUN_TYPE" --dry-run --json hex 2>/dev/null || true)
     fi
-    RAW=$(matugen image "$WALLPAPER" "${matugen_args[@]}" --json hex 2>/dev/null || true)
+elif command -v matugen >/dev/null 2>&1; then
+    RAW=""
 fi
 
 # Strip common noise ("ok", empty lines, etc.) then validate
@@ -152,13 +148,45 @@ for name, val in sorted(colors.items()):
         var = "COLOR_" + name.upper().replace("-", "_")
         lines.append(f'export {var}="{hexval}"')
 
+# Base16 palette exports (Material You → semantic slots)
+BASE16_MAP = {
+    "base00": "surface_container_lowest",
+    "base01": "surface_container_low",
+    "base02": "surface_container",
+    "base03": "outline_variant",
+    "base04": "on_surface_variant",
+    "base05": "on_surface",
+    "base06": "inverse_on_surface",
+    "base07": "surface_bright",
+    "base08": "error",
+    "base09": "tertiary",
+    "base0a": "secondary",
+    "base0b": "primary",
+    "base0c": "tertiary_container",
+    "base0d": "primary",
+    "base0e": "secondary_container",
+    "base0f": "source_color",
+}
+for slot, material in BASE16_MAP.items():
+    val = colors.get(material, {})
+    hexval = val.get("hex") if isinstance(val, dict) else None
+    if hexval:
+        lines.append(f'export BASE16_{slot.upper()}="{hexval}"')
+
 # Add a few very common semantic aliases for convenience
 aliases = [
-    ('COLOR_ACCENT',        'COLOR_PRIMARY'),
+    ('COLOR_ACCENT',        'BASE16_BASE0D'),
     ('COLOR_BG',            'COLOR_SURFACE'),
     ('COLOR_FG',            'COLOR_ON_SURFACE'),
     ('COLOR_TEXT',          'COLOR_ON_SURFACE'),
     ('COLOR_SURFACE_CONTAINER_HIGH', 'COLOR_SURFACE_CONTAINER_HIGH'),
+    ('COLOR_BACKGROUND',    'BASE16_BASE00'),
+    ('COLOR_SURFACE',       'BASE16_BASE00'),
+    ('COLOR_ON_SURFACE',    'BASE16_BASE05'),
+    ('COLOR_PRIMARY',       'BASE16_BASE0D'),
+    ('COLOR_ERROR',         'BASE16_BASE08'),
+    ('COLOR_URGENT',        'BASE16_BASE08'),
+    ('COLOR_MUTED',         'BASE16_BASE03'),
 ]
 for alias, target in aliases:
     lines.append(f'export {alias}="${{{target}}}"')
@@ -200,6 +228,9 @@ env | grep '^GUM_'" | sed 's/^/export /' || true
     echo ":: [posthook] Wrote gum theme cache: $GUM_ENV"
 fi
 
+# Grok Build TUI theme (~/.grok/themes/matugen.toml)
+"$HOME/.config/hyprgruv/scripts/matugen-posthook-grok.sh" 2>/dev/null || true
+
 # -----------------------------------------------------------------------------
 # Starship fallback — only if the matugen template did not write the file.
 # The main [templates.starship_rainbow] entry is the source of truth; this
@@ -237,14 +268,14 @@ def getc(name, fallback="#888888"):
     return c.get("hex", fallback) if isinstance(c, dict) else fallback
 
 primary = getc("primary")
-on_primary = getc("on_primary")
 secondary = getc("secondary")
-on_secondary = getc("on_secondary")
 tertiary = getc("tertiary")
-on_tertiary = getc("on_tertiary")
-primary_container = getc("primary_container")
+tertiary_container = getc("tertiary_container")
+secondary_container = getc("secondary_container")
+source_color = getc("source_color")
 surface_container = getc("surface_container")
-surface_container_high = getc("surface_container_high")
+surface_container_low = getc("surface_container_low")
+surface_container_lowest = getc("surface_container_lowest")
 on_surface = getc("on_surface")
 error = getc("error")
 
@@ -292,20 +323,20 @@ palette = 'matugen'
 [palettes.matugen]
 color_fg0 = '{on_surface}'
 color_bg1 = '{surface_container}'
-color_bg3 = '{surface_container_high}'
+color_bg3 = '{surface_container_low}'
 
-color_orange = '{primary}'
-color_yellow = '{tertiary}'
-color_aqua   = '{secondary}'
-color_blue   = '{primary_container}'
+color_orange = '{tertiary}'
+color_yellow = '{secondary}'
+color_aqua   = '{tertiary_container}'
+color_blue   = '{source_color}'
 
-color_on_orange = '{on_primary}'
-color_on_yellow = '{on_tertiary}'
-color_on_aqua   = '{on_secondary}'
+color_on_orange = '{surface_container_lowest}'
+color_on_yellow = '{surface_container_lowest}'
+color_on_aqua   = '{surface_container_lowest}'
 
-color_green  = '{secondary}'
+color_green  = '{primary}'
 color_red    = '{error}'
-color_purple = '{tertiary}'
+color_purple = '{secondary_container}'
 
 [os]
 disabled = false
@@ -478,10 +509,12 @@ fi
 # -----------------------------------------------------------------------------
 "$HOME/.config/hyprgruv/scripts/tty-theme.sh" 2>/dev/null || true &
 
-# -----------------------------------------------------------------------------
-# Plymouth splash theme (if installed and configured)
-# This is backgrounded because it may need to elevate for /usr/share
-# -----------------------------------------------------------------------------
-"$HOME/.config/hyprgruv/scripts/update-plymouth-theme.sh" 2>/dev/null || true &
+# Firefox (pywalfox bridge — extension still applies browser chrome colors)
+"$HOME/.config/hyprgruv/scripts/matugen-posthook-firefox.sh" 2>/dev/null || true
+
+# Plymouth boot splash is opt-in only — never run during wallpaper changes (pkexec
+# used to pop a permission dialog and block matugen). Manual sync:
+#   touch ~/.config/settings/plymouth-matugen-sync
+#   ~/.config/hyprgruv/scripts/update-plymouth-theme.sh --setup
 
 echo "Matugen post-hook completed for: $(basename "$WALLPAPER" 2>/dev/null || echo "$WALLPAPER")"

@@ -1,12 +1,20 @@
-/* Matugen Dynamic Firefox Theme */
+/* Matugen Dynamic Firefox Theme — Base16 + legacy Material exports */
 
 :root {
-    /* Hex colors */
+    /* Base16 palette */
+    <* for name, value in base16 *>
+    --{{ name }}: {{ value.dark.hex }};
+    <* endfor *>
+
+    <* for name, value in base16 *>
+    --{{ name }}-rgb: {{ value.dark.red }} {{ value.dark.green }} {{ value.dark.blue }};
+    <* endfor *>
+
+    /* Legacy Material roles (for older userChrome rules) */
     <* for name, value in colors *>
     --{{name}}: {{value.default.hex}};
     <* endfor *>
 
-    /* RGB values (very useful for transparency) */
     <* for name, value in colors *>
     --{{name}}-rgb: {{value.default.red}} {{value.default.green}} {{value.default.blue}};
     <* endfor *>

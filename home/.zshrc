@@ -74,17 +74,6 @@ alias hgupdates='bash ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt'
 # =====================================================
 # Aliases
 # =====================================================
-if command -v eza >/dev/null; then
-  alias ls='eza -a --icons'
-  alias ll='eza -al --icons'
-  alias la='eza -Alh --icons'
-  alias lls='eza -l --icons'
-  alias ldir="eza -l --icons | egrep '^d'"
-else
-  alias ls='ls --color=auto -A'
-  alias ll='ls --color=auto -al'
-fi
-
 if command -v bat >/dev/null; then
   export BAT_THEME="Matugen"
   alias cat='bat -pp'
@@ -107,6 +96,15 @@ alias hyprstow='$HOME/bin/migrate-config-to-stow'
 alias c='clear && $SHELL'
 alias ff='fastfetch'
 alias tm='tmux'
+cheater() {
+  local cheat="${HOME}/.config/tmux/cheatsheet.txt"
+  [[ -f "$cheat" ]] || { echo "No cheat sheet: $cheat" >&2; return 1; }
+  if command -v bat >/dev/null; then
+    PAGER=cat bat --paging=never --decorations=never "$cheat"
+  else
+    cat "$cheat"
+  fi
+}
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit -m'
@@ -142,6 +140,18 @@ if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
   # --- zsh-autosuggestions settings ---
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
   ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+fi
+
+# eza aliases must come after OMZ — it overrides ls otherwise
+if command -v eza >/dev/null; then
+  alias ls='eza -a --icons'
+  alias ll='eza -al --icons'
+  alias la='eza -Alh --icons'
+  alias lls='eza -l --icons'
+  alias ldir="eza -l --icons | egrep '^d'"
+else
+  alias ls='ls --color=auto -A'
+  alias ll='ls --color=auto -al'
 fi
 
 # Matugen Palette Output
@@ -245,6 +255,26 @@ if command -v zoxide >/dev/null; then
 fi
 
 # =====================================================
+# Tmux dev workspace — cheat sheet in left pane (before starship)
+# =====================================================
+if [[ -n "${TMUX:-}" && -t 1 && -z "${TMUX_CHEATSHEET_SHOWN:-}" ]]; then
+  _tmux_sess="$(tmux display -p '#{session_name}' 2>/dev/null)"
+  _tmux_dev_prefix="${TMUX_DEV_PREFIX:-dev}"
+  if [[ ("$_tmux_sess" == "$_tmux_dev_prefix" || "$_tmux_sess" == "${_tmux_dev_prefix}-"*)
+     && "$(tmux display -p '#{pane_index}' 2>/dev/null)" == "1" ]]; then
+    cheat="${HOME}/.config/tmux/cheatsheet.txt"
+    if [[ -f "$cheat" ]]; then
+      export TMUX_CHEATSHEET_SHOWN=1
+      if command -v bat >/dev/null; then
+        PAGER=cat bat --paging=never --decorations=never "$cheat"
+      else
+        cat "$cheat"
+      fi
+    fi
+  fi
+fi
+
+# =====================================================
 # Prompt (Starship)
 # =====================================================
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship/matugen-rainbow.toml}"
@@ -253,9 +283,9 @@ if command -v starship >/dev/null; then
 fi
 
 # =====================================================
-# Fastfetch intro
+# Fastfetch intro (plain kitty only — not tmux dev workspace)
 # =====================================================
-if [[ $TERM == "kitty" && -t 1 ]]; then
+if [[ $TERM == "kitty" && -t 1 && -z "${TMUX:-}" ]]; then
   clear
   command -v fastfetch >/dev/null && fastfetch
 fi
@@ -279,8 +309,8 @@ fi
 bindkey '^H' backward-kill-word
 
 # >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
+#export PATH="$HOME/.grok/bin:$PATH"
+#fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
 

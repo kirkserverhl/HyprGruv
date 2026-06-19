@@ -49,7 +49,7 @@ hide_when_typing = true
 semantic_escape_chars = ":@-./_~?&=%+#"
 
 [terminal]
-# Launch the dev tmux layout on startup; reuses session "dev" if it already exists.
+# Launch a new dev-N tmux layout on startup (dev-1, dev-2, …).
 # alacritty -e … overrides this (e.g. yazi.sh helper scripts).
 shell = { program = "/bin/bash", args = ["-lc", "~/.config/tmux/dev-workspace.sh"] }
 

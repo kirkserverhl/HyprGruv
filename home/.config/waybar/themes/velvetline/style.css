@@ -20,7 +20,7 @@ window#waybar {
 
 tooltip {
   background: @background;
-  border: 1px solid @primary;
+  border: 1px solid @accent;
   border-radius: 12px;
 }
 
@@ -46,8 +46,8 @@ tooltip label {
 }
 
 #workspaces button.active {
-  background-color: @primary;
-  color: @surface;
+  background-color: @base02;
+  color: @base05;
   min-width: 50px;
   transition: all 0.3s ease-in-out;
   border-radius: 5px;
@@ -62,8 +62,8 @@ tooltip label {
 }
 
 #workspaces button.urgent {
-  background-color: @error;
-  color: @surface;
+  background-color: @urgent;
+  color: @on_urgent;
   border-radius: 16px;
   min-width: 50px;
   background-size: 400% 400%;
@@ -83,7 +83,7 @@ tooltip label {
 #custom-notification,
 #power-profiles-daemon {
   background-color: @surface;
-  color: @primary;
+  color: @accent;
   padding: 0 15px 0 15px;
   margin: 0 0 0 12px;
   border-radius: 50px;
@@ -103,7 +103,7 @@ tooltip label {
 }
 
 #custom-special.active {
-  background-color: @primary;
+  background-color: @accent;
   color: @surface;
 }
 

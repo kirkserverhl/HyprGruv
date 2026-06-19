@@ -7,6 +7,7 @@
   "layer": "top",
   "position": "top",
   "margin-top": 13,
+  "reload_style_on_change": true,
   "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/special"],
   "modules-center": ["custom/notification", "custom/media"],
   "modules-right": [
@@ -42,7 +43,7 @@
     "interval": "once",
     "exec": "checkupdates | wc -l",
     "on-click": "bash home/$USER/.config/hyprgruv/scripts/updates.sh",
-    "on-click-right": "kitty pacseek"
+    "on-click-right": "kitty pacseek",
     "signal": 8,
     "tooltip-format": "{} updates available",
   },

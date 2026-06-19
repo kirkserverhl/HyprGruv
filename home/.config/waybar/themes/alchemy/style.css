@@ -25,18 +25,18 @@ window#waybar {
 }
 
 #workspaces button.active {
-  background-color: @primary_fixed_dim;
-  color: @on_primary_fixed;
+  background-color: @base02;
+  color: @base05;
   padding: 5px 24px;
 }
 
 #workspaces button.active:hover {
-  color: @primary_fixed_dim;
-  background: inherit;
+  color: @base05;
+  background-color: @base02;
 }
 
 #workspaces button.empty {
-  color: @outline_variant;
+  color: @muted;
 }
 
 #workspaces button {
@@ -56,8 +56,8 @@ window#waybar {
 }
 
 #workspaces button.urgent {
-  background-color: @error;
-  color: @on_error;
+  background-color: @urgent;
+  color: @on_urgent;
 }
 
 #custom-special {
@@ -94,7 +94,7 @@ window#waybar {
 #custom-launcher,
 #custom-notification,
 #power-profiles-daemon {
-  color: @primary;
+  color: @accent;
   background-color: @surface_container;
   padding: 0 15px 0 15px;
   margin: 0 0 0 12px;

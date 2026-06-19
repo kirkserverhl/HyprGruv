@@ -75,7 +75,7 @@ window#waybar {
 /* -----------------------------------------------------
  * Workspaces (center) - subtle transparent background
  * Bold @on_surface text (matches pacman), 17px
- * Active workspace highlighted with @source_color
+ * Active workspace highlighted with @base02; accent UI uses @accent (base0D)
  * ----------------------------------------------------- */
 
 #workspaces {
@@ -104,8 +104,8 @@ window#waybar {
 }
 
 #workspaces button.active {
-  background-color: @source_color;
-  color: @on_surface;
+  background-color: @base02;
+  color: @base05;
   opacity: 1;
 }
 
@@ -126,7 +126,7 @@ window#waybar {
 }
 
 #custom-special.active {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface;
 }
 
@@ -295,7 +295,7 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #custom-appmenu {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface;
   border-radius: 15px;
   padding: 0px 10px 0px 10px;
@@ -312,7 +312,7 @@ window#waybar.empty #window {
 #custom-exit {
   margin: 0px 13px 0px 0px;
   padding: 0px;
-  color: @primary;
+  color: @accent;
   opacity: 0.8;
 }
 
@@ -342,7 +342,7 @@ window#waybar.empty #window {
 #custom-updates.green > *,
 #custom-updates.green > * > *,
 #custom-updates.green > box > label {
-  background-color: @source_color;
+  background-color: @accent;
 }
 
 #custom-updates.yellow,
@@ -372,7 +372,7 @@ window#waybar.empty #window {
 }
 
 #custom-updates.green {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface;
 }
 
@@ -408,7 +408,7 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #clock {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface;
   border-radius: 15px;
   padding: 1px 10px 0px 10px;
@@ -423,7 +423,7 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #backlight {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface_variant;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
@@ -456,7 +456,7 @@ window#waybar.empty #window {
 }
 
 #network:hover {
-  color: @primary;
+  color: @accent;
   opacity: 1;
 }
 
@@ -474,7 +474,7 @@ window#waybar.empty #window {
 #bluetooth,
 #bluetooth.on,
 #bluetooth.connected {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface;
   border-radius: 15px;
   padding: 2px 10px 0px 10px;
@@ -483,7 +483,7 @@ window#waybar.empty #window {
 }
 
 #bluetooth.off {
-  background-color: @source_color;
+  background-color: @accent;
   padding: 0px;
   margin: 0px;
 }
@@ -494,7 +494,7 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #battery {
-  background-color: @source_color;
+  background-color: @accent;
   color: @on_surface;
   border-radius: 15px;
   padding: 2px 15px 0px 10px;
@@ -506,12 +506,12 @@ window#waybar.empty #window {
 #battery.charging,
 #battery.plugged {
   color: @on_surface;
-  background-color: @source_color;
+  background-color: @accent;
 }
 
 @keyframes blink {
   to {
-    background-color: @source_color;
+    background-color: @accent;
     color: @on_surface;
   }
 }

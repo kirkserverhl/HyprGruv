@@ -5,6 +5,7 @@
   ],
 
   "layer": "top",
+  "reload_style_on_change": true,
   "modules-left": ["custom/launcher", "hyprland/workspaces", "custom/special"],
   "modules-center": ["custom/media"],
   "modules-right": ["pulseaudio", "network", "battery", "clock"],

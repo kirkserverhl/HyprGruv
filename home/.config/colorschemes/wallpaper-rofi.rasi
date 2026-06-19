@@ -1,0 +1,81 @@
+/* Wallpaper picker — waypaper-like 3×3 scrolling grid */
+
+configuration {
+    show-icons: true;
+    font:       "Agave Nerd Font Propo 11";
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+
+window {
+    width:  980px;
+    height: 720px;
+    location: center;
+    anchor:   center;
+}
+
+mainbox {
+    children: ["inputbar", "listview"];
+}
+
+inputbar {
+    children: ["textbox-prompt-colon", "entry"];
+    padding:  12px 14px;
+}
+
+entry {
+    placeholder: "Search wallpapers...";
+}
+
+listview {
+    columns:       3;
+    lines:         3;
+    fixed-height:  true;
+    fixed-columns: true;
+    scrollbar:     true;
+    spacing:       10px;
+    padding:       8px 10px 12px 10px;
+}
+
+scrollbar {
+    handle-width:     8px;
+    handle-color:     @outline;
+    background-color: @surface-container;
+    border-radius:    4px;
+}
+
+element {
+    padding:       6px;
+    border:        2px;
+    border-color:  transparent;
+    border-radius: 8px;
+    orientation:   vertical;
+}
+
+element normal.normal {
+    background-color: transparent;
+}
+
+element alternate.normal {
+    background-color: @surface-container;
+}
+
+element selected.normal {
+    background-color: @primary;
+    border-color:     @primary;
+    text-color:       @on-primary;
+}
+
+element-icon {
+    size:           240px;
+    border-radius:  6px;
+    cursor:         inherit;
+}
+
+element-text {
+    enabled:          true;
+    font:             "ShureTechMono Nerd Font 9";
+    horizontal-align: 0.5;
+    margin:           4px 0px 0px 0px;
+}

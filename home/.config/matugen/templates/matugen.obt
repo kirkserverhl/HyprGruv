@@ -9,40 +9,40 @@
     /* --- MATUGEN COLOR MAPPING --- */
 
     /* Primary Accents (Blue mapping) */
-    --blue1: {{colors.primary_fixed.default.hex}};
-    --blue2: {{colors.primary_container.default.hex}};
-    --blue3: {{colors.primary.default.hex}};
-    --blue4: {{colors.on_primary_container.default.hex}};
-    --blue5: {{colors.inverse_primary.default.hex}};
+    --blue1: {{colors.primary.dark.hex}};
+    --blue2: {{colors.tertiary_container.dark.hex}};
+    --blue3: {{colors.primary.dark.hex}};
+    --blue4: {{colors.on_surface.dark.hex}};
+    --blue5: {{colors.secondary_container.dark.hex}};
 
     /* Error / Danger (Red mapping) */
     --red1: #E85E75;
-    --red2: {{colors.error_container.default.hex}};
-    --red3: {{colors.error.default.hex}};
-    --red4: {{colors.on_error_container.default.hex}};
+    --red2: {{colors.error.dark.hex}};
+    --red3: {{colors.error.dark.hex}};
+    --red4: {{colors.surface_container_lowest.dark.hex}};
     --red5: #7D1224;
 
     /* Secondary Accents (Pink mapping -> Secondary) */
-    --pink1: {{colors.secondary_fixed.default.hex}};
-    --pink2: {{colors.secondary_container.default.hex}};
-    --pink3: {{colors.secondary.default.hex}};
-    --pink4: {{colors.on_secondary_container.default.hex}};
+    --pink1: {{colors.secondary_container.dark.hex}};
+    --pink2: {{colors.surface_container.dark.hex}};
+    --pink3: {{colors.secondary_container.dark.hex}};
+    --pink4: {{colors.on_surface.dark.hex}};
     /* ИСПРАВЛЕНО: inverse_secondary -> on_secondary (это темный цвет в темной теме) */
-    --pink5: {{colors.on_secondary.default.hex}};
+    --pink5: {{colors.surface_container_lowest.dark.hex}};
 
     /* Tertiary Accents (Teal mapping -> Tertiary) */
-    --teal1: {{colors.tertiary_fixed.default.hex}};
-    --teal2: {{colors.tertiary_container.default.hex}};
-    --teal3: {{colors.tertiary.default.hex}};
-    --teal4: {{colors.on_tertiary_container.default.hex}};
+    --teal1: {{colors.secondary.dark.hex}};
+    --teal2: {{colors.secondary.dark.hex}};
+    --teal3: {{colors.tertiary.dark.hex}};
+    --teal4: {{colors.surface_container_lowest.dark.hex}};
     /* ИСПРАВЛЕНО: inverse_tertiary -> on_tertiary */
-    --teal5: {{colors.on_tertiary.default.hex}};
+    --teal5: {{colors.surface_container_lowest.dark.hex}};
 
     /* Purple mapping */
     --purple1: #997FDC;
-    --purple2: {{colors.secondary_fixed_dim.default.hex}};
-    --purple3: {{colors.secondary.default.hex}};
-    --purple4: {{colors.on_secondary_container.default.hex}};
+    --purple2: {{colors.secondary_container.dark.hex}};
+    --purple3: {{colors.secondary_container.dark.hex}};
+    --purple4: {{colors.on_surface.dark.hex}};
     --purple5: #3D2380;
 
     /* Green & Yellow (Static) */
@@ -59,23 +59,23 @@
     --yellow5: #6E520D;
 
     /* Neutrals / Greys (Surface Mapping) */
-    --grey1: {{colors.outline.default.hex}};
-    --grey2: {{colors.outline_variant.default.hex}};
-    --grey3: {{colors.surface_container_highest.default.hex}};
-    --grey4: {{colors.surface_container_high.default.hex}};
-    --grey5: {{colors.surface_container.default.hex}};
-    --grey6: {{colors.surface.default.hex}};
-    --grey7: {{colors.surface_dim.default.hex}};
-    --grey8: {{colors.shadow.default.hex}};
+    --grey1: {{colors.on_surface_variant.dark.hex}};
+    --grey2: {{colors.outline_variant.dark.hex}};
+    --grey3: {{colors.outline_variant.dark.hex}};
+    --grey4: {{colors.surface_container_low.dark.hex}};
+    --grey5: {{colors.surface_container.dark.hex}};
+    --grey6: {{colors.surface_container_lowest.dark.hex}};
+    --grey7: {{colors.surface_container_lowest.dark.hex}};
+    --grey8: {{colors.surface_container_lowest.dark.hex}};
 
     /* Text */
-    --white1: {{colors.on_surface.default.hex}};
-    --white2: {{colors.on_surface_variant.default.hex}};
-    --white3: {{colors.on_surface_variant.default.hex}};
+    --white1: {{colors.on_surface.dark.hex}};
+    --white2: {{colors.on_surface_variant.dark.hex}};
+    --white3: {{colors.on_surface_variant.dark.hex}};
     --white4: #C2C2C2;
     --white5: #ADADAD;
 
-    --black1: {{colors.inverse_surface.default.hex}};
+    --black1: {{colors.surface_bright.dark.hex}};
     --black2: #1F1F1F;
     --black3: #333333;
     --black4: #474747;
@@ -97,7 +97,7 @@
 
     --text: var(--white1);
     --text_light: var(--white2);
-    --text_muted: var(--grey1);
+    --text_muted: var(--grey2);  /* base03 */
 
     --text_disabled: var(--text_muted);
     --text_inactive: var(--white2);

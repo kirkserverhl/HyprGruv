@@ -6,8 +6,15 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 THEME="$1"
+WALLPAPER_OVERRIDE="$2"
 THEME_DIR="$HOME/.config/colorschemes/$THEME"
 WALLPAPER_STATE="$HOME/.config/colorschemes/.wallpaper-state"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# shellcheck source=wallpaper-dir.sh
+source "$SCRIPT_DIR/wallpaper-dir.sh"
+# shellcheck source=theme-assets.sh
+source "$SCRIPT_DIR/theme-assets.sh"
 
 if [ -z "$THEME" ]; then
     echo -e "${YELLOW}Usage: $0 <theme-name>${NC}"
@@ -20,52 +27,30 @@ if [ ! -d "$THEME_DIR" ]; then
     exit 1
 fi
 
-# Track current theme
 CURRENT_THEME_FILE="$HOME/.config/colorschemes/.current-theme"
 echo "$THEME" >"$CURRENT_THEME_FILE"
+rm -f "$HOME/.config/colorschemes/.use-preset-colors" 2>/dev/null || true
 
 echo -e "${GREEN}Applying theme: $THEME${NC}\n"
 notify-send "Theme Switching" "Applying theme: $THEME" -t 3000
 
-# Spotify theme
-echo -e "${CYAN}-> Applying Spotify theme...${NC}"
-spicetify config color_scheme $THEME
-spicetify refresh
-echo ""
-
-# Hyprland config
-echo -e "${CYAN}-> Updating Hyprland configuration...${NC}"
-cp "$THEME_DIR/hypr/colors.conf" "$HOME/.config/hypr/colors/colors.conf" >/dev/null 2>&1
-echo ""
-
-# Waybar style
-echo -e "${CYAN}-> Applying Waybar CSS...${NC}"
-cp "$THEME_DIR/waybar/colors.css" "$HOME/.config/waybar/colors/colors.css" >/dev/null 2>&1
-echo -e "${CYAN}-> Restarting Waybar...${NC}"
-pkill waybar >/dev/null 2>&1 && ~/.config/waybar/scripts/launch.sh >/dev/null 2>&1 &
-disown
-echo ""
-
-# Wallpaper
-echo -e "${CYAN}-> Setting wallpaper...${NC}"
-WALLPAPER_DIR="$THEME_DIR/wallpapers"
-
-# Create state file if it doesn't exist
+# Resolve wallpaper first (display only — colors come from static theme seed)
+echo -e "${CYAN}-> Resolving wallpaper...${NC}"
+WALLPAPER_DIR="$(resolve_wallpaper_dir "$THEME")"
 touch "$WALLPAPER_STATE"
-
-# Get saved wallpaper for this theme
 SAVED_WALLPAPER=$(grep "^$THEME:" "$WALLPAPER_STATE" | cut -d':' -f2-)
 
-if [ -n "$SAVED_WALLPAPER" ] && [ -f "$SAVED_WALLPAPER" ]; then
-    # Use saved wallpaper
+if [ -n "$WALLPAPER_OVERRIDE" ] && [ -f "$WALLPAPER_OVERRIDE" ]; then
+    WALLPAPER="$WALLPAPER_OVERRIDE"
+    sed -i "/^$THEME:/d" "$WALLPAPER_STATE"
+    echo "$THEME:$WALLPAPER" >>"$WALLPAPER_STATE"
+    echo -e "${CYAN}   Using selected wallpaper${NC}"
+elif [ -n "$SAVED_WALLPAPER" ] && [ -f "$SAVED_WALLPAPER" ]; then
     WALLPAPER="$SAVED_WALLPAPER"
     echo -e "${CYAN}   Using saved wallpaper${NC}"
-elif [ -d "$WALLPAPER_DIR" ]; then
-    # Get first wallpaper from directory (sorted alphabetically)
-    WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | sort | head -n1)
-
+elif [ -n "$WALLPAPER_DIR" ] && [ -d "$WALLPAPER_DIR" ]; then
+    WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort | head -n1)
     if [ -n "$WALLPAPER" ]; then
-        # Save this as the default for this theme
         sed -i "/^$THEME:/d" "$WALLPAPER_STATE"
         echo "$THEME:$WALLPAPER" >>"$WALLPAPER_STATE"
         echo -e "${CYAN}   Using first wallpaper (default)${NC}"
@@ -73,19 +58,11 @@ elif [ -d "$WALLPAPER_DIR" ]; then
         echo -e "${YELLOW}   No wallpapers found in $WALLPAPER_DIR${NC}"
     fi
 else
-    echo -e "${YELLOW}   Wallpaper directory not found: $WALLPAPER_DIR${NC}"
-fi
-
-if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
-    awww img "$WALLPAPER" >/dev/null 2>&1
-    # Also update hyprlock symlink
-    ln -sf "$WALLPAPER" ~/.config/hypr/hyprlock/wallpaper >/dev/null 2>&1
-else
-    echo -e "${YELLOW}   Could not set wallpaper${NC}"
+    echo -e "${YELLOW}   Wallpaper directory not found${NC}"
 fi
 echo ""
 
-# GTK Theme
+# GTK window theme from ~/.themes
 if [ -f "$THEME_DIR/gtk-theme" ]; then
     GTK_THEME_NAME=$(cat "$THEME_DIR/gtk-theme")
     echo -e "${CYAN}-> Setting GTK theme to '$GTK_THEME_NAME'...${NC}"
@@ -109,63 +86,41 @@ else
 fi
 echo ""
 
-# Terminal theme
-echo -e "${CYAN}-> Applying terminal theme...${NC}"
-case "$THEME" in
-everforest-dark | gruvbox-dark | catppuccin | tokyo-night | kanagawa | nord-darker | noir | e-ink | nightfox | rose-pine)
-    cp "$THEME_DIR/kitty/colors.conf" "$HOME/.config/kitty/colors/colors.conf" >/dev/null 2>&1
-    ;;
-*)
-    echo -e "${YELLOW}-> No terminal theme defined for $THEME. Skipping.${NC}"
-    ;;
-esac
-pgrep kitty | xargs -r kill -SIGUSR1 >/dev/null 2>&1
-echo ""
-
-# Dunst — colors come from matugen dunstrc
-#echo -e "${CYAN}-> Restarting Dunst...${NC}"
-#pkill dunst > /dev/null 2>&1 && dunst > /dev/null 2>&1 & disown
-#echo ""
-
-# wlogout theme
-echo -e "${CYAN}-> Applying wlogout theme...${NC}"
-cp "$THEME_DIR/wlogout/colors.css" "$HOME/.config/wlogout/colors/colors.css" >/dev/null 2>&1
-echo ""
-
-# Rofi colors — active path: ~/.config/rofi/colors.rasi (imported by shared/standard.rasi)
-echo -e "${CYAN}-> Applying Rofi theme...${NC}"
-if [[ -f "$THEME_DIR/rofi/colors.rasi" ]]; then
-    rofi_src=""
-    if grep -q '@theme' "$THEME_DIR/rofi/colors.rasi" 2>/dev/null; then
-        rofi_src=$(grep '@theme' "$THEME_DIR/rofi/colors.rasi" | head -1 | sed -E 's/.*"([^"]+)".*/\1/' | sed "s|^~|$HOME|")
-    fi
-    if [[ -n "$rofi_src" && -f "$rofi_src" ]]; then
-        cp "$rofi_src" "$HOME/.config/rofi/colors.rasi" >/dev/null 2>&1
-    else
-        cp "$THEME_DIR/rofi/colors.rasi" "$HOME/.config/rofi/colors.rasi" >/dev/null 2>&1
-    fi
+# Matugen: seed from static theme palette, not wallpaper pixels
+SOURCE_HEX="$(get_source_color "$THEME")"
+echo -e "${CYAN}-> Running matugen from static theme seed ($SOURCE_HEX)...${NC}"
+if bash "$SCRIPT_DIR/apply-preset-matugen.sh" "$THEME" "${WALLPAPER:-}"; then
+    echo -e "${CYAN}   Matugen templates updated${NC}"
+else
+    echo -e "${YELLOW}   Matugen failed — some app colors may be stale${NC}"
 fi
 echo ""
 
-# NvChad theme
-#echo -e "${CYAN}-> Applying NvChad theme...${NC}"
-#cp "$THEME_DIR/nvim/lua/chadrc.lua" "$HOME/.config/nvim/lua/chadrc.lua" > /dev/null 2>&1
-#echo -e "${CYAN}-> Theme will auto-reload in Neovim (within 2 seconds)${NC}"
-#echo ""
+# Wallpaper (visual only; already palette-matched on disk)
+if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
+    echo -e "${CYAN}-> Setting wallpaper...${NC}"
+    APPLY_MONITOR="all"
+    if [[ -f "$HOME/.config/colorschemes/.wallpaper-monitor" ]]; then
+        APPLY_MONITOR=$(cat "$HOME/.config/colorschemes/.wallpaper-monitor")
+        [[ -z "$APPLY_MONITOR" ]] && APPLY_MONITOR="all"
+    fi
+    bash "$SCRIPT_DIR/awww-wallpaper.sh" "$WALLPAPER" "$APPLY_MONITOR" >/dev/null 2>&1
+else
+    echo -e "${YELLOW}-> Could not set wallpaper${NC}"
+fi
+echo ""
 
-# VSCodium theme
+# VSCodium theme (not handled by matugen)
 if [ -f "$THEME_DIR/vscodium-theme" ]; then
     VSCODIUM_THEME=$(cat "$THEME_DIR/vscodium-theme")
     VSCODIUM_SETTINGS="$HOME/.config/VSCodium/User/settings.json"
 
     echo -e "${CYAN}-> Setting VSCodium theme to '$VSCODIUM_THEME'...${NC}"
 
-    # Use jq if available for robust JSON manipulation
     if command -v jq >/dev/null 2>&1; then
         tmpfile=$(mktemp)
         jq --arg theme "$VSCODIUM_THEME" '.["workbench.colorTheme"] = $theme' "$VSCODIUM_SETTINGS" >"$tmpfile" && mv "$tmpfile" "$VSCODIUM_SETTINGS"
     else
-        # Fallback: naive sed replacement
         sed -i "s/\"workbench.colorTheme\": \".*\"/\"workbench.colorTheme\": \"$VSCODIUM_THEME\"/" "$VSCODIUM_SETTINGS"
     fi
 else
@@ -173,10 +128,4 @@ else
 fi
 echo ""
 
-# Discord theme
-#echo -e "${CYAN}-> Applying Discord theme...${NC}"
-#cp "$THEME_DIR/discord/current.theme.css" "$HOME/.config/vesktop/themes/" > /dev/null 2>&1
-#echo ""
-
-# Final success notification
 notify-send "Theme Applied" "Successfully switched to: $THEME" -t 5000

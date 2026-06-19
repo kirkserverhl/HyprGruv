@@ -1,0 +1,46 @@
+/* Base16 palette reference — shades (00–07) | accents (08–0f) */
+
+configuration {
+    show-icons: true;
+    font:       "Agave Nerd Font Propo 14";
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/fuzzel-chrome.rasi"
+
+window {
+    width: 580px;
+}
+
+mainbox {
+    padding:  6px;
+    children: ["listview"];
+}
+
+listview {
+    columns:       2;
+    fixed-columns: true;
+    lines:         8;
+    spacing:       2px;
+    padding:       2px;
+    scrollbar:     false;
+}
+
+element {
+    padding: 4px 6px;
+    margin:  0px;
+}
+
+element-icon {
+    size:   40px;
+    margin: 0px 8px 0px 0px;
+}
+
+element-text {
+    enabled: true;
+    vertical-align: 0.5;
+}
+
+inputbar {
+    enabled: false;
+}

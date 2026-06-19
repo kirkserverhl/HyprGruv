@@ -17,11 +17,7 @@ mainbox {
 }
 
 inputbar {
-    children: ["prompt", "entry"];
-}
-
-prompt {
-    text-color: @prompt-color;
+    children: ["textbox-prompt-colon", "entry"];
 }
 
 entry {

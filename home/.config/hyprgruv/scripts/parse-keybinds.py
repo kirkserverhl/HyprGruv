@@ -71,6 +71,7 @@ def humanize_command(cmd: str) -> str:
         "fuzzel-full.sh": "Full app launcher",
         "fuzzel-keybinds.sh": "Keybind reference menu",
         "terminal.sh": "Open terminal",
+        "dev-workspace.sh": "Open dev tmux workspace",
         "hyprshot.sh": "Screenshot menu",
         "quickshot.sh": "Quick screenshot to clipboard",
         "cliphist.sh": "Clipboard history",

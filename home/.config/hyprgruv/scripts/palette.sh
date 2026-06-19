@@ -158,16 +158,20 @@ while true; do
             MODE="--mode dark"
             TYPE="--type scheme-tonal-spot"
             LABEL="Dark (Standard)"
+            rm -f "$HOME/.cache/matugen/force-monochrome" 2>/dev/null || true
             ;;
         "Dark - Vibrant")
             MODE="--mode dark"
             TYPE="--type scheme-vibrant"
             LABEL="Dark - Vibrant"
+            rm -f "$HOME/.cache/matugen/force-monochrome" 2>/dev/null || true
             ;;
         "Dark - Monochrome")
             MODE="--mode dark"
             TYPE="--type scheme-monochrome"
             LABEL="Dark - Monochrome"
+            mkdir -p "$HOME/.cache/matugen"
+            touch "$HOME/.cache/matugen/force-monochrome"
             ;;
         *)
             echo "Unknown option"
@@ -241,7 +245,25 @@ while true; do
         if [[ -z "$key" ]]; then
             swatch=$(color_swatch "$SRC")
             echo "Applying $LABEL   ${swatch}  $SRC ..."
-            mkdir -p "$HOME/.cache/wal" 2>/dev/null || true
+            mkdir -p "$HOME/.cache/wal" "$HOME/.cache/matugen" 2>/dev/null || true
+
+            MATUGEN_MODE="${MODE#--mode }"
+            MATUGEN_TYPE="${TYPE#--type }"
+            jq -n \
+                --arg wp "$WALLPAPER" \
+                --arg method "hex" \
+                --arg mode "$MATUGEN_MODE" \
+                --arg type "$MATUGEN_TYPE" \
+                --arg source_hex "$SRC" \
+                --argjson source_index 0 \
+                '{
+                    wallpaper: $wp,
+                    method: $method,
+                    mode: $mode,
+                    type: $type,
+                    source_hex: $source_hex,
+                    source_index: $source_index
+                }' >"$HOME/.cache/matugen/pending-run.json"
 
             # Run matugen. We no longer trust its exit code blindly because
             # secondary templates (pywalfox/wal) can complain even when the

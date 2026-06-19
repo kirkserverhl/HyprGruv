@@ -15,7 +15,7 @@ fi
 
 selected=$(
     printf '%s\n' "${entries[@]}" |
-        fuzzel -d \
+        fuzzel -n fuzzel -d \
             --prompt="⌨  " \
             --width=52 \
             --lines=18 \

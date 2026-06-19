@@ -1,12 +1,7 @@
 #!/bin/bash
-# macOS-style (SUPER/Cmd) → Ctrl+letter translation for Hyprland 0.55+ Lua config.
-# Uses hl.dsp.send_shortcut via hyprctl (old "sendshortcut CTRL, C," syntax is dead).
-#
-# Usage:
-#   mac-shortcut.sh copy     # Super+C → Ctrl+C (Ctrl+Shift+C in terminals)
-#   mac-shortcut.sh paste    # Super+V → Ctrl+V (Ctrl+Shift+V in terminals)
-#   mac-shortcut.sh cut      # Super+X → Ctrl+X
-#   mac-shortcut.sh undo     # Super+Z → Ctrl+Z
+# Minimal Mac Cmd bridge (lowest-priority layer). Sends Ctrl+* to the focused app.
+# Super+C/V/X/Z/A and Super+Shift+B/I/K in Hyprland map here.
+# Press Ctrl directly anytime — this is additive, not required.
 
 set -euo pipefail
 
@@ -56,18 +51,21 @@ case "$action" in
     undo|z)
         send_shortcut "CTRL" "Z"
         ;;
-    i)
+    select-all|a)
+        send_shortcut "CTRL" "A"
+        ;;
+    bold|b)
+        send_shortcut "CTRL" "B"
+        ;;
+    italic|i)
         send_shortcut "CTRL" "I"
         ;;
-    u)
-        send_shortcut "CTRL" "U"
-        ;;
-    k)
+    link|k)
         send_shortcut "CTRL" "K"
         ;;
     *)
         echo "Unknown mac-shortcut action: $action" >&2
-        echo "Known: copy|c, paste|v, cut|x, undo|z, i, u, k" >&2
+        echo "Known: copy|c paste|v cut|x undo|z select-all|a bold|b italic|i link|k" >&2
         exit 1
         ;;
 esac

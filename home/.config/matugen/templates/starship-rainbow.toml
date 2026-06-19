@@ -47,29 +47,26 @@ $line_break$character"""
 palette = 'matugen'
 
 # =============================================================================
-# Dynamic Palette from Matugen (Material You)
+# Dynamic Palette — Base16 semantic slots (Material You sources)
+# Rainbow segment names follow gruvbox-rainbow layout; hues come from base09–0F.
 # =============================================================================
 [palettes.matugen]
-# Core neutrals
-color_fg0 = '{{colors.on_surface.default.hex}}'
-color_bg1 = '{{colors.surface_container.default.hex}}'
-color_bg3 = '{{colors.surface_container_high.default.hex}}'
+color_fg0 = '{{colors.on_surface.dark.hex}}'              # base05
+color_bg1 = '{{colors.surface_container.dark.hex}}'       # base02
+color_bg3 = '{{colors.surface_container_low.dark.hex}}'   # base01
 
-# Rainbow powerline segments (chosen for hue variety across most wallpapers)
-color_orange = '{{colors.primary.default.hex}}'
-color_yellow = '{{colors.tertiary.default.hex}}'
-color_aqua   = '{{colors.secondary.default.hex}}'
-color_blue   = '{{colors.primary_container.default.hex}}'
+color_orange = '{{colors.tertiary.dark.hex}}'             # base09 — orange slot
+color_yellow = '{{colors.secondary.dark.hex}}'            # base0A — yellow slot
+color_aqua   = '{{colors.tertiary_container.dark.hex}}'   # base0C — cyan slot
+color_blue   = '{{colors.source_color.dark.hex}}'         # base0F — gruv teal / blue slot
 
-# Proper contrast text colors for the vivid accent segments
-color_on_orange = '{{colors.on_primary.default.hex}}'
-color_on_yellow = '{{colors.on_tertiary.default.hex}}'
-color_on_aqua   = '{{colors.on_secondary.default.hex}}'
+color_on_orange = '{{colors.surface_container_lowest.dark.hex}}'
+color_on_yellow = '{{colors.surface_container_lowest.dark.hex}}'
+color_on_aqua   = '{{colors.surface_container_lowest.dark.hex}}'
 
-# Special states (character) — using only core roles that are always present
-color_green  = '{{colors.secondary.default.hex}}'
-color_red    = '{{colors.error.default.hex}}'
-color_purple = '{{colors.tertiary.default.hex}}'
+color_green  = '{{colors.primary.dark.hex}}'              # base0B — accent / prompt arrow
+color_red    = '{{colors.error.dark.hex}}'                # base08
+color_purple = '{{colors.secondary_container.dark.hex}}'  # base0E
 
 # =============================================================================
 # OS Segment

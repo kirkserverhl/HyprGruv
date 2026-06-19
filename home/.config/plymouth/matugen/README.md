@@ -4,7 +4,7 @@ This is the source template for a dynamic Plymouth boot splash that pulls colors
 
 ## How it works
 
-- `update-plymouth-theme.sh` (called automatically from the matugen post-hook) reads your latest `~/.cache/matugen/current.json`
+- `update-plymouth-theme.sh` (manual / opt-in only) reads your latest `~/.cache/matugen/current.json`
 - It substitutes the colors into copies of these files and installs them to `/usr/share/plymouth/themes/matugen/`
 - It then activates the theme and rebuilds the initramfs
 

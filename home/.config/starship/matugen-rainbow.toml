@@ -47,29 +47,26 @@ $line_break$character"""
 palette = 'matugen'
 
 # =============================================================================
-# Dynamic Palette from Matugen (Material You)
+# Dynamic Palette — Base16 semantic slots (Material You sources)
+# Rainbow segment names follow gruvbox-rainbow layout; hues come from base09–0F.
 # =============================================================================
 [palettes.matugen]
-# Core neutrals
-color_fg0 = '#e5e1e9'
-color_bg1 = '#201f25'
-color_bg3 = '#2a292f'
+color_fg0 = '#dde4e3'              # base05
+color_bg1 = '#1a2121'       # base02
+color_bg3 = '#161d1d'   # base01
 
-# Rainbow powerline segments (chosen for hue variety across most wallpapers)
-color_orange = '#c7bfff'
-color_yellow = '#ecb8ce'
-color_aqua   = '#c8c3dc'
-color_blue   = '#463f77'
+color_orange = '#b5c7e9'             # base09 — orange slot
+color_yellow = '#b1cccd'            # base0A — yellow slot
+color_aqua   = '#364764'   # base0C — cyan slot
+color_blue   = '#458588'         # base0F — gruv teal / blue slot
 
-# Proper contrast text colors for the vivid accent segments
-color_on_orange = '#2f295f'
-color_on_yellow = '#482537'
-color_on_aqua   = '#302e41'
+color_on_orange = '#090f10'
+color_on_yellow = '#090f10'
+color_on_aqua   = '#090f10'
 
-# Special states (character) — using only core roles that are always present
-color_green  = '#c8c3dc'
-color_red    = '#ffb4ab'
-color_purple = '#ecb8ce'
+color_green  = '#80d4d8'              # base0B — accent / prompt arrow
+color_red    = '#ffb4ab'                # base08
+color_purple = '#324b4c'  # base0E
 
 # =============================================================================
 # OS Segment

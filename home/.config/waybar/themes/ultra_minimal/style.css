@@ -30,8 +30,8 @@ window#waybar {
 }
 
 #workspaces button.active {
-  background-color: #e8eaed;
-  color: #121212;
+  background-color: @base02;
+  color: @base05;
   border-radius: 100px;
   padding: 0px 20px 0px 20px;
 }
@@ -41,8 +41,8 @@ window#waybar {
 }
 
 #clock {
-  background-color: #e8eaed;
-  color: #121212;
+  background-color: @surface_bright;
+  color: @background;
   padding: 2px 10px;
   margin: 4px 0 4px 0;
   border-radius: 3px;
@@ -51,14 +51,14 @@ window#waybar {
 #custom-special {
   margin-left: 8px;
   padding: 0 8px;
-  color: #e8eaed;
+  color: @on_surface;
   opacity: 0.85;
   transition: all 0.2s ease-in-out;
 }
 
 #custom-special.active {
-  background-color: #e8eaed;
-  color: #121212;
+  background-color: @surface_bright;
+  color: @background;
   border-radius: 100px;
   padding: 0 12px;
   opacity: 1;

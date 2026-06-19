@@ -8,7 +8,7 @@
      • Single source of truth font (edit ~/.config/settings/fonts.sh then run apply-fonts.sh)
      • Shared border width (2px, matches fuzzel)
 
-   For full fuzzel-like chrome (live blur, no wallpaper image), also import:
+   For waypaper-matched panel chrome (live blur, same transparency), also import:
      @import "~/.config/rofi/shared/fuzzel-chrome.rasi"
 ============================================================================= */
 

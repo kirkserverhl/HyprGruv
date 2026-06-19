@@ -34,7 +34,7 @@ window#waybar {
 /* --- Tooltip settings --- */
 tooltip {
   background: @background;
-  border: 2px solid @primary;
+  border: 2px solid @accent;
   border-radius: 12px;
 }
 
@@ -92,7 +92,7 @@ tooltip-label {
 #workspaces button {
   all: unset;
   padding: 0px 5px;
-  color: alpha(@primary, 0.4);
+  color: @muted;
   transition: all 0.2s ease;
 }
 
@@ -104,9 +104,11 @@ tooltip-label {
 }
 
 #workspaces button.active {
-  color: @primary;
+  color: @base05;
+  background-color: @base02;
   border: none;
-  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  text-shadow: none;
 }
 
 #workspaces button.empty {
@@ -123,9 +125,11 @@ tooltip-label {
 }
 
 #workspaces button.empty.active {
-  color: @on_surface;
+  color: @base05;
+  background-color: @base02;
   border: none;
-  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  text-shadow: none;
 }
 
 #custom-special {
@@ -135,7 +139,7 @@ tooltip-label {
 }
 
 #custom-special.active {
-  color: @primary;
+  color: @accent;
   text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 }
 

@@ -17,35 +17,41 @@
 #           the full set of manual steps you still need (mkinitcpio,
 #           GRUB cmdline, etc.).
 #
-# The script is intentionally safe to call even if Plymouth is not
-
-# --- Load your existing helpers for consistent look ---
-source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
-
 # installed yet — it will just warn.
 # ===================================================================
 
 set -euo pipefail
 
-# --- Self-reexec with privileges if needed (same pattern as SDDM script) ---
+SUDOERS_MARKER="/etc/sudoers.d/99-plymouth-theme-${USER}"
+ENABLE_FILE="${HOME}/.config/settings/plymouth-matugen-sync"
+
+# Silent no-op for any automatic caller (legacy post-hooks, etc.).
+if [ "${MATUGEN_AUTO_HOOK:-0}" = "1" ] || [ "${PLYMOUTH_QUIET:-0}" = "1" ]; then
+    exit 0
+fi
+
+# --- Self-reexec with privileges only when passwordless sudo is configured ---
 maybe_elevate() {
     if [ "$EUID" -eq 0 ]; then
         return 0
     fi
 
-    SUDOERS_MARKER="/etc/sudoers.d/99-plymouth-theme-${USER}"
-
     if [ -f "$SUDOERS_MARKER" ]; then
         exec sudo -n -- "$0" "$@"
     fi
 
-    if command -v pkexec >/dev/null 2>&1; then
-        exec pkexec "$0" "$@"
-    else
-        exec sudo "$0" "$@"
+    if [ "${1:-}" = "--setup" ]; then
+        echo "Run with sudo for one-time setup: sudo $0 --setup" >&2
+        exit 1
     fi
+
+    echo "Plymouth theme sync skipped (run once: $0 --setup)" >&2
+    exit 0
 }
+
+# --- Load helpers after quiet/auto exits ---
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
+source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
 
 if [ "${1:-}" = "--setup" ]; then
     SUDOERS_FILE="/etc/sudoers.d/99-plymouth-theme-${USER}"
@@ -108,12 +114,6 @@ INSTRUCTIONS
     shift
 fi
 
-if [ "$EUID" -ne 0 ]; then
-    maybe_elevate "$@"
-fi
-
-# --- Now running as root (or with NOPASSWD) ---
-
 if ! command -v plymouth >/dev/null 2>&1; then
     echo "Plymouth is not installed. Run this first:"
     echo "    sudo pacman -S plymouth"
@@ -121,6 +121,17 @@ if ! command -v plymouth >/dev/null 2>&1; then
     echo "    $0 --setup"
     exit 0
 fi
+
+if [ ! -f "$ENABLE_FILE" ]; then
+    echo "Plymouth auto-sync is off. Enable with: touch $ENABLE_FILE" >&2
+    exit 0
+fi
+
+if [ "$EUID" -ne 0 ]; then
+    maybe_elevate "$@"
+fi
+
+# --- Now running as root (or with NOPASSWD) ---
 
 # --- Resolve source colors from matugen ---
 JSON_CACHE="$HOME/.cache/matugen/current.json"

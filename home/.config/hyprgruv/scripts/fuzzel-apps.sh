@@ -23,4 +23,4 @@ link_icon_theme "${USER_ICONS}/hicolor" "${HOME}/.local/share/icons/hicolor"
 export XDG_DATA_HOME="${FUZZEL_CONFIG}/apps-menu"
 export XDG_DATA_DIRS="${FUZZEL_CONFIG}/icon-lookup:${FUZZEL_CONFIG}/user-icon-lookup"
 
-exec fuzzel "$@"
+exec fuzzel -n fuzzel "$@"

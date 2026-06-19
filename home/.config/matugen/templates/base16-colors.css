@@ -1,0 +1,48 @@
+/* Matugen Base16 palette — derived from Material You roles */
+/*
+ * 00-07 shades (darkest → brightest):
+ *   00  darkest background
+ *   01  slightly lighter background, inactive borders
+ *   02  selection highlight, active workspace
+ *   03  muted text / comments / subtle chrome
+ *   04  status bars / dim foreground
+ *   05  default text
+ *   06  light foreground
+ *   07  bright highlights
+ * 08-0f accents:
+ *   08  red / errors / urgent notifications
+ *   0D  accent (primary actions, highlights)
+ */
+
+@define-color base00 {{colors.surface_container_lowest.dark.hex}};
+@define-color base01 {{colors.surface_container_low.dark.hex}};
+@define-color base02 {{colors.surface_container.dark.hex}};
+@define-color base03 {{colors.outline_variant.dark.hex}};
+@define-color base04 {{colors.on_surface_variant.dark.hex}};
+@define-color base05 {{colors.on_surface.dark.hex}};
+@define-color base06 {{colors.inverse_on_surface.dark.hex}};
+@define-color base07 {{colors.surface_bright.dark.hex}};
+
+@define-color base08 {{colors.error.dark.hex}};
+@define-color base09 {{colors.tertiary.dark.hex}};
+@define-color base0A {{colors.secondary.dark.hex}};
+@define-color base0B {{colors.primary.dark.hex}};
+@define-color base0C {{colors.tertiary_container.dark.hex}};
+@define-color base0D {{colors.primary.dark.hex}};
+@define-color base0E {{colors.secondary_container.dark.hex}};
+@define-color base0F {{colors.source_color.dark.hex}};
+
+@define-color background @base00;
+@define-color foreground @base05;
+@define-color primary @base0D;
+@define-color accent @base0D;
+@define-color accent_fg @base00;
+@define-color on_primary @base00;
+@define-color secondary @base0E;
+@define-color tertiary @base09;
+@define-color muted @base03;
+@define-color error @base08;
+@define-color urgent @base08;
+@define-color on_urgent @base00;
+@define-color surface @base00;
+@define-color on_surface @base05;

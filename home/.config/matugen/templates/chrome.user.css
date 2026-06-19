@@ -1,12 +1,20 @@
-/* Matugen Dynamic Chrome Theme */
+/* Matugen Dynamic Chrome Theme — Base16 + legacy Material exports */
 
 :root {
-    /* Hex colors */
+    /* Base16 palette */
+    <* for name, value in base16 *>
+    --{{ name }}: {{ value.dark.hex }};
+    <* endfor *>
+
+    <* for name, value in base16 *>
+    --{{ name }}-rgb: {{ value.dark.red }} {{ value.dark.green }} {{ value.dark.blue }};
+    <* endfor *>
+
+    /* Legacy Material roles */
     <* for name, value in colors *>
     --matugen-{{name}}: {{value.default.hex}};
     <* endfor *>
 
-    /* RGB values (great for transparency) */
     <* for name, value in colors *>
     --matugen-{{name}}-rgb: {{value.default.red}} {{value.default.green}} {{value.default.blue}};
     <* endfor *>

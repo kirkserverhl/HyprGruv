@@ -126,26 +126,28 @@ function M.load()
     colors.bg1 = normalize_color(colors.bg1 or colors.surface_container, "rgb(201f25)")
     colors.fg  = normalize_color(colors.fg  or colors.on_background,     "rgb(e5e1e9)")
 
-    -- Hyprbars buttons — directly pulled from the Starship matugen design structure.
-    -- Mapping chosen to match classic traffic-light semantics while staying consistent
-    -- with the rainbow palette you use in Starship + Waybar:
-    --   close    ← color_red    (error / destructive)
-    --   minimize ← color_yellow (caution / tertiary)
-    --   maximize ← color_green  (positive / secondary tone)
+    -- Hyprbars buttons — left-to-right matches starship / waybar rainbow chain:
+    --   close (✕) → color_orange | float (⧉) → color_yellow | maximize (+) → color_aqua
     local function to_rgb(hex)
         if not hex then return nil end
         local h = hex:gsub("^#", "")
         return "rgb(" .. h .. ")"
     end
 
-    -- Hyprbars buttons — matugen semantic roles (subtle, wallpaper-aware)
-    colors.hyprbar_close    = normalize_color(colors.error     or to_rgb(starship.color_red),   "rgb(ffb4ab)")
-    colors.hyprbar_minimize = normalize_color(colors.secondary or to_rgb(starship.color_aqua) or to_rgb(starship.color_yellow), "rgb(c6c6c6)")
-    colors.hyprbar_maximize = normalize_color(colors.tertiary    or to_rgb(starship.color_green), "rgb(e2e2e2)")
+    local function starship_color(key, matugen_fallback, hard_fallback)
+        if starship[key] then
+            return normalize_color(to_rgb(starship[key]), hard_fallback)
+        end
+        return normalize_color(matugen_fallback, hard_fallback)
+    end
 
-    colors.hyprbar_close_fg    = normalize_color(colors.on_error    or colors.on_background, "rgb(690005)")
-    colors.hyprbar_minimize_fg = normalize_color(colors.on_secondary  or colors.on_background, "rgb(1b1b1b)")
-    colors.hyprbar_maximize_fg = normalize_color(colors.on_tertiary   or colors.on_background, "rgb(1b1b1b)")
+    colors.hyprbar_close    = starship_color("color_orange", colors.base09 or colors.tertiary, "rgb(bdc5eb)")
+    colors.hyprbar_minimize = starship_color("color_yellow", colors.yellow or colors.base0A, "rgb(b2cbd1)")
+    colors.hyprbar_maximize = starship_color("color_aqua",   colors.primary_container or colors.base0C, "rgb(3d4565)")
+
+    colors.hyprbar_close_fg    = starship_color("color_on_orange", colors.on_background or colors.bg, "rgb(090f11)")
+    colors.hyprbar_minimize_fg = starship_color("color_on_yellow", colors.on_background or colors.bg, "rgb(090f11)")
+    colors.hyprbar_maximize_fg = starship_color("color_on_aqua",   colors.on_background or colors.bg, "rgb(090f11)")
 
     return colors
 end

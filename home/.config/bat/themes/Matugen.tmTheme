@@ -10,19 +10,18 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#13140c</string>
+				<string>#090f10</string>
 				<key>foreground</key>
-				<string>#e5e3d6</string>
+				<string>#dde4e3</string>
 				<key>caret</key>
-				<string>#c6cc7a</string>
+				<string>#80d4d8</string>
 				<key>lineHighlight</key>
-				<string>#202018</string>
+				<string>#161d1d</string>
 				<key>selection</key>
-				<string>#454a03</string>
+				<string>#1a2121</string>
 			</dict>
 		</dict>
 
-		<!-- Comments -->
 		<dict>
 			<key>name</key>
 			<string>Comment</string>
@@ -31,13 +30,12 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#c8c7b7</string>
+				<string>#3f4949</string>
 				<key>fontStyle</key>
 				<string>italic</string>
 			</dict>
 		</dict>
 
-		<!-- Strings -->
 		<dict>
 			<key>name</key>
 			<string>String</string>
@@ -46,11 +44,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#a3d0c0</string>
+				<string>#80d4d8</string>
 			</dict>
 		</dict>
 
-		<!-- Keywords -->
 		<dict>
 			<key>name</key>
 			<string>Keyword</string>
@@ -59,13 +56,12 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#c6cc7a</string>
+				<string>#324b4c</string>
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
 		</dict>
 
-		<!-- Functions -->
 		<dict>
 			<key>name</key>
 			<string>Function</string>
@@ -74,11 +70,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#c8c9a6</string>
+				<string>#80d4d8</string>
 			</dict>
 		</dict>
 
-		<!-- Types / Classes -->
 		<dict>
 			<key>name</key>
 			<string>Type</string>
@@ -87,11 +82,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#a3d0c0</string>
+				<string>#b1cccd</string>
 			</dict>
 		</dict>
 
-		<!-- Constants -->
 		<dict>
 			<key>name</key>
 			<string>Constant</string>
@@ -100,11 +94,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#ffb4ab</string>
+				<string>#b5c7e9</string>
 			</dict>
 		</dict>
 
-		<!-- Numbers -->
 		<dict>
 			<key>name</key>
 			<string>Number</string>
@@ -113,11 +106,10 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#c8c9a6</string>
+				<string>#b5c7e9</string>
 			</dict>
 		</dict>
 
-		<!-- Operators -->
 		<dict>
 			<key>name</key>
 			<string>Operator</string>
@@ -126,7 +118,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#e5e3d6</string>
+				<string>#dde4e3</string>
 			</dict>
 		</dict>
 	</array>

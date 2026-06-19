@@ -56,23 +56,6 @@ ensure_zsh() {
     fi
 }
 
-# --- Ensure 'sddm' is installed (handles SKIP_PACKAGES or partial runs) ---
-ensure_sddm() {
-    if pacman -Qq sddm &>/dev/null; then return 0; fi
-    log_status "sddm not found. Installing…"
-    if command -v yay >/dev/null 2>&1; then
-        yay -S --needed --noconfirm sddm || {
-            log_error "Failed to install sddm"
-            return 1
-        }
-    else
-        sudo pacman -S --needed --noconfirm sddm || {
-            log_error "Failed to install sddm"
-            return 1
-        }
-    fi
-}
-
 ensure_gum || true
 ensure_zsh || true
 
@@ -158,12 +141,8 @@ done
     exit 1
 }
 
-log_status "Ensuring SDDM is installed..."
-ensure_sddm || true
-
-log_status "Enabling SDDM (greeter) and installing theme..."
-sudo systemctl enable sddm.service || true
-sudo systemctl set-default graphical.target || true
+# SDDM package, enable, and Sugar Candy theme — all in sddm_candy_install.sh
+log_status "Configuring SDDM (display manager + Sugar Candy theme)..."
 bash "$SCRIPTS_DIR/sddm_candy_install.sh" || true
 
 # For VMs we force the GRUB cmdline / boot compatibility tweaks here

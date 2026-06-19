@@ -370,7 +370,7 @@ tmux_conf_theme_clock_style="24"
 #   - false (default)
 #   - disabled
 # on Linux, this requires xsel, xclip or wl-copy
-tmux_conf_copy_to_os_clipboard=false
+tmux_conf_copy_to_os_clipboard=true
 
 
 # -- urlscan -------------------------------------------------------------------
@@ -382,6 +382,46 @@ tmux_conf_urlscan_options="--compact --dedupe"
 # -- user customizations -------------------------------------------------------
 
 # this is the place to override or undo settings
+
+# -- ergonomics (Ctrl-b prefix kept for SSH compatibility) ---------------------
+
+# Kitty sends modern key encodings; required for prefix-less Ctrl+arrow pane nav.
+set -g extended-keys on #!important
+
+# Pane splits: - horizontal (top/bottom), / vertical (left/right).
+# Stock " and % stay available on remote hosts without this config.
+bind / split-window -h #!important
+unbind _ #!important
+
+# Fast pane switching without prefix (local-only; does not affect remote tmux).
+# Alt+hjkl is not a tmux convention — use Ctrl+arrows; vim keys stay on Ctrl-b h/j/k/l.
+unbind -n M-Left #!important
+unbind -n M-Right #!important
+unbind -n M-Up #!important
+unbind -n M-Down #!important
+bind -n C-Left  select-pane -L #!important
+bind -n C-Right select-pane -R #!important
+bind -n C-Up    select-pane -U #!important
+bind -n C-Down  select-pane -D #!important
+
+# Vi copy mode; y copies to the system clipboard via wl-copy (Wayland).
+setw -g mode-keys vi #!important
+
+# Quality of life
+set -g mouse on #!important
+set -g history-limit 50000 #!important
+setw -g automatic-rename off #!important
+
+# Drop oh-my-tmux's secondary C-a prefix — stay closer to stock tmux.
+set -gu prefix2 #!important
+unbind C-a #!important
+
+# Resize panes: prefix + Shift + arrow keys (same step as H/J/K/L below).
+# Replaces the default Shift+arrow bindings that only scroll the terminal viewport.
+bind -r S-Up    resize-pane -U 2 #!important
+bind -r S-Down  resize-pane -D 2 #!important
+bind -r S-Left  resize-pane -L 2 #!important
+bind -r S-Right resize-pane -R 2 #!important
 
 # -- matugen (wallpaper-synced colors) -----------------------------------------
 # Defaults used until ~/.config/tmux/generated.conf exists (written by matugen).
@@ -415,24 +455,6 @@ setw -g window-status-current-format "#[fg=#{@thm_bg},bg=#{@thm_primary},bold] #
 set -g pane-border-style "fg=#{@thm_outline},bg=default" #!important
 set -g pane-active-border-style "fg=#{@thm_primary},bg=default" #!important
 
-# increase history size
-#set -g history-limit 10000
-
-# start with mouse mode enabled
-#set -g mouse on
-
-# force Vi mode
-#   really you should export VISUAL or EDITOR environment variable, see manual
-#set -g status-keys vi
-#set -g mode-keys vi
-
-# replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
-# unbind C-b
-# set -g prefix C-a
-# bind C-a send-prefix
-
 # if you don't want Oh my tmux! to alter a binding or a setting, use #!important
 # bind c new-window -c '#{pane_current_path}' #!important
 
@@ -450,8 +472,9 @@ set -g @learning_cheatsheet on
 set-hook -g after-new-session 'run-shell -b "pane=$(tmux list-panes -t #{session_name} -F #{pane_id} | head -1); $HOME/.config/tmux/show-cheatsheet.sh \"$pane\""'
 bind ? run-shell "$HOME/.config/tmux/show-cheatsheet.sh" #!important
 
-# Dev workspace: shell | nvim / yazi (same layout as dev-workspace.sh)
+# Dev workspace: each run creates dev-1, dev-2, … — switch with prefix + s
 bind D run-shell "bash ~/.config/tmux/dev-workspace.sh" #!important
+bind R run-shell "bash ~/.config/tmux/dev-workspace.sh --reset" #!important
 
 
 # -- tpm -----------------------------------------------------------------------

@@ -103,10 +103,15 @@ def main():
         if DEBUG:
             print("[waypaper-wrapper] Using system (unpatched) waypaper", file=sys.stderr)
 
-    # Import the real CLI/GUI entrypoint. Because we (may have) replaced
-    # sys.modules['waypaper.app'], the line inside __main__.py that does
-    #     from waypaper.app import App
-    # will resolve to our patched class.
+    # Hyprland float/blur rules match class ^waypaper$ (same as theme/wallpaper pickers).
+    import gi
+    gi.require_version("Gdk", "3.0")
+    gi.require_version("Gtk", "3.0")
+    from gi.repository import Gdk, GLib, Gtk
+    GLib.set_prgname("waypaper")
+    Gdk.set_program_class("waypaper")
+    Gtk.init(sys.argv if len(sys.argv) > 1 else None)
+
     from waypaper.__main__ import run
     sys.exit(run())
 

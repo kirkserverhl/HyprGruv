@@ -48,8 +48,6 @@ USE_CACHE_FILE="$HOME/.config/settings/wallpaper_cache"
 # BLUR="50x30"
 FORCE_GENERATE=0
 USE_CACHE=0
-GRAYSCALE_THRESHOLD=0.08
-
 # ------------------- Setup -------------------
 mkdir -p "$GENERATED_DIR" "$CACHE_DIR"
 
@@ -64,15 +62,6 @@ if [ -f "$USE_CACHE_FILE" ]; then
 else
     echo ":: Wallpaper cache disabled"
 fi
-
-# ------------------- Grayscale Detection -------------------
-is_mostly_grayscale() {
-    local img="$1"
-    local mean_sat
-    mean_sat=$(magick "$img" -colorspace HSL -channel S -separate -format "%[fx:mean]" info: 2>/dev/null)
-    [ -z "$mean_sat" ] && return 1
-    awk "BEGIN { exit !($mean_sat < $GRAYSCALE_THRESHOLD) }"
-}
 
 # ------------------- Lock Handling -------------------
 if [ -f "$WAYPAPER_LOCK" ]; then

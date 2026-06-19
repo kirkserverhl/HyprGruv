@@ -1,5 +1,5 @@
 /* Top strip in Hyprbars mode — same height as Waybar, matches hyprbars bar_color */
-@import "../../colors/matugen-waybar.css";
+@import "../../shared/base.css";
 
 * {
   font-size: 0;

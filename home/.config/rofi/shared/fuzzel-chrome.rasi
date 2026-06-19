@@ -1,8 +1,11 @@
 /* =============================================================================
-   Fuzzel-matched Rofi chrome
+   Waypaper-matched panel chrome (fuzzel + rofi launchers)
    =============================================================================
-   Semi-transparent matugen surface + primary border/selection.
-   No pre-rendered blurred wallpaper — Hyprland layerrule blur handles the rest.
+   Same matugen surface transparency and blur treatment as waypaper/theme-picker:
+     • window @surface-alpha (90% surface_container_lowest)
+     • search field @entry-surface (85% surface_container_low)
+     • selection @primary / @on-primary (waypaper button hover)
+   Hyprland layerrule blur shows through — no pre-rendered wallpaper.
    Import after shared/standard.rasi; override window width/location per launcher.
 ============================================================================= */
 
@@ -18,16 +21,15 @@ configuration {
     selected:          @primary;
     selected-fg:       @on-primary;
     background-alt:    @surface-container;
-    prompt-color:      @secondary;
-    placeholder-color: @outline;
+    prompt-color:      @on-surface-variant;
+    placeholder-color: @outline-variant;
 }
 
 window {
     spacing:          0px;
     padding:          0px;
     margin:           0px;
-    border:           2px;
-    border-color:     @primary;
+    border:           0px;
     border-radius:    14px;
     background-color: @surface-alpha;
     transparency:     "real";
@@ -47,9 +49,12 @@ mainbox {
 inputbar {
     enabled:          true;
     spacing:          10px;
-    padding:          10px 14px;
-    border-radius:    8px;
-    background-color: transparent;
+    padding:          5px 8px;
+    margin:           0px 4px 6px 4px;
+    border:           1px;
+    border-color:     @outline;
+    border-radius:    6px;
+    background-color: @entry-surface;
     text-color:       @foreground;
     children:         [ "textbox-prompt-colon", "entry" ];
 }
@@ -92,7 +97,7 @@ element {
     margin:           2px 0px;
     cursor:           pointer;
     background-color: transparent;
-    border-radius:    8px;
+    border-radius:    6px;
     border:           0px;
 }
 

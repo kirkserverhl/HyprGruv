@@ -1,0 +1,5 @@
+# Themes shown in the Alt+T switcher (one id per line).
+# Move unused theme folders to ~/.config/colorschemes/unused/ to keep them out of the way.
+catppuccin
+gruvbox-dark
+nord-darker

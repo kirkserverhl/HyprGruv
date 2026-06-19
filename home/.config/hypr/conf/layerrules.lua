@@ -42,7 +42,9 @@ hl.layer_rule({
 })
 
 -- ============================================
--- ROFI (application launcher / menus) + WAYPAPER
+-- LAUNCHER OVERLAYS — slight live blur through semi-transparent surfaces
+-- Rofi + Fuzzel: layer-shell. Waypaper GTK uses decoration blur (same alpha tuning).
+-- Tune via hyprgruv-settings → Blur → per-layer ignore_alpha.
 -- ============================================
 hl.layer_rule({
     name = "rofi-blur",
@@ -54,18 +56,17 @@ hl.layer_rule({
 })
 
 hl.layer_rule({
-    name = "waypaper-blur",
-    match = { namespace = "^waypaper$" },
+    name = "fuzzel-blur",
+    match = { namespace = "^(fuzzel|launcher)$" },
     blur = true,
     blur_popups = true,
     ignore_alpha = 0.10,
     order = 50,
 })
 
--- Fuzzel (app launcher, Super+Space)
 hl.layer_rule({
-    name = "fuzzel-blur",
-    match = { namespace = "^fuzzel$" },
+    name = "waypaper-blur",
+    match = { namespace = "^waypaper$" },
     blur = true,
     blur_popups = true,
     ignore_alpha = 0.10,

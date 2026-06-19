@@ -69,24 +69,8 @@ _section_handoff() {
     hyprgruv_section_transition "$message" "$kind"
 }
 
-# --------------------- SDDM (Sugar Candy) --------------------
-hyprgruv_section_intro "SDDM"
-if systemctl is-enabled sddm.service &>/dev/null; then
-    _section_handoff "SDDM already configured" status
-else
-    if _confirm "  🍬   Install Sugar-Candy SDDM theme?"; then
-        script="$SCRIPTS_DIR/sddm_candy_install.sh"
-        if [[ -f "$script" ]]; then
-            run_step "$script" "Sugar-Candy SDDM Theme"
-            _section_handoff "Sugar-Candy SDDM Theme completed"
-        else
-            log_error "Script not found: $script"
-            exit 1
-        fi
-    else
-        _section_handoff "SDDM configuration skipped" status
-    fi
-fi
+# SDDM (package, enable, Sugar Candy theme) is configured in 03-setup.sh before reboot.
+# Re-apply manually: bash ~/.hyprgruv/lib/scripts/sddm_candy_install.sh
 
 # ------------------------- GRUB ------------------------------
 hyprgruv_section_intro "Grub"

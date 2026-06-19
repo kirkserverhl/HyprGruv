@@ -55,7 +55,24 @@ hl.window_rule({
 })
 
 -- Common floating apps using the preset idea
-hl.window_rule({ name = "waypaper-float",  match = { class = "^(waypaper)$" },  float = true })
+hl.window_rule({
+    name = "waypaper-float",
+    match = { class = "^(waypaper)$" },
+    float = true,
+    center = true,
+    size = {820, 600},
+})
+-- 'blur' is not a supported field on hl.window_rule (only no_blur is).
+-- Use hyprctl to apply the classic "blur" windowrule.
+hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(waypaper)$'")
+hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(wallpaper-picker\\.py)$'")
+hl.window_rule({
+    name = "wallpaper-picker-float",
+    match = { class = "^(wallpaper-picker\\.py)$", title = "^Waypaper$" },
+    float = true,
+    center = true,
+    size = {820, 600},
+})
 hl.window_rule({ name = "nemo-float",      match = { class = "^(nemo)$" },       float = true })
 -- Removed: This was too broad and made every kitty window float.
 -- The original only floated specific kitty instances (htop, yazi, etc.) via title rules below.
