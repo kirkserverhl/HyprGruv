@@ -227,7 +227,21 @@ sudo pacman -S --needed --noconfirm \
     || hyprgruv_strict_abort "PipeWire stack install failed"
 
 log_status "Installing official repo packages from manifest…"
-sudo pacman -S --needed --noconfirm "${OFFICIAL_PKGS[@]}" \
+OFFICIAL_RESOLVABLE=()
+OFFICIAL_SKIPPED=()
+for pkg in "${OFFICIAL_PKGS[@]}"; do
+    if pacman -Si "$pkg" &>/dev/null 2>&1; then
+        OFFICIAL_RESOLVABLE+=("$pkg")
+    else
+        OFFICIAL_SKIPPED+=("$pkg")
+    fi
+done
+if ((${#OFFICIAL_SKIPPED[@]})); then
+    log_warning "Skipping ${#OFFICIAL_SKIPPED[@]} manifest package(s) not in official repos: ${OFFICIAL_SKIPPED[*]}"
+    log_warning "Move them to lib/packages/aur.list if you still want them installed"
+fi
+((${#OFFICIAL_RESOLVABLE[@]})) || hyprgruv_strict_abort "No official manifest packages resolvable — check mirrors/repos"
+sudo pacman -S --needed --noconfirm "${OFFICIAL_RESOLVABLE[@]}" \
     || hyprgruv_strict_abort "Official manifest package install failed"
 
 # Rust AUR builds need an active default toolchain *before* yay.
