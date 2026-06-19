@@ -139,8 +139,40 @@ fi
 # Recreate the previously ignored items as symlinks in $HOME
 # --------------------------------------------------------------------
 
-# 1) GTK 4.0 files linking to Gruvbox system theme assets
-GTK_SYS_DIR="/usr/share/themes/Gruvbox-Dark/gtk-4.0"
+# 1) GTK 4.0 — Gruvbox assets (system theme or bundled colorscheme fallback)
+_hyprgruv_resolve_gruvbox_gtk4_dir() {
+    local candidate bundled
+    for candidate in \
+        "/usr/share/themes/Gruvbox-Dark/gtk-4.0" \
+        "/usr/share/themes/Gruvbox-Dark-hc/gtk-4.0" \
+        "/usr/share/themes/Gruvbox-Dark-hc-b/gtk-4.0"; do
+        [[ -d "$candidate/assets" ]] || continue
+        echo "$candidate"
+        return 0
+    done
+    for bundled in \
+        "$HOME/.config/colorschemes/gruvbox-dark/gtk-4.0" \
+        "$REPO_DIR/$PKG_DIR/.config/colorschemes/gruvbox-dark/gtk-4.0"; do
+        [[ -d "$bundled/assets" ]] || continue
+        echo "$bundled"
+        return 0
+    done
+    return 1
+}
+
+GTK_SYS_DIR="$(_hyprgruv_resolve_gruvbox_gtk4_dir || true)"
+if [[ -z "$GTK_SYS_DIR" ]] && command -v yay >/dev/null 2>&1; then
+    log_status "Gruvbox GTK theme not found — installing gruvbox-gtk-theme-git…"
+    yay -S --needed --noconfirm gtk-engine-murrine gruvbox-gtk-theme-git 2>/dev/null || \
+        log_warning "Could not install gruvbox-gtk-theme-git (will use bundled assets if available)"
+    GTK_SYS_DIR="$(_hyprgruv_resolve_gruvbox_gtk4_dir || true)"
+fi
+
+if [[ -z "$GTK_SYS_DIR" ]]; then
+    hyprgruv_strict_abort "Gruvbox GTK 4 assets missing (expected system theme or ~/.config/colorschemes/gruvbox-dark/gtk-4.0)"
+fi
+
+log_status "GTK 4 Gruvbox source: $GTK_SYS_DIR"
 mkdir -p "$HOME/.config/gtk-4.0"
 
 declare -A GTK_LINKS=(
@@ -155,7 +187,7 @@ for link in "${!GTK_LINKS[@]}"; do
         ln -sfn "$target" "$link"
         log_status "Linked: $link -> $target"
     else
-        hyprgruv_strict_abort "Missing theme asset: $target (install Gruvbox-Dark GTK theme?)"
+        hyprgruv_strict_abort "Missing theme asset: $target"
     fi
 done
 
