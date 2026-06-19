@@ -107,7 +107,8 @@ write_setting editor "$EDITOR_CMD"
 remove_legacy_defaults
 
 hyprgruv_section_transition "Defaults saved"
-gum style --foreground "${COLOR_SECONDARY:-${COLOR_PRIMARY:-#a6e3a1}}" "Saved to $SETTINGS_DIR"
+gum style --foreground "${COLOR_SECONDARY:-#83a598}" "Saved to $SETTINGS_DIR" 2>/dev/null \
+    || log_success "Saved to $SETTINGS_DIR"
 gum style --foreground "${COLOR_ON_SURFACE:-#cdd6f4}" "Terminal=$TERMINAL, Browser=$BROWSER_CMD, Editor=$EDITOR_CMD"
 
 if declare -F mark_completed >/dev/null 2>&1; then

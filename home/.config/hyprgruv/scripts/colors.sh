@@ -16,8 +16,10 @@
 #   source ~/.config/hyprgruv/scripts/colors.sh && gum_apply_matugen_theme
 #
 # The parser prefers:
-#   1. ~/.config/hypr/colors/custom/matugen.conf  (most reliable in this setup)
-#   2. ~/.cache/matugen/current.json              (when valid)
+#   1. ~/.cache/matugen/colors.sh                 (posthook shell cache)
+#   2. ~/.config/hypr/colors/custom/matugen.conf
+#   3. ~/.cache/matugen/current.json
+#   4. ~/.hyprgruv/lib/defaults/gruvbox-colors.sh (standard fallback)
 #
 # This file is safe to source multiple times.
 
@@ -30,7 +32,7 @@ MATUGEN_HYPR_CONF="${HOME}/.config/hypr/colors/custom/matugen.conf"
 MATUGEN_HYPR_CONF_REPO="${HYPRGRUV_DIR:-${HYPR_DIR:-$HOME/.hyprgruv}}/home/.config/hypr/colors/custom/matugen.conf"
 MATUGEN_JSON="${HOME}/.cache/matugen/current.json"
 MATUGEN_CACHE_DIR="${HOME}/.cache/matugen"
-MATUGEN_DEFAULT_COLORS="${HYPRGRUV_DIR:-${HYPR_DIR:-$HOME/.hyprgruv}}/lib/defaults/matugen-colors.sh"
+MATUGEN_DEFAULT_COLORS="${HYPRGRUV_DIR:-${HYPR_DIR:-$HOME/.hyprgruv}}/lib/defaults/gruvbox-colors.sh"
 
 # -----------------------------------------------------------------------------
 # Color storage (populated by load_matugen_colors)
@@ -166,6 +168,11 @@ load_matugen_colors() {
         set -a
         source "$MATUGEN_DEFAULT_COLORS" 2>/dev/null || true
         set +a
+        COLOR_ACCENT="${COLOR_ACCENT:-$COLOR_PRIMARY}"
+        COLOR_BG="${COLOR_BG:-$COLOR_SURFACE}"
+        COLOR_FG="${COLOR_FG:-$COLOR_ON_SURFACE}"
+        COLOR_TEXT="${COLOR_TEXT:-$COLOR_ON_SURFACE}"
+        return 0
     else
         # Last resort: try to ask matugen for the current wallpaper's colors
         # (slow, only if everything else failed)
@@ -185,30 +192,30 @@ load_matugen_colors() {
         fi
     fi
 
-    # Promote into convenient top-level variables (with safe fallbacks)
-    COLOR_PRIMARY="${MATUGEN_COLORS[primary]:-#c792ea}"
-    COLOR_ON_PRIMARY="${MATUGEN_COLORS[on_primary]:-#1e1e2e}"
-    COLOR_PRIMARY_CONTAINER="${MATUGEN_COLORS[primary_container]:-#4a2c6a}"
-    COLOR_ON_PRIMARY_CONTAINER="${MATUGEN_COLORS[on_primary_container]:-#f5e1ff}"
+    # Promote into convenient top-level variables (Gruvbox fallbacks)
+    COLOR_PRIMARY="${MATUGEN_COLORS[primary]:-#fe8019}"
+    COLOR_ON_PRIMARY="${MATUGEN_COLORS[on_primary]:-#282828}"
+    COLOR_PRIMARY_CONTAINER="${MATUGEN_COLORS[primary_container]:-#d65d0e}"
+    COLOR_ON_PRIMARY_CONTAINER="${MATUGEN_COLORS[on_primary_container]:-#ebdbb2}"
 
-    COLOR_SECONDARY="${MATUGEN_COLORS[secondary]:-#89b4fa}"
-    COLOR_ON_SECONDARY="${MATUGEN_COLORS[on_secondary]:-#1e1e2e}"
+    COLOR_SECONDARY="${MATUGEN_COLORS[secondary]:-#83a598}"
+    COLOR_ON_SECONDARY="${MATUGEN_COLORS[on_secondary]:-#282828}"
 
-    COLOR_BACKGROUND="${MATUGEN_COLORS[background]:-#1e1e2e}"
-    COLOR_ON_BACKGROUND="${MATUGEN_COLORS[on_background]:-#cdd6f4}"
+    COLOR_BACKGROUND="${MATUGEN_COLORS[background]:-#282828}"
+    COLOR_ON_BACKGROUND="${MATUGEN_COLORS[on_background]:-#ebdbb2}"
 
-    COLOR_SURFACE="${MATUGEN_COLORS[surface]:-#1e1e2e}"
-    COLOR_ON_SURFACE="${MATUGEN_COLORS[on_surface]:-#cdd6f4}"
-    COLOR_SURFACE_VARIANT="${MATUGEN_COLORS[surface_variant]:-#45475a}"
-    COLOR_ON_SURFACE_VARIANT="${MATUGEN_COLORS[on_surface_variant]:-#bac2de}"
+    COLOR_SURFACE="${MATUGEN_COLORS[surface]:-#282828}"
+    COLOR_ON_SURFACE="${MATUGEN_COLORS[on_surface]:-#ebdbb2}"
+    COLOR_SURFACE_VARIANT="${MATUGEN_COLORS[surface_variant]:-#504945}"
+    COLOR_ON_SURFACE_VARIANT="${MATUGEN_COLORS[on_surface_variant]:-#a89984}"
 
-    COLOR_SURFACE_CONTAINER="${MATUGEN_COLORS[surface_container]:-#252535}"
-    COLOR_SURFACE_CONTAINER_HIGH="${MATUGEN_COLORS[surface_container_high]:-#2d2d3f}"
-    COLOR_SURFACE_CONTAINER_HIGHEST="${MATUGEN_COLORS[surface_container_highest]:-#36364a}"
+    COLOR_SURFACE_CONTAINER="${MATUGEN_COLORS[surface_container]:-#3c3836}"
+    COLOR_SURFACE_CONTAINER_HIGH="${MATUGEN_COLORS[surface_container_high]:-#504945}"
+    COLOR_SURFACE_CONTAINER_HIGHEST="${MATUGEN_COLORS[surface_container_highest]:-#665c54}"
 
-    COLOR_OUTLINE="${MATUGEN_COLORS[outline]:-#6c7086}"
-    COLOR_ERROR="${MATUGEN_COLORS[error]:-#f38ba8}"
-    COLOR_ON_ERROR="${MATUGEN_COLORS[on_error]:-#1e1e2e}"
+    COLOR_OUTLINE="${MATUGEN_COLORS[outline]:-#665c54}"
+    COLOR_ERROR="${MATUGEN_COLORS[error]:-#fb4934}"
+    COLOR_ON_ERROR="${MATUGEN_COLORS[on_error]:-#282828}"
 
     # Handy semantic aliases
     COLOR_ACCENT="$COLOR_PRIMARY"

@@ -160,10 +160,10 @@ run_command() {
 export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INSTALL_SCRIPTS
 
 
-# ============== Install theming (static Gruvbox — no matugen/colors.sh) ==============
+# ============== Theme baseline (Gruvbox — install + script fallback) ==============
 
-_hyprgruv_load_install_colors() {
-    local gruvbox="${HYPR_DIR}/lib/defaults/gruvbox-install-colors.sh"
+_hyprgruv_load_theme_colors() {
+    local gruvbox="${HYPR_DIR}/lib/defaults/gruvbox-colors.sh"
     if [[ -f "$gruvbox" ]]; then
         # shellcheck source=/dev/null
         source "$gruvbox"
@@ -178,10 +178,10 @@ _hyprgruv_load_install_colors() {
     : "${COLOR_SUCCESS:="#b8bb26"}"
     : "${COLOR_ERROR:="#fb4934"}"
     : "${COLOR_TEXT:="#ebdbb2"}"
-    : "${COLOR_OUTLINE:="#504945"}"
+    : "${COLOR_OUTLINE:="#665c54"}"
 }
 
-_hyprgruv_load_install_colors
+_hyprgruv_load_theme_colors
 
 gum_apply_matugen_theme() {
     export GUM_CONFIRM_PROMPT="? "
