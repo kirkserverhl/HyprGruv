@@ -17,6 +17,11 @@
 --     Super+C/V/X/Z/A + Super+Shift+B/I/K → mac-shortcut.sh → Ctrl+*
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- Backup: keybinds.lua.bak-pre-stack-YYYYMMDD next to this file
+--
+-- Rofi cheatsheet (Alt+K) reads descriptions from:
+--   1. Trailing comment on the bind line:  hl.bind(...) -- #tag Human label
+--   2. Comment on the line above:          -- Human label
+--   #tags are searchable in the rofi menu (e.g. #launcher #guest)
 
 local SCRIPTS = require("conf.scripts_path").get()
 local MAC     = SCRIPTS .. "/mac-shortcut.sh"
@@ -83,13 +88,13 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Launchers
-hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"))
+hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh")) -- #launcher #guest Open all apps
 -- Super+Return: plain kitty (or default terminal from ~/.config/settings/terminal.sh)
 hl.bind(mainMod .. " + Return",       hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
-hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh"))
-hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh"))
-hl.bind(mainMod .. " + N",            hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh"))
-hl.bind(mainMod .. " + PRINT",        hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"))
+hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh")) -- #launcher Open browser
+hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
+hl.bind(mainMod .. " + N",            hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
+hl.bind(mainMod .. " + PRINT",        hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh")) -- #screenshot Quick screenshot
 
 -- Session / power
 hl.bind(mainMod .. " + Q",            hl.dsp.window.close())
@@ -102,7 +107,7 @@ hl.bind(mainMod .. " + S",            hl.dsp.workspace.toggle_special())
 hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special" }))
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G",            toggle_gaps)
-hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh"))
+hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Switch theme & wallpaper
 hl.bind(mainMod .. " + Tab",          hl.dsp.focus({ workspace = "m+1" }))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" }))
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
@@ -135,7 +140,7 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(SCRIPTS .. "/reload-dev-session.sh"))
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Launchers (alt)
-hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh"))
+hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh")) -- #launcher #guest Favorite apps
 hl.bind(altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
 hl.bind(altMod .. " + B",      hl.dsp.exec_cmd("google-chrome-stable"))
 hl.bind(mainMod .. " + " .. altMod .. " + B", hl.dsp.exec_cmd("firefox"))
@@ -195,8 +200,9 @@ hl.bind(altMod .. " + minus", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_fa
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 hl.bind("CTRL + F",     hl.dsp.window.fullscreen())
-hl.bind("CTRL + P",     hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh"))
-hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh"))
+hl.bind("CTRL + P",     hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh")) -- #theme Color palette picker
+hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh")) -- #guest #help Search all keybinds
+hl.bind(altMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh")) -- #guest #help Keybind cheatsheet (tell guests this one)
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- MAC BRIDGE (lowest priority — optional Cmd muscle memory → Ctrl in app)

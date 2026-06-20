@@ -229,6 +229,66 @@ verify_shell_startup() {
     fi
 }
 
+pick_shell() {
+    local choice=""
+    local gum_status=0
+
+    # Prior gum prompts can leave the TTY in raw mode and break choose (empty selection).
+    stty sane 2>/dev/null || true
+
+    if command -v gum >/dev/null 2>&1; then
+        set +e
+        if _hyprgruv_has_tty; then
+            choice="$(
+                gum choose \
+                    --header "Default shell (↑↓ to move, Enter to confirm, Esc to cancel):" \
+                    --height 6 \
+                    "fish" "zsh" "bash" "CANCEL" \
+                    </dev/tty 2>/dev/tty
+            )"
+        else
+            choice="$(
+                gum choose \
+                    --header "Default shell:" \
+                    --height 6 \
+                    "fish" "zsh" "bash" "CANCEL"
+            )"
+        fi
+        gum_status=$?
+        set -e
+    fi
+
+    choice="${choice//$'\r'/}"
+    choice="${choice#"${choice%%[![:space:]]*}"}"
+    choice="${choice%"${choice##*[![:space:]]}"}"
+
+    if [[ $gum_status -ne 0 || -z "$choice" ]]; then
+        log_warning "Gum menu unavailable or canceled — falling back to text menu"
+        echo ""
+        echo "  1) fish"
+        echo "  2) zsh"
+        echo "  3) bash"
+        echo "  q) cancel"
+        echo ""
+        local reply=""
+        if _hyprgruv_has_tty; then
+            read -rp "Choose [1-3/q]: " reply </dev/tty
+        else
+            read -rp "Choose [1-3/q]: " reply
+        fi
+        case "${reply,,}" in
+            1|fish) choice="fish" ;;
+            2|zsh) choice="zsh" ;;
+            3|bash) choice="bash" ;;
+            q|quit|"") choice="CANCEL" ;;
+            *) choice="" ;;
+        esac
+    fi
+
+    [[ -n "$choice" ]] || return 1
+    echo "$choice"
+}
+
 set_login_shell() {
     local target="$1"
     local user="${USER:-$(whoami)}"
@@ -299,7 +359,10 @@ fi
 echo "Please select your preferred shell"
 echo ""
 
-shell="$(gum_choose_prompt "fish" "zsh" "bash" "CANCEL")"
+shell="$(pick_shell)" || {
+    echo "No shell selected."
+    exit 0
+}
 selected_shell_path=""
 
 # ------------------------------------------------------------
@@ -353,9 +416,15 @@ fi
 # ------------------------------------------------------------
 # Cancel
 # ------------------------------------------------------------
-if [[ "$shell" == "CANCEL" || -z "$selected_shell_path" ]]; then
-    echo "Changing shell canceled."
+if [[ "$shell" == "CANCEL" ]]; then
+    echo "Shell change canceled."
     exit 0
+fi
+
+if [[ -z "$selected_shell_path" ]]; then
+    log_error "Setup failed for '$shell' — login shell was not changed"
+    log_status "Try again in a fresh terminal: bash ~/.hyprgruv/lib/scripts/shell.sh"
+    exit 1
 fi
 
 # ------------------------------------------------------------

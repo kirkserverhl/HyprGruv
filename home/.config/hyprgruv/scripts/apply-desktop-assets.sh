@@ -9,6 +9,7 @@ set -euo pipefail
 THEME="${1:-}"
 COLORSCHEMES_DIR="${HOME}/.config/colorschemes"
 GTK3_SETTINGS="${HOME}/.config/gtk-3.0/settings.ini"
+GTK4_SETTINGS="${HOME}/.config/gtk-4.0/settings.ini"
 QT5CT_CONF="${HOME}/.config/qt5ct/qt5ct.conf"
 QT6CT_CONF="${HOME}/.config/qt6ct/qt6ct.conf"
 CURSOR_CONF="${HOME}/.config/hypr/conf/cursor.conf"
@@ -27,29 +28,44 @@ FAMILY=$(resolve_theme_family "$THEME")
 THEME_DIR="$COLORSCHEMES_DIR/$FAMILY"
 
 GTK_THEME=$(resolve_gtk_theme "$THEME")
+activate_gtk_theme "$GTK_THEME" >/dev/null 2>&1 || true
 ICON_THEME=$(resolve_icon_theme "$THEME")
 CURSOR_THEME=$(resolve_cursor_theme "$THEME")
 KDE_LNF=$(resolve_kde_lookandfeel "$THEME")
 
-update_gtk3_setting() {
-    local key="$1"
-    local value="$2"
-    [[ -f "$GTK3_SETTINGS" ]] || return 0
-    if grep -q "^${key}=" "$GTK3_SETTINGS"; then
-        sed -i "s|^${key}=.*|${key}=${value}|" "$GTK3_SETTINGS"
+update_gtk_setting() {
+    local file="$1"
+    local key="$2"
+    local value="$3"
+    [[ -f "$file" ]] || return 0
+    if grep -q "^${key}=" "$file"; then
+        sed -i "s|^${key}=.*|${key}=${value}|" "$file"
     else
-        printf '%s=%s\n' "$key" "$value" >>"$GTK3_SETTINGS"
+        printf '%s=%s\n' "$key" "$value" >>"$file"
     fi
 }
 
+update_gtk3_setting() {
+    update_gtk_setting "$GTK3_SETTINGS" "$1" "$2"
+}
+
+update_gtk4_setting() {
+    update_gtk_setting "$GTK4_SETTINGS" "$1" "$2"
+}
+
 link_gtk4_assets() {
-    local src="$THEME_DIR/gtk-4.0"
+    local src="$COLORSCHEMES_DIR/$THEME/gtk-4.0"
     local dst="${HOME}/.config/gtk-4.0"
+    [[ -d "$src" ]] || src="$THEME_DIR/gtk-4.0"
     [[ -d "$src" ]] || return 0
     mkdir -p "$dst"
     ln -sf "$src/gtk.css" "$dst/gtk.css"
-    ln -sf "$src/gtk-dark.css" "$dst/gtk-dark.css"
-    ln -sfn "$src/assets" "$dst/assets"
+    if [[ -f "$src/gtk-dark.css" ]]; then
+        ln -sf "$src/gtk-dark.css" "$dst/gtk-dark.css"
+    fi
+    if [[ -d "$src/assets" ]]; then
+        ln -sfn "$src/assets" "$dst/assets"
+    fi
 }
 
 apply_gsettings() {
@@ -79,14 +95,21 @@ update_qtct_icon_theme() {
     fi
 }
 
-mkdir -p "$(dirname "$GTK3_SETTINGS")"
-touch "$GTK3_SETTINGS"
+mkdir -p "$(dirname "$GTK3_SETTINGS")" "$(dirname "$GTK4_SETTINGS")"
+touch "$GTK3_SETTINGS" "$GTK4_SETTINGS"
 
-update_gtk3_setting gtk-theme-name "$GTK_THEME"
-update_gtk3_setting gtk-icon-theme-name "$ICON_THEME"
-update_gtk3_setting gtk-cursor-theme-name "$CURSOR_THEME"
-update_gtk3_setting gtk-cursor-theme-size "$CURSOR_SIZE"
+for setting in gtk-theme-name gtk-icon-theme-name gtk-cursor-theme-name gtk-cursor-theme-size; do
+    case "$setting" in
+    gtk-theme-name) value="$GTK_THEME" ;;
+    gtk-icon-theme-name) value="$ICON_THEME" ;;
+    gtk-cursor-theme-name) value="$CURSOR_THEME" ;;
+    gtk-cursor-theme-size) value="$CURSOR_SIZE" ;;
+    esac
+    update_gtk3_setting "$setting" "$value"
+    update_gtk4_setting "$setting" "$value"
+done
 update_gtk3_setting gtk-application-prefer-dark-theme "true"
+update_gtk4_setting gtk-application-prefer-dark-theme "true"
 
 update_qtct_icon_theme "$QT5CT_CONF" "$ICON_THEME"
 update_qtct_icon_theme "$QT6CT_CONF" "$ICON_THEME"

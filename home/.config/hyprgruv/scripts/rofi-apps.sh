@@ -26,6 +26,7 @@ link_icon_theme "${SYSTEM_ICONS}/Papirus" /usr/share/icons/Papirus
 link_icon_theme "${SYSTEM_ICONS}/Papirus-Dark" /usr/share/icons/Papirus-Dark
 link_icon_theme "${SYSTEM_ICONS}/hicolor" /usr/share/icons/hicolor
 link_icon_theme "${USER_ICONS}/hicolor" "${HOME}/.local/share/icons/hicolor"
+link_icon_theme "${USER_ICONS}/GreyStone" "${HOME}/.local/share/icons/GreyStone"
 
 # XDG_DATA_HOME limits which .desktop files drun sees (favorites only).
 # XDG_DATA_DIRS must expose icon themes but NOT /usr/share/applications.

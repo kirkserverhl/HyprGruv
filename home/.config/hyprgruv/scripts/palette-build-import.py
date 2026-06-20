@@ -145,10 +145,16 @@ def run_matugen_base16(wallpaper: Path) -> dict[str, str]:
     return slots
 
 
+def normalize_base16_keys(raw: dict[str, Any]) -> dict[str, Any]:
+    """palette.json uses mixed-case slot names (base0A); normalize to lowercase."""
+    return {k.lower(): v for k, v in raw.items() if isinstance(k, str)}
+
+
 def base16_hex_from_json(data: dict[str, Any]) -> dict[str, str]:
     raw = data.get("base16") or {}
     if not isinstance(raw, dict):
         return {}
+    raw = normalize_base16_keys(raw)
     out: dict[str, str] = {}
     for slot in BASE16_SLOTS:
         val = raw.get(slot)
@@ -171,6 +177,7 @@ def load_user_palette(wallpaper: Path) -> dict[str, str] | None:
     base16 = payload.get("base16")
     if not isinstance(base16, dict):
         return None
+    base16 = normalize_base16_keys(base16)
     out: dict[str, str] = {}
     for slot in BASE16_SLOTS:
         val = base16.get(slot)

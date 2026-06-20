@@ -49,7 +49,7 @@ run_step() {
     # are interactive (gum choose/confirm, GUI tools, read prompts, etc.).
     # Wrapping them in gum spin breaks TTY / nested gum input and causes apparent stalls/hangs.
     if [[ "$title" == "Shell Configuration" ]]; then
-        HYPRGRUV_FROM_CONFIG=1 bash "$path"
+        HYPRGRUV_FROM_CONFIG=1 hyprgruv_run_interactive "$path" "${HYPRGRUV_LOGFILE:-}"
     else
         bash "$path"
     fi

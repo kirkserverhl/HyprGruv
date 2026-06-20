@@ -16,11 +16,12 @@ SCHEMA="org.gnome.desktop.interface"
 
 CURRENT_THEME_FILE="${HOME}/.config/colorschemes/.current-theme"
 gtk_theme="adw-gtk3-dark"
+# shellcheck source=/dev/null
+source "${HOME}/.config/colorschemes/theme-assets.sh"
 if [[ -f "$CURRENT_THEME_FILE" ]]; then
     theme=$(tr -d '[:space:]' <"$CURRENT_THEME_FILE")
-    theme_file="${HOME}/.config/colorschemes/${theme}/gtk-theme"
-    if [[ -n "$theme" && -f "$theme_file" ]]; then
-        gtk_theme=$(tr -d '[:space:]' <"$theme_file")
+    if [[ -n "$theme" ]]; then
+        gtk_theme=$(resolve_gtk_theme "$theme")
     fi
 elif [[ -f "$GTK3_SETTINGS" ]]; then
     gtk_theme="$(grep -E '^gtk-theme-name=' "$GTK3_SETTINGS" | sed -E 's/^gtk-theme-name=//' | tr -d '"' | xargs)"

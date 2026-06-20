@@ -23,7 +23,7 @@ BIND_RE = re.compile(
     r"hl\.bind\((.+?),\s*(.+?)\)(?:\s*,\s*\{[^}]*\})?(?:\s*--\s*(.+))?$"
 )
 FOR_RE = re.compile(r"for\s+(\w+)\s*=\s*(\d+)\s*,\s*(\d+)\s+do")
-INLINE_COMMENT_RE = re.compile(r"\s*--\s*(.+)$")
+TAG_RE = re.compile(r"#(\w+)")
 
 DIR_NAMES = {"l": "left", "r": "right", "u": "up", "d": "down"}
 
@@ -69,7 +69,12 @@ def humanize_command(cmd: str) -> str:
     friendly = {
         "rofi-apps.sh": "Favorites app launcher",
         "rofi-full.sh": "Full app launcher",
-        "rofi-keybinds.sh": "Keybind reference menu",
+        "rofi-keybinds.sh": "Keybind cheatsheet (search all shortcuts)",
+        "theme-switcher-launch.sh": "Theme & wallpaper switcher",
+        "palette.sh": "Color palette picker",
+        "base16-palette.sh": "View/copy base16 colors",
+        "brightness.sh": "Brightness",
+        "volume.sh": "Volume",
         "terminal.sh": "Open terminal",
         "dev-workspace.sh": "Open dev tmux workspace",
         "hyprshot.sh": "Screenshot menu",
@@ -87,7 +92,18 @@ def humanize_command(cmd: str) -> str:
     if name in friendly:
         if name == "mac-shortcut.sh" and " " in cmd:
             return f"Mac-style shortcut ({cmd.split(maxsplit=1)[1]})"
-        return friendly[name]
+        base = friendly[name]
+        if name in ("brightness.sh", "volume.sh") and " " in cmd:
+            flag = cmd.split(maxsplit=1)[1]
+            actions = {
+                "--dec": "decrease",
+                "--inc": "increase",
+                "--toggle": "toggle mute",
+                "--toggle-mic": "toggle mic",
+            }
+            if flag in actions:
+                return f"{base}: {actions[flag]}"
+        return base
     return cmd
 
 
@@ -171,20 +187,50 @@ def describe_action(action: str) -> str:
     return action
 
 
-def parse_inline_comment(line: str) -> str | None:
-    if match := INLINE_COMMENT_RE.search(line):
-        text = match.group(1).strip()
-        if text.startswith("="):
-            return None
-        return text
-    return None
+def is_decorative_comment(text: str) -> bool:
+    """Skip section dividers like -- ═══ or -- ─── with no real words."""
+    stripped = text.strip()
+    if not stripped:
+        return True
+    if SECTION_RE.search(f"-- {stripped}"):
+        return True
+    letters = sum(1 for c in stripped if c.isalpha())
+    if letters < 3:
+        return True
+    ornaments = sum(1 for c in stripped if c in "=─━═-_·")
+    if ornaments > len(stripped) * 0.55:
+        return True
+    return False
 
 
-def format_entry(combo: str, description: str, section: str | None) -> str:
+def parse_description_text(text: str | None) -> tuple[str | None, list[str]]:
+    """Turn a Lua comment into rofi description + optional #tags (searchable)."""
+    if not text:
+        return None, []
+    raw = text.strip()
+    if not raw or is_decorative_comment(raw):
+        return None, []
+
+    tags = TAG_RE.findall(raw)
+    desc = TAG_RE.sub("", raw)
+    desc = re.sub(r"\s{2,}", " ", desc).strip(" \t-:|")
+    return (desc or None), tags
+
+
+def format_entry(
+    combo: str,
+    description: str,
+    section: str | None,
+    tags: list[str] | None = None,
+) -> str:
     combo = normalize_combo(combo)
+    tag_suffix = ""
+    if tags:
+        tag_suffix = "  ·  " + " ".join(f"#{t}" for t in tags)
+    body = f"{combo}  →  {description}{tag_suffix}"
     if section:
-        return f"[{section}] {combo}  →  {description}"
-    return f"{combo}  →  {description}"
+        return f"[{section}] {body}"
+    return body
 
 
 def parse_file(path: Path) -> list[str]:
@@ -193,6 +239,8 @@ def parse_file(path: Path) -> list[str]:
 
     entries: list[str] = []
     section: str | None = None
+    pending_desc: str | None = None
+    pending_tags: list[str] = []
     loop_var: str | None = None
     loop_start = 0
     loop_end = 0
@@ -210,6 +258,10 @@ def parse_file(path: Path) -> list[str]:
         if line.startswith("--"):
             if match := SECTION_RE.search(line):
                 section = match.group(1).strip()
+                pending_desc = None
+                pending_tags = []
+            else:
+                pending_desc, pending_tags = parse_description_text(line[2:])
             continue
 
         if match := FOR_RE.search(line):
@@ -228,12 +280,10 @@ def parse_file(path: Path) -> list[str]:
         if not line.startswith("hl.bind("):
             continue
 
-        bind_line = line
-        inline_desc = parse_inline_comment(bind_line)
-        bind_line = INLINE_COMMENT_RE.sub("", bind_line).rstrip()
-
-        match = BIND_RE.match(bind_line)
+        match = BIND_RE.match(line)
         if not match:
+            pending_desc = None
+            pending_tags = []
             continue
 
         key_expr, action, trailing_desc = match.groups()
@@ -249,13 +299,27 @@ def parse_file(path: Path) -> list[str]:
                     str(value),
                     resolved_action,
                 )
-            description = trailing_desc or describe_action(resolved_action)
+
+            desc_text, desc_tags = parse_description_text(trailing_desc)
+            if desc_text:
+                description = desc_text
+                tags = desc_tags
+            elif pending_desc:
+                description = pending_desc
+                tags = list(pending_tags)
+            else:
+                description = describe_action(resolved_action)
+                tags = []
+
             combo = lua_concat(
                 key_expr,
                 loop_var=loop_var,
                 loop_value=value if value is not None else None,
             )
-            entries.append(format_entry(combo, description, section))
+            entries.append(format_entry(combo, description, section, tags))
+
+        pending_desc = None
+        pending_tags = []
 
     return entries
 

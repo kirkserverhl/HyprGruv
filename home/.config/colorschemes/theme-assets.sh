@@ -10,7 +10,8 @@ resolve_theme_family() {
     everforest-dark | forest-night) printf '%s\n' "everforest-dark" ;;
     gruvbox-dark | coast-gruv | warm-stone) printf '%s\n' "gruvbox-dark" ;;
     gruvbox-light) printf '%s\n' "gruvbox-light" ;;
-    noir | e-ink) printf '%s\n' "gruvbox-dark" ;;
+    noir) printf '%s\n' "noir" ;;
+    e-ink) printf '%s\n' "e-ink" ;;
     "")
         printf '%s\n' "gruvbox-dark"
         ;;
@@ -100,13 +101,40 @@ find_cursor_theme_name() {
     return 1
 }
 
+GTK_THEME_UNUSED_DIR="${GTK_THEME_UNUSED_DIR:-$HOME/.themes/unused}"
+
 gtk_theme_exists() {
     local name="$1"
     local base
-    for base in "$HOME/.themes" "/usr/share/themes"; do
+    for base in "$HOME/.themes" "$GTK_THEME_UNUSED_DIR" "/usr/share/themes"; do
         [[ -d "$base/$name" ]] && return 0
     done
     return 1
+}
+
+# GTK only loads ~/.themes/<name> — symlink from ~/.themes/unused/ when needed.
+activate_gtk_theme() {
+    local name="$1"
+    local src dest current_target
+
+    [[ -n "$name" ]] || return 1
+    if [[ -d "$HOME/.themes/$name" ]]; then
+        return 0
+    fi
+    src="$GTK_THEME_UNUSED_DIR/$name"
+    [[ -d "$src" ]] || return 1
+
+    dest="$HOME/.themes/$name"
+    mkdir -p "$HOME/.themes"
+    if [[ -L "$dest" ]]; then
+        current_target=$(readlink "$dest" 2>/dev/null || true)
+        [[ "$current_target" == "$src" || "$current_target" == "unused/$name" ]] && return 0
+        rm -f "$dest"
+    elif [[ -e "$dest" ]]; then
+        return 0
+    fi
+    ln -sfn "$src" "$dest"
+    return 0
 }
 
 # First existing candidate from a whitespace-separated preference list.
@@ -144,10 +172,18 @@ pick_existing_cursor_theme() {
     fi
 }
 
+gtk_theme_is_light() {
+    local name="${1,,}"
+    [[ "$name" == *light* ]]
+}
+
 pick_existing_gtk_theme() {
     local candidate fallback="adw-gtk3-dark"
     for candidate in "$@"; do
+        [[ -n "$candidate" ]] || continue
+        gtk_theme_is_light "$candidate" && continue
         if gtk_theme_exists "$candidate"; then
+            activate_gtk_theme "$candidate" >/dev/null 2>&1 || true
             printf '%s\n' "$candidate"
             return 0
         fi
@@ -159,29 +195,47 @@ pick_existing_gtk_theme() {
     fi
 }
 
+_read_gtk_theme_slot() {
+    local theme="$1"
+    local family slot_file slot_name=""
+    family=$(resolve_theme_family "$theme")
+
+    for slot_file in \
+        "$HOME/.config/colorschemes/$theme/gtk-theme" \
+        "$HOME/.config/colorschemes/$family/gtk-theme"; do
+        if [[ -f "$slot_file" ]]; then
+            slot_name=$(tr -d '[:space:]' <"$slot_file")
+            [[ -n "$slot_name" ]] && break
+        fi
+    done
+
+    printf '%s\n' "$slot_name"
+}
+
 resolve_gtk_theme() {
     local theme="$1"
-    local family slot_file slot_name
+    local family slot_name
     family=$(resolve_theme_family "$theme")
-    slot_file="$HOME/.config/colorschemes/$family/gtk-theme"
-    if [[ -f "$slot_file" ]]; then
-        slot_name=$(tr -d '[:space:]' <"$slot_file")
-    else
-        slot_name=""
-    fi
+    slot_name=$(_read_gtk_theme_slot "$theme")
 
     case "$family" in
     catppuccin)
         pick_existing_gtk_theme "$slot_name" Catppuccin-Dark Gruvbox-Dark adw-gtk3-dark
         ;;
     nord-darker)
-        pick_existing_gtk_theme "$slot_name" Nordic-darker Nordic-darker-v40 Graphite-Dark-nord adw-gtk3-dark
+        pick_existing_gtk_theme "$slot_name" Nordic-darker Nordic-darker-v40 Gruvbox-Dark adw-gtk3-dark
         ;;
     everforest-dark)
         pick_existing_gtk_theme "$slot_name" Everforest-Dark Gruvbox-Dark adw-gtk3-dark
         ;;
+    noir | e-ink)
+        pick_existing_gtk_theme "$slot_name" Graphite-Dark-compact Gruvbox-Dark adw-gtk3-dark
+        ;;
     gruvbox-dark)
         pick_existing_gtk_theme "$slot_name" Gruvbox-Dark adw-gtk3-dark
+        ;;
+    gruvbox-light)
+        pick_existing_gtk_theme Gruvbox-Dark adw-gtk3-dark
         ;;
     *)
         pick_existing_gtk_theme "$slot_name" Gruvbox-Dark adw-gtk3-dark
@@ -189,20 +243,44 @@ resolve_gtk_theme() {
     esac
 }
 
+_read_icon_theme_slot() {
+    local theme="$1"
+    local family slot_file slot_name=""
+    family=$(resolve_theme_family "$theme")
+
+    for slot_file in \
+        "$HOME/.config/colorschemes/$theme/icon-theme" \
+        "$HOME/.config/colorschemes/$family/icon-theme"; do
+        if [[ -f "$slot_file" ]]; then
+            slot_name=$(tr -d '[:space:]' <"$slot_file")
+            [[ -n "$slot_name" ]] && break
+        fi
+    done
+
+    printf '%s\n' "$slot_name"
+}
+
 resolve_icon_theme() {
     local theme="$1"
-    case "$(resolve_theme_family "$theme")" in
+    local family slot_name
+    family=$(resolve_theme_family "$theme")
+    slot_name=$(_read_icon_theme_slot "$theme")
+
+    case "$family" in
     catppuccin)
-        pick_existing_icon_theme Papirus-Dark Ant-Dark Gruvbox-Plus-Dark
+        pick_existing_icon_theme "$slot_name" Papirus-Dark Ant-Dark Gruvbox-Plus-Dark
         ;;
     nord-darker)
-        pick_existing_icon_theme Zafiro-Nord-Black Papirus-Dark Gruvbox-Plus-Dark
+        pick_existing_icon_theme "$slot_name" Zafiro-Nord-Black Papirus-Dark Gruvbox-Plus-Dark
         ;;
     everforest-dark)
-        pick_existing_icon_theme Everforest-Dark Papirus-Dark Gruvbox-Plus-Dark
+        pick_existing_icon_theme "$slot_name" Everforest-Dark Papirus-Dark Gruvbox-Plus-Dark
+        ;;
+    noir)
+        pick_existing_icon_theme "$slot_name" GreyStone Papirus-Dark Gruvbox-Plus-Dark
         ;;
     *)
-        pick_existing_icon_theme Gruvbox-Plus-Dark Papirus-Dark
+        pick_existing_icon_theme "$slot_name" Gruvbox-Plus-Dark Papirus-Dark
         ;;
     esac
 }

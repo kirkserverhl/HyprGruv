@@ -82,15 +82,38 @@ show_missed_menu() {
     done
 }
 
-case "${1:-last}" in
-    last|pop|1)
+is_paused() {
+    dunstctl is-paused 2>/dev/null | grep -q "true"
+}
+
+render_for_waybar() {
+    local icon tooltip class
+
+    if is_paused; then
+        icon="󰂛"
+        tooltip="Dunst paused (Do Not Disturb)\nLeft: show last\nRight: history"
+        class="paused"
+    else
+        icon="󰂚"
+        tooltip="Notifications\nLeft: show last notification\nRight: list last 10"
+        class=""
+    fi
+
+    if [[ -n "$class" ]]; then
+        printf '{"text":"%s","tooltip":"%s","class":"%s"}\n' "$icon" "$tooltip" "$class"
+    else
+        printf '{"text":"%s","tooltip":"%s"}\n' "$icon" "$tooltip"
+    fi
+}
+
+case "${1:-}" in
+    last|pop|1|left)
         show_last_missed
         ;;
-    menu|10|last10)
+    menu|10|last10|right|3)
         show_missed_menu
         ;;
     *)
-        echo "Usage: $(basename "$0") {last|menu}"
-        exit 1
+        render_for_waybar
         ;;
 esac

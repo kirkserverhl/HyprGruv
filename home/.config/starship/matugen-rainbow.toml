@@ -31,19 +31,19 @@ palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
 color_fg0 = "#fbf1c7"
-color_bg1 = "#3c3836"
-color_bg3 = "#665c54"
-color_orange = "#d65d0e"
-color_yellow = "#d79921"
-color_aqua = "#689d6a"
-color_blue = "#458588"
+color_bg1 = "#59636e"
+color_bg3 = "#c3c3c4"
+color_orange = "#458487"
+color_yellow = "#a19a3b"
+color_aqua = "#dac99f"
+color_blue = "#beb290"
 color_on_orange = "#fbf1c7"
 color_on_yellow = "#fbf1c7"
 color_on_aqua = "#fbf1c7"
 color_on_blue = "#fbf1c7"
-color_green = "#98971a"
-color_red = "#cc241d"
-color_purple = "#b16286"
+color_green = "#689467"
+color_red = "#719055"
+color_purple = "#719055"
 [os]
 disabled = false
 style = "bg:color_orange fg:color_fg0"

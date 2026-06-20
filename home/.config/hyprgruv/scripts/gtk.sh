@@ -31,11 +31,18 @@ echo $cursor_size
 echo $font_name
 echo $terminal
 
+# shellcheck source=/dev/null
+source "$HOME/.config/colorschemes/theme-assets.sh" 2>/dev/null || true
+if declare -F gtk_theme_exists >/dev/null 2>&1 && ! gtk_theme_exists "$gtk_theme"; then
+    gtk_theme=$(pick_existing_gtk_theme Gruvbox-Dark adw-gtk3-dark)
+fi
+
+gsettings set "$gnome_schema" color-scheme "prefer-dark"
+gsettings set "$gnome_schema" gtk-theme ""
 gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
 gsettings set "$gnome_schema" icon-theme "$icon_theme"
 gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
 gsettings set "$gnome_schema" font-name "$font_name"
-gsettings set "$gnome_schema" color-scheme "prefer-dark"
 
 # gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal "$terminal"
 # gsettings set com.github.stunkymonkey.nautilus-open-any-terminal use-generic-terminal-name "true"

@@ -85,7 +85,8 @@ while true; do
     fi
 
     choice=$(gum choose \
-        "Customize — Pywal preview + role picker (recommended)" \
+        "Pick base16 slot-by-slot (hex / hyprpicker / panel)" \
+        "Customize — Pywal preview + role picker" \
         "Load saved configuration" \
         "Save current as configuration" \
         "Clear active configuration" \
@@ -167,7 +168,14 @@ while true; do
             continue
             ;;
 
-        "Customize — Pywal preview + role picker (recommended)")
+        "Pick base16 slot-by-slot (hex / hyprpicker / panel)")
+            echo
+            echo "Opening base16 picker..."
+            "$HOME/.config/hyprgruv/scripts/palette-pick.sh" "$WALLPAPER" || true
+            break
+            ;;
+
+        "Customize — Pywal preview + role picker")
             echo
             echo "Opening palette customizer..."
             "$HOME/.config/hyprgruv/scripts/palette-customize.sh" "$WALLPAPER" || true
