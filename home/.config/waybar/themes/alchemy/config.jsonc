@@ -43,7 +43,7 @@
     "interval": "once",
     "exec": "checkupdates | wc -l",
     "on-click": "bash home/$USER/.config/hyprgruv/scripts/updates.sh",
-    "on-click-right": "kitty pacseek",
+    "on-click-right": "$HOME/.config/hyprgruv/scripts/software.sh",
     "signal": 8,
     "tooltip-format": "{} updates available",
   },

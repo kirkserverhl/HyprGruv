@@ -1,10 +1,9 @@
-# Minimal matugen config — yazi theme.toml only (no global run_after / other templates).
-# Used by reload-yazi-theme.sh --regen so dev-workspace yazi launch cannot re-theme the desktop.
+# Minimal matugen config — yazi flavor switch only (no theme.toml generation).
+# Used by reload-yazi-theme.sh legacy callers; flavors replaced matugen templates.
 
 [config]
 block_prefix = "<*"
 block_postfix = "*>"
 
 [templates.yazi]
-input_path = "~/.config/matugen/templates/yazi-theme.toml"
-output_path = "~/.config/yazi/theme.toml"
+post_hook = "~/.config/hyprgruv/scripts/reload-yazi-theme.sh --switch"

@@ -2,7 +2,7 @@
 # yazi.sh — open yazi in a floating terminal (clean env)
 set -euo pipefail
 
-# CLASS="dotfiles-floating"
+CLASS="yazi"
 
 # Prefix to scrub noisy GTK env vars for this launch only
 CLEAN_ENV=(env -u GDK_DEBUG -u GDK_DISABLE GDK_DEBUG= GDK_DISABLE=)

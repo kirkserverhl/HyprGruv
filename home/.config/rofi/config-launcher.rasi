@@ -33,7 +33,7 @@ entry {
 }
 
 listview {
-    lines:        12;
+    lines:        10;
     fixed-height: true;
 }
 

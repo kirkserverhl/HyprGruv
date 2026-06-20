@@ -128,6 +128,12 @@ output_path = "~/.config/dunst/dunstrc"
 post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-dunst.sh"
 
 
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync-style.css"
+output_path = "~/.config/swaync/style.css"
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-swaync.sh"
+
+
 [templates.pywalfox]
 input_path = "~/.config/matugen/templates/pywalfox-colors.json"
 output_path = "~/.cache/wal/colors.json"
@@ -194,12 +200,12 @@ output_path = "~/.config/hypr/hyprlock/colors/matugen.conf"
 [templates.kvantum_kvconfig]
 input_path = "~/.config/matugen/templates/kvantum-colors.kvconfig"
 output_path = "~/.config/Kvantum/matugen/matugen.kvconfig"
-
-
+post_hook = "~/.config/hyprgruv/scripts/sync-kde-qt-theme.sh"
 
 [templates.kvantum_svg]
 input_path = "~/.config/matugen/templates/kvantum-colors.svg"
 output_path = "~/.config/Kvantum/matugen/matugen.svg"
+post_hook = "~/.config/hyprgruv/scripts/sync-kde-qt-theme.sh"
 
 
 [templates.neovim]
@@ -279,16 +285,18 @@ output_path = "~/.config/pavucontrol/pavucontrol.css"
 [templates.qt5ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt5ct/colors/matugen.conf"
+post_hook = "~/.config/hyprgruv/scripts/sync-kde-qt-theme.sh"
 
 
-## Optional but useful for some KDE apps (disabled — template file missing, breaks matugen)
-##[templates.kde_colors]
-##input_path = "~/.config/matugen/templates/archive/Matugen.colors"
-##output_path = "~/.local/share/color-schemes/Matugen.colors"
+[templates.kde_colors]
+input_path = "~/.config/matugen/templates/Matugen.colors"
+output_path = "~/.local/share/color-schemes/Matugen.colors"
+post_hook = "~/.config/hyprgruv/scripts/sync-kde-qt-theme.sh"
 
 [templates.qt6ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt6ct/colors/matugen.conf"
+post_hook = "~/.config/hyprgruv/scripts/sync-kde-qt-theme.sh"
 
 
 
@@ -314,11 +322,9 @@ input_path = "~/.config/matugen/templates/colors.css"
 output_path = "~/.config/wlogout/colors.css"
 
 
-[templates.yazi]
-input_path = "~/.config/matugen/templates/yazi-theme.toml"
-output_path = "~/.config/yazi/theme.toml"
-post_hook = "~/.config/hyprgruv/scripts/reload-yazi-theme.sh --icons"
-
+# Yazi uses flavors (see ~/.config/yazi/flavors/) — switched by reload-yazi-theme.sh.
+# Matugen no longer overwrites theme.toml (that caused washed-out Material You colors).
+# Yazi reload runs from reload-matugen-visible.sh instead (no matugen template needed).
 
 [templates.grok]
 input_path = "~/.config/matugen/templates/grok-theme.toml"

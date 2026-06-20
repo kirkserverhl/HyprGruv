@@ -9,13 +9,14 @@ set -euo pipefail
 
 SCRIPTS="${HOME}/.config/hyprgruv/scripts"
 
-for hook in hyprland waybar starship terminal dunst firefox grok; do
+"${SCRIPTS}/apply-desktop-assets.sh" 2>/dev/null || true
+
+for hook in hyprland waybar starship terminal dunst swaync firefox grok; do
     "${SCRIPTS}/matugen-posthook-${hook}.sh" 2>/dev/null || true
 done
 
 # Never regen all templates from current.json here — that can overwrite a good
 # matugen run if the JSON cache was briefly out of sync. Hot-reload only.
-"${SCRIPTS}/reload-yazi-theme.sh" --reload 2>/dev/null || true
+"${SCRIPTS}/reload-yazi-theme.sh" --switch 2>/dev/null || true
 
-# GTK has no per-run matugen cache-hit path in apply-matugen-auto; keep bundled here
-"${SCRIPTS}/reload-gtk-colors.sh" 2>/dev/null || true
+hyprctl eval 'reapply_hyprbars()' 2>/dev/null || true

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+if [[ -x /usr/bin/swaync-client ]]; then
+    exec /usr/bin/swaync-client "$@"
+fi
+exec "$HOME/.local/swaync-root/usr/bin/swaync-client" "$@"

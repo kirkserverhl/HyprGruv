@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# User-local fish launcher (until you run: yay -S fish)
+exec "$HOME/.local/fish-root/usr/bin/fish" "$@"

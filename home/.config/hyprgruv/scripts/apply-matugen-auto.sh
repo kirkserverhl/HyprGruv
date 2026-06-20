@@ -391,8 +391,10 @@ jq -n \
         source_index: $source_index
     }' > "$CACHE_DIR/pending-run.json"
 
-if [[ "$MATUGEN_METHOD" == "image" || "$MATUGEN_METHOD" == "wal" ]]; then
-    echo "matugen" >"$CACHE_DIR/yazi-icon-mode"
+# Yazi uses installed flavors — keep preset mode aligned with the active theme slot.
+if [[ -f "$HOME/.config/colorschemes/.current-theme" ]]; then
+    theme=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.current-theme")
+    echo "preset:${theme}" >"$CACHE_DIR/yazi-icon-mode"
 fi
 
 run_matugen_logged() {

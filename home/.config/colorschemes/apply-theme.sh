@@ -67,34 +67,10 @@ else
 fi
 echo ""
 
-# GTK window theme from ~/.themes
-if [ -f "$THEME_DIR/gtk-theme" ]; then
-    GTK_THEME_NAME=$(cat "$THEME_DIR/gtk-theme")
-    echo -e "${CYAN}-> Setting GTK theme to '$GTK_THEME_NAME'...${NC}"
-    gsettings set org.gnome.desktop.interface gtk-theme "$GTK_THEME_NAME" >/dev/null 2>&1
-else
-    echo -e "${YELLOW}-> GTK theme file not found. Skipping.${NC}"
-fi
-echo ""
-
-GTK4_SRC="$THEME_DIR/gtk-4.0"
-GTK4_DST="$HOME/.config/gtk-4.0"
-
-if [[ -d "$GTK4_SRC" ]]; then
-    echo -e "${CYAN}-> Linking GTK4 theme files...${NC}"
-    mkdir -p "$GTK4_DST"
-    ln -sf "$GTK4_SRC/gtk.css" "$GTK4_DST/gtk.css"
-    ln -sf "$GTK4_SRC/gtk-dark.css" "$GTK4_DST/gtk-dark.css"
-    ln -sfn "$GTK4_SRC/assets" "$GTK4_DST/assets"
-else
-    echo -e "${YELLOW}-> No GTK4 theme files found in $GTK4_SRC. Skipping.${NC}"
-fi
-echo ""
-
 # Colors from saved palette.json or active configuration (static — no pywal re-extract).
 echo -e "${CYAN}-> Applying static palette for $THEME...${NC}"
 if bash "$SCRIPT_DIR/apply-preset-assets.sh" "$THEME" "${WALLPAPER:-}"; then
-    echo -e "${CYAN}   Saved palette → starship, waybar, hyprbars, hypr, rofi${NC}"
+    echo -e "${CYAN}   Saved palette → starship, waybar, hypr, rofi, qt/kvantum/kde${NC}"
 else
     echo -e "${YELLOW}   Palette apply failed — some app colors may be stale${NC}"
 fi
@@ -132,17 +108,17 @@ else
 fi
 echo ""
 
-# Matugen gtk post-hook may have run during preset apply — enforce slot GTK theme last.
-if [ -f "$THEME_DIR/gtk-theme" ]; then
-    GTK_THEME_NAME=$(cat "$THEME_DIR/gtk-theme")
-    echo -e "${CYAN}-> Confirming GTK theme '$GTK_THEME_NAME'...${NC}"
-    gsettings set org.gnome.desktop.interface gtk-theme "$GTK_THEME_NAME" >/dev/null 2>&1 || true
-    if [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]] && grep -q '^gtk-theme-name=' "$HOME/.config/gtk-3.0/settings.ini"; then
-        sed -i "s/^gtk-theme-name=.*/gtk-theme-name=${GTK_THEME_NAME}/" "$HOME/.config/gtk-3.0/settings.ini"
-    fi
+# GTK, icons, cursors (per-theme desktop assets)
+if [[ -x "$HOME/.config/hyprgruv/scripts/apply-desktop-assets.sh" ]]; then
+    echo -e "${CYAN}-> Applying GTK, Qt, KDE, icons, and cursor...${NC}"
+    "$HOME/.config/hyprgruv/scripts/apply-desktop-assets.sh" "$THEME" 2>/dev/null || true
 fi
-if [[ -x "$HOME/.config/hyprgruv/scripts/reload-gtk-colors.sh" ]]; then
-    "$HOME/.config/hyprgruv/scripts/reload-gtk-colors.sh" >/dev/null 2>&1 || true
+echo ""
+
+# Yazi flavor (catppuccin / nord / everforest / gruvbox)
+if [[ -x "$HOME/.config/hyprgruv/scripts/reload-yazi-theme.sh" ]]; then
+    echo -e "${CYAN}-> Switching Yazi flavor...${NC}"
+    "$HOME/.config/hyprgruv/scripts/reload-yazi-theme.sh" --switch "$THEME" 2>/dev/null || true
 fi
 echo ""
 

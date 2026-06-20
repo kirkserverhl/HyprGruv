@@ -52,8 +52,8 @@ hl.on("hyprland.start", function()
 	-- No waypaper post_command on login — palette/matugen only when switching wallpapers.
 	hl.exec_cmd(SCRIPTS .. "/restore_wallpaper.sh &")
 
-	-- Cursor theme
-	hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic-Gruvbox 24")
+	-- GTK / icons / cursor for active colorscheme (default: gruvbox + Bibata Gruvbox)
+	hl.exec_cmd(SCRIPTS .. "/apply-desktop-assets.sh")
 
 	-- Workspace monitor setup script
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
@@ -73,8 +73,8 @@ hl.on("hyprland.start", function()
 	-- Auto-mount
 	hl.exec_cmd("udiskie")
 
-	-- Dunst
-	hl.exec_cmd("dunst")
+	-- Notification daemon (dunst or swaync — see notify-trial / ~/.local/state/notify-daemon)
+	hl.exec_cmd(SCRIPTS .. "/notify-autostart.sh")
 
 	-- Saved blur profile (overrides decorations.lua defaults after load)
 	hl.exec_cmd(SCRIPTS .. "/apply-hypr-blur.sh")

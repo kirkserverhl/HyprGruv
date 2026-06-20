@@ -1,180 +1,111 @@
 #!/usr/bin/env bash
-# reload-yazi-theme.sh — refresh ~/.config/yazi/theme.toml and hot-reload open yazis
+# reload-yazi-theme.sh — switch Yazi flavor to match the active colorscheme theme
 #
-# Yazi 26.5+ supports `app:theme` (no restart). Broadcast with:
-#   ya emit-to 0 app:theme
-#
-# Icon source (~/.cache/matugen/yazi-icon-mode):
-#   matugen       — wallpaper-driven palette (waypaper / image matugen)
-#   preset:<name> — static theme icons (e.g. preset:gruvbox-dark)
+# Yazi 26.5+ merges flavors from ~/.config/yazi/flavors/*.yazi with this file.
+# Keep theme.toml limited to [flavor]; edit flavor.toml files for per-theme tweaks.
 #
 # Usage:
-#   reload-yazi-theme.sh              hot-reload running instances only
-#   reload-yazi-theme.sh --regen      rewrite theme.toml from current.json + icons
-#   reload-yazi-theme.sh --reload     emit app:theme only
-#   reload-yazi-theme.sh --icons      append icons for current mode + reload
+#   reload-yazi-theme.sh                 switch to .current-theme + hot-reload
+#   reload-yazi-theme.sh --switch NAME   switch to a specific theme id + hot-reload
+#   reload-yazi-theme.sh --reload        hot-reload running instances only
+#   reload-yazi-theme.sh --flavor NAME   set flavor directly (no theme mapping)
 
 set -euo pipefail
 
-JSON="${HOME}/.cache/matugen/current.json"
-THEME="${HOME}/.config/yazi/theme.toml"
-YAZI_CONFIG="${HOME}/.config/matugen/yazi-only.toml"
-ICON_MODE_FILE="${HOME}/.cache/matugen/yazi-icon-mode"
-ICON_CACHE="${HOME}/.cache/matugen/yazi-icons-matugen.toml"
-TEMPLATES="${HOME}/.config/matugen/templates"
-SCRIPTS="${HOME}/.config/hyprgruv/scripts"
-GENERATOR="${SCRIPTS}/generate-yazi-icons-matugen.py"
+THEME_FILE="${HOME}/.config/yazi/theme.toml"
+CURRENT_THEME_FILE="${HOME}/.config/colorschemes/.current-theme"
+FLAVORS_DIR="${HOME}/.config/yazi/flavors"
 
-strip_icon_block() {
-    [[ -f "$THEME" ]] || return 0
-    if grep -qE '^(# .*icon palette|\[icon\])' "$THEME"; then
-        sed -i -E '/^(# .*icon palette|\[icon\])/,$d' "$THEME"
+resolve_yazi_flavor() {
+    local theme="${1:-}"
+    if [[ -z "$theme" && -f "$CURRENT_THEME_FILE" ]]; then
+        theme=$(tr -d '[:space:]' <"$CURRENT_THEME_FILE")
     fi
-}
 
-resolve_icon_mode() {
-    local mode=""
-    if [[ -f "$ICON_MODE_FILE" ]]; then
-        mode=$(tr -d '[:space:]' <"$ICON_MODE_FILE")
-    fi
-    if [[ -z "$mode" ]]; then
-        local run_method=""
-        if [[ -f "${HOME}/.cache/matugen/pending-run.json" ]]; then
-            run_method=$(jq -r '.method // empty' "${HOME}/.cache/matugen/pending-run.json" 2>/dev/null || true)
-        fi
-        if [[ "$run_method" == "image" ]]; then
-            mode="matugen"
-        elif [[ -f "${HOME}/.config/colorschemes/.current-theme" ]]; then
-            mode="preset:$(tr -d '[:space:]' <"${HOME}/.config/colorschemes/.current-theme")"
-        else
-            mode="matugen"
-        fi
-    fi
-    printf '%s' "$mode"
-}
-
-resolve_icon_palette() {
-    local mode="$1"
-    local theme_name palette
-
-    case "$mode" in
-    matugen | waypaper)
-        if [[ ! -f "$JSON" ]]; then
-            echo "[reload-yazi] No cache at $JSON — cannot build matugen icons" >&2
-            return 1
-        fi
-        if [[ ! -x "$GENERATOR" ]] && [[ -f "$GENERATOR" ]]; then
-            chmod +x "$GENERATOR" 2>/dev/null || true
-        fi
-        if [[ ! -f "$GENERATOR" ]]; then
-            echo "[reload-yazi] Missing $GENERATOR" >&2
-            return 1
-        fi
-        python3 "$GENERATOR" "$JSON" >/dev/null
-        ICONS="$ICON_CACHE"
-        ;;
-    preset:*)
-        theme_name="${mode#preset:}"
-        palette="$TEMPLATES/yazi-icons-${theme_name}.toml"
-        if [[ ! -f "$palette" ]]; then
-            case "$theme_name" in
-            gruvbox* | *gruvbox*)
-                palette="$TEMPLATES/yazi-icons-gruvbox.toml"
-                ;;
-            *)
-                palette=""
-                ;;
-            esac
-        fi
-        if [[ -n "$palette" && -f "$palette" ]]; then
-            ICONS="$palette"
-        else
-            echo "[reload-yazi] No static icon palette for $theme_name — using matugen tint" >&2
-            python3 "$GENERATOR" "$JSON" >/dev/null 2>/dev/null || return 1
-            ICONS="$ICON_CACHE"
-        fi
+    case "$theme" in
+    catppuccin) echo "catppuccin-mocha" ;;
+    nord-darker | nord) echo "nord" ;;
+    everforest-dark | forest-night) echo "everforest-medium" ;;
+    gruvbox-dark | coast-gruv | warm-stone) echo "gruvbox-dark" ;;
+    gruvbox-light) echo "gruvbox-light" ;;
+    noir | e-ink) echo "catppuccin-mocha" ;;
+    "")
+        echo "catppuccin-mocha"
         ;;
     *)
-        palette="$TEMPLATES/yazi-icons-${mode}.toml"
-        if [[ -f "$palette" ]]; then
-            ICONS="$palette"
+        if [[ -d "${FLAVORS_DIR}/${theme}.yazi" ]]; then
+            echo "$theme"
         else
-            python3 "$GENERATOR" "$JSON" >/dev/null 2>/dev/null || return 1
-            ICONS="$ICON_CACHE"
+            echo "catppuccin-mocha"
         fi
         ;;
     esac
-
-    [[ -f "$ICONS" ]] || {
-        echo "[reload-yazi] Icon palette missing at $ICONS" >&2
-        return 1
-    }
 }
 
-append_icons() {
-    local mode
-    mode=$(resolve_icon_mode)
+write_theme_flavor() {
+    local flavor="$1"
+    local theme_id="${2:-}"
 
-    [[ -f "$THEME" ]] || return 1
-    resolve_icon_palette "$mode" || return 1
-
-    strip_icon_block
-
-    printf '\n' >>"$THEME"
-    cat "$ICONS" >>"$THEME"
-}
-
-regen_theme() {
-    [[ -f "$JSON" ]] || {
-        echo "[reload-yazi] No cache at $JSON — run matugen first" >&2
-        return 0
-    }
-    command -v matugen >/dev/null 2>&1 || {
-        echo "[reload-yazi] matugen not found" >&2
-        return 0
-    }
-
-    local before after
-    before=""
-    [[ -f "$THEME" ]] && before=$(stat -c '%Y' "$THEME" 2>/dev/null || echo "")
-
-    # Yazi-only config — never run the full matugen.toml here (would reload waybar, hypr, gtk, etc.).
-    matugen json "$JSON" -c "$YAZI_CONFIG" -q --continue-on-error 2>/dev/null || true
-
-    [[ -f "$THEME" ]] || {
-        echo "[reload-yazi] theme.toml missing after matugen json" >&2
+    [[ -d "${FLAVORS_DIR}/${flavor}.yazi" ]] || {
+        echo "[reload-yazi] Flavor not installed: ${flavor}.yazi" >&2
+        echo "[reload-yazi] Run: ya pkg add <owner>/<flavor>" >&2
         return 1
     }
 
-    append_icons
+    cat >"$THEME_FILE" <<EOF
+# Managed by reload-yazi-theme.sh — do not edit [flavor] by hand.
+# Switch via theme picker or: reload-yazi-theme.sh --switch <theme-name>
 
-    after=$(stat -c '%Y' "$THEME" 2>/dev/null || echo "")
-    if [[ -n "$before" && "$before" == "$after" ]]; then
-        touch "$THEME" 2>/dev/null || true
+[flavor]
+dark  = "${flavor}"
+light = "${flavor}"
+EOF
+
+    if [[ -n "$theme_id" ]]; then
+        echo "flavor:${flavor}" >"${HOME}/.cache/matugen/yazi-flavor-mode"
+        echo "preset:${theme_id}" >"${HOME}/.cache/matugen/yazi-icon-mode"
     fi
+}
+
+switch_theme() {
+    local theme="${1:-}"
+    local flavor
+    flavor=$(resolve_yazi_flavor "$theme")
+    write_theme_flavor "$flavor" "${theme:-$(tr -d '[:space:]' <"$CURRENT_THEME_FILE" 2>/dev/null || true)}"
+    echo "[reload-yazi] flavor=${flavor} theme=${theme:-current}"
 }
 
 reload_instances() {
     command -v ya >/dev/null 2>&1 || return 0
-    # Receiver 0 = all remote yazi instances (DDS broadcast).
     ya emit-to 0 app:theme 2>/dev/null || true
 }
 
 case "${1:-}" in
---regen)
-    regen_theme
+--switch)
+    switch_theme "${2:-}"
+    reload_instances
+    ;;
+--flavor)
+    write_theme_flavor "${2:?flavor name required}"
+    reload_instances
     ;;
 --reload)
     reload_instances
     ;;
---icons)
-    append_icons
+--regen | --icons)
+    # Legacy matugen paths — flavors replaced generated theme.toml + icon blocks.
+    switch_theme ""
     reload_instances
     ;;
 -h | --help)
-    sed -n '2,16p' "$0"
+    sed -n '2,14p' "$0"
+    ;;
+"")
+    switch_theme ""
+    reload_instances
     ;;
 *)
+    switch_theme "$1"
     reload_instances
     ;;
 esac

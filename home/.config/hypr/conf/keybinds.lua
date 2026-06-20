@@ -87,7 +87,7 @@ hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"
 -- Super+Return: plain kitty (or default terminal from ~/.config/settings/terminal.sh)
 hl.bind(mainMod .. " + Return",       hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh"))
-hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh yazi"))
+hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh"))
 hl.bind(mainMod .. " + N",            hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh"))
 hl.bind(mainMod .. " + PRINT",        hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"))
 
@@ -121,7 +121,7 @@ hl.bind(mainMod .. " + comma",  hl.dsp.layout("move -col"))
 bind_navigation_stack()
 
 -- Notifications (main = last missed)
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh last"))
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh last"))
 
 -- Clipboard history (desktop meta — not app paste)
 hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))
@@ -182,9 +182,9 @@ hl.bind(altMod .. " + C",            hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh")
 hl.bind(mainMod .. " + " .. altMod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/software.sh"))
 
 -- Notifications (alt = full menu)
-hl.bind(altMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/dunst.sh menu"))
-hl.bind(altMod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd("dunstctl close-all"))
-hl.bind(altMod .. " + SUPER + A",       hl.dsp.exec_cmd("dunstctl set-paused toggle"))
+hl.bind(altMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh menu"))
+hl.bind(altMod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh close-all"))
+hl.bind(altMod .. " + SUPER + A",       hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh toggle-pause"))
 
 -- Accessibility zoom
 hl.bind(altMod .. " + equal", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 1.1}')"))

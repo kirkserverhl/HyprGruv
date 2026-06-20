@@ -73,6 +73,24 @@ hl.window_rule({
     center = true,
     size = {820, 600},
 })
+
+-- GTK Settings (nwg-look)
+hl.window_rule({
+    name = "nwg-look-float",
+    match = { class = "^(nwg-look)$" },
+    float = true,
+    center = true,
+    size = {820, 500},
+})
+
+-- Display configuration (wdisplays)
+hl.window_rule({
+    name = "wdisplays-float",
+    match = { class = "^(wdisplays)$" },
+    float = true,
+    center = true,
+    size = {900, 650},
+})
 hl.window_rule({ name = "nemo-float",      match = { class = "^(nemo)$" },       float = true })
 -- Removed: This was too broad and made every kitty window float.
 -- The original only floated specific kitty instances (htop, yazi, etc.) via title rules below.
@@ -171,11 +189,22 @@ hl.window_rule({
     move = { "(monitor_w*0.695)", "(monitor_h*0.04)" },
 })
 
--- yazi floating
+-- yazi floating (launch with kitty --class yazi, etc.)
 hl.window_rule({
     name = "yazi-float",
     match = { class = "^(yazi)$" },
     float = true,
+    center = true,
+    size = {1000, 700},
+})
+
+-- pacseek floating (launch with kitty --class pacseek, etc.)
+hl.window_rule({
+    name = "pacseek-float",
+    match = { class = "^(pacseek)$" },
+    float = true,
+    center = true,
+    size = {1000, 700},
 })
 
 -- Basic cmatrix (F5): fullscreen on the focused monitor

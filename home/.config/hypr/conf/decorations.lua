@@ -6,7 +6,7 @@ local decorations = {
 	rounding_power = 2.0,
 
 	active_opacity = 1.0,
-	inactive_opacity = 0.97,
+	inactive_opacity = 0.95,
 	fullscreen_opacity = 1.0,
 
 	shadow = {
@@ -20,11 +20,17 @@ local decorations = {
 	blur = {
 		enabled = true,
 		size = 10,
-		passes = 3,
-		noise = 0.01,
+		passes = 6,
+		ignore_opacity = false,
 		contrast = 0.8,
 		vibrancy = 0.2,
+		xray = false,
+		new_optimizations = true,
 	},
+
+	-- inactive_opacity = 0.7,
+
+	dim_inactive = false,
 }
 
 local screen_shader = HOME .. "/.config/hypr/shaders/cinematic.frog"

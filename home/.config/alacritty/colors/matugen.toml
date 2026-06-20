@@ -2,33 +2,33 @@
 # Output target: ~/.config/alacritty/colors/matugen.toml
 
 [colors.primary]
-background = "#1d2021"
-foreground = "#ebdbb2"
+background = "#14181b"
+foreground = "#d3c6aa"
 
 [colors.cursor]
-cursor = "#f4bd6f"
-text = "#1d2021"
+cursor = "#84d2e5"
+text = "#14181b"
 
 [colors.selection]
-text = "#1d2021"
-background = "#f4bd6f"
+text = "#14181b"
+background = "#84d2e5"
 
 [colors.normal]
-black = "#1d2021"
-red = "#cc241d"
-green = "#f4bd6f"
-yellow = "#ddc2a1"
-blue = "#f4bd6f"
-magenta = "#56442a"
-cyan = "#3a4c2a"
-white = "#ebdbb2"
+black = "#14181b"
+red = "#e67e80"
+green = "#84d2e5"
+yellow = "#b2cbd2"
+blue = "#84d2e5"
+magenta = "#334a50"
+cyan = "#3e4565"
+white = "#d3c6aa"
 
 [colors.bright]
-black = "#7c6f64"
-red = "#cc241d"
-green = "#f4bd6f"
-yellow = "#ddc2a1"
-blue = "#f4bd6f"
-magenta = "#56442a"
-cyan = "#3a4c2a"
-white = "#665c54"
+black = "#657366"
+red = "#e67e80"
+green = "#84d2e5"
+yellow = "#b2cbd2"
+blue = "#84d2e5"
+magenta = "#334a50"
+cyan = "#3e4565"
+white = "#3c4851"

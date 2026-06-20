@@ -5,10 +5,6 @@ set -euo pipefail
 SCRIPTS="${HOME}/.config/hyprgruv/scripts"
 THEME="${HOME}/.config/yazi/theme.toml"
 
-if [[ ! -f "$THEME" ]]; then
-    "$SCRIPTS/reload-yazi-theme.sh" --regen
-else
-    "$SCRIPTS/reload-yazi-theme.sh" --icons 2>/dev/null || true
-fi
+"$SCRIPTS/reload-yazi-theme.sh" --switch 2>/dev/null || true
 
 exec yazi "$@"

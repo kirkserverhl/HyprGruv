@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "name": "car",
+  "label": "car",
+  "saved_at": "2026-06-20T01:35:06.526915+00:00",
+  "theme": "gruvbox-dark",
+  "wallpaper": "/home/kirk/Wallpapers/gruv_wallhaven-ly93ry.png",
+  "source": "saved-config",
+  "base16": {
+    "base00": "#0e2020",
+    "base01": "#0e2020",
+    "base02": "#0e2020",
+    "base03": "#0e2020",
+    "base04": "#0e2020",
+    "base05": "#0e2020",
+    "base06": "#0e2020",
+    "base07": "#0e2020",
+    "base08": "#0e2020",
+    "base09": "#0e2020",
+    "base0a": "#0e2020",
+    "base0b": "#5d7272",
+    "base0c": "#0e2020",
+    "base0d": "#5d7272",
+    "base0e": "#0e2020",
+    "base0f": "#0e2020"
+  }
+}
