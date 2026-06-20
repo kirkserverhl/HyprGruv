@@ -3,9 +3,6 @@
 
 set -euo pipefail
 
-state="${XDG_STATE_HOME:-$HOME/.local/state}/notify-daemon"
-[[ -f "$state" ]] && [[ "$(tr -d '[:space:]' <"$state")" != "swaync" ]] && exit 0
-
 swaync_bin() {
     if command -v swaync-client >/dev/null 2>&1; then
         command -v swaync-client

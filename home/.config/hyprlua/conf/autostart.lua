@@ -43,8 +43,8 @@ hl.on("hyprland.start", function()
     -- Auto-mount
     hl.exec_cmd("udiskie")
 
-    -- Dunst
-    hl.exec_cmd("dunst")
+    -- SwayNC
+    hl.exec_cmd(SCRIPTS .. "/notify-autostart.sh")
 
     -- The original also had a non-once exec here:
     -- hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")

@@ -215,9 +215,6 @@ verify_shell_startup() {
     case "$shell_name" in
         zsh)
             [[ -f "$HOME/.zshrc" ]] || log_warning "~/.zshrc missing — zsh will start with minimal config"
-            if [[ ! -d "${ZSH:-$HOME/.oh-my-zsh}" ]]; then
-                log_warning "Oh My Zsh not installed — plugins and theme from ~/.zshrc will not load"
-            fi
             ;;
         fish)
             [[ -d "$HOME/.config/fish" ]] || log_warning "~/.config/fish missing — fish will use defaults only"
@@ -389,12 +386,6 @@ if [[ "$shell" == "zsh" ]]; then
     selected_shell_path="$(canonical_shell_path "$selected_shell_path")"
 
     deploy_shell_configs zsh
-
-    # Oh My Zsh: official installer + custom plugins (see lib/scripts/oh_my_zsh.sh)
-    # shellcheck source=/dev/null
-    source "$HYPR_DIR/lib/scripts/oh_my_zsh.sh"
-    setup_oh_my_zsh_interactive || true
-
     verify_shell_startup zsh "$selected_shell_path"
 fi
 

@@ -16,7 +16,7 @@
 {
   "include": [
     "~/.config/waybar/shared/workspaces.json",
-    "~/.config/waybar/shared/dunst.json",
+    "~/.config/waybar/shared/notifications.json",
     "~/.config/waybar/shared/apps.json",
     "~/.config/waybar/shared/settings.json",
     "~/.config/waybar/shared/soundsettings.json",

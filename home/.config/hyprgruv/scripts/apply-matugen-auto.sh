@@ -81,7 +81,7 @@ on_exit() {
 }
 trap on_exit EXIT
 
-# One apply at a time (mkdir lock — safe against fd inheritance by dunst post_hooks).
+# One apply at a time (mkdir lock — safe against fd inheritance by post_hooks).
 acquire_apply_lock() {
     local waited=0
     while ! mkdir "$APPLY_LOCK_DIR" 2>/dev/null; do

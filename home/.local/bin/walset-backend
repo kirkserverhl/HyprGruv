@@ -33,8 +33,7 @@ matugen image "$IMAGE"
 pkill waybar
 $HOME/.config/hyprgruv/scripts/launch.sh >/dev/null 2>&1 &
 
-# Refresh dunst
-pkill dunst
-dunst >/dev/null 2>&1 &
+# Refresh SwayNC
+"$HOME/.config/hyprgruv/scripts/matugen-posthook-swaync.sh" 2>/dev/null || true
 
 notify-send "Theme Applied" "Wallpaper and theme updated successfully!"

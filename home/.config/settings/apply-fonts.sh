@@ -19,7 +19,7 @@ fi
 source "$FONTS_SH"
 
 echo "==> Applying fonts from central config:"
-echo "    TEXT   : $FONT_TEXT  (terminals, dunst, etc.)"
+echo "    TEXT   : $FONT_TEXT  (terminals, notifications, etc.)"
 echo "    UI     : $FONT_UI    (menus, waybar, rofi, gtk)"
 echo "    HEADER : $FONT_HEADER (sddm, hyprlock big elements, wlogout)"
 echo
@@ -111,16 +111,7 @@ if [[ -f "$GHOSTTY_CONF" ]]; then
 fi
 
 # =============================================================================
-# 5. DUNST notifications → TEXT font (body text)
-# =============================================================================
-DUNST_CONF="$HOME/.config/dunst/dunstrc"
-if [[ -f "$DUNST_CONF" ]]; then
-    sed -i "s|^font = .*|font = $FONT_TEXT $FONT_SIZE_TEXT|" "$DUNST_CONF"
-    echo "  ✓ Updated dunstrc → $FONT_TEXT"
-fi
-
-# =============================================================================
-# 6. HYPRLOCK - mix of HEADER (big/important) + UI (secondary)
+# 5. HYPRLOCK - mix of HEADER (big/important) + UI (secondary)
 # =============================================================================
 HYPRLOCK_CONF="$HOME/.config/hypr/hyprlock/hyprlock.conf"
 if [[ -f "$HYPRLOCK_CONF" ]]; then

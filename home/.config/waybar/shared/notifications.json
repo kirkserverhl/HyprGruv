@@ -1,0 +1,11 @@
+{
+  "custom/notification": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "$HOME/.config/hyprgruv/scripts/swaync.sh",
+    "on-click": "$HOME/.config/hyprgruv/scripts/swaync.sh left",
+    "on-click-right": "$HOME/.config/hyprgruv/scripts/swaync.sh right",
+    "interval": 10,
+    "tooltip": true
+  }
+}

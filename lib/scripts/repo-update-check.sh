@@ -36,7 +36,7 @@ Hyprgruv update checker
 
 Modes:
   check                 Exit 0 when remote has new commits
-  --notify              Send dunst/libnotify alert
+  --notify              Send libnotify alert
   --prompt              Show rofi menu when behind remote
   --prompt-if-needed    Notify + rofi unless dismissed for this commit
   --mark-current        Record current remote as seen (dismiss)

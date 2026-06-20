@@ -73,7 +73,7 @@ hl.on("hyprland.start", function()
 	-- Auto-mount
 	hl.exec_cmd("udiskie")
 
-	-- Notification daemon (dunst or swaync — see notify-trial / ~/.local/state/notify-daemon)
+	-- Notification daemon (SwayNC)
 	hl.exec_cmd(SCRIPTS .. "/notify-autostart.sh")
 
 	-- Saved blur profile (overrides decorations.lua defaults after load)

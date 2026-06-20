@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SwayNC helpers — mirrors dunst.sh / dunstctl for keybinds and waybar.
+# SwayNC helpers for keybinds and waybar.
 
 set -euo pipefail
 
@@ -19,7 +19,7 @@ swaync_client() {
 CLIENT="$(swaync_client)"
 
 show_last_missed() {
-    # Control center is swaync's history UI (replaces dunst history-pop)
+    # Open the notification center
     "$CLIENT" -op -sw 2>/dev/null || notify-send -t 2000 "SwayNC" "Notification center unavailable"
 }
 

@@ -40,7 +40,7 @@ python3 "$BUILDER" export-theme "$WALLPAPER" "$THEME" "$PALETTE_JSON"
 
 python3 "$GENERATOR" "$THEME"
 
-# Matugen import drives kitty/dunst/etc. from the same wal base16 (no Material You expansion).
+# Matugen import drives kitty/swaync/etc. from the same wal base16 (no Material You expansion).
 IMPORT_JSON="$CACHE_DIR/wal-import.json"
 python3 "$BUILDER" build "$WALLPAPER" "$IMPORT_JSON" spectrum-scale
 if command -v matugen >/dev/null 2>&1; then

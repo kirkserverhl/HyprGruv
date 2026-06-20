@@ -1,5 +1,5 @@
 #!/bin/bash
-iDIR="$HOME/.config/dunst/icons"
+iDIR="$HOME/.config/hyprgruv/icons/notifications"
 notification_timeout=1000
 step=5  # INCREASE/DECREASE BY THIS VALUE
 

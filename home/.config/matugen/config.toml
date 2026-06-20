@@ -122,12 +122,6 @@ input_path = "~/.config/matugen/templates/chrome.user.css"
 output_path = "~/.config/chrome/matugen-theme.user.css"
 
 
-[templates.dunst]
-input_path = "~/.config/matugen/templates/dunst.conf"
-output_path = "~/.config/dunst/dunstrc"
-post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-dunst.sh"
-
-
 [templates.swaync]
 input_path = "~/.config/matugen/templates/swaync-style.css"
 output_path = "~/.config/swaync/style.css"

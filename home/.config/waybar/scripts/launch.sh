@@ -54,9 +54,8 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
     [[ "$found" -eq 0 ]] && break
     sleep 0.05
 done
-killall -9 dunst 2>/dev/null || true
-
-dunst &
+killall -9 dunst swaync 2>/dev/null || true
+"$HOME/.config/hyprgruv/scripts/notify-autostart.sh" &
 
 ln -sf "$cfg" "$WAYBAR_DIR/config.jsonc"
 ln -sf "$css" "$WAYBAR_DIR/style.css"

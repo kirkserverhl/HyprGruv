@@ -121,9 +121,9 @@ esac
 pgrep kitty | xargs -r kill -SIGUSR1 > /dev/null 2>&1
 echo ""
 
-# Dunst — colors come from matugen dunstrc; restart to pick up config changes
-echo -e "${CYAN}-> Restarting Dunst...${NC}"
-pkill dunst > /dev/null 2>&1 && dunst > /dev/null 2>&1 & disown
+# SwayNC — colors come from matugen style.css; reload to pick up config changes
+echo -e "${CYAN}-> Reloading SwayNC...${NC}"
+"$HOME/.config/hyprgruv/scripts/matugen-posthook-swaync.sh" 2>/dev/null || true
 echo ""
 
 # wlogout theme

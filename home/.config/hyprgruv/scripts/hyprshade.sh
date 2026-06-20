@@ -18,11 +18,11 @@ done
 # If the current theme is the last one, turn off the filter
 if [[ $current_index -eq 2 ]]; then
     hyprshade off
-    dunstify -u normal "Hyprshade" "Blue light filter turned off"
+    notify-send "Hyprshade" "Blue light filter turned off"
 else
     # Set the next theme in the array
     next_index=$((current_index + 1))
     hyprshade on "${themes[$next_index]}"
-    dunstify -u normal "Hyprshade" "Blue light filter set to ${themes[$next_index]}"
+    notify-send "Hyprshade" "Blue light filter set to ${themes[$next_index]}"
 fi
 

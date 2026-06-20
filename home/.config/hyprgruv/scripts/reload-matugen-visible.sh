@@ -11,7 +11,7 @@ SCRIPTS="${HOME}/.config/hyprgruv/scripts"
 
 "${SCRIPTS}/apply-desktop-assets.sh" 2>/dev/null || true
 
-for hook in hyprland waybar starship terminal dunst swaync firefox grok; do
+for hook in hyprland waybar starship terminal swaync firefox grok; do
     "${SCRIPTS}/matugen-posthook-${hook}.sh" 2>/dev/null || true
 done
 

@@ -265,7 +265,7 @@ fi
 # *after* a full matugen run. The posthook always writes the complete themed file;
 # the toggle script then punches holes in just the background roles.
 
-# Per-app reloads run via matugen-posthook-{dunst,terminal,starship,hyprland,waybar}.sh
+# Per-app reloads run via matugen-posthook-{swaync,terminal,starship,hyprland,waybar}.sh
 # on each template's post_hook. Cache hits use reload-matugen-visible.sh instead.
 
 # -----------------------------------------------------------------------------

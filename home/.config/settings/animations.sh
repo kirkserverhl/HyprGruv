@@ -36,8 +36,7 @@ echo "source = ~/.config/hypr/conf/animations/${ANIMATION_OPTIONS[$NEXT_INDEX]}"
 # Extract the animation title (remove ".conf" and replace "-" with " ")
 ANIMATION_TITLE=$(echo "${ANIMATION_OPTIONS[$NEXT_INDEX]%.conf}" | sed 's/-/ /g')
 
-# Send a dunst notification
-dunstify -u normal "Animations Changed To" "$ANIMATION_TITLE"
+notify-send "Animations Changed To" "$ANIMATION_TITLE"
 
 echo "Animation source updated to ${ANIMATION_OPTIONS[$NEXT_INDEX]}"
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-iDIR="$HOME/.config/dunst/icons"
+iDIR="$HOME/.config/hyprgruv/icons/notifications"
 sDIR="$HOME/.config/hyprgruv/scripts"
 
 # ---------- Volume helpers ----------

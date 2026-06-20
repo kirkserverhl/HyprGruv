@@ -89,19 +89,11 @@ fi
 
 # ------------------------- Shell -----------------------------
 hyprgruv_section_intro "Shell"
-if _confirm "  🐚   Configure the Shell? (fish, zsh, Oh My Zsh, custom plugins)"; then
+if _confirm "  🐚   Configure the Shell? (fish, zsh, or bash)"; then
     script="$SCRIPTS_DIR/shell.sh"
     if [[ -f "$script" ]]; then
         run_step "$script" "Shell Configuration"
-
-        zsh_fix="$SCRIPTS_DIR/zsh_fix.sh"
-        if [[ -f "$zsh_fix" ]]; then
-            run_step "$zsh_fix" "Zsh Plugin Fix"
-            _section_handoff "Shell configuration completed"
-        else
-            log_warning "zsh_fix.sh not found at: $zsh_fix"
-            _section_handoff "Shell configuration completed"
-        fi
+        _section_handoff "Shell configuration completed"
     else
         log_error "Script not found: $script"
         exit 1

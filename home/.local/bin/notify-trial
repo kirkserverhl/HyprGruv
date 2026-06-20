@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STATE="${XDG_STATE_HOME:-$HOME/.local/state}/notify-daemon"
 SCRIPTS="${HOME}/.config/hyprgruv/scripts"
 
 usage() {
@@ -9,16 +8,9 @@ usage() {
 Usage: notify-trial <command>
 
 Commands:
-  dunst         Switch to dunst now (default on fresh installs)
-  swaync        Switch to swaync now
-  install       Install swaync system-wide via yay (needs sudo)
-  compare       Show dunst vs swaync feature mapping
-  status        Show active daemon
-  backup        Re-backup dunst config
+  restart       Restart SwayNC
+  status        Show whether SwayNC is running
   test          Send sample low/normal/critical notifications
-
-Dunst stays the default until you run: notify-trial swaync
-Hyprland autostart reads ~/.local/state/notify-daemon on next login.
 EOF
 }
 
@@ -32,73 +24,16 @@ swaync_bin() {
     fi
 }
 
-set_daemon() {
-    local name="$1"
-    mkdir -p "$(dirname "$STATE")"
-    printf '%s\n' "$name" >"$STATE"
-    "$SCRIPTS/notify-install-user-dbus.sh" 2>/dev/null || true
-
-    case "$name" in
-        swaync)
-            killall dunst 2>/dev/null || true
-            "$(swaync_bin)" &>/dev/null &
-            ;;
-        dunst)
-            killall swaync 2>/dev/null || true
-            dunst &>/dev/null &
-            ;;
-    esac
-    disown 2>/dev/null || true
-    echo "Active notification daemon: $name"
-}
-
 cmd="${1:-}"
 case "$cmd" in
-    dunst)
-        set_daemon dunst
-        ;;
-    swaync)
-        set_daemon swaync
-        ;;
-    install)
-        yay -S swaync
+    restart|swaync|start)
+        killall dunst swaync 2>/dev/null || true
+        "$(swaync_bin)" &>/dev/null &
+        disown 2>/dev/null || true
+        echo "SwayNC restarted"
         ;;
     status)
-        if [[ -f "$STATE" ]]; then
-            echo "Configured: $(tr -d '[:space:]' <"$STATE")"
-        else
-            echo "Configured: dunst (default)"
-        fi
-        pgrep -a dunst 2>/dev/null || echo "dunst: not running"
         pgrep -a swaync 2>/dev/null || echo "swaync: not running"
-        ;;
-    backup)
-        dest="$HOME/.config/dunst-backup-$(date +%Y%m%d-%H%M%S)"
-        mkdir -p "$dest"
-        cp -a "$HOME/.config/dunst/dunstrc" "$dest/"
-        cp -a "$HOME/.config/waybar/scripts/dunst.sh" "$dest/waybar-dunst.sh"
-        cp -a "$SCRIPTS/dunst.sh" "$dest/hyprgruv-dunst.sh"
-        cp -a "$HOME/.config/matugen/templates/dunst.conf" "$dest/" 2>/dev/null || true
-        echo "Backed up to $dest"
-        ;;
-    compare)
-        cat <<'EOF'
-Dunst                              SwayNC
-──────────────────────────────────────────────────────────────────
-Lightweight popup daemon           Popup + built-in control center
-dunstrc (ini config)               config.json + CSS theming
-dunstctl / dunstify CLI             swaync-client CLI
-History via dunstctl history       History in control center panel
-DND: dunstctl set-paused           DND: swaync-client -d
-Rofi menu for last 10 (custom)     Native grouped history UI
-Matugen → dunstrc                  Matugen → style.css
-No widgets                         DND toggle, clear-all, mpris*, etc.
-
-* mpris/volume widgets available in config.json if you want them
-
-Try swaync:  notify-trial swaync && notify-trial test
-Back to dunst: notify-trial dunst
-EOF
         ;;
     test)
         notify-send -u low    "Test" "Low priority (6s timeout)"
