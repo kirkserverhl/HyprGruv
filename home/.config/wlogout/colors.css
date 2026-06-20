@@ -6,23 +6,23 @@
 /* base08: red / errors / urgent notifications */
 /* base0D: accent (primary actions, highlights, borders) */
 
-@define-color base00 #14181b;
-@define-color base01 #1e2429;
-@define-color base02 #283036;
-@define-color base03 #657366;
-@define-color base04 #859289;
-@define-color base05 #d3c6aa;
-@define-color base06 #283036;
-@define-color base07 #3c4851;
+@define-color base00 #1d2021;
+@define-color base01 #282828;
+@define-color base02 #3c3836;
+@define-color base03 #7c6f64;
+@define-color base04 #928374;
+@define-color base05 #ebdbb2;
+@define-color base06 #3c3836;
+@define-color base07 #665c54;
 
-@define-color base08 #e67e80;
-@define-color base09 #d699b6;
-@define-color base0A #262e31;
-@define-color base0B #232a2e;
-@define-color base0C #232a2e;
-@define-color base0D #232a2e;
-@define-color base0E #232a2e;
-@define-color base0F #232a2e;
+@define-color base08 #cc241d;
+@define-color base09 #b16286;
+@define-color base0A #5f5850;
+@define-color base0B #6d655a;
+@define-color base0C #786f62;
+@define-color base0D #847b69;
+@define-color base0E #918571;
+@define-color base0F #9d907a;
 
 @define-color background @base00;
 @define-color foreground @base05;

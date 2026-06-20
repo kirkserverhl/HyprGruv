@@ -32,8 +32,8 @@ tooltip {
 /* Unified blurred panel: semi-transparent surface across the whole window. */
 
 window {
-    color: #d3c6aa;
-    background-color: alpha(#14181b, 0.9);
+    color: #ebdbb2;
+    background-color: alpha(#1d2021, 0.9);
 }
 
 box,
@@ -46,27 +46,27 @@ scrolledwindow {
 /* All action buttons — top row, bottom row, slideshow */
 button,
 togglebutton {
-    background-color: #3e4565;
-    color: #d3c6aa;
-    border: 1px solid #859289;
+    background-color: #384c2c;
+    color: #ebdbb2;
+    border: 1px solid #928374;
     border-radius: 6px;
     padding: 6px 14px;
 }
 
 button:hover,
 togglebutton:hover {
-    background-color: #84d2e5;
-    color: #14181b;
+    background-color: #f1be6d;
+    color: #1d2021;
 }
 
 button:active,
 togglebutton:active {
-    background-color: #3e4565;
+    background-color: #384c2c;
 }
 
 togglebutton:checked {
-    background-color: #84d2e5;
-    color: #14181b;
+    background-color: #f1be6d;
+    color: #1d2021;
 }
 
 /* Combobox dropdown arrow buttons stay minimal */
@@ -77,76 +77,76 @@ combobox button {
 }
 
 combobox button:hover {
-    background-color: alpha(#84d2e5, 0.15);
-    color: #d3c6aa;
+    background-color: alpha(#f1be6d, 0.15);
+    color: #ebdbb2;
 }
 
 label {
-    color: #d3c6aa;
+    color: #ebdbb2;
     background-color: transparent;
 }
 
 entry {
-    background-color: alpha(#1e2429, 0.85);
-    color: #d3c6aa;
-    border: 1px solid #859289;
+    background-color: alpha(#282828, 0.85);
+    color: #ebdbb2;
+    border: 1px solid #928374;
     border-radius: 6px;
     padding: 5px 8px;
 }
 
 entry selection {
-    background-color: #84d2e5;
-    color: #14181b;
+    background-color: #f1be6d;
+    color: #1d2021;
 }
 
 combobox {
-    background-color: alpha(#283036, 0.85);
-    color: #d3c6aa;
-    border: 1px solid #859289;
+    background-color: alpha(#3c3836, 0.85);
+    color: #ebdbb2;
+    border: 1px solid #928374;
     border-radius: 6px;
     padding: 5px 8px;
 }
 
 menu,
 popover {
-    background-color: alpha(#1e2429, 0.95);
-    color: #d3c6aa;
-    border: 1px solid #859289;
+    background-color: alpha(#282828, 0.95);
+    color: #ebdbb2;
+    border: 1px solid #928374;
     border-radius: 6px;
 }
 
 menuitem,
 checkmenuitem {
-    color: #d3c6aa;
+    color: #ebdbb2;
 }
 
 tooltip {
-    background-color: alpha(#1e2429, 0.95);
-    color: #d3c6aa;
-    border: 1px solid #859289;
+    background-color: alpha(#282828, 0.95);
+    color: #ebdbb2;
+    border: 1px solid #928374;
     border-radius: 6px;
     padding: 4px 8px;
 }
 
 scrollbar {
-    background-color: alpha(#283036, 0.5);
+    background-color: alpha(#3c3836, 0.5);
     border-radius: 4px;
 }
 
 scrollbar slider {
-    background-color: #859289;
+    background-color: #928374;
     border-radius: 4px;
     min-width: 8px;
     min-height: 20px;
 }
 
 scrollbar slider:hover {
-    background-color: #657366;
+    background-color: #7c6f64;
 }
 
 /* Wallpaper grid */
 .highlighted-button {
-    border: 2px solid #84d2e5;
+    border: 2px solid #f1be6d;
     border-radius: 8px;
 }
 
@@ -158,7 +158,7 @@ grid button {
 }
 
 grid button:hover {
-    background-color: alpha(#84d2e5, 0.15);
+    background-color: alpha(#f1be6d, 0.15);
     border-radius: 6px;
 }
 
