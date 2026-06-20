@@ -195,6 +195,7 @@ rules = [
 # : ]]]
 # Icons: appended by reload-yazi-theme.sh (matugen tint or preset palette)
 
+
 # Matugen icon palette (semantic groups from wallpaper colors)
 [icon]
 
