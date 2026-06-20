@@ -605,7 +605,8 @@ Common keybinds:
   Win + F             Thunar
   Win + N             NeoVim
   Win + Q             Close Window
-  Win + SPACE         App launcher (favorites)
+  Win + SPACE         App launcher (all apps)
+  Alt + SPACE         Favorites launcher
   Win + CTRL + Q      Logout
 
 Full keybinds: Win + K  or type 'keybinds' in a terminal

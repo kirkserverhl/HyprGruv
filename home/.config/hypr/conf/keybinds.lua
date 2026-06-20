@@ -83,7 +83,7 @@ hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Launchers
-hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh"))
+hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"))
 -- Super+Return: plain kitty (or default terminal from ~/.config/settings/terminal.sh)
 hl.bind(mainMod .. " + Return",       hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh"))
@@ -135,7 +135,7 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(SCRIPTS .. "/reload-dev-session.sh"))
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Launchers (alt)
-hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"))
+hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh"))
 hl.bind(altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
 hl.bind(altMod .. " + B",      hl.dsp.exec_cmd("google-chrome-stable"))
 hl.bind(mainMod .. " + " .. altMod .. " + B", hl.dsp.exec_cmd("firefox"))
