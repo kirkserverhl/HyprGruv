@@ -42,12 +42,15 @@ case "$cmd" in
         ;;
     default-fish)
         fish_path="$(fish_bin)"
-        if [[ "$fish_path" == "$HOME/.local/fish-root/usr/bin/fish" ]]; then
-            echo "Install system fish first: shell-trial install" >&2
-            exit 1
+        if [[ "$fish_path" == "$HOME/.local/bin/fish" ]]; then
+            fish_path="$HOME/.local/fish-root/usr/bin/fish"
+        fi
+        if [[ ! -f /etc/shells ]] || ! grep -Fxq "$fish_path" /etc/shells 2>/dev/null; then
+            echo "Adding $fish_path to /etc/shells (sudo required)…"
+            echo "$fish_path" | sudo tee -a /etc/shells >/dev/null
         fi
         chsh -s "$fish_path"
-        echo "Login shell set to $fish_path"
+        echo "Login shell set to $fish_path — reboot or log out/in to apply"
         ;;
     default-zsh)
         chsh -s /usr/bin/zsh

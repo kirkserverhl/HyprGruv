@@ -89,7 +89,7 @@ fi
 
 # ------------------------- Shell -----------------------------
 hyprgruv_section_intro "Shell"
-if _confirm "  🐚   Configure the Shell? (zsh, Oh My Zsh, custom plugins)"; then
+if _confirm "  🐚   Configure the Shell? (fish, zsh, Oh My Zsh, custom plugins)"; then
     script="$SCRIPTS_DIR/shell.sh"
     if [[ -f "$script" ]]; then
         run_step "$script" "Shell Configuration"
