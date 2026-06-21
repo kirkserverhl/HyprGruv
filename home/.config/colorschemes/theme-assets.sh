@@ -55,11 +55,11 @@ find_icon_theme_name() {
     local want="$1"
     local base dir index found
     [[ -n "$want" ]] || return 1
-    for base in "$HOME/.local/share/icons" "/usr/share/icons"; do
+    for base in "$HOME/.icons" "$HOME/.local/share/icons" "/usr/share/icons"; do
         [[ -d "$base" ]] || continue
         if [[ -d "$base/$want" && -f "$base/$want/index.theme" ]]; then
-            found=$(_read_icon_theme_name "$base/$want/index.theme")
-            printf '%s\n' "${found:-$want}"
+            # GTK/xsettingsd need the on-disk directory name, not index.theme Name=.
+            printf '%s\n' "$want"
             return 0
         fi
         for dir in "$base"/*; do
@@ -68,7 +68,7 @@ find_icon_theme_name() {
             [[ -f "$index" ]] || continue
             found=$(_read_icon_theme_name "$index")
             if [[ "$found" == "$want" ]]; then
-                printf '%s\n' "$found"
+                printf '%s\n' "$(basename "$dir")"
                 return 0
             fi
         done
@@ -80,11 +80,11 @@ find_cursor_theme_name() {
     local want="$1"
     local base dir index found
     [[ -n "$want" ]] || return 1
-    for base in "$HOME/.local/share/icons" "/usr/share/icons"; do
+    for base in "$HOME/.icons" "$HOME/.local/share/icons" "/usr/share/icons"; do
         [[ -d "$base" ]] || continue
         if [[ -d "$base/$want" && -f "$base/$want/index.theme" ]]; then
-            found=$(_read_icon_theme_name "$base/$want/index.theme")
-            printf '%s\n' "${found:-$want}"
+            # Hyprland/GTK need the on-disk directory name, not index.theme Name=.
+            printf '%s\n' "$want"
             return 0
         fi
         for dir in "$base"/*; do
@@ -93,7 +93,7 @@ find_cursor_theme_name() {
             [[ -f "$index" ]] || continue
             found=$(_read_icon_theme_name "$index")
             if [[ "$found" == "$want" ]]; then
-                printf '%s\n' "$found"
+                printf '%s\n' "$(basename "$dir")"
                 return 0
             fi
         done
@@ -285,6 +285,23 @@ resolve_icon_theme() {
     esac
 }
 
+_read_cursor_theme_slot() {
+    local theme="$1"
+    local family slot_file slot_name=""
+    family=$(resolve_theme_family "$theme")
+
+    for slot_file in \
+        "$HOME/.config/colorschemes/$theme/cursor-theme" \
+        "$HOME/.config/colorschemes/$family/cursor-theme"; do
+        if [[ -f "$slot_file" ]]; then
+            slot_name=$(tr -d '[:space:]' <"$slot_file")
+            [[ -n "$slot_name" ]] && break
+        fi
+    done
+
+    printf '%s\n' "$slot_name"
+}
+
 resolve_kde_lookandfeel() {
     local theme="$1"
     local family slot_file slot_name
@@ -307,18 +324,22 @@ resolve_kde_lookandfeel() {
 
 resolve_cursor_theme() {
     local theme="$1"
-    case "$(resolve_theme_family "$theme")" in
+    local family slot_name
+    family=$(resolve_theme_family "$theme")
+    slot_name=$(_read_cursor_theme_slot "$theme")
+
+    case "$family" in
     catppuccin)
-        pick_existing_cursor_theme Nordzy-catppuccin-mocha-rosewater "Catppuccin Frappé Rosewater" catppuccin-frappe-rosewater-cursors Bibata-Modern-Classic-Gruvbox
+        pick_existing_cursor_theme "$slot_name" Nordzy-catppuccin-mocha-rosewater "Catppuccin Frappé Rosewater" catppuccin-frappe-rosewater-cursors Bibata-Modern-Classic-Gruvbox
         ;;
     nord-darker)
-        pick_existing_cursor_theme Nordzy-cursors Nordzy-cursors-white Bibata-Modern-Classic-Gruvbox
+        pick_existing_cursor_theme "$slot_name" Nordzy-cursors Nordzy-cursors-white Bibata-Modern-Classic-Gruvbox
         ;;
     everforest-dark)
-        pick_existing_cursor_theme Nordzy-cursors Bibata-Modern-Classic-Gruvbox
+        pick_existing_cursor_theme "$slot_name" Nordzy-cursors Bibata-Modern-Classic-Gruvbox
         ;;
     *)
-        pick_existing_cursor_theme Bibata-Modern-Classic-Gruvbox
+        pick_existing_cursor_theme "$slot_name" Bibata-Modern-Classic-Gruvbox
         ;;
     esac
 }

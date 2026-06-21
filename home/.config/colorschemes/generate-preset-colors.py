@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -354,8 +355,41 @@ def write_rofi(slots: dict[str, str], theme: str) -> None:
     out.write_text(content, encoding="utf-8")
 
 
+CANONICAL_PALETTE_SOURCES = frozenset({
+    "exported-from-css",
+    "preset-static",
+    "theme-seed",
+})
+
+
+def palette_json_path(theme: str) -> Path:
+    return COLORSCHEMES / theme / "palette.json"
+
+
+def palette_json_source(theme: str) -> str | None:
+    path = palette_json_path(theme)
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    source = data.get("source")
+    return source if isinstance(source, str) else None
+
+
+def should_use_canonical_palette(theme: str) -> bool:
+    """Theme switcher picks must use the fixed slot palette, not wallpaper extracts."""
+    if os.environ.get("THEME_SWITCHER_APPLY") == "1":
+        return True
+    source = palette_json_source(theme)
+    if source is None:
+        return False
+    return source not in CANONICAL_PALETTE_SOURCES
+
+
 def load_palette_json(theme: str) -> dict[str, str] | None:
-    path = COLORSCHEMES / theme / "palette.json"
+    path = palette_json_path(theme)
     if not path.is_file():
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
@@ -369,9 +403,9 @@ def load_palette_json(theme: str) -> dict[str, str] | None:
     return slots if len(slots) >= 8 else None
 
 
-def export_palette_json(theme: str, slots: dict[str, str]) -> None:
-    out = COLORSCHEMES / theme / "palette.json"
-    if out.is_file():
+def export_palette_json(theme: str, slots: dict[str, str], *, force: bool = False) -> None:
+    out = palette_json_path(theme)
+    if out.is_file() and not force:
         return
     payload = {
         "version": 1,
@@ -388,13 +422,14 @@ def main() -> int:
         return 1
 
     theme = sys.argv[1].strip()
-    slots = load_palette_json(theme)
+    use_canonical = should_use_canonical_palette(theme)
+    slots = None if use_canonical else load_palette_json(theme)
     palette_path: Path | None = None
     if slots is None:
         palette_path = find_palette_css(theme)
         palette = parse_palette(palette_path)
         slots = build_slots(palette, theme)
-        export_palette_json(theme, slots)
+        export_palette_json(theme, slots, force=use_canonical)
 
     slots = normalize_slot_keys(slots)
 

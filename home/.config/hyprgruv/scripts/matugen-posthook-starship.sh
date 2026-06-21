@@ -22,4 +22,5 @@ fi
 if command -v pkill >/dev/null 2>&1; then
     pkill -WINCH -u "$(id -un)" -x zsh 2>/dev/null || true
     pkill -WINCH -u "$(id -un)" -x bash 2>/dev/null || true
+    pkill -WINCH -u "$(id -un)" -x fish 2>/dev/null || true
 fi

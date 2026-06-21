@@ -67,16 +67,8 @@ else
 fi
 echo ""
 
-# Colors from saved palette.json or active configuration (static — no pywal re-extract).
-echo -e "${CYAN}-> Applying static palette for $THEME...${NC}"
-if bash "$SCRIPT_DIR/apply-preset-assets.sh" "$THEME" "${WALLPAPER:-}"; then
-    echo -e "${CYAN}   Saved palette → starship, waybar, hypr, rofi, qt/kvantum/kde${NC}"
-else
-    echo -e "${YELLOW}   Palette apply failed — some app colors may be stale${NC}"
-fi
-echo ""
-
-# Wallpaper display (colors already matched above)
+# Wallpaper + desktop chrome first — palette/matugen can take 30–60s and must not
+# block the visible switch (background, cursor, GTK, icons).
 if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
     echo -e "${CYAN}-> Setting wallpaper...${NC}"
     APPLY_MONITOR="all"
@@ -87,6 +79,21 @@ if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
     bash "$SCRIPT_DIR/awww-wallpaper.sh" "$WALLPAPER" "$APPLY_MONITOR" >/dev/null 2>&1
 else
     echo -e "${YELLOW}-> Could not set wallpaper${NC}"
+fi
+echo ""
+
+if [[ -x "$HOME/.config/hyprgruv/scripts/apply-desktop-assets.sh" ]]; then
+    echo -e "${CYAN}-> Applying GTK, Qt, KDE, icons, and cursor...${NC}"
+    "$HOME/.config/hyprgruv/scripts/apply-desktop-assets.sh" "$THEME" 2>/dev/null || true
+fi
+echo ""
+
+# Colors from saved palette.json or active configuration (static — no pywal re-extract).
+echo -e "${CYAN}-> Applying static palette for $THEME...${NC}"
+if bash "$SCRIPT_DIR/apply-preset-assets.sh" "$THEME" "${WALLPAPER:-}"; then
+    echo -e "${CYAN}   Saved palette → starship, waybar, hypr, rofi, qt/kvantum/kde${NC}"
+else
+    echo -e "${YELLOW}   Palette apply failed — some app colors may be stale${NC}"
 fi
 echo ""
 
@@ -105,13 +112,6 @@ if [ -f "$THEME_DIR/vscodium-theme" ]; then
     fi
 else
     echo -e "${YELLOW}-> VSCodium theme file not found. Skipping.${NC}"
-fi
-echo ""
-
-# GTK, icons, cursors (per-theme desktop assets)
-if [[ -x "$HOME/.config/hyprgruv/scripts/apply-desktop-assets.sh" ]]; then
-    echo -e "${CYAN}-> Applying GTK, Qt, KDE, icons, and cursor...${NC}"
-    "$HOME/.config/hyprgruv/scripts/apply-desktop-assets.sh" "$THEME" 2>/dev/null || true
 fi
 echo ""
 

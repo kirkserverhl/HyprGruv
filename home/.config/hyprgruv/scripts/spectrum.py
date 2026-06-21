@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -205,11 +206,10 @@ def apply_starship_asset(
     out_active = HOME / ".config/starship.toml"
 
     if asset.is_file():
-        text = asset.read_text(encoding="utf-8")
-        palette_match = re.search(r"palette\s*=\s*['\"]([^'\"]+)['\"]", text)
-        palette_name = palette_match.group(1) if palette_match else "matugen"
-        text = patch_starship_toml(text, resolved, palette_name)
-        out_matugen.write_text(text, encoding="utf-8")
+        # Per-theme starship-rainbow.toml is hand-tuned (powerline arrows, semantic
+        # palette). Matugen's generic template uses a different layout and maps
+        # base08→yellow (pink on Catppuccin) — always ship the curated asset as-is.
+        out_matugen.write_text(asset.read_text(encoding="utf-8"), encoding="utf-8")
     else:
         template = HOME / ".config/matugen/templates/starship-rainbow.toml"
         if not template.is_file():

@@ -15,6 +15,8 @@ QT6CT_CONF="${HOME}/.config/qt6ct/qt6ct.conf"
 CURSOR_CONF="${HOME}/.config/hypr/conf/cursor.conf"
 CURSOR_SIZE="${DESKTOP_CURSOR_SIZE:-24}"
 SYNC_KDE_QT="${HOME}/.config/hyprgruv/scripts/sync-kde-qt-theme.sh"
+XSETTINGSD_CONF="${HOME}/.config/xsettingsd/xsettingsd.conf"
+XSETTINGSD_BIN="${XSETTINGSD_BIN:-xsettingsd}"
 
 # shellcheck source=/dev/null
 source "$COLORSCHEMES_DIR/theme-assets.sh"
@@ -80,10 +82,67 @@ apply_gsettings() {
 
 apply_hypr_cursor() {
     command -v hyprctl >/dev/null 2>&1 || return 0
-    if [[ -f "$CURSOR_CONF" ]]; then
-        printf 'exec-once = hyprctl setcursor %s %s\n' "$CURSOR_THEME" "$CURSOR_SIZE" >"$CURSOR_CONF"
-    fi
+    mkdir -p "$(dirname "$CURSOR_CONF")"
+    printf 'exec-once = hyprctl setcursor %s %s\n' "$CURSOR_THEME" "$CURSOR_SIZE" >"$CURSOR_CONF"
     hyprctl setcursor "$CURSOR_THEME" "$CURSOR_SIZE" 2>/dev/null || true
+}
+
+install_theme_to_xdg() {
+    local theme="$1"
+    local src dest
+    [[ -n "$theme" ]] || return 0
+
+    for src in \
+        "${HOME}/.icons/${theme}" \
+        "${HOME}/.local/share/icons/${theme}" \
+        "/usr/share/icons/${theme}"; do
+        if [[ -d "$src" && -f "$src/index.theme" ]]; then
+            mkdir -p "${HOME}/.local/share/icons"
+            dest="${HOME}/.local/share/icons/${theme}"
+            if [[ "$src" != "$dest" ]]; then
+                ln -sfn "$src" "$dest"
+            fi
+            return 0
+        fi
+    done
+}
+
+sync_xsettingsd() {
+    local gtk_theme="$1"
+    local icon_theme="$2"
+    local cursor_theme="$3"
+    local cursor_size="$4"
+
+    mkdir -p "$(dirname "$XSETTINGSD_CONF")"
+    cat >"$XSETTINGSD_CONF" <<EOF
+Net/ThemeName "${gtk_theme}"
+Net/IconThemeName "${icon_theme}"
+Gtk/CursorThemeName "${cursor_theme}"
+Gtk/CursorThemeSize ${cursor_size}
+Net/EnableEventSounds 1
+EnableInputFeedbackSounds 0
+Xft/Antialias 1
+Xft/Hinting 1
+Xft/HintStyle "hintslight"
+Xft/RGBA "rgb"
+EOF
+
+    if command -v "$XSETTINGSD_BIN" >/dev/null 2>&1; then
+        pkill -x "$XSETTINGSD_BIN" 2>/dev/null || true
+        sleep 0.1
+        nohup "$XSETTINGSD_BIN" -c "$XSETTINGSD_CONF" >/dev/null 2>&1 &
+    fi
+}
+
+restart_thunar() {
+    if ! command -v thunar >/dev/null 2>&1; then
+        return 0
+    fi
+    if pgrep -x thunar >/dev/null 2>&1; then
+        pkill -x thunar 2>/dev/null || true
+        sleep 0.3
+    fi
+    nohup thunar >/dev/null 2>&1 &
 }
 
 update_qtct_icon_theme() {
@@ -114,9 +173,25 @@ update_gtk4_setting gtk-application-prefer-dark-theme "true"
 update_qtct_icon_theme "$QT5CT_CONF" "$ICON_THEME"
 update_qtct_icon_theme "$QT6CT_CONF" "$ICON_THEME"
 
+install_theme_to_xdg "$ICON_THEME"
+install_theme_to_xdg "$CURSOR_THEME"
+
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    for icon_dir in \
+        "${HOME}/.local/share/icons/${ICON_THEME}" \
+        "${HOME}/.icons/${ICON_THEME}" \
+        "/usr/share/icons/${ICON_THEME}"; do
+        if [[ -d "$icon_dir" ]]; then
+            gtk-update-icon-cache -f -t "$icon_dir" 2>/dev/null || true
+            break
+        fi
+    done
+fi
+
 link_gtk4_assets
 apply_gsettings
 apply_hypr_cursor
+sync_xsettingsd "$GTK_THEME" "$ICON_THEME" "$CURSOR_THEME" "$CURSOR_SIZE"
 
 if [[ -x "$SYNC_KDE_QT" ]]; then
     "$SYNC_KDE_QT" "$THEME" "$ICON_THEME" "$KDE_LNF" 2>/dev/null || true
@@ -125,6 +200,8 @@ fi
 if [[ -x "${HOME}/.config/hyprgruv/scripts/reload-gtk-colors.sh" ]]; then
     "${HOME}/.config/hyprgruv/scripts/reload-gtk-colors.sh" >/dev/null 2>&1 || true
 fi
+
+restart_thunar
 
 printf '[desktop-assets] theme=%s family=%s gtk=%s icon=%s cursor=%s kde_lnf=%s\n' \
     "$THEME" "$FAMILY" "$GTK_THEME" "$ICON_THEME" "$CURSOR_THEME" "$KDE_LNF"

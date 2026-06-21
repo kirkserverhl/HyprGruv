@@ -1,20 +1,28 @@
-/* Preset theme: gruvbox-dark — static palette (not Material You) */
-@define-color base00 #101213;
-@define-color base01 #59636e;
-@define-color base02 #59636e;
-@define-color base03 #59636e;
-@define-color base04 #a19a3b;
-@define-color base05 #c3c3c4;
-@define-color base06 #c3c3c4;
-@define-color base07 #c3c3c4;
-@define-color base08 #719055;
-@define-color base09 #719055;
-@define-color base0A #a19a3b;
-@define-color base0B #689467;
-@define-color base0C #dac99f;
-@define-color base0D #458487;
-@define-color base0E #beb290;
-@define-color base0F #458487;
+/* Matugen colors for Waybar + other apps — Base16 only (no invented Material You slots) */
+/* In pywal mode these 16 slots are literal wallpaper colors. Everything below aliases them. */
+/* base01: slightly lighter background, inactive borders */
+/* base02: selection highlight, active workspace */
+/* base03: muted text / comments / subtle chrome */
+/* base08: red / errors / urgent notifications */
+/* base0D: accent (primary actions, highlights, borders) */
+
+@define-color base00 #14181b;
+@define-color base01 #1e2429;
+@define-color base02 #283036;
+@define-color base03 #657366;
+@define-color base04 #859289;
+@define-color base05 #d3c6aa;
+@define-color base06 #283036;
+@define-color base07 #3c4851;
+
+@define-color base08 #e67e80;
+@define-color base09 #d699b6;
+@define-color base0A #dbbc7f;
+@define-color base0B #a7c080;
+@define-color base0C #83c092;
+@define-color base0D #a7c080;
+@define-color base0E #7fbbb3;
+@define-color base0F #e69875;
 
 @define-color background @base00;
 @define-color foreground @base05;
@@ -45,52 +53,55 @@
 @define-color urgent @base08;
 @define-color on_urgent @base00;
 
-/* Shared spectrum — Starship + Waybar + Hyprbars (from ~/.config/colorschemes/gruvbox-dark/spectrum.json) */
-/* order: orange → yellow → aqua → blue → grey → dark grey */
-@define-color color_fg0 #fbf1c7;
-@define-color color_bg1 #59636e;
-@define-color color_bg3 #c3c3c4;
-@define-color color_orange #458487;
-@define-color color_yellow #a19a3b;
-@define-color color_aqua #dac99f;
-@define-color color_blue #beb290;
-@define-color color_on_orange #fbf1c7;
-@define-color color_on_yellow #fbf1c7;
-@define-color color_on_aqua #fbf1c7;
-@define-color color_on_blue #fbf1c7;
-@define-color color_green #689467;
-@define-color color_red #719055;
-@define-color color_purple #719055;
+/*
+ * Shared spectrum — source (far left) + 4 palette columns (see ~/.config/matugen/spectrum.json)
+ * source → col1 → col2 → col3 → col4(bg3) → neutral tail(bg1)
+ * color_orange = source (base0f), not literal orange
+ */
+@define-color color_fg0 @base05;
+@define-color color_bg1 @base02;
+@define-color color_bg3 @base0E;
+@define-color color_orange @base0F;
+@define-color color_yellow @base08;
+@define-color color_aqua   @base0B;
+@define-color color_blue   @base0A;
+@define-color color_on_orange @base00;
+@define-color color_on_yellow @base00;
+@define-color color_on_aqua   @base00;
+@define-color color_on_blue   @base05;
+@define-color color_green  @base0B;
+@define-color color_red    @base08;
+@define-color color_purple @base09;
 
-
-@define-color error_container #719055;
-@define-color inverse_on_surface #c3c3c4;
-@define-color inverse_primary #458487;
-@define-color inverse_surface #c3c3c4;
-@define-color on_background #c3c3c4;
-@define-color on_error #101213;
-@define-color on_error_container #c3c3c4;
-@define-color on_primary_fixed #101213;
-@define-color on_primary_fixed_variant #458487;
-@define-color on_secondary #101213;
-@define-color on_secondary_container #c3c3c4;
-@define-color on_secondary_fixed #101213;
-@define-color on_secondary_fixed_variant #beb290;
-@define-color on_tertiary_container #c3c3c4;
-@define-color on_tertiary_fixed #101213;
-@define-color on_tertiary_fixed_variant #719055;
-@define-color primary_fixed #458487;
-@define-color primary_fixed_dim #458487;
-@define-color scrim #000000;
-@define-color secondary_fixed #beb290;
-@define-color secondary_fixed_dim #dac99f;
-@define-color shadow #000000;
-@define-color source_color #458487;
-@define-color surface_bright #c3c3c4;
-@define-color surface_container_highest #59636e;
-@define-color surface_container_low #59636e;
-@define-color surface_container_lowest #101213;
-@define-color surface_dim #101213;
-@define-color surface_tint #458487;
-@define-color tertiary_fixed #a19a3b;
-@define-color tertiary_fixed_dim #a19a3b;
+/* Semantic aliases for waybar themes — still only the 16 base slots above */
+@define-color error_container @base08;
+@define-color inverse_on_surface @base06;
+@define-color inverse_primary @base0D;
+@define-color inverse_surface @base07;
+@define-color on_background @base05;
+@define-color on_error @base00;
+@define-color on_error_container @base05;
+@define-color on_primary_fixed @base00;
+@define-color on_primary_fixed_variant @base03;
+@define-color on_secondary @base00;
+@define-color on_secondary_container @base05;
+@define-color on_secondary_fixed @base00;
+@define-color on_secondary_fixed_variant @base03;
+@define-color on_tertiary_container @base05;
+@define-color on_tertiary_fixed @base00;
+@define-color on_tertiary_fixed_variant @base03;
+@define-color primary_fixed @base0D;
+@define-color primary_fixed_dim @base0B;
+@define-color scrim @base00;
+@define-color secondary_fixed @base0E;
+@define-color secondary_fixed_dim @base0A;
+@define-color shadow @base00;
+@define-color source_color @base0F;
+@define-color surface_bright @base07;
+@define-color surface_container_highest @base03;
+@define-color surface_container_low @base01;
+@define-color surface_container_lowest @base00;
+@define-color surface_dim @base00;
+@define-color surface_tint @base0D;
+@define-color tertiary_fixed @base09;
+@define-color tertiary_fixed_dim @base0A;

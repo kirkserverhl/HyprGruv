@@ -2,5 +2,5 @@
 # Switch via theme picker or: reload-yazi-theme.sh --switch <theme-name>
 
 [flavor]
-dark  = "gruvbox-dark"
-light = "gruvbox-dark"
+dark  = "everforest-medium"
+light = "everforest-medium"
