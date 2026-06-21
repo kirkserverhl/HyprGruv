@@ -33,7 +33,7 @@ hl.bind(mainMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/mac-shortcut.sh k"))
 
 -- === TERMINALS & LAUNCHERS ===
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
-hl.bind(mod     .. " + Return", hl.dsp.exec_cmd("ghostty"))
+hl.bind(mod     .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 
 -- Browsers: Super+B = Brave, Alt+B = Chrome, Super+Alt+B = Firefox (Ctrl+B left for tmux)
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave-browser"))

@@ -101,15 +101,6 @@ if [[ -f "$KITTY_CONF" ]]; then
     echo "  ✓ Updated kitty.conf → $FONT_TEXT"
 fi
 
-# Ghostty
-GHOSTTY_CONF="$HOME/.config/ghostty/config"
-if [[ -f "$GHOSTTY_CONF" ]]; then
-    sed -i "s|^font-family = .*|font-family = $FONT_TEXT|" "$GHOSTTY_CONF"
-    # Also update the comment block if present
-    sed -i "s|ShureTechMono Nerd Font|$FONT_TEXT|g" "$GHOSTTY_CONF"
-    echo "  ✓ Updated ghostty/config → $FONT_TEXT"
-fi
-
 # =============================================================================
 # 5. HYPRLOCK - mix of HEADER (big/important) + UI (secondary)
 # =============================================================================
@@ -121,11 +112,14 @@ if [[ -f "$HYPRLOCK_CONF" ]]; then
         s/font_family\s*=\s*"\K[^"]*(Agave|agave)[^"]*/'"$FONT_UI_PROPO_REGULAR"'/gi;
     ' "$HYPRLOCK_CONF" 2>/dev/null || true
 
-    # Fallback broad replace if perl missed something
-    sed -i "s/HeavyData Nerd Font[^\"]*/$FONT_HEADER_REGULAR/g" "$HYPRLOCK_CONF"
-    sed -i "s/Agave Nerd Font Propo[^\"]*/$FONT_UI_PROPO_REGULAR/g" "$HYPRLOCK_CONF"
+    # Fallback broad replace if perl missed something (font_family lines only)
+    sed -i '/font_family/ s/HeavyData Nerd Font[^"]*/'"$FONT_HEADER_REGULAR"'/g' "$HYPRLOCK_CONF"
+    sed -i '/font_family/ s/Agave Nerd Font Propo[^"]*/'"$FONT_UI_PROPO_REGULAR"'/g' "$HYPRLOCK_CONF"
 
-    echo "  ✓ Updated hyprlock.conf (HEADER + UI roles applied)"
+    # $font is a hyprlock variable (UI role, family name without weight suffix)
+    sed -i "s|^\$font = .*|\$font = $FONT_UI|" "$HYPRLOCK_CONF"
+
+    echo "  ✓ Updated hyprlock.conf (\$font + HEADER + UI roles applied)"
 fi
 
 # =============================================================================
@@ -140,6 +134,30 @@ fi
 # =============================================================================
 # 8. GTK (app menus, file pickers, etc.) → UI
 # =============================================================================
+GTK_FONT_SETTING="$FONT_UI, ${FONT_SIZE_UI}"
+
+for gtkini in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
+    if [[ -f "$gtkini" ]]; then
+        if grep -q '^gtk-font-name=' "$gtkini"; then
+            sed -i "s|^gtk-font-name=.*|gtk-font-name=$GTK_FONT_SETTING|" "$gtkini"
+        else
+            sed -i "/^\[Settings\]/a gtk-font-name=$GTK_FONT_SETTING" "$gtkini"
+        fi
+        echo "  ✓ Updated $(basename "$(dirname "$gtkini")")/settings.ini → $GTK_FONT_SETTING"
+    fi
+done
+
+GTKRC_FILE="$HOME/.gtkrc-2.0"
+if [[ -f "$GTKRC_FILE" ]] && grep -q '^gtk-font-name=' "$GTKRC_FILE"; then
+    sed -i "s|^gtk-font-name=.*|gtk-font-name=\"$GTK_FONT_SETTING\"|" "$GTKRC_FILE"
+    echo "  ✓ Updated .gtkrc-2.0 → $GTK_FONT_SETTING"
+fi
+
+if command -v gsettings >/dev/null 2>&1; then
+    gsettings set org.gnome.desktop.interface font-name "$GTK_FONT_SETTING"
+    echo "  ✓ Updated gsettings font-name → $GTK_FONT_SETTING"
+fi
+
 for gtkcss in "$HOME/.config/gtk-4.0/gtk.css" "$HOME/.config/gtk-3.0/gtk.css"; do
     if [[ -f "$gtkcss" ]]; then
         sed -i "s|\"Agave Propo\"[^,]*|\"$FONT_UI\"|g" "$gtkcss"

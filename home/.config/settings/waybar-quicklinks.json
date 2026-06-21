@@ -8,7 +8,7 @@
     "format": "",
     "on-click": "~/.config/settings/browser.sh",
     "on-click-right": "~/.config/settings/terminal.sh",
-    "tooltip-format": "Left:   Firefox \nRight: Ghostty "
+    "tooltip-format": "Left:   Firefox \nRight: Terminal "
   },
   "custom/quicklink3": {
     "format": "",

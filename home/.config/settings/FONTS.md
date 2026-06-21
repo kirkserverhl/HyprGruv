@@ -6,7 +6,7 @@ Single source of truth: **`~/.config/settings/fonts.sh`**
 
 | Role         | Default Font                    | Used For                                      |
 |--------------|---------------------------------|-----------------------------------------------|
-| `FONT_TEXT`  | ShureTechMono Nerd Font         | Terminals (Kitty, Ghostty), Dunst, body text  |
+| `FONT_TEXT`  | ShureTechMono Nerd Font         | Terminals (Kitty), Dunst, body text           |
 | `FONT_UI`    | Agave Nerd Font Propo           | Waybar, Rofi menus, GTK, app chrome            |
 | `FONT_HEADER`| HeavyData Nerd Font             | SDDM login, Hyprlock big elements, Wlogout    |
 
@@ -30,7 +30,7 @@ Single source of truth: **`~/.config/settings/fonts.sh`**
 
 - Rofi (all the important configs via rofi-font.rasi + fonts.rasi)
 - Waybar (main styles + several themes)
-- Kitty + Ghostty
+- Kitty
 - Dunst
 - Hyprlock (smart HEADER vs UI split)
 - Wlogout

@@ -22,10 +22,17 @@ hyprgruv_section_intro "Set default programs"
 echo ""
 
 # Supported mappings (choice:package for install)
-declare -A terms=(["kitty"]="kitty" ["alacritty"]="alacritty" ["ghostty"]="ghostty" ["wezterm"]="wezterm" ["foot"]="foot")
+declare -A terms=(["kitty"]="kitty" ["alacritty"]="alacritty" ["wezterm"]="wezterm" ["foot"]="foot")
 declare -A browsers=(["brave"]="brave-bin" ["firefox"]="firefox" ["chromium"]="chromium" ["chrome"]="google-chrome")
 declare -A browser_cmds=(["brave"]="brave" ["firefox"]="firefox" ["chromium"]="chromium" ["chrome"]="google-chrome-stable")
 declare -A editors=(["nvim"]="neovim" ["vim"]="vim" ["nano"]="nano")
+declare -A editor_desktops=(["nvim"]="nvim.desktop" ["vim"]="vim.desktop" ["nano"]="nano.desktop")
+declare -A browser_desktops=(
+    ["brave"]="brave-browser.desktop"
+    ["firefox"]="firefox.desktop"
+    ["chromium"]="chromium.desktop"
+    ["chrome"]="google-chrome.desktop"
+)
 
 write_setting() {
     local name="$1"
@@ -60,7 +67,7 @@ install_pkg() {
 
 # Choose terminal (supported + other)
 hyprgruv_section_intro "Terminal"
-TERMINAL=$(gum_choose_prompt --header "Default terminal:" "kitty" "alacritty" "ghostty" "wezterm" "foot" "other")
+TERMINAL=$(gum_choose_prompt --header "Default terminal:" "kitty" "alacritty" "wezterm" "foot" "other")
 if [ "$TERMINAL" = "other" ]; then
     TERMINAL=$(gum input --placeholder "Enter terminal command")
 fi
@@ -105,6 +112,28 @@ write_setting terminal "$TERMINAL"
 write_setting browser "$BROWSER_CMD"
 write_setting editor "$EDITOR_CMD"
 remove_legacy_defaults
+
+apply_default_mimes() {
+    local script="$HYPR_DIR/lib/scripts/apply-mimeapps.sh"
+    [[ -f "$script" ]] || return 0
+    # shellcheck source=/dev/null
+    source "$script"
+
+    if [[ -n "${editor_desktops[$EDITOR_CHOICE]:-}" ]]; then
+        apply_mime_default text/plain "${editor_desktops[$EDITOR_CHOICE]}" || true
+        apply_mime_default application/json "${editor_desktops[$EDITOR_CHOICE]}" || true
+    fi
+
+    if [[ -n "${browser_desktops[$BROWSER_CHOICE]:-}" ]]; then
+        apply_mime_default x-scheme-handler/http "${browser_desktops[$BROWSER_CHOICE]}" || true
+        apply_mime_default x-scheme-handler/https "${browser_desktops[$BROWSER_CHOICE]}" || true
+        apply_mime_default x-scheme-handler/mailto "${browser_desktops[$BROWSER_CHOICE]}" || true
+    fi
+
+    apply_mimeapps_file "${XDG_CONFIG_HOME:-$HOME/.config}/mimeapps.list" || true
+}
+
+apply_default_mimes
 
 hyprgruv_section_transition "Defaults saved"
 gum style --foreground "${COLOR_SECONDARY:-#83a598}" "Saved to $SETTINGS_DIR" 2>/dev/null \

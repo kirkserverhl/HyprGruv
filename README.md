@@ -91,9 +91,9 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 | Step | Script | What it does |
 |------|--------|--------------|
 | Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, initial theme |
-| System | `03-setup.sh` | Hyprpm plugins; enables SDDM + Sugar Candy theme; VM GRUB tweaks |
+| System | `03-setup.sh` | Hyprpm plugins; MIME handlers (handlr, Zathura, nvim/LibreOffice defaults); enables SDDM + Sugar Candy theme; VM GRUB tweaks |
 | Interactive | `04-config.sh` | Optional: SDDM theme, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
-| Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/ghostty/…), browser, and editor; offers to install if missing |
+| Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/wezterm/foot/…), browser, and editor; offers to install if missing |
 
 Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.
 
@@ -121,7 +121,7 @@ bash ~/.hyprgruv/sync-packages.sh --new-only
 
 | Package | Repo | Notes |
 |---------|------|-------|
-| `aphototoollibre` | AUR | A Photo Tool Libre — photo editor; not auto-installed |
+| `aphototoollibre` | AUR | Installed via `aur.list` / `setup-mime-handlers.sh` for image MIME types |
 | `easyeffects` | official | PipeWire audio effects |
 | `qt6-virtualkeyboard` | official | SDDM Sugar Candy on-screen keyboard |
 
@@ -161,6 +161,21 @@ bash ~/.hyprgruv/sync-packages.sh add <package> --new
 # Promote from potential → confirmed
 bash ~/.hyprgruv/sync-packages.sh promote <package> --to pacman
 bash ~/.hyprgruv/sync-packages.sh promote <package> --to aur
+```
+
+## File openers (nvim, yazi, handlr)
+
+Stowed configs:
+
+- `~/.config/mimeapps.list` — default apps (nvim for text, Zathura for PDF, LibreOffice for Office, Brave for URLs)
+- `~/.local/bin/xdg-open` — uses `handlr` when installed, otherwise `/usr/bin/xdg-open`
+
+Packages: `handlr-regex`, `zathura`, `zathura-pdf-mupdf`, `xdg-utils`, `libreoffice-fresh`, `aphototoollibre` (AUR), `brave-bin` (AUR).
+
+Applied automatically during the setup wizard (`setup-mime-handlers.sh` in `03-setup.sh`). Re-apply after stow or MIME edits:
+
+```bash
+bash ~/.hyprgruv/lib/scripts/setup-mime-handlers.sh
 ```
 
 ## Install environment variables

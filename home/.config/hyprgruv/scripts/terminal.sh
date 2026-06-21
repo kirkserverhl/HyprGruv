@@ -8,7 +8,7 @@ resolve_terminal() {
     local term
     term="$("$SCRIPT_DIR/read-setting.sh" terminal kitty)"
 
-    for candidate in "$term" ghostty kitty alacritty foot wezterm; do
+    for candidate in "$term" kitty alacritty foot wezterm; do
         if command -v "$candidate" >/dev/null 2>&1; then
             printf '%s\n' "$candidate"
             return 0

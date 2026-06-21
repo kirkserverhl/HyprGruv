@@ -17,7 +17,7 @@ is_terminal() {
     local cls
     cls="$(active_class)"
     case "$cls" in
-        kitty|ghostty|Ghostty|Alacritty|wezterm-gui|foot|com.mitchellh.ghostty|org.wezfurlong.wezterm)
+        kitty|Alacritty|wezterm-gui|foot|org.wezfurlong.wezterm)
             return 0
             ;;
     esac

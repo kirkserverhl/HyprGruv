@@ -27,7 +27,7 @@ Generated colors land in app config paths; post-hooks reload where possible
 | Hyprland | `~/.config/hypr/colors/custom/matugen.conf` |
 | Hyprlock | `~/.config/hypr/hyprlock/colors/matugen.conf` |
 | Kitty | `~/.config/kitty/colors/custom/matugen.conf` |
-| Ghostty | `~/.config/ghostty/colors/matugen.conf` |
+
 | Waybar | `~/.config/waybar/colors/matugen-waybar.css` |
 | Starship | `~/.config/starship/matugen-rainbow.toml` |
 | Rofi | `~/.config/rofi/colors.rasi` |
@@ -46,7 +46,7 @@ Generated colors land in app config paths; post-hooks reload where possible
 | Chrome user CSS | `~/.config/chrome/matugen-theme.user.css` |
 | SDDM | via `update-sddm-wallpaper.sh` on wallpaper change |
 
-Some apps need a manual reload after theme updates (Ghostty: `Ctrl+Shift+,`; Firefox: restart; Qt apps: restart).
+Some apps need a manual reload after theme updates (Firefox: restart; Qt apps: restart).
 
 ## First wallpaper / install
 

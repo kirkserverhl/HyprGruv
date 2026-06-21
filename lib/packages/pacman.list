@@ -14,6 +14,8 @@ bash
 zsh
 eza
 fzf
+fd
+ripgrep
 zoxide
 bat
 trash-cli
@@ -100,6 +102,10 @@ gvfs-mtp
 udiskie
 sddm
 firefox
+handlr-regex
+xdg-utils
+zathura
+zathura-pdf-mupdf
 libreoffice-fresh
 timeshift
 noto-fonts

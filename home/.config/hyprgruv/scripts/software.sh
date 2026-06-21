@@ -31,9 +31,6 @@ case "$TERM_CMD" in
         mapfile -t _kitty_palette < <(kitty_readable_palette)
         exec "${CLEAN_ENV[@]}" kitty "${_kitty_palette[@]}" --class "$CLASS" -e pacseek
         ;;
-    ghostty)
-        exec "${CLEAN_ENV[@]}" ghostty --class "$CLASS" --command pacseek
-        ;;
     alacritty)
         exec "${CLEAN_ENV[@]}" alacritty --class "$CLASS","$CLASS" -e pacseek
         ;;

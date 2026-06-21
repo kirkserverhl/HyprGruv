@@ -98,6 +98,7 @@ declare -a ORDERED_SCRIPTS=(
     # Builds hyprbars + hymission when Hyprland is running; otherwise defers to first login.
     # Session build/load: ~/.config/hyprgruv/scripts/hyprpm-reload.sh (autostart.lua).
     "hyprpm.sh|Install Hyprpm plugins"
+    "setup-mime-handlers.sh|Configure MIME handlers and file openers"
 )
 
 # Support skipping the wallpaper step (waypaper + matugen can hang or block

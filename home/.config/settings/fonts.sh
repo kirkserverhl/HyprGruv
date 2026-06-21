@@ -6,7 +6,7 @@
 # This is THE ONLY FILE you should edit when changing fonts.
 #
 # Your three font roles (as defined by you):
-#   • FONT_TEXT    → Terminals (Kitty, Ghostty) + browser text feel + notification bodies
+#   • FONT_TEXT    → Terminals (Kitty) + browser text feel + notification bodies
 #                    Currently: ShureTechMono Nerd Font
 #
 #   • FONT_UI      → App menus, Waybar, Rofi, GTK apps, most "normal" UI

@@ -145,7 +145,7 @@ ColorScheme=Matugen
 UseSystemBell=true
 
 [Icons]
-Theme=GreyStone
+Theme=Gruvbox-Plus-Dark
 
 [KDE]
 LookAndFeelPackage=Ant-Dark

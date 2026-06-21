@@ -1,2 +1,5 @@
 #!/bin/sh
-exec handlr open "$@"
+if command -v handlr >/dev/null 2>&1; then
+  exec handlr open "$@"
+fi
+exec /usr/bin/xdg-open "$@"

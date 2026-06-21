@@ -10,9 +10,6 @@ CLEAN_ENV=(env -u GDK_DEBUG -u GDK_DISABLE GDK_DEBUG= GDK_DISABLE=)
 # Pick a terminal and run nmtui
 if command -v kitty >/dev/null 2>&1; then
   exec "${CLEAN_ENV[@]}" kitty --class "$CLASS" -e yazi
-elif command -v ghostty >/dev/null 2>&1; then
-  # ghostty prefers --command
-  exec "${CLEAN_ENV[@]}" ghostty --class "$CLASS" --command yazi
 elif command -v alacritty >/dev/null 2>&1; then
   exec "${CLEAN_ENV[@]}" alacritty --class "$CLASS","$CLASS" -e yazi
 elif command -v footclient >/dev/null 2>&1; then

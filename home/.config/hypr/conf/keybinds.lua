@@ -100,6 +100,7 @@ hl.bind(mainMod .. " + KP_Enter",     hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh")
 hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh")) -- #launcher Open browser
 hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N",            hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
+hl.bind(mainMod .. " + O",            hl.dsp.exec_cmd("obsidian")) -- #launcher Open Obsidian
 hl.bind(mainMod .. " + PRINT",        hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh")) -- #screenshot Quick screenshot
 
 -- Session / power

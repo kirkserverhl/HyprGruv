@@ -138,10 +138,11 @@ restart_thunar() {
     if ! command -v thunar >/dev/null 2>&1; then
         return 0
     fi
-    if pgrep -x thunar >/dev/null 2>&1; then
-        pkill -x thunar 2>/dev/null || true
-        sleep 0.3
+    if ! pgrep -x thunar >/dev/null 2>&1; then
+        return 0
     fi
+    pkill -x thunar 2>/dev/null || true
+    sleep 0.3
     nohup thunar >/dev/null 2>&1 &
 }
 

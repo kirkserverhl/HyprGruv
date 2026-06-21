@@ -161,14 +161,6 @@ output_path = "~/.config/alacritty/colors/matugen.toml"
 post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-terminal.sh"
 
 
-[templates.ghostty]
-input_path = "~/.config/matugen/templates/ghostty-colors.conf"
-output_path = "~/.config/ghostty/colors/matugen.conf"
-# Ghostty has no reliable external reload signal from CLI in current versions.
-# Press ctrl+shift+, inside Ghostty (or bind a global hotkey) to reload after theme changes.
-post_hook = "true"
-
-
 [templates.gtk3]
 input_path = "~/.config/matugen/templates/gtk-colors.css"
 output_path = "~/.config/gtk-3.0/colors.css"
