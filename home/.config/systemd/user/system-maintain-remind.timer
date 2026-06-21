@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily system maintenance reminder (updates + cleanup)
+
+[Timer]
+OnBootSec=2h
+OnUnitActiveSec=24h
+Persistent=true
+
+[Install]
+WantedBy=timers.target

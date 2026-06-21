@@ -17,12 +17,11 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # shellcheck source=/dev/null
 [[ -f "$HYPR_DIR/lib/common.sh" ]] && source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
+source "$HYPR_DIR/lib/scripts/git-eod-common.sh"
 
-declare -a REPO_NAMES=()
-declare -a REPO_PATHS=()
-
-REPO_NAMES+=(hyprgruv Wallpapers notes)
-REPO_PATHS+=("$HOME/.hyprgruv" "$HOME/Wallpapers" "$HOME/notes")
+REPO_NAMES=("${GIT_EOD_REPO_NAMES[@]}")
+REPO_PATHS=("${GIT_EOD_REPO_PATHS[@]}")
 
 COMMIT_MSG=""
 DRY_RUN=0
@@ -94,21 +93,8 @@ repo_selected() {
     return 1
 }
 
-repo_has_changes() {
-    local path="$1"
-    ! git -C "$path" diff --quiet 2>/dev/null ||
-        ! git -C "$path" diff --cached --quiet 2>/dev/null ||
-        [[ -n "$(git -C "$path" ls-files --others --exclude-standard 2>/dev/null)" ]]
-}
-
-change_summary() {
-    local path="$1"
-    local modified staged untracked
-    modified="$(git -C "$path" diff --name-only 2>/dev/null | wc -l | tr -d ' ')"
-    staged="$(git -C "$path" diff --cached --name-only 2>/dev/null | wc -l | tr -d ' ')"
-    untracked="$(git -C "$path" ls-files --others --exclude-standard 2>/dev/null | wc -l | tr -d ' ')"
-    printf '%s modified, %s staged, %s untracked' "$modified" "$staged" "$untracked"
-}
+repo_has_changes() { git_eod_repo_has_changes "$1"; }
+change_summary() { git_eod_change_summary "$1"; }
 
 run_cmd() {
     if [[ $DRY_RUN -eq 1 ]]; then
@@ -203,6 +189,7 @@ main() {
 
     echo ""
     if [[ $failures -eq 0 ]]; then
+        bash "$HYPR_DIR/lib/scripts/git-eod-remind.sh" --clear 2>/dev/null || true
         log_success "EOD sync finished"
         exit 0
     fi

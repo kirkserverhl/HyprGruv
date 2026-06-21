@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec bash "${HYPRGRUV_DIR:-$HOME/.hyprgruv}/lib/scripts/system-maintain-remind.sh" "$@"

@@ -1,0 +1,13 @@
+[Unit]
+Description=Remind to run system updates and cleanup
+After=hyprland-session.target graphical-session.target network-online.target
+PartOf=hyprland-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=oneshot
+Environment=HYPRGRUV_DIR=%h/.hyprgruv
+ExecStart=%h/.hyprgruv/lib/scripts/system-maintain-remind.sh
+
+[Install]
+WantedBy=timers.target

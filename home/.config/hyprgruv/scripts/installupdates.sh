@@ -91,6 +91,7 @@ fedora)
     ;;
 esac
 
+bash "${HYPRGRUV_DIR:-$HOME/.hyprgruv}/lib/scripts/system-maintain-remind.sh" --clear 2>/dev/null || true
 notify-send "Update complete" | lsd-print
 echo
 echo ":: Update complete" | lsd-print

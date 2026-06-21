@@ -60,6 +60,7 @@ fi
 # fi
 
 clear
+bash "$HYPR_DIR/lib/scripts/system-maintain-remind.sh" --clear 2>/dev/null || true
 log_success "Cleanup complete"
 echo ""
 duf -theme ansi || df -h
