@@ -131,12 +131,13 @@ post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-swaync.sh"
 [templates.pywalfox]
 input_path = "~/.config/matugen/templates/pywalfox-colors.json"
 output_path = "~/.cache/wal/colors.json"
-post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-firefox.sh"
+# Template already wrote colors.json — sync here would clobber with stale current.json.
+post_hook = "PYWALFOX_SKIP_SYNC=1 ~/.config/hyprgruv/scripts/matugen-posthook-firefox.sh"
 
 [templates.firefox]
 input_path = "~/.config/matugen/templates/firefox-colors.css"
 output_path = "~/.mozilla/firefox/vfpa7t0f.default-release/chrome/userChrome.css"
-post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-firefox.sh"
+post_hook = "PYWALFOX_SKIP_SYNC=1 ~/.config/hyprgruv/scripts/matugen-posthook-firefox.sh"
 
 # Firefox website theming (userContent.css imports these)
 
@@ -216,6 +217,7 @@ output_path = "~/.config/obsidian/matugen.css"
 post_hook = '''
     OBS_CSS="$HOME/.config/obsidian/matugen.css"
     for vault in \
+        "$HOME/notes/Work Notes" \
         "$HOME/Documents/Obsidian" \
         "$HOME/Obsidian" \
         "$HOME/vaults" \
@@ -260,6 +262,7 @@ PY
             echo "[matugen] Copied Obsidian theme to $vault (snippet toggled for reload)"
         fi
     done
+    ~/.config/hyprgruv/scripts/obsidian-theme.sh 2>/dev/null || true
 '''
 
 

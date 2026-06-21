@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Obsidian
+Comment=Obsidian
+Exec=sh -c '"$HOME/.config/hyprgruv/scripts/obsidian.sh" %U'
+Terminal=false
+Type=Application
+Icon=obsidian
+StartupWMClass=obsidian
+MimeType=x-scheme-handler/obsidian;
+Categories=Office;

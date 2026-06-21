@@ -58,9 +58,10 @@ elif [[ -f "$XDG_OPEN" ]]; then
     chmod +x "$XDG_OPEN"
 fi
 
-# Empty or broken per-user mimeapps overrides can shadow ~/.config/mimeapps.list.
+# Empty per-user mimeapps overrides shadow ~/.config/mimeapps.list and break xdg-open
+# for Electron apps (Obsidian, etc.) — links fail silently.
 LOCAL_MIMEAPPS="$HOME/.local/share/applications/mimeapps.list"
-if [[ -f "$LOCAL_MIMEAPPS" ]] && ! grep -q '=' "$LOCAL_MIMEAPPS" 2>/dev/null; then
+if [[ -f "$LOCAL_MIMEAPPS" ]] && [[ ! -s "$LOCAL_MIMEAPPS" || ! grep -q '=' "$LOCAL_MIMEAPPS" 2>/dev/null ]]; then
     log "Removing empty mimeapps override: $LOCAL_MIMEAPPS"
     rm -f "$LOCAL_MIMEAPPS"
 fi

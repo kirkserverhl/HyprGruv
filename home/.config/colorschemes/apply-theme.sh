@@ -122,4 +122,11 @@ if [[ -x "$HOME/.config/hyprgruv/scripts/reload-yazi-theme.sh" ]]; then
 fi
 echo ""
 
+# Obsidian community theme (Cognia Noir / Catppuccin / Gruvbox / Nord / Everforest)
+if [[ -x "$HOME/.config/hyprgruv/scripts/obsidian-theme.sh" ]]; then
+    echo -e "${CYAN}-> Switching Obsidian theme...${NC}"
+    "$HOME/.config/hyprgruv/scripts/obsidian-theme.sh" "$THEME" 2>/dev/null || true
+fi
+echo ""
+
 notify-send "Theme Applied" "Successfully switched to: $THEME" -t 5000

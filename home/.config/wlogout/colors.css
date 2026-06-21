@@ -6,23 +6,23 @@
 /* base08: red / errors / urgent notifications */
 /* base0D: accent (primary actions, highlights, borders) */
 
-@define-color base00 #272727;
-@define-color base01 #554d48;
-@define-color base02 #554d48;
-@define-color base03 #554d48;
-@define-color base04 #ebdbb2;
-@define-color base05 #959f8e;
-@define-color base06 #959f8e;
-@define-color base07 #959f8e;
+@define-color base00 #11111b;
+@define-color base01 #181825;
+@define-color base02 #1e1e2e;
+@define-color base03 #7f849c;
+@define-color base04 #6c7086;
+@define-color base05 #cdd6f4;
+@define-color base06 #1e1e2e;
+@define-color base07 #45475a;
 
-@define-color base08 #458588;
-@define-color base09 #62635a;
-@define-color base0A #8ba495;
-@define-color base0B #b4b59b;
-@define-color base0C #ddcca7;
-@define-color base0D #458588;
-@define-color base0E #b1a38a;
-@define-color base0F #cc241d;
+@define-color base08 #f38ba8;
+@define-color base09 #cba6f7;
+@define-color base0A #f9e2af;
+@define-color base0B #a6e3a1;
+@define-color base0C #94e2d5;
+@define-color base0D #cba6f7;
+@define-color base0E #89b4fa;
+@define-color base0F #fab387;
 
 @define-color background @base00;
 @define-color foreground @base05;

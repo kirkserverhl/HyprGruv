@@ -1,4 +1,11 @@
 #!/bin/sh
+set -eu
+
+# Electron apps (Obsidian, VS Code, Slack, etc.) may invoke xdg-open without
+# stdout/stderr attached, which can make the browser hang silently.
+[ -e /dev/fd/1 ] || exec 1>/dev/null
+[ -e /dev/fd/2 ] || exec 2>/dev/null
+
 if command -v handlr >/dev/null 2>&1; then
   exec handlr open "$@"
 fi

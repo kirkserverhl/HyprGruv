@@ -344,6 +344,43 @@ resolve_cursor_theme() {
     esac
 }
 
+_read_obsidian_theme_slot() {
+    local theme="$1"
+    local family slot_file slot_name=""
+    family=$(resolve_theme_family "$theme")
+
+    for slot_file in \
+        "$HOME/.config/colorschemes/$theme/obsidian-theme" \
+        "$HOME/.config/colorschemes/$family/obsidian-theme"; do
+        if [[ -f "$slot_file" ]]; then
+            slot_name=$(tr -d '[:space:]' <"$slot_file")
+            [[ -n "$slot_name" ]] && break
+        fi
+    done
+
+    printf '%s\n' "$slot_name"
+}
+
+resolve_obsidian_css_theme() {
+    local theme="$1"
+    local family slot_name
+    family=$(resolve_theme_family "$theme")
+    slot_name=$(_read_obsidian_theme_slot "$theme")
+    if [[ -n "$slot_name" ]]; then
+        printf '%s\n' "$slot_name"
+        return 0
+    fi
+
+    case "$family" in
+    catppuccin) printf '%s\n' "Catppuccin" ;;
+    gruvbox-dark) printf '%s\n' "Material Gruvbox" ;;
+    nord-darker) printf '%s\n' "Obsidian Nord" ;;
+    everforest-dark) printf '%s\n' "Everforest Enchanted" ;;
+    noir) printf '%s\n' "Cognia Noir" ;;
+    *) return 1 ;;
+    esac
+}
+
 get_source_color() {
     local theme="$1"
     local theme_dir="$HOME/.config/colorschemes/$(resolve_theme_family "$theme")"
