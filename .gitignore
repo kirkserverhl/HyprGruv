@@ -47,6 +47,21 @@ home/.config/rofi/apps-menu/atuin/
 home/.config/rofi/apps-menu/gvfs-metadata/
 home/.config/rofi/apps-menu/mimeapps.list
 
+# Fish machine state (universal variables; aliases.fish is stowed as empty stub)
+home/.config/fish/fish_variables
+
+# SwayNC matugen-generated (regenerated on wallpaper change)
+home/.config/swaync/style.css
+home/.config/swaync/matugen/
+
+# VSCodium runtime data (only User/settings.json is config)
+home/.config/VSCodium/**/state.vscdb*
+home/.config/VSCodium/**/globalStorage/
+home/.config/VSCodium/**/Cached*/
+home/.config/VSCodium/**/blob_storage/
+home/.config/VSCodium/**/Session Storage/
+home/.config/VSCodium/**/Local Storage/
+
 # Runtime / machine state
 home/.config/dconf/
 home/.config/last_wallpaper.txt

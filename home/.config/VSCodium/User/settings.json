@@ -1,0 +1,13 @@
+{
+  "workbench.statusBar.visible": false,
+  "workbench.colorTheme": "Gruvbox Dark Hard",
+  "editor.fontFamily": "'ZedMono Nerd Font Proppo','monospace', monospace",
+  "window.customTitleBarVisibility": "never",
+  "window.titleBarStyle": "native",
+  "window.customMenuBarAltFocus": false,
+  "window.menuBarVisibility": "hidden",
+  "breadcrumbs.enabled": false,
+  "editor.padding.bottom": 10,
+  "editor.padding.top": 10,
+  "git.openRepositoryInParentFolders": "always"
+}
