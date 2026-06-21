@@ -89,7 +89,7 @@
 
         {
           "label": "󰀝",
-          "command": "bash -c $HOME/.config/hypr/scripts/airplaneMode.sh",
+          "command": "bash -c 'rfkill show wifi | grep -q \"Soft blocked: yes\" && rfkill unblock wifi || rfkill block wifi'",
           "type": "toggle"
         }
       ]

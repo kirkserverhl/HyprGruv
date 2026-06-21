@@ -122,6 +122,10 @@ input_path = "~/.config/matugen/templates/chrome.user.css"
 output_path = "~/.config/chrome/matugen-theme.user.css"
 
 
+[templates.swaync-colors]
+input_path = "~/.config/matugen/templates/swaync-colors.css"
+output_path = "~/.config/swaync/matugen/colors.css"
+
 [templates.swaync]
 input_path = "~/.config/matugen/templates/swaync-style.css"
 output_path = "~/.config/swaync/style.css"
