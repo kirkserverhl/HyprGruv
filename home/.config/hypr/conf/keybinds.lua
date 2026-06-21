@@ -38,14 +38,19 @@ local GAP_PRESETS = {
 local function toggle_gaps()
     gap_mode = (gap_mode == "normal") and "minimal" or "normal"
     local g = GAP_PRESETS[gap_mode]
-    hl.dsp.exec_cmd(string.format(
-        "hyprctl --batch 'keyword general:gaps_in %d; keyword general:gaps_out %d'",
-        g.gaps_in, g.gaps_out
-    ))
-    hl.dsp.exec_cmd(string.format(
+    hl.config({ general = { gaps_in = g.gaps_in, gaps_out = g.gaps_out } })
+    hl.exec_cmd(string.format(
         "hyprctl notify 1 1400 0 'Gaps: %s (in:%d out:%d)'",
         gap_mode, g.gaps_in, g.gaps_out
     ))
+end
+
+-- hyprctl keyword does not work with the Lua config parser (0.55+); use hl.config.
+local function set_layout(name)
+    return function()
+        hl.config({ general = { layout = name } })
+        hl.exec_cmd(string.format("hyprctl notify 0 1500 0 'Layout: %s'", name))
+    end
 end
 
 -- Hypr direction + parallel arrow/vim keys (tmux uses the same hjkl map)
@@ -104,8 +109,8 @@ hl.bind(mainMod .. " + CTRL + Q",     hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogou
 hl.bind("CTRL + ALT + DELETE",       hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 
 -- Windows & workspaces
-hl.bind(mainMod .. " + S",            hl.dsp.workspace.toggle_special())
-hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special" }))
+hl.bind(mainMod .. " + S",            hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh"))
+hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special:scratchpad" }))
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G",            toggle_gaps)
 hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Switch theme & wallpaper
@@ -174,9 +179,9 @@ hl.bind(altMod .. " + SHIFT + S",    hl.dsp.layout("swapsplit"))
 hl.bind(altMod .. " + Tab",          hl.dsp.exec_cmd("hyprctl dispatch cyclenext"))
 hl.bind(altMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("hyprctl dispatch cycleprev"))
 
--- Layout tuning (alt — keeps Super+J/K/L free for vim-nav)
-hl.bind(altMod .. " + J",            hl.dsp.exec_cmd("hyprctl keyword general:layout scrolling"))
-hl.bind(altMod .. " + SHIFT + J",    hl.dsp.exec_cmd("hyprctl keyword general:layout master"))
+-- Layout switching (alt — keeps Super+J/K/L free for vim-nav)
+hl.bind(altMod .. " + J",            set_layout("scrolling"))
+hl.bind(altMod .. " + SHIFT + J",    set_layout("dwindle"))
 hl.bind(altMod .. " + Z",            hl.dsp.layout("addmaster"))
 hl.bind(altMod .. " + SUPER + Z",     hl.dsp.layout("removemaster"))
 hl.bind(altMod .. " + comma",        hl.dsp.layout("mfact -0.05"))

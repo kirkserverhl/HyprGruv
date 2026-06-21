@@ -34,11 +34,34 @@ local function get_innermost_directory(path)
 	return innermost
 end
 
+local function command_exists(cmd)
+	local p = io.popen("command -v " .. cmd .. " 2>/dev/null", "r")
+	if p == nil then
+		return false
+	end
+	local result = p:read("*l")
+	p:close()
+	return result ~= nil and result ~= ""
+end
+
 local function extract(archive)
 	local filename = archive:match("(.*)%.([^%.]+)$")
-	-- Always overwrite files when a file to be unpacked already exists on disk
-	-- Always create a containing directory
-	os.execute("unar -f -d " .. ya.quote(archive) .. " >/dev/null 2>&1")
+	local ext = archive:match("%.([^%.]+)$")
+
+	if ext == "zip" and command_exists("unzip") then
+		os.execute("mkdir -p " .. ya.quote(filename) .. " && unzip -o -q " .. ya.quote(archive) .. " -d " .. ya.quote(filename))
+	elseif command_exists("unar") then
+		-- Always overwrite files when a file to be unpacked already exists on disk
+		-- Always create a containing directory
+		os.execute("unar -f -d " .. ya.quote(archive) .. " >/dev/null 2>&1")
+	else
+		ya.notify({
+			title = "fast-enter",
+			content = "No extractor found (install unarchiver or unzip)",
+			level = "err",
+			timeout = 4,
+		})
+	end
 	return filename
 end
 

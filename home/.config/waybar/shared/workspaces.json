@@ -26,7 +26,7 @@
     "exec": "~/.config/waybar/scripts/special-workspace.sh",
     "return-type": "json",
     "format": "{}",
-    "on-click": "hyprctl dispatch togglespecialworkspace scratchpad",
+    "on-click": "~/.config/hyprgruv/scripts/scratchpad.sh",
     "interval": 2,
     "tooltip": true
   }

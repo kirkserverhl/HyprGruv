@@ -50,8 +50,8 @@ desc = "Seek preview up"
 
 [[mgr.prepend_keymap]]
 on = [ "1" ]
-run = "plugin fast-enter"
-desc = "Enter subfolder or open file directly"
+run = "plugin smart-enter"
+desc = "Enter child directory or open file"
 
 # Input layer - Esc to close (very common modern setting)
 [[input.prepend_keymap]]
@@ -97,8 +97,8 @@ desc = "Smart filter"
 
 [[mgr.prepend_keymap]]
 on = "l"
-run = "plugin smart-enter"
-desc = "Enter child directory or open file"
+run = "plugin fast-enter"
+desc = "Enter subfolder, extract archives, or open file"
 
 [[mgr.prepend_keymap]]
 on = [ "<C-d>" ]
