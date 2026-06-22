@@ -6,36 +6,24 @@
     "tooltip-format": "Left: All Apps\nRight: Favorites"
   },
 
-  "custom/tools": {
-    "format": " \ueb52 ",
+  "custom/browser": {
+    "format": "\uf268",
     "on-click": "~/.config/hyprgruv/scripts/rofi-full.sh",
     "tooltip-format": "Tools & Utilities"
   },
 
+  "custom/fmanager": {
+    "format": "\udb80\udde5",
+    "on-click": ": kitty -e yazi",
+    "on-click-right": "thunar",
+    "tooltip-format": "File Manager"
+  },
+
   "custom/cliphist": {
-    "format": " \udb80\udd4c ",
+    "format": "\udb80\udd4c",
     "on-click": "~/.config/hyprgruv/scripts/hyprshot.sh",
     "on-click-right": "~/.config/hyprgruv/scripts/cliphist.sh",
     "tooltip-format": "Left: Screenshot\nRight: Clipboard history"
-  },
-
-  "custom/hypridle": {
-    "format": " \uf023 ",
-    "return-type": "json",
-    "escape": true,
-    "exec-on-event": true,
-    "interval": 60,
-    "exec": "~/.config/hyprgruv/scripts/hypridle.sh status",
-    "on-click": "~/.config/hyprgruv/scripts/hypridle.sh toggle",
-    "on-click-right": "hyprlock",
-    "tooltip": false
-  },
-
-  "custom/hyprsunset": {
-    "format": "\ue4dc",
-    "tooltip-format": "Toggle screen shader",
-    "on-click": "~/.config/hyprgruv/scripts/hyprshade.sh",
-    "on-click-right": "sleep 0.5; ~/.config/hyprgruv/scripts/hyprshade.sh rofi"
   },
 
   "group/apps": {
@@ -48,11 +36,10 @@
     },
     "modules": [
       "custom/appmenu",
-      "custom/tools",
+      "custom/browser",
+      "custom/fmanager",
       "custom/cliphist",
-      "custom/hypridle",
-      "custom/hyprsunset"
+      "custom/hypridle"
     ]
   }
 }
-

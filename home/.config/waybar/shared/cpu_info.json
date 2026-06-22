@@ -18,28 +18,12 @@
   },
 
   "custom/system": {
-    "format": "\udb81\udc93",
+    "format": " \uf4bc ",
     "tooltip": false
-  },
-
-  "cpu": {
-    "interval": 2,
-    "format": "\udb83\udee0 {usage}%",
-    "tooltip": true
   },
 
   "memory": {
     "format": "\uefc5 {percentage}%"
-  },
-
-  "disk": {
-    "interval": 30,
-    "format": "\uf0c7 {percentage_used}%",
-    "path": "/"
-  },
-
-  "hyprland/language": {
-    "format": "/ K {short}"
   },
 
   "group/cpu-info": {

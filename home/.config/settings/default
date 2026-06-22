@@ -1,7 +1,2 @@
-Could not generate preview for astronaut_gruvbox-Dark_mode.png
-gdk-pixbuf-error-quark: Failed to load image “/home/kirk/Wallpapers/themed-wallpapers/gruvbox-dark/astronaut_gruvbox-Dark_mode.png”: Remote error: org.gnome.glycin.Error.LoadingError: glycin-loaders/glycin-image-rs/src/main.rs:228:29: glycin-utils/src/image_rs.rs:60:41: Format error decoding Png: CRC error: expected 0x2b802315 have 0x5cf121fa while decoding ChunkType { type: IDAT, critical: true, private: false, reserved: false, safecopy: false } chunk.
-
-stderr:
-Setting process memory limit
- (0)
-/home/kirk/Wallpapers/themed-wallpapers/gruvbox-dark/gruv-calvin_gruvbox-Dark_mode.png
+/home/kirk/Wallpapers/themed-wallpapers/nord/cat-dominik-mayer-23_nord-Polar_Night-Snow_Stosrm-Frost-Aurora.png
+y 1).png

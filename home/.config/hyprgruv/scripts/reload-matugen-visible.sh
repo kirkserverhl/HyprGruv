@@ -11,9 +11,11 @@ SCRIPTS="${HOME}/.config/hyprgruv/scripts"
 
 "${SCRIPTS}/apply-desktop-assets.sh" 2>/dev/null || true
 
-for hook in hyprland waybar starship terminal swaync firefox obsidian grok; do
+for hook in hyprland waybar starship terminal swaync firefox browsers obsidian grok; do
     "${SCRIPTS}/matugen-posthook-${hook}.sh" 2>/dev/null || true
 done
+
+"${SCRIPTS}/reload-nvim-theme.sh" 2>/dev/null || true
 
 # Never regen all templates from current.json here — that can overwrite a good
 # matugen run if the JSON cache was briefly out of sync. Hot-reload only.

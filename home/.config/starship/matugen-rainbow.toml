@@ -1,10 +1,4 @@
-# =============================================================================
-# Starship Rainbow Prompt - Matugen version
-# =============================================================================
-# Powerline rainbow layout (gruvbox-rainbow structure) with matugen colors.
-# Each segment carries its own leading arrow so empty sections stay hidden.
-#
-# Output: ~/.config/starship/matugen-rainbow.toml
+"$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
 [](color_orange)\
@@ -12,57 +6,47 @@ $os\
 $username\
 [](bg:color_yellow fg:color_orange)\
 $directory\
+[](fg:color_yellow bg:color_aqua)\
 $git_branch\
 $git_status\
+[](fg:color_aqua bg:color_blue)\
 $c\
-$cpp\
 $rust\
 $golang\
 $nodejs\
-$bun\
 $php\
 $java\
 $kotlin\
 $haskell\
 $python\
+[](fg:color_blue bg:color_bg3)\
 $docker_context\
 $conda\
-$pixi\
+[](fg:color_bg3 bg:color_bg1)\
 $time\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
-palette = 'matugen'
+palette = 'nord_darker'
 
-# =============================================================================
-# Shared spectrum — source (far left) + 4 palette columns (~/.config/matugen/spectrum.json)
-# source → col1 → col2 → col3 → col4(bg3) → neutral(bg1)
-# color_orange = source seed (base0f)
-# =============================================================================
-[palettes.matugen]
-color_fg0 = '#cdd6f4'
-color_bg1 = '#1e1e2e'
-color_bg3 = '#89b4fa'
-
-color_orange = '#fab387'
-color_yellow = '#f38ba8'
-color_aqua   = '#a6e3a1'
-color_blue   = '#f9e2af'
-
-color_on_orange = '#11111b'
-color_on_yellow = '#11111b'
-color_on_aqua   = '#11111b'
-
-color_green  = '#a6e3a1'
-color_red    = '#f38ba8'
-color_purple = '#cba6f7'
-
-# =============================================================================
-# OS
-# =============================================================================
+[palettes.nord_darker]
+color_fg0 = "#d8dee9"
+color_bg1 = "#434c5e"
+color_bg3 = "#5f6c84"
+color_orange = "#d08770"
+color_yellow = "#ebcb8b"
+color_aqua = "#8fbcbb"
+color_blue = "#5e81ac"
+color_on_orange = "#d8dee9"
+color_on_yellow = "#d8dee9"
+color_on_aqua = "#d8dee9"
+color_on_blue = "#d8dee9"
+color_green = "#a3be8c"
+color_red = "#bf616a"
+color_purple = "#b48ead"
 [os]
 disabled = false
-style = "bg:color_orange fg:color_on_orange"
+style = "bg:color_orange fg:color_fg0"
 
 [os.symbols]
 Windows = "󰍲"
@@ -78,8 +62,7 @@ Fedora = "󰣛"
 Alpine = ""
 Amazon = ""
 Android = ""
-AOSC = ""
-Arch = "󰣇"
+Arch = "💩"
 Artix = "󰣇"
 EndeavourOS = ""
 CentOS = ""
@@ -88,20 +71,14 @@ Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
 Pop = ""
 
-# =============================================================================
-# Username
-# =============================================================================
 [username]
 show_always = true
-style_user = "bg:color_orange fg:color_on_orange"
-style_root = "bg:color_orange fg:color_on_orange"
+style_user = "bg:color_orange fg:color_fg0"
+style_root = "bg:color_orange fg:color_fg0"
 format = '[ $user ]($style)'
 
-# =============================================================================
-# Directory (yellow segment)
-# =============================================================================
 [directory]
-style = "fg:color_on_yellow bg:color_yellow"
+style = "fg:color_fg0 bg:color_yellow"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
@@ -113,110 +90,78 @@ truncation_symbol = "…/"
 "Pictures" = " "
 "Developer" = "󰲋 "
 
-# =============================================================================
-# Git (aqua segment) — only renders inside a repo
-# =============================================================================
 [git_branch]
 symbol = ""
 style = "bg:color_aqua"
-format = '[](fg:color_yellow bg:color_aqua)[[ $symbol $branch ](fg:color_on_aqua bg:color_aqua)]($style)'
+format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
 
 [git_status]
 style = "bg:color_aqua"
-format = '[[($all_status$ahead_behind )](fg:color_on_aqua bg:color_aqua)]($style)'
+format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
 
-# =============================================================================
-# Languages (blue segment) — arrow only when a language is detected
-# =============================================================================
 [nodejs]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
-
-[bun]
-symbol = ""
-style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [c]
 symbol = " "
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
-
-[cpp]
-symbol = " "
-style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [rust]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [golang]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [php]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [java]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [kotlin]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [haskell]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
 [python]
 symbol = ""
 style = "bg:color_blue"
-format = '[](fg:color_yellow bg:color_blue)[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 
-# =============================================================================
-# Environment / containers (bg3 segment)
-# =============================================================================
 [docker_context]
 symbol = ""
 style = "bg:color_bg3"
-format = '[](fg:color_blue bg:color_bg3)[[ $symbol( $context) ](fg:color_fg0 bg:color_bg3)]($style)'
+format = '[[ $symbol( $context) ](fg:#8fbcbb bg:color_bg3)]($style)'
 
 [conda]
 style = "bg:color_bg3"
-format = '[[ $symbol( $environment) ](fg:color_fg0 bg:color_bg3)]($style)'
+format = '[[ $symbol( $environment) ](fg:#8fbcbb bg:color_bg3)]($style)'
 
-[pixi]
-style = "bg:color_bg3"
-format = '[[ $symbol( $version)( $environment) ](fg:color_fg0 bg:color_bg3)]($style)'
-
-# =============================================================================
-# Time (neutral tail)
-# =============================================================================
 [time]
 disabled = false
 time_format = "%R"
 style = "bg:color_bg1"
-format = '[](fg:color_blue bg:color_bg1)[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
 
-# =============================================================================
-# Layout
-# =============================================================================
 [line_break]
 disabled = false
 
-# =============================================================================
-# Prompt character
-# =============================================================================
 [character]
 disabled = false
 success_symbol = '[](bold fg:color_green)'

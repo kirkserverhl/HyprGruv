@@ -10,6 +10,19 @@ return {
     lazy = false,
     priority = 1000, -- load very early so colors are set before UI plugins
     config = function()
+      local function refresh_ui()
+        -- mini.base16 sets highlights directly (no ColorScheme event), but lualine's
+        -- "auto" theme snapshots colors at setup — re-run it after palette changes.
+        vim.schedule(function()
+          if package.loaded["lualine"] then
+            pcall(require("lualine").setup)
+          end
+          pcall(vim.cmd.doautocmd, "ColorScheme")
+          pcall(vim.cmd.redrawstatus)
+          pcall(vim.cmd.redrawtabline)
+        end)
+      end
+
       local function load_matugen()
         local path = vim.fn.stdpath("config") .. "/lua/matugen-theme.lua"
         if vim.fn.filereadable(path) == 1 then
@@ -19,6 +32,7 @@ return {
           -- You can change this to any colorscheme you have installed.
           pcall(vim.cmd.colorscheme, "tokyonight-night")
         end
+        refresh_ui()
       end
 
       load_matugen()
@@ -28,12 +42,6 @@ return {
         pattern = "SIGUSR1",
         callback = function()
           load_matugen()
-
-          -- Many UI plugins cache highlights; a gentle redraw helps
-          vim.schedule(function()
-            pcall(vim.cmd.redrawstatus)
-            pcall(vim.cmd.redrawtabline)
-          end)
         end,
       })
     end,

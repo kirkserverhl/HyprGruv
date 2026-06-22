@@ -287,6 +287,8 @@ vim.api.nvim_set_hl(0, "DiagnosticError", {{ fg = "{s['base08']}" }})
 vim.api.nvim_set_hl(0, "DiagnosticWarn", {{ fg = "{s['base0A']}" }})
 vim.api.nvim_set_hl(0, "DiagnosticInfo", {{ fg = "{s['base0D']}" }})
 vim.api.nvim_set_hl(0, "DiagnosticHint", {{ fg = "{s['base0C']}" }})
+
+pcall(function() require("lualine").setup() end)
 """
     out = HOME / ".config/nvim/lua/matugen-theme.lua"
     out.parent.mkdir(parents=True, exist_ok=True)

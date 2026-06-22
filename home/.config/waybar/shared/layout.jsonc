@@ -23,12 +23,27 @@
     "~/.config/waybar/shared/updates.json",
     "~/.config/waybar/shared/cpu_info.json",
     "~/.config/waybar/shared/power_settings.json",
-    "~/.config/waybar/shared/clock.json"
+    "~/.config/waybar/shared/clock.json",
   ],
 
   "spacing": 6,
 
-  "modules-left": ["group/apps", "group/settings", "group/sound", "custom/media"],
-  "modules-center": ["hyprland/workspaces", "custom/special", "custom/notification"],
-  "modules-right": ["group/clock", "custom/updates", "group/cpu-info", "group/power"]
+  "modules-left": [
+    "group/apps",
+    "group/settings",
+    "group/sound",
+    "custom/media",
+  ],
+  "modules-center": [
+    "hyprland/workspaces",
+    "custom/special",
+    "custom/notification",
+  ],
+  "modules-right": [
+    "custom/updates",
+    "group/cpu-info",
+    "group/power",
+    "group/clock",
+  ],
 }
+

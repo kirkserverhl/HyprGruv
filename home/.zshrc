@@ -255,26 +255,6 @@ if command -v zoxide >/dev/null; then
 fi
 
 # =====================================================
-# Tmux dev workspace — cheat sheet in left pane (before starship)
-# =====================================================
-if [[ -n "${TMUX:-}" && -t 1 && -z "${TMUX_CHEATSHEET_SHOWN:-}" ]]; then
-  _tmux_sess="$(tmux display -p '#{session_name}' 2>/dev/null)"
-  _tmux_dev_prefix="${TMUX_DEV_PREFIX:-dev}"
-  if [[ ("$_tmux_sess" == "$_tmux_dev_prefix" || "$_tmux_sess" == "${_tmux_dev_prefix}-"*)
-     && "$(tmux display -p '#{pane_index}' 2>/dev/null)" == "1" ]]; then
-    cheat="${HOME}/.config/tmux/cheatsheet.txt"
-    if [[ -f "$cheat" ]]; then
-      export TMUX_CHEATSHEET_SHOWN=1
-      if command -v bat >/dev/null; then
-        PAGER=cat bat --paging=never --decorations=never "$cheat"
-      else
-        cat "$cheat"
-      fi
-    fi
-  fi
-fi
-
-# =====================================================
 # Prompt (Starship)
 # =====================================================
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship/matugen-rainbow.toml}"
@@ -308,10 +288,11 @@ fi
 # Control + Backspace
 bindkey '^H' backward-kill-word
 
-# >>> grok installer >>>
-#export PATH="$HOME/.grok/bin:$PATH"
-#fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
-# <<< grok installer <<<
 
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<

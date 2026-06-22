@@ -3,275 +3,275 @@
 :root {
     /* Base16 palette */
     
-    --base00: #11111b;
+    --base00: #1b1e25;
     
-    --base01: #181825;
+    --base01: #626878;
     
-    --base02: #1e1e2e;
+    --base02: #626878;
     
-    --base03: #7f849c;
+    --base03: #626878;
     
-    --base04: #6c7086;
+    --base04: #82a3c2;
     
-    --base05: #cdd6f4;
+    --base05: #c6c6c8;
     
-    --base06: #1e1e2e;
+    --base06: #c6c6c8;
     
-    --base07: #45475a;
+    --base07: #c6c6c8;
     
-    --base08: #f38ba8;
+    --base08: #7fa0c0;
     
-    --base09: #cba6f7;
+    --base09: #7fa0c0;
     
-    --base0a: #f9e2af;
+    --base0a: #82a3c2;
     
-    --base0b: #a6e3a1;
+    --base0b: #af92af;
     
-    --base0c: #94e2d5;
+    --base0c: #d7dee9;
     
-    --base0d: #cba6f7;
+    --base0d: #a7bad0;
     
-    --base0e: #89b4fa;
+    --base0e: #93c3d2;
     
-    --base0f: #fab387;
+    --base0f: #a7bad0;
     
 
     
-    --base00-rgb: 17 17 27;
+    --base00-rgb: 27 30 37;
     
-    --base01-rgb: 24 24 37;
+    --base01-rgb: 98 104 120;
     
-    --base02-rgb: 30 30 46;
+    --base02-rgb: 98 104 120;
     
-    --base03-rgb: 127 132 156;
+    --base03-rgb: 98 104 120;
     
-    --base04-rgb: 108 112 134;
+    --base04-rgb: 130 163 194;
     
-    --base05-rgb: 205 214 244;
+    --base05-rgb: 198 198 200;
     
-    --base06-rgb: 30 30 46;
+    --base06-rgb: 198 198 200;
     
-    --base07-rgb: 69 71 90;
+    --base07-rgb: 198 198 200;
     
-    --base08-rgb: 243 139 168;
+    --base08-rgb: 127 160 192;
     
-    --base09-rgb: 203 166 247;
+    --base09-rgb: 127 160 192;
     
-    --base0a-rgb: 249 226 175;
+    --base0a-rgb: 130 163 194;
     
-    --base0b-rgb: 166 227 161;
+    --base0b-rgb: 175 146 175;
     
-    --base0c-rgb: 148 226 213;
+    --base0c-rgb: 215 222 233;
     
-    --base0d-rgb: 203 166 247;
+    --base0d-rgb: 167 186 208;
     
-    --base0e-rgb: 137 180 250;
+    --base0e-rgb: 147 195 210;
     
-    --base0f-rgb: 250 179 135;
+    --base0f-rgb: 167 186 208;
     
 
     /* Legacy Material roles */
     
-    --matugen-background: #131318;
+    --matugen-background: #101418;
     
-    --matugen-error: #f38ba8;
+    --matugen-error: #7fa0c0;
     
     --matugen-error_container: #93000a;
     
-    --matugen-inverse_on_surface: #1e1e2e;
+    --matugen-inverse_on_surface: #c6c6c8;
     
-    --matugen-inverse_primary: #565992;
+    --matugen-inverse_primary: #33618d;
     
-    --matugen-inverse_surface: #e4e1e9;
+    --matugen-inverse_surface: #e0e2e8;
     
-    --matugen-on_background: #e4e1e9;
+    --matugen-on_background: #e0e2e8;
     
-    --matugen-on_error: #11111b;
+    --matugen-on_error: #1b1e25;
     
     --matugen-on_error_container: #ffdad6;
     
-    --matugen-on_primary: #11111b;
+    --matugen-on_primary: #1b1e25;
     
-    --matugen-on_primary_container: #e0e0ff;
+    --matugen-on_primary_container: #d0e4ff;
     
-    --matugen-on_primary_fixed: #11144b;
+    --matugen-on_primary_fixed: #001d35;
     
-    --matugen-on_primary_fixed_variant: #3e4278;
+    --matugen-on_primary_fixed_variant: #154974;
     
-    --matugen-on_secondary: #11111b;
+    --matugen-on_secondary: #1b1e25;
     
-    --matugen-on_secondary_container: #e1e0f9;
+    --matugen-on_secondary_container: #d6e4f7;
     
-    --matugen-on_secondary_fixed: #191a2c;
+    --matugen-on_secondary_fixed: #0f1d2a;
     
-    --matugen-on_secondary_fixed_variant: #444559;
+    --matugen-on_secondary_fixed_variant: #3b4857;
     
-    --matugen-on_surface: #cdd6f4;
+    --matugen-on_surface: #c6c6c8;
     
-    --matugen-on_surface_variant: #6c7086;
+    --matugen-on_surface_variant: #82a3c2;
     
-    --matugen-on_tertiary: #11111b;
+    --matugen-on_tertiary: #1b1e25;
     
-    --matugen-on_tertiary_container: #ffd8ee;
+    --matugen-on_tertiary_container: #f1dbff;
     
-    --matugen-on_tertiary_fixed: #2e1126;
+    --matugen-on_tertiary_fixed: #241532;
     
-    --matugen-on_tertiary_fixed_variant: #5e3c52;
+    --matugen-on_tertiary_fixed_variant: #514060;
     
-    --matugen-outline: #918f9a;
+    --matugen-outline: #8c9199;
     
-    --matugen-outline_variant: #7f849c;
+    --matugen-outline_variant: #626878;
     
-    --matugen-primary: #a6e3a1;
+    --matugen-primary: #af92af;
     
-    --matugen-primary_container: #3e4278;
+    --matugen-primary_container: #154974;
     
-    --matugen-primary_fixed: #e0e0ff;
+    --matugen-primary_fixed: #d0e4ff;
     
-    --matugen-primary_fixed_dim: #bfc2ff;
+    --matugen-primary_fixed_dim: #9ecafc;
     
     --matugen-scrim: #000000;
     
-    --matugen-secondary: #f9e2af;
+    --matugen-secondary: #82a3c2;
     
-    --matugen-secondary_container: #89b4fa;
+    --matugen-secondary_container: #93c3d2;
     
-    --matugen-secondary_fixed: #e1e0f9;
+    --matugen-secondary_fixed: #d6e4f7;
     
-    --matugen-secondary_fixed_dim: #c5c4dd;
+    --matugen-secondary_fixed_dim: #bac8db;
     
     --matugen-shadow: #000000;
     
-    --matugen-source_color: #fab387;
+    --matugen-source_color: #a7bad0;
     
-    --matugen-surface: #11111b;
+    --matugen-surface: #1b1e25;
     
-    --matugen-surface_bright: #45475a;
+    --matugen-surface_bright: #c6c6c8;
     
-    --matugen-surface_container: #1e1e2e;
+    --matugen-surface_container: #626878;
     
-    --matugen-surface_container_high: #2a292f;
+    --matugen-surface_container_high: #272a2f;
     
-    --matugen-surface_container_highest: #34343a;
+    --matugen-surface_container_highest: #32353a;
     
-    --matugen-surface_container_low: #181825;
+    --matugen-surface_container_low: #626878;
     
-    --matugen-surface_container_lowest: #11111b;
+    --matugen-surface_container_lowest: #1b1e25;
     
-    --matugen-surface_dim: #131318;
+    --matugen-surface_dim: #101418;
     
-    --matugen-surface_tint: #bfc2ff;
+    --matugen-surface_tint: #9ecafc;
     
-    --matugen-surface_variant: #46464f;
+    --matugen-surface_variant: #42474e;
     
-    --matugen-tertiary: #cba6f7;
+    --matugen-tertiary: #7fa0c0;
     
-    --matugen-tertiary_container: #94e2d5;
+    --matugen-tertiary_container: #d7dee9;
     
-    --matugen-tertiary_fixed: #ffd8ee;
+    --matugen-tertiary_fixed: #f1dbff;
     
-    --matugen-tertiary_fixed_dim: #e8b9d5;
+    --matugen-tertiary_fixed_dim: #d5bee5;
     
 
     
-    --matugen-background-rgb: 19 19 24;
+    --matugen-background-rgb: 16 20 24;
     
-    --matugen-error-rgb: 243 139 168;
+    --matugen-error-rgb: 127 160 192;
     
     --matugen-error_container-rgb: 147 0 10;
     
-    --matugen-inverse_on_surface-rgb: 30 30 46;
+    --matugen-inverse_on_surface-rgb: 198 198 200;
     
-    --matugen-inverse_primary-rgb: 86 89 146;
+    --matugen-inverse_primary-rgb: 51 97 141;
     
-    --matugen-inverse_surface-rgb: 228 225 233;
+    --matugen-inverse_surface-rgb: 224 226 232;
     
-    --matugen-on_background-rgb: 228 225 233;
+    --matugen-on_background-rgb: 224 226 232;
     
-    --matugen-on_error-rgb: 17 17 27;
+    --matugen-on_error-rgb: 27 30 37;
     
     --matugen-on_error_container-rgb: 255 218 214;
     
-    --matugen-on_primary-rgb: 17 17 27;
+    --matugen-on_primary-rgb: 27 30 37;
     
-    --matugen-on_primary_container-rgb: 224 224 255;
+    --matugen-on_primary_container-rgb: 208 228 255;
     
-    --matugen-on_primary_fixed-rgb: 17 20 75;
+    --matugen-on_primary_fixed-rgb: 0 29 53;
     
-    --matugen-on_primary_fixed_variant-rgb: 62 66 120;
+    --matugen-on_primary_fixed_variant-rgb: 21 73 116;
     
-    --matugen-on_secondary-rgb: 17 17 27;
+    --matugen-on_secondary-rgb: 27 30 37;
     
-    --matugen-on_secondary_container-rgb: 225 224 249;
+    --matugen-on_secondary_container-rgb: 214 228 247;
     
-    --matugen-on_secondary_fixed-rgb: 25 26 44;
+    --matugen-on_secondary_fixed-rgb: 15 29 42;
     
-    --matugen-on_secondary_fixed_variant-rgb: 68 69 89;
+    --matugen-on_secondary_fixed_variant-rgb: 59 72 87;
     
-    --matugen-on_surface-rgb: 205 214 244;
+    --matugen-on_surface-rgb: 198 198 200;
     
-    --matugen-on_surface_variant-rgb: 108 112 134;
+    --matugen-on_surface_variant-rgb: 130 163 194;
     
-    --matugen-on_tertiary-rgb: 17 17 27;
+    --matugen-on_tertiary-rgb: 27 30 37;
     
-    --matugen-on_tertiary_container-rgb: 255 216 238;
+    --matugen-on_tertiary_container-rgb: 241 219 255;
     
-    --matugen-on_tertiary_fixed-rgb: 46 17 38;
+    --matugen-on_tertiary_fixed-rgb: 36 21 50;
     
-    --matugen-on_tertiary_fixed_variant-rgb: 94 60 82;
+    --matugen-on_tertiary_fixed_variant-rgb: 81 64 96;
     
-    --matugen-outline-rgb: 145 143 154;
+    --matugen-outline-rgb: 140 145 153;
     
-    --matugen-outline_variant-rgb: 127 132 156;
+    --matugen-outline_variant-rgb: 98 104 120;
     
-    --matugen-primary-rgb: 166 227 161;
+    --matugen-primary-rgb: 175 146 175;
     
-    --matugen-primary_container-rgb: 62 66 120;
+    --matugen-primary_container-rgb: 21 73 116;
     
-    --matugen-primary_fixed-rgb: 224 224 255;
+    --matugen-primary_fixed-rgb: 208 228 255;
     
-    --matugen-primary_fixed_dim-rgb: 191 194 255;
+    --matugen-primary_fixed_dim-rgb: 158 202 252;
     
     --matugen-scrim-rgb: 0 0 0;
     
-    --matugen-secondary-rgb: 249 226 175;
+    --matugen-secondary-rgb: 130 163 194;
     
-    --matugen-secondary_container-rgb: 137 180 250;
+    --matugen-secondary_container-rgb: 147 195 210;
     
-    --matugen-secondary_fixed-rgb: 225 224 249;
+    --matugen-secondary_fixed-rgb: 214 228 247;
     
-    --matugen-secondary_fixed_dim-rgb: 197 196 221;
+    --matugen-secondary_fixed_dim-rgb: 186 200 219;
     
     --matugen-shadow-rgb: 0 0 0;
     
-    --matugen-source_color-rgb: 250 179 135;
+    --matugen-source_color-rgb: 167 186 208;
     
-    --matugen-surface-rgb: 17 17 27;
+    --matugen-surface-rgb: 27 30 37;
     
-    --matugen-surface_bright-rgb: 69 71 90;
+    --matugen-surface_bright-rgb: 198 198 200;
     
-    --matugen-surface_container-rgb: 30 30 46;
+    --matugen-surface_container-rgb: 98 104 120;
     
-    --matugen-surface_container_high-rgb: 42 41 47;
+    --matugen-surface_container_high-rgb: 39 42 47;
     
-    --matugen-surface_container_highest-rgb: 52 52 58;
+    --matugen-surface_container_highest-rgb: 50 53 58;
     
-    --matugen-surface_container_low-rgb: 24 24 37;
+    --matugen-surface_container_low-rgb: 98 104 120;
     
-    --matugen-surface_container_lowest-rgb: 17 17 27;
+    --matugen-surface_container_lowest-rgb: 27 30 37;
     
-    --matugen-surface_dim-rgb: 19 19 24;
+    --matugen-surface_dim-rgb: 16 20 24;
     
-    --matugen-surface_tint-rgb: 191 194 255;
+    --matugen-surface_tint-rgb: 158 202 252;
     
-    --matugen-surface_variant-rgb: 70 70 79;
+    --matugen-surface_variant-rgb: 66 71 78;
     
-    --matugen-tertiary-rgb: 203 166 247;
+    --matugen-tertiary-rgb: 127 160 192;
     
-    --matugen-tertiary_container-rgb: 148 226 213;
+    --matugen-tertiary_container-rgb: 215 222 233;
     
-    --matugen-tertiary_fixed-rgb: 255 216 238;
+    --matugen-tertiary_fixed-rgb: 241 219 255;
     
-    --matugen-tertiary_fixed_dim-rgb: 232 185 213;
+    --matugen-tertiary_fixed_dim-rgb: 213 190 229;
     
 }
