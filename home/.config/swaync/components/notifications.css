@@ -1,4 +1,4 @@
-@import "colors/colors.css";
+@import "../matugen/colors.css";
 
 @define-color text            #FFFFFF;
 @define-color background      @bg1;

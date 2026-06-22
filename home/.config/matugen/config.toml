@@ -120,6 +120,7 @@ post_hook = "pkill -USR1 cava 2>/dev/null || true"
 [templates.chrome-user]
 input_path = "~/.config/matugen/templates/chrome.user.css"
 output_path = "~/.config/chrome/matugen-theme.user.css"
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-browsers.sh"
 
 
 [templates.swaync-colors]

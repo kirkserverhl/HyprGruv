@@ -8,10 +8,8 @@ SCRIPTS="${HOME}/.config/hyprgruv/scripts"
 
 killall dunst 2>/dev/null || true
 
-if command -v swaync >/dev/null 2>&1; then
-    swaync &>/dev/null &
-elif [[ -x "$HOME/.local/swaync-root/usr/bin/swaync" ]]; then
-    "$HOME/.local/swaync-root/usr/bin/swaync" &>/dev/null &
+if [[ -x "$SCRIPTS/swaync-daemon.sh" ]]; then
+    "$SCRIPTS/swaync-daemon.sh" &>/dev/null &
 fi
 
 disown 2>/dev/null || true

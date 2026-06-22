@@ -18,10 +18,8 @@ swaync_bin() {
 client="$(swaync_bin)" || exit 0
 "$client" -rs 2>/dev/null || {
     killall swaync 2>/dev/null || true
-    if command -v swaync >/dev/null 2>&1; then
-        swaync &>/dev/null &
-    elif [[ -x "$HOME/.local/swaync-root/usr/bin/swaync" ]]; then
-        "$HOME/.local/swaync-root/usr/bin/swaync" &>/dev/null &
+    if [[ -x "$HOME/.config/hyprgruv/scripts/swaync-daemon.sh" ]]; then
+        "$HOME/.config/hyprgruv/scripts/swaync-daemon.sh" &>/dev/null &
     fi
     disown 2>/dev/null || true
 }

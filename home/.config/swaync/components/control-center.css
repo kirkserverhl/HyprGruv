@@ -1,4 +1,4 @@
-@import "colors/colors.css";
+@import "../matugen/colors.css";
 
 * {
   color: @fg;
