@@ -9,10 +9,19 @@ local float_utils = {
     size = {900, 700},
 }
 
--- pavucontrol (themed via matugen)
+-- pavucontrol dropdown (waybar volume left-click)
+hl.window_rule({
+    name = "pavucontrol-dropdown",
+    match = { tag = "pavu-dropdown" },
+    float = true,
+    pin = true,
+    animation = "slidevert",
+})
+
+-- pavucontrol full panel (waybar volume right-click)
 hl.window_rule({
     name = "pavucontrol",
-    match = { class = "^(org.pulseaudio.pavucontrol)$" },
+    match = { class = "^(org.pulseaudio.pavucontrol)$", tag = "negative:pavu-dropdown" },
     float = true,
     size = {780, 620},
     move = "100%-w-24 24",

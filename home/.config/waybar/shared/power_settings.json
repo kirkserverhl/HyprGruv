@@ -3,29 +3,6 @@
     "format": "\udb81\udc25 ",
     "on-click": "~/.config/hyprgruv/scripts/launch-wlogout.sh",
     "on-right-click": "hypridle",
-    "tooltip-format": "Right: Idle"
-  },
-
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip-format": "Power mode: {profile}",
-    "tooltip": true,
-    "format-icons": {
-      "default": "\uf0e7",
-      "performance": "\udb82\udc20",
-      "balanced": "\udb81\ude80",
-      "power-saver": "\udb80\udf2a"
-    }
-  },
-
-  "group/power": {
-    "orientation": "horizontal",
-    "tooltip-format": "Power Menu",
-    "drawer": {
-      "transition-duration": 300,
-      "children-class": "not-power",
-      "transition-left-to-right": false
-    },
-    "modules": ["custom/power", "power-profiles-daemon"]
+    "tooltip-format": "Power Menu\nRight: Idle"
   }
 }

@@ -56,7 +56,6 @@ label.module {
 #group-apps,
 #group-settings,
 #group-hyprgruv-drawer,
-#group-clock,
 #group-cpu-drawer,
 #group-power {
   margin: 0;
@@ -66,13 +65,11 @@ label.module {
 #group-apps label.module,
 #group-settings label.module,
 #group-hyprgruv-drawer label.module,
-#group-clock label.module,
 #group-cpu-drawer label.module,
 #group-power label.module,
 #group-apps widget,
 #group-settings widget,
 #group-hyprgruv-drawer widget,
-#group-clock widget,
 #group-cpu-drawer widget,
 #group-power widget {
   margin: 0 4px;
@@ -83,25 +80,36 @@ label.module {
 #group-settings widget.not-settings,
 #group-hyprgruv-settings widget.not-hyprgruv-settings,
 #group-sound widget.not-sound,
-#group-clock widget.not-clock,
-#group-cpu-info widget.not-system,
+#group-cpu-info widget.not-cpu,
 #group-power widget.not-power {
   margin: 0 4px;
   padding: 0 4px;
+}
+
+#clock,
+#custom-media {
+  margin: 0 4px;
+  padding: 0 4px;
+}
+
+#custom-media.custom-media-idle {
+  opacity: 0.7;
+}
+
+.modules-right > widget:last-child > #group-power {
+  margin-right: 0;
 }
 
 #group-apps:hover label.module,
 #group-settings:hover label.module,
 #group-hyprgruv-settings:hover label.module,
 #group-sound:hover label.module,
-#group-clock:hover label.module,
 #group-cpu-info:hover label.module,
 #group-power:hover label.module,
 #group-apps:hover widget,
 #group-settings:hover widget,
 #group-hyprgruv-settings:hover widget,
 #group-sound:hover widget,
-#group-clock:hover widget,
 #group-cpu-info:hover widget,
 #group-power:hover widget {
   margin: 0 5px;

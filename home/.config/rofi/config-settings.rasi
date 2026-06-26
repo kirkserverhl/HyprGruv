@@ -2,7 +2,7 @@
 
 configuration {
     show-icons:    true;
-    icon-theme:    "Gruvbox Plus Dark";
+    icon-theme:    "Gruvbox-Plus-Dark";
     cycle:         false;
     hover-select:  false;
     scroll-method: 1;

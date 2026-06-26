@@ -32,7 +32,8 @@ window {
     spacing:          0px;
     padding:          0px;
     margin:           0px;
-    border:           0px;
+    border:           @border-width;
+    border-color:     @outline;
     border-radius:    14px;
     background-color: @surface-alpha;
     transparency:     "real";
@@ -101,7 +102,8 @@ element {
     cursor:           pointer;
     background-color: transparent;
     border-radius:    6px;
-    border:           0px;
+    border:           @border-width;
+    border-color:     transparent;
 }
 
 element normal.normal,
@@ -119,6 +121,8 @@ element selected.urgent,
 element selected.active {
     background-color: @color11;
     text-color:       @selected-fg;
+    border:           @border-width;
+    border-color:     @primary;
 }
 
 element-icon {

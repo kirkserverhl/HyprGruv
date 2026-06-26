@@ -4,8 +4,8 @@
     "format-bluetooth": "\udb80\udcb1",
     "format-muted": "\udb81\udd81",
     "scroll-step": 1,
-    "on-click": "pavucontrol",
-    "on-click-right": "pavucontrol",
+    "on-click": "~/.config/waybar/scripts/pavucontrol-dropdown.sh",
+    "on-click-right": "~/.config/waybar/scripts/pavucontrol-full.sh",
     "ignored-sinks": ["Easy Effects Sink"],
     "format-icons": {
       "headphone": "\uf025",
@@ -16,7 +16,7 @@
       "car": "\uf1b9",
       "default": ["\udb81\udd80", "\udb81\udd7e"]
     },
-    "tooltip-format": "Volume: {volume}%"
+    "tooltip-format": "Volume: {volume}%\nLeft: Volume dropdown\nRight: Pavucontrol"
   },
 
   "bluetooth": {
@@ -48,7 +48,6 @@
     "format": "{}",
     "escape": true,
     "return-type": "json",
-    "hide-empty-text": true,
     "max-length": 40,
     "on-click": "playerctl play-pause",
     "on-click-right": "playerctl stop",

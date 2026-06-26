@@ -5,12 +5,23 @@
 set -e
 
 CONF="$HOME/.config/hypr-legacy/hyprland.conf"
+FAREWELL="${HOME}/.config/hyprgruv/scripts/farewell-fish.sh"
+FAREWELL_STAMP="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hyprgruv-farewell.stamp"
 
 if [[ ! -f "$CONF" ]]; then
     echo "ERROR: Legacy config not found at $CONF" >&2
     exit 1
 fi
 
+rm -f "$FAREWELL_STAMP"
+
 echo "[hypr-legacy] Starting Hyprland with explicit config: $CONF" >&2
 
-exec /usr/bin/start-hyprland -- -c "$CONF" "$@"
+/usr/bin/start-hyprland -- -c "$CONF" "$@"
+exit_code=$?
+
+if [[ -x "$FAREWELL" ]]; then
+    "$FAREWELL" || true
+fi
+
+exit "$exit_code"

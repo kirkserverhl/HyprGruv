@@ -41,6 +41,7 @@ class PlayerManager:
         self.excluded_player = excluded_player.split(",") if excluded_player else []
 
         self.init_players()
+        self.show_most_important_player()
 
     def init_players(self):
         for player in self.manager.props.player_names:
@@ -79,7 +80,13 @@ class PlayerManager:
         sys.stdout.flush()
 
     def clear_output(self):
-        sys.stdout.write("\n")
+        output = {
+            "text": "\uf001",
+            "class": "custom-media-idle",
+            "alt": "idle",
+            "tooltip": "No media playing",
+        }
+        sys.stdout.write(json.dumps(output) + "\n")
         sys.stdout.flush()
 
     def on_playback_status_changed(self, player, status, _=None):
@@ -143,7 +150,10 @@ class PlayerManager:
             current_playing is None
             or current_playing.props.player_name == player.props.player_name
         ):
-            self.write_output(track_info, player)
+            if track_info:
+                self.write_output(track_info, player)
+            else:
+                self.clear_output()
         else:
             logger.debug(
                 f"Other player {current_playing.props.player_name} is playing, skipping"

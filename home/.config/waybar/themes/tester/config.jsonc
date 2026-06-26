@@ -1,6 +1,6 @@
 /*
  * tester theme — minimal styling shell for the shared layout.
- * HyprGruv Settings gear is a standalone module (not inside group/settings drawer).
+ * Left modules come from shared/layout.jsonc (group/apps + group/settings drawers).
  */
 {
   "reload_style_on_change": true,
@@ -10,16 +10,7 @@
     "~/.config/waybar/themes/tester/modules.json"
   ],
 
-  "modules-left": [
-    "group/apps",
-    "custom/hyprgruv-settings",
-    "custom/waybarthemes",
-    "custom/wallpaper",
-    "group/sound",
-    "custom/media"
-  ],
-
-  "custom/hyprgruv-settings": {
+  "custom/settings": {
     "format": "\udb81\udc93",
     "on-click": "~/.config/hyprgruv/scripts/waybar-hyprgruv-settings.sh",
     "tooltip-format": "HyprGruv Settings"

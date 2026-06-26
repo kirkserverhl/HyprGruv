@@ -6,12 +6,23 @@
 set -e
 
 LUA_CFG="$HOME/.config/hypr/hyprland.lua"
+FAREWELL="${HOME}/.config/hyprgruv/scripts/farewell-fish.sh"
+FAREWELL_STAMP="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hyprgruv-farewell.stamp"
 
 if [[ ! -f "$LUA_CFG" ]]; then
     echo "ERROR: Lua config not found at $LUA_CFG" >&2
     exit 1
 fi
 
+rm -f "$FAREWELL_STAMP"
+
 echo "[hypr-lua] Starting Hyprland via start-hyprland with Lua config: $LUA_CFG" >&2
 
-exec /usr/bin/start-hyprland -- -c "$LUA_CFG" "$@"
+/usr/bin/start-hyprland -- -c "$LUA_CFG" "$@"
+exit_code=$?
+
+if [[ -x "$FAREWELL" ]]; then
+    "$FAREWELL" || true
+fi
+
+exit "$exit_code"

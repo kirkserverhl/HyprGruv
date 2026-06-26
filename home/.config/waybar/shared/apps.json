@@ -7,20 +7,20 @@
   },
 
   "custom/browser": {
-    "format": "\uf268",
+    "format": " \uf268",
     "on-click": "~/.config/hyprgruv/scripts/rofi-full.sh",
     "tooltip-format": "Tools & Utilities"
   },
 
   "custom/fmanager": {
-    "format": "\udb80\udde5",
-    "on-click": ": kitty -e yazi",
+    "format": " \udb80\udde5",
+    "on-click": "kitty -e yazi",
     "on-click-right": "thunar",
     "tooltip-format": "File Manager"
   },
 
-  "custom/cliphist": {
-    "format": "\udb80\udd4c",
+  "custom/clip": {
+    "format": " \udb80\udd4c",
     "on-click": "~/.config/hyprgruv/scripts/hyprshot.sh",
     "on-click-right": "~/.config/hyprgruv/scripts/cliphist.sh",
     "tooltip-format": "Left: Screenshot\nRight: Clipboard history"
@@ -38,7 +38,7 @@
       "custom/appmenu",
       "custom/browser",
       "custom/fmanager",
-      "custom/cliphist",
+      "custom/clip",
       "custom/hypridle"
     ]
   }

@@ -36,6 +36,14 @@ welcome_skip_label() {
     fi
 }
 
+welcome_skip_icon() {
+    if [[ -f "$SKIP_TOGGLE_FILE" ]]; then
+        printf '%s' "udiskie-checkbox-checked"
+    else
+        printf '%s' "udiskie-checkbox-unchecked"
+    fi
+}
+
 welcome_toggle_skip() {
     if [[ -f "$SKIP_TOGGLE_FILE" ]]; then
         rm -f "$SKIP_TOGGLE_FILE"
@@ -85,10 +93,10 @@ menu_styling() {
     while true; do
         local choice
         choice=$(rofi_pick "Styling" \
-            "Themes switcher|themes|themes" \
-            "Waypaper|waypaper|waypaper" \
-            "Waybar Theme|waybar|waybar" \
-            "Back|back|back")
+            "Themes switcher|preferences-desktop-theme|themes" \
+            "Waypaper|preferences-desktop-wallpaper|waypaper" \
+            "Waybar Theme|panel-top-symbolic|waybar" \
+            "Back|gtk-go-back-ltr|back")
         [[ -z "${choice:-}" ]] && return 0
 
         case "$choice" in
@@ -110,11 +118,11 @@ menu_settings() {
     while true; do
         local choice
         choice=$(rofi_pick "Settings" \
-            "Settings|setup|setup" \
-            "Blur|waypaper|blur" \
-            "Blitz|blitz|blitz" \
-            "Hyprsunset|hyprsunset|hyprsunset" \
-            "Back|back|back")
+            "Settings|settings-configure|setup" \
+            "Blur|blur|blur" \
+            "Blitz|flash|blitz" \
+            "Hyprsunset|brightnesssettings|hyprsunset" \
+            "Back|gtk-go-back-ltr|back")
         [[ -z "${choice:-}" ]] && return 0
 
         case "$choice" in
@@ -139,11 +147,11 @@ menu_system() {
     while true; do
         local choice
         choice=$(rofi_pick "System" \
-            "Laptop / PC|laptop|laptop" \
-            "Packages Sync|packages|packages" \
-            "Updates|updates|updates" \
-            "Cleanup|cleanup|cleanup" \
-            "Back|back|back")
+            "Laptop / PC|computer-laptop|laptop" \
+            "Packages Sync|package-x-generic|packages" \
+            "Updates|software-update|updates" \
+            "Cleanup|document-cleanup|cleanup" \
+            "Back|gtk-go-back-ltr|back")
         [[ -z "${choice:-}" ]] && return 0
 
         case "$choice" in
@@ -171,15 +179,15 @@ menu_main() {
     while true; do
         local choice
         local -a entries=(
-            "Styling|styling|styling"
+            "Styling|preferences-desktop-theme|styling"
             "Settings|settings|settings"
-            "System|system|system"
+            "System|system-run|system"
         )
 
         if [[ "$WELCOME_MODE" == "1" ]]; then
-            entries+=("$(welcome_skip_label)|settings|welcome_skip")
+            entries+=("$(welcome_skip_label)|$(welcome_skip_icon)|welcome_skip")
         fi
-        entries+=("Exit|exit|exit")
+        entries+=("Exit|system-log-out|exit")
 
         choice=$(rofi_pick "$prompt" "${entries[@]}") || return 0
         if [[ -z "${choice:-}" ]]; then

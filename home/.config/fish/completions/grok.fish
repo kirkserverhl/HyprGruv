@@ -1,6 +1,6 @@
 # Print an optspec for argparse to handle cmd's options that are independent of any subcommand.
 function __fish_grok_global_optspecs
-	string join \n v/version cwd= leader-socket= debug debug-file= always-approve trust allow= deny= p/single= prompt-json= prompt-file= verbatim output-format= m/model= reasoning-effort= rules= compaction-mode= compaction-detail= system-prompt-override= r/resume= load= c/continue s/session-id= w/worktree= restore-code no-plan no-subagents no-ask-user experimental-memory no-memory agent= agents= tools= disallowed-tools= effort= max-turns= permission-mode= disable-web-search check no-wait-for-background background-wait-timeout= best-of-n= sandbox= storage-mode= client-identifier= hunk-tracker-mode= terminal fs-read fs-write no-auto-update todo-gate installer= no-alt-screen log-sampling force-login oauth leader no-leader hub-url= hub-workspace-mode= h/help
+	string join \n v/version cwd= leader-socket= debug debug-file= always-approve trust allow= deny= p/single= prompt-json= prompt-file= verbatim output-format= json-schema= m/model= reasoning-effort= rules= compaction-mode= compaction-detail= system-prompt-override= r/resume= load= c/continue s/session-id= w/worktree= worktree-ref= restore-code no-plan no-subagents no-ask-user experimental-memory no-memory agent= agents= tools= disallowed-tools= effort= max-turns= permission-mode= disable-web-search check no-wait-for-background background-wait-timeout= best-of-n= sandbox= storage-mode= client-identifier= hunk-tracker-mode= terminal fs-read fs-write no-auto-update todo-gate installer= no-alt-screen log-sampling force-login oauth leader no-leader hub-url= hub-workspace-mode= h/help
 end
 
 function __fish_grok_needs_command
@@ -35,6 +35,7 @@ complete -c grok -n "__fish_grok_needs_command" -l prompt-file -d 'Single-turn p
 complete -c grok -n "__fish_grok_needs_command" -l output-format -d 'Output format for headless mode' -r -f -a "plain\t''
 json\t''
 streaming-json\t''"
+complete -c grok -n "__fish_grok_needs_command" -l json-schema -d 'JSON Schema for structured output. When set, the model is constrained to produce JSON matching this schema. Implies --output-format json. Example: --json-schema \'{"type":"object","properties":{"name":{"type":"string"}}}\'' -r
 complete -c grok -n "__fish_grok_needs_command" -s m -l model -d 'Model ID to use' -r
 complete -c grok -n "__fish_grok_needs_command" -l reasoning-effort -d 'Reasoning effort for reasoning models' -r
 complete -c grok -n "__fish_grok_needs_command" -l rules -d 'Extra rules to append to the system prompt' -r
@@ -45,6 +46,7 @@ complete -c grok -n "__fish_grok_needs_command" -s r -l resume -d 'Resume a sess
 complete -c grok -n "__fish_grok_needs_command" -l load -d 'Resume a previous session by session ID (alias for --resume)' -r
 complete -c grok -n "__fish_grok_needs_command" -s s -l session-id -d 'Create or resume a session with a specific ID (upsert semantics). If the session exists, it is loaded; otherwise a new session is created with the given ID. Hidden from --help' -r
 complete -c grok -n "__fish_grok_needs_command" -s w -l worktree -d 'Start the session in a new git worktree, optionally named' -r
+complete -c grok -n "__fish_grok_needs_command" -l worktree-ref -l ref -d 'Branch, tag, or commit to base the worktree on (with `--worktree`). Defaults to the current HEAD of the source checkout when omitted' -r
 complete -c grok -n "__fish_grok_needs_command" -l agent -d 'Agent name or definition file path' -r
 complete -c grok -n "__fish_grok_needs_command" -l agents -d 'Inline subagent definitions as JSON' -r
 complete -c grok -n "__fish_grok_needs_command" -l tools -d 'Built-in tools to allow (comma-separated)' -r

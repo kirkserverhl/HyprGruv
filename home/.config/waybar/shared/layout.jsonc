@@ -1,6 +1,9 @@
 /*
  * Canonical Waybar module layout.
  *
+ * Text clock sits left of updates; icon drawers fill each side toward center.
+ * Interior drawers (icons): three expandable groups per side working inward.
+ *
  * Themes include this file and only override bar chrome (height, margins, etc.)
  * and style.css. Module definitions live in shared/*.json; arrangement lives here.
  *
@@ -40,10 +43,9 @@
     "custom/notification",
   ],
   "modules-right": [
+    "clock",
     "custom/updates",
     "group/cpu-info",
-    "group/power",
-    "group/clock",
+    "custom/power",
   ],
 }
-
