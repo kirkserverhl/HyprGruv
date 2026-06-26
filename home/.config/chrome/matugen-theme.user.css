@@ -80,11 +80,11 @@
     
     --matugen-inverse_on_surface: #434c5e;
     
-    --matugen-inverse_primary: #34618d;
+    --matugen-inverse_primary: #33618d;
     
-    --matugen-inverse_surface: #e1e2e8;
+    --matugen-inverse_surface: #e0e2e8;
     
-    --matugen-on_background: #e1e2e8;
+    --matugen-on_background: #e0e2e8;
     
     --matugen-on_error: #2e3440;
     
@@ -114,7 +114,7 @@
     
     --matugen-on_tertiary_container: #f1daff;
     
-    --matugen-on_tertiary_fixed: #241432;
+    --matugen-on_tertiary_fixed: #241532;
     
     --matugen-on_tertiary_fixed_variant: #514060;
     
@@ -128,7 +128,7 @@
     
     --matugen-primary_fixed: #d0e4ff;
     
-    --matugen-primary_fixed_dim: #9fcafc;
+    --matugen-primary_fixed_dim: #9ecafc;
     
     --matugen-scrim: #000000;
     
@@ -160,7 +160,7 @@
     
     --matugen-surface_dim: #101418;
     
-    --matugen-surface_tint: #9fcafc;
+    --matugen-surface_tint: #9ecafc;
     
     --matugen-surface_variant: #42474e;
     
@@ -182,11 +182,11 @@
     
     --matugen-inverse_on_surface-rgb: 67 76 94;
     
-    --matugen-inverse_primary-rgb: 52 97 141;
+    --matugen-inverse_primary-rgb: 51 97 141;
     
-    --matugen-inverse_surface-rgb: 225 226 232;
+    --matugen-inverse_surface-rgb: 224 226 232;
     
-    --matugen-on_background-rgb: 225 226 232;
+    --matugen-on_background-rgb: 224 226 232;
     
     --matugen-on_error-rgb: 46 52 64;
     
@@ -216,7 +216,7 @@
     
     --matugen-on_tertiary_container-rgb: 241 218 255;
     
-    --matugen-on_tertiary_fixed-rgb: 36 20 50;
+    --matugen-on_tertiary_fixed-rgb: 36 21 50;
     
     --matugen-on_tertiary_fixed_variant-rgb: 81 64 96;
     
@@ -230,7 +230,7 @@
     
     --matugen-primary_fixed-rgb: 208 228 255;
     
-    --matugen-primary_fixed_dim-rgb: 159 202 252;
+    --matugen-primary_fixed_dim-rgb: 158 202 252;
     
     --matugen-scrim-rgb: 0 0 0;
     
@@ -262,7 +262,7 @@
     
     --matugen-surface_dim-rgb: 16 20 24;
     
-    --matugen-surface_tint-rgb: 159 202 252;
+    --matugen-surface_tint-rgb: 158 202 252;
     
     --matugen-surface_variant-rgb: 66 71 78;
     
