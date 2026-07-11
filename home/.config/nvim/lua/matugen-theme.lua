@@ -1,4 +1,4 @@
--- Preset theme: nord-darker — static palette (not Material You)
+-- Preset theme: catppuccin — static palette (not Material You)
 
 local ok, base16 = pcall(require, "mini.base16")
 if not ok then
@@ -8,34 +8,34 @@ end
 
 base16.setup({
   palette = {
-    base00 = "#2e3440",
-    base01 = "#3b4252",
-    base02 = "#434c5e",
-    base03 = "#e4e9ef",
-    base04 = "#bfc5cd",
-    base05 = "#d8dee9",
-    base06 = "#434c5e",
-    base07 = "#5f6c84",
-    base08 = "#bf616a",
-    base09 = "#b48ead",
-    base0A = "#ebcb8b",
-    base0B = "#a3be8c",
-    base0C = "#8fbcbb",
-    base0D = "#5e81ac",
-    base0E = "#5e81ac",
-    base0F = "#d08770",
+    base00 = "#11111b",
+    base01 = "#181825",
+    base02 = "#1e1e2e",
+    base03 = "#7f849c",
+    base04 = "#6c7086",
+    base05 = "#cdd6f4",
+    base06 = "#1e1e2e",
+    base07 = "#45475a",
+    base08 = "#f38ba8",
+    base09 = "#cba6f7",
+    base0A = "#f9e2af",
+    base0B = "#a6e3a1",
+    base0C = "#94e2d5",
+    base0D = "#cba6f7",
+    base0E = "#89b4fa",
+    base0F = "#fab387",
   },
   use_cterm = false,
   plugins = { default = true },
 })
 
-vim.api.nvim_set_hl(0, "Visual", { bg = "#434c5e", fg = "#d8dee9" })
-vim.api.nvim_set_hl(0, "Comment", { fg = "#e4e9ef", italic = true })
-vim.api.nvim_set_hl(0, "@comment", { fg = "#e4e9ef", italic = true })
-vim.api.nvim_set_hl(0, "CursorLine", { bg = "#3b4252" })
-vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#bf616a" })
-vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#ebcb8b" })
-vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#5e81ac" })
-vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#8fbcbb" })
+vim.api.nvim_set_hl(0, "Visual", { bg = "#1e1e2e", fg = "#cdd6f4" })
+vim.api.nvim_set_hl(0, "Comment", { fg = "#7f849c", italic = true })
+vim.api.nvim_set_hl(0, "@comment", { fg = "#7f849c", italic = true })
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#181825" })
+vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#f38ba8" })
+vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#f9e2af" })
+vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#cba6f7" })
+vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#94e2d5" })
 
 pcall(function() require("lualine").setup() end)

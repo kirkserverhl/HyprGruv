@@ -1,0 +1,90 @@
+/* Soundsbored — waypaper-matched chrome (same colors/fonts/borders as launcher) */
+
+configuration {
+    show-icons:    false;
+    cycle:         true;
+    scroll-method: 1;
+    /* Left/Right reserved for category navigation (set via -kb-custom-* in script) */
+    kb-row-left:           "";
+    kb-row-right:          "";
+    kb-move-char-back:     "";
+    kb-move-char-forward:  "";
+    kb-move-word-back:     "";
+    kb-move-word-forward:  "";
+    kb-mode-previous:      "";
+    kb-mode-next:          "";
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
+
+window {
+    width:    520px;
+    location: center;
+    anchor:   center;
+}
+
+mainbox {
+    children: ["inputbar", "message", "listview"];
+}
+
+inputbar {
+    children: ["textbox-prompt-colon", "entry"];
+}
+
+textbox-prompt-colon {
+    str: "♪";
+}
+
+entry {
+    placeholder: "Filter clips...";
+}
+
+message {
+    margin:  0px 4px 6px 4px;
+    padding: 0px;
+}
+
+textbox {
+    padding:          6px 10px;
+    border-radius:    6px;
+    background-color: @entry-surface;
+    text-color:       @prompt-color;
+}
+
+listview {
+    lines:        14;
+    fixed-height: false;
+    dynamic:      true;
+    scrollbar:    true;
+}
+
+element {
+    padding: 8px 12px;
+}
+
+/* Subtle separator rows */
+element normal.urgent,
+element alternate.urgent {
+    background-color: transparent;
+    text-color:       @outline-variant;
+}
+
+element selected.urgent {
+    background-color: transparent;
+    text-color:       @outline-variant;
+    border-color:     transparent;
+}
+
+/* Hotkey strip rows (active) */
+element normal.active,
+element alternate.active {
+    background-color: @surface-container;
+    text-color:       @primary-container;
+}
+
+element selected.active {
+    background-color: @primary;
+    text-color:       @on-primary;
+    border-color:     @primary;
+}

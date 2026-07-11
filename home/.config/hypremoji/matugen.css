@@ -2,24 +2,24 @@
 /* Maps to current wallpaper colors. Run matugen to update. */
 
 :root {
-  --primary-col: #a3be8c;
-  --primary-col-glow: #a3be8caa;
+  --primary-col: #a6e3a1;
+  --primary-col-glow: #a6e3a1aa;
 
   /* Muted gray for borders etc. */
-  --gray: #e4e9ef;
+  --gray: #7f849c;
 
   /* Main surfaces */
-  --bg-col: #2e3440;
-  --input-text-col: #d8dee9;
+  --bg-col: #11111b;
+  --input-text-col: #cdd6f4;
 
-  --btn-list-col: #434c5e;
-  --btn-list-col-hover: #3b4252;
-  --btn-list-col-hover-glow: #3b425277;
+  --btn-list-col: #1e1e2e;
+  --btn-list-col-hover: #181825;
+  --btn-list-col-hover-glow: #18182577;
 
-  --btn-nav-col: #3b4252;
-  --btn-nav-col-hover: #2e3440;
+  --btn-nav-col: #181825;
+  --btn-nav-col-hover: #11111b;
 
-  --error: #bf616a;
+  --error: #f38ba8;
 
   --emoji-font: "Noto Color Emoji";
 }
@@ -69,13 +69,13 @@ window {
 
 @keyframes shot {
   0% { border: 1px solid var(--primary-col); }
-  50% { border: 1px solid #d8dee9; }
+  50% { border: 1px solid #cdd6f4; }
   100% { border: 1px solid transparent; }
 }
 
 entry {
   background-color: var(--btn-list-col);
-  color: #d8dee9;
+  color: #cdd6f4;
   border-radius: 10px;
   padding: 0 15px;
 }
@@ -105,7 +105,7 @@ entry {
 
 .nav_enabled button.active, .nav_enabled button.active:focus {
   background: var(--primary-col);
-  color: #2e3440;
+  color: #11111b;
 }
 
 .nav_enabled button.active, .nav_enabled button.active:hover, .nav_enabled button.active:focus {
@@ -143,7 +143,7 @@ entry {
 }
 
 .toast-label {
-  color: #d8dee9;
+  color: #cdd6f4;
   font-weight: 700;
 }
 

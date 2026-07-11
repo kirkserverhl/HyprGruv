@@ -21,9 +21,15 @@ hl.config({
     },
 })
 
--- Gaming mice expose a phantom "keyboard" HID interface with its own Caps Lock
--- state. When focus follows the mouse, that stale state can flip Caps on.
+-- G502 side buttons mapped to keys/macros in Piper are emitted on this HID
+-- "keyboard" interface. enabled=false made Piper look correct while clicks did
+-- nothing. Leave it enabled so macros work.
+--
+-- Tradeoff: this interface has its own Caps Lock LED state and can occasionally
+-- flip Caps when focus follows the mouse. Prefer empty kb_options here over
+-- disabling the device entirely.
 hl.device({
     name = "logitech-g502-hero-gaming-mouse-keyboard",
-    enabled = false,
+    enabled = true,
+    kb_options = "",
 })

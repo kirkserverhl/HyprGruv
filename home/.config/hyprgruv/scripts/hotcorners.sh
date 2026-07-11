@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Geometry-aware bottom hot corners for Hyprland + hymission.
-# Triggers Mission Control on the outer bottom corners only.
+# Triggers Mission Control from bottom corners (per-monitor or outer-only).
 
 set -u
 
@@ -11,8 +11,9 @@ RADIUS=24                     # tiny deliberate corner zone (pixels)
 POLL_MS=90                    # cursor poll interval (ms)
 COOLDOWN_MS=900               # minimum time between triggers
 
-# "extreme" = bottom-left of leftmost monitor + bottom-right of rightmost monitor
-MODE="extreme"
+# "extreme"  = bottom-left of leftmost monitor + bottom-right of rightmost monitor
+# "all-bottom" = bottom-left AND bottom-right of every monitor
+MODE="all-bottom"
 
 LOG_FILE="/tmp/hotcorners.log"
 DEBUG=0
