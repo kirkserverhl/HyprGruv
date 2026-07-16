@@ -65,6 +65,17 @@ hl.layer_rule({
 })
 
 -- ============================================
+-- SCREENSHOT SELECTION (hyprshot / slurp)
+-- Disable fade animation so the selection overlay
+-- doesn't leave a grey line artifact in clipboard captures.
+-- ============================================
+hl.layer_rule({
+    name = "no_anim_for_selection",
+    match = { namespace = "^selection$" },
+    no_anim = true,
+})
+
+-- ============================================
 -- Future / Nice to have during overhaul
 -- ============================================
 -- hl.layer_rule({ match = { namespace = "notifications" }, blur = true })

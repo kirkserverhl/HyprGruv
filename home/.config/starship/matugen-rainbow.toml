@@ -27,23 +27,23 @@ $time\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
-palette = 'catppuccin'
+palette = 'noir'
 
-[palettes.catppuccin]
-color_fg0 = "#cdd6f4"
-color_bg1 = "#1e1e2e"
-color_bg3 = "#45475a"
-color_orange = "#fab387"
-color_yellow = "#f9e2af"
-color_aqua = "#94e2d5"
-color_blue = "#89b4fa"
-color_on_orange = "#cdd6f4"
-color_on_yellow = "#cdd6f4"
-color_on_aqua = "#cdd6f4"
-color_on_blue = "#cdd6f4"
-color_green = "#a6e3a1"
-color_red = "#f38ba8"
-color_purple = "#cba6f7"
+[palettes.noir]
+color_fg0 = "#e6e6e6"
+color_bg1 = "#2a2a2a"
+color_bg3 = "#444444"
+color_orange = "#b0a8a0"
+color_yellow = "#b0ada0"
+color_aqua = "#9cb0ad"
+color_blue = "#9ca8b0"
+color_on_orange = "#e6e6e6"
+color_on_yellow = "#e6e6e6"
+color_on_aqua = "#e6e6e6"
+color_on_blue = "#e6e6e6"
+color_green = "#a5b0a0"
+color_red = "#b0a0a5"
+color_purple = "#a89cb0"
 [os]
 disabled = false
 style = "bg:color_orange fg:color_fg0"
@@ -147,11 +147,11 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 [docker_context]
 symbol = ""
 style = "bg:color_bg3"
-format = '[[ $symbol( $context) ](fg:#94e2d5 bg:color_bg3)]($style)'
+format = '[[ $symbol( $context) ](fg:#b9bdc2 bg:color_bg3)]($style)'
 
 [conda]
 style = "bg:color_bg3"
-format = '[[ $symbol( $environment) ](fg:#94e2d5 bg:color_bg3)]($style)'
+format = '[[ $symbol( $environment) ](fg:#b9bdc2 bg:color_bg3)]($style)'
 
 [time]
 disabled = false

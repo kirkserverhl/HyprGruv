@@ -1,0 +1,266 @@
+/*
+ * qBittorrent matugen theme — follows system base16 palette.
+ * No custom icon overrides (keeps built-in icons working).
+ */
+
+QToolTip {
+    background-color: {{base16.base01.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+    padding: 4px;
+}
+
+QProgressBar {
+    text-align: center;
+    background: {{base16.base01.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+    border-radius: 2px;
+    color: {{base16.base05.dark.hex}};
+}
+
+QProgressBar::chunk {
+    background: {{base16.base0d.dark.hex}};
+    border-radius: 2px;
+}
+
+QHeaderView::section {
+    background: {{base16.base01.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+    padding: 4px 6px;
+}
+
+QHeaderView::section:hover {
+    background: {{base16.base02.dark.hex}};
+}
+
+QStatusBar {
+    background: {{base16.base00.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    border-top: 1px solid {{base16.base02.dark.hex}};
+}
+
+QMenuBar {
+    background: {{base16.base00.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+}
+
+QMenuBar::item:selected {
+    background: {{base16.base02.dark.hex}};
+    color: {{base16.base0d.dark.hex}};
+}
+
+QMenu {
+    background: {{base16.base00.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+}
+
+QMenu::item:selected {
+    background: {{base16.base02.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+}
+
+QMenu::separator {
+    height: 1px;
+    background: {{base16.base02.dark.hex}};
+    margin: 4px 8px;
+}
+
+QToolBar {
+    background: {{base16.base00.dark.hex}};
+    border-bottom: 1px solid {{base16.base02.dark.hex}};
+    spacing: 2px;
+}
+
+QToolButton:hover {
+    background: {{base16.base02.dark.hex}};
+    border-radius: 3px;
+}
+
+QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    background: {{base16.base01.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+    border-radius: 3px;
+    padding: 3px 6px;
+    selection-background-color: {{base16.base0d.dark.hex}};
+    selection-color: {{base16.base00.dark.hex}};
+}
+
+QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
+    border: 1px solid {{base16.base0d.dark.hex}};
+}
+
+QComboBox QAbstractItemView {
+    background: {{base16.base01.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    selection-background-color: {{base16.base02.dark.hex}};
+    selection-color: {{base16.base05.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+}
+
+QPushButton {
+    background: {{base16.base02.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    border: 1px solid {{base16.base03.dark.hex}};
+    border-radius: 3px;
+    padding: 5px 12px;
+}
+
+QPushButton:hover {
+    background: {{base16.base03.dark.hex}};
+    border-color: {{base16.base0d.dark.hex}};
+}
+
+QPushButton:pressed {
+    background: {{base16.base01.dark.hex}};
+}
+
+QPushButton:default {
+    background: {{base16.base0d.dark.hex}};
+    color: {{base16.base00.dark.hex}};
+    border-color: {{base16.base0d.dark.hex}};
+}
+
+QPushButton:default:hover {
+    background: {{base16.base0c.dark.hex}};
+}
+
+QPushButton:disabled {
+    color: {{base16.base03.dark.hex}};
+    background: {{base16.base01.dark.hex}};
+    border-color: {{base16.base02.dark.hex}};
+}
+
+QTabBar::tab {
+    background: {{base16.base01.dark.hex}};
+    color: {{base16.base04.dark.hex}};
+    border: 1px solid {{base16.base02.dark.hex}};
+    padding: 6px 12px;
+    margin-right: 2px;
+}
+
+QTabBar::tab:selected {
+    background: {{base16.base00.dark.hex}};
+    color: {{base16.base0d.dark.hex}};
+    border-bottom-color: {{base16.base0d.dark.hex}};
+}
+
+QTabBar::tab:hover:!selected {
+    background: {{base16.base02.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+}
+
+QTabWidget::pane {
+    border: 1px solid {{base16.base02.dark.hex}};
+    background: {{base16.base00.dark.hex}};
+}
+
+QTreeView, QTableView, QListView {
+    background: {{base16.base00.dark.hex}};
+    color: {{base16.base05.dark.hex}};
+    alternate-background-color: {{base16.base01.dark.hex}};
+    selection-background-color: {{base16.base02.dark.hex}};
+    selection-color: {{base16.base05.dark.hex}};
+    border: none;
+    outline: none;
+}
+
+QTreeView::item:hover, QTableView::item:hover, QListView::item:hover {
+    background: {{base16.base02.dark.hex}};
+}
+
+QScrollBar:vertical {
+    background: {{base16.base00.dark.hex}};
+    width: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:vertical {
+    background: {{base16.base02.dark.hex}};
+    min-height: 24px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: {{base16.base03.dark.hex}};
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+    height: 0;
+}
+
+QScrollBar:horizontal {
+    background: {{base16.base00.dark.hex}};
+    height: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+    background: {{base16.base02.dark.hex}};
+    min-width: 24px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: {{base16.base03.dark.hex}};
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+    width: 0;
+}
+
+QGroupBox {
+    border: 1px solid {{base16.base02.dark.hex}};
+    border-radius: 4px;
+    margin-top: 12px;
+    padding-top: 8px;
+    color: {{base16.base05.dark.hex}};
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 4px;
+    color: {{base16.base0d.dark.hex}};
+}
+
+QSplitter::handle {
+    background: {{base16.base02.dark.hex}};
+}
+
+QSplitter::handle:horizontal {
+    width: 1px;
+}
+
+QSplitter::handle:vertical {
+    height: 1px;
+}
+
+/* Transfer list status colors (qBittorrent custom properties) */
+TransferListWidget {
+    qproperty-downloadingStateForeground: {{base16.base0b.dark.hex}};
+    qproperty-forcedDownloadingStateForeground: {{base16.base0b.dark.hex}};
+    qproperty-downloadingMetadataStateForeground: {{base16.base0b.dark.hex}};
+    qproperty-allocatingStateForeground: {{base16.base03.dark.hex}};
+    qproperty-stalledDownloadingStateForeground: {{base16.base0a.dark.hex}};
+    qproperty-stalledUploadingStateForeground: {{base16.base0e.dark.hex}};
+    qproperty-uploadingStateForeground: {{base16.base0d.dark.hex}};
+    qproperty-forcedUploadingStateForeground: {{base16.base0d.dark.hex}};
+    qproperty-pausedDownloadingStateForeground: {{base16.base03.dark.hex}};
+    qproperty-pausedUploadingStateForeground: {{base16.base09.dark.hex}};
+    qproperty-errorStateForeground: {{base16.base08.dark.hex}};
+    qproperty-missingFilesStateForeground: {{base16.base08.dark.hex}};
+    qproperty-queuedDownloadingStateForeground: {{base16.base0c.dark.hex}};
+    qproperty-queuedUploadingStateForeground: {{base16.base0c.dark.hex}};
+    qproperty-checkingDownloadingStateForeground: {{base16.base0c.dark.hex}};
+    qproperty-checkingUploadingStateForeground: {{base16.base0c.dark.hex}};
+    qproperty-checkingResumeDataStateForeground: {{base16.base0c.dark.hex}};
+    qproperty-movingStateForeground: {{base16.base0c.dark.hex}};
+    qproperty-unknownStateForeground: {{base16.base08.dark.hex}};
+}

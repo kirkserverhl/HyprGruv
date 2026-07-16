@@ -13,6 +13,8 @@ configuration {
     kb-move-word-forward:  "";
     kb-mode-previous:      "";
     kb-mode-next:          "";
+    /* Free Alt+S for soundsbored Stop (default is screenshot) */
+    kb-screenshot:         "";
 }
 
 @import "~/.config/rofi/shared/standard.rasi"

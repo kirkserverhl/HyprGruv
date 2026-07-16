@@ -276,6 +276,18 @@ input_path = "~/.config/matugen/templates/pavucontrol.css"
 output_path = "~/.config/pavucontrol/pavucontrol.css"
 
 
+# qBittorrent folder theme (config.json + stylesheet.qss).
+# Point Preferences/General/CustomUIThemePath at the config.json path.
+# Restart qBittorrent after matugen runs to pick up new colors.
+[templates.qbittorrent_config]
+input_path = "~/.config/matugen/templates/qbittorrent-config.json"
+output_path = "~/.config/qBittorrent/themes/matugen/config.json"
+post_hook = "~/.config/hyprgruv/scripts/enable-qbittorrent-matugen-theme.sh"
+
+[templates.qbittorrent_stylesheet]
+input_path = "~/.config/matugen/templates/qbittorrent-stylesheet.qss"
+output_path = "~/.config/qBittorrent/themes/matugen/stylesheet.qss"
+
 [templates.qt5ct]
 input_path = "~/.config/matugen/templates/qtct-colors.conf"
 output_path = "~/.config/qt5ct/colors/matugen.conf"

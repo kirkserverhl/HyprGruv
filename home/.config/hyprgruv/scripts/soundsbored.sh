@@ -8,11 +8,16 @@ ROOT="${HOME}/.local/share/soundsbored"
 CLIPS="${ROOT}/clips"
 INDEX="${CLIPS}/index.tsv"
 STATE="${ROOT}/state"
+IPC_DIR="${STATE}/ipc"
 TOGGLE_FILE="${STATE}/wooo_awww"
 THEME="${HOME}/.config/rofi/config-soundsbored.rasi"
 DOWNLOADER="${ROOT}/download-clips.sh"
 
-mkdir -p "$STATE" "$CLIPS"
+# Fade duration (seconds) and volume step size
+FADE_SECS="${SOUNDSBORED_FADE_SECS:-1.5}"
+FADE_STEPS="${SOUNDSBORED_FADE_STEPS:-20}"
+
+mkdir -p "$STATE" "$CLIPS" "$IPC_DIR"
 
 # 0 = Wooo next, 1 = Awww next
 [[ -f "$TOGGLE_FILE" ]] || echo 0 >"$TOGGLE_FILE"
@@ -57,15 +62,94 @@ random_paths() {
   index_rows | awk -F'\t' '$1=="hotkeys" && $2=="random" { print $5 }'
 }
 
+mpv_cmd() {
+  # Send a JSON IPC command to one mpv unix socket. Args: sock json-command-array
+  local sock="$1"
+  local cmd_json="$2"
+  [[ -S "$sock" ]] || return 1
+  printf '{"command":%s}\n' "$cmd_json" | socat -t 0.2 - "UNIX-CONNECT:${sock}" >/dev/null 2>&1 || return 1
+}
+
+# Drop dead sockets left behind after clips finish
+prune_ipc() {
+  local sock
+  shopt -s nullglob
+  for sock in "$IPC_DIR"/mpv-*.sock; do
+    if ! mpv_cmd "$sock" '["get_property","pid"]'; then
+      rm -f "$sock"
+    fi
+  done
+  shopt -u nullglob
+}
+
 play_file() {
   local f="$1"
   if [[ -z "$f" || ! -f "$f" ]]; then
     notify-send -a soundsbored "Soundsbored" "Missing clip: ${f:-?}" 2>/dev/null || true
     return 1
   fi
-  # Overlapping playback (classic soundboard). Quiet, no video.
-  mpv --no-video --really-quiet --volume=100 --force-window=no "$f" &
+  prune_ipc
+  # Unique IPC socket so we can fade/stop this instance later
+  local sock
+  sock="${IPC_DIR}/mpv-$$-$(date +%s%N).sock"
+  # Overlapping playback (classic soundboard). Quiet, no video, IPC for fade-out.
+  mpv --no-video --really-quiet --volume=100 --force-window=no \
+    --input-ipc-server="$sock" \
+    --keep-open=no \
+    "$f" &
   disown
+}
+
+# Smoothly fade every active clip to silence, then quit.
+# Runs in background so the menu stays snappy.
+fade_out_all() {
+  prune_ipc
+  local socks=()
+  local sock
+  shopt -s nullglob
+  socks=("$IPC_DIR"/mpv-*.sock)
+  shopt -u nullglob
+
+  if ((${#socks[@]} == 0)); then
+    notify-send -a soundsbored -t 1000 "Soundsbored" "Nothing playing" 2>/dev/null || true
+    return 0
+  fi
+
+  (
+    local steps step delay vol i s
+    steps="$FADE_STEPS"
+    ((steps < 1)) && steps=1
+    # bash $(( )) is integer — use awk for fractional delay
+    delay="$(awk -v s="$FADE_SECS" -v n="$steps" 'BEGIN { printf "%.4f", s / n }')"
+    for ((i = 1; i <= steps; i++)); do
+      vol=$((100 - (100 * i / steps)))
+      ((vol < 0)) && vol=0
+      for s in "${socks[@]}"; do
+        mpv_cmd "$s" "[\"set_property\",\"volume\",${vol}]" || true
+      done
+      sleep "$delay"
+    done
+    for s in "${socks[@]}"; do
+      mpv_cmd "$s" '["quit"]' || true
+      rm -f "$s"
+    done
+  ) &
+  disown
+  notify-send -a soundsbored -t 1200 "Soundsbored" "Fade out (${FADE_SECS}s)…" 2>/dev/null || true
+}
+
+# Instant stop (no fade) — handy if a long clip is stuck
+stop_all() {
+  prune_ipc
+  local sock
+  shopt -s nullglob
+  for sock in "$IPC_DIR"/mpv-*.sock; do
+    mpv_cmd "$sock" '["quit"]' || true
+    rm -f "$sock"
+  done
+  shopt -u nullglob
+  # Fallback: kill any orphaned soundsbored mpv still holding our ipc pattern
+  notify-send -a soundsbored -t 1000 "Soundsbored" "Stopped" 2>/dev/null || true
 }
 
 play_by_name() {
@@ -165,6 +249,10 @@ build_menu() {
   meta+=("action:toggle")
   lines+=("  ♪  Laugh Track (random)")
   meta+=("action:laugh")
+  lines+=("  ↷  Fade Out")
+  meta+=("action:fade")
+  lines+=("  ■  Stop")
+  meta+=("action:stop")
 
   # Export via globals for selection handling
   MENU_LINES=("${lines[@]}")
@@ -180,8 +268,9 @@ run_rofi() {
   build_menu "$cat"
 
   # Mark separator as urgent, hotkeys as active for theming
+  # hotkey strip: Sad, Damn, Toggle, Laugh, Fade, Stop  (6 rows after sep)
   local sep_idx hot_start
-  sep_idx=$((${#MENU_LINES[@]} - 5))
+  sep_idx=$((${#MENU_LINES[@]} - 7))
   hot_start=$((sep_idx + 1))
   local u_arg a_arg
   u_arg="$sep_idx"
@@ -193,7 +282,7 @@ run_rofi() {
     printf '%s\n' "${MENU_LINES[@]}" | rofi -dmenu -i \
       -config "$THEME" \
       -p "${title}" \
-      -mesg "  ${hint}     ·     hotkeys stay pinned below" \
+      -mesg "  ${hint}     ·     Alt+F fade  ·  Alt+X stop  ·  Alt+1–4 hotkeys" \
       -format s \
       -selected-row 0 \
       -u "$u_arg" \
@@ -203,7 +292,9 @@ run_rofi() {
       -kb-custom-3 "Alt+1" \
       -kb-custom-4 "Alt+2" \
       -kb-custom-5 "Alt+3" \
-      -kb-custom-6 "Alt+4"
+      -kb-custom-6 "Alt+4" \
+      -kb-custom-7 "Alt+f" \
+      -kb-custom-8 "Alt+x"
   )"
   local rc=$?
   set -e
@@ -248,6 +339,14 @@ run_rofi() {
       play_random_laugh
       return 2
       ;;
+    16)
+      fade_out_all
+      return 2
+      ;;
+    17)
+      stop_all
+      return 2
+      ;;
     0)
       if [[ -z "${selected:-}" ]]; then
         return 1
@@ -273,6 +372,8 @@ run_rofi() {
           case "$rest" in
             toggle) play_toggle_wooo_awww ;;
             laugh)  play_random_laugh ;;
+            fade)   fade_out_all ;;
+            stop)   stop_all ;;
           esac
           return 2
           ;;
