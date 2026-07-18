@@ -4,6 +4,8 @@ configuration {
     show-icons:    false;
     cycle:         true;
     scroll-method: 1;
+    /* Click other windows without dismissing (paired with -normal-window in script) */
+    click-to-exit:  false;
     /* Left/Right reserved for category navigation (set via -kb-custom-* in script) */
     kb-row-left:           "";
     kb-row-right:          "";
@@ -21,9 +23,17 @@ configuration {
 @import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
-    width:    520px;
-    location: center;
-    anchor:   center;
+    width: 520px;
+    /*
+     * Corner tool panel (not centered overlay).
+     * Rofi 2.x on Wayland is layer-shell even with -normal-window, so Hyprland
+     * cannot drag/tile it — location/anchor place it as a fixed panel instead.
+     * southeast = bottom-right of the focused monitor.
+     */
+    location: southeast;
+    anchor:   southeast;
+    x-offset: -16px;
+    y-offset: -16px;
 }
 
 mainbox {

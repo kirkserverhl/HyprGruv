@@ -4,14 +4,15 @@
 --
 --   Super (main)     → desktop defaults — reach here first on a work day
 --   Alt  (alt)       → the *other* option (2nd browser, dev tmux, power tools)
---   Ctrl (apps)      → native app shortcuts (copy/paste/find…) — press directly
+--   Ctrl (apps)      → NEVER bind bare Ctrl+letter globally — apps own Find/Print/Save…
+--                      Only OK with Super/Alt chorded: Super+Ctrl+H (move), Ctrl+Alt+Del
 --   Ctrl-b (tmux)    → panes/sessions (see ~/.config/tmux/cheatsheet.txt)
 --   (none)           → vim / shell typing
 --
 --   Navigation gesture (same everywhere):
 --     dir / hjkl        → focus
 --     Shift + dir/hjkl  → resize
---     Ctrl  + dir/hjkl  → move (window or pane)
+--     Ctrl  + dir/hjkl  → move (window or pane)  [only when Super is held]
 --
 --   Mac bridge (lowest priority — Super only, never steals OS keys):
 --     Super+C/V/X/Z/A + Super+Shift+B/I/K → mac-shortcut.sh → Ctrl+*
@@ -105,14 +106,16 @@ hl.bind(mainMod .. " + SHIFT + A",    hl.dsp.exec_cmd(SCRIPTS .. "/soundsbored.s
 hl.bind(mainMod .. " + PRINT",        hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh")) -- #screenshot Quick screenshot
 
 -- Session / power
+-- Lock on Super+Escape (not Super+L) so Super+H/J/K/L stay pure vim focus
 hl.bind(mainMod .. " + Q",            hl.dsp.window.close())
-hl.bind(mainMod .. " + L",            hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"))
+hl.bind(mainMod .. " + Escape",       hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf")) -- #session Lock screen
 hl.bind(mainMod .. " + CTRL + Q",     hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 hl.bind("CTRL + ALT + DELETE",       hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 
 -- Windows & workspaces
 hl.bind(mainMod .. " + S",            hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh"))
 hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special:scratchpad" }))
+hl.bind(mainMod .. " + F",            hl.dsp.window.fullscreen()) -- #window Fullscreen (was CTRL+F — that stole Find)
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G",            toggle_gaps)
 hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Switch theme & wallpaper
@@ -206,12 +209,15 @@ hl.bind(altMod .. " + equal", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_fa
 hl.bind(altMod .. " + minus", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 0.9}')"))
 
 -- ═══════════════════════════════════════════════════════════════════════════════
--- CTRL — applications & meta (press Ctrl directly in apps; these are extras)
+-- DESKTOP META (was under bare CTRL — that steals native app shortcuts)
+-- Rule: bare Ctrl is reserved for apps (Find, Print, Save, close-tab…).
+-- Desktop actions live on Super / Alt only.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
-hl.bind("CTRL + F",     hl.dsp.window.fullscreen())
-hl.bind("CTRL + P",     hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh")) -- #theme Color palette picker
-hl.bind("CTRL + SPACE", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh")) -- #guest #help Search all keybinds
+-- Fullscreen moved to Super+F (see MAIN section above).
+-- Palette: was CTRL+P (Print in every app) → Super+Shift+C
+hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh")) -- #theme Color palette picker
+-- Keybind cheatsheet: was also CTRL+SPACE (IME / IDE autocomplete conflict) — Alt+K only
 hl.bind(altMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh")) -- #guest #help Keybind cheatsheet (tell guests this one)
 
 -- ═══════════════════════════════════════════════════════════════════════════════

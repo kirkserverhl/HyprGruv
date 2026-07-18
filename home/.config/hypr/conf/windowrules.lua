@@ -105,6 +105,9 @@ hl.window_rule({ name = "nemo-float",      match = { class = "^(nemo)$" },      
 -- The original only floated specific kitty instances (htop, yazi, etc.) via title rules below.
 -- hl.window_rule({ name = "kitty-float", match = { class = "^(kitty)$" }, float = true })
 -- hl.window_rule({ name = "smile-float",     match = { class = "^(smile)$" },      float = true })  -- replaced by hypremoji
+
+-- Note: soundsbored rofi is layer-shell on Wayland (even with -normal-window),
+-- so window rules cannot place it. Corner placement is in config-soundsbored.rasi.
 hl.window_rule({ name = "rofi-float",      match = { class = "^(rofi|Rofi)$" },  float = true })
 -- These two are also quite broad. Comment them out if you want normal alacritty/ghostty to tile.
 -- hl.window_rule({ name = "alacritty-float", match = { class = "^(alacritty)$" },  float = true })
