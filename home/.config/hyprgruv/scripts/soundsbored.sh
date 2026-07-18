@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 # Arch / Hyprland launcher — thin wrapper around the git package.
 #
-# Single source of truth: ~/soundsbored (Python).
+# Single source of truth: ~/BaaS_ISO/soundsbored (Python).
 #   Linux → rofi backend (this machine)
 #   macOS → fzf backend (same package, same menus/clips logic)
+#
+# Override with: export SOUNDSBORED_REPO=/path/to/soundsbored
 #
 # Legacy bash implementation (if you need it):
 #   ~/.config/hyprgruv/scripts/soundsbored.sh.legacy
 set -euo pipefail
 
-REPO="${SOUNDSBORED_REPO:-${HOME}/soundsbored}"
+REPO="${SOUNDSBORED_REPO:-${HOME}/BaaS_ISO/soundsbored}"
 VENV_BIN="${REPO}/.venv/bin/soundsbored"
 
 if [[ -x "$VENV_BIN" ]]; then

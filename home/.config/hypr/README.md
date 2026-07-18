@@ -9,13 +9,10 @@ This is now your primary Hyprland configuration using the native Lua format (Hyp
 - `scripts/` — All your custom scripts (still used by the config)
 - `hyprlock/`, `shaders/`, `effects/`, etc. — Supporting assets
 
-## Sessions at Login
+## Session at Login
 - **Hyprland (Lua)** — Uses this directory (`~/.config/hypr/hyprland.lua`)
-- **Hyprland (Legacy Conf)** — Uses the old config from `~/.config/hypr-legacy/`
 
-## Backup
-Full backup of the previous conf-based setup lives at:
-`~/.config/hypr-legacy/`
+Legacy conf backups were removed; the old setup lives in the separate GitHub history if needed.
 
 ## Testing / Reloading
 From inside Hyprland you can usually just save the file — it should hot reload.
