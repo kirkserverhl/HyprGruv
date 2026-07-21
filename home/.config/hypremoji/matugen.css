@@ -2,24 +2,24 @@
 /* Maps to current wallpaper colors. Run matugen to update. */
 
 :root {
-  --primary-col: #98971a;
-  --primary-col-glow: #98971aaa;
+  --primary-col: #a6e3a1;
+  --primary-col-glow: #a6e3a1aa;
 
   /* Muted gray for borders etc. */
-  --gray: #7c6f64;
+  --gray: #7f849c;
 
   /* Main surfaces */
-  --bg-col: #1d2021;
-  --input-text-col: #ebdbb2;
+  --bg-col: #11111b;
+  --input-text-col: #cdd6f4;
 
-  --btn-list-col: #3c3836;
-  --btn-list-col-hover: #282828;
-  --btn-list-col-hover-glow: #28282877;
+  --btn-list-col: #1e1e2e;
+  --btn-list-col-hover: #181825;
+  --btn-list-col-hover-glow: #18182577;
 
-  --btn-nav-col: #282828;
-  --btn-nav-col-hover: #1d2021;
+  --btn-nav-col: #181825;
+  --btn-nav-col-hover: #11111b;
 
-  --error: #cc241d;
+  --error: #f38ba8;
 
   --emoji-font: "Noto Color Emoji";
 }
@@ -69,13 +69,13 @@ window {
 
 @keyframes shot {
   0% { border: 1px solid var(--primary-col); }
-  50% { border: 1px solid #ebdbb2; }
+  50% { border: 1px solid #cdd6f4; }
   100% { border: 1px solid transparent; }
 }
 
 entry {
   background-color: var(--btn-list-col);
-  color: #ebdbb2;
+  color: #cdd6f4;
   border-radius: 10px;
   padding: 0 15px;
 }
@@ -105,7 +105,7 @@ entry {
 
 .nav_enabled button.active, .nav_enabled button.active:focus {
   background: var(--primary-col);
-  color: #1d2021;
+  color: #11111b;
 }
 
 .nav_enabled button.active, .nav_enabled button.active:hover, .nav_enabled button.active:focus {
@@ -143,7 +143,7 @@ entry {
 }
 
 .toast-label {
-  color: #ebdbb2;
+  color: #cdd6f4;
   font-weight: 700;
 }
 

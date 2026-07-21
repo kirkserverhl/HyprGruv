@@ -103,6 +103,7 @@ hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) --
 hl.bind(mainMod .. " + N",            hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
 hl.bind(mainMod .. " + O",            hl.dsp.exec_cmd(SCRIPTS .. "/obsidian.sh")) -- #launcher Open Obsidian
 hl.bind(mainMod .. " + SHIFT + A",    hl.dsp.exec_cmd(SCRIPTS .. "/soundsbored.sh")) -- #audio #launcher Open soundsbored
+hl.bind(mainMod .. " + SHIFT + M",    hl.dsp.exec_cmd(os.getenv("HOME") .. "/bin/baas-menu")) -- #work #baas #launcher BaaS tech workflows
 hl.bind(mainMod .. " + PRINT",        hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh")) -- #screenshot Quick screenshot
 
 -- Session / power
