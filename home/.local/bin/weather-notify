@@ -1,0 +1,691 @@
+#!/usr/bin/env bash
+# weather-notify — SwayNC (notify-send) weather alerts for Hyprland/Sway
+#
+#   precip   Every ~15 min: notify if raining now or rain expected soon
+#   alerts   Frequently: notify ASAP when new severe NWS alerts post
+#   hourly   On the hour: calm weather digest (skipped if precip warrants a notify)
+#   all      Run precip + alerts (default)
+#   test     Send sample notifications
+#   status   Show last run state / current conditions (no notify)
+#   clear    Clear remembered alert IDs (will re-notify active alerts)
+#
+# Data: Open-Meteo (precip) + National Weather Service (alerts)
+set -euo pipefail
+IFS=$'\n\t'
+
+APP_NAME="Weather"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/weather-notify"
+CONFIG_FILE="${CONFIG_DIR}/config"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/weather-notify"
+SEEN_ALERTS_FILE="${STATE_DIR}/seen-alerts"
+LAST_PRECIP_FILE="${STATE_DIR}/last-precip"
+LAST_RUN_FILE="${STATE_DIR}/last-run"
+LOG_FILE="${STATE_DIR}/weather-notify.log"
+
+# Defaults (overridden by config)
+LAT=35.8515
+LON=-78.6314
+LOCATION_NAME="Raleigh, NC"
+UNITS=us
+FORECAST_HOURS=3
+MIN_PRECIP_NOW=0.01
+MIN_PRECIP_FORECAST=0.01
+MIN_PRECIP_PROB=40
+SEVERE_SEVERITIES="Extreme,Severe,Moderate"
+PRECIP_EXPIRE_MS=12000
+HOURLY_EXPIRE_MS=10000
+USER_AGENT="weather-notify/1.0 (local; hyprgruv; contact: none)"
+
+DEFAULT_SEVERE_KEYWORDS=(
+  Flood
+  "Flash Flood"
+  Winter
+  Snow
+  Blizzard
+  Ice
+  Freezing
+  Tornado
+  "Severe Thunderstorm"
+  Hurricane
+  Tropical
+  "Storm Surge"
+  "Extreme Wind"
+  "Dust Storm"
+  "High Wind"
+  "Special Weather"
+  Tsunami
+)
+
+mkdir -p "$STATE_DIR" "$CONFIG_DIR"
+
+log() {
+  local ts
+  ts="$(date '+%Y-%m-%d %H:%M:%S')"
+  printf '%s %s\n' "$ts" "$*" >>"$LOG_FILE"
+}
+
+load_config() {
+  if [[ -f "$CONFIG_FILE" ]]; then
+    # shellcheck disable=SC1090
+    source "$CONFIG_FILE"
+  fi
+  export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/bus}"
+}
+
+ensure_notify() {
+  if ! command -v notify-send &>/dev/null; then
+    log "ERROR: notify-send not found"
+    return 1
+  fi
+  # Soft check: notifications may still work after a short wait on session start
+  if command -v gdbus &>/dev/null; then
+    local has
+    has="$(gdbus call --session \
+      --dest org.freedesktop.DBus \
+      --object-path /org/freedesktop/DBus \
+      --method org.freedesktop.DBus.NameHasOwner \
+      org.freedesktop.Notifications 2>/dev/null || echo '(false,)')"
+    if [[ "$has" != "(true,)" ]]; then
+      log "WARNING: notification daemon not ready yet"
+      return 1
+    fi
+  fi
+  return 0
+}
+
+notify() {
+  # notify <urgency> <icon> <title> <body> [expire_ms]
+  local urgency="$1" icon="$2" title="$3" body="$4"
+  local expire="${5:-}"
+  local args=(-u "$urgency" -a "$APP_NAME" -i "$icon" -c weather)
+  if [[ -n "$expire" ]]; then
+    args+=(-t "$expire")
+  fi
+  notify-send "${args[@]}" "$title" "$body" || {
+    log "ERROR: notify-send failed for: $title"
+    return 1
+  }
+  log "NOTIFIED [$urgency] $title"
+}
+
+wmo_label() {
+  case "$1" in
+  0) echo "Clear" ;;
+  1) echo "Mainly clear" ;;
+  2) echo "Partly cloudy" ;;
+  3) echo "Overcast" ;;
+  45 | 48) echo "Fog" ;;
+  51) echo "Light drizzle" ;;
+  53) echo "Drizzle" ;;
+  55) echo "Dense drizzle" ;;
+  56 | 57) echo "Freezing drizzle" ;;
+  61) echo "Light rain" ;;
+  63) echo "Rain" ;;
+  65) echo "Heavy rain" ;;
+  66 | 67) echo "Freezing rain" ;;
+  71) echo "Light snow" ;;
+  73) echo "Snow" ;;
+  75) echo "Heavy snow" ;;
+  77) echo "Snow grains" ;;
+  80) echo "Light showers" ;;
+  81) echo "Showers" ;;
+  82) echo "Heavy showers" ;;
+  85) echo "Light snow showers" ;;
+  86) echo "Heavy snow showers" ;;
+  95) echo "Thunderstorm" ;;
+  96 | 99) echo "Thunderstorm + hail" ;;
+  *) echo "Weather code $1" ;;
+  esac
+}
+
+wmo_icon() {
+  case "$1" in
+  0 | 1) echo "weather-clear" ;;
+  2) echo "weather-few-clouds" ;;
+  3) echo "weather-overcast" ;;
+  45 | 48) echo "weather-fog" ;;
+  51 | 53 | 55 | 61 | 63 | 65 | 80 | 81 | 82) echo "weather-showers" ;;
+  56 | 57 | 66 | 67) echo "weather-freezing-rain" ;;
+  71 | 73 | 75 | 77 | 85 | 86) echo "weather-snow" ;;
+  95 | 96 | 99) echo "weather-storm" ;;
+  *) echo "weather-showers" ;;
+  esac
+}
+
+unit_params() {
+  if [[ "${UNITS}" == "metric" ]]; then
+    echo "temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm"
+  else
+    echo "temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch"
+  fi
+}
+
+temp_unit() { [[ "${UNITS}" == "metric" ]] && echo "°C" || echo "°F"; }
+precip_unit() { [[ "${UNITS}" == "metric" ]] && echo "mm" || echo "in"; }
+wind_unit() { [[ "${UNITS}" == "metric" ]] && echo "km/h" || echo "mph"; }
+
+fetch_forecast() {
+  # Optional first arg: number of hourly steps (default FORECAST_HOURS)
+  local units hours url
+  units="$(unit_params)"
+  hours="${1:-$FORECAST_HOURS}"
+  url="https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}"
+  url+="&current=temperature_2m,precipitation,rain,showers,snowfall,weather_code,relative_humidity_2m,wind_speed_10m,apparent_temperature,cloud_cover"
+  url+="&hourly=temperature_2m,precipitation,precipitation_probability,rain,showers,snowfall,weather_code"
+  url+="&forecast_hours=${hours}&timezone=auto&${units}"
+  curl -sS --max-time 20 --fail "$url"
+}
+
+fetch_alerts() {
+  local url="https://api.weather.gov/alerts/active?point=${LAT},${LON}"
+  curl -sS --max-time 20 --fail \
+    -H "User-Agent: ${USER_AGENT}" \
+    -H "Accept: application/geo+json" \
+    "$url"
+}
+
+float_ge() {
+  # return 0 if $1 >= $2
+  awk -v a="$1" -v b="$2" 'BEGIN { exit !(a+0 >= b+0) }'
+}
+
+float_gt() {
+  awk -v a="$1" -v b="$2" 'BEGIN { exit !(a+0 > b+0) }'
+}
+
+fmt_num() {
+  # trim trailing zeros for display
+  awk -v n="$1" 'BEGIN {
+    if (n+0 == int(n+0) && n+0 < 10) printf "%.2f", n+0
+    else if (n+0 < 1) printf "%.3f", n+0
+    else printf "%.2f", n+0
+  }'
+}
+
+# Analyze forecast JSON into globals used by check_precip / check_hourly.
+# Sets: WX_* variables and raining/expected flags (0/1).
+analyze_forecast() {
+  local json="$1"
+  local i n
+
+  WX_PRECIP="$(jq -r '.current.precipitation // 0' <<<"$json")"
+  WX_RAIN="$(jq -r '.current.rain // 0' <<<"$json")"
+  WX_SHOWERS="$(jq -r '.current.showers // 0' <<<"$json")"
+  WX_SNOW="$(jq -r '.current.snowfall // 0' <<<"$json")"
+  WX_TEMP="$(jq -r '.current.temperature_2m // "?"' <<<"$json")"
+  WX_FEELS="$(jq -r '.current.apparent_temperature // empty' <<<"$json")"
+  WX_HUMIDITY="$(jq -r '.current.relative_humidity_2m // "?"' <<<"$json")"
+  WX_WIND="$(jq -r '.current.wind_speed_10m // "?"' <<<"$json")"
+  WX_CLOUDS="$(jq -r '.current.cloud_cover // empty' <<<"$json")"
+  WX_CODE="$(jq -r '.current.weather_code // 0' <<<"$json")"
+  WX_LABEL="$(wmo_label "$WX_CODE")"
+  WX_ICON="$(wmo_icon "$WX_CODE")"
+  WX_RAINING=0
+  WX_EXPECTED=0
+  WX_MAX_PROB=0
+  WX_TOTAL_PRECIP=0
+  WX_FIRST_RAIN_HOUR=""
+  WX_FIRST_RAIN_AMT=""
+  WX_NEXT_TEMPS=()
+
+  if float_ge "$WX_PRECIP" "$MIN_PRECIP_NOW" ||
+    float_ge "$WX_RAIN" "$MIN_PRECIP_NOW" ||
+    float_ge "$WX_SHOWERS" "$MIN_PRECIP_NOW" ||
+    float_ge "$WX_SNOW" "0.01"; then
+    WX_RAINING=1
+  fi
+
+  local times probs precips rains snows temps
+  mapfile -t times < <(jq -r '.hourly.time[]?' <<<"$json")
+  mapfile -t probs < <(jq -r '.hourly.precipitation_probability[]?' <<<"$json")
+  mapfile -t precips < <(jq -r '.hourly.precipitation[]?' <<<"$json")
+  mapfile -t rains < <(jq -r '.hourly.rain[]?' <<<"$json")
+  mapfile -t snows < <(jq -r '.hourly.snowfall[]?' <<<"$json")
+  mapfile -t temps < <(jq -r '.hourly.temperature_2m[]?' <<<"$json")
+
+  n="${#times[@]}"
+  for ((i = 0; i < n; i++)); do
+    local hour_time hour_prob hour_precip hour_rain hour_snow hour_temp
+    hour_time="${times[i]}"
+    hour_prob="${probs[i]:-0}"
+    hour_precip="${precips[i]:-0}"
+    hour_rain="${rains[i]:-0}"
+    hour_snow="${snows[i]:-0}"
+    hour_temp="${temps[i]:-}"
+
+    [[ -n "$hour_temp" ]] && WX_NEXT_TEMPS+=("$hour_temp")
+
+    # Precip thresholds / stats only cover FORECAST_HOURS
+    if ((i < FORECAST_HOURS)); then
+      if float_gt "$hour_prob" "$WX_MAX_PROB"; then
+        WX_MAX_PROB="$hour_prob"
+      fi
+      WX_TOTAL_PRECIP="$(awk -v a="$WX_TOTAL_PRECIP" -v b="$hour_precip" 'BEGIN { printf "%.4f", a+b }')"
+
+      if float_ge "$hour_precip" "$MIN_PRECIP_FORECAST" ||
+        float_ge "$hour_rain" "$MIN_PRECIP_FORECAST" ||
+        float_ge "$hour_snow" "0.01" ||
+        float_ge "$hour_prob" "$MIN_PRECIP_PROB"; then
+        WX_EXPECTED=1
+        if [[ -z "$WX_FIRST_RAIN_HOUR" ]]; then
+          WX_FIRST_RAIN_HOUR="$hour_time"
+          WX_FIRST_RAIN_AMT="$hour_precip"
+        fi
+      fi
+    fi
+  done
+
+  {
+    echo "time=$(date -Iseconds)"
+    echo "location=${LOCATION_NAME}"
+    echo "temp=${WX_TEMP}"
+    echo "label=${WX_LABEL}"
+    echo "precip_now=${WX_PRECIP}"
+    echo "raining=${WX_RAINING}"
+    echo "expected=${WX_EXPECTED}"
+    echo "max_prob=${WX_MAX_PROB}"
+    echo "total_next=${WX_TOTAL_PRECIP}"
+  } >"$LAST_PRECIP_FILE"
+}
+
+precip_warrants_notify() {
+  [[ "${WX_RAINING:-0}" -eq 1 || "${WX_EXPECTED:-0}" -eq 1 ]]
+}
+
+check_precip() {
+  local json body lines=() icon
+
+  if ! json="$(fetch_forecast)"; then
+    log "ERROR: failed to fetch Open-Meteo forecast"
+    return 1
+  fi
+
+  analyze_forecast "$json"
+  icon="$WX_ICON"
+
+  if ! precip_warrants_notify; then
+    log "precip: dry (now=${WX_PRECIP} $(precip_unit), next${FORECAST_HOURS}h max_prob=${WX_MAX_PROB}% total=$(fmt_num "$WX_TOTAL_PRECIP"))"
+    return 0
+  fi
+
+  lines+=("${LOCATION_NAME}")
+  lines+=("Now: ${WX_LABEL} · ${WX_TEMP}$(temp_unit) · ${WX_HUMIDITY}% RH · wind ${WX_WIND} $(wind_unit)")
+
+  if [[ "$WX_RAINING" -eq 1 ]]; then
+    local type_bits=()
+    float_gt "$WX_RAIN" 0 && type_bits+=("rain $(fmt_num "$WX_RAIN") $(precip_unit)")
+    float_gt "$WX_SHOWERS" 0 && type_bits+=("showers $(fmt_num "$WX_SHOWERS") $(precip_unit)")
+    float_gt "$WX_SNOW" 0 && type_bits+=("snow $(fmt_num "$WX_SNOW") cm")
+    if [[ ${#type_bits[@]} -eq 0 ]]; then
+      type_bits+=("precip $(fmt_num "$WX_PRECIP") $(precip_unit)")
+    fi
+    lines+=("Currently: ${type_bits[*]}")
+  fi
+
+  lines+=("Next ${FORECAST_HOURS}h: up to ${WX_MAX_PROB}% chance · ~$(fmt_num "$WX_TOTAL_PRECIP") $(precip_unit) total")
+  if [[ -n "$WX_FIRST_RAIN_HOUR" && "$WX_RAINING" -eq 0 ]]; then
+    local pretty
+    pretty="$(date -d "$WX_FIRST_RAIN_HOUR" '+%a %I:%M %p' 2>/dev/null || echo "$WX_FIRST_RAIN_HOUR")"
+    lines+=("Expect precip around ${pretty} (~$(fmt_num "$WX_FIRST_RAIN_AMT") $(precip_unit)/h)")
+  fi
+
+  body="$(printf '%s\n' "${lines[@]}")"
+
+  local title urgency
+  if [[ "$WX_RAINING" -eq 1 ]]; then
+    title="Precipitation now — ${WX_LABEL}"
+    urgency="normal"
+    float_gt "$WX_SNOW" 0 && icon="weather-snow"
+  else
+    title="Rain expected within ${FORECAST_HOURS}h"
+    urgency="normal"
+    icon="weather-showers-scattered"
+  fi
+
+  ensure_notify || return 0
+  notify "$urgency" "$icon" "$title" "$body" "$PRECIP_EXPIRE_MS"
+}
+
+# Routine on-the-hour digest when nothing else needs attention.
+check_hourly() {
+  local json body lines=() clock title icon
+  local outlook_hours=6
+  local i temp_bits=() t
+
+  if ! json="$(fetch_forecast "$outlook_hours")"; then
+    log "ERROR: failed to fetch Open-Meteo forecast (hourly)"
+    return 1
+  fi
+
+  analyze_forecast "$json"
+
+  if precip_warrants_notify; then
+    log "hourly: skipped (precip notify already warranted)"
+    return 0
+  fi
+
+  clock="$(date '+%-I:%M %p')"
+  icon="$WX_ICON"
+  title="Weather · ${clock}"
+
+  lines+=("${LOCATION_NAME}")
+  lines+=("${WX_LABEL} · ${WX_TEMP}$(temp_unit)")
+  if [[ -n "${WX_FEELS:-}" && "$WX_FEELS" != "null" ]]; then
+    lines[-1]+=" (feels ${WX_FEELS}$(temp_unit))"
+  fi
+  lines+=("Humidity ${WX_HUMIDITY}% · wind ${WX_WIND} $(wind_unit)")
+  if [[ -n "${WX_CLOUDS:-}" && "$WX_CLOUDS" != "null" ]]; then
+    lines[-1]+=" · clouds ${WX_CLOUDS}%"
+  fi
+  lines+=("Next ${FORECAST_HOURS}h rain chance: ${WX_MAX_PROB}% · ~$(fmt_num "$WX_TOTAL_PRECIP") $(precip_unit)")
+
+  # Short temp trend for the next few hours
+  if ((${#WX_NEXT_TEMPS[@]} > 0)); then
+    local limit="${#WX_NEXT_TEMPS[@]}"
+    ((limit > 4)) && limit=4
+    for ((i = 0; i < limit; i++)); do
+      t="$(fmt_num "${WX_NEXT_TEMPS[i]}")"
+      # drop trailing .00 for temps
+      t="$(awk -v n="$t" 'BEGIN { if (n+0 == int(n+0)) printf "%d", n+0; else printf "%s", n }')"
+      temp_bits+=("${t}$(temp_unit)")
+    done
+    lines+=("Next hours: ${temp_bits[*]}")
+  fi
+
+  body="$(printf '%s\n' "${lines[@]}")"
+
+  ensure_notify || return 0
+  notify low "$icon" "$title" "$body" "$HOURLY_EXPIRE_MS"
+  log "hourly: sent calm digest (${WX_LABEL}, ${WX_TEMP}$(temp_unit))"
+}
+
+alert_is_severe() {
+  local event="$1" severity="$2"
+  local sev s
+  # Severity match
+  IFS=',' read -ra sev <<<"$SEVERE_SEVERITIES"
+  for s in "${sev[@]}"; do
+    s="${s// /}"
+    [[ -z "$s" ]] && continue
+    if [[ "${severity,,}" == "${s,,}" ]]; then
+      return 0
+    fi
+  done
+
+  # Keyword match
+  local keywords=()
+  if [[ -n "${SEVERE_EVENT_KEYWORDS:-}" ]]; then
+    IFS='|' read -ra keywords <<<"$SEVERE_EVENT_KEYWORDS"
+  else
+    keywords=("${DEFAULT_SEVERE_KEYWORDS[@]}")
+  fi
+
+  local kw
+  for kw in "${keywords[@]}"; do
+    [[ -z "$kw" ]] && continue
+    if [[ "${event,,}" == *"${kw,,}"* ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+alert_icon() {
+  local event="${1,,}"
+  case "$event" in
+  *flood*) echo "dialog-warning" ;;
+  *snow* | *winter* | *blizzard* | *ice* | *freezing*) echo "weather-snow" ;;
+  *tornado*) echo "dialog-error" ;;
+  *thunder* | *storm*) echo "weather-storm" ;;
+  *hurricane* | *tropical*) echo "weather-storm" ;;
+  *) echo "dialog-warning" ;;
+  esac
+}
+
+alert_urgency() {
+  local severity="$1"
+  case "${severity,,}" in
+  extreme | severe) echo "critical" ;;
+  *) echo "normal" ;;
+  esac
+}
+
+load_seen_alerts() {
+  declare -gA SEEN_ALERTS=()
+  [[ -f "$SEEN_ALERTS_FILE" ]] || return 0
+  local id
+  while IFS= read -r id; do
+    [[ -z "$id" || "$id" == \#* ]] && continue
+    SEEN_ALERTS["$id"]=1
+  done <"$SEEN_ALERTS_FILE"
+}
+
+save_seen_alerts() {
+  local id
+  {
+    echo "# seen NWS alert ids — do not edit while weather-notify is running"
+    for id in "${!SEEN_ALERTS[@]}"; do
+      printf '%s\n' "$id"
+    done
+  } >"${SEEN_ALERTS_FILE}.tmp"
+  mv -f "${SEEN_ALERTS_FILE}.tmp" "$SEEN_ALERTS_FILE"
+}
+
+check_alerts() {
+  local json count i
+  local id event severity urgency certainty headline description area ends expires
+  local short_desc body title icon urg
+  local new_count=0
+
+  if ! json="$(fetch_alerts)"; then
+    log "ERROR: failed to fetch NWS alerts"
+    return 1
+  fi
+
+  load_seen_alerts
+  count="$(jq -r '.features | length' <<<"$json")"
+  log "alerts: ${count} active near ${LOCATION_NAME}"
+
+  # Prune seen IDs that are no longer active (keep file small)
+  declare -A ACTIVE=()
+
+  for ((i = 0; i < count; i++)); do
+    id="$(jq -r ".features[$i].properties.id // empty" <<<"$json")"
+    event="$(jq -r ".features[$i].properties.event // empty" <<<"$json")"
+    severity="$(jq -r '.features['"$i"'].properties.severity // "Unknown"' <<<"$json")"
+    urgency="$(jq -r '.features['"$i"'].properties.urgency // "Unknown"' <<<"$json")"
+    certainty="$(jq -r '.features['"$i"'].properties.certainty // "Unknown"' <<<"$json")"
+    headline="$(jq -r ".features[$i].properties.headline // empty" <<<"$json")"
+    description="$(jq -r ".features[$i].properties.description // empty" <<<"$json")"
+    area="$(jq -r ".features[$i].properties.areaDesc // empty" <<<"$json")"
+    ends="$(jq -r ".features[$i].properties.ends // .features[$i].properties.expires // empty" <<<"$json")"
+    expires="$(jq -r ".features[$i].properties.expires // empty" <<<"$json")"
+
+    [[ -z "$id" ]] && continue
+    ACTIVE["$id"]=1
+
+    if ! alert_is_severe "$event" "$severity"; then
+      log "alerts: skip non-severe: $event ($severity)"
+      continue
+    fi
+
+    if [[ -n "${SEEN_ALERTS[$id]:-}" ]]; then
+      continue
+    fi
+
+    # New severe alert
+    short_desc="$(printf '%s' "$description" | tr '\n' ' ' | sed 's/  */ /g' | cut -c1-280)"
+    [[ -n "$short_desc" ]] && short_desc+="…"
+
+    body="${headline}"$'\n'
+    body+="Severity: ${severity} · Urgency: ${urgency} · Certainty: ${certainty}"$'\n'
+    if [[ -n "$area" ]]; then
+      body+="Area: ${area}"$'\n'
+    fi
+    if [[ -n "$ends" && "$ends" != "null" ]]; then
+      local ends_pretty
+      ends_pretty="$(date -d "$ends" '+%a %b %-d %I:%M %p' 2>/dev/null || echo "$ends")"
+      body+="Until: ${ends_pretty}"$'\n'
+    fi
+    body+=$'\n'"${short_desc}"
+
+    title="⚠ ${event}"
+    icon="$(alert_icon "$event")"
+    urg="$(alert_urgency "$severity")"
+
+    ensure_notify || {
+      log "alerts: daemon unavailable; will retry next run (not marking seen)"
+      continue
+    }
+
+    # Critical alerts stay until dismissed; normal get a longer timeout
+    if [[ "$urg" == "critical" ]]; then
+      notify "$urg" "$icon" "$title" "$body"
+    else
+      notify "$urg" "$icon" "$title" "$body" 20000
+    fi
+
+    SEEN_ALERTS["$id"]=1
+    new_count=$((new_count + 1))
+    log "alerts: NEW $event id=$id"
+    : "$expires"
+  done
+
+  # Keep only still-active seen IDs
+  for id in "${!SEEN_ALERTS[@]}"; do
+    if [[ -z "${ACTIVE[$id]:-}" ]]; then
+      unset "SEEN_ALERTS[$id]"
+    fi
+  done
+  save_seen_alerts
+
+  if [[ "$new_count" -eq 0 ]]; then
+    log "alerts: no new severe alerts"
+  fi
+}
+
+cmd_status() {
+  load_config
+  echo "Location: ${LOCATION_NAME} (${LAT}, ${LON})"
+  echo "Config:   ${CONFIG_FILE}"
+  echo "State:    ${STATE_DIR}"
+  echo
+
+  if [[ -f "$LAST_PRECIP_FILE" ]]; then
+    echo "=== Last precip snapshot ==="
+    cat "$LAST_PRECIP_FILE"
+    echo
+  fi
+
+  echo "=== Live conditions ==="
+  local json
+  if json="$(fetch_forecast)"; then
+    jq -r '
+      .current as $c |
+      "Temp: \($c.temperature_2m)  Precip: \($c.precipitation)  Code: \($c.weather_code)\n" +
+      "Humidity: \($c.relative_humidity_2m)%  Wind: \($c.wind_speed_10m)\n" +
+      "Hourly precip next hours: \(.hourly.precipitation | map(tostring) | join(", "))\n" +
+      "Hourly prob %: \(.hourly.precipitation_probability | map(tostring) | join(", "))"
+    ' <<<"$json"
+  else
+    echo "(failed to fetch forecast)"
+  fi
+  echo
+
+  echo "=== Active NWS alerts ==="
+  local alerts
+  if alerts="$(fetch_alerts)"; then
+    jq -r '
+      if (.features|length) == 0 then
+        "(none)"
+      else
+        .features[] | .properties |
+        "• \(.event) [\(.severity)] — \(.headline)"
+      end
+    ' <<<"$alerts"
+  else
+    echo "(failed to fetch alerts)"
+  fi
+  echo
+
+  if [[ -f "$SEEN_ALERTS_FILE" ]]; then
+    echo "=== Seen alert IDs ==="
+    grep -v '^#' "$SEEN_ALERTS_FILE" | sed '/^$/d' | wc -l | xargs -I{} echo "{} remembered"
+  fi
+
+  if [[ -f "$LAST_RUN_FILE" ]]; then
+    echo
+    echo "Last run: $(cat "$LAST_RUN_FILE")"
+  fi
+}
+
+cmd_test() {
+  load_config
+  ensure_notify || {
+    echo "Notification daemon not available" >&2
+    exit 1
+  }
+  notify normal weather-showers "Precipitation now — Light rain" \
+    "${LOCATION_NAME}"$'\n'"Now: Light rain · 72°F · 90% RH · wind 8 mph"$'\n'"Currently: rain 0.05 in"$'\n'"Next 3h: up to 80% chance · ~0.25 in total" \
+    10000
+  sleep 0.4
+  notify critical dialog-warning "⚠ Flood Watch" \
+    "Flood Watch issued (test)"$'\n'"Severity: Severe · Urgency: Future"$'\n'"Area: Wake"$'\n\n'"Flash flooding possible from excessive rainfall."
+  sleep 0.4
+  notify low weather-few-clouds "Weather · $(date '+%-I:%M %p')" \
+    "${LOCATION_NAME}"$'\n'"Partly cloudy · 77°F (feels 79°F)"$'\n'"Humidity 83% · wind 9 mph · clouds 60%"$'\n'"Next 3h rain chance: 8% · ~0.00 in"$'\n'"Next hours: 77°F 76°F 75°F 74°F" \
+    10000
+  echo "Sent test precip + severe + hourly notifications."
+}
+
+cmd_clear() {
+  rm -f "$SEEN_ALERTS_FILE"
+  echo "Cleared seen alert IDs. Active severe alerts will notify again on next check."
+  log "cleared seen alerts"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: weather-notify [command]
+
+Commands:
+  all       Check precipitation + severe alerts (default)
+  precip    Only precipitation (current + next 3h)
+  alerts    Only NWS severe weather (notify once per new alert)
+  hourly    On-the-hour calm digest (skipped if precip warrants notify)
+  status    Print current conditions and state
+  test      Send sample SwayNC notifications
+  clear     Forget seen alert IDs (re-notify active alerts)
+  help      Show this help
+
+Config: ~/.config/weather-notify/config
+Logs:   ~/.local/state/weather-notify/weather-notify.log
+EOF
+}
+
+main() {
+  local cmd="${1:-all}"
+  load_config
+  date -Iseconds >"$LAST_RUN_FILE"
+
+  case "$cmd" in
+  all)
+    check_precip || true
+    check_alerts || true
+    ;;
+  precip) check_precip ;;
+  alerts) check_alerts ;;
+  hourly) check_hourly ;;
+  status) cmd_status ;;
+  test) cmd_test ;;
+  clear) cmd_clear ;;
+  -h | --help | help) usage ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    usage
+    exit 1
+    ;;
+  esac
+}
+
+main "$@"

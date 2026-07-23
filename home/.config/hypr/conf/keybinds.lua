@@ -3,7 +3,8 @@
 -- KEYBIND STACK (one rhyme across Hypr + Tmux + Vim)
 --
 --   Super (main)     → desktop defaults — reach here first on a work day
---   Alt  (alt)       → the *other* option (2nd browser, dev tmux, power tools)
+--   Alt  (alt)       → the *other* option (2nd browser, power tools)
+--   Super+Alt+Return → dev tmux workspace (not bare Alt+Return — kew owns Alt+Enter)
 --   Ctrl (apps)      → NEVER bind bare Ctrl+letter globally — apps own Find/Print/Save…
 --                      Only OK with Super/Alt chorded: Super+Ctrl+H (move), Ctrl+Alt+Del
 --   Ctrl-b (tmux)    → panes/sessions (see ~/.config/tmux/cheatsheet.txt)
@@ -153,8 +154,9 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(SCRIPTS .. "/reload-dev-session.sh"))
 
 -- Launchers (alt)
 hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh")) -- #launcher #guest Favorite apps
-hl.bind(altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
-hl.bind(altMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
+-- Super+Alt+Return: tmux dev workspace (was Alt+Return — that stole kew's enqueueAndPlay)
+hl.bind(mainMod .. " + " .. altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh")) -- #terminal #tmux Dev tmux workspace
+hl.bind(mainMod .. " + " .. altMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
 hl.bind(altMod .. " + B",      hl.dsp.exec_cmd("google-chrome-stable"))
 hl.bind(mainMod .. " + " .. altMod .. " + B", hl.dsp.exec_cmd("firefox"))
 hl.bind(altMod .. " + Y",      hl.dsp.exec_cmd(SCRIPTS .. "/filemanager.sh"))
