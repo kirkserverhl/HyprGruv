@@ -99,7 +99,7 @@ hl.bind(mainMod .. " + SPACE",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"
 -- Super+Return: plain kitty (or default terminal from ~/.config/settings/terminal.sh)
 hl.bind(mainMod .. " + Return",       hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + KP_Enter",     hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
-hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd(SCRIPTS .. "/browser.sh")) -- #launcher Open browser
+hl.bind(mainMod .. " + B",            hl.dsp.exec_cmd("google-chrome-stable")) -- #launcher Open Chrome
 hl.bind(mainMod .. " + Y",            hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N",            hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
 hl.bind(mainMod .. " + O",            hl.dsp.exec_cmd(SCRIPTS .. "/obsidian.sh")) -- #launcher Open Obsidian
@@ -157,7 +157,7 @@ hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh")) -- #
 -- Super+Alt+Return: tmux dev workspace (was Alt+Return — that stole kew's enqueueAndPlay)
 hl.bind(mainMod .. " + " .. altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh")) -- #terminal #tmux Dev tmux workspace
 hl.bind(mainMod .. " + " .. altMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
-hl.bind(altMod .. " + B",      hl.dsp.exec_cmd("google-chrome-stable"))
+hl.bind(altMod .. " + B",      hl.dsp.exec_cmd("brave")) -- #launcher Open Brave
 hl.bind(mainMod .. " + " .. altMod .. " + B", hl.dsp.exec_cmd("firefox"))
 hl.bind(altMod .. " + Y",      hl.dsp.exec_cmd(SCRIPTS .. "/filemanager.sh"))
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))
@@ -238,19 +238,75 @@ hl.bind(mainMod .. " + SHIFT + I", mac("italic"))
 hl.bind(mainMod .. " + SHIFT + K", mac("link"))
 
 -- ═══════════════════════════════════════════════════════════════════════════════
--- FUNCTION KEYS (hardware — unchanged)
+-- FUNCTION KEYS — per-keyboard (match each board's F-row legends)
+-- Hyprland device-specific binds: only the listed keyboards trigger each map.
+-- Third board (Logitech wireless keyboard) not mapped yet — send its F-row when ready.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
-hl.bind("F1",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), { locked = true, repeating = true })
-hl.bind("F2",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), { locked = true, repeating = true })
-hl.bind("F3",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),     { locked = true, repeating = true })
-hl.bind("F4",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),     { locked = true, repeating = true })
-hl.bind("F5",  hl.dsp.exec_cmd("[fullscreen] kitty --class cmatrix -e cmatrix"))
-hl.bind("F7",  hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
-hl.bind("F8",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"))
-hl.bind("F9",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
-hl.bind("F10", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("F11", hl.dsp.exec_cmd("playerctl next"),       { locked = true })
-hl.bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), { locked = true })
+-- Device name lists from `hyprctl devices` (include all HID interfaces per board)
+local KB_HP = {
+	"chicony-hp-wireless-keyboard-mouse-kit",
+	"chicony-hp-wireless-keyboard-mouse-kit-consumer-control",
+	"chicony-hp-wireless-keyboard-mouse-kit-1",
+}
+local KB_LOGI_WIRED = {
+	"logitech-mechanical-keyboard-logitech-mechanical-keyboard",
+	"logitech-mechanical-keyboard-logitech-mechanical-keyboard-keyboard",
+}
+local MOUSE_LOGI_WIRELESS = {
+	"logitech-wireless-mouse-1",
+	"logitech-usb-receiver-mouse",
+}
+
+local function dev_bind(keys, dispatcher, devices, extra)
+	local opts = {
+		locked = true,
+		device = { inclusive = true, list = devices },
+	}
+	if extra then
+		for k, v in pairs(extra) do
+			opts[k] = v
+		end
+	end
+	hl.bind(keys, dispatcher, opts)
+end
+
+-- ── HP wireless (Chicony kit) ────────────────────────────────────────────────
+-- F1 mute · F2 vol- · F3 vol+ · F4 prev · F5 pause · F6 next
+-- F7 bright- · F8 bright+ · F9 search · F10 Mission Control · F11 audio · F12 settings
+dev_bind("F1",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"),     KB_HP) -- #media Mute
+dev_bind("F2",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),        KB_HP, { repeating = true }) -- #media Volume down
+dev_bind("F3",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),        KB_HP, { repeating = true }) -- #media Volume up
+dev_bind("F4",  hl.dsp.exec_cmd("playerctl previous"),                 KB_HP) -- #media Previous track
+dev_bind("F5",  hl.dsp.exec_cmd("playerctl play-pause"),               KB_HP) -- #media Play/Pause
+dev_bind("F6",  hl.dsp.exec_cmd("playerctl next"),                     KB_HP) -- #media Next track
+dev_bind("F7",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"),    KB_HP, { repeating = true }) -- #display Brightness down
+dev_bind("F8",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"),    KB_HP, { repeating = true }) -- #display Brightness up
+dev_bind("F9",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_HP) -- #launcher Search apps
+dev_bind("F10", hl.dsp.exec_cmd(SCRIPTS .. "/mission-control.sh"),     KB_HP) -- #window Mission Control
+dev_bind("F11", hl.dsp.exec_cmd("pavucontrol"),                        KB_HP) -- #audio Audio mixer
+dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"),   KB_HP) -- #settings Hyprland / HyprGruv settings
+
+-- ── Logitech wired mechanical ────────────────────────────────────────────────
+-- F1 bright- · F2 bright+ · F3 search · F4 calc · F5 kew · F6 prev
+-- F7 play/pause · F8 next · F9 mute · F10 vol- · F11 vol+ · F12 settings
+dev_bind("F1",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"),    KB_LOGI_WIRED, { repeating = true }) -- #display Brightness down
+dev_bind("F2",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"),    KB_LOGI_WIRED, { repeating = true }) -- #display Brightness up
+dev_bind("F3",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_LOGI_WIRED) -- #launcher Search apps
+dev_bind("F4",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"),           KB_LOGI_WIRED) -- #calc Rofi calculator
+dev_bind("F5",  hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh kew"),        KB_LOGI_WIRED) -- #music Open kew
+dev_bind("F6",  hl.dsp.exec_cmd("playerctl previous"),                 KB_LOGI_WIRED) -- #media Previous track
+dev_bind("F7",  hl.dsp.exec_cmd("playerctl play-pause"),               KB_LOGI_WIRED) -- #media Play/Pause
+dev_bind("F8",  hl.dsp.exec_cmd("playerctl next"),                     KB_LOGI_WIRED) -- #media Next track
+dev_bind("F9",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"),     KB_LOGI_WIRED) -- #media Mute
+dev_bind("F10", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),        KB_LOGI_WIRED, { repeating = true }) -- #media Volume down
+dev_bind("F11", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),        KB_LOGI_WIRED, { repeating = true }) -- #media Volume up
+dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"),   KB_LOGI_WIRED) -- #settings Hyprland / HyprGruv settings
+
+-- ── Logitech wireless mouse: press scroll wheel = screenshot ─────────────────
+-- mouse:274 = MMB (scroll wheel click). Not mouse=true — that flag is for drag/resize.
+hl.bind("mouse:274", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"), {
+	device = { inclusive = true, list = MOUSE_LOGI_WIRELESS },
+}) -- #screenshot Middle-click (scroll wheel) region screenshot
 
 -- Mission Control: conf/hymission.lua

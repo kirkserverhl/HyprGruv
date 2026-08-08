@@ -167,7 +167,7 @@
 
   "group/clock": {
     "orientation": "horizontal",
-    "tooltip-format": "Left: Date\nRight: Weather",
-    "modules": ["custom/blank-left", "clock", "custom/weather"],
+    "tooltip-format": "Left-click clock: show/hide month & date",
+    "modules": ["custom/clock-date", "clock", "custom/weather"],
   },
 }

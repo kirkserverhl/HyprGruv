@@ -19,7 +19,7 @@
   // Individual islands
   "modules-left": ["group/expand"],
   "modules-center": ["custom/media", "custom/media-separator", "hyprland/workspaces", "custom/special"],
-  "modules-right": ["pulseaudio", "bluetooth", "network", "battery", "clock"],
+  "modules-right": ["pulseaudio", "bluetooth", "network", "battery", "group/clock"],
 
   // Separator
   "custom/media-separator": {

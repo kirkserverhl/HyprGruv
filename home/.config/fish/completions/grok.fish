@@ -46,7 +46,7 @@ complete -c grok -n "__fish_grok_needs_command" -l system-prompt-override -d 'Ov
 complete -c grok -n "__fish_grok_needs_command" -s r -l resume -d 'Resume a session by ID or title, or the most recent if omitted. Non-ID values match session titles for the current directory (ignoring letter case; a sole renamed match wins among duplicates, otherwise ambiguity errors; UUID-shaped values always mean IDs)' -r
 complete -c grok -n "__fish_grok_needs_command" -l load -d 'Resume a previous session by session ID (alias for --resume)' -r
 complete -c grok -n "__fish_grok_needs_command" -s s -l session-id -d 'Use a specific session UUID for a **new** conversation (must be a valid UUID and must not already exist under the target session directory). With `--resume`/`--continue`, only valid together with `--fork-session` (names the forked session). Does not resume existing sessions — use `--resume` / `--continue` instead' -r
-complete -c grok -n "__fish_grok_needs_command" -s w -l worktree -d 'Start the session in a new git worktree, optionally named' -r
+complete -c grok -n "__fish_grok_needs_command" -s w -l worktree -d 'Start the session in a new git worktree, optionally named. With `--resume` of a remote session, pass `--restore-code` to apply the snapshot codebase (conversation is restored either way). Headless (`-p`) does not create a worktree from this flag' -r
 complete -c grok -n "__fish_grok_needs_command" -l worktree-ref -l ref -d 'Branch, tag, or commit to base the worktree on (with `--worktree`). Defaults to the current HEAD of the source checkout when omitted' -r
 complete -c grok -n "__fish_grok_needs_command" -l agent -d 'Agent name or definition file path' -r
 complete -c grok -n "__fish_grok_needs_command" -l agents -d 'Inline subagent definitions as JSON' -r
@@ -73,7 +73,7 @@ complete -c grok -n "__fish_grok_needs_command" -l verbatim -d 'Send the prompt 
 complete -c grok -n "__fish_grok_needs_command" -l include-partial-messages -d 'Emit incremental `stream_event` lines (text/thinking deltas) alongside whole messages. Only affects `--output-format streaming-messages-json`'
 complete -c grok -n "__fish_grok_needs_command" -s c -l continue -d 'Continue the most recent session for the current working directory'
 complete -c grok -n "__fish_grok_needs_command" -l fork-session -d 'When resuming (`--resume` / `--continue`), create a new session ID instead of reusing the original (optionally set via `--session-id`)'
-complete -c grok -n "__fish_grok_needs_command" -l restore-code -d 'Check out the original session\'s commit when resuming'
+complete -c grok -n "__fish_grok_needs_command" -l restore-code -d 'Restore the original session\'s repository snapshot when resuming. Remote sessions require `--worktree` (never checks out into the current directory). Without this flag, resume restores conversation only'
 complete -c grok -n "__fish_grok_needs_command" -l no-plan -d 'Disable plan mode'
 complete -c grok -n "__fish_grok_needs_command" -l no-subagents -d 'Disable subagent spawning'
 complete -c grok -n "__fish_grok_needs_command" -l no-ask-user -d 'Disable structured question prompts from the agent'

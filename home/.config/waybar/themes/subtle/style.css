@@ -58,6 +58,7 @@ tooltip-label {
 #power-profiles-daemon,
 #custom-notification,
 #clock,
+#custom-clock-date,
 #custom-pacman,
 #custom-media {
   padding: 0px 5px;
@@ -67,6 +68,7 @@ tooltip-label {
 
 /* --- Modules on hover --- */
 #clock:hover,
+#custom-clock-date:hover,
 #custom-pacman:hover,
 #custom-notification:hover,
 #bluetooth:hover,

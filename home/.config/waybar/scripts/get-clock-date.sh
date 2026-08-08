@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-# Date + time string shown to the left of the clock (left-click toggle).
+# Month + day shown to the LEFT of the clock when expanded (left-click toggle).
+# Empty when collapsed so hide-empty-text keeps the time module stationary.
 set -euo pipefail
 
-FLAG="${HOME}/.cache/waybar-clock-date-visible"
+FLAG="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-clock-date-visible"
 
-if [ ! -f "$FLAG" ]; then
-  echo '{"text":""}'
-  exit 0
+if [[ ! -f "$FLAG" ]]; then
+	printf '%s\n' '{"text":"","class":"collapsed"}'
+	exit 0
 fi
 
-printf '{"text":"%s"}\n' "$(date +"%B %-d  %H:%M")"
+# Full month + day, trailing space so it sits cleanly left of HH:MM
+printf '{"text":"%s ","class":"expanded"}\n' "$(date +'%B %-d')"

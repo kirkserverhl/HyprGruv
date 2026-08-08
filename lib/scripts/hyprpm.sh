@@ -46,9 +46,15 @@ ensure_hyprpm_cache_owned() {
     [[ -n "${USER:-}" ]] || { log_error "USER is unset — cannot prepare hyprpm cache"; return 1; }
     local cache_root="/var/cache/hyprpm/${USER}"
     # /var/cache/hyprpm is root-owned on fresh installs; hyprpm needs a user-writable tree.
-    if [[ ! -d "$cache_root" ]] || [[ ! -w "$cache_root" ]]; then
+    # hyprpm update also installs .so files as root — re-chown so the user can write state.
+    if [[ ! -d "$cache_root" ]]; then
         log_status "Preparing hyprpm cache: $cache_root"
         sudo mkdir -p "$cache_root"
+        sudo chown -R "${USER}:${USER}" "$cache_root"
+        return 0
+    fi
+    if [[ ! -w "$cache_root" ]] || find "$cache_root" -user root -print -quit 2>/dev/null | grep -q .; then
+        log_status "Fixing hyprpm cache ownership: $cache_root"
         sudo chown -R "${USER}:${USER}" "$cache_root"
     fi
 }

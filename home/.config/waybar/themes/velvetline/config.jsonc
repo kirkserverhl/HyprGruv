@@ -16,7 +16,7 @@
     "custom/special",
     "power-profiles-daemon"
   ],
-  "modules-right": ["custom/pacman", "pulseaudio", "network", "battery", "clock"],
+  "modules-right": ["custom/pacman", "pulseaudio", "network", "battery", "group/clock"],
 
   "hyprland/workspaces": {
     "format": "{id}",

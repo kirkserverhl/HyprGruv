@@ -16,7 +16,9 @@ local function start_hotcorners()
 end
 
 local function reload_hyprpm()
-	hl.exec_cmd(HYPRPM_RELOAD)
+	-- Brief delay so HYPRLAND_INSTANCE_SIGNATURE + socket are fully ready.
+	-- Script waits/polls further; on outdated headers it runs hyprpm update then reload.
+	hl.exec_cmd("sleep 0.5 && " .. HYPRPM_RELOAD)
 end
 
 local function start_systemd_session()

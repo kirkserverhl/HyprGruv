@@ -87,9 +87,37 @@ label.module {
 }
 
 #clock,
+#custom-clock-date,
+#group-clock,
 #custom-media {
   margin: 0 4px;
   padding: 0 4px;
+}
+
+/* Date expands left of time; match clock typography */
+#custom-clock-date,
+#group-clock #custom-clock-date,
+#group-clock #clock {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+#group-clock {
+  margin: 0;
+  padding: 0;
+}
+
+#group-clock #custom-clock-date {
+  margin-right: 0;
+  padding-right: 0;
+}
+
+#group-clock #clock {
+  margin-left: 0;
+  padding-left: 0;
 }
 
 #custom-media.custom-media-idle {

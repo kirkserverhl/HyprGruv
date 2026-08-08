@@ -1,7 +1,10 @@
 -- conf/plugins.lua
 -- Hyprbars plugin configuration for Hyprland 0.55+ Lua config.
--- Buttons are registered once per plugin session (never in hl.on handlers —
--- those accumulate across reloads and duplicate buttons).
+--
+-- Buttons: hyprbars has add_button only (no remove). The plugin clears its
+-- button list on config reload (onPreConfigReload). Calling add_button twice
+-- in the same plugin session without a config reload = 6 buttons.
+-- Never reset the Lua flag and re-add without unloading the plugin first.
 
 local SCRIPTS = require("conf.scripts_path").get()
 
@@ -73,11 +76,12 @@ local function apply_hyprbars()
 	register_hyprbars_buttons(colors)
 end
 
--- Called from toggle-bar-mode.sh / apply-bar-mode.sh via hyprctl eval.
+-- Only call before plugin unload (bar-mode). Does NOT clear in-plugin buttons.
 function reset_hyprbars_buttons()
 	buttons_registered = false
 end
 
+-- Safe to call anytime: updates bar config; adds the 3 buttons only once per load.
 function reapply_hyprbars()
 	apply_hyprbars()
 end

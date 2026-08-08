@@ -1,8 +1,24 @@
 {
+  "group/clock": {
+    "orientation": "horizontal",
+    "modules": ["custom/clock-date", "clock"]
+  },
+
+  "custom/clock-date": {
+    "exec": "$HOME/.config/waybar/scripts/get-clock-date.sh",
+    "return-type": "json",
+    "interval": 30,
+    "signal": 4,
+    "hide-empty-text": true,
+    "tooltip": false,
+    "on-click": "$HOME/.config/waybar/scripts/toggle-clock-date.sh"
+  },
+
   "clock": {
     "format": "{:%H:%M}",
     "interval": 1,
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
+    "tooltip-format": "Click: show/hide month and date\n\n<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
+    "on-click": "$HOME/.config/waybar/scripts/toggle-clock-date.sh",
     "calendar": {
       "format": {
         "today": "<span color='#fAfBfC'><b>{}</b></span>"

@@ -43,7 +43,7 @@
     "custom/notification",
   ],
   "modules-right": [
-    "clock",
+    "group/clock",
     "custom/updates",
     "group/cpu-info",
     "custom/power",

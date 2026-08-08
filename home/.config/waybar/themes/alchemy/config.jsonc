@@ -17,7 +17,7 @@
     "battery",
     "network",
     "power-profiles-daemon",
-    "clock",
+    "group/clock",
   ],
   "height": 40,
 

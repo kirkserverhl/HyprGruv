@@ -40,7 +40,8 @@ window#waybar {
   margin: 0 20px 0 20px;
 }
 
-#clock {
+#clock,
+#custom-clock-date {
   background-color: @surface_bright;
   color: @background;
   padding: 2px 10px;

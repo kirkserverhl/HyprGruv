@@ -1,11 +1,14 @@
 {
+    "include": [
+        "~/.config/waybar/shared/clock.json"
+    ],
     "layer": "top",
     "margin-top": 20,
     "modules-left": [
         "hyprland/workspaces"
     ],
     "modules-center": [
-        "clock",
+        "group/clock",
         "hyprland/window"
     ],
     "modules-right": [
@@ -27,9 +30,6 @@
             "󰂂",
             "󰁹"
         ]
-    },
-    "clock": {
-        "format-alt": "{:%a, %d. %b  %H:%M}"
     },
     "hyprland/workspaces": {
         "format": "{name}",
