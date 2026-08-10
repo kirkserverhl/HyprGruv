@@ -1,97 +1,107 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# Waybar layout/theme picker (rofi). Bound to Ctrl+W and Super+Alt+W.
+set -u
 
-WAYBAR_DIR="$HOME/.config/waybar"
-LAYOUTS_DIR="$WAYBAR_DIR/themes"
+WAYBAR_DIR="${HOME}/.config/waybar"
+LAYOUTS_DIR="${WAYBAR_DIR}/themes"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/waybar"
-STATE_FILE="$STATE_DIR/last_layout"
-NOTIFY=${NOTIFY:-notify-send}
+STATE_FILE="${STATE_DIR}/last_layout"
+NOTIFY="${NOTIFY:-notify-send}"
+ROFI_CONF="${HOME}/.config/rofi/config-compact.rasi"
+LOG="${XDG_STATE_HOME:-$HOME/.local/state}/waybar/layout-switcher.log"
 
 mkdir -p "$STATE_DIR"
+{
+  echo "$(date -Iseconds) start pid=$$ WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-} bar_mode=$(tr -d '[:space:]' <"$STATE_DIR/bar_mode" 2>/dev/null || echo '?')"
+} >>"$LOG" 2>/dev/null || true
 
-BAR_MODE_FILE="$STATE_DIR/bar_mode"
-if [[ -f "$BAR_MODE_FILE" ]]; then
-    _bar_mode=$(tr -d '[:space:]' <"$BAR_MODE_FILE")
-    if [[ "$_bar_mode" == "hyprbars" || "$_bar_mode" == "off" ]]; then
-        [[ "$NOTIFY" = ":" ]] || $NOTIFY "Waybar" "Bar is in ${_bar_mode} mode — switch with Alt+W first" -u normal -t 3000
-        exit 0
-    fi
-fi
-
-if [[ ! -d "$LAYOUTS_DIR" ]]; then
-    echo "No layouts directory at $LAYOUTS_DIR" >&2
-    exit 1
-fi
-
-# Include themes that provide a config.jsonc (for layout / modules selection).
-# If they lack their own style.css, they will follow freshstart.css + matugen (and the modules from the lua backup).
-mapfile -t LAYOUTS < <(find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d -exec sh -c '
-  d=$1
-  name=$(basename "$d")
-  # spacer is internal (Hyprbars reserved strip), not a user-facing theme
-  if [[ "$name" == "spacer" ]]; then
-    exit 0
-  fi
-  if [[ -f "$d/config.jsonc" || -f "$d/config" ]]; then
-    printf "%s\n" "$name"
-  fi
-' _ {} \; | sort)
-((${#LAYOUTS[@]})) || {
-    echo "No layouts with config.jsonc found in $LAYOUTS_DIR"
-    exit 1
+notify() {
+  [[ "$NOTIFY" == ":" ]] && return 0
+  command -v notify-send >/dev/null 2>&1 || return 0
+  notify-send "$@" 2>/dev/null || true
 }
 
-# Detect current layout.
-# Priority: running waybar process -c arg (what you actually see) > state file > root symlink
+fail() {
+  echo "waybar-layout-switcher: $*" >&2
+  echo "$(date -Iseconds) FAIL: $*" >>"$LOG" 2>/dev/null || true
+  notify "Waybar layout" "$*" -u critical -t 4000
+  exit 1
+}
+
+# Only pick when waybar mode is active
+BAR_MODE_FILE="${STATE_DIR}/bar_mode"
+if [[ -f "$BAR_MODE_FILE" ]]; then
+  _bar_mode=$(tr -d '[:space:]' <"$BAR_MODE_FILE" || true)
+  if [[ "$_bar_mode" == "hyprbars" || "$_bar_mode" == "off" ]]; then
+    notify "Waybar" "Bar is in ${_bar_mode} mode — switch with Alt+W first" -u normal -t 3000
+    exit 0
+  fi
+fi
+
+[[ -d "$LAYOUTS_DIR" ]] || fail "No layouts directory at $LAYOUTS_DIR"
+
+# Exact-name match only — never match this script (waybar-layout-switcher)
+mapfile -t LAYOUTS < <(
+  find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name spacer -printf '%f\n' 2>/dev/null \
+    | while read -r name; do
+        if [[ -f "$LAYOUTS_DIR/$name/config.jsonc" || -f "$LAYOUTS_DIR/$name/config" ]]; then
+          printf '%s\n' "$name"
+        fi
+      done | sort
+)
+
+((${#LAYOUTS[@]} > 0)) || fail "No layouts with config found in $LAYOUTS_DIR"
+
+# Detect current layout: state file > symlink (avoid fragile pgrep)
 current="(none)"
-running_c=$(pgrep -a waybar 2>/dev/null | grep -oE -- '-c [^ ]+' | head -1 | awk '{print $2}' || true)
-if [[ -n "$running_c" && "$running_c" == "$LAYOUTS_DIR/"*"/config.jsonc" ]]; then
-    current=$(basename "$(dirname "$running_c")")
+if [[ -f "$STATE_FILE" ]]; then
+  saved=$(tr -d '[:space:]' <"$STATE_FILE" || true)
+  if [[ -n "$saved" && -d "$LAYOUTS_DIR/$saved" ]]; then
+    current="$saved"
+  fi
 fi
-if [[ "$current" == "(none)" || ! -d "$LAYOUTS_DIR/$current" ]]; then
-    if [[ -f "$STATE_FILE" ]]; then
-        saved=$(cat "$STATE_FILE")
-        if [[ -d "$LAYOUTS_DIR/$saved" ]]; then
-            current="$saved"
-        fi
-    fi
+if [[ "$current" == "(none)" && -L "$WAYBAR_DIR/config.jsonc" ]]; then
+  tgt=$(readlink -f "$WAYBAR_DIR/config.jsonc" 2>/dev/null || true)
+  if [[ "$tgt" == "$LAYOUTS_DIR/"*"/config.jsonc" ]]; then
+    current=$(basename "$(dirname "$tgt")")
+  fi
 fi
-if [[ "$current" == "(none)" || ! -d "$LAYOUTS_DIR/$current" ]]; then
-    if [[ -L "$WAYBAR_DIR/config.jsonc" ]]; then
-        tgt=$(readlink -f "$WAYBAR_DIR/config.jsonc" || true)
-        if [[ "$tgt" == "$LAYOUTS_DIR/"*"/config.jsonc" ]]; then
-            current=$(basename "$(dirname "$tgt")")
-        fi
-    fi
-fi
-# Sanitize
 [[ -d "$LAYOUTS_DIR/$current" ]] || current="(none)"
 
-# Build menu with star on current
-menu=$(printf "%s\n" "${LAYOUTS[@]}" | awk -v c="$current" '{print ($0==c?"| ":"  ")$0}')
-chosen=$(echo "$menu" | rofi -dmenu -i -p "Select Layout" -config "$HOME/.config/rofi/config-compact.rasi" | sed 's/^| //; s/^  //')
-[[ -z "${chosen:-}" ]] && exit 0
+command -v rofi >/dev/null 2>&1 || fail "rofi not found in PATH"
 
-cfg_src=""
-for cf in config.jsonc config; do
-  if [[ -f "$LAYOUTS_DIR/$chosen/$cf" ]]; then
-    cfg_src="$LAYOUTS_DIR/$chosen/$cf"
-    break
-  fi
-done
-if [[ -z "$cfg_src" ]]; then
-    # theme does not have its own modules/config spec -> follow the modules from the lua backup via fallback
-    cfg_src="$WAYBAR_DIR/fallback-config.jsonc"
+menu=$(printf '%s\n' "${LAYOUTS[@]}" | awk -v c="$current" '{ print ($0 == c ? "| " : "  ") $0 }')
+
+echo "$(date -Iseconds) opening rofi (${#LAYOUTS[@]} layouts, current=$current)" >>"$LOG" 2>/dev/null || true
+
+# Do not use set -e: cancel returns non-zero from rofi.
+# Avoid pkill here — a wedged prior rofi can make pkill hang on /proc.
+chosen=$(
+  printf '%s\n' "$menu" \
+    | rofi -dmenu -i -p "Select Layout" -config "$ROFI_CONF" 2>>"$LOG" \
+    | sed 's/^| //; s/^  //'
+) || true
+
+chosen=${chosen//$'\r'/}
+chosen=${chosen//$'\n'/}
+
+if [[ -z "${chosen:-}" ]]; then
+  echo "$(date -Iseconds) cancelled/empty" >>"$LOG" 2>/dev/null || true
+  exit 0
 fi
-css_src="$LAYOUTS_DIR/$chosen/style.css"
-if [[ ! -f "$css_src" ]]; then
-    # theme does not have its own style -> follow freshstart.css + matugen
-    css_src="$WAYBAR_DIR/freshstart.css"
+
+if [[ ! -d "$LAYOUTS_DIR/$chosen" ]]; then
+  fail "Unknown layout: $chosen"
 fi
 
 echo "$chosen" >"$STATE_FILE"
+echo "$(date -Iseconds) chose=$chosen" >>"$LOG" 2>/dev/null || true
 
 # launch.sh starts waybar inside the theme dir so @import "../../shared/…" resolves.
-"$HOME/.config/waybar/scripts/launch.sh"
+if [[ ! -x "$HOME/.config/waybar/scripts/launch.sh" ]]; then
+  fail "Missing $HOME/.config/waybar/scripts/launch.sh"
+fi
+"$HOME/.config/waybar/scripts/launch.sh" || fail "launch.sh failed"
 
-[[ "$NOTIFY" = ":" ]] || $NOTIFY "Waybar" "Layout: $chosen"
+notify "Waybar" "Layout: $chosen"
+echo "$(date -Iseconds) done" >>"$LOG" 2>/dev/null || true

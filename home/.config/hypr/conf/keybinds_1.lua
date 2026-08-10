@@ -224,7 +224,7 @@ hl.bind(mod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications
 hl.bind(mod .. " + SUPER + A",       hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh toggle-pause"))
 
 -- Plugin load/unload examples (hyprbars)
-local hyprbars = "/var/cache/hyprpm/kirk/hyprland-plugins/hyprbars.so"
+local hyprbars = "/var/cache/hyprpm/kirk/hyprplug/hyprbars.so"
 hl.bind(mainMod .. " + R",       hl.dsp.exec_cmd("hyprctl plugin load " .. hyprbars))
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl plugin unload " .. hyprbars))
 

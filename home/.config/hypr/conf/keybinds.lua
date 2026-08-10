@@ -16,7 +16,10 @@
 --     Ctrl  + dir/hjkl  → move (window or pane)  [only when Super is held]
 --
 --   Mac bridge (lowest priority — Super only, never steals OS keys):
---     Super+C/V/X/Z/A + Super+Shift+B/I/K → mac-shortcut.sh → Ctrl+*
+--     Super+C/V/X/Z/A + Super+Shift+Z/B/I/U → mac-shortcut.sh → Ctrl+*
+--     Script delays briefly so Super is released (avoids cccc/vvvv storms).
+--     Terminals: primary-selection copy + Ctrl+Shift paste (text only).
+--     (link is Super+Shift+U so Super+Shift+K stays resize-up)
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- Backup: keybinds.lua.bak-pre-stack-YYYYMMDD next to this file
 --
@@ -48,14 +51,42 @@ local function toggle_gaps()
 end
 
 -- hyprctl keyword does not work with the Lua config parser (0.55+); use hl.config.
-local function set_layout(name)
+-- Layout modes: dwindle (default tiling) ↔ scrolling (column / research).
+local layout_mode = "dwindle"
+
+local function apply_layout(name, label)
+    layout_mode = name
+    hl.config({ general = { layout = name } })
+    hl.exec_cmd(string.format(
+        "hyprctl notify 0 1600 0 'Layout: %s'",
+        label or name
+    ))
+end
+
+local function set_layout(name, label)
     return function()
-        hl.config({ general = { layout = name } })
-        hl.exec_cmd(string.format("hyprctl notify 0 1500 0 'Layout: %s'", name))
+        apply_layout(name, label)
+    end
+end
+
+local function toggle_column_layout()
+    if layout_mode == "scrolling" then
+        apply_layout("dwindle", "dwindle (tiling)")
+    else
+        apply_layout("scrolling", "columns (research)")
     end
 end
 
 -- Hypr direction + parallel arrow/vim keys (tmux uses the same hjkl map)
+--
+--   Super + left/right/up/down   OR   Super + H/J/K/L
+--     focus window in that direction
+--   Super + Shift + same keys
+--     resize active window (hold to repeat)
+--   Super + Ctrl + same keys
+--     move/swap window in that direction (hold to repeat)
+--
+-- Keep Super+Shift+H/J/K/L free of other binds (mac link uses Super+Shift+U).
 local DIRECTIONS = {
     { arrow = "left",  vim = "H", hypr = "l", resize = { x = -100, y = 0  } },
     { arrow = "right", vim = "L", hypr = "r", resize = { x =  100, y = 0  } },
@@ -67,16 +98,23 @@ local function bind_navigation_stack()
     for _, d in ipairs(DIRECTIONS) do
         local keys = { d.arrow, d.vim }
         for _, key in ipairs(keys) do
+            -- #window Focus window (arrows + hjkl)
             hl.bind(mainMod .. " + " .. key,
                 hl.dsp.focus({ direction = d.hypr }))
+            -- #window Resize window (arrows + hjkl)
             hl.bind(mainMod .. " + SHIFT + " .. key,
-                hl.dsp.window.resize({ x = d.resize.x, y = d.resize.y, relative = true }))
+                hl.dsp.window.resize({ x = d.resize.x, y = d.resize.y, relative = true }),
+                { repeating = true })
+            -- #window Move window (arrows + hjkl)
             hl.bind(mainMod .. " + CTRL + " .. key,
-                hl.dsp.window.move({ direction = d.hypr }))
+                hl.dsp.window.move({ direction = d.hypr }),
+                { repeating = true })
         end
     end
 end
 
+-- ── Mac bridge: Super (Cmd muscle memory) → mac-shortcut.sh ─────────────────
+-- Script owns terminal vs app logic + delayed wtype (see script header).
 local function mac(action)
     return hl.dsp.exec_cmd(MAC .. " " .. action)
 end
@@ -132,8 +170,9 @@ for i = 1, 9 do
     hl.bind(mainMod .. " + CTRL + " .. i,  hl.dsp.exec_cmd(SCRIPTS .. "/moveTo.sh " .. i))
 end
 
-hl.bind(mainMod .. " + period", hl.dsp.layout("move +col"))
-hl.bind(mainMod .. " + comma",  hl.dsp.layout("move -col"))
+-- Column view pan (scrolling layout only — no-ops harmlessly in dwindle)
+hl.bind(mainMod .. " + period", hl.dsp.layout("move +col")) -- #layout #column Pan view +1 column
+hl.bind(mainMod .. " + comma",  hl.dsp.layout("move -col")) -- #layout #column Pan view -1 column
 
 -- Focus / resize / move (arrows + hjkl — mirrors tmux)
 bind_navigation_stack()
@@ -180,20 +219,41 @@ hl.bind(altMod .. " + L",            hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr
 hl.bind(altMod .. " + W", function()
 	hl.exec_cmd("bash " .. SCRIPTS .. "/toggle-bar-mode.sh")
 end)
-hl.bind(mainMod .. " + " .. altMod .. " + W", hl.dsp.exec_cmd("~/.local/bin/waybar-layout-switcher"))
+-- Waybar layout rofi: absolute path + lua callback (tilde + bare exec_cmd was silent-failing)
+local WAYBAR_LAYOUT = (os.getenv("HOME") or "") .. "/.local/bin/waybar-layout-switcher"
+local function open_waybar_layout_switcher()
+	hl.exec_cmd("bash " .. WAYBAR_LAYOUT)
+end
+hl.bind(mainMod .. " + " .. altMod .. " + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
+-- Exception to bare-Ctrl rule: Ctrl+W → waybar layout (close-tab unused; muscle memory)
+hl.bind("CTRL + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
 hl.bind(altMod .. " + SHIFT + S",    hl.dsp.layout("swapsplit"))
 
 -- Alt+Tab = cycle windows (Super+Tab cycles workspaces)
 hl.bind(altMod .. " + Tab",          hl.dsp.exec_cmd("hyprctl dispatch cyclenext"))
 hl.bind(altMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("hyprctl dispatch cycleprev"))
 
--- Layout switching (alt — keeps Super+J/K/L free for vim-nav)
-hl.bind(altMod .. " + J",            set_layout("scrolling"))
-hl.bind(altMod .. " + SHIFT + J",    set_layout("dwindle"))
-hl.bind(altMod .. " + Z",            hl.dsp.layout("addmaster"))
-hl.bind(altMod .. " + SUPER + Z",     hl.dsp.layout("removemaster"))
-hl.bind(altMod .. " + comma",        hl.dsp.layout("mfact -0.05"))
-hl.bind(altMod .. " + period",        hl.dsp.layout("mfact +0.05"))
+-- ── Layout: optional column / research mode (scrolling) ─────────────────────
+-- Daily default is dwindle. Flip to columns when researching / multi-doc work.
+-- Super+hjkl still focus/resize/move; these binds only add column semantics.
+--
+--   Alt+J              toggle dwindle ↔ columns (research)
+--   Alt+Shift+J        force dwindle
+--   Super+, / .        pan view along the column tape
+--   Alt+, / .          cycle column width (explicit_column_widths)
+--   Super+Alt+, / .    swap column with neighbor
+--   Alt+Z              promote window to its own column
+--   Alt+Shift+Z        consume into previous column (stack)
+--   Alt+Shift+F        fit active column into view
+hl.bind(altMod .. " + J",            toggle_column_layout) -- #layout #column Toggle columns (research)
+hl.bind(altMod .. " + SHIFT + J",    set_layout("dwindle", "dwindle (tiling)")) -- #layout Force dwindle tiling
+hl.bind(altMod .. " + comma",        hl.dsp.layout("colresize -conf")) -- #layout #column Narrower column width
+hl.bind(altMod .. " + period",       hl.dsp.layout("colresize +conf")) -- #layout #column Wider column width
+hl.bind(mainMod .. " + " .. altMod .. " + comma",  hl.dsp.layout("swapcol l")) -- #layout #column Swap column left
+hl.bind(mainMod .. " + " .. altMod .. " + period", hl.dsp.layout("swapcol r")) -- #layout #column Swap column right
+hl.bind(altMod .. " + Z",            hl.dsp.layout("promote")) -- #layout #column Promote to own column
+hl.bind(altMod .. " + SHIFT + Z",    hl.dsp.layout("consume")) -- #layout #column Stack into previous column
+hl.bind(altMod .. " + SHIFT + F",    hl.dsp.layout("fit_into_view")) -- #layout #column Fit column into view
 
 -- Power tools
 hl.bind(altMod .. " + H",            hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh htop"))
@@ -207,9 +267,12 @@ hl.bind(altMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh menu"))
 hl.bind(altMod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh close-all"))
 hl.bind(altMod .. " + SUPER + A",       hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh toggle-pause"))
 
--- Accessibility zoom
+-- Accessibility zoom (screen magnifier around cursor — not app content zoom)
 hl.bind(altMod .. " + equal", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 1.1}')"))
 hl.bind(altMod .. " + minus", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 0.9}')"))
+-- Ctrl + scroll wheel: same magnifier (steals Ctrl+scroll from apps — browsers/terminals)
+hl.bind("CTRL + mouse_up",   hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 1.1}')")) -- #zoom Ctrl+scroll up magnify
+hl.bind("CTRL + mouse_down", hl.dsp.exec_cmd("hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 0.9}')")) -- #zoom Ctrl+scroll down demagnify
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- DESKTOP META (was under bare CTRL — that steals native app shortcuts)
@@ -225,17 +288,20 @@ hl.bind(altMod .. " + K", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-keybinds.sh")) -- #g
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- MAC BRIDGE (lowest priority — optional Cmd muscle memory → Ctrl in app)
--- Super never fights window nav: link/bold/italic sit on Super+Shift
+-- Super ≈ Cmd. Native Linux Ctrl+* still works. Desktop keeps Super for WM.
+-- bold/italic/link on Super+Shift but NOT H/J/K/L (resize). Link = Super+Shift+U.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
-hl.bind(mainMod .. " + C", mac("copy"))
-hl.bind(mainMod .. " + V", mac("paste"))
-hl.bind(mainMod .. " + X", mac("cut"))
-hl.bind(mainMod .. " + Z", mac("undo"))
-hl.bind(mainMod .. " + A", mac("select-all"))
-hl.bind(mainMod .. " + SHIFT + B", mac("bold"))
-hl.bind(mainMod .. " + SHIFT + I", mac("italic"))
-hl.bind(mainMod .. " + SHIFT + K", mac("link"))
+hl.bind(mainMod .. " + C", mac("copy"))       -- #mac Cmd+C → copy (Ctrl+C / Ctrl+Shift+C in term)
+hl.bind(mainMod .. " + V", mac("paste"))      -- #mac Cmd+V → paste
+hl.bind(mainMod .. " + X", mac("cut"))        -- #mac Cmd+X → cut
+hl.bind(mainMod .. " + Z", mac("undo"))       -- #mac Cmd+Z → undo
+hl.bind(mainMod .. " + SHIFT + Z", mac("redo")) -- #mac Cmd+Shift+Z → redo
+hl.bind(mainMod .. " + A", mac("select-all")) -- #mac Cmd+A → select all
+hl.bind(mainMod .. " + SHIFT + B", mac("bold"))   -- #mac Bold
+hl.bind(mainMod .. " + SHIFT + I", mac("italic")) -- #mac Italic
+-- Super+Shift+K is resize-up (vim nav); use U for URL/link instead
+hl.bind(mainMod .. " + SHIFT + U", mac("link")) -- #mac Cmd+K → link (was Super+Shift+K)
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- FUNCTION KEYS — per-keyboard (match each board's F-row legends)

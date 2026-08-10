@@ -23,13 +23,23 @@ hl.config({
 		-- new_status = "master",   -- commented in original for compatibility
 	},
 
-	-- Scrolling layout (if you use it)
+	-- Scrolling / column layout (built-in since Hyprland 0.54+)
+	-- Optional research mode: infinite horizontal columns (niri-like).
+	-- Toggle with Alt+J — see conf/keybinds.lua.
+	-- Wiki: https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout/
 	scrolling = {
-		column_width = 0.6,
+		-- Default column ~half screen so two research panes sit side by side.
+		column_width = 0.5,
+		-- Solo window fills the monitor (feels like dwindle until you open more).
 		fullscreen_on_one_column = true,
 		follow_focus = true,
-		focus_fit_method = 0,
-		explicit_column_widths = "0.5,0.67,0.8,1.0",
+		-- 0 = center column, 1 = fit into view (better for research panes)
+		focus_fit_method = 1,
+		-- Cycle with Alt+, / Alt+.  (colresize ±conf)
+		explicit_column_widths = "0.4,0.5,0.67,0.8,1.0",
+		wrap_focus = true,
+		wrap_swapcol = true,
+		direction = "right",
 	},
 
 	-- Binds related (from layout.conf)
@@ -69,18 +79,13 @@ hl.config({
 -- above no longer bakes in colors at module parse time.
 local function apply_borders()
 	local colors = require("colors.init").load()
-	-- Use matugen semantic roles — not source_color (wallpaper seed can be a loud
-	-- off-palette orange that reads as a red ring around every focused window).
+	-- Solid active border from source_color (gruvbox preset: orange #d65d0e).
 	hl.config({
 		general = {
 			col = {
-				active_border = {
-					colors = {
-						colors.primary or "rgba(33ccffee)",
-						colors.secondary or colors.tertiary or "rgba(00ff99ee)",
-					},
-					angle = 45,
-				},
+				active_border = colors.source_color
+					or colors.primary
+					or "rgba(d65d0eee)",
 				inactive_border = colors.inactive_border
 					or colors.base01
 					or colors.surface_container_low

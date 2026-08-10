@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # hyprpm.sh — bootstrap Hyprland plugins for HyprGruv (03-setup / manual re-run)
 #
-# Fetches plugin repos, enables hyprbars + hymission, builds via hyprpm update.
+# Registers hyprplug (hyprbars-only) + hymission, enables both, builds via hyprpm update.
 # Does NOT call hyprpm reload — Hyprland is usually not running during install.
 # Session reload: ~/.config/hyprgruv/scripts/hyprpm-reload.sh (autostart.lua)
 set -euo pipefail
@@ -13,9 +13,12 @@ source "$HYPR_DIR/lib/common.sh"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/state.sh"
 
-HYPRLAND_PLUGINS_REPO="https://github.com/hyprwm/hyprland-plugins"
+# hyprplug: hyprbars-only (avoids building unused monorepo plugins on every update)
+HYPRPLUG_REPO="https://github.com/kirkserverhl/hyprplug"
 HYMISSION_REPO="https://github.com/gfhdhytghd/hymission"
 ENABLED_PLUGINS=(hyprbars hymission)
+# Cache dir name matches [repository].name in hyprplug's hyprpm.toml
+HYPRBARS_CACHE_DIR="hyprplug"
 
 hyprpm_quiet() {
     [[ "${HYPRPM_QUIET:-0}" == "1" || "${1:-}" == "--quiet" ]]
@@ -108,8 +111,8 @@ verify_plugins() {
     local cache_root="/var/cache/hyprpm/${USER}"
     local ok=0
 
-    if [[ ! -f "$cache_root/hyprland-plugins/hyprbars.so" ]]; then
-        log_warning "hyprbars.so not found under $cache_root/hyprland-plugins/"
+    if [[ ! -f "$cache_root/${HYPRBARS_CACHE_DIR}/hyprbars.so" ]]; then
+        log_warning "hyprbars.so not found under $cache_root/${HYPRBARS_CACHE_DIR}/"
         ok=1
     fi
     if [[ ! -f "$cache_root/hymission/hymission.so" ]]; then
@@ -149,7 +152,14 @@ main() {
 
     ensure_build_deps
 
-    add_repo "$HYPRLAND_PLUGINS_REPO" || return 1
+    # Drop official monorepo if present (builds unused plugins every update).
+    # hyprpm remove always prompts Y/n — feed yes for non-interactive install.
+    if hyprpm list 2>/dev/null | grep -qF 'hyprland-plugins'; then
+        log_status "Removing official hyprland-plugins monorepo (replaced by hyprplug)"
+        printf 'Y\n' | hyprpm remove hyprland-plugins >/dev/null 2>&1 || true
+    fi
+
+    add_repo "$HYPRPLUG_REPO" || return 1
     sleep 0.2
     add_repo "$HYMISSION_REPO" || return 1
     sleep 0.2

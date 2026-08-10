@@ -3,6 +3,6 @@ Type=Application
 Version=1.0
 Name=surfshark
 Comment=surfshark startup script
-Exec=/opt/Surfshark/surfshark 
+Exec=/opt/Surfshark/surfshark --hidden
 StartupNotify=false
 Terminal=false
