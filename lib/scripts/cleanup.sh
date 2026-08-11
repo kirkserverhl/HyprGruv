@@ -5,6 +5,10 @@
 #   • Interactive terminal (gum confirm + sudo password on TTY)
 #   • Installer / reminder launch (works without silent sudo failures)
 #
+# Never runs pacman/yay -Sc or -Scc (interactive + breaks on download-* dirs).
+# System cache: paccache -rk2 / -ruk0 + rm download-* leftovers.
+# User AUR cache: ~/.cache/yay or ~/.cache/paru only.
+#
 # Usage:
 #   cleanup.sh                 # confirm, then clean caches
 #   cleanup.sh --yes           # skip confirm
@@ -187,43 +191,66 @@ else
     log_status "No user $AUR_HELPER cache at $AUR_CACHE"
 fi
 
-# ── 2) pacman package cache via paccache (keeps last 2 versions) ─────────────
-if command -v paccache >/dev/null 2>&1; then
-    log_status "Cleaning pacman package cache (keep last 2 versions)…"
+# ── 2) System pacman cache — NEVER use pacman/yay -Sc/-Scc ───────────────────
+# -Sc/-Scc prompts interactively and fails on leftover download-* directories.
+# Use paccache (pacman-contrib) + explicit rm of partial download dirs instead.
+PKG_CACHE="/var/cache/pacman/pkg"
+
+clean_pacman_pkg_cache() {
+    # Returns: 0 ok, 2 no sudo, 1 other failure
+    if ! command -v paccache >/dev/null 2>&1; then
+        log_warning "paccache not found (install pacman-contrib) — skipped $PKG_CACHE"
+        return 1
+    fi
+
+    log_status "Cleaning system pacman cache ($PKG_CACHE)…"
+    log_status "  keep last 2 versions of installed pkgs; drop uninstalled; remove download-* dirs"
+
     if [[ $DRY_RUN -eq 1 ]]; then
-        paccache -d -k2 2>/dev/null || log_status "[dry-run] paccache -rk2"
-    else
-        if sudo_cmd paccache -rk2; then
-            log_success "  pacman cache trimmed"
-            DID_ANY=1
-        else
-            rc=$?
-            if [[ $rc -eq 2 ]]; then
-                log_warning "  skipped pacman cache — no sudo TTY (run cleanup in a terminal for full clean)"
+        paccache -d -k2 2>/dev/null || true
+        paccache -d -uk0 2>/dev/null || true
+        log_status "[dry-run] sudo paccache -rk2 && sudo paccache -ruk0"
+        log_status "[dry-run] sudo find $PKG_CACHE -maxdepth 1 -type d -name 'download-*' -exec rm -rf {} +"
+        return 0
+    fi
+
+    if ! sudo_cmd paccache -rk2; then
+        local rc=$?
+        if [[ $rc -eq 2 ]]; then
+            log_warning "  skipped — need sudo in a real terminal (or: sudo paccache -rk2)"
+            return 2
+        fi
+        log_warning "  paccache -rk2 failed"
+        return 1
+    fi
+
+    # Remove cached packages no longer installed
+    sudo_cmd paccache -ruk0 2>/dev/null || true
+
+    # Partial/interrupted downloads: pacman -Scc cannot delete these dirs
+    if [[ -d "$PKG_CACHE" ]]; then
+        local n
+        n="$(find "$PKG_CACHE" -mindepth 1 -maxdepth 1 -type d -name 'download-*' 2>/dev/null | wc -l | tr -d ' ')"
+        if [[ "${n:-0}" -gt 0 ]]; then
+            log_status "  removing $n stuck download-* director$( [[ $n -eq 1 ]] && echo y || echo ies )…"
+            if sudo_cmd find "$PKG_CACHE" -mindepth 1 -maxdepth 1 -type d -name 'download-*' -exec rm -rf {} +; then
+                log_success "  download leftovers removed"
             else
-                log_warning "  paccache failed"
-                FAILURES=$((FAILURES + 1))
+                log_warning "  could not remove some download-* dirs"
+                return 1
             fi
         fi
     fi
-elif command -v "$AUR_HELPER" >/dev/null 2>&1; then
-    # Fallback: yay/paru -Sc only when we have a TTY (avoids silent sudo fail)
-    if has_sudo_tty || sudo -n true 2>/dev/null; then
-        log_status "Cleaning via $AUR_HELPER -Sc (TTY available)…"
-        if [[ $DRY_RUN -eq 0 ]]; then
-            if has_sudo_tty; then
-                "$AUR_HELPER" -Sc --noconfirm </dev/tty || FAILURES=$((FAILURES + 1))
-            else
-                "$AUR_HELPER" -Sc --noconfirm || FAILURES=$((FAILURES + 1))
-            fi
-            DID_ANY=1
-        fi
-    else
-        log_warning "Skipping pacman/$AUR_HELPER system cache — no interactive sudo"
-        log_status "  Tip: run cleanup from a terminal, or: sudo paccache -rk2"
-    fi
+
+    log_success "  pacman cache cleaned"
+    return 0
+}
+
+if clean_pacman_pkg_cache; then
+    DID_ANY=1
 else
-    log_warning "paccache and $AUR_HELPER not found — skipped system package cache"
+    rc=$?
+    [[ $rc -eq 1 ]] && FAILURES=$((FAILURES + 1))
 fi
 
 # ── 3) Light user clutter (safe) ─────────────────────────────────────────────
