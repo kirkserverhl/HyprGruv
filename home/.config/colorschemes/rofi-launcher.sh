@@ -40,12 +40,17 @@ if [[ -x "$WALLPAPER_SCRIPT" ]]; then
 fi
 
 SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
+ACCENT_PICKER="$HOME/.config/hyprgruv/scripts/pick-theme-accent.sh"
 
 if [[ -n "$wallpaper" ]]; then
-    # Static theme slots only — apply-theme.sh writes the preset palette (no matugen popup).
+    # 1) Static theme palette + wallpaper
     "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1
-    # Refresh default_wp / hyprlock / SDDM wallpaper only. Do NOT re-run palette chooser:
-    # SET_WALLPAPER_FORCE_PALETTE used to skip preset path and open the matugen UI (noisy).
+    # 2) Theme-native accent splotches (gruvbox green/orange/…) → primary/source
+    #    Not wallpaper-extracted colors — fixed slots from the theme palette.
+    if [[ -x "$ACCENT_PICKER" ]]; then
+        bash "$ACCENT_PICKER" "$selected" "$wallpaper" || true
+    fi
+    # 3) SDDM / default_wp only (no matugen Material You chooser)
     if [[ -x "$SET_WALLPAPER" ]]; then
         SET_WALLPAPER_SKIP_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 &
     else
@@ -53,4 +58,7 @@ if [[ -n "$wallpaper" ]]; then
     fi
 else
     "$APPLY_SCRIPT" "$selected" >/dev/null 2>&1
+    if [[ -x "$ACCENT_PICKER" ]]; then
+        bash "$ACCENT_PICKER" "$selected" || true
+    fi
 fi

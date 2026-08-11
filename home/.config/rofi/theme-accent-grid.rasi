@@ -1,0 +1,67 @@
+/* Theme accent splotches — labeled primary/source pick for Super+W */
+
+configuration {
+    show-icons:    true;
+    font:          "Agave Nerd Font Propo 13";
+    hover-select:  false;
+    scroll-method: 1;
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
+
+window {
+    width: 720px;
+}
+
+mainbox {
+    padding:  8px;
+    children: ["message", "listview"];
+}
+
+message {
+    padding: 6px 10px;
+}
+
+textbox {
+    text-color: @foreground;
+}
+
+listview {
+    columns:       4;
+    fixed-columns: true;
+    lines:         2;
+    spacing:       8px;
+    padding:       6px;
+    scrollbar:     false;
+}
+
+element {
+    padding: 4px;
+    margin:  0px;
+    border:  0px;
+    orientation: vertical;
+    children: ["element-icon", "element-text"];
+}
+
+element-icon {
+    size:   140px;
+    margin: 0px 0px 4px 0px;
+}
+
+element-text {
+    enabled:     true;
+    horizontal-align: 0.5;
+    text-color:  @foreground;
+    font:        "Agave Nerd Font Propo 12";
+}
+
+element selected {
+    background-color: @selected-normal-background;
+    border: 2px solid;
+    border-color: @primary;
+}
+
+inputbar {
+    enabled: false;
+}

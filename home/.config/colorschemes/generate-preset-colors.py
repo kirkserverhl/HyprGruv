@@ -471,23 +471,19 @@ def export_palette_json(theme: str, slots: dict[str, str], *, force: bool = Fals
     out.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-def main() -> int:
-    if len(sys.argv) < 2:
-        print("Usage: generate-preset-colors.py <theme-name>", file=sys.stderr)
-        return 1
-
-    theme = sys.argv[1].strip()
+def resolve_theme_slots(theme: str) -> dict[str, str]:
+    """Load fixed theme palette (canonical CSS / palette.json)."""
     use_canonical = should_use_canonical_palette(theme)
     slots = None if use_canonical else load_palette_json(theme)
-    palette_path: Path | None = None
     if slots is None:
         palette_path = find_palette_css(theme)
         palette = parse_palette(palette_path)
         slots = build_slots(palette, theme)
         export_palette_json(theme, slots, force=use_canonical)
+    return normalize_slot_keys(slots)
 
-    slots = normalize_slot_keys(slots)
 
+def write_all_outputs(slots: dict[str, str], theme: str) -> None:
     write_waybar(slots, theme)
     write_hypr(slots, theme)
     write_nvim(slots, theme)
@@ -495,10 +491,111 @@ def main() -> int:
     write_rofi(slots, theme)
     write_mpv(slots, theme)
 
-    if palette_path is not None:
-        print(f"Preset colors applied for {theme} from {palette_path.name}")
-    else:
-        print(f"Preset colors applied for {theme} from palette.json")
+
+# Accent swatches shown in Super+W source-color picker (theme-native, not wallpaper).
+ACCENT_SLOTS: list[tuple[str, str]] = [
+    ("base08", "Red"),
+    ("base09", "Purple"),
+    ("base0A", "Yellow"),
+    ("base0B", "Green"),
+    ("base0C", "Aqua"),
+    ("base0D", "Orange"),
+    ("base0E", "Blue"),
+]
+
+
+def list_theme_accents(theme: str) -> list[dict[str, str]]:
+    """Return unique accent options from the theme's fixed base16 palette."""
+    slots = resolve_theme_slots(theme)
+    seen: set[str] = set()
+    out: list[dict[str, str]] = []
+    for key, label in ACCENT_SLOTS:
+        hexv = slots.get(key.lower()) or slots.get(key)
+        if not hexv:
+            continue
+        hx = hexv.lower()
+        if hx in seen:
+            continue
+        seen.add(hx)
+        out.append({"slot": key.lower(), "label": label, "hex": hx})
+    return out
+
+
+def apply_source_accent(theme: str, hex_color: str) -> dict[str, str]:
+    """Keep theme surfaces; set primary + source (base0D/base0F) to the chosen accent."""
+    hex_color = hex_color.strip().lower()
+    if not hex_color.startswith("#"):
+        hex_color = f"#{hex_color}"
+    if len(hex_color) != 7:
+        raise ValueError(f"invalid hex color: {hex_color}")
+
+    slots = resolve_theme_slots(theme)
+    slots["base0d"] = hex_color
+    slots["base0f"] = hex_color
+    # Keep normalize_slot_keys format (mixed case keys used by writers)
+    slots = normalize_slot_keys(slots)
+    slots["base0D"] = hex_color
+    slots["base0F"] = hex_color
+
+    write_all_outputs(slots, theme)
+
+    # Persist for next Super+W / ensure-local-palette
+    accent_file = COLORSCHEMES / theme / "user-accent"
+    accent_file.parent.mkdir(parents=True, exist_ok=True)
+    accent_file.write_text(hex_color + "\n", encoding="utf-8")
+    source_file = COLORSCHEMES / theme / "source-color"
+    source_file.write_text(hex_color + "\n", encoding="utf-8")
+
+    # Update live palette.json so apply-static paths stay consistent
+    export_palette_json(theme, slots, force=True)
+
+    return slots
+
+
+def main() -> int:
+    if len(sys.argv) < 2:
+        print(
+            "Usage:\n"
+            "  generate-preset-colors.py <theme-name>\n"
+            "  generate-preset-colors.py --list-accents <theme-name>\n"
+            "  generate-preset-colors.py --apply-accent <theme-name> <#hex>",
+            file=sys.stderr,
+        )
+        return 1
+
+    if sys.argv[1] == "--list-accents":
+        if len(sys.argv) < 3:
+            print("Usage: generate-preset-colors.py --list-accents <theme>", file=sys.stderr)
+            return 1
+        accents = list_theme_accents(sys.argv[2].strip())
+        print(json.dumps(accents, indent=2))
+        return 0
+
+    if sys.argv[1] == "--apply-accent":
+        if len(sys.argv) < 4:
+            print(
+                "Usage: generate-preset-colors.py --apply-accent <theme> <#hex>",
+                file=sys.stderr,
+            )
+            return 1
+        theme = sys.argv[2].strip()
+        hex_color = sys.argv[3].strip()
+        slots = apply_source_accent(theme, hex_color)
+        print(f"Accent applied for {theme}: primary/source = {slots['base0D']}")
+        return 0
+
+    theme = sys.argv[1].strip()
+    # Re-apply saved Super+W accent if present (after full palette rebuild)
+    slots = resolve_theme_slots(theme)
+    accent_path = COLORSCHEMES / theme / "user-accent"
+    if accent_path.is_file():
+        saved = accent_path.read_text(encoding="utf-8").strip().lower()
+        if saved.startswith("#") and len(saved) == 7:
+            slots["base0D"] = saved
+            slots["base0F"] = saved
+
+    write_all_outputs(slots, theme)
+    print(f"Preset colors applied for {theme}")
     print(f"  accent (primary): {slots['base0D']}")
     return 0
 
