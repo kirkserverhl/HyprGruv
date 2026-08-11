@@ -5,6 +5,7 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-08-11T16:10:14-04:00 | HyprLab | deploy | to-source | HyprLab: hyprpm loop fix, hyprplug hyprbars pin, SSH settings menu + OpenSSH agent | [2026-08-11T201014Z-HyprLab.md](entries/2026-08-11T201014Z-HyprLab.md) |
 | 2026-08-11T15:29:59-04:00 | HyprLab | deploy | to-source | Laptop UX: classic trackpad scroll (not inverse) by default; hypridle dim→lock@5m→dpms→suspend@15m; hyprlock fingerprint-ready; fprintd on Goodix readers. | [2026-08-11T192959Z-HyprLab.md](entries/2026-08-11T192959Z-HyprLab.md) |
 | 2026-08-11T15:25:03-04:00 | HyprLab | deploy | to-source | Laptop (HyprLab) authored machine profiles + reciprocal git-sync + device-sync handoff index. Main should pull and become source of truth; laptop stays ROLE=deploy, FOLLOW=hyprgruv only. | [2026-08-11T192503Z-HyprLab.md](entries/2026-08-11T192503Z-HyprLab.md) |
 
