@@ -101,6 +101,9 @@ declare -a ORDERED_SCRIPTS=(
     # Builds hyprbars + hymission when Hyprland is running; otherwise defers to first login.
     # Session build/load: ~/.config/hyprgruv/scripts/hyprpm-reload.sh (autostart.lua).
     "hyprpm.sh|Install Hyprpm plugins"
+    # Oh My Tmux: required so ~/.config/tmux/tmux.conf symlink resolves and
+    # pane-base-index 1 is available for Super+Alt+Return dev-workspace layout.
+    "oh_my_tmux.sh|Install Oh My Tmux (gpakosz/.tmux)"
     "setup-mime-handlers.sh|Configure MIME handlers and file openers"
 )
 

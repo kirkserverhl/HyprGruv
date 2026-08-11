@@ -1,10 +1,11 @@
 [Unit]
-Description=Daily git-eod / git-eod-pull reminder (role-aware)
+Description=git-eod / git-eod-pull reminder (role-aware; backup to login-sync-prompt)
 
 [Timer]
-# First check after login window, then every 24h; also catch up after sleep/off
-OnBootSec=25min
-OnUnitActiveSec=24h
+# Early after boot/login, then every 12h; Persistent catches up after sleep/off.
+# Primary prompt is login-sync-prompt.sh from Hyprland autostart (~40s).
+OnBootSec=3min
+OnUnitActiveSec=12h
 Persistent=true
 
 [Install]

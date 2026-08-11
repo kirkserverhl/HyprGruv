@@ -69,9 +69,11 @@ hl.on("hyprland.start", function()
 	-- Post-install wizard runs from install.sh (before reboot).
 	-- Manual re-run: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
-	-- Deploy-target machines (laptop profile): repo update check.
-	-- Marker: ~/.local/state/hyprgruv/deploy-target or ~/.config/hyprgruv/deploy-target
-	hl.exec_cmd("sleep 90 && ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt-if-needed &")
+	-- Role-aware login sync (both machines):
+	--   deploy → rofi hyprgruv pull when behind + notify on followed repos
+	--   source → notify when dirty repos need git-eod
+	-- Also enables git-eod-remind.timer / hyprgruv-update-check.timer as backups.
+	hl.exec_cmd("sleep 40 && ~/.hyprgruv/lib/scripts/login-sync-prompt.sh &")
 
 	-- Auto-mount
 	hl.exec_cmd("udiskie")

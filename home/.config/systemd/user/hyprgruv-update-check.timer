@@ -1,8 +1,10 @@
 [Unit]
-Description=Periodically check hyprgruv repo for updates (laptop deploy target)
+Description=Periodically check hyprgruv repo for updates (deploy machines)
 
 [Timer]
-OnBootSec=3min
+# Backup to login-sync-prompt.sh (autostart ~40s). Only meaningful when
+# deploy-target is set — repo-update-check.sh no-ops on pure source desktops.
+OnBootSec=2min
 OnUnitActiveSec=30min
 Persistent=true
 

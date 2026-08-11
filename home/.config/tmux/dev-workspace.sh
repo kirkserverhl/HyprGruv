@@ -9,6 +9,9 @@
 #
 # Each run creates a new session (dev-1, dev-2, …). Switch between them with Ctrl-b s.
 #
+# Pane targeting uses pane IDs (%N), so this works with any pane-base-index
+# (stock tmux = 0, oh-my-tmux = 1).
+#
 # Usage:
 #   dev-workspace.sh [start_dir]        create a new dev session and attach
 #   dev-workspace.sh --reset [session]  rebuild the layout for the current or named session
@@ -103,29 +106,46 @@ if [[ ! -d "$START_DIR" ]]; then
 fi
 
 create_dev_session() {
+    local left_pane right_pane bottom_pane pane_count
+
     tmux new-session -d -s "$SESSION_NAME" -c "$START_DIR" -n "$WINDOW_NAME"
-    tmux set-option -t "$SESSION_NAME" @learning_cheatsheet off
+    tmux set-option -t "$SESSION_NAME" @learning_cheatsheet off 2>/dev/null || true
 
-    # Pane 1: nvim (left half). Pane 2: yazi. Pane 3: cmatrix.
-    tmux split-window -h -t "${SESSION_NAME}:${WINDOW_NAME}" -p 50 -c "$START_DIR"
-    tmux split-window -v -t "${SESSION_NAME}:${WINDOW_NAME}.2" -p 34 -c "$START_DIR"
+    # Pane IDs (%N) are independent of pane-base-index (0 vs 1).
+    left_pane="$(tmux display -p -t "${SESSION_NAME}:${WINDOW_NAME}" '#{pane_id}')"
+    # -P/-F print the newly created pane id
+    right_pane="$(tmux split-window -h -t "$left_pane" -P -F '#{pane_id}' -p 50 -c "$START_DIR")"
+    bottom_pane="$(tmux split-window -v -t "$right_pane" -P -F '#{pane_id}' -p 34 -c "$START_DIR")"
 
+    pane_count="$(tmux list-panes -t "${SESSION_NAME}:${WINDOW_NAME}" 2>/dev/null | wc -l)"
+    if [[ "${pane_count// /}" -lt "$EXPECTED_PANES" ]]; then
+        echo "dev-workspace: expected $EXPECTED_PANES panes, got $pane_count" >&2
+        tmux kill-session -t "$SESSION_NAME" 2>/dev/null || true
+        exit 1
+    fi
+
+    # left: editor | top-right: yazi | bottom-right: cmatrix
     if [[ -x "$EDITOR_CMD" ]]; then
-        tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.1" \
+        tmux send-keys -t "$left_pane" \
             "$("$EDITOR_CMD" --print)" Enter
     elif command -v nvim >/dev/null; then
-        tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.1" "nvim" Enter
+        tmux send-keys -t "$left_pane" "nvim" Enter
     fi
 
-    tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.2" \
-        "${HOME}/.config/hyprgruv/scripts/yazi-matugen.sh" Enter
+    if [[ -x "${HOME}/.config/hyprgruv/scripts/yazi-matugen.sh" ]]; then
+        tmux send-keys -t "$right_pane" \
+            "${HOME}/.config/hyprgruv/scripts/yazi-matugen.sh" Enter
+    elif command -v yazi >/dev/null; then
+        tmux send-keys -t "$right_pane" "yazi" Enter
+    fi
+
     if [[ -x "$CMATRIX_PANE" ]]; then
-        tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.3" "$CMATRIX_PANE" Enter
+        tmux send-keys -t "$bottom_pane" "$CMATRIX_PANE" Enter
     elif command -v cmatrix >/dev/null; then
-        tmux send-keys -t "${SESSION_NAME}:${WINDOW_NAME}.3" "cmatrix -s" Enter
+        tmux send-keys -t "$bottom_pane" "cmatrix -s" Enter
     fi
 
-    tmux select-pane -t "${SESSION_NAME}:${WINDOW_NAME}.1"
+    tmux select-pane -t "$left_pane"
     tmux select-window -t "${SESSION_NAME}:${WINDOW_NAME}"
 }
 

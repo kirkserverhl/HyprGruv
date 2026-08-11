@@ -780,11 +780,22 @@ ensure_git_sync_role() {
         log_status "Manage optional repos: git-sync list | follow | local-only | inventory"
     fi
 
-    # Daily role-aware reminder timer
+    # Login + periodic sync reminders (role-aware)
+    systemctl --user daemon-reload 2>/dev/null || true
     if systemctl --user enable --now git-eod-remind.timer 2>/dev/null; then
-        log_status "Enabled git-eod-remind.timer (24h)"
+        log_status "Enabled git-eod-remind.timer (boot + 12h catch-up)"
     else
         log_warning "Could not enable git-eod-remind.timer (reload user systemd after session login)"
+    fi
+    # Deploy machines: also poll origin for hyprgruv commits (rofi menu)
+    if [[ "$role" == "deploy" || "$want_deploy" == "1" ]]; then
+        if systemctl --user enable --now hyprgruv-update-check.timer 2>/dev/null; then
+            log_status "Enabled hyprgruv-update-check.timer (deploy pull prompts)"
+        else
+            log_warning "Could not enable hyprgruv-update-check.timer"
+        fi
+    else
+        systemctl --user disable --now hyprgruv-update-check.timer 2>/dev/null || true
     fi
 }
 

@@ -1,6 +1,7 @@
 [Unit]
 Description=Check hyprgruv git repo for remote updates
-After=network-online.target
+After=network-online.target graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
 
 [Service]
 Type=oneshot
