@@ -511,49 +511,88 @@ EOF
     fi
 }
 
-# Goodix / other fingerprint readers: optional fprintd + hyprlock PAM (laptop only)
+# Fingerprint readers: fprintd only helps if libfprint has a driver.
+# Many Goodix USB IDs appear in lsusb but are unsupported by stock libfprint —
+# enroll then fails with NoSuchDevice (common: 27c6:55b4 on Lenovo Yoga).
 ensure_laptop_fingerprint() {
     local machine="$1"
     [[ "$machine" == "laptop" ]] || return 0
 
-    local has_fp=0
-    if lsusb 2>/dev/null | grep -qiE 'fingerprint|goodix|validity|synaptics.*finger|elan.*finger'; then
-        has_fp=1
-    elif [[ -n "$(find /sys/bus/usb/devices -name idVendor 2>/dev/null | head -1)" ]] \
-        && lsusb 2>/dev/null | grep -qi '27c6:'; then
-        # Goodix vendor id common on Lenovo Yoga
-        has_fp=1
-    fi
-
-    if [[ $has_fp -eq 0 ]]; then
-        log_status "No fingerprint reader detected — skip fprintd"
+    local usb_line="" vid_pid=""
+    usb_line="$(lsusb 2>/dev/null | grep -iE 'fingerprint|goodix' || true)"
+    if [[ -z "$usb_line" ]]; then
+        log_status "No fingerprint reader in lsusb — skip fprintd"
         return 0
     fi
 
-    log_status "Fingerprint reader detected — ensuring fprintd (optional hyprlock unlock)"
+    vid_pid="$(echo "$usb_line" | grep -oE '[0-9a-fA-F]{4}:[0-9a-fA-F]{4}' | head -1 | tr '[:upper:]' '[:lower:]')"
+    log_status "Fingerprint USB present: $usb_line"
+
+    # Stock libfprint does not support these Goodix IDs (as of common Arch packages).
+    # Experimental AUR forks exist but may require a risky device flash.
+    case "$vid_pid" in
+    27c6:55b4 | 27c6:55a4 | 27c6:5110 | 27c6:538c | 27c6:5840)
+        log_warning "Goodix $vid_pid is usually NOT supported by stock libfprint/fprintd."
+        log_warning "That is why fprintd-enroll says: No devices available"
+        log_status "Options:"
+        log_status "  1) Password-only lock (default — fully supported)"
+        log_status "  2) Experimental: AUR libfprint-goodixtls-55x4 / -fixed (55b4)"
+        log_status "     May require goodix-fp-dump firmware flash — can brick the sensor."
+        log_status "     Read: https://aur.archlinux.org/packages/libfprint-goodixtls-55x4"
+        log_status "Hyprgruv will NOT auto-install experimental fingerprint forks."
+        # Keep fprintd out of the way; don't rewrite PAM until a device enumerates
+        write_setting fingerprint_status "unsupported-stock:${vid_pid}"
+        return 0
+        ;;
+    esac
+
+    log_status "Fingerprint hardware detected — ensuring stock fprintd"
 
     if [[ "${HYPRGRUV_SKIP_PACKAGES:-0}" != "1" ]]; then
         if ! pacman -Qq fprintd &>/dev/null; then
             if command -v yay >/dev/null 2>&1; then
                 yay -S --needed --noconfirm fprintd 2>/dev/null \
-                    || log_warning "Could not install fprintd (install later: sudo pacman -S fprintd)"
+                    || log_warning "Could not install fprintd"
             elif sudo -n true 2>/dev/null || [[ -t 0 ]]; then
                 sudo pacman -S --needed --noconfirm fprintd 2>/dev/null \
                     || log_warning "Could not install fprintd"
-            else
-                log_warning "Install later: sudo pacman -S fprintd && fprintd-enroll"
             fi
         fi
     fi
 
-    if pacman -Qq fprintd &>/dev/null; then
-        sudo systemctl enable --now fprintd.service 2>/dev/null \
-            || log_warning "Could not enable fprintd.service"
-        # PAM for hyprlock — idempotent drop-in style rewrite if missing fprintd line
-        if [[ -f /etc/pam.d/hyprlock ]] && ! grep -q 'pam_fprintd' /etc/pam.d/hyprlock 2>/dev/null; then
-            if sudo -n true 2>/dev/null || [[ -t 0 ]]; then
-                log_status "Configuring /etc/pam.d/hyprlock for fingerprint (password still works)"
-                sudo tee /etc/pam.d/hyprlock >/dev/null <<'EOF'
+    if ! pacman -Qq fprintd &>/dev/null; then
+        write_setting fingerprint_status "pkg-missing"
+        return 0
+    fi
+
+    # Only wire PAM if libfprint can actually see a device
+    local seen=0
+    if command -v python3 >/dev/null 2>&1; then
+        if python3 - <<'PY' 2>/dev/null; then
+import gi
+gi.require_version("FPrint", "2.0")
+from gi.repository import FPrint
+ctx = FPrint.Context()
+ctx.enumerate()
+raise SystemExit(0 if ctx.get_devices() else 1)
+PY
+            seen=1
+        fi
+    fi
+
+    if [[ $seen -eq 0 ]]; then
+        log_warning "fprintd installed but libfprint reports 0 devices — skip hyprlock PAM"
+        log_status "Use password unlock. Optional experimental drivers only if you accept risk."
+        write_setting fingerprint_status "no-libfprint-device:${vid_pid:-unknown}"
+        return 0
+    fi
+
+    sudo systemctl enable --now fprintd.service 2>/dev/null \
+        || log_warning "Could not enable fprintd.service"
+    if [[ -f /etc/pam.d/hyprlock ]] && ! grep -q 'pam_fprintd' /etc/pam.d/hyprlock 2>/dev/null; then
+        if sudo -n true 2>/dev/null || [[ -t 0 ]]; then
+            log_status "Configuring /etc/pam.d/hyprlock for fingerprint (password still works)"
+            sudo tee /etc/pam.d/hyprlock >/dev/null <<'EOF'
 #%PAM-1.0
 # Hyprgruv laptop: password OR fingerprint unlocks hyprlock
 auth        sufficient      pam_unix.so try_first_pass nullok
@@ -564,13 +603,10 @@ account     include         login
 password    include         login
 session     include         login
 EOF
-            else
-                log_warning "sudo needed to wire fingerprint into hyprlock PAM"
-            fi
         fi
-        log_status "Enroll fingerprints (once per user):  fprintd-enroll"
-        log_status "List: fprintd-list \$USER   Verify: fprintd-verify"
     fi
+    write_setting fingerprint_status "ready:${vid_pid:-ok}"
+    log_status "Enroll: fprintd-enroll   List: fprintd-list \$USER   Verify: fprintd-verify"
 }
 
 write_blur_conf() {
