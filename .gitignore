@@ -59,6 +59,9 @@ home/.config/fish/fish_variables
 home/.config/swaync/style.css
 home/.config/swaync/matugen/
 
+# mpv GPU shader compile cache (regenerated at runtime)
+home/.config/mpv/shaders/cache/
+
 # VSCodium runtime data (only User/settings.json is config)
 home/.config/VSCodium/**/state.vscdb*
 home/.config/VSCodium/**/globalStorage/
