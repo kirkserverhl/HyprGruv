@@ -4,7 +4,9 @@
 local settings = require("conf.settings")
 local is_laptop = settings.is_laptop()
 
-local natural = settings.read_bool("natural_scroll", is_laptop)
+-- Classic scroll by default (false). Natural/inverse is opt-in via settings/natural_scroll.sh
+-- so terminals + trackpads feel consistent on laptop deploys.
+local natural = settings.read_bool("natural_scroll", false)
 local tap = settings.read_bool("touchpad_tap", is_laptop)
 local dwt = settings.read_bool("touchpad_dwt", is_laptop)
 local scroll_factor = settings.read_number("touchpad_scroll_factor", is_laptop and 0.6 or 1.0)

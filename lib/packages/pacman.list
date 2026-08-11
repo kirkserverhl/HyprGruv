@@ -52,6 +52,8 @@ wl-clipboard
 brightnessctl
 power-profiles-daemon
 upower
+# Laptop fingerprint (Goodix etc.) — safe on desktops without a reader
+fprintd
 wlr-randr
 waybar
 xdg-desktop-portal-hyprland
