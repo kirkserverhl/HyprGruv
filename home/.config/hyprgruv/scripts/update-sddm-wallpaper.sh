@@ -266,28 +266,61 @@ if [ -f "$THEME_CONF" ]; then
     # Keep cropped scaling (good default for photos/wallpapers)
     sed -i 's|^ScaleImageCropped=.*|ScaleImageCropped="true"|' "$THEME_CONF"
 
-    # Pull current matugen colors (fall back to reasonable dark theme values)
-    MATUGEN_CONF="$USER_HOME/.config/hypr/colors/custom/matugen.conf"
+    # Live system palette via colors.sh (resolves $base0X refs + gruvbox default).
+    # Falls back to parsing matugen.conf directly if colors.sh unavailable.
+    MAIN_COLOR="#ebdbb2"
+    ACCENT_COLOR="#fe8019"
+    BG_COLOR="#3c3836"
 
-    if [ -f "$MATUGEN_CONF" ]; then
-        # Extract rgba(...) values and convert to #hex for SDDM
-        get_hex() {
-            grep -m1 "^\$$1 = rgba(" "$MATUGEN_CONF" 2>/dev/null | sed -E 's/.*rgba\(([0-9a-fA-F]{6}).*/#\1/' || echo "$2"
-        }
-
-        MAIN_COLOR=$(get_hex "on_surface" "#e2e2e2")
-        ACCENT_COLOR=$(get_hex "primary" "#98ccf9")
-        BG_COLOR=$(get_hex "surface_container" "#1f1f1f")
-
-        sed -i "s|^MainColor=.*|MainColor=\"${MAIN_COLOR}\"|" "$THEME_CONF"
-        sed -i "s|^AccentColor=.*|AccentColor=\"${ACCENT_COLOR}\"|" "$THEME_CONF"
-        sed -i "s|^BackgroundColor=.*|BackgroundColor=\"${BG_COLOR}\"|" "$THEME_CONF"
-
-        # Try to use a font close to what wlogout/hyprlock use
-        sed -i 's|^Font=.*|Font="HeavyData Nerd Font"|' "$THEME_CONF"
-
-        echo ":: theme.conf colors + font updated from matugen"
+    if [ -n "${COLOR_ON_SURFACE:-}" ] && [ -n "${COLOR_PRIMARY:-}" ]; then
+        MAIN_COLOR="${COLOR_ON_SURFACE}"
+        ACCENT_COLOR="${COLOR_PRIMARY}"
+        BG_COLOR="${COLOR_SURFACE_CONTAINER:-${COLOR_SURFACE:-$BG_COLOR}}"
+        echo ":: theme.conf colors from colors.sh (${HYPRGRUV_COLOR_SOURCE:-live})"
+    else
+        MATUGEN_CONF="$USER_HOME/.config/hypr/colors/custom/matugen.conf"
+        if [ -f "$MATUGEN_CONF" ]; then
+            # Resolve rgba(...) or $base0X indirection (preset themes use the latter)
+            get_hex() {
+                local role="$1" fallback="$2" line val depth=0
+                line=$(grep -m1 "^\\\$$role = " "$MATUGEN_CONF" 2>/dev/null || true)
+                val="${line#*= }"
+                val="${val#"${val%%[![:space:]]*}"}"
+                while [ $depth -lt 8 ]; do
+                    depth=$((depth + 1))
+                    case "$val" in
+                    rgba\(*\))
+                        echo "$val" | sed -E 's/.*rgba\(([0-9a-fA-F]{6}).*/#\1/'
+                        return 0
+                        ;;
+                    \$*)
+                        local ref="${val#\$}"
+                        line=$(grep -m1 "^\\\$$ref = " "$MATUGEN_CONF" 2>/dev/null || true)
+                        val="${line#*= }"
+                        val="${val#"${val%%[![:space:]]*}"}"
+                        [ -n "$val" ] || break
+                        ;;
+                    *)
+                        break
+                        ;;
+                    esac
+                done
+                echo "$fallback"
+            }
+            MAIN_COLOR=$(get_hex "on_surface" "$MAIN_COLOR")
+            ACCENT_COLOR=$(get_hex "primary" "$ACCENT_COLOR")
+            BG_COLOR=$(get_hex "surface_container" "$BG_COLOR")
+            echo ":: theme.conf colors from matugen.conf (resolved)"
+        else
+            echo ":: theme.conf colors using gruvbox defaults"
+        fi
     fi
+
+    sed -i "s|^MainColor=.*|MainColor=\"${MAIN_COLOR}\"|" "$THEME_CONF"
+    sed -i "s|^AccentColor=.*|AccentColor=\"${ACCENT_COLOR}\"|" "$THEME_CONF"
+    sed -i "s|^BackgroundColor=.*|BackgroundColor=\"${BG_COLOR}\"|" "$THEME_CONF"
+    sed -i 's|^Font=.*|Font="HeavyData Nerd Font"|' "$THEME_CONF"
+    echo ":: theme.conf Main=${MAIN_COLOR} Accent=${ACCENT_COLOR} Bg=${BG_COLOR}"
 
     echo ":: theme.conf updated → Background=${SDDM_BG} (FullBlur=false)"
 fi

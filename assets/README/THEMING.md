@@ -128,6 +128,15 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruvbox`.
 
+**CLI / install / greeter (same policy):**
+
+| Surface | How colors apply |
+|---------|------------------|
+| gum (install, setup, upkeep) | `common.sh` → `colors.sh` → `gum_apply_matugen_theme` |
+| figlet / toilet headers | `header.sh` paints with `COLOR_PRIMARY` via gum |
+| SDDM Sugar Candy | Asset defaults = gruvbox; `update-sddm-wallpaper.sh` overwrites from live palette |
+| Shell cache | `~/.cache/matugen/colors.sh` regenerated on load / theme ensure |
+
 | Role | Behavior |
 |------|----------|
 | Source `git-eod` | Does not stage live palette files (ignored). Do not force-add them. |

@@ -129,6 +129,30 @@ export LSCOLORS=GxFxCxDxbxegedabagaced
 display_header() {
     local title="${1:-}"
     [[ -z "$title" ]] && return 0
+
+    # Prefer figlet/toilet themed headers when header.sh is available (install + upkeep).
+    local header_sh=""
+    local cand
+    for cand in \
+        "${DOTFILES_SCRIPTS:-}/header.sh" \
+        "${REPO_DOTFILES_SCRIPTS:-}/header.sh" \
+        "${HOME}/.config/hyprgruv/scripts/header.sh" \
+        "${HYPR_DIR}/home/.config/hyprgruv/scripts/header.sh"
+    do
+        if [[ -n "$cand" && -f "$cand" ]]; then
+            header_sh="$cand"
+            break
+        fi
+    done
+    if [[ -n "$header_sh" ]]; then
+        # shellcheck source=/dev/null
+        source "$header_sh" 2>/dev/null || true
+        if declare -F print_header >/dev/null 2>&1; then
+            print_header "$title"
+            return 0
+        fi
+    fi
+
     echo ""
     if command -v gum >/dev/null 2>&1; then
         echo "$title" | gum style --foreground "${COLOR_PRIMARY:-#fe8019}" --bold 2>/dev/null \
@@ -160,14 +184,36 @@ run_command() {
 export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INSTALL_SCRIPTS
 
 
-# ============== Theme baseline (Gruvbox — install + script fallback) ==============
+# ============== Theme for gum / figlet / install (gruvbox default, live if set) ==============
+# Policy: live matugen/preset palette if present, else gruvbox-dark.
+# Implementation lives in ~/.config/hyprgruv/scripts/colors.sh (stowed).
 
 _hyprgruv_load_theme_colors() {
+    local colors_sh=""
+    local cand
+    for cand in \
+        "${DOTFILES_SCRIPTS:-}/colors.sh" \
+        "${REPO_DOTFILES_SCRIPTS:-}/colors.sh" \
+        "${HOME}/.config/hyprgruv/scripts/colors.sh" \
+        "${HYPR_DIR}/home/.config/hyprgruv/scripts/colors.sh"
+    do
+        if [[ -n "$cand" && -f "$cand" ]]; then
+            colors_sh="$cand"
+            break
+        fi
+    done
+
+    if [[ -n "$colors_sh" ]]; then
+        # shellcheck source=/dev/null
+        source "$colors_sh" --gum
+        return 0
+    fi
+
+    # Pre-stow install: gruvbox only
     local gruvbox="${HYPR_DIR}/lib/defaults/gruvbox-colors.sh"
     if [[ -f "$gruvbox" ]]; then
         # shellcheck source=/dev/null
         source "$gruvbox"
-        return 0
     fi
     : "${COLOR_PRIMARY:="#fe8019"}"
     : "${COLOR_ON_PRIMARY:="#282828"}"
@@ -179,33 +225,38 @@ _hyprgruv_load_theme_colors() {
     : "${COLOR_ERROR:="#fb4934"}"
     : "${COLOR_TEXT:="#ebdbb2"}"
     : "${COLOR_OUTLINE:="#665c54"}"
+    : "${COLOR_WARNING:="#fabd2f"}"
+    : "${COLOR_INFO:="#83a598"}"
 }
 
 _hyprgruv_load_theme_colors
 
-gum_apply_matugen_theme() {
-    export GUM_CONFIRM_PROMPT="? "
-    export GUM_CONFIRM_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
-    export GUM_CONFIRM_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
-    export GUM_CONFIRM_UNSELECTED_BACKGROUND="${COLOR_SURFACE_CONTAINER}"
-    export GUM_CONFIRM_UNSELECTED_FOREGROUND="${COLOR_ON_SURFACE}"
-    export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
-    export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
-    export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
-    export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
-    export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
-    export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
-    export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
-    export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
-    export GUM_CHOOSE_CURSOR_PREFIX="› "
-    export GUM_CHOOSE_SELECTED_PREFIX="✓ "
-    export GUM_CHOOSE_UNSELECTED_PREFIX="  "
-    export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
-    export GUM_SPIN_SPINNER_FOREGROUND="${COLOR_PRIMARY}"
-    export GUM_SPIN_TITLE_FOREGROUND="${COLOR_ON_SURFACE}"
-    export GUM_TABLE_HEADER_FOREGROUND="${COLOR_PRIMARY}"
-    export GUM_PAGER_FOREGROUND="${COLOR_ON_SURFACE}"
-}
+# Prefer colors.sh definition when available; keep a local fallback for pre-stow.
+if ! declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
+    gum_apply_matugen_theme() {
+        export GUM_CONFIRM_PROMPT="? "
+        export GUM_CONFIRM_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+        export GUM_CONFIRM_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+        export GUM_CONFIRM_UNSELECTED_BACKGROUND="${COLOR_SURFACE_CONTAINER}"
+        export GUM_CONFIRM_UNSELECTED_FOREGROUND="${COLOR_ON_SURFACE}"
+        export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
+        export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
+        export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
+        export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
+        export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
+        export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
+        export GUM_CHOOSE_CURSOR_PREFIX="› "
+        export GUM_CHOOSE_SELECTED_PREFIX="✓ "
+        export GUM_CHOOSE_UNSELECTED_PREFIX="  "
+        export GUM_FILTER_MATCH_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_SPIN_SPINNER_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_SPIN_TITLE_FOREGROUND="${COLOR_ON_SURFACE}"
+        export GUM_TABLE_HEADER_FOREGROUND="${COLOR_PRIMARY}"
+        export GUM_PAGER_FOREGROUND="${COLOR_ON_SURFACE}"
+    }
+fi
 
 # True when the session can open the controlling terminal (needed for gum UI under tee logging).
 _hyprgruv_has_tty() {

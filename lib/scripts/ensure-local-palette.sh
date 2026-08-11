@@ -119,3 +119,16 @@ mkdir -p "$(dirname "$CURRENT_THEME_FILE")"
 if [[ ! -f "$CURRENT_THEME_FILE" ]] || [[ -z "$(tr -d '[:space:]' <"$CURRENT_THEME_FILE" 2>/dev/null || true)" ]]; then
     printf '%s\n' "$theme" >"$CURRENT_THEME_FILE"
 fi
+
+# Refresh gum/figlet shell cache + SDDM greeter colors from live palette.
+if [[ -f "$HOME_CFG/hyprgruv/scripts/colors.sh" ]]; then
+    # shellcheck source=/dev/null
+    source "$HOME_CFG/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true
+    if declare -F write_matugen_shell_color_cache >/dev/null 2>&1; then
+        write_matugen_shell_color_cache 2>/dev/null || true
+    fi
+fi
+if [[ -x "$HOME_CFG/hyprgruv/scripts/update-sddm-wallpaper.sh" || -f "$HOME_CFG/hyprgruv/scripts/update-sddm-wallpaper.sh" ]]; then
+    bash "$HOME_CFG/hyprgruv/scripts/update-sddm-wallpaper.sh" 2>/dev/null \
+        || echo "ensure-local-palette: SDDM color sync skipped (run update-sddm-wallpaper.sh after login)" >&2
+fi

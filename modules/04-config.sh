@@ -24,7 +24,7 @@ source "$HYPR_DIR/lib/state.sh"
 
 hyprgruv_section_intro "Config"
 
-# gum theming comes from common.sh → colors.sh / ~/.cache/matugen/colors.sh
+# gum/figlet theming: common.sh → colors.sh (live palette) or gruvbox default
 export GUM_CONFIRM_PROMPT="? "
 
 # ------------------------------------------------------------
