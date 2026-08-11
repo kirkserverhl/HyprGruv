@@ -191,8 +191,6 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(SCRIPTS .. "/reload-dev-session.sh"))
 -- ALT — the other option (same category, different choice)
 -- ═══════════════════════════════════════════════════════════════════════════════
 
--- Launchers (alt)
-hl.bind(altMod .. " + SPACE",  hl.dsp.exec_cmd(SCRIPTS .. "/rofi-apps.sh")) -- #launcher #guest Favorite apps
 -- Super+Alt+Return: tmux dev workspace (was Alt+Return — that stole kew's enqueueAndPlay)
 hl.bind(mainMod .. " + " .. altMod .. " + Return", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh")) -- #terminal #tmux Dev tmux workspace
 hl.bind(mainMod .. " + " .. altMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/dev-workspace.sh"))

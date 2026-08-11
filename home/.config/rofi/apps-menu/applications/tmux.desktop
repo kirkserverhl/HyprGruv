@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=tmux
-Comment=Terminal multiplexer
-Exec=tmux
-Icon=utilities-terminal
-Terminal=true
-Categories=System;TerminalEmulator;

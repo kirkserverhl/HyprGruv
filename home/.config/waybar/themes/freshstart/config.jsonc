@@ -77,8 +77,7 @@
   "custom/appmenu": {
     "format": " 󰣇 ",
     "on-click": "~/.config/hyprgruv/scripts/rofi-full.sh",
-    "on-click-right": "~/.config/hyprgruv/scripts/rofi-apps.sh",
-    "tooltip-format": "Left: All Apps\nRight: Favorites",
+    "tooltip-format": "All apps",
   },
 
   "custom/hyprgruv-settings": {
