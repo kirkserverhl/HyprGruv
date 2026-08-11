@@ -1,5 +1,10 @@
-#!/bin/bash
-# Super+W theme switcher: theme grid (incl. Waypaper) → wallpaper grid or Waypaper GUI.
+#!/usr/bin/env bash
+# Super+W — theme → wallpaper → primary accent (splotches) → ONE full apply
+#
+# Important: do NOT apply the full theme before the accent rofi.
+# That painted default orange and blocked the accent UI for a long time.
+
+set -euo pipefail
 
 THEME_DIR="$(readlink -f "$HOME/.config/colorschemes")"
 APPLY_SCRIPT="$THEME_DIR/apply-theme.sh"
@@ -7,6 +12,10 @@ THEME_PICKER="$THEME_DIR/theme-picker.py"
 WALLPAPER_SCRIPT="$THEME_DIR/wallpaper-selector.sh"
 WAYPAPER_MODE="__waypaper__"
 WAYPAPER_BIN="$HOME/.local/bin/waypaper"
+SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
+ACCENT_PICKER="$HOME/.config/hyprgruv/scripts/pick-theme-accent.sh"
+
+killall -9 rofi 2>/dev/null || true
 
 selected=""
 if [[ -f "$THEME_PICKER" ]]; then
@@ -14,7 +23,6 @@ if [[ -f "$THEME_PICKER" ]]; then
         exit 1
     fi
 fi
-
 [[ -z "$selected" ]] && exit 0
 
 if [[ "$selected" == "$WAYPAPER_MODE" ]]; then
@@ -26,6 +34,7 @@ if [[ "$selected" == "$WAYPAPER_MODE" ]]; then
     exit 0
 fi
 
+# --- wallpaper (fast) ---
 wallpaper=""
 if [[ -x "$WALLPAPER_SCRIPT" ]]; then
     picker_err_file=$(mktemp)
@@ -39,26 +48,28 @@ if [[ -x "$WALLPAPER_SCRIPT" ]]; then
     rm -f "$picker_err_file"
 fi
 
-SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
-ACCENT_PICKER="$HOME/.config/hyprgruv/scripts/pick-theme-accent.sh"
-
-if [[ -n "$wallpaper" ]]; then
-    # 1) Theme default palette + wallpaper (gruvbox orange, nord frost, …)
-    "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1
-    # 2) SDDM / default_wp only — must finish before accent rebuild (no palette regen)
-    if [[ -x "$SET_WALLPAPER" ]]; then
-        SET_WALLPAPER_SKIP_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 || true
+# --- primary accent splotches FIRST (fast; only rofi + tiny PNGs) ---
+# Writes colorschemes/<theme>/user-accent before any heavy apply.
+if [[ -x "$ACCENT_PICKER" ]]; then
+    if accent=$(bash "$ACCENT_PICKER" "$selected" ${wallpaper:+"$wallpaper"}); then
+        notify-send -e -u low -t 2000 "Theme" "$selected · accent $accent" 2>/dev/null || true
     else
-        notify-send "Theme switcher" "set_wallpaper.sh missing — SDDM default not updated" -u critical 2>/dev/null || true
-    fi
-    # 3) LAST: accent splotch → write primary/source → full chrome rebuild
-    #    (must be last so apply-theme / set_wallpaper cannot re-apply default orange)
-    if [[ -x "$ACCENT_PICKER" ]]; then
-        bash "$ACCENT_PICKER" "$selected" "$wallpaper" || true
-    fi
-else
-    "$APPLY_SCRIPT" "$selected" >/dev/null 2>&1
-    if [[ -x "$ACCENT_PICKER" ]]; then
-        bash "$ACCENT_PICKER" "$selected" || true
+        # Esc = keep theme default primary; clear previous user-accent so default wins
+        rm -f "$THEME_DIR/$selected/user-accent" 2>/dev/null || true
+        # leave source-color as theme default if present
+        notify-send -e -u low -t 2000 "Theme" "$selected · default primary" 2>/dev/null || true
     fi
 fi
+
+# --- ONE full theme apply (reads user-accent for primary/source) ---
+notify-send -e -u low -t 2500 "Theme" "Applying $selected…" 2>/dev/null || true
+if [[ -n "$wallpaper" && -f "$wallpaper" ]]; then
+    "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1 || true
+    if [[ -x "$SET_WALLPAPER" ]]; then
+        SET_WALLPAPER_SKIP_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 || true
+    fi
+else
+    "$APPLY_SCRIPT" "$selected" >/dev/null 2>&1 || true
+fi
+
+notify-send -e -u low "Theme ready" "$selected applied" 2>/dev/null || true
