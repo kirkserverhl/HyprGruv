@@ -187,6 +187,14 @@ reapply_plugin_ui() {
         hyprctl eval 'if type(reapply_hyprbars) == "function" then reapply_hyprbars() end' \
             >/dev/null 2>&1 || true
     fi
+    # hymission options + binds already registered; re-apply plugin table after late load
+    if hyprctl plugin list 2>/dev/null | grep -q 'Plugin hymission'; then
+        log "reapply hymission config"
+        hyprctl eval 'if type(reapply_hymission) == "function" then reapply_hymission() end' \
+            >/dev/null 2>&1 || true
+    else
+        log "hymission not in plugin list after reload"
+    fi
 }
 
 # ── main ──────────────────────────────────────────────────────────────────────

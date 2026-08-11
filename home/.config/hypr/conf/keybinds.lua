@@ -227,9 +227,9 @@ hl.bind(mainMod .. " + " .. altMod .. " + W", open_waybar_layout_switcher) -- #t
 hl.bind("CTRL + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
 hl.bind(altMod .. " + SHIFT + S",    hl.dsp.layout("swapsplit"))
 
--- Alt+Tab = cycle windows (Super+Tab cycles workspaces)
-hl.bind(altMod .. " + Tab",          hl.dsp.exec_cmd("hyprctl dispatch cyclenext"))
-hl.bind(altMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("hyprctl dispatch cycleprev"))
+-- Window cycle: Super+Alt+Tab (NOT bare Alt+Tab — that is Mission Control / hymission)
+hl.bind(mainMod .. " + " .. altMod .. " + Tab",          hl.dsp.exec_cmd("hyprctl dispatch cyclenext")) -- #window Cycle next window
+hl.bind(mainMod .. " + " .. altMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("hyprctl dispatch cycleprev")) -- #window Cycle prev window
 
 -- ── Layout: optional column / research mode (scrolling) ─────────────────────
 -- Daily default is dwindle. Flip to columns when researching / multi-doc work.
