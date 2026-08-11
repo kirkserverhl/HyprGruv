@@ -197,6 +197,15 @@ main() {
     echo ""
     if [[ $failures -eq 0 ]]; then
         bash "$HYPR_DIR/lib/scripts/git-eod-remind.sh" --clear 2>/dev/null || true
+        # Surface cross-device handoffs for the other Grok / human session
+        if [[ -f "$HYPR_DIR/lib/scripts/git-sync.sh" ]]; then
+            echo ""
+            log_status "Cross-device handoffs:"
+            if bash "$HYPR_DIR/lib/scripts/git-sync.sh" unread 2>/dev/null; then
+                :
+            fi
+            log_status "Full brief: git-sync brief   (or open docs/device-sync/LATEST.md)"
+        fi
         log_success "EOD pull finished"
         exit 0
     fi

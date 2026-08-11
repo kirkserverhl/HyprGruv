@@ -142,6 +142,18 @@ Defaults: **source** follows `hyprgruv`, `notes`, `Wallpapers`, `soundsbored` (i
 
 Timer: `git-eod-remind.timer` (every 24h) — role-aware SwayNC nudge.
 
+### Cross-device handoff index
+
+When two machines (or two Grok sessions) share one rice, log intent in-repo:
+
+```bash
+git-sync handoff -t to-source "What laptop did; main should pull + …"
+git-sync brief          # LATEST.md + index (start every agent session with this)
+```
+
+Lives under `docs/device-sync/` (append-only `entries/`, plus `LATEST.md` / `INDEX.md`).  
+**SSH between PCs is optional** for live shells; the handoff log is the durable system of record.
+
 ### Setup wizard (`post_reboot_setup.sh`)
 
 Can also be run manually after login:

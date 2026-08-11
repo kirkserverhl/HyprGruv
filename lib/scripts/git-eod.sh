@@ -218,6 +218,7 @@ main() {
     if [[ $failures -eq 0 ]]; then
         bash "$HYPR_DIR/lib/scripts/git-eod-remind.sh" --clear 2>/dev/null || true
         log_success "EOD sync finished"
+        log_status "If this push should brief the other machine/Grok:  git-sync handoff \"…\" && git push"
         exit 0
     fi
 
