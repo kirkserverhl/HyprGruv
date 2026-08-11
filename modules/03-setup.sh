@@ -61,16 +61,19 @@ ensure_gum || hyprgruv_strict_abort "Failed to install gum"
 ensure_zsh || hyprgruv_strict_abort "Failed to install zsh"
 hyprgruv_require_cmd zsh
 
-# gum spin hides sudo prompts and long build output — use it only for quick scripts.
+# gum spin hides sudo prompts and long build output — use live TTY for anything
+# that may need sudo, hyprpm, or multi-minute work.
 run_setup_script() {
     local script_path="$1"
     local script_name="$2"
 
-    if [[ "$script_name" == "hyprpm.sh" ]]; then
-        log_status "Running: $script_path (live output — plugin build may take several minutes)"
-        bash "$script_path"
-        return $?
-    fi
+    case "$script_name" in
+        hyprpm.sh|setup-mime-handlers.sh|sddm_candy_install.sh|grub.sh)
+            log_status "Running: $script_path (live output)"
+            bash "$script_path"
+            return $?
+            ;;
+    esac
 
     if command -v gum >/dev/null 2>&1; then
         gum spin --title "Running: ${script_path}" -- bash "$script_path"

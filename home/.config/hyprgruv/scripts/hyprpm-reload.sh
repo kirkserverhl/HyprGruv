@@ -199,10 +199,19 @@ if ! wait_for_hyprland; then
 fi
 log "Hyprland ready (sig=${HYPRLAND_INSTANCE_SIGNATURE})"
 
-# First login after install: fetch/build if cache empty
+# First login after install: fetch/build if cache empty.
+# Bootstrap needs sudo for headers; set askpass first (no TTY at graphical login).
 if [[ ! -f "$HYPRBARS_SO" && -x "$HYPRPM_BOOTSTRAP" ]]; then
     log "missing hyprbars.so — running bootstrap"
-    HYPRPM_QUIET=1 bash "$HYPRPM_BOOTSTRAP" --quiet >>"$LOG_FILE" 2>&1 || true
+    setup_sudo_askpass
+    # Live stdio when possible so hyprpm progress UI does not deadlock on pipes.
+    # Still tee to the log. HYPRPM_QUIET only suppresses banners, not hyprpm itself.
+    if [[ -t 1 ]]; then
+        HYPRPM_QUIET=1 bash "$HYPRPM_BOOTSTRAP" --quiet 2>&1 | tee -a "$LOG_FILE" || true
+    else
+        # No TTY: bootstrap will use SUDO_ASKPASS; hyprpm output goes to log only.
+        HYPRPM_QUIET=1 bash "$HYPRPM_BOOTSTRAP" --quiet >>"$LOG_FILE" 2>&1 || true
+    fi
 fi
 
 if run_reload; then

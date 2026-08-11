@@ -27,10 +27,21 @@ if command -v bat >/dev/null
     set -gx BAT_THEME Matugen
 end
 
-# GPG / SSH agent
+# GPG (signing / encrypt). SSH uses OpenSSH agent — not gpg-agent's ssh socket.
+# gpg-agent ssh emulation refuses normal OpenSSH keys without extra setup
+# ("agent refused operation" on ssh-add ~/.ssh/id_*).
 set -gx GPG_TTY (tty)
-set -gx SSH_AUTH_SOCK (gpgconf --list-dirs agent-ssh-socket)
-gpgconf --launch gpg-agent >/dev/null 2>&1
+if test -S "$XDG_RUNTIME_DIR/ssh-agent.socket"
+    set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
+else if test -z "$SSH_AUTH_SOCK"; or string match -q '*gnupg*S.gpg-agent.ssh' -- "$SSH_AUTH_SOCK"
+    # Fall back only if a real agent socket is not available yet this session.
+    if command -v gpgconf >/dev/null
+        set -l gpg_ssh (gpgconf --list-dirs agent-ssh-socket 2>/dev/null)
+        if test -n "$gpg_ssh"; and test -S "$gpg_ssh"
+            set -gx SSH_AUTH_SOCK $gpg_ssh
+        end
+    end
+end
 
 # History (mirrors zsh HISTSIZE / hist_ignore_space)
 set -g fish_history_max 200000

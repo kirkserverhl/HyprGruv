@@ -119,6 +119,7 @@ menu_settings() {
         local choice
         choice=$(rofi_pick "Settings" \
             "Settings|settings-configure|setup" \
+            "SSH / GitHub|network-server|ssh" \
             "Blur|blur|blur" \
             "Blitz|flash|blitz" \
             "Hyprsunset|brightnesssettings|hyprsunset" \
@@ -128,6 +129,9 @@ menu_settings() {
         case "$choice" in
             Settings)
                 exec "$SCRIPT_DIR/settings-run-setup.sh"
+                ;;
+            "SSH / GitHub")
+                exec "$SCRIPT_DIR/settings-ssh.sh"
                 ;;
             Blur)
                 exec "$SCRIPT_DIR/settings-blur.sh"

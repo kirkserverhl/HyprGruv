@@ -24,6 +24,7 @@ declare -A ICONS=(
     [updates]="#a6e3a1|U"
     [cleanup]="#f9e2af|C"
     [setup]="#89dceb|S"
+    [ssh]="#94e2d5|⌘"
     [blitz]="#f38ba8|!"
     [hyprsunset]="#eba0ac|☾"
 )

@@ -1,0 +1,12 @@
+[repository]
+name = "hyprplug"
+authors = ["kirkserverhl"]
+commit_pins = []
+
+[hyprbars]
+description = "Title bars for Hyprland windows (vendored from hyprwm/hyprland-plugins v0.56.0)"
+authors = ["Vaxry"]
+output = "hyprbars/hyprbars.so"
+build = [
+    "make -C hyprbars all",
+]
