@@ -304,7 +304,8 @@ hl.bind(mainMod .. " + SHIFT + U", mac("link")) -- #mac Cmd+K → link (was Supe
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- FUNCTION KEYS — per-keyboard (match each board's F-row legends)
 -- Hyprland device-specific binds: only the listed keyboards trigger each map.
--- Third board (Logitech wireless keyboard) not mapped yet — send its F-row when ready.
+-- FN note: firmware chooses whether bare F-row is F1–F12 or XF86 media keys.
+-- Laptop map binds both so either FN layer works; external boards keep own maps.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Device name lists from `hyprctl devices` (include all HID interfaces per board)
@@ -316,6 +317,13 @@ local KB_HP = {
 local KB_LOGI_WIRED = {
 	"logitech-mechanical-keyboard-logitech-mechanical-keyboard",
 	"logitech-mechanical-keyboard-logitech-mechanical-keyboard-keyboard",
+}
+-- HyprLab / IdeaPad built-in (main AT keyboard + vendor extra buttons)
+local KB_LAPTOP = {
+	"at-translated-set-2-keyboard",
+	"ideapad-extra-buttons",
+	"sof-hda-dsp-headphone",
+	"video-bus",
 }
 local MOUSE_LOGI_WIRELESS = {
 	"logitech-wireless-mouse-1",
@@ -334,6 +342,47 @@ local function dev_bind(keys, dispatcher, devices, extra)
 	end
 	hl.bind(keys, dispatcher, opts)
 end
+
+-- ── HyprLab laptop (IdeaPad) ─────────────────────────────────────────────────
+-- F1 mute · F2 vol- · F3 vol+ · F4 mic mute (under consideration)
+-- F5 bright- · F6 bright+ · F7 displays · F8 airplane
+-- F9 settings · F10 lock · F11 apps · F12 calc
+-- Insert clipboard · Print screenshot rofi · Delete stays native (typing)
+dev_bind("F1",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"),       KB_LAPTOP) -- #media #laptop Mute
+dev_bind("F2",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),          KB_LAPTOP, { repeating = true }) -- #media #laptop Volume down
+dev_bind("F3",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),          KB_LAPTOP, { repeating = true }) -- #media #laptop Volume up
+-- F4 mic mute — under consideration (bound; remove if it fights firmware)
+dev_bind("F4",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"),   KB_LAPTOP) -- #media #laptop #wip Mute mic
+dev_bind("F5",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"),      KB_LAPTOP, { repeating = true }) -- #display #laptop Brightness down
+dev_bind("F6",  hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"),      KB_LAPTOP, { repeating = true }) -- #display #laptop Brightness up
+dev_bind("F7",  hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"),          KB_LAPTOP) -- #display #laptop Display layouts
+dev_bind("F8",  hl.dsp.exec_cmd(SCRIPTS .. "/airplane-mode.sh"),         KB_LAPTOP) -- #network #laptop Airplane mode
+dev_bind("F9",  hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"),     KB_LAPTOP) -- #settings #laptop HyprGruv settings
+dev_bind("F10", hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"), KB_LAPTOP) -- #session #laptop Lock
+dev_bind("F11", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),             KB_LAPTOP) -- #launcher #laptop Applications
+dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"),             KB_LAPTOP) -- #calc #laptop Calculator
+
+dev_bind("INSERT", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"),           KB_LAPTOP) -- #clipboard #laptop Clipboard history
+dev_bind("PRINT",  hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"),           KB_LAPTOP) -- #screenshot #laptop Screenshot menu
+-- DELETE intentionally unbound on laptop so editors keep native delete
+
+-- XF86 keys (what many IdeaPads emit without holding FN). Same actions as F-row above
+-- so media-default FN layout still hits Hypr binds instead of doing nothing.
+dev_bind("XF86AudioMute",         hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"),     KB_LAPTOP) -- #media #laptop
+dev_bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),        KB_LAPTOP, { repeating = true })
+dev_bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"),        KB_LAPTOP, { repeating = true })
+dev_bind("XF86AudioMicMute",      hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LAPTOP) -- #wip
+dev_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"),    KB_LAPTOP, { repeating = true })
+dev_bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"),    KB_LAPTOP, { repeating = true })
+dev_bind("XF86Display",           hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"),        KB_LAPTOP)
+dev_bind("XF86WLAN",              hl.dsp.exec_cmd(SCRIPTS .. "/airplane-mode.sh"),       KB_LAPTOP)
+dev_bind("XF86RFKill",            hl.dsp.exec_cmd(SCRIPTS .. "/airplane-mode.sh"),       KB_LAPTOP)
+dev_bind("XF86Tools",             hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"),   KB_LAPTOP)
+dev_bind("XF86Launch1",           hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"),   KB_LAPTOP)
+dev_bind("XF86Calculator",        hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"),           KB_LAPTOP)
+dev_bind("XF86Explorer",          hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_LAPTOP)
+dev_bind("XF86Search",            hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_LAPTOP)
+dev_bind("XF86Favorites",         hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_LAPTOP)
 
 -- ── HP wireless (Chicony kit) ────────────────────────────────────────────────
 -- F1 mute · F2 vol- · F3 vol+ · F4 prev · F5 pause · F6 next
