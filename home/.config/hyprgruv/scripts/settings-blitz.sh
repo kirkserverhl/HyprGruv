@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Blitz mode — minimal, work-focused Hyprland profile.
+# Blitz mode — WORK-focus toggle (not device profile).
+# Laptop/desktop decoration baselines come from apply-machine-profile.sh.
+# Blitz: strip blur/animations/gaps for deep work; reload restores profile.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,7 +22,7 @@ blitz_active() {
 status="normal"
 blitz_active && status="blitz"
 
-chosen=$(hyprgruv_rofi_pick "Blitz Mode" \
+chosen=$(hyprgruv_rofi_pick "Blitz Mode (work focus)" \
     "Enable Blitz|blitz|on" \
     "Disable Blitz (reload)|settings|off" \
     "Status: ${status}|system|status" \
@@ -30,21 +32,20 @@ chosen=$(hyprgruv_rofi_pick "Blitz Mode" \
 case "$chosen" in
     "Enable Blitz")
         if blitz_active; then
-            notify-send "Blitz Mode" "Already active"
+            notify-send "Blitz Mode" "Already active (work focus)"
         else
             bash "$BLITZ_SCRIPT"
-            notify-send "Blitz Mode" "Enabled — animations/blur/gaps off"
         fi
         ;;
     "Disable Blitz (reload)")
         hyprctl reload
-        notify-send "Blitz Mode" "Disabled — config reloaded"
+        notify-send "Blitz Mode" "Off — laptop/desktop decoration profile restored"
         ;;
     Status*)
         if blitz_active; then
-            notify-send "Blitz Mode" "Active (animations disabled)"
+            notify-send "Blitz Mode" "Active — blur/anim/gaps off (work)\nDevice profile is separate (laptop light blur vs desktop rich)"
         else
-            notify-send "Blitz Mode" "Normal (full effects)"
+            notify-send "Blitz Mode" "Normal — using machine decoration profile"
         fi
         ;;
     Back)
