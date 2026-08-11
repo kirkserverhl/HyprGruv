@@ -193,7 +193,11 @@ def apply_starship_asset(
     resolved: dict[str, str],
     base16: dict[str, str] | None = None,
 ) -> Path | None:
-    """Install the theme starship rainbow config and refresh the active symlink."""
+    """Install the theme's fixed starship rainbow config (source color never touches it).
+
+    gruvbox → curated gruvbox prompt; catppuccin → curated catppuccin; etc.
+    Super+W source/primary only affects borders/waybar/kitty — not starship.
+    """
     theme_cfg = load_theme_spectrum_config(theme) or {}
     asset_name = theme_cfg.get("starship", "starship-rainbow.toml")
     if not isinstance(asset_name, str):
@@ -206,21 +210,23 @@ def apply_starship_asset(
     out_active = HOME / ".config/starship.toml"
 
     if asset.is_file():
-        # Per-theme starship-rainbow.toml is hand-tuned (powerline arrows, semantic
-        # palette). Matugen's generic template uses a different layout and maps
-        # base08→yellow (pink on Catppuccin) — always ship the curated asset as-is.
-        out_matugen.write_text(asset.read_text(encoding="utf-8"), encoding="utf-8")
+        # Ship curated theme asset as-is (no source-accent patch).
+        text = asset.read_text(encoding="utf-8")
     else:
         template = HOME / ".config/matugen/templates/starship-rainbow.toml"
         if not template.is_file():
             return None
         text = template.read_text(encoding="utf-8")
+        # Fallback only: theme-default base16 (caller should pass un-accented slots)
         if base16:
             for slot, hx in base16.items():
                 for variant in ("dark", "default", "light"):
                     text = text.replace(f"{{{{base16.{slot}.{variant}.hex}}}}", hx)
-        text = patch_starship_toml(text, resolved, "matugen")
-        out_matugen.write_text(text, encoding="utf-8")
+            m = re.search(r"palette\s*=\s*['\"]([^'\"]+)['\"]", text)
+            pname = m.group(1) if m else "matugen"
+            text = patch_starship_toml(text, resolved, pname)
+
+    out_matugen.write_text(text, encoding="utf-8")
 
     if not out_active.exists() or out_active.is_symlink():
         if out_active.exists() or out_active.is_symlink():
@@ -228,3 +234,4 @@ def apply_starship_asset(
         out_active.symlink_to(out_matugen)
 
     return out_matugen
+

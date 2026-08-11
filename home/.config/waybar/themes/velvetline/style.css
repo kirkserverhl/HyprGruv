@@ -29,45 +29,46 @@ tooltip label {
   padding: 6px;
 }
 
-#workspaces {
+/* Shared group/workspaces strip — pill look for velvetline */
+#group-workspaces {
   background: @surface;
   padding: 8px 5px;
   border-radius: 16px;
   color: @on_surface;
 }
 
-#workspaces button {
-  padding: 0px 6px;
-  margin: 0px 3px;
+#group-workspaces label.module {
+  padding: 0 8px;
+  margin: 0 3px;
   border-radius: 50px;
-  color: transparent;
+  color: @on_surface_variant;
   background: @surface_bright;
+  min-width: 22px;
   transition: all 0.3s ease-in-out;
 }
 
-#workspaces button.active {
+#group-workspaces label.module.ws.active {
   background-color: @base02;
   color: @base05;
   min-width: 50px;
-  transition: all 0.3s ease-in-out;
   border-radius: 5px;
 }
 
-#workspaces button:hover {
+#group-workspaces label.module:hover {
   background-color: @on_secondary_container;
   color: @surface;
   border-radius: 16px;
   min-width: 50px;
-  background-size: 400% 400%;
 }
 
-#workspaces button.urgent {
-  background-color: @urgent;
-  color: @on_urgent;
-  border-radius: 16px;
-  min-width: 50px;
-  background-size: 400% 400%;
-  transition: all 0.3s ease-in-out;
+#group-workspaces label.module.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+  background: transparent;
+  color: transparent;
+  opacity: 0;
 }
 
 #battery,
@@ -94,6 +95,7 @@ tooltip label {
   margin: 0 12px 0 0;
 }
 
+#group-workspaces #custom-special,
 #custom-special {
   padding: 0 6px;
   margin: 0 3px;
@@ -103,11 +105,13 @@ tooltip label {
   transition: all 0.3s ease-in-out;
 }
 
+#group-workspaces #custom-special.active,
 #custom-special.active {
   background-color: @accent;
   color: @surface;
 }
 
+#group-workspaces #custom-special:hover,
 #custom-special:hover {
   background-color: @on_secondary_container;
   color: @surface;

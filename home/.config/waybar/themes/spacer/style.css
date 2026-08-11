@@ -12,3 +12,8 @@ window#waybar {
   background-color: alpha(@surface_container, 0.95);
   color: @surface_container;
 }
+
+/* --- shared custom workspace strip (group/workspaces) --- */
+#group-workspaces label.module.hidden {
+  margin: 0; padding: 0; min-width: 0; font-size: 0; opacity: 0;
+}

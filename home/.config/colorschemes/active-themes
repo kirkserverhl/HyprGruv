@@ -1,12 +1,11 @@
-# Nine curated themes (Super+W). Palette is fixed per theme — wallpapers never re-roll colors.
+# Curated themes (Super+W theme switcher). Palette is fixed per theme —
+# wallpapers never re-roll colors. Waypaper is a separate Super+W path (matugen/pywal).
 # Edit ~/.config/colorschemes/themes.registry.json for labels and wallpaper folders.
-# Refine a palette: palette-customize.sh → save to theme slot.
 gruvbox-dark
 catppuccin
 nord-darker
 everforest-dark
 noir
-e-ink
 coast-gruv
 forest-night
 warm-stone

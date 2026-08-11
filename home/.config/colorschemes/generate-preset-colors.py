@@ -33,7 +33,6 @@ ACCENT_KEY = {
     "nord-darker": "blue",
     "everforest-dark": "green",
     "noir": "grey1",
-    "e-ink": "grey0",
 }
 
 
@@ -235,12 +234,15 @@ def write_hypr(slots: dict[str, str], theme: str) -> None:
             f"$tertiary = $base09",
             f"$on_tertiary = $base00",
             f"$source_color = $base0F",
+            # Inactive windows: theme secondary (not bland grey base01)
+            f"$inactive_border = $base0E",
             f"$bg = $base00",
             f"$fg = $base05",
             f"$text = $base05",
             f"$bg1 = $base02",
         ]
     )
+
     out = HOME / ".config/hypr/colors/custom/matugen.conf"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -296,10 +298,22 @@ pcall(function() require("lualine").setup() end)
 
 
 def write_starship(slots: dict[str, str], theme: str) -> None:
-    s = {k.lower(): v for k, v in slots.items()}
+    """Install fixed per-theme starship (gruvbox/catppuccin/…).
+
+    Uses the theme's seed palette only — never the Super+W source accent —
+    so the prompt always matches the theme brand, not the border source color.
+    """
+    # Prefer canonical theme seed (no user-accent) for starship + rainbow cache
+    try:
+        seed = resolve_theme_slots(theme)
+    except Exception:
+        seed = {k.lower(): v for k, v in slots.items()}
+    # Strip any baked accent from live slots if seed load failed: still use curated file
+    s = {k.lower(): v for k, v in seed.items()}
     resolved = spectrum.resolve_spectrum(s, theme)
     spectrum.write_rainbow_cache(theme, resolved)
     spectrum.apply_starship_asset(theme, resolved, s)
+
 
 
 def write_mpv(slots: dict[str, str], theme: str) -> None:
@@ -472,24 +486,120 @@ def export_palette_json(theme: str, slots: dict[str, str], *, force: bool = Fals
 
 
 def resolve_theme_slots(theme: str) -> dict[str, str]:
-    """Load fixed theme palette (canonical CSS / palette.json)."""
+    """Load fixed theme palette (canonical CSS when present, else palette.json).
+
+    Super+W sets THEME_SWITCHER_APPLY=1 so we prefer the theme seed, not a
+    wallpaper extract. Only gruvbox has a waybar CSS seed on this install —
+    other themes ship palette.json only; fall back instead of crashing.
+    """
     use_canonical = should_use_canonical_palette(theme)
     slots = None if use_canonical else load_palette_json(theme)
     if slots is None:
-        palette_path = find_palette_css(theme)
-        palette = parse_palette(palette_path)
-        slots = build_slots(palette, theme)
-        export_palette_json(theme, slots, force=use_canonical)
+        try:
+            palette_path = find_palette_css(theme)
+            palette = parse_palette(palette_path)
+            slots = build_slots(palette, theme)
+            export_palette_json(theme, slots, force=True)
+        except FileNotFoundError:
+            slots = load_palette_json(theme)
+            if slots is None:
+                raise FileNotFoundError(
+                    f"No palette CSS or palette.json for theme '{theme}'"
+                ) from None
     return normalize_slot_keys(slots)
+
+
+
+def write_kitty(slots: dict[str, str], theme: str) -> None:
+    """Standard base16 kitty theme; primary/source (base0D) drives cursor/selection."""
+    s = {k.lower(): v for k, v in slots.items()}
+    for key, default in (
+        ("base00", "#1d2021"),
+        ("base01", "#282828"),
+        ("base02", "#3c3836"),
+        ("base03", "#665c54"),
+        ("base04", "#928374"),
+        ("base05", "#ebdbb2"),
+        ("base06", "#fbf1c7"),
+        ("base07", "#fbf1c7"),
+        ("base08", "#cc241d"),
+        ("base09", "#d65d0e"),
+        ("base0a", "#d79921"),
+        ("base0b", "#98971a"),
+        ("base0c", "#689d6a"),
+        ("base0d", "#d65d0e"),
+        ("base0e", "#b16286"),
+        ("base0f", "#d65d0e"),
+    ):
+        s.setdefault(key, default)
+
+    content = f"""# Preset theme: {theme} — static base16 (source/primary = base0D)
+cursor            {s["base0d"]}
+cursor_text_color {s["base00"]}
+
+foreground            {s["base05"]}
+background            {s["base00"]}
+selection_foreground  {s["base00"]}
+selection_background  {s["base0d"]}
+url_color             {s["base0c"]}
+
+#: black
+color0  {s["base00"]}
+color8  {s["base03"]}
+#: red
+color1  {s["base08"]}
+color9  {s["base08"]}
+#: green
+color2  {s["base0b"]}
+color10 {s["base0b"]}
+#: yellow
+color3  {s["base0a"]}
+color11 {s["base0a"]}
+#: blue
+color4  {s["base0e"]}
+color12 {s["base0e"]}
+#: magenta
+color5  {s["base09"]}
+color13 {s["base09"]}
+#: cyan
+color6  {s["base0c"]}
+color14 {s["base0c"]}
+#: white
+color7  {s["base05"]}
+color15 {s["base07"]}
+
+mark1_foreground {s["base00"]}
+mark1_background {s["base0d"]}
+mark2_foreground {s["base00"]}
+mark2_background {s["base0e"]}
+mark3_foreground {s["base00"]}
+mark3_background {s["base09"]}
+
+active_tab_foreground {s["base00"]}
+active_tab_background {s["base0d"]}
+inactive_tab_foreground {s["base04"]}
+inactive_tab_background {s["base01"]}
+
+active_border_color {s["base0d"]}
+inactive_border_color {s["base02"]}
+"""
+    out = HOME / ".config/kitty/colors/custom/matugen.conf"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(content, encoding="utf-8")
 
 
 def write_all_outputs(slots: dict[str, str], theme: str) -> None:
     write_waybar(slots, theme)
     write_hypr(slots, theme)
     write_nvim(slots, theme)
+    # Theme-fixed starship only (source color does not rewrite the prompt)
     write_starship(slots, theme)
     write_rofi(slots, theme)
     write_mpv(slots, theme)
+    write_kitty(slots, theme)
+
+
+
 
 
 # Accent swatches shown in Super+W source-color picker (theme-native, not wallpaper).

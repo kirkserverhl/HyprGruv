@@ -124,6 +124,68 @@ label.module {
   opacity: 0.7;
 }
 
+/*
+ * Shared workspace strip (group/workspaces): [1] [2] … [+] [scratchpad]
+ * All themes import this; individual themes may refine colors.
+ */
+#group-workspaces {
+  margin: 0 2px;
+}
+
+/* Number buttons + plus + scratchpad inside the group */
+#group-workspaces label.module {
+  margin: 0 2px;
+  padding: 0 8px;
+  min-width: 18px;
+  border-radius: 8px;
+  background: transparent;
+  color: @on_surface_variant;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+#group-workspaces label.module.ws.active {
+  color: @on_surface;
+  background: alpha(@accent, 0.35);
+}
+
+#group-workspaces label.module.ws.occupied {
+  color: @on_surface;
+}
+
+#group-workspaces label.module.ws.empty {
+  color: @on_surface_variant;
+  opacity: 0.85;
+}
+
+#group-workspaces label.module:hover {
+  color: @surface;
+  background: @on_secondary_container;
+}
+
+#group-workspaces label.module.workspace-add {
+  min-width: 18px;
+  font-weight: bold;
+}
+
+/* Scratchpad + notification sit after + in the same strip */
+#group-workspaces #custom-special,
+#group-workspaces #custom-notification {
+  min-width: 18px;
+}
+
+/* Hide unused workspace slots (ws-3… when empty) */
+#group-workspaces label.module.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+  opacity: 0;
+  background: transparent;
+  color: transparent;
+}
+
+
 .modules-right > widget:last-child > #group-power {
   margin-right: 0;
 }

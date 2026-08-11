@@ -57,7 +57,13 @@ inject() {
         return 1
     fi
     if ! command -v wtype >/dev/null 2>&1; then
-        echo "mac-shortcut: wtype not installed" >&2
+        # Once per session so Super+C spam doesn't flood notifications.
+        local stamp="${XDG_RUNTIME_DIR:-/tmp}/mac-shortcut-wtype-missing"
+        if [[ ! -f "$stamp" ]]; then
+            touch "$stamp"
+            hyprctl notify 3 5000 0 "Mac shortcuts need wtype — run: sudo pacman -S wtype" 2>/dev/null || true
+            echo "mac-shortcut: wtype not installed (sudo pacman -S wtype)" >&2
+        fi
         return 1
     fi
     # shellcheck disable=SC2086

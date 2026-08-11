@@ -1,11 +1,14 @@
 {
     "include": [
+        "~/.config/waybar/shared/workspaces.json",
         "~/.config/waybar/shared/clock.json"
     ],
     "layer": "top",
     "margin-top": 20,
+    // media on left; workspaces → + → scratchpad → notification next
     "modules-left": [
-        "hyprland/workspaces"
+        "custom/media",
+        "group/workspaces"
     ],
     "modules-center": [
         "group/clock",
@@ -30,13 +33,6 @@
             "󰂂",
             "󰁹"
         ]
-    },
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "persistent-workspaces": {
-            "*": 5, // 5 workspaces by default on every monitor
-            "HDMI-A-1": 3 // but only three on HDMI-A-1
-        }
     },
     "hyprland/window": {
         "format": "{}",

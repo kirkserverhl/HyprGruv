@@ -211,10 +211,16 @@ rules = [
   # Documents
   { mime = "application/{pdf,doc,rtf,vnd.*}", fg = "#689d6a" },
 
-  # Fallback
+  # Fallback — directories aqua (theme accent family)
   { url = "*", fg = "#ebdbb2" },
-  { url = "*/", fg = "#83a598" },
+  { url = "*/", fg = "#83a598", bold = true },
 ]
 
 # : }}}
+
+# Folder icons tinted like catppuccin/nord (default nerd icons stay grey otherwise)
+[icon]
+prepend_conds = [
+  { if = "dir", text = "󰉋", fg = "#83a598" },
+]
 

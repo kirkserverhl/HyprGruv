@@ -53,7 +53,6 @@ THEME_LABELS = {
     "nord-darker": "Nord",
     "everforest-dark": "Everforest",
     "noir": "Noir",
-    "e-ink": "E-Ink",
     "coast-gruv": "Coast Gruv",
     "forest-night": "Forest Night",
     "warm-stone": "Warm Stone",
@@ -139,7 +138,6 @@ THEME_FILE_PATTERNS: dict[str, tuple[str, ...]] = {
     "catppuccin": (r"catppuccin", r"mocha"),
     "everforest-dark": (r"everforest",),
     "noir": (r"noir", r"custom-noir"),
-    "e-ink": (r"e-ink", r"eink", r"e_ink"),
 }
 
 

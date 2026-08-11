@@ -64,3 +64,8 @@ window#waybar {
   padding: 0 12px;
   opacity: 1;
 }
+
+/* --- shared custom workspace strip (group/workspaces) --- */
+#group-workspaces label.module.hidden {
+  margin: 0; padding: 0; min-width: 0; font-size: 0; opacity: 0;
+}

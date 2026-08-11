@@ -38,7 +38,6 @@ YAML_MAP: dict[str, str] = {
     "nord-darker": "nord.yaml",
     "everforest-dark": "everforest-dark-hard.yaml",
     "noir": "grayscale-dark.yaml",
-    "e-ink": "grayscale-dark.yaml",
     "coast-gruv": "gruvbox-dark-hard.yaml",
     "forest-night": "everforest-dark-hard.yaml",
     "warm-stone": "gruvbox-dark-medium.yaml",
@@ -142,22 +141,6 @@ SPECTRUM_SLOTS: dict[str, dict[str, str]] = {
         "color_red": "base08",
         "color_purple": "base09",
     },
-    "e-ink": {
-        "color_fg0": "base05",
-        "color_bg1": "base02",
-        "color_bg3": "base07",
-        "color_orange": "base0f",
-        "color_yellow": "base0a",
-        "color_aqua": "base0c",
-        "color_blue": "base0e",
-        "color_on_orange": "base05",
-        "color_on_yellow": "base05",
-        "color_on_aqua": "base05",
-        "color_on_blue": "base05",
-        "color_green": "base0b",
-        "color_red": "base08",
-        "color_purple": "base09",
-    },
 }
 
 SPECTRUM_OVERRIDES: dict[str, dict[str, str]] = {
@@ -177,7 +160,6 @@ SEGMENT_FG: dict[str, dict[str, str]] = {
     "everforest-dark": {"color_bg3": "#83c092"},
     "forest-night": {"color_bg3": "#83c092"},
     "noir": {"color_bg3": "#b9bdc2"},
-    "e-ink": {"color_bg3": "#bcbcbc"},
     "coast-gruv": {"color_bg3": "#83a598"},
     "warm-stone": {"color_bg3": "#83a598"},
 }
@@ -230,7 +212,7 @@ def sync_palette_from_yaml(theme: str) -> bool:
         print(f"  skip yaml sync: no base16 in {yaml_path}", file=sys.stderr)
         return False
 
-    # Keep existing theme-tuned palette when present (noir, e-ink, catppuccin css exports).
+    # Keep existing theme-tuned palette when present (noir, catppuccin css exports).
     palette_path = COLORSCHEMES / theme / "palette.json"
     if palette_path.is_file():
         data = json.loads(palette_path.read_text(encoding="utf-8"))

@@ -113,3 +113,8 @@ window#waybar {
 window#waybar.empty #window {
   background-color: transparent;
 }
+
+/* --- shared custom workspace strip (group/workspaces) --- */
+#group-workspaces label.module.hidden {
+  margin: 0; padding: 0; min-width: 0; font-size: 0; opacity: 0;
+}

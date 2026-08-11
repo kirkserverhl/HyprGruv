@@ -33,12 +33,6 @@
       "status": "ready"
     },
     {
-      "id": "e-ink",
-      "label": "E-Ink",
-      "wallpaper_folder": "e-ink",
-      "status": "ready"
-    },
-    {
       "id": "coast-gruv",
       "label": "Coast Gruv",
       "wallpaper_folder": "gruvbox-dark",

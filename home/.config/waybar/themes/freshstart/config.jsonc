@@ -15,22 +15,24 @@
   "reload_style_on_change": true,
 
   "include": [
+    "~/.config/waybar/shared/workspaces.json",
     "~/.config/waybar/shared/layout.jsonc",
     "~/.config/waybar/themes/freshstart/modules.json",
   ],
 
+  // media on left; workspaces → + → scratchpad → notification in center
   "modules-left": [
     "group/apps",
     "custom/hyprgruv-settings",
     "group/hyprgruv-drawer",
     "pulseaudio",
     "bluetooth",
-    "group/notification",
+    "custom/media",
   ],
 
   "group/center": {
     "orientation": "horizontal",
-    "modules": ["hyprland/workspaces", "custom/special"],
+    "modules": ["group/workspaces"],
   },
 
   "modules-center": ["group/center"],
@@ -44,13 +46,6 @@
       "transition-left-to-right": true,
     },
     "modules": ["custom/waybarthemes", "custom/wallpaper"],
-  },
-
-  "group/notification": {
-    "format": " ",
-    "orientation": "horizontal",
-    "tooltip-format": "Media & Notifications",
-    "modules": ["custom/media", "custom/notification"],
   },
 
   "modules-right": [
@@ -107,11 +102,6 @@
   "custom/media": {
     "format": "{}",
     "hide-empty-text": true,
-  },
-
-  "custom/notification": {
-    "format": "{}",
-    "tooltip": true,
   },
 
   "pulseaudio": {

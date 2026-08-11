@@ -37,10 +37,9 @@
     "group/sound",
     "custom/media",
   ],
+  // workspaces → + → scratchpad → notification (group/workspaces)
   "modules-center": [
-    "hyprland/workspaces",
-    "custom/special",
-    "custom/notification",
+    "group/workspaces",
   ],
   "modules-right": [
     "group/clock",

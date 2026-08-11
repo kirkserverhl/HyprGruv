@@ -11,7 +11,6 @@ resolve_theme_family() {
     gruvbox-dark | coast-gruv | warm-stone) printf '%s\n' "gruvbox-dark" ;;
     gruvbox-light) printf '%s\n' "gruvbox-light" ;;
     noir) printf '%s\n' "noir" ;;
-    e-ink) printf '%s\n' "e-ink" ;;
     "")
         printf '%s\n' "gruvbox-dark"
         ;;
@@ -228,7 +227,7 @@ resolve_gtk_theme() {
     everforest-dark)
         pick_existing_gtk_theme "$slot_name" Everforest-Dark Gruvbox-Dark adw-gtk3-dark
         ;;
-    noir | e-ink)
+    noir)
         pick_existing_gtk_theme "$slot_name" Graphite-Dark-compact Gruvbox-Dark adw-gtk3-dark
         ;;
     gruvbox-dark)

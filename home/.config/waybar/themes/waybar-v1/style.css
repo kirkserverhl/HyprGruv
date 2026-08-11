@@ -83,3 +83,8 @@ tooltip label {
 #battery {
 	padding: 0 8px;
 }
+
+/* --- shared custom workspace strip (group/workspaces) --- */
+#group-workspaces label.module.hidden {
+  margin: 0; padding: 0; min-width: 0; font-size: 0; opacity: 0;
+}

@@ -153,20 +153,29 @@ hl.bind(mainMod .. " + CTRL + Q",     hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogou
 hl.bind("CTRL + ALT + DELETE",       hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 
 -- Windows & workspaces
-hl.bind(mainMod .. " + S",            hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh"))
-hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special:scratchpad" }))
+hl.bind(mainMod .. " + S",            hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh toggle")) -- #window Scratchpad toggle
+hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special:scratchpad" })) -- #window Move to scratchpad
 hl.bind(mainMod .. " + F",            hl.dsp.window.fullscreen()) -- #window Fullscreen (was CTRL+F — that stole Find)
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G",            toggle_gaps)
-hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Switch theme & wallpaper
-hl.bind(mainMod .. " + Tab",          hl.dsp.focus({ workspace = "m+1" }))
-hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" }))
-hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" }))
-hl.bind(mainMod .. " + SHIFT + E",    hl.dsp.window.move({ workspace = "empty" }))
+hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
+-- Super+Tab: cycle only occupied workspaces (skip empty / persistent blanks)
+-- Super+Shift+Tab: open next free workspace (new empty desktop)
+-- Note: Hyprland's r+1 includes empty slots on the monitor — not what we want for Tab.
+hl.bind(mainMod .. " + Tab",          hl.dsp.exec_cmd(SCRIPTS .. "/workspace-cycle.sh next")) -- #window Next occupied workspace
+hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "emptyn" })) -- #window New/empty workspace
+-- Also: Super+Ctrl+Space = first empty; Super+Shift+E = move window to empty
+hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" })) -- #window First empty workspace
+hl.bind(mainMod .. " + SHIFT + E",    hl.dsp.window.move({ workspace = "empty" })) -- #window Move to empty workspace
+-- Equal/minus: same occupied cycle as Tab (handy on laptop)
+hl.bind(mainMod .. " + equal",        hl.dsp.exec_cmd(SCRIPTS .. "/workspace-cycle.sh next")) -- #window Next occupied workspace
+hl.bind(mainMod .. " + minus",        hl.dsp.exec_cmd(SCRIPTS .. "/workspace-cycle.sh prev")) -- #window Prev occupied workspace
 
 for i = 1, 9 do
-    hl.bind(mainMod .. " + " .. i,         hl.dsp.focus({ workspace = i }))
-    hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
+    -- Super+N: focus (creates WS if needed). Empty non-persistent WS drop when left empty.
+    hl.bind(mainMod .. " + " .. i,         hl.dsp.focus({ workspace = i })) -- #window Workspace N
+    -- Super+Shift+N: move window there (also creates if needed)
+    hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i })) -- #window Move to workspace N
     hl.bind(mainMod .. " + CTRL + " .. i,  hl.dsp.exec_cmd(SCRIPTS .. "/moveTo.sh " .. i))
 end
 

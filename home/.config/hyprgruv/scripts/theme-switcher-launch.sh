@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Super+W — theme switcher (theme grid → wallpaper picker, or Waypaper from footer).
+# Super+W — theme grid (optional Waypaper tile) → themed wallpapers → source → apply.
 set -euo pipefail
 
 killall -9 rofi 2>/dev/null || true

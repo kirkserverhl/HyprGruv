@@ -124,9 +124,9 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 | Entry point | Behavior |
 |-------------|----------|
-| **Super+W** (theme rofi) | Theme → wallpaper → **theme palette accent splotches** (gruvbox green/orange/…, not wallpaper extract). Choice sets primary/source for borders, waybar, starship. |
-| **Waypaper GUI** (free wallpaper) | Optional palette / source-color chooser (backup Material You path). |
-| **Waypaper** in theme folder / `themed-wallpapers/` | Static preset for current theme (no chooser). |
+| **Super+W** | Pick a **theme** → sorted **themed wallpapers** → **source color** → static apply. Optional grid tile **Waypaper · all / matugen** only if you want free wallpapers or matugen/pywal. |
+| **Waypaper** (tile or standalone) | All wallpapers + matugen/pywal (`set_wallpaper` posthook). Not used for normal theme switches. |
+| **themed-wallpapers / theme folder** | Static preset for the Super+W theme (no matugen re-extract). |
 | Live palette files already present | Follow system until next explicit theme apply. |
 | Nothing chosen yet | **gruvbox-dark**. |
 

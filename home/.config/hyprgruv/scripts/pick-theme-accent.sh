@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# pick-theme-accent.sh — Super+W: pick primary from theme palette splotches
+# pick-theme-accent.sh — Super+W: source/primary color from theme palette
 #
-# Fast: only reads theme base16 accents + rofi. Does NOT apply the full theme
-# first (that was applying default orange and blocking this UI for minutes).
+# Only choice after theme pick. Fast: list accents + rofi. Never applies themes.
+# Magick swatches best-effort; text fallback if ImageMagick missing/busy.
 #
 # Usage:
-#   pick-theme-accent.sh <theme-name> [wallpaper]
-# Prints chosen #hex to stdout; exit 1 if cancelled.
-# Writes colorschemes/<theme>/user-accent for the subsequent apply-theme.
+#   pick-theme-accent.sh <theme-name>
+# Prints chosen #hex; exit 1 if cancelled (caller uses theme default).
+# Writes user-accent + source-color for apply-theme standard assets.
 set -euo pipefail
 
 THEME="${1:-}"
@@ -17,7 +17,7 @@ ROFI_THEME="${HOME}/.config/rofi/theme-accent-grid.rasi"
 [[ -f "$ROFI_THEME" ]] || ROFI_THEME="${HOME}/.config/rofi/color-grid.rasi"
 
 if [[ -z "$THEME" || ! -f "$GENERATOR" ]]; then
-    echo "Usage: pick-theme-accent.sh <theme-name> [wallpaper]" >&2
+    echo "Usage: pick-theme-accent.sh <theme-name>" >&2
     exit 1
 fi
 
@@ -26,7 +26,7 @@ if ! command -v rofi >/dev/null 2>&1; then
     exit 1
 fi
 
-# Unset so list-accents never does a heavy THEME_SWITCHER rebuild
+# Never inherit a heavy rebuild path from the parent shell
 unset THEME_SWITCHER_APPLY
 
 mapfile -t LINES < <(python3 "$GENERATOR" --list-accents "$THEME" 2>/dev/null | jq -c '.[]' 2>/dev/null || true)
@@ -35,8 +35,13 @@ if ((${#LINES[@]} == 0)); then
     exit 1
 fi
 
-SWATCH_DIR=$(mktemp -d /tmp/theme-accent-XXXXXX)
-trap 'rm -rf "$SWATCH_DIR" 2>/dev/null || true' EXIT
+SWATCH_DIR=""
+USE_ICONS=0
+if command -v magick >/dev/null 2>&1 || command -v convert >/dev/null 2>&1; then
+    SWATCH_DIR=$(mktemp -d /tmp/theme-accent-XXXXXX)
+    trap 'rm -rf "$SWATCH_DIR" 2>/dev/null || true' EXIT
+    USE_ICONS=1
+fi
 
 ROFI_INPUT=""
 declare -a HEXES=()
@@ -46,23 +51,31 @@ for line in "${LINES[@]}"; do
     hex=$(jq -r '.hex' <<<"$line")
     label=$(jq -r '.label' <<<"$line")
     [[ -n "$hex" && "$hex" != "null" ]] || continue
-    swatch="$SWATCH_DIR/$(printf '%02d' "$i")-${label}.png"
-    if command -v magick >/dev/null 2>&1; then
-        # Solid splotch only — labels shown as rofi text (faster than annotate)
-        magick -size 120x72 "xc:${hex}" -alpha off png32:"$swatch" 2>/dev/null || true
-    elif command -v convert >/dev/null 2>&1; then
-        convert -size 120x72 "xc:${hex}" "$swatch" 2>/dev/null || true
-    fi
-    [[ -f "$swatch" ]] || continue
     HEXES+=("$hex")
     LABELS+=("$label")
-    ROFI_INPUT+="${label}\0icon\x1f${swatch}\n"
+
+    if [[ "$USE_ICONS" -eq 1 ]]; then
+        swatch="$SWATCH_DIR/$(printf '%02d' "$i")-${label}.png"
+        # Timeout so a stuck magick never blocks the accent UI
+        if command -v magick >/dev/null 2>&1; then
+            timeout 1 magick -size 120x72 "xc:${hex}" -alpha off png32:"$swatch" 2>/dev/null || true
+        else
+            timeout 1 convert -size 120x72 "xc:${hex}" "$swatch" 2>/dev/null || true
+        fi
+        if [[ -f "$swatch" ]]; then
+            ROFI_INPUT+="${label}\0icon\x1f${swatch}\n"
+        else
+            ROFI_INPUT+="${label}  ${hex}\n"
+        fi
+    else
+        ROFI_INPUT+="${label}  ${hex}\n"
+    fi
     i=$((i + 1))
 done
 
 ((${#HEXES[@]})) || exit 1
 
-# Default selection = Orange / primary slot when present (index of Orange label)
+# Default row = Orange when present (gruvbox primary), else first
 default_row=0
 for i in "${!LABELS[@]}"; do
     if [[ "${LABELS[$i]}" == "Orange" ]]; then
@@ -71,18 +84,28 @@ for i in "${!LABELS[@]}"; do
     fi
 done
 
-chosen=$(printf '%b' "$ROFI_INPUT" | rofi -dmenu -i -show-icons \
-    -p "Primary — $THEME" \
-    -mesg "Source color for borders, waybar, starship · Esc = theme default" \
-    -theme "$ROFI_THEME" \
-    -selected-row "$default_row" \
-    -no-custom 2>/dev/null || true)
+rofi_args=(
+    -dmenu -i
+    -p "Source color — $THEME"
+    -mesg "Only choice after theme · Esc = theme default · then standard apply"
+    -theme "$ROFI_THEME"
+    -selected-row "$default_row"
+    -no-custom
+)
+# Only request icons when we actually produced swatches
+if [[ "$USE_ICONS" -eq 1 ]] && compgen -G "$SWATCH_DIR"/*.png >/dev/null 2>&1; then
+    rofi_args+=(-show-icons)
+fi
+
+# Clear any leftover THEME_SWITCHER so rofi theme CSS is not blocked
+chosen=$(printf '%b' "$ROFI_INPUT" | rofi "${rofi_args[@]}" 2>/dev/null || true)
 
 # Esc / cancel → empty (caller uses theme default)
 if [[ -z "${chosen:-}" ]]; then
     exit 1
 fi
 
+# Match label (with or without trailing "  #hex")
 PICK_HEX=""
 for i in "${!LABELS[@]}"; do
     if [[ "$chosen" == "${LABELS[$i]}" ]] || [[ "$chosen" == "${LABELS[$i]}"* ]]; then
@@ -91,12 +114,9 @@ for i in "${!LABELS[@]}"; do
     fi
 done
 if [[ -z "$PICK_HEX" ]]; then
-    for i in "${!LABELS[@]}"; do
-        if [[ "$chosen" == *"$(printf '%02d' "$i")-"* ]]; then
-            PICK_HEX="${HEXES[$i]}"
-            break
-        fi
-    done
+    # bare hex paste / fallback
+    cand=$(grep -oE '#[0-9a-fA-F]{6}' <<<"$chosen" | head -1 || true)
+    [[ -n "$cand" ]] && PICK_HEX="${cand,,}"
 fi
 [[ -n "$PICK_HEX" ]] || exit 1
 

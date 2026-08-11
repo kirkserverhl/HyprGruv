@@ -361,10 +361,17 @@ class ThemePicker(Gtk.Window):
 
 
 def build_theme_entries() -> list[ThemeEntry]:
+    """Theme tiles + optional Waypaper (matugen / all wallpapers).
+
+    Picking a theme uses the themed sorted wallpaper grid — not Waypaper.
+    Waypaper is only for free matugen/pywal or browsing all wallpapers.
+    """
     entries: list[ThemeEntry] = []
     for theme_id in load_active_themes():
         theme_dir = COLORSCHEMES / theme_id
         if not theme_dir.is_dir():
+            continue
+        if theme_id in ("e-ink", "eink"):
             continue
         preview_path = None
         try:
@@ -379,14 +386,18 @@ def build_theme_entries() -> list[ThemeEntry]:
         labels = load_registry_labels()
         label = labels.get(theme_id, theme_id.replace("-", " ").title())
         entries.append(ThemeEntry(theme_id=theme_id, label=label, preview_path=preview_path))
+
+    # Optional path — matugen/pywal or all wallpapers (not required for themes)
     entries.append(
         ThemeEntry(
             theme_id=WAYPAPER_MODE,
-            label="Waypaper",
+            label="Waypaper · all / matugen",
             preview_path=random_waypaper_preview(),
         ),
     )
     return entries
+
+
 
 
 def main() -> int:

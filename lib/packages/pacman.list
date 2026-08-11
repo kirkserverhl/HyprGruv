@@ -49,6 +49,8 @@ hyprtoolkit
 grim
 slurp
 wl-clipboard
+# Virtual keyboard for Mac Cmd bridge (Super+C/V/X/Z → Ctrl+* via mac-shortcut.sh)
+wtype
 brightnessctl
 power-profiles-daemon
 upower

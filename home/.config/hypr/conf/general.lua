@@ -79,7 +79,7 @@ hl.config({
 -- above no longer bakes in colors at module parse time.
 local function apply_borders()
 	local colors = require("colors.init").load()
-	-- Solid active border from source_color (gruvbox preset: orange #d65d0e).
+	-- Active = Super+W source/primary. Inactive = theme secondary (base0E), not grey.
 	hl.config({
 		general = {
 			col = {
@@ -87,15 +87,16 @@ local function apply_borders()
 					or colors.primary
 					or "rgba(d65d0eee)",
 				inactive_border = colors.inactive_border
-					or colors.base01
-					or colors.surface_container_low
-					or colors.outline_variant
-					or colors.outline
-					or "rgba(595959aa)",
+					or colors.secondary
+					or colors.base0E
+					or colors.base0C
+					or colors.tertiary
+					or "rgba(458588aa)",
 			},
 		},
 	})
 end
+
 
 hl.on("hyprland.start", apply_borders)
 hl.on("config.reloaded", apply_borders)

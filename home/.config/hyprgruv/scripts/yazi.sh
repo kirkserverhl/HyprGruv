@@ -3,11 +3,18 @@
 set -euo pipefail
 
 CLASS="yazi"
+SCRIPTS="${HOME}/.config/hyprgruv/scripts"
+
+# Sync flavor + folder/status colors from Super+W theme before launch
+# (Yazi only reads theme.toml at startup — no live reload.)
+if [[ -x "$SCRIPTS/reload-yazi-theme.sh" ]]; then
+  bash "$SCRIPTS/reload-yazi-theme.sh" --switch 2>/dev/null || true
+fi
 
 # Prefix to scrub noisy GTK env vars for this launch only
 CLEAN_ENV=(env -u GDK_DEBUG -u GDK_DISABLE GDK_DEBUG= GDK_DISABLE=)
 
-# Pick a terminal and run nmtui
+# Pick a terminal and run yazi
 if command -v kitty >/dev/null 2>&1; then
   exec "${CLEAN_ENV[@]}" kitty --class "$CLASS" -e yazi
 elif command -v alacritty >/dev/null 2>&1; then
