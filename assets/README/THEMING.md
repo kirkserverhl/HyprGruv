@@ -120,11 +120,15 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 ### Default vs chosen (system) theme
 
-| Situation | What runs |
-|-----------|-----------|
-| Live palette files already present | **Follow system** — leave them (matugen / last apply). |
-| No live files; `~/.config/colorschemes/.current-theme` set | **Follow chosen theme** — re-apply that preset. |
-| No live files; nothing chosen | **Default** — apply **gruvbox-dark** and write `.current-theme`. |
+**Default for all machines until the user picks something: `gruvbox-dark`.**
+
+| Entry point | Behavior |
+|-------------|----------|
+| **Super+W** (theme rofi) | Standard theme slots only → static palette + matching wallpapers. **No** matugen source-color popup. |
+| **Waypaper GUI** (free wallpaper) | Optional palette / source-color chooser (backup Material You path). |
+| **Waypaper** in theme folder / `themed-wallpapers/` | Static preset for current theme (no chooser). |
+| Live palette files already present | Follow system until next explicit theme apply. |
+| Nothing chosen yet | **gruvbox-dark**. |
 
 Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruvbox`.
 
