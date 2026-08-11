@@ -3,6 +3,11 @@ assets/install_state.json
 assets/completed_steps.txt
 assets/user_choices.txt
 
+# Wallpaper library lives in a real ~/Pictures/Wallpapers (not the git tree).
+# Seed image: assets/wallpapers/default.png — never commit bulk wallpapers here.
+home/Pictures/Wallpapers/**
+!home/Pictures/Wallpapers/.gitkeep
+
 # Install logs (local only)
 assets/logs/
 

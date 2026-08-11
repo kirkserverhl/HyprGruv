@@ -40,6 +40,9 @@ THEME_SRC="$ASSET_DIR/$THEME_NAME"
 CONF_SRC="$ASSET_DIR/sddm.conf.d"
 CONF_DEST="$CONF_DIR/50-hyprgruv.conf"
 UPDATE_SDDM="$HOME/.config/hyprgruv/scripts/update-sddm-wallpaper.sh"
+GREETER_SRC="$ASSET_DIR/hyprland-greeter.conf"
+GREETER_DEST_DIR="/usr/share/hyprgruv/sddm"
+GREETER_DEST="$GREETER_DEST_DIR/hyprland.conf"
 
 display_header "SDDM Theme"
 
@@ -178,6 +181,15 @@ fi
 log_status "Installing SDDM config → $CONF_DEST"
 sudo install -m 0644 "$CONF_SRC/default.conf" "$CONF_DEST"
 
+# Minimal Hyprland config for Wayland greeter (path referenced by default.conf).
+if [[ -f "$GREETER_SRC" ]]; then
+    log_status "Installing SDDM greeter Hyprland config → $GREETER_DEST"
+    sudo install -d -m 0755 "$GREETER_DEST_DIR"
+    sudo install -m 0644 "$GREETER_SRC" "$GREETER_DEST"
+else
+    log_warning "Greeter config missing: $GREETER_SRC"
+fi
+
 # ------------------------------------------------------------
 # Enable SDDM + seed wallpaper from waypaper
 # ------------------------------------------------------------
@@ -185,12 +197,46 @@ log_status "Ensuring sddm.service is enabled and graphical.target is default"
 sudo systemctl reenable sddm.service >/dev/null 2>&1 || true
 sudo systemctl set-default graphical.target >/dev/null 2>&1 || true
 
-if [[ -x "$UPDATE_SDDM" ]]; then
-    log_status "Syncing SDDM wallpaper from waypaper…"
-    if runuser -u "$DESKTOP_USER" -- "$UPDATE_SDDM"; then
+sync_sddm_wallpaper() {
+    local script="$1"
+    local user_home
+    user_home="$(getent passwd "$DESKTOP_USER" | cut -d: -f6 2>/dev/null || echo "$HOME")"
+
+    # Prefer running as the desktop user with a correct HOME (stow puts scripts under ~/.config).
+    # Never fail the whole SDDM install solely because notify-send has no display.
+    if [[ "$(id -un)" == "$DESKTOP_USER" ]]; then
+        env HOME="$user_home" USER="$DESKTOP_USER" LOGNAME="$DESKTOP_USER" \
+            bash "$script" && return 0
+        return 1
+    fi
+
+    if command -v runuser >/dev/null 2>&1; then
+        runuser -u "$DESKTOP_USER" -- env HOME="$user_home" USER="$DESKTOP_USER" LOGNAME="$DESKTOP_USER" \
+            bash "$script" && return 0
+        return 1
+    fi
+
+    if command -v sudo >/dev/null 2>&1; then
+        sudo -u "$DESKTOP_USER" HOME="$user_home" bash "$script" && return 0
+        return 1
+    fi
+
+    bash "$script"
+}
+
+if [[ -x "$UPDATE_SDDM" || -f "$UPDATE_SDDM" ]]; then
+    log_status "Syncing SDDM wallpaper / theme colors from waypaper…"
+    if sync_sddm_wallpaper "$UPDATE_SDDM"; then
         log_success "SDDM wallpaper synced"
     else
-        log_warning "SDDM wallpaper sync failed — run manually: $UPDATE_SDDM"
+        log_warning "SDDM wallpaper sync failed (attempt 1) — retrying once…"
+        sleep 1
+        if sync_sddm_wallpaper "$UPDATE_SDDM"; then
+            log_success "SDDM wallpaper synced on retry"
+        else
+            log_warning "SDDM wallpaper sync failed — run after login: $UPDATE_SDDM"
+            log_warning "Theme is installed; personalization applies once wallpaper sync succeeds."
+        fi
     fi
 else
     log_warning "update-sddm-wallpaper.sh not found at $UPDATE_SDDM"
@@ -202,6 +248,7 @@ echo
 echo "SDDM theme installation complete."
 echo "  Theme:     $THEME_DEST"
 echo "  Config:    $CONF_DEST"
+echo "  Greeter:   $GREETER_DEST"
 echo "  Wallpaper: $THEME_DEST/sddm-wallpaper.png  (updated by waypaper)"
 echo
 echo "Test greeter:  sudo sddm --test-mode"

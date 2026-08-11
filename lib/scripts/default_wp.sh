@@ -73,18 +73,51 @@ ensure_matugen
 
 # ------------------------------------------------------------
 # Resolve canonical opening wallpaper
+# Wallpaper library must be a real ~/Pictures/Wallpapers (not a stow
+# symlink into ~/.hyprgruv — downloads would pollute the git tree).
 # ------------------------------------------------------------
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
+ASSET_DEFAULT="$HYPR_DIR/assets/wallpapers/default.png"
 STOWED_DEFAULT="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
 SETTINGS_DEFAULT="$HYPR_DIR/home/.config/settings/default_wp.png"
 SDDM_DEFAULT="$HYPR_DIR/assets/sddm/sugar-candy/sddm-wallpaper.png"
 
-mkdir -p "$WALLPAPER_DIR"
+_hyprgruv_ensure_real_wallpaper_dir() {
+  if [[ -L "$WALLPAPER_DIR" ]]; then
+    local link_target tmp
+    link_target="$(readlink -f "$WALLPAPER_DIR" 2>/dev/null || true)"
+    if [[ -n "$link_target" && "$link_target" == "$HYPR_DIR"* ]]; then
+      log_status "Converting stowed wallpaper symlink → real directory"
+      tmp="$(mktemp -d "${TMPDIR:-/tmp}/hyprgruv-wallpapers.XXXXXX")"
+      if [[ -d "$link_target" ]]; then
+        find "$link_target" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
+          -exec cp -a {} "$tmp/" \; 2>/dev/null || true
+      fi
+      rm -f "$WALLPAPER_DIR"
+      mkdir -p "$WALLPAPER_DIR"
+      if compgen -G "$tmp/*" >/dev/null 2>&1; then
+        cp -a "$tmp"/. "$WALLPAPER_DIR"/
+      fi
+      rm -rf "$tmp"
+    else
+      tmp="$(mktemp -d "${TMPDIR:-/tmp}/hyprgruv-wallpapers.XXXXXX")"
+      [[ -d "$WALLPAPER_DIR" ]] && cp -a "$WALLPAPER_DIR"/. "$tmp"/ 2>/dev/null || true
+      rm -f "$WALLPAPER_DIR"
+      mkdir -p "$WALLPAPER_DIR"
+      [[ -d "$tmp" ]] && cp -a "$tmp"/. "$WALLPAPER_DIR"/ 2>/dev/null || true
+      rm -rf "$tmp"
+    fi
+  else
+    mkdir -p "$WALLPAPER_DIR"
+  fi
+}
+_hyprgruv_ensure_real_wallpaper_dir
 
 _hyprgruv_resolve_opening_wallpaper() {
   local candidate
   for candidate in \
     "$WALLPAPER_DIR/default.png" \
+    "$ASSET_DEFAULT" \
     "$STOWED_DEFAULT" \
     "$SETTINGS_DEFAULT" \
     "$SDDM_DEFAULT" \
@@ -93,7 +126,7 @@ _hyprgruv_resolve_opening_wallpaper() {
     echo "$candidate"
     return 0
   done
-  find "$WALLPAPER_DIR" -maxdepth 1 -type f \
+  find -L "$WALLPAPER_DIR" -maxdepth 1 -type f \
     \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
     2>/dev/null | head -1
 }
