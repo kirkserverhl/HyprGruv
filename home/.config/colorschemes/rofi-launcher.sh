@@ -42,12 +42,12 @@ fi
 SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
 
 if [[ -n "$wallpaper" ]]; then
+    # Static theme slots only — apply-theme.sh writes the preset palette (no matugen popup).
     "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1
-    # Post-command hook (same as waypaper): refresh default_wp.png, library default.png,
-    # hyprlock symlink, and SDDM sugar-candy wallpaper/theme.conf.
+    # Refresh default_wp / hyprlock / SDDM wallpaper only. Do NOT re-run palette chooser:
+    # SET_WALLPAPER_FORCE_PALETTE used to skip preset path and open the matugen UI (noisy).
     if [[ -x "$SET_WALLPAPER" ]]; then
-        # SDDM/default paths update first inside set_wallpaper; palette can follow in bg.
-        SET_WALLPAPER_FORCE_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 &
+        SET_WALLPAPER_SKIP_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 &
     else
         notify-send "Theme switcher" "set_wallpaper.sh missing — SDDM default not updated" -u critical 2>/dev/null || true
     fi

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # wallpaper-preset-scope.sh — when a wallpaper should use static preset colors
 #
-# Preset themes (gruvbox-dark, etc.) keep a fixed palette, but waypaper often
-# picks from ~/Wallpapers outside the theme folder. Those picks should still
-# show the matugen source-color chooser (rofi / palette.sh), not skip it.
+# Preset themes (gruvbox-dark, etc.) keep a fixed palette.
+# In-scope wallpapers (theme folder / themed-wallpapers) → static preset, no chooser.
+# Free wallpapers outside that scope → waypaper may open palette chooser (backup).
 
 wallpaper_in_preset_scope() {
     local wp="${1:-}"

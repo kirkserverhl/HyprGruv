@@ -384,6 +384,13 @@ dev_bind("XF86Explorer",          hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),  
 dev_bind("XF86Search",            hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_LAPTOP)
 dev_bind("XF86Favorites",         hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"),           KB_LAPTOP)
 
+-- Keyboard backlight (IdeaPad: platform::kbd_backlight, levels 0–2)
+dev_bind("XF86KbdBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set +1"), KB_LAPTOP) -- #laptop KB light up
+dev_bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set 1-"), KB_LAPTOP) -- #laptop KB light down
+-- Fallback if firmware sends no XF86 keys: Super+F8/F9 cycle keyboard light (laptop only)
+dev_bind(mainMod .. " + F8", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set 1-"), KB_LAPTOP) -- #laptop KB light down
+dev_bind(mainMod .. " + F9", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_backlight set +1"), KB_LAPTOP) -- #laptop KB light up
+
 -- ── HP wireless (Chicony kit) ────────────────────────────────────────────────
 -- F1 mute · F2 vol- · F3 vol+ · F4 prev · F5 pause · F6 next
 -- F7 bright- · F8 bright+ · F9 search · F10 Mission Control · F11 audio · F12 settings

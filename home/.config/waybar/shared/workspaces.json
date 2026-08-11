@@ -10,7 +10,7 @@
     "on-scroll-down": "hyprctl dispatch workspace e+1",
     "on-scroll-up": "hyprctl dispatch workspace e-1",
     "all-outputs": false,
-    "persistent-only": true,
+    "persistent-only": false,
     "show-special": false,
     "ignore-workspaces": ["special:.*"],
     "persistent-workspaces": {

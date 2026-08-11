@@ -32,8 +32,12 @@ fi
 
 CURRENT_THEME_FILE="$HOME/.config/colorschemes/.current-theme"
 echo "$THEME" >"$CURRENT_THEME_FILE"
+# Super+W uses fixed theme slots — drop any "saved active config" that would
+# block preset apply or re-open matugen tooling.
+rm -f "$HOME/.config/colorschemes/.active-config" 2>/dev/null || true
 mkdir -p "$HOME/.cache/matugen"
 echo "preset:$THEME" >"$HOME/.cache/matugen/yazi-icon-mode"
+echo "saved" >"$HOME/.cache/matugen/color-mode"
 
 
 echo -e "${GREEN}Applying theme: $THEME${NC}\n"

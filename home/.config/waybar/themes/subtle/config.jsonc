@@ -85,16 +85,15 @@
   },
 
   // Rest of the modules
+  // Numbers for each workspace; click to select. Extra desktops appear when created.
+  // Persistent baseline: 2 per monitor (desktop multi-monitor map + laptop "*": [1,2]).
   "hyprland/workspaces": {
-    "format": "{icon}",
-    "format-icons": {
-      "active": "",
-      "default": "",
-      "empty": ""
-    },
+    "format": "{id}",
     "on-click": "activate",
+    "on-scroll-down": "hyprctl dispatch workspace e+1",
+    "on-scroll-up": "hyprctl dispatch workspace e-1",
     "all-outputs": false,
-    "persistent-only": true,
+    "persistent-only": false,
     "show-special": false,
     "ignore-workspaces": ["special:.*"],
     "persistent-workspaces": {

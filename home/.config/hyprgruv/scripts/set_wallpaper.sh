@@ -189,26 +189,30 @@ else
 fi
 
 # ------------------- Color Generation -------------------
-echo ":: Running matugen via palette chooser (interactive)..."
-# palette.sh is the same script bound to Ctrl+P in Hyprland. Waypaper's post_command
-# and the theme-switcher wallpaper picker both land here after a wallpaper is chosen.
+# Paths:
+#   Super+W theme switcher → SET_WALLPAPER_SKIP_PALETTE=1 (static preset already applied)
+#   Waypaper + theme-folder / themed-wallpapers → static preset (no chooser)
+#   Waypaper free wallpaper / Ctrl+P → palette chooser (backup / Material You)
 
 # shellcheck source=wallpaper-preset-scope.sh
 source "$HOME/.config/hyprgruv/scripts/wallpaper-preset-scope.sh" 2>/dev/null || true
 
-if [[ -f "$HOME/.config/colorschemes/.active-config" ]]; then
+if [[ "${SET_WALLPAPER_SKIP_PALETTE:-0}" == "1" ]]; then
+    echo ":: Theme switcher — wallpaper/SDDM only (preset colors already applied)"
+elif [[ -f "$HOME/.config/colorschemes/.active-config" ]]; then
     CONFIG_NAME=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.active-config")
     echo ":: Saved config ($CONFIG_NAME) active — wallpaper only, colors unchanged"
 elif [[ "${SET_WALLPAPER_FORCE_PALETTE:-0}" != "1" ]] && declare -F wallpaper_in_preset_scope >/dev/null 2>&1 && wallpaper_in_preset_scope "$WALLPAPER"; then
-    CURRENT_THEME=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.current-theme")
-    echo ":: Preset theme ($CURRENT_THEME) — applying saved palette (no re-extract)"
+    CURRENT_THEME=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.current-theme" 2>/dev/null || echo "gruvbox-dark")
+    [[ -z "$CURRENT_THEME" ]] && CURRENT_THEME="gruvbox-dark"
+    echo ":: Preset theme ($CURRENT_THEME) — static palette only (no matugen popup)"
     bash "$HOME/.config/colorschemes/apply-preset-assets.sh" "$CURRENT_THEME" "$WALLPAPER" 2>/dev/null || true
 elif command -v matugen >/dev/null 2>&1; then
-    # Release lock before the floating kitty + gum UI so rapid GUI picks are not dropped.
+    # Free wallpaper / waypaper outside theme scope — optional source-color chooser
     release_lock
     trap - EXIT
 
-    echo ":: Launching palette chooser..."
+    echo ":: Launching palette chooser (waypaper / free wallpaper)..."
     "$HOME/.config/hyprgruv/scripts/palette.sh" || true
 fi
 
