@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# colors.sh — Load live system palette into COLOR_* shell vars (gum / figlet / install)
+# colors.sh — Load system palette into COLOR_* (gum / toilet headers / install / upkeep)
 #
-# Policy (same as ensure-local-palette.sh):
-#   1. Live matugen / preset outputs if present  → follow system
-#   2. Else gruvbox-dark defaults               → baseline
+# Policy (system-wide):
+#   • Gruvbox-dark is the default baseline
+#   • If the user selected a theme / matugen is live → follow that palette
+#
+# Prefer order (first hit wins):
+#   1. ~/.cache/matugen/colors.sh                 (shell cache from last apply)
+#   2. ~/.config/hypr/colors/custom/matugen.conf  (live matugen / preset roles)
+#   3. ~/.cache/matugen/current.json
+#   4. lib/defaults/gruvbox-colors.sh             (default)
 #
 # Usage:
 #   source ~/.config/hyprgruv/scripts/colors.sh
-#   source ~/.config/hyprgruv/scripts/colors.sh --gum   # also apply gum env
-#
-# Prefer order:
-#   1. ~/.cache/matugen/colors.sh          (written by this loader / posthooks)
-#   2. ~/.config/hypr/colors/custom/matugen.conf  (base16 + semantic roles)
-#   3. ~/.cache/matugen/current.json
-#   4. lib/defaults/gruvbox-colors.sh
+#   source ~/.config/hyprgruv/scripts/colors.sh --gum   # also export GUM_* theme
 #
 # Safe to source multiple times. Does not use set -e.
 

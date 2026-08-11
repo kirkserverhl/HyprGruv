@@ -1,15 +1,15 @@
 #!/bin/bash
-# Universal styling library — live palette + toilet/figlet headers + gum
+# Universal styling — gum + toilet headers
 #
-# Default: gruvbox. Follows system when matugen/preset colors are present
-# (via colors.sh → hypr matugen.conf / shell cache).
+# Policy: gruvbox default; live matugen / user-selected theme if present
+# (colors.sh → hypr matugen.conf / shell cache / gruvbox-colors.sh).
 
-# shellcheck source=/dev/null
-source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
 # shellcheck source=/dev/null
 source "$HOME/.config/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true
+# shellcheck source=/dev/null
+source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
 
-# Gruvbox fallbacks if colors.sh missing (pre-stow)
+# Gruvbox fallbacks if colors.sh missing (pre-stow install)
 : "${COLOR_PRIMARY:="#fe8019"}"
 : "${COLOR_SUCCESS:="#b8bb26"}"
 : "${COLOR_ERROR:="#fb4934"}"
@@ -17,15 +17,16 @@ source "$HOME/.config/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true
 : "${COLOR_ON_SURFACE:="#ebdbb2"}"
 : "${COLOR_SURFACE_CONTAINER:="#3c3836"}"
 
+# Ensure gum env tracks current palette
+if declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
+    gum_apply_matugen_theme 2>/dev/null || true
+fi
+
 print_header() {
     local title="$1"
     clear
     if declare -f display_header >/dev/null 2>&1; then
         display_header "$title"
-    elif command -v toilet >/dev/null 2>&1; then
-        toilet -f graffiti "$title" 2>/dev/null | while IFS= read -r line; do
-            printf '%s\n' "$line" | gum style --foreground "$COLOR_PRIMARY" 2>/dev/null || printf '%s\n' "$line"
-        done
     else
         echo "$title" | gum style --foreground "$COLOR_PRIMARY" --bold 2>/dev/null || echo "=== $title ==="
     fi

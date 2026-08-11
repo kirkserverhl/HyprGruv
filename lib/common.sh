@@ -130,7 +130,7 @@ display_header() {
     local title="${1:-}"
     [[ -z "$title" ]] && return 0
 
-    # Prefer figlet/toilet themed headers when header.sh is available (install + upkeep).
+    # toilet headers via header.sh (palette: matugen/user theme if set, else gruvbox)
     local header_sh=""
     local cand
     for cand in \
@@ -153,8 +153,12 @@ display_header() {
         fi
     fi
 
+    # Fallback without header.sh: gum still uses COLOR_* (gruvbox default / live theme)
     echo ""
     if command -v gum >/dev/null 2>&1; then
+        if declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
+            gum_apply_matugen_theme 2>/dev/null || true
+        fi
         echo "$title" | gum style --foreground "${COLOR_PRIMARY:-#fe8019}" --bold 2>/dev/null \
             || echo "=== $title ==="
     else
@@ -184,9 +188,9 @@ run_command() {
 export HYPR_DIR ASSET_DIR BACKUP_DIR DOTFILES_SCRIPTS REPO_DOTFILES_SCRIPTS INSTALL_SCRIPTS
 
 
-# ============== Theme for gum / figlet / install (gruvbox default, live if set) ==============
-# Policy: live matugen/preset palette if present, else gruvbox-dark.
-# Implementation lives in ~/.config/hyprgruv/scripts/colors.sh (stowed).
+# ============== Theme for gum / toilet / install ==============
+# Policy (system-wide): gruvbox-dark default; user-selected / matugen live palette if present.
+# Implementation: ~/.config/hyprgruv/scripts/colors.sh (+ lib/defaults/gruvbox-colors.sh).
 
 _hyprgruv_load_theme_colors() {
     local colors_sh=""

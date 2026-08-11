@@ -120,7 +120,7 @@ if [[ ! -f "$CURRENT_THEME_FILE" ]] || [[ -z "$(tr -d '[:space:]' <"$CURRENT_THE
     printf '%s\n' "$theme" >"$CURRENT_THEME_FILE"
 fi
 
-# Refresh gum/figlet shell cache + SDDM greeter colors from live palette.
+# Refresh gum/toilet shell cache + SDDM greeter colors from live palette.
 if [[ -f "$HOME_CFG/hyprgruv/scripts/colors.sh" ]]; then
     # shellcheck source=/dev/null
     source "$HOME_CFG/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true

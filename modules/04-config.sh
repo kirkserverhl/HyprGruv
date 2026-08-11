@@ -24,7 +24,7 @@ source "$HYPR_DIR/lib/state.sh"
 
 hyprgruv_section_intro "Config"
 
-# gum/figlet theming: common.sh → colors.sh (live palette) or gruvbox default
+# gum/toilet theming: common.sh → colors.sh (gruvbox default; user/matugen if present)
 export GUM_CONFIRM_PROMPT="? "
 
 # ------------------------------------------------------------
