@@ -26,11 +26,11 @@ return {
       local function load_matugen()
         local path = vim.fn.stdpath("config") .. "/lua/matugen-theme.lua"
         if vim.fn.filereadable(path) == 1 then
+          -- Live system palette (matugen / apply-theme) — follow what the host chose.
           dofile(path)
         else
-          -- First run / no wallpaper yet → gentle fallback
-          -- You can change this to any colorscheme you have installed.
-          pcall(vim.cmd.colorscheme, "tokyonight-night")
+          -- No live palette yet → gruvbox default (matches ensure-local-palette.sh).
+          pcall(vim.cmd.colorscheme, "gruvbox")
         end
         refresh_ui()
       end

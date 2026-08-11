@@ -118,11 +118,22 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 **Active** matugen outputs (starship, nvim, gtk, waybar, hypr, `user-palette.json`, …) are **gitignored** and must not be committed. They are regenerated per machine from wallpapers or static presets under `~/.config/colorschemes/<theme>/`.
 
+### Default vs chosen (system) theme
+
+| Situation | What runs |
+|-----------|-----------|
+| Live palette files already present | **Follow system** — leave them (matugen / last apply). |
+| No live files; `~/.config/colorschemes/.current-theme` set | **Follow chosen theme** — re-apply that preset. |
+| No live files; nothing chosen | **Default** — apply **gruvbox-dark** and write `.current-theme`. |
+
+Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruvbox`.
+
 | Role | Behavior |
 |------|----------|
 | Source `git-eod` | Does not stage live palette files (ignored). Do not force-add them. |
-| Deploy `git-eod-pull` | After a hyprgruv pull, runs `ensure-local-palette.sh` if nvim/starship markers are missing — reapplies `.current-theme` or **gruvbox-dark**. |
+| Deploy `git-eod-pull` | After a hyprgruv pull, runs `ensure-local-palette.sh` with the policy above. |
 | Manual restore | `THEME_SWITCHER_APPLY=1 ~/.config/colorschemes/apply-theme.sh gruvbox-dark` |
+| Manual switch | Super+W / `apply-theme.sh <name>` — updates `.current-theme` and live outputs. |
 
 If a deploy machine suddenly shows another host’s palette (e.g. noir/nord after pull), re-apply a local theme; then pull the gitignore fix so it cannot happen again.
 
