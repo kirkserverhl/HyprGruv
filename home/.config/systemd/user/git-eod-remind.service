@@ -1,5 +1,5 @@
 [Unit]
-Description=Remind to run git-eod when repos have local changes
+Description=Role-aware git sync reminder (git-eod push / git-eod-pull)
 After=hyprland-session.target graphical-session.target network-online.target
 PartOf=hyprland-session.target
 ConditionEnvironment=WAYLAND_DISPLAY

@@ -3,7 +3,15 @@
 # Hyprland 0.55+ Lua config: use hyprctl eval (keyword/layerrule keywords do not work).
 set -euo pipefail
 
-CONF="${HYPR_BLUR_CONF:-$HOME/.config/settings/hypr-blur.conf}"
+# Prefer machine-local blur from apply-machine-profile.sh, then settings default.
+_STATE_BLUR="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/hypr-blur.conf"
+if [[ -n "${HYPR_BLUR_CONF:-}" ]]; then
+    CONF="$HYPR_BLUR_CONF"
+elif [[ -f "$_STATE_BLUR" ]]; then
+    CONF="$_STATE_BLUR"
+else
+    CONF="$HOME/.config/settings/hypr-blur.conf"
+fi
 
 cfg_get() {
     local key="$1"

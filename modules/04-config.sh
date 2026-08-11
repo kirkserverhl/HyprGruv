@@ -44,6 +44,8 @@ _say() {
 run_step() {
     local path="$1"
     local title="$2"
+    shift 2 || true
+    local -a extra_args=("$@")
     log_status "Starting: $title"
     # Do NOT wrap in gum spin here. These sub-scripts (shell.sh, grub.sh, etc.)
     # are interactive (gum choose/confirm, GUI tools, read prompts, etc.).
@@ -51,7 +53,7 @@ run_step() {
     if [[ "$title" == "Shell Configuration" ]]; then
         HYPRGRUV_FROM_CONFIG=1 hyprgruv_run_interactive "$path" "${HYPRGRUV_LOGFILE:-}"
     else
-        bash "$path"
+        bash "$path" "${extra_args[@]}"
     fi
     log_success "$title completed"
 }
@@ -71,6 +73,21 @@ _section_handoff() {
 
 # SDDM (package, enable, Sugar Candy theme) is configured in 03-setup.sh before reboot.
 # Re-apply manually: bash ~/.hyprgruv/lib/scripts/sddm_candy_install.sh
+
+# -------------------- Machine profile ------------------------
+hyprgruv_section_intro "Machine profile"
+if _confirm "  💻   Configure laptop vs desktop profile? (touchpad, idle, power, GPU env)"; then
+    script="$SCRIPTS_DIR/apply-machine-profile.sh"
+    if [[ -f "$script" ]]; then
+        run_step "$script" "Machine profile" --prompt
+        _section_handoff "Machine profile completed"
+    else
+        log_error "Script not found: $script"
+        exit 1
+    fi
+else
+    _section_handoff "Machine profile skipped" status
+fi
 
 # ------------------------- GRUB ------------------------------
 hyprgruv_section_intro "Grub"

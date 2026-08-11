@@ -1,5 +1,8 @@
 -- conf/env.lua
 -- Converted from conf/environments/default.conf + direct env lines
+-- GPU / VA-API vars come from apply-machine-profile.sh (settings/*) when present.
+
+local settings = require("conf.settings")
 
 -- Hyprland / Wayland
 hl.env("GDK_BACKEND", "wayland,x11")
@@ -14,34 +17,47 @@ hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 -- QT apps
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
--- AMD (Cezanne / Radeon Vega iGPU)
--- These are appropriate for your actual hardware
-hl.env("WLR_NO_HARDWARE_CURSORS", "1")
-hl.env("LIBVA_DRIVER_NAME", "radeonsi")
+-- GPU / video decode (profile- or hardware-aware defaults)
+-- Written by apply-machine-profile.sh → ~/.config/settings/libva_driver.sh etc.
+local libva = settings.read("libva_driver", "")
+local no_hw = settings.read("wlr_no_hw_cursors", "")
+local gpu = settings.read("gpu_vendor", "")
 
--- Uncomment the line below only if you run into severe rendering problems
--- hl.env("WLR_RENDERER_ALLOW_SOFTWARE", "1")
-
-local function read_setting(name, fallback)
-    local home = os.getenv("HOME") or ""
-    local path = home .. "/.config/settings/" .. name .. ".sh"
-    local file = io.open(path, "r")
-    if not file then
-        return fallback
-    end
-    local line = file:read("l")
-    file:close()
-    if line and line ~= "" then
-        return (line:gsub("%s+", ""))
-    end
-    return fallback
+if libva == nil or libva == "" then
+	-- Fallback before first profile apply: prefer common iGPU drivers by crude path probes
+	if gpu == "nvidia" or gpu == "hybrid-nvidia" then
+		libva = "nvidia"
+	elseif gpu == "amd" then
+		libva = "radeonsi"
+	elseif gpu == "intel" then
+		libva = "iHD"
+	else
+		-- Leave unset rather than force a wrong vendor (was hard-coded radeonsi)
+		libva = nil
+	end
 end
+
+if libva and libva ~= "" then
+	hl.env("LIBVA_DRIVER_NAME", libva)
+end
+
+if no_hw == "1" or no_hw == "true" or gpu == "nvidia" or gpu == "hybrid-nvidia" then
+	hl.env("WLR_NO_HARDWARE_CURSORS", "1")
+end
+
+-- NVIDIA session (only when profile says so — avoid breaking Intel/AMD)
+if libva == "nvidia" then
+	hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+end
+
+-- Uncomment only for severe rendering problems
+-- hl.env("WLR_RENDERER_ALLOW_SOFTWARE", "1")
 
 -- From main hyprland.conf
 local SCRIPTS = require("conf.scripts_path").get()
 hl.env("TERMINAL", SCRIPTS .. "/terminal.sh")
 -- Electron apps (Obsidian) need a bare browser command, not a launcher script path.
-hl.env("BROWSER", read_setting("browser", "brave"))
+hl.env("BROWSER", settings.read("browser", "brave"))
 hl.env("FILEMANAGER", SCRIPTS .. "/filemanager.sh")
 
 -- Misc from other places

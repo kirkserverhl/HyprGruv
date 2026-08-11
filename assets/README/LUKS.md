@@ -95,7 +95,9 @@ Losing the LUKS passphrase = disk contents are unrecoverable. Store it offline (
 - [ ] SDDM shows Sugar Candy (not Plasma Login Manager only)  
 - [ ] `./install.sh` completed; rofi / waypaper / wallpaper library path OK  
 - [ ] SSH key / GitHub access if you need private repos  
-- [ ] Optional: laptop profile (idle, touchpad, lid) — Phase B when ready  
+- [ ] Machine profile at install (Laptop vs Desktop) — touchpad, idle, lid, power  
+- [ ] Re-run anytime: `bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh --prompt`  
+
 
 ---
 

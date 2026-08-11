@@ -104,11 +104,16 @@ ensure_multilib_enabled || hyprgruv_strict_abort "Failed to enable multilib repo
 
 # ------------------ detect GPU + packages ----------------
 GPU_VENDOR="generic"
-if lspci | grep -iE ' vga|3d|display' | grep -qi nvidia; then
+# Match class lines only; never use bare "ati" (matches "Corporation").
+_gfx_lines="$(lspci 2>/dev/null | grep -iE 'vga compatible|3d controller|display controller' || true)"
+if echo "$_gfx_lines" | grep -qi nvidia; then
     GPU_VENDOR="nvidia"
-elif lspci | grep -iE ' vga|3d|display' | grep -qi amd; then
+elif echo "$_gfx_lines" | grep -qiE 'amd |radeon|advanced micro devices'; then
     GPU_VENDOR="amd"
-elif lspci | grep -iE ' vga|3d|display' | grep -qi intel; then GPU_VENDOR="intel"; fi
+elif echo "$_gfx_lines" | grep -qi intel; then
+    GPU_VENDOR="intel"
+fi
+unset _gfx_lines
 log_status "Detected GPU vendor: $GPU_VENDOR"
 
 case "$GPU_VENDOR" in

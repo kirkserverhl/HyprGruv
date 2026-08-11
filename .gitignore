@@ -79,3 +79,20 @@ home/.config/**/*.db
 home/.config/**/*.db-*
 home/.config/**/error.log
 home/.config/atuin/atuin-receipt.json
+
+# Per-machine profile (apply-machine-profile.sh) — never commit host-specific values
+home/.config/settings/machine.sh
+home/.config/settings/natural_scroll.sh
+home/.config/settings/touchpad_tap.sh
+home/.config/settings/touchpad_dwt.sh
+home/.config/settings/touchpad_scroll_factor.sh
+home/.config/settings/workspace_swipe.sh
+home/.config/settings/monitors_mode.sh
+home/.config/settings/animations_enabled.sh
+home/.config/settings/gpu_vendor.sh
+home/.config/settings/libva_driver.sh
+home/.config/settings/wlr_no_hw_cursors.sh
+home/.config/settings/shadow_enabled.sh
+home/.config/settings/blur_passes.sh
+home/.config/settings/blur_size.sh
+home/.config/hyprgruv/deploy-target

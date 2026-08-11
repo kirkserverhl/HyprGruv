@@ -382,11 +382,14 @@ gpu_pacman_pkgs() {
 }
 
 detect_gpu_vendor() {
-    if lspci 2>/dev/null | grep -iE ' vga|3d|display' | grep -qi nvidia; then
+    # Class lines only; bare "ati" matches "Corporation" — do not use it.
+    local lines
+    lines="$(lspci 2>/dev/null | grep -iE 'vga compatible|3d controller|display controller' || true)"
+    if echo "$lines" | grep -qi nvidia; then
         echo nvidia
-    elif lspci 2>/dev/null | grep -iE ' vga|3d|display' | grep -qi amd; then
+    elif echo "$lines" | grep -qiE 'amd |radeon|advanced micro devices'; then
         echo amd
-    elif lspci 2>/dev/null | grep -iE ' vga|3d|display' | grep -qi intel; then
+    elif echo "$lines" | grep -qi intel; then
         echo intel
     else
         echo generic

@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# git-eod-remind.sh — persistent SwayNC nudge when repos have uncommitted work
+# git-eod-remind.sh — role-aware daily nudge (SwayNC persistent)
+#
+# SOURCE (desktop): dirty followed repos → run git-eod
+# DEPLOY (laptop):  followed repos behind remote → run git-eod-pull
 #
 # Usage:
-#   git-eod-remind.sh
-#   git-eod-remind.sh --force   # notify even when all repos are clean
-#   git-eod-remind.sh --test    # send a test notification
-#   git-eod-remind.sh --clear   # dismiss any saved reminder
+#   git-eod-remind
+#   git-eod-remind --force   # notify even when clean/up-to-date
+#   git-eod-remind --test
+#   git-eod-remind --clear
 
 set -euo pipefail
 IFS=$'\n\t'
@@ -32,12 +35,15 @@ while [[ $# -gt 0 ]]; do
     --clear) CLEAR=1; shift ;;
     -h | --help)
         cat <<'EOF'
-Persistent git-eod reminder (SwayNC critical = stays until dismissed)
+Role-aware git sync reminder (SwayNC critical = stays until dismissed)
 
-  git-eod-remind.sh
-  git-eod-remind.sh --force
-  git-eod-remind.sh --test
-  git-eod-remind.sh --clear
+  git-eod-remind
+  git-eod-remind --force
+  git-eod-remind --test
+  git-eod-remind --clear
+
+SOURCE → dirty repos → git-eod
+DEPLOY → behind repos → git-eod-pull
 EOF
         exit 0
         ;;
@@ -59,30 +65,55 @@ main() {
         exit 0
     fi
 
+    if [[ ! -f "$GIT_SYNC_CONF" ]]; then
+        git_sync_init_conf "$(git_sync_detect_role)" 1
+    fi
+    git_sync_load
+    local role="$GIT_SYNC_ROLE"
+
     if [[ $TEST -eq 1 ]]; then
+        local tip="git-eod"
+        [[ "$role" == "deploy" ]] && tip="git-eod-pull"
         persistent_send_notification \
-            "Git EOD (test)" \
-            "Critical notifications stay until you click them. Run: git-eod" \
+            "Git EOD (test · $role)" \
+            "Critical notifications stay until dismissed. Run: $tip" \
             "git" || exit 0
         exit 0
     fi
 
-    mapfile -t dirty_lines < <(git_eod_dirty_repo_lines)
+    local -a lines=()
+    local title body action
 
-    if [[ ${#dirty_lines[@]} -eq 0 && $FORCE -eq 0 ]]; then
-        persistent_close_notification
-        exit 0
-    fi
-
-    local body
-    if [[ ${#dirty_lines[@]} -eq 0 ]]; then
-        body="All repos are clean, but here is your scheduled reminder.\nRun: git-eod"
+    if [[ "$role" == "deploy" ]]; then
+        action="git-eod-pull"
+        title="Repos available for this machine"
+        mapfile -t lines < <(git_eod_behind_repo_lines)
+        if [[ ${#lines[@]} -eq 0 && $FORCE -eq 0 ]]; then
+            persistent_close_notification
+            exit 0
+        fi
+        if [[ ${#lines[@]} -eq 0 ]]; then
+            body="Followed repos look up-to-date.\nScheduled reminder · Run: $action\n(Manage: git-sync list)"
+        else
+            body="$(printf '%s\n\nRun: %s\n(hyprgruv full: git-eod-pull --hyprgruv-full)' "$(printf '%s\n' "${lines[@]}")" "$action")"
+        fi
     else
-        body="$(printf '%s\n\nRun: git-eod' "$(printf '%s\n' "${dirty_lines[@]}")")"
+        action="git-eod"
+        title="Git repos need a push"
+        mapfile -t lines < <(git_eod_dirty_repo_lines)
+        if [[ ${#lines[@]} -eq 0 && $FORCE -eq 0 ]]; then
+            persistent_close_notification
+            exit 0
+        fi
+        if [[ ${#lines[@]} -eq 0 ]]; then
+            body="All followed repos are clean.\nScheduled reminder · Run: $action\n(Manage: git-sync list)"
+        else
+            body="$(printf '%s\n\nRun: %s' "$(printf '%s\n' "${lines[@]}")" "$action")"
+        fi
     fi
 
     persistent_send_notification \
-        "Git repos need a sync" \
+        "$title" \
         "$body" \
         "git" || exit 0
 }

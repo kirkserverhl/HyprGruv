@@ -78,10 +78,69 @@ The installer runs in one pass. On a graphical session (e.g. EndeavourOS KDE), t
 | 1 | `00-preflight.sh` | Arch sanity checks, multilib, mirror/keyring repair, EndeavourOS cleanup |
 | 2 | `01-packages.sh` | Installs yay, optional Chaotic-AUR, core Hyprland stack, then `lib/packages/pacman.list` + `aur.list` |
 | 3 | `02-stow.sh` | Stows `home/` configs into `$HOME` (with timestamped backup) |
-| 4 | `default_wp.sh` | Opening wallpaper + first matugen palette (skipped with `SKIP_WALLPAPER=1`) |
-| 5 | `post_reboot_setup.sh` | Full setup wizard (modules 03–05) when `SKIP_SETUP_WIZARD` is unset |
-| 6 | Final sync | `yay -Syu` or `pacman -Syu` |
-| 7 | Reboot | Skipped when a graphical session is detected (`WAYLAND_DISPLAY` / `DISPLAY` set) |
+| 4 | `apply-machine-profile.sh` | **Laptop vs desktop** prompt — touchpad, idle, blur, GPU env, monitors mode, lid, power-profiles-daemon, deploy-target |
+| 5 | `default_wp.sh` | Opening wallpaper + first matugen palette (skipped with `SKIP_WALLPAPER=1`) |
+| 6 | `post_reboot_setup.sh` | Full setup wizard (modules 03–05) when `SKIP_SETUP_WIZARD` is unset |
+| 7 | Final sync | `yay -Syu` or `pacman -Syu` |
+| 8 | Reboot | Skipped when a graphical session is detected (`WAYLAND_DISPLAY` / `DISPLAY` set) |
+
+### Machine profile (laptop / desktop)
+
+After stow, the installer asks whether this machine is a **laptop** or **desktop** (or Auto-detect from chassis/battery). That choice is the long-term provisioning switch for multi-machine use (main desktop reinstall + pull-only laptops).
+
+| Concern | Desktop | Laptop |
+|---------|---------|--------|
+| Touchpad | natural scroll off | natural scroll (prompt), tap-to-click, disable-while-typing, lower scroll factor |
+| Gestures | optional | 3-finger workspace swipe |
+| Monitors | multi-head `desc:` layout | preferred + auto only |
+| Blur / idle | fuller defaults; no suspend listener | lighter blur; lock → DPMS → suspend |
+| Lid | no logind drop-in | suspend on lid close |
+| Power | `power-profiles-daemon` | same + deploy-target for repo update checks |
+| GPU env | detected (AMD/Intel/NVIDIA) | same — no hard-coded vendor |
+
+Re-run later (or from the interactive wizard):
+
+```bash
+bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh --prompt
+# Non-interactive:
+MACHINE_TYPE=laptop bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh --yes
+MACHINE_TYPE=desktop ./install.sh
+```
+
+State lives under `~/.local/state/hyprgruv/` (not committed). Settings mirrors are gitignored under `home/.config/settings/`.
+
+### Reciprocal git sync (`git-eod` / `git-eod-pull`)
+
+After machine profile, each host gets a **role** and a **follow list** (which repos to care about):
+
+| Role | Machine | Daily command | Reminder |
+|------|---------|---------------|----------|
+| `source` | Desktop / author | `git-eod` (commit + push) | dirty followed repos |
+| `deploy` | Laptop / consumer | `git-eod-pull` | followed repos behind remote |
+
+Shared catalog (committed): `lib/git-sync/catalog.conf`  
+Machine config (local): `~/.local/state/hyprgruv/git-sync.conf`  
+Project repos live under **`~/Projects/<name>`**.
+
+```bash
+git-sync status
+git-sync list
+git-sync inventory          # catalog + Projects + move candidates
+git-sync follow Wallpapers  # opt-in optional/media/project
+git-sync local-only scratch # device-specific: no push/pull reminders
+git-sync unfollow Wallpapers
+
+# Source desktop
+git-eod
+
+# Deploy laptop
+git-eod-pull
+git-eod-pull --hyprgruv-full   # pull + packages + restow for hyprgruv only
+```
+
+Defaults: **source** follows `hyprgruv`, `notes`, `Wallpapers`, `soundsbored` (if listed as `default_source=follow`). **deploy** only follows `hyprgruv` so laptops stay lean (debloat wallpapers / skip projects until you `git-sync follow`).
+
+Timer: `git-eod-remind.timer` (every 24h) — role-aware SwayNC nudge.
 
 ### Setup wizard (`post_reboot_setup.sh`)
 
@@ -95,7 +154,7 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 |------|--------|--------------|
 | Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, initial theme |
 | System | `03-setup.sh` | Hyprpm plugins; MIME handlers (handlr, Zathura, nvim/LibreOffice defaults); enables SDDM + Sugar Candy theme; VM GRUB tweaks |
-| Interactive | `04-config.sh` | Optional: SDDM theme, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
+| Interactive | `04-config.sh` | Optional: machine profile, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
 | Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/wezterm/foot/…), browser, and editor; offers to install if missing |
 
 Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.

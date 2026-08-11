@@ -1,0 +1,18 @@
+# Machine-local git-sync config
+# Copy is written by: git-sync init   or apply-machine-profile.sh
+# Lives at: ~/.local/state/hyprgruv/git-sync.conf  (never commit)
+#
+# ROLE=source  → desktop / author machine (git-eod commit+push)
+# ROLE=deploy  → laptop / consumer (git-eod-pull)
+#
+# FOLLOW=comma-separated catalog names this machine cares about
+# LOCAL_ONLY=comma-separated names present on disk but never push/pull-remind
+#             (device-specific scratch projects)
+#
+# Optional path overrides (if a repo is not at the catalog default):
+# PATH_Wallpapers=~/Pictures/Wallpapers-git
+# PATH_soundsbored=~/Projects/soundsbored
+
+ROLE=deploy
+FOLLOW=hyprgruv
+LOCAL_ONLY=

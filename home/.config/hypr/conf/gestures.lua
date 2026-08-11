@@ -1,15 +1,23 @@
 -- conf/gestures.lua
--- Converted from conf/gestures.conf + input gesture example
+-- Workspace swipe enabled for laptop profile (settings/workspace_swipe.sh).
 
--- 4 finger down gesture
--- In the new Lua API you must use a function for custom actions like "exec"
+local settings = require("conf.settings")
+local swipe = settings.read_bool("workspace_swipe", settings.is_laptop())
+
+-- 4 finger down → terminal
 hl.gesture({
-    fingers = 4,
-    direction = "down",
-    action = function()
-        hl.exec_cmd(require("conf.scripts_path").get() .. "/terminal.sh")
-    end
+	fingers = 4,
+	direction = "down",
+	action = function()
+		hl.exec_cmd(require("conf.scripts_path").get() .. "/terminal.sh")
+	end,
 })
 
--- Example 3-finger horizontal workspace swipe (from example docs)
--- hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+-- 3-finger horizontal workspace swipe (trackpads)
+if swipe then
+	hl.gesture({
+		fingers = 3,
+		direction = "horizontal",
+		action = "workspace",
+	})
+end

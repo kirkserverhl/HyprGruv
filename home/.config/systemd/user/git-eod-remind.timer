@@ -1,9 +1,10 @@
 [Unit]
-Description=Periodic git-eod reminder (every 4 hours)
+Description=Daily git-eod / git-eod-pull reminder (role-aware)
 
 [Timer]
-OnBootSec=20min
-OnUnitActiveSec=4h
+# First check after login window, then every 24h; also catch up after sleep/off
+OnBootSec=25min
+OnUnitActiveSec=24h
 Persistent=true
 
 [Install]

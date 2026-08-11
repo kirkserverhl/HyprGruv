@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# git-eod.sh — stage, commit, and push personal repos when you've been slacking
+# git-eod.sh — SOURCE role: stage, commit, and push followed repos
 #
-# Repos: hyprgruv (~/.hyprgruv), Wallpapers, notes
+# Device role comes from ~/.local/state/hyprgruv/git-sync.conf (ROLE=source).
+# On deploy machines this refuses unless --force (use git-eod-pull instead).
 #
 # Usage:
-#   git-eod.sh
-#   git-eod.sh -m "catch-up"
-#   git-eod.sh --dry-run
-#   git-eod.sh --only hyprgruv,notes
-#   git-eod.sh --no-push
+#   git-eod
+#   git-eod -m "catch-up"
+#   git-eod --only hyprgruv,notes
+#   git-eod --dry-run
+#   git-eod --no-push
+#   git-eod --force          # allow on deploy role (rare)
 
 set -euo pipefail
 IFS=$'\n\t'
@@ -20,29 +22,28 @@ HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 # shellcheck source=/dev/null
 source "$HYPR_DIR/lib/scripts/git-eod-common.sh"
 
-REPO_NAMES=("${GIT_EOD_REPO_NAMES[@]}")
-REPO_PATHS=("${GIT_EOD_REPO_PATHS[@]}")
-
 COMMIT_MSG=""
 DRY_RUN=0
 DO_PUSH=1
 ONLY_FILTER=""
+FORCE_ROLE=0
 
 usage() {
     cat <<'EOF'
-EOD git sync — commit and push hyprgruv, Wallpapers, and notes
+EOD git sync (SOURCE / desktop) — commit and push followed repos
 
 Options:
   -m, --message MSG   Commit message (default: eod: YYYY-MM-DD)
-  --only NAMES        Comma-separated subset: hyprgruv, Wallpapers, notes
+  --only NAMES        Comma-separated subset of followed repos
   --no-push           Commit locally only
   --dry-run           Show planned actions without changing anything
+  --force             Allow run even if ROLE=deploy
   -h, --help          Show this help
 
-Examples:
-  git-eod.sh
-  git-eod.sh -m "theme tweaks + new wallpapers"
-  git-eod.sh --only notes --dry-run
+Manage which repos are followed:
+  git-sync list | follow | unfollow | local-only | inventory
+
+Deploy / laptop machines should use:  git-eod-pull
 EOF
 }
 
@@ -58,7 +59,7 @@ while [[ $# -gt 0 ]]; do
         ;;
     --only)
         [[ $# -ge 2 ]] || {
-            log_error "Missing value for --only"
+            log_error "Missing value for $1"
             exit 1
         }
         ONLY_FILTER="$2"
@@ -66,6 +67,7 @@ while [[ $# -gt 0 ]]; do
         ;;
     --no-push) DO_PUSH=0; shift ;;
     --dry-run) DRY_RUN=1; shift ;;
+    --force) FORCE_ROLE=1; shift ;;
     -h | --help)
         usage
         exit 0
@@ -80,14 +82,34 @@ done
 
 [[ -n "$COMMIT_MSG" ]] || COMMIT_MSG="eod: $(date +%Y-%m-%d)"
 
+if [[ ! -f "$GIT_SYNC_CONF" ]]; then
+    git_sync_init_conf "$(git_sync_detect_role)" 1
+fi
+git_sync_load
+
+if [[ "$GIT_SYNC_ROLE" != "source" && $FORCE_ROLE -eq 0 ]]; then
+    log_error "This machine is ROLE=$GIT_SYNC_ROLE (deploy/pull)."
+    log_status "Use:  git-eod-pull"
+    log_status "Or:   git-sync role source   # if this is actually your author machine"
+    log_status "Or:   git-eod --force        # override (unusual)"
+    exit 2
+fi
+
+REPO_NAMES=("${GIT_EOD_REPO_NAMES[@]}")
+REPO_PATHS=("${GIT_EOD_REPO_PATHS[@]}")
+
+if [[ ${#REPO_NAMES[@]} -eq 0 ]]; then
+    log_warning "No followed repos. Run: git-sync follow hyprgruv"
+    exit 0
+fi
+
 repo_selected() {
     local name="$1"
     [[ -z "$ONLY_FILTER" ]] && return 0
     local item
     IFS=',' read -ra items <<<"$ONLY_FILTER"
     for item in "${items[@]}"; do
-        item="${item#"${item%%[![:space:]]*}"}"
-        item="${item%"${item##*[![:space:]]}"}"
+        item="$(git_sync_trim "$item")"
         [[ "$item" == "$name" ]] && return 0
     done
     return 1
@@ -98,7 +120,11 @@ change_summary() { git_eod_change_summary "$1"; }
 
 run_cmd() {
     if [[ $DRY_RUN -eq 1 ]]; then
-        log_status "[dry-run] $*"
+        local joined="" a
+        for a in "$@"; do
+            joined+="$a "
+        done
+        log_status "[dry-run] $joined"
         return 0
     fi
     "$@"
@@ -164,8 +190,9 @@ sync_repo() {
 }
 
 main() {
-    display_header "EOD Git Sync" 2>/dev/null || true
-    log_status "Message: $COMMIT_MSG"
+    display_header "EOD Git Sync (source)" 2>/dev/null || true
+    log_status "Role: $GIT_SYNC_ROLE · Message: $COMMIT_MSG"
+    log_status "Followed: ${REPO_NAMES[*]}"
     [[ $DO_PUSH -eq 1 ]] || log_status "Push disabled"
     [[ $DRY_RUN -eq 1 ]] && log_status "Dry run — no changes will be made"
 

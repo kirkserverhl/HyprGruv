@@ -1,0 +1,707 @@
+#!/usr/bin/env bash
+# apply-machine-profile.sh — laptop vs desktop profile for Hyprgruv provisioning
+#
+# Writes machine-local settings (XDG state + gitignored settings/*.sh), generates
+# hypridle, tunes blur, enables power tooling, and optional lid / deploy-target.
+#
+# Usage:
+#   bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh              # apply saved / detect
+#   bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh --prompt      # interactive
+#   bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh laptop       # set + apply
+#   bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh desktop
+#   MACHINE_TYPE=laptop bash .../apply-machine-profile.sh --yes
+#
+# Env:
+#   MACHINE_TYPE / HYPRGRUV_MACHINE   laptop|desktop (skips detect)
+#   SKIP_MACHINE_PROMPT=1             never ask (use saved / detect / MACHINE_TYPE)
+#   HYPRGRUV_NATURAL_SCROLL=true|false
+#   HYPRGRUV_DEPLOY_TARGET=0|1        force deploy-target marker on/off
+#   HYPRGRUV_LID_SUSPEND=0|1          laptop lid → suspend (default 1 on laptop)
+#   HYPRGRUV_SKIP_PACKAGES=1          do not install/enable power packages
+#   HYPRGRUV_STRICT                 inherited from installer when sourced path
+
+set -euo pipefail
+IFS=$'\n\t'
+
+HYPR_DIR="${HYPRGRUV_DIR:-$HOME/.hyprgruv}"
+if [[ ! -f "$HYPR_DIR/lib/common.sh" ]]; then
+    # Fallback: script lives in lib/scripts/
+    HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+fi
+# shellcheck source=/dev/null
+source "$HYPR_DIR/lib/common.sh"
+# shellcheck source=/dev/null
+[[ -f "$HYPR_DIR/lib/state.sh" ]] && source "$HYPR_DIR/lib/state.sh"
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv"
+SETTINGS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/settings"
+PROFILE_ENV="$STATE_DIR/profile.env"
+MACHINE_FILE="$STATE_DIR/machine"
+HYPRIDLE_OUT="$STATE_DIR/hypridle.conf"
+BLUR_OUT="$STATE_DIR/hypr-blur.conf"
+DEPLOY_MARKER_STATE="$STATE_DIR/deploy-target"
+# Legacy path still checked by repo-update-check.sh
+DEPLOY_MARKER_CFG="${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv/deploy-target"
+LOGIND_DROPIN="/etc/systemd/logind.conf.d/99-hyprgruv-lid.conf"
+
+DO_PROMPT=0
+DO_YES=0
+EXPLICIT_TYPE=""
+
+usage() {
+    sed -n '2,22p' "$0" | sed 's/^# \?//'
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+    --prompt | -p) DO_PROMPT=1 ;;
+    --yes | -y) DO_YES=1 ;;
+    --help | -h)
+        usage
+        exit 0
+        ;;
+    laptop | desktop | auto)
+        EXPLICIT_TYPE="$1"
+        ;;
+    *)
+        log_error "Unknown argument: $1"
+        usage
+        exit 1
+        ;;
+    esac
+    shift
+done
+
+mkdir -p "$STATE_DIR" "$SETTINGS_DIR"
+
+# ---------------------------------------------------------------------------
+# Detection / I/O helpers
+# ---------------------------------------------------------------------------
+detect_machine_type() {
+    local chassis bat
+    if [[ -n "${MACHINE_TYPE:-}" ]]; then
+        echo "${MACHINE_TYPE}"
+        return
+    fi
+    if [[ -n "${HYPRGRUV_MACHINE:-}" ]]; then
+        echo "${HYPRGRUV_MACHINE}"
+        return
+    fi
+    if [[ -f "$MACHINE_FILE" ]]; then
+        tr -d '[:space:]' <"$MACHINE_FILE"
+        return
+    fi
+    if declare -F get_choice >/dev/null 2>&1; then
+        local saved
+        saved="$(get_choice machine_type "")"
+        if [[ "$saved" == "laptop" || "$saved" == "desktop" ]]; then
+            echo "$saved"
+            return
+        fi
+    fi
+
+    chassis="$(hostnamectl 2>/dev/null | awk -F': ' '/Chassis/ {print tolower($2); exit}')"
+    case "$chassis" in
+    laptop | convertible | portable | handset)
+        echo laptop
+        return
+        ;;
+    esac
+
+    for bat in /sys/class/power_supply/*/type; do
+        [[ -f "$bat" ]] || continue
+        if grep -qx Battery "$bat" 2>/dev/null; then
+            echo laptop
+            return
+        fi
+    done
+
+    echo desktop
+}
+
+detect_gpu_vendor() {
+    # Only VGA/3D/Display lines — never match "Corporation" (contains "ati").
+    local lines
+    lines="$(lspci 2>/dev/null | grep -iE 'vga compatible|3d controller|display controller' || true)"
+    if echo "$lines" | grep -qi nvidia; then
+        if echo "$lines" | grep -qiE 'intel|amd |radeon|advanced micro devices'; then
+            echo hybrid-nvidia
+        else
+            echo nvidia
+        fi
+        return
+    fi
+    if echo "$lines" | grep -qiE 'amd |radeon|advanced micro devices'; then
+        echo amd
+        return
+    fi
+    if echo "$lines" | grep -qi intel; then
+        echo intel
+        return
+    fi
+    echo generic
+}
+
+write_setting() {
+    local name="$1"
+    local value="$2"
+    printf '%s\n' "$value" >"$SETTINGS_DIR/${name}.sh"
+}
+
+read_setting_file() {
+    local name="$1"
+    local fallback="${2:-}"
+    local f="$SETTINGS_DIR/${name}.sh"
+    if [[ -f "$f" ]]; then
+        tr -d '[:space:]' <"$f"
+        return
+    fi
+    printf '%s' "$fallback"
+}
+
+bool_norm() {
+    case "${1,,}" in
+    1 | true | yes | on | y) echo true ;;
+    *) echo false ;;
+    esac
+}
+
+# ---------------------------------------------------------------------------
+# Interactive prompt
+# ---------------------------------------------------------------------------
+hardware_guess_machine() {
+    local c bat
+    c="$(hostnamectl 2>/dev/null | awk -F': ' '/Chassis/ {print tolower($2); exit}')"
+    case "$c" in
+    laptop | convertible | portable | handset) echo laptop; return ;;
+    esac
+    for bat in /sys/class/power_supply/*/type; do
+        [[ -f "$bat" ]] || continue
+        if grep -qx Battery "$bat" 2>/dev/null; then
+            echo laptop
+            return
+        fi
+    done
+    echo desktop
+}
+
+prompt_machine_type() {
+    local detected choice
+    # Env / CLI win; else hardware guess for the prompt label
+    if [[ -n "${MACHINE_TYPE:-}" ]]; then
+        detected="$MACHINE_TYPE"
+    elif [[ -n "${HYPRGRUV_MACHINE:-}" ]]; then
+        detected="$HYPRGRUV_MACHINE"
+    elif [[ -f "$MACHINE_FILE" ]]; then
+        detected="$(tr -d '[:space:]' <"$MACHINE_FILE")"
+    else
+        detected="$(hardware_guess_machine)"
+    fi
+    [[ "$detected" == "laptop" || "$detected" == "desktop" ]] || detected="$(hardware_guess_machine)"
+
+    if [[ "${SKIP_MACHINE_PROMPT:-0}" == "1" || "$DO_YES" -eq 1 ]]; then
+        if [[ -n "$EXPLICIT_TYPE" && "$EXPLICIT_TYPE" != "auto" ]]; then
+            echo "$EXPLICIT_TYPE"
+        else
+            echo "$detected"
+        fi
+        return
+    fi
+
+    if [[ -n "$EXPLICIT_TYPE" && "$EXPLICIT_TYPE" != "auto" && "$DO_PROMPT" -eq 0 ]]; then
+        echo "$EXPLICIT_TYPE"
+        return
+    fi
+
+    if ! command -v gum >/dev/null 2>&1; then
+        log_warning "gum not found — using detected machine type: $detected"
+        echo "$detected"
+        return
+    fi
+
+    hyprgruv_section_intro "Machine profile" 2>/dev/null || display_header "Machine profile"
+    cat <<EOF
+
+Hyprgruv will tailor input, idle, power, GPU env, and performance for this machine.
+
+  Detected suggestion: ${detected}
+  GPU detect (informational): $(detect_gpu_vendor)
+
+EOF
+
+    choice="$(
+        gum_choose_prompt \
+            --header "Is this a laptop or a desktop?" \
+            "Auto (${detected})" \
+            "Laptop" \
+            "Desktop"
+    )" || choice="Auto (${detected})"
+
+    case "$choice" in
+    Laptop | laptop) echo laptop ;;
+    Desktop | desktop) echo desktop ;;
+    *) echo "$detected" ;;
+    esac
+}
+
+prompt_laptop_extras() {
+    # Sets globals: NATURAL_SCROLL, WANT_DEPLOY, WANT_LID
+    NATURAL_SCROLL="${HYPRGRUV_NATURAL_SCROLL:-}"
+    WANT_DEPLOY="${HYPRGRUV_DEPLOY_TARGET:-}"
+    WANT_LID="${HYPRGRUV_LID_SUSPEND:-}"
+
+    if [[ "${SKIP_MACHINE_PROMPT:-0}" == "1" || "$DO_YES" -eq 1 ]]; then
+        NATURAL_SCROLL="$(bool_norm "${NATURAL_SCROLL:-true}")"
+        WANT_DEPLOY="${WANT_DEPLOY:-1}"
+        WANT_LID="${WANT_LID:-1}"
+        return
+    fi
+
+    if ! command -v gum >/dev/null 2>&1; then
+        NATURAL_SCROLL="$(bool_norm "${NATURAL_SCROLL:-true}")"
+        WANT_DEPLOY="${WANT_DEPLOY:-1}"
+        WANT_LID="${WANT_LID:-1}"
+        return
+    fi
+
+    if [[ -z "$NATURAL_SCROLL" ]]; then
+        if gum_confirm_prompt "Enable natural (macOS-style) touchpad scrolling?"; then
+            NATURAL_SCROLL=true
+        else
+            NATURAL_SCROLL=false
+        fi
+    else
+        NATURAL_SCROLL="$(bool_norm "$NATURAL_SCROLL")"
+    fi
+
+    if [[ -z "$WANT_DEPLOY" ]]; then
+        if gum_confirm_prompt "Treat this machine as a deploy/pull target (repo update checks)?"; then
+            WANT_DEPLOY=1
+        else
+            WANT_DEPLOY=0
+        fi
+    fi
+
+    if [[ -z "$WANT_LID" ]]; then
+        if gum_confirm_prompt "Suspend when laptop lid is closed?"; then
+            WANT_LID=1
+        else
+            WANT_LID=0
+        fi
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Profile values
+# ---------------------------------------------------------------------------
+apply_profile_values() {
+    local machine="$1"
+    local gpu
+    gpu="$(detect_gpu_vendor)"
+
+    local natural_scroll=false
+    local touchpad_tap=false
+    local touchpad_dwt=false
+    local scroll_factor=1.0
+    local workspace_swipe=false
+    local monitors_mode=desktop
+    local animations_enabled=true
+    local blur_passes=3
+    local blur_size=10
+    local shadow_enabled=true
+    local lock_timeout=900
+    local dpms_timeout=960
+    local suspend_timeout=0
+    local libva=""
+    local no_hw_cursors=0
+    local want_deploy=0
+    local want_lid=0
+
+    case "$gpu" in
+    nvidia | hybrid-nvidia)
+        libva=nvidia
+        no_hw_cursors=1
+        ;;
+    amd)
+        libva=radeonsi
+        no_hw_cursors=0
+        ;;
+    intel)
+        libva=iHD
+        no_hw_cursors=0
+        ;;
+    *)
+        libva=""
+        no_hw_cursors=0
+        ;;
+    esac
+
+    if [[ "$machine" == "laptop" ]]; then
+        natural_scroll="$(bool_norm "${NATURAL_SCROLL:-true}")"
+        touchpad_tap=true
+        touchpad_dwt=true
+        scroll_factor=0.6
+        workspace_swipe=true
+        monitors_mode=laptop
+        animations_enabled=true
+        blur_passes=2
+        blur_size=8
+        shadow_enabled=true
+        lock_timeout=600
+        dpms_timeout=660
+        suspend_timeout=1800
+        want_deploy="${WANT_DEPLOY:-1}"
+        want_lid="${WANT_LID:-1}"
+    else
+        natural_scroll="$(bool_norm "${HYPRGRUV_NATURAL_SCROLL:-false}")"
+        touchpad_tap=false
+        touchpad_dwt=false
+        scroll_factor=1.0
+        workspace_swipe=false
+        monitors_mode=desktop
+        animations_enabled=true
+        blur_passes=3
+        blur_size=10
+        shadow_enabled=true
+        lock_timeout=900
+        dpms_timeout=960
+        suspend_timeout=0
+        want_deploy="${HYPRGRUV_DEPLOY_TARGET:-0}"
+        want_lid=0
+    fi
+
+    # Persist machine marker
+    printf '%s\n' "$machine" >"$MACHINE_FILE"
+    if declare -F save_choice >/dev/null 2>&1; then
+        save_choice machine_type "$machine" || true
+    fi
+
+    # Settings files (Lua + shell consumers)
+    write_setting machine "$machine"
+    write_setting natural_scroll "$natural_scroll"
+    write_setting touchpad_tap "$touchpad_tap"
+    write_setting touchpad_dwt "$touchpad_dwt"
+    write_setting touchpad_scroll_factor "$scroll_factor"
+    write_setting workspace_swipe "$workspace_swipe"
+    write_setting monitors_mode "$monitors_mode"
+    write_setting animations_enabled "$animations_enabled"
+    write_setting gpu_vendor "$gpu"
+    write_setting libva_driver "${libva:-}"
+    write_setting wlr_no_hw_cursors "$no_hw_cursors"
+    write_setting shadow_enabled "$shadow_enabled"
+    write_setting blur_passes "$blur_passes"
+    write_setting blur_size "$blur_size"
+
+    # Idle timeouts (settings scripts used by hyprgruv-settings UI)
+    write_setting hypridle_hyprlock_timeout "$lock_timeout"
+    write_setting hypridle_dpms_timeout "$dpms_timeout"
+    write_setting hypridle_suspend_timeout "$suspend_timeout"
+
+    # profile.env for shell tooling
+    cat >"$PROFILE_ENV" <<EOF
+# Generated by apply-machine-profile.sh — do not commit
+MACHINE=$machine
+GPU_VENDOR=$gpu
+LIBVA_DRIVER=$libva
+WLR_NO_HW_CURSORS=$no_hw_cursors
+NATURAL_SCROLL=$natural_scroll
+TOUCHPAD_TAP=$touchpad_tap
+TOUCHPAD_DWT=$touchpad_dwt
+TOUCHPAD_SCROLL_FACTOR=$scroll_factor
+WORKSPACE_SWIPE=$workspace_swipe
+MONITORS_MODE=$monitors_mode
+ANIMATIONS_ENABLED=$animations_enabled
+SHADOW_ENABLED=$shadow_enabled
+HYPRIDLE_LOCK=$lock_timeout
+HYPRIDLE_DPMS=$dpms_timeout
+HYPRIDLE_SUSPEND=$suspend_timeout
+DEPLOY_TARGET=$want_deploy
+LID_SUSPEND=$want_lid
+APPLIED_AT=$(date -Iseconds)
+EOF
+
+    write_hypridle_conf "$lock_timeout" "$dpms_timeout" "$suspend_timeout"
+    write_blur_conf "$blur_size" "$blur_passes"
+    apply_deploy_marker "$want_deploy"
+    apply_lid_policy "$want_lid"
+    ensure_power_stack "$machine" "$gpu"
+    ensure_git_sync_role "$machine" "$want_deploy"
+
+    log_success "Machine profile applied: $machine (GPU=$gpu, libva=${libva:-none})"
+    log_status "State: $PROFILE_ENV"
+    log_status "Hypridle: $HYPRIDLE_OUT"
+    if command -v hyprctl >/dev/null 2>&1 && [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+        log_status "Reloading Hyprland + hypridle…"
+        hyprctl reload >/dev/null 2>&1 || true
+        restart_hypridle
+        if [[ -x "${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv/scripts/apply-hypr-blur.sh" ]]; then
+            HYPR_BLUR_CONF="$BLUR_OUT" bash "${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv/scripts/apply-hypr-blur.sh" >/dev/null 2>&1 || true
+        fi
+    fi
+}
+
+write_hypridle_conf() {
+    local lock_t="$1"
+    local dpms_t="$2"
+    local susp_t="$3"
+    local lock_conf="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprlock/hyprlock.conf"
+    local lock_cmd="pidof hyprlock || hyprlock -c ${lock_conf}"
+
+    cat >"$HYPRIDLE_OUT" <<EOF
+# Generated by apply-machine-profile.sh — machine-local (not stowed)
+general {
+    lock_cmd = ${lock_cmd}
+    before_sleep_cmd = loginctl lock-session
+    after_sleep_cmd = hyprctl dispatch dpms on
+}
+
+# Screen lock
+listener {
+    timeout = ${lock_t}
+    on-timeout = loginctl lock-session
+}
+
+# Display power off (after lock timeout window)
+listener {
+    timeout = ${dpms_t}
+    on-timeout = hyprctl dispatch dpms off
+    on-resume = hyprctl dispatch dpms on
+}
+EOF
+
+    if [[ "${susp_t}" -gt 0 ]] 2>/dev/null; then
+        cat >>"$HYPRIDLE_OUT" <<EOF
+
+# Suspend (laptops)
+listener {
+    timeout = ${susp_t}
+    on-timeout = systemctl suspend
+}
+EOF
+    fi
+}
+
+write_blur_conf() {
+    local size="$1"
+    local passes="$2"
+    cat >"$BLUR_OUT" <<EOF
+# Generated by apply-machine-profile.sh — machine-local blur
+decoration_enabled=1
+decoration_size=${size}
+decoration_passes=${passes}
+decoration_noise=0.01
+decoration_contrast=0.8
+decoration_vibrancy=0.2
+
+layer_rofi_blur=1
+layer_rofi_ignore_alpha=0.2
+layer_waypaper_blur=1
+layer_waypaper_ignore_alpha=0.10
+layer_wlogout_blur=1
+layer_wlogout_ignore_alpha=0.0001
+layer_hyprlock_blur=1
+layer_hyprlock_ignore_alpha=0.05
+hyprlock_bg_blur_passes=${passes}
+hyprlock_bg_blur_size=2
+EOF
+}
+
+apply_deploy_marker() {
+    local want="$1"
+    if [[ "$want" == "1" ]]; then
+        touch "$DEPLOY_MARKER_STATE"
+        mkdir -p "$(dirname "$DEPLOY_MARKER_CFG")"
+        # Prefer state; also touch config path if writable and not a broken layout
+        if [[ -d "$(dirname "$DEPLOY_MARKER_CFG")" ]]; then
+            touch "$DEPLOY_MARKER_CFG" 2>/dev/null || true
+        fi
+        log_status "Deploy target enabled (update checks allowed)"
+    else
+        rm -f "$DEPLOY_MARKER_STATE" "$DEPLOY_MARKER_CFG" 2>/dev/null || true
+    fi
+}
+
+apply_lid_policy() {
+    local want="$1"
+    if [[ "$want" == "1" ]]; then
+        if ! command -v sudo >/dev/null 2>&1; then
+            log_warning "sudo missing — cannot install lid logind drop-in"
+            return 0
+        fi
+        log_status "Installing logind lid→suspend drop-in…"
+        if ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]; then
+            log_warning "No passwordless sudo / TTY — skip lid drop-in (re-run with sudo later)"
+            log_status "Manual: sudo tee $LOGIND_DROPIN <<'EOF' … HandleLidSwitch=suspend"
+            return 0
+        fi
+        if sudo mkdir -p /etc/systemd/logind.conf.d \
+            && sudo tee "$LOGIND_DROPIN" >/dev/null <<'EOF'
+# Managed by Hyprgruv apply-machine-profile.sh (laptop)
+[Login]
+HandleLidSwitch=suspend
+HandleLidSwitchExternalPower=suspend
+HandleLidSwitchDocked=ignore
+EOF
+        then
+            sudo systemctl kill -s HUP systemd-logind.service 2>/dev/null \
+                || sudo systemctl restart systemd-logind.service 2>/dev/null \
+                || log_warning "Could not reload logind — reboot to apply lid policy"
+        else
+            log_warning "Could not install lid logind drop-in (sudo failed)"
+        fi
+    else
+        if [[ -f "$LOGIND_DROPIN" ]]; then
+            log_status "Removing laptop lid logind drop-in (desktop profile)…"
+            sudo rm -f "$LOGIND_DROPIN" 2>/dev/null || true
+            sudo systemctl kill -s HUP systemd-logind.service 2>/dev/null || true
+        fi
+    fi
+}
+
+ensure_power_stack() {
+    local machine="$1"
+    local gpu="$2"
+
+    if [[ "${HYPRGRUV_SKIP_PACKAGES:-0}" == "1" ]]; then
+        log_status "HYPRGRUV_SKIP_PACKAGES=1 — skipping power package ensure"
+        return 0
+    fi
+
+    local pkgs=(power-profiles-daemon upower)
+    # brightnessctl already in pacman.list; ensure on laptops
+    [[ "$machine" == "laptop" ]] && pkgs+=(brightnessctl)
+
+    local need=()
+    local p
+    for p in "${pkgs[@]}"; do
+        pacman -Qq "$p" &>/dev/null || need+=("$p")
+    done
+
+    if ((${#need[@]})); then
+        log_status "Installing power stack: ${need[*]}"
+        if command -v yay >/dev/null 2>&1; then
+            yay -S --needed --noconfirm "${need[@]}" || log_warning "Failed to install: ${need[*]}"
+        elif sudo -n true 2>/dev/null || [[ -t 0 ]]; then
+            sudo pacman -S --needed --noconfirm "${need[@]}" || log_warning "Failed to install: ${need[*]}"
+        else
+            log_warning "Cannot install without sudo TTY: ${need[*]}"
+        fi
+    fi
+
+    if pacman -Qq power-profiles-daemon &>/dev/null; then
+        if systemctl is-enabled power-profiles-daemon.service &>/dev/null; then
+            :
+        else
+            sudo systemctl enable --now power-profiles-daemon.service 2>/dev/null \
+                || log_warning "Could not enable power-profiles-daemon (sudo)"
+        fi
+        # Avoid stacking with auto-cpufreq / tlp if user installed them manually
+        if systemctl is-enabled auto-cpufreq.service &>/dev/null; then
+            log_warning "auto-cpufreq is enabled — disable it to avoid fighting power-profiles-daemon"
+        fi
+        if systemctl is-enabled tlp.service &>/dev/null; then
+            log_warning "tlp is enabled — disable it to avoid fighting power-profiles-daemon"
+        fi
+    fi
+
+    # Hybrid NVIDIA laptop hint only (do not force install — needs reboot/kernel match)
+    if [[ "$machine" == "laptop" && "$gpu" == "hybrid-nvidia" ]]; then
+        log_status "Hybrid NVIDIA detected. Optional later: nvidia + nvidia-utils + supergfxctl (not auto-installed)."
+        log_status "When using NVIDIA as primary, set libva via re-run after driver install."
+    fi
+}
+
+restart_hypridle() {
+    local bin=""
+    if command -v hypridle >/dev/null 2>&1; then
+        bin="$(command -v hypridle)"
+    elif [[ -x /usr/bin/hypridle ]]; then
+        bin=/usr/bin/hypridle
+    else
+        log_warning "hypridle not installed — idle config written; install hypridle package"
+        return 0
+    fi
+    pkill -x hypridle 2>/dev/null || true
+    sleep 0.2
+    if [[ -f "$HYPRIDLE_OUT" ]]; then
+        "$bin" -c "$HYPRIDLE_OUT" &
+    else
+        "$bin" &
+    fi
+}
+
+# git-sync role: desktop → source (git-eod push); laptop/deploy → deploy (git-eod-pull)
+ensure_git_sync_role() {
+    local machine="$1"
+    local want_deploy="$2"
+    local role="source"
+    if [[ "$machine" == "laptop" || "$want_deploy" == "1" ]]; then
+        role="deploy"
+    fi
+
+    # shellcheck source=/dev/null
+    if [[ -f "$HYPR_DIR/lib/scripts/git-eod-common.sh" ]]; then
+        source "$HYPR_DIR/lib/scripts/git-eod-common.sh"
+        # Keep existing FOLLOW if conf already present
+        if [[ -f "$GIT_SYNC_CONF" ]]; then
+            git_sync_init_conf "$role" 0
+        else
+            git_sync_init_conf "$role" 1
+        fi
+        log_status "git-sync ROLE=$role (FOLLOW=$(git_sync_conf_get FOLLOW))"
+        log_status "Manage optional repos: git-sync list | follow | local-only | inventory"
+    fi
+
+    # Daily role-aware reminder timer
+    if systemctl --user enable --now git-eod-remind.timer 2>/dev/null; then
+        log_status "Enabled git-eod-remind.timer (24h)"
+    else
+        log_warning "Could not enable git-eod-remind.timer (reload user systemd after session login)"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+main() {
+    local machine
+
+    if [[ -n "$EXPLICIT_TYPE" && "$EXPLICIT_TYPE" != "auto" && "$DO_PROMPT" -eq 0 && "${SKIP_MACHINE_PROMPT:-0}" != "1" && "$DO_YES" -eq 0 ]]; then
+        # CLI: apply-machine-profile.sh laptop
+        machine="$EXPLICIT_TYPE"
+        if [[ "$machine" == "laptop" ]]; then
+            NATURAL_SCROLL="$(bool_norm "${HYPRGRUV_NATURAL_SCROLL:-true}")"
+            WANT_DEPLOY="${HYPRGRUV_DEPLOY_TARGET:-1}"
+            WANT_LID="${HYPRGRUV_LID_SUSPEND:-1}"
+        fi
+    elif [[ "$DO_PROMPT" -eq 1 || ! -f "$MACHINE_FILE" || "${FORCE:-0}" == "1" ]]; then
+        machine="$(prompt_machine_type)"
+        if [[ "$machine" == "auto" ]]; then
+            machine="$(detect_machine_type)"
+        fi
+        if [[ "$machine" == "laptop" ]]; then
+            prompt_laptop_extras
+        fi
+    else
+        machine="$(tr -d '[:space:]' <"$MACHINE_FILE")"
+        [[ "$machine" == "laptop" || "$machine" == "desktop" ]] || machine="$(detect_machine_type)"
+        if [[ "$machine" == "laptop" ]]; then
+            NATURAL_SCROLL="$(bool_norm "${HYPRGRUV_NATURAL_SCROLL:-$(read_setting_file natural_scroll true)}")"
+            WANT_DEPLOY="${HYPRGRUV_DEPLOY_TARGET:-$([[ -f $DEPLOY_MARKER_STATE || -f $DEPLOY_MARKER_CFG ]] && echo 1 || echo 0)}"
+            WANT_LID="${HYPRGRUV_LID_SUSPEND:-1}"
+        fi
+    fi
+
+    case "$machine" in
+    laptop | desktop) ;;
+    *)
+        log_error "Invalid machine type: $machine"
+        exit 1
+        ;;
+    esac
+
+    log_status "Applying Hyprgruv machine profile: $machine"
+    apply_profile_values "$machine"
+}
+
+main

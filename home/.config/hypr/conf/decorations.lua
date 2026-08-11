@@ -1,7 +1,14 @@
 local HOME = os.getenv("HOME") or ""
+local settings = require("conf.settings")
+local is_laptop = settings.is_laptop()
+
+-- Defaults: desktop can run heavier blur; laptop profile softens for iGPU/battery.
+-- Runtime override: apply-hypr-blur.sh (prefers state hypr-blur.conf when present).
+local blur_passes = settings.read_number("blur_passes", is_laptop and 2 or 6)
+local blur_size = settings.read_number("blur_size", is_laptop and 8 or 10)
+local shadow_on = settings.read_bool("shadow_enabled", true)
 
 local decorations = {
-	-- Active preset was rounding-more-blur (10px, not 25)
 	rounding = 10,
 	rounding_power = 2.0,
 
@@ -10,25 +17,22 @@ local decorations = {
 	fullscreen_opacity = 1.0,
 
 	shadow = {
-		enabled = true,
-		range = 30,
+		enabled = shadow_on,
+		range = is_laptop and 20 or 30,
 		render_power = 3,
-		-- Neutral shadow — 0x80900a0a had a red tint that haloed every window
 		color = 0x66000000,
 	},
 
 	blur = {
 		enabled = true,
-		size = 10,
-		passes = 6,
+		size = blur_size,
+		passes = blur_passes,
 		ignore_opacity = false,
 		contrast = 0.8,
 		vibrancy = 0.2,
 		xray = false,
 		new_optimizations = true,
 	},
-
-	-- inactive_opacity = 0.7,
 
 	dim_inactive = false,
 }

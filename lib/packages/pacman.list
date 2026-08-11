@@ -44,11 +44,14 @@ hyprpicker
 hyprcursor
 hyprsunset
 hyprlock
+hypridle
 hyprtoolkit
 grim
 slurp
 wl-clipboard
 brightnessctl
+power-profiles-daemon
+upower
 wlr-randr
 waybar
 xdg-desktop-portal-hyprland

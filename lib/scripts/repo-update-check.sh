@@ -24,10 +24,11 @@ mkdir -p "$STATE_DIR"
 
 MODE="${1:---prompt-if-needed}"
 DEPLOY_MARKER="${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv/deploy-target"
+DEPLOY_MARKER_STATE="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/deploy-target"
 
 is_deploy_target() {
     [[ "${HYPRGRUV_DEPLOY_TARGET:-0}" == "1" ]] && return 0
-    [[ -f "$DEPLOY_MARKER" ]]
+    [[ -f "$DEPLOY_MARKER" || -f "$DEPLOY_MARKER_STATE" ]]
 }
 
 usage() {
@@ -45,8 +46,8 @@ Modes:
 After desktop push, the laptop timer or login hook runs this script.
 
 Laptop / deploy machine only (avoids prompts on your push desktop):
-  mkdir -p ~/.config/hyprgruv
-  touch ~/.config/hyprgruv/deploy-target
+  bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh laptop
+  # or: touch ~/.local/state/hyprgruv/deploy-target
   systemctl --user enable --now hyprgruv-update-check.timer
 EOF
 }

@@ -18,6 +18,9 @@ hyprgruv_forbid_skip_var SKIP_PACKAGES
 hyprgruv_forbid_skip_var SKIP_WALLPAPER
 hyprgruv_forbid_skip_var SKIP_SETUP_WIZARD
 hyprgruv_forbid_skip_var SKIP_CHAOTIC
+# SKIP_MACHINE_PROFILE is allowed in strict mode only when MACHINE_TYPE is pre-set
+# via env for automation; bare skip remains a soft warning unless STRICT forbids it.
+# (Not forbidden — reinstalls often set MACHINE_TYPE instead.)
 
 # ============================================================
 # Setup logging
@@ -129,6 +132,39 @@ fi
 sleep 1
 
 run_module "02-stow.sh" "Stow configuration" || exit 1
+sleep 1
+
+# ============================================================
+# Machine profile (laptop vs desktop) — after stow so settings
+# and hypr configs exist. Tailors touchpad, idle, blur, GPU env,
+# monitors mode, power-profiles-daemon, lid policy, deploy-target.
+#
+# Non-interactive provisioning:
+#   MACHINE_TYPE=laptop ./install.sh
+#   MACHINE_TYPE=desktop SKIP_MACHINE_PROMPT=1 ./install.sh
+#   SKIP_MACHINE_PROFILE=1 ./install.sh   # skip entirely
+# ============================================================
+if [[ "${SKIP_MACHINE_PROFILE:-0}" != "1" ]]; then
+    display_header "Machine profile"
+    set +e
+    if [[ -n "${MACHINE_TYPE:-${HYPRGRUV_MACHINE:-}}" || "${SKIP_MACHINE_PROMPT:-0}" == "1" ]]; then
+        MACHINE_TYPE="${MACHINE_TYPE:-${HYPRGRUV_MACHINE:-}}" \
+            bash "$HYPR_DIR/lib/scripts/apply-machine-profile.sh" --yes
+    else
+        bash "$HYPR_DIR/lib/scripts/apply-machine-profile.sh" --prompt
+    fi
+    mp_exit=$?
+    set -e
+    if [[ $mp_exit -eq 0 ]]; then
+        log_success "Machine profile applied"
+        mark_completed "Machine profile"
+    else
+        hyprgruv_strict_abort "apply-machine-profile.sh failed (exit $mp_exit)"
+        log_warning "Machine profile finished with errors (exit $mp_exit)"
+    fi
+else
+    log_warning "SKIP_MACHINE_PROFILE=1 — skipping laptop/desktop profile"
+fi
 sleep 1
 
 # ============================================================

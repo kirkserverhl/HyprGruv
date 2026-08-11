@@ -40,8 +40,9 @@ hl.on("hyprland.start", function()
 	start_polkit_agent()
 
 	-- Idle + bar
+	-- Prefer machine-local hypridle from apply-machine-profile.sh when present.
 	hl.exec_cmd(
-		'hypridle & sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
+		'sh -c \'hidle=${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/hypridle.conf; if [ -f "$hidle" ]; then hypridle -c "$hidle" &; else hypridle &; fi; st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
 	)
 
 	-- Clipboard history (images)
@@ -68,8 +69,8 @@ hl.on("hyprland.start", function()
 	-- Post-install wizard runs from install.sh (before reboot).
 	-- Manual re-run: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
-	-- Hyprgruv deploy target (laptop): touch ~/.config/hyprgruv/deploy-target
-	-- Then: systemctl --user enable --now hyprgruv-update-check.timer
+	-- Deploy-target machines (laptop profile): repo update check.
+	-- Marker: ~/.local/state/hyprgruv/deploy-target or ~/.config/hyprgruv/deploy-target
 	hl.exec_cmd("sleep 90 && ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt-if-needed &")
 
 	-- Auto-mount
