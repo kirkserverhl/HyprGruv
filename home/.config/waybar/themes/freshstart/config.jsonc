@@ -132,10 +132,17 @@
     "format": " {icon} ",
   },
 
+  // interface omitted → auto default-route iface (wlan0 / wlo1 / eth / enp…)
   "network": {
+    "interval": 5,
     "format-wifi": " {icon} ",
     "format-ethernet": " \udb80\ude00 ",
     "format-disconnected": " \udb82\udd2d ",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "tooltip-format-wifi": "{essid}\n{ifname}: {ipaddr}/{cidr}\nSignal: {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh",
   },
 
   "cpu": {

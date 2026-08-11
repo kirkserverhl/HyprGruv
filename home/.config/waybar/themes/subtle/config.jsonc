@@ -106,17 +106,21 @@
     }
   },
 
+  // interface omitted → auto default-route iface (wlan0 / wlo1 / eth / enp…)
   "network": {
-    "interface": "wlo1",
-    "format-alt": "{essid}  {icon}",
+    "interval": 5,
     "format-wifi": "{icon}",
-    "format-wifi-alt": "{icon} lol",
     "format-ethernet": "󰈀",
+    "format-linked": "󰈁",
     "format-disconnected": "󰤭",
+    "format-disabled": "󰤮",
+    "format-alt": "{essid}  {icon}",
     "max-length": 50,
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "tooltip-format": "Connected to {essid}\nStrength: {signalStrength}%"
-    // "on-click": "foot --title FootNmtui sh -c 'sleep 0.1; nmtui'"
+    "tooltip-format-wifi": "{essid}\n{ifname}: {ipaddr}/{cidr}\nSignal: {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh"
   },
 
   "bluetooth": {

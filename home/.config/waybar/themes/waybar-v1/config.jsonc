@@ -66,17 +66,17 @@
             "Easy Effects Sink"
         ]
     },
+    // interface omitted → auto default-route iface (wlan0 / wlo1 / eth / enp…)
     "network": {
-        "interface": "wlo1",
-        "format": "{ifname}",
+        "interval": 5,
         "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
         "format-wifi": "{essid} {icon}",
         "format-ethernet": "{ipaddr}/{cidr} 󰊗",
-        "format-disconnected": "", //An empty format will hide the module.
-        "tooltip-format": "{ifname} via {gwaddr} 󰊗",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%)",
-        "tooltip-format-ethernet": "{ifname} ",
+        "format-disconnected": "", // empty format hides the module
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
         "tooltip-format-disconnected": "Disconnected",
-        "max-length": 50
+        "max-length": 50,
+        "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh"
     }
 }

@@ -22,11 +22,12 @@
   },
 
   "network": {
-    "interface": "wlo1",
-    "format": "{ifname}",
+    "interval": 5,
     "format-wifi": "{icon}",
     "format-ethernet": "\udb80\ude00",
+    "format-linked": "\udb80\ude01",
     "format-disconnected": "\udb82\udd2d",
+    "format-disabled": "\udb82\udd2e",
     "max-length": 50,
     "format-icons": [
       "\udb82\udd2f",
@@ -35,7 +36,9 @@
       "\udb82\udd25",
       "\udb82\udd28"
     ],
-    "tooltip-format": "Network Manager",
+    "tooltip-format-wifi": "{essid}\n{ifname}: {ipaddr}/{cidr}\nSignal: {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Disconnected",
     "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh"
   },
 

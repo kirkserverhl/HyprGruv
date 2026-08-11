@@ -53,18 +53,18 @@
     "separate-outputs": true
   },
 
+  // interface omitted → auto default-route iface (wlan0 / wlo1 / eth / enp…)
   "network": {
-    "interface": "wlo1",
-    "format": "{ifname}",
+    "interval": 5,
     "format-wifi": "{icon}",
     "format-ethernet": "{ipaddr}/{cidr} 󰊗",
-    "format-disconnected": "", //An empty format will hide the module.
-    "tooltip-format": "{ifname} via {gwaddr} 󰊗",
-    "tooltip-format-wifi": "Connected to {essid} ({signalStrength}%)",
-    "tooltip-format-ethernet": "{ifname} ",
+    "format-disconnected": "", // empty format hides the module
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
     "tooltip-format-disconnected": "Disconnected",
     "max-length": 50,
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh"
   },
 
   "pulseaudio": {

@@ -87,17 +87,20 @@
     "tooltip-format": "Volume: {volume}%",
   },
 
+  // interface omitted → auto default-route iface (wlan0 / wlo1 / eth / enp…)
   "network": {
-    "interface": "wlo1",
-    "format": "{ifname}",
+    "interval": 5,
     "format-wifi": "{icon}  {essid}",
     "format-ethernet": "󰈀  {ipaddr}/{cidr}",
+    "format-linked": "󰈁",
     "format-disconnected": "󰤭  Disconnected",
+    "format-disabled": "󰤮",
     "max-length": 50,
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "on-click": "kitty nm-connection-editor",
-    //"on-click-right":""
-    "tooltip-format": "Internet Connections}",
+    "tooltip-format-wifi": "{essid}\n{ifname}: {ipaddr}/{cidr}\nSignal: {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "Disconnected",
+    "on-click": "~/.config/hyprgruv/scripts/networkmanager.sh",
   },
 
   "hyprland/workspaces": {
