@@ -162,6 +162,16 @@ pull_repo() {
             if [[ $stashed -eq 1 ]]; then
                 log_status "$name — stash kept (git -C $path stash list)"
             fi
+            # Live matugen outputs are machine-local (gitignored). After a
+            # hyprgruv pull they may be missing or still from a pre-ignore era;
+            # re-seed only when markers are absent so we never clobber a local theme.
+            if [[ "$name" == "hyprgruv" ]]; then
+                local ensure="$HYPR_DIR/lib/scripts/ensure-local-palette.sh"
+                if [[ -f "$ensure" ]]; then
+                    log_status "$name — ensuring local theme palette (gruvbox default if missing)"
+                    bash "$ensure" || log_warning "$name — ensure-local-palette failed (run apply-theme.sh manually)"
+                fi
+            fi
             return 0
         fi
         log_error "$name — pull failed"

@@ -114,6 +114,18 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 (requires root for initramfs rebuild)
 
+## Machine-local palettes (git-eod / dual-device)
+
+**Active** matugen outputs (starship, nvim, gtk, waybar, hypr, `user-palette.json`, …) are **gitignored** and must not be committed. They are regenerated per machine from wallpapers or static presets under `~/.config/colorschemes/<theme>/`.
+
+| Role | Behavior |
+|------|----------|
+| Source `git-eod` | Does not stage live palette files (ignored). Do not force-add them. |
+| Deploy `git-eod-pull` | After a hyprgruv pull, runs `ensure-local-palette.sh` if nvim/starship markers are missing — reapplies `.current-theme` or **gruvbox-dark**. |
+| Manual restore | `THEME_SWITCHER_APPLY=1 ~/.config/colorschemes/apply-theme.sh gruvbox-dark` |
+
+If a deploy machine suddenly shows another host’s palette (e.g. noir/nord after pull), re-apply a local theme; then pull the gitignore fix so it cannot happen again.
+
 ## Troubleshooting
 
 | Problem | Fix |
@@ -123,6 +135,7 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 | Hyprland colors stale | `hyprctl reload` |
 | Firefox chrome empty | Fix profile path in `config.toml`, enable `userChrome` pref, restart Firefox |
 | Grey / washed-out palette | Re-pick source color in `palette.sh` or `rofi-palette.sh` |
+| Deploy looks like source palette after pull | Live outputs were committed historically; `git-eod-pull` + `ensure-local-palette.sh`, or re-apply theme |
 | waypaper search picks wrong image | Ensure `~/waypaper_fixed_app.py` exists (patched wrapper in `~/.local/bin/waypaper`) |
 
 ## Adding a new themed app
