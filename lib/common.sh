@@ -130,7 +130,7 @@ display_header() {
     local title="${1:-}"
     [[ -z "$title" ]] && return 0
 
-    # toilet headers via header.sh (palette: matugen/user theme if set, else gruvbox)
+    # toilet graffiti headers via header.sh (lsd-print if available; else gum/ANSI palette)
     local header_sh=""
     local cand
     for cand in \

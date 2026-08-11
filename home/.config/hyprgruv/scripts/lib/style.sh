@@ -1,8 +1,8 @@
 #!/bin/bash
-# Universal styling — gum + toilet headers
+# Universal styling — gum + toilet graffiti headers (install & upkeep)
 #
-# Policy: gruvbox default; live matugen / user-selected theme if present
-# (colors.sh → hypr matugen.conf / shell cache / gruvbox-colors.sh).
+# Headers: graffiti font system-wide; lsd-print if available, else gum/ANSI.
+# Palette (gum path): gruvbox default; matugen / user-selected if present.
 
 # shellcheck source=/dev/null
 source "$HOME/.config/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true
@@ -25,8 +25,17 @@ fi
 print_header() {
     local title="$1"
     clear
+    # Always use header.sh (graffiti + lsd-print/gum) when available
     if declare -f display_header >/dev/null 2>&1; then
         display_header "$title"
+    elif command -v toilet >/dev/null 2>&1; then
+        if command -v lsd-print >/dev/null 2>&1; then
+            toilet -f graffiti "$title" 2>/dev/null | lsd-print
+        else
+            toilet -f graffiti "$title" 2>/dev/null | while IFS= read -r line; do
+                printf '%s\n' "$line" | gum style --foreground "$COLOR_PRIMARY" 2>/dev/null || printf '%s\n' "$line"
+            done
+        fi
     else
         echo "$title" | gum style --foreground "$COLOR_PRIMARY" --bold 2>/dev/null || echo "=== $title ==="
     fi

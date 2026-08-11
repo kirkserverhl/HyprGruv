@@ -13,6 +13,8 @@ bibata-cursor-gruvbox-git
 cbonsai-git
 dipc
 toilet-fonts
+# Rainbow/LSD styling for toilet graffiti headers (header.sh); optional but preferred
+lsd-print-git
 displaylink
 google-chrome
 gruvbox-gtk-theme-git
