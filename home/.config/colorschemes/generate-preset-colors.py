@@ -302,6 +302,59 @@ def write_starship(slots: dict[str, str], theme: str) -> None:
     spectrum.apply_starship_asset(theme, resolved, s)
 
 
+def write_mpv(slots: dict[str, str], theme: str) -> None:
+    """ModernZ OSC + mpv OSD colors from base16 (same mapping as matugen templates)."""
+    s = {k.lower(): v for k, v in slots.items()}
+    for key in ("base00", "base01", "base02", "base03", "base04", "base05",
+                "base08", "base0a", "base0b", "base0d"):
+        s.setdefault(key, {
+            "base00": "#1d2021", "base01": "#282828", "base02": "#3c3836",
+            "base03": "#7c6f64", "base04": "#928374", "base05": "#ebdbb2",
+            "base08": "#cc241d", "base0a": "#d79921", "base0b": "#98971a",
+            "base0d": "#d65d0e",
+        }[key])
+
+    mpv_dir = HOME / ".config/mpv"
+    mpv_dir.mkdir(parents=True, exist_ok=True)
+    (mpv_dir / "script-opts").mkdir(parents=True, exist_ok=True)
+
+    osd = f"""# mpv OSD colors — preset {theme} (machine-local)
+# Included from mpv.conf via: include=~~/mpv-matugen.conf
+
+osd-color='{s["base05"]}'
+osd-border-color='{s["base00"]}'
+"""
+    (mpv_dir / "mpv-matugen.conf").write_text(osd, encoding="utf-8")
+
+    modernz = f"""# ModernZ OSC colors — preset {theme} (machine-local)
+# Loaded by modernz.lua after modernz.conf
+
+osc_color={s["base00"]}
+window_title_color={s["base05"]}
+window_controls_color={s["base05"]}
+windowcontrols_close_hover={s["base08"]}
+windowcontrols_max_hover={s["base0a"]}
+windowcontrols_min_hover={s["base0b"]}
+title_color={s["base05"]}
+cache_info_color={s["base04"]}
+time_color={s["base05"]}
+chapter_title_color={s["base04"]}
+seekbarfg_color={s["base0d"]}
+seekbarbg_color={s["base03"]}
+seekbar_cache_color={s["base02"]}
+hover_effect_color={s["base0d"]}
+nibble_color={s["base0d"]}
+nibble_current_color={s["base05"]}
+side_buttons_color={s["base05"]}
+middle_buttons_color={s["base05"]}
+playpause_color={s["base05"]}
+held_element_color={s["base04"]}
+thumbnail_border_color={s["base01"]}
+thumbnail_border_outline={s["base03"]}
+"""
+    (mpv_dir / "script-opts/modernz-matugen.conf").write_text(modernz, encoding="utf-8")
+
+
 def write_rofi(slots: dict[str, str], theme: str) -> None:
     s = slots
     content = f"""* {{
@@ -440,6 +493,7 @@ def main() -> int:
     write_nvim(slots, theme)
     write_starship(slots, theme)
     write_rofi(slots, theme)
+    write_mpv(slots, theme)
 
     if palette_path is not None:
         print(f"Preset colors applied for {theme} from {palette_path.name}")

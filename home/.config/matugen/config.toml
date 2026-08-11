@@ -205,6 +205,15 @@ input_path = "~/.config/matugen/templates/neovim-mini.lua"
 output_path = "~/.config/nvim/lua/matugen-theme.lua"
 post_hook = 'pkill -SIGUSR1 nvim 2>/dev/null || true'
 
+# mpv / ModernZ OSC — system palette (reopen mpv to pick up)
+[templates.mpv_osd]
+input_path = "~/.config/matugen/templates/mpv-matugen.conf"
+output_path = "~/.config/mpv/mpv-matugen.conf"
+
+[templates.mpv_modernz]
+input_path = "~/.config/matugen/templates/modernz-matugen.conf"
+output_path = "~/.config/mpv/script-opts/modernz-matugen.conf"
+
 # Starship prompt - rainbow powerline structure using matugen colors
 
 [templates.obs]

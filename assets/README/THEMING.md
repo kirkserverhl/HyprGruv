@@ -136,6 +136,7 @@ Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruv
 | figlet / toilet headers | `header.sh` paints with `COLOR_PRIMARY` via gum |
 | SDDM Sugar Candy | Asset defaults = gruvbox; `update-sddm-wallpaper.sh` overwrites from live palette |
 | Shell cache | `~/.cache/matugen/colors.sh` regenerated on load / theme ensure |
+| **mpv / ModernZ** | `mpv-matugen.conf` (OSD) + `script-opts/modernz-matugen.conf` (OSC); reopen player after theme change |
 
 | Role | Behavior |
 |------|----------|
