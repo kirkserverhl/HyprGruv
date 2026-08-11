@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
-# pick-theme-accent.sh — Super+W step 3: pick primary/source from theme palette
+# pick-theme-accent.sh — Super+W step 3: theme-palette primary + full chrome rebuild
 #
-# Shows the theme's standard accent splotches (not wallpaper-extracted colors),
-# e.g. Gruvbox: red, purple, yellow, green, aqua, orange, blue.
-# Choice becomes base0D/base0F (active border, waybar primary, starship accents, …).
+# After theme + wallpaper are applied, show fixed theme accent splotches
+# (Gruvbox: red, purple, yellow, green, aqua, orange, blue — not wallpaper extract).
+# On pick: set base0D/base0F, then FULL rebuild (preset assets + reload).
 #
 # Usage:
 #   pick-theme-accent.sh <theme-name> [wallpaper-path]
-# Exit 0 always (cancel keeps current theme primary).
+# Escape = keep theme default primary (already applied).
 set -euo pipefail
 
 THEME="${1:-}"
 WALLPAPER="${2:-}"
-GENERATOR="${HOME}/.config/colorschemes/generate-preset-colors.py"
+COLORSCHEMES="${HOME}/.config/colorschemes"
+GENERATOR="${COLORSCHEMES}/generate-preset-colors.py"
+CONFIG_SCRIPT="${COLORSCHEMES}/colors-config.sh"
 RELOAD="${HOME}/.config/hyprgruv/scripts/reload-matugen-visible.sh"
 ROFI_THEME="${HOME}/.config/rofi/theme-accent-grid.rasi"
 [[ -f "$ROFI_THEME" ]] || ROFI_THEME="${HOME}/.config/rofi/color-grid.rasi"
+
+# Never force-canonical rebuild here (would wipe the accent we just wrote).
+unset THEME_SWITCHER_APPLY
 
 if [[ -z "$THEME" || ! -f "$GENERATOR" ]]; then
     echo "Usage: pick-theme-accent.sh <theme-name> [wallpaper]" >&2
@@ -27,7 +32,6 @@ if ! command -v rofi >/dev/null 2>&1; then
     exit 0
 fi
 
-# JSON array of {slot,label,hex}
 mapfile -t LINES < <(python3 "$GENERATOR" --list-accents "$THEME" 2>/dev/null | jq -c '.[]' 2>/dev/null || true)
 if ((${#LINES[@]} == 0)); then
     echo "No accents for theme $THEME — skipping" >&2
@@ -37,7 +41,6 @@ fi
 SWATCH_DIR=$(mktemp -d /tmp/theme-accent-XXXXXX)
 trap 'rm -rf "$SWATCH_DIR" 2>/dev/null || true' EXIT
 
-# Build rofi entries: labeled splotches
 ROFI_INPUT=""
 declare -a HEXES=()
 declare -a LABELS=()
@@ -66,22 +69,20 @@ done
 ((${#HEXES[@]})) || exit 0
 
 chosen=$(printf '%b' "$ROFI_INPUT" | rofi -dmenu -i -show-icons \
-    -p "Primary / source color — $THEME" \
-    -mesg "Active window, waybar accents, starship · Escape = keep default" \
+    -p "Primary color — $THEME" \
+    -mesg "Active window · waybar · starship · Escape = theme default" \
     -theme "$ROFI_THEME" \
     -no-custom 2>/dev/null || true)
 
 [[ -z "${chosen:-}" ]] && exit 0
 
-# Match by label
 PICK_HEX=""
 for i in "${!LABELS[@]}"; do
-    if [[ "$chosen" == "${LABELS[$i]}"* ]] || [[ "$chosen" == *"${LABELS[$i]}"* ]]; then
+    if [[ "$chosen" == "${LABELS[$i]}" ]] || [[ "$chosen" == "${LABELS[$i]}"* ]]; then
         PICK_HEX="${HEXES[$i]}"
         break
     fi
 done
-# Fallback: first line of chosen if it's a path with index
 if [[ -z "$PICK_HEX" ]]; then
     for i in "${!LABELS[@]}"; do
         if [[ "$chosen" == *"$(printf '%02d' "$i")-"* ]]; then
@@ -92,19 +93,44 @@ if [[ -z "$PICK_HEX" ]]; then
 fi
 [[ -n "$PICK_HEX" ]] || exit 0
 
-echo "Applying $THEME primary/source accent: $PICK_HEX"
+echo "Accent $PICK_HEX — writing primary/source and full rebuild…"
 python3 "$GENERATOR" --apply-accent "$THEME" "$PICK_HEX"
 
-# Live reload chrome
-if [[ -x "$RELOAD" ]]; then
-    bash "$RELOAD" 2>/dev/null || true
-else
-    pkill -SIGUSR2 waybar 2>/dev/null || true
-    hyprctl reload >/dev/null 2>&1 || true
+PALETTE_JSON="${COLORSCHEMES}/${THEME}/palette.json"
+if [[ ! -f "$PALETTE_JSON" ]]; then
+    echo "Missing $PALETTE_JSON after accent apply" >&2
+    exit 0
 fi
 
-# Borders pick up source_color from matugen hypr conf
-hyprctl eval 'if type(apply_borders) == "function" then apply_borders() end' >/dev/null 2>&1 || true
+# Resolve wallpaper for matugen import path (templates need an image path)
+if [[ -z "$WALLPAPER" || ! -f "$WALLPAPER" ]]; then
+    for f in "$HOME/.config/last_wallpaper.txt" "$HOME/.config/settings/default"; do
+        [[ -f "$f" ]] || continue
+        WALLPAPER=$(tr -d '\n' <"$f")
+        [[ -n "$WALLPAPER" && -f "$WALLPAPER" ]] && break
+    done
+fi
 
-notify-send -e -u low "Theme accent" "$THEME → $PICK_HEX (primary / active border)" 2>/dev/null || true
+# Full static rebuild from palette.json (includes matugen import + spectrum restore + reload).
+# Must NOT set THEME_SWITCHER_APPLY — that forces canonical orange and undoes the accent.
+if [[ -x "$CONFIG_SCRIPT" && -n "${WALLPAPER:-}" && -f "$WALLPAPER" ]]; then
+    echo "Rebuilding system chrome from palette + accent…"
+    bash "$CONFIG_SCRIPT" apply-static "$THEME" "$PALETTE_JSON" "$WALLPAPER" "" || true
+else
+    # Fallback: generator already wrote files; still reload visible apps
+    if [[ -x "$RELOAD" ]]; then
+        bash "$RELOAD" 2>/dev/null || true
+    else
+        pkill -SIGUSR2 waybar 2>/dev/null || true
+        hyprctl reload >/dev/null 2>&1 || true
+    fi
+fi
+
+# Ensure borders pick up $source_color from hypr matugen conf
+hyprctl reload >/dev/null 2>&1 || true
+sleep 0.15
+hyprctl eval 'if type(apply_borders) == "function" then apply_borders() end' >/dev/null 2>&1 || true
+pkill -SIGUSR1 nvim 2>/dev/null || true
+
+notify-send -e -u low "Theme accent" "$THEME → $PICK_HEX (rebuilt)" 2>/dev/null || true
 exit 0

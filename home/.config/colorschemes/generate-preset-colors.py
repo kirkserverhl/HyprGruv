@@ -522,33 +522,40 @@ def list_theme_accents(theme: str) -> list[dict[str, str]]:
 
 
 def apply_source_accent(theme: str, hex_color: str) -> dict[str, str]:
-    """Keep theme surfaces; set primary + source (base0D/base0F) to the chosen accent."""
+    """Keep theme surfaces; set primary + source (base0D/base0F) to the chosen accent.
+
+    Always starts from the theme's fixed palette, then overlays the accent — never
+    leaves a half-applied state. Caller should run colors-config apply-static after
+    for a full matugen-import rebuild of templates.
+    """
     hex_color = hex_color.strip().lower()
     if not hex_color.startswith("#"):
         hex_color = f"#{hex_color}"
     if len(hex_color) != 7:
         raise ValueError(f"invalid hex color: {hex_color}")
 
-    slots = resolve_theme_slots(theme)
-    slots["base0d"] = hex_color
-    slots["base0f"] = hex_color
-    # Keep normalize_slot_keys format (mixed case keys used by writers)
+    # Ignore THEME_SWITCHER_APPLY here — we need the theme base, then our accent.
+    # (Caller unsets it; belt-and-suspenders if env leaked.)
+    saved_tsa = os.environ.pop("THEME_SWITCHER_APPLY", None)
+    try:
+        slots = resolve_theme_slots(theme)
+    finally:
+        if saved_tsa is not None:
+            os.environ["THEME_SWITCHER_APPLY"] = saved_tsa
+
     slots = normalize_slot_keys(slots)
     slots["base0D"] = hex_color
     slots["base0F"] = hex_color
 
-    write_all_outputs(slots, theme)
-
-    # Persist for next Super+W / ensure-local-palette
+    # Persist BEFORE write so any nested generator main() re-reads the accent
     accent_file = COLORSCHEMES / theme / "user-accent"
     accent_file.parent.mkdir(parents=True, exist_ok=True)
     accent_file.write_text(hex_color + "\n", encoding="utf-8")
     source_file = COLORSCHEMES / theme / "source-color"
     source_file.write_text(hex_color + "\n", encoding="utf-8")
-
-    # Update live palette.json so apply-static paths stay consistent
     export_palette_json(theme, slots, force=True)
 
+    write_all_outputs(slots, theme)
     return slots
 
 
@@ -585,14 +592,17 @@ def main() -> int:
         return 0
 
     theme = sys.argv[1].strip()
-    # Re-apply saved Super+W accent if present (after full palette rebuild)
     slots = resolve_theme_slots(theme)
+    # Super+W accent must survive canonical rebuilds (apply-static / apply-theme)
     accent_path = COLORSCHEMES / theme / "user-accent"
     if accent_path.is_file():
         saved = accent_path.read_text(encoding="utf-8").strip().lower()
-        if saved.startswith("#") and len(saved) == 7:
+        if not saved.startswith("#"):
+            saved = f"#{saved}"
+        if len(saved) == 7:
             slots["base0D"] = saved
             slots["base0F"] = saved
+            export_palette_json(theme, slots, force=True)
 
     write_all_outputs(slots, theme)
     print(f"Preset colors applied for {theme}")

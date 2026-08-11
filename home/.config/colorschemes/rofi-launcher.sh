@@ -43,18 +43,18 @@ SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
 ACCENT_PICKER="$HOME/.config/hyprgruv/scripts/pick-theme-accent.sh"
 
 if [[ -n "$wallpaper" ]]; then
-    # 1) Static theme palette + wallpaper
+    # 1) Theme default palette + wallpaper (gruvbox orange, nord frost, …)
     "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1
-    # 2) Theme-native accent splotches (gruvbox green/orange/…) → primary/source
-    #    Not wallpaper-extracted colors — fixed slots from the theme palette.
-    if [[ -x "$ACCENT_PICKER" ]]; then
-        bash "$ACCENT_PICKER" "$selected" "$wallpaper" || true
-    fi
-    # 3) SDDM / default_wp only (no matugen Material You chooser)
+    # 2) SDDM / default_wp only — must finish before accent rebuild (no palette regen)
     if [[ -x "$SET_WALLPAPER" ]]; then
-        SET_WALLPAPER_SKIP_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 &
+        SET_WALLPAPER_SKIP_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 || true
     else
         notify-send "Theme switcher" "set_wallpaper.sh missing — SDDM default not updated" -u critical 2>/dev/null || true
+    fi
+    # 3) LAST: accent splotch → write primary/source → full chrome rebuild
+    #    (must be last so apply-theme / set_wallpaper cannot re-apply default orange)
+    if [[ -x "$ACCENT_PICKER" ]]; then
+        bash "$ACCENT_PICKER" "$selected" "$wallpaper" || true
     fi
 else
     "$APPLY_SCRIPT" "$selected" >/dev/null 2>&1
