@@ -43,9 +43,13 @@ SET_WALLPAPER="$HOME/.config/hyprgruv/scripts/set_wallpaper.sh"
 
 if [[ -n "$wallpaper" ]]; then
     "$APPLY_SCRIPT" "$selected" "$wallpaper" >/dev/null 2>&1
-    # Post-command hook: SDDM/default_wp cache + palette.sh (same as waypaper Ctrl+P flow).
+    # Post-command hook (same as waypaper): refresh default_wp.png, library default.png,
+    # hyprlock symlink, and SDDM sugar-candy wallpaper/theme.conf.
     if [[ -x "$SET_WALLPAPER" ]]; then
+        # SDDM/default paths update first inside set_wallpaper; palette can follow in bg.
         SET_WALLPAPER_FORCE_PALETTE=1 "$SET_WALLPAPER" "$wallpaper" >/dev/null 2>&1 &
+    else
+        notify-send "Theme switcher" "set_wallpaper.sh missing — SDDM default not updated" -u critical 2>/dev/null || true
     fi
 else
     "$APPLY_SCRIPT" "$selected" >/dev/null 2>&1

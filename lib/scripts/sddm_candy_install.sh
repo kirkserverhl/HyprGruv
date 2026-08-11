@@ -191,11 +191,131 @@ else
 fi
 
 # ------------------------------------------------------------
-# Enable SDDM + seed wallpaper from waypaper
+# Make SDDM the *active* display manager
+#
+# Common on EndeavourOS / multi-DE machines:
+#   plasma-login-manager (plasmalogin) is display-manager.service
+#   → sugar-candy never runs; greeter looks "stock" KDE/EOS.
+#
+# Order matters (lesson from a botched switch → TTY-only boot):
+#   1) Detect + report rivals
+#   2) enable -f sddm FIRST (steals display-manager.service alias)
+#   3) Then disable other DMs (do NOT disable --now first — that can
+#      remove display-manager.service with nothing to replace it)
+#   4) Verify alias points at sddm; abort in strict mode if not
 # ------------------------------------------------------------
-log_status "Ensuring sddm.service is enabled and graphical.target is default"
-sudo systemctl reenable sddm.service >/dev/null 2>&1 || true
-sudo systemctl set-default graphical.target >/dev/null 2>&1 || true
+list_display_manager_units() {
+    # Units that install Alias=display-manager.service (or act as greeters).
+    local -a known=(
+        sddm.service
+        plasmalogin.service
+        gdm.service
+        gdm3.service
+        lightdm.service
+        lxdm.service
+        ly.service
+        entrance.service
+        greetd.service
+        slim.service
+    )
+    local u
+    for u in "${known[@]}"; do
+        systemctl cat "$u" &>/dev/null || continue
+        printf '%s\n' "$u"
+    done
+}
+
+display_manager_alias_target() {
+    readlink -f /etc/systemd/system/display-manager.service 2>/dev/null || true
+}
+
+claim_sddm_as_display_manager() {
+    local unit competing state
+    local -a installed=() active_or_enabled=()
+    local -a rivals=()
+
+    log_status "Checking for other login / display managers…"
+
+    while IFS= read -r unit; do
+        [[ -n "$unit" ]] || continue
+        installed+=("$unit")
+        if [[ "$unit" == "sddm.service" ]]; then
+            continue
+        fi
+        rivals+=("$unit")
+        if systemctl is-enabled "$unit" &>/dev/null 2>&1 \
+            || systemctl is-active "$unit" &>/dev/null 2>&1; then
+            active_or_enabled+=("$unit")
+        fi
+    done < <(list_display_manager_units)
+
+    if ((${#installed[@]})); then
+        log_status "Display managers present: ${installed[*]}"
+    fi
+
+    unit="$(display_manager_alias_target)"
+    if [[ -n "$unit" ]]; then
+        log_status "Current display-manager.service → $unit"
+    else
+        log_warning "No display-manager.service alias (would boot to TTY)"
+    fi
+
+    if ((${#active_or_enabled[@]})); then
+        log_warning "Other login manager(s) enabled/active (typical after Plasma/GNOME install):"
+        for competing in "${active_or_enabled[@]}"; do
+            state=""
+            systemctl is-enabled "$competing" &>/dev/null 2>&1 && state+="enabled "
+            systemctl is-active "$competing" &>/dev/null 2>&1 && state+="active"
+            log_warning "  - $competing (${state:-present})"
+        done
+        log_status "Hyprgruv requires SDDM for Sugar Candy — switching display-manager to sddm."
+        log_status "(Other DEs stay installed; only the greeter unit is disabled.)"
+    fi
+
+    # --- 1) Claim the alias FIRST (never leave the system without a DM) ---
+    log_status "Enabling SDDM as display-manager (enable -f replaces any existing alias)…"
+    if ! sudo systemctl enable -f sddm.service; then
+        log_warning "systemctl enable -f failed — trying manual alias + enable"
+        sudo systemctl enable sddm.service 2>/dev/null || true
+        if [[ -f /usr/lib/systemd/system/sddm.service ]]; then
+            sudo ln -sfn /usr/lib/systemd/system/sddm.service /etc/systemd/system/display-manager.service
+            sudo systemctl daemon-reload
+        fi
+    fi
+
+    # --- 2) Disable rivals for *next boot* (no --now: avoid killing this session) ---
+    for competing in "${rivals[@]}"; do
+        if systemctl is-enabled "$competing" &>/dev/null 2>&1; then
+            log_status "Disabling competing greeter for next boot: $competing"
+            # disable without --now: keeps current session alive during install
+            sudo systemctl disable "$competing" 2>/dev/null || true
+        fi
+    done
+
+    sudo systemctl set-default graphical.target >/dev/null 2>&1 || true
+    sudo systemctl daemon-reload 2>/dev/null || true
+
+    # --- 3) Verify — critical so we never ship a TTY-only box ---
+    unit="$(display_manager_alias_target)"
+    if [[ "$unit" == *sddm.service ]] && systemctl is-enabled sddm.service &>/dev/null; then
+        log_success "display-manager.service → sddm (Sugar Candy on next login/reboot)"
+        if ((${#active_or_enabled[@]})); then
+            log_status "Note: ${active_or_enabled[*]} may still be running this session; reboot to use SDDM only."
+        fi
+        return 0
+    fi
+
+    log_error "SDDM is not the active display manager (alias: ${unit:-missing})"
+    log_error "Manual fix:"
+    log_error "  sudo systemctl enable -f sddm.service"
+    log_error "  sudo systemctl disable plasmalogin.service gdm.service lightdm.service 2>/dev/null"
+    log_error "  readlink -f /etc/systemd/system/display-manager.service   # must end in sddm.service"
+    if declare -F hyprgruv_strict_abort >/dev/null 2>&1; then
+        hyprgruv_strict_abort "Failed to claim display-manager for SDDM"
+    fi
+    return 1
+}
+claim_sddm_as_display_manager
 
 sync_sddm_wallpaper() {
     local script="$1"
@@ -250,9 +370,13 @@ echo "  Theme:     $THEME_DEST"
 echo "  Config:    $CONF_DEST"
 echo "  Greeter:   $GREETER_DEST"
 echo "  Wallpaper: $THEME_DEST/sddm-wallpaper.png  (updated by waypaper)"
+echo "  Display manager: $(display_manager_alias_target 2>/dev/null || echo sddm)"
 echo
 echo "Test greeter:  sudo sddm --test-mode"
 echo "Live sync:     $UPDATE_SDDM"
+echo
+echo "If this machine also has Plasma/GNOME, other greeters were disabled so only"
+echo "SDDM runs at boot (packages stay installed; you can re-enable them later)."
 
 sleep 0.5
 exit 0
