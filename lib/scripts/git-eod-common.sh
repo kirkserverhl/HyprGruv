@@ -122,9 +122,21 @@ git_sync_catalog_get() {
     return 1
 }
 
+# Map catalog/follow names → safe shell identifier for PATH_* conf overrides.
+# e.g. proxmox-arch-lxc → PATH_proxmox_arch_lxc  (hyphens invalid in bash vars)
+git_sync_path_override_var() {
+    local name="$1"
+    local safe
+    safe="$(printf '%s' "$name" | tr -c 'A-Za-z0-9_' '_')"
+    # Leading digits after PATH_ are fine; ensure we never produce empty
+    [[ -n "$safe" ]] || safe="unnamed"
+    printf 'PATH_%s\n' "$safe"
+}
+
 git_sync_default_path_for() {
     local name="$1"
-    local override_var="PATH_${name}"
+    local override_var
+    override_var="$(git_sync_path_override_var "$name")"
     # shellcheck disable=SC2154
     if [[ -n "${!override_var:-}" ]]; then
         git_sync_expand_path "${!override_var}"
