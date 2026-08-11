@@ -8,6 +8,8 @@ atuin
 aylurs-gtk-shell-git
 aphototoollibre
 brave-bin
+# SDDM greeter + Hyprland cursor theme (CursorTheme=Bibata-Modern-Classic-Gruvbox)
+bibata-cursor-gruvbox-git
 cbonsai-git
 dipc
 toilet-fonts

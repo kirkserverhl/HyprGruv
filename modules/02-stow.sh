@@ -112,6 +112,9 @@ IGNORE_PATTERNS=(
     '^\.config/gtk-4\.0/.*$'
     '^\.config/pacseek/pacseek$'
     '^\.config/starship\.toml$'
+    # Wallpaper library is a real ~/Pictures/Wallpapers (seeded after stow).
+    # Never stow bulk images into the git working tree.
+    '^Pictures/.*$'
 )
 
 STOW_ARGS=(-v -t "$TARGET" "$PKG_DIR" --adopt)
@@ -218,6 +221,54 @@ fi
 
 hyprgruv_require_cmd stow
 [[ -d "$HOME/.config/hyprgruv/scripts" ]] || hyprgruv_strict_abort "hyprgruv scripts missing after stow"
+
+# --------------------------------------------------------------------
+# Wallpaper library: real directory under $HOME (not a stow symlink).
+# Seed default.png from assets/ so waypaper + default_wp always have one.
+# --------------------------------------------------------------------
+_hyprgruv_seed_wallpaper_dir() {
+    local wall_dir="$HOME/Pictures/Wallpapers"
+    local seed=""
+    local c
+    for c in \
+        "$HYPR_DIR/assets/wallpapers/default.png" \
+        "$HYPR_DIR/home/Pictures/Wallpapers/default.png" \
+        "$HYPR_DIR/home/.config/settings/default_wp.png"; do
+        [[ -f "$c" ]] || continue
+        seed="$c"
+        break
+    done
+
+    if [[ -L "$wall_dir" ]]; then
+        local target tmp
+        target="$(readlink -f "$wall_dir" 2>/dev/null || true)"
+        if [[ -n "$target" && "$target" == "$HYPR_DIR"* ]]; then
+            log_status "Replacing stowed Pictures/Wallpapers symlink with a real directory"
+            tmp="$(mktemp -d "${TMPDIR:-/tmp}/hyprgruv-wallpapers.XXXXXX")"
+            if [[ -d "$target" ]]; then
+                find "$target" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
+                    -exec cp -a {} "$tmp/" \; 2>/dev/null || true
+            fi
+            rm -f "$wall_dir"
+            mkdir -p "$wall_dir"
+            if compgen -G "$tmp/*" >/dev/null 2>&1; then
+                cp -a "$tmp"/. "$wall_dir"/
+            fi
+            rm -rf "$tmp"
+        else
+            rm -f "$wall_dir"
+            mkdir -p "$wall_dir"
+        fi
+    else
+        mkdir -p "$wall_dir"
+    fi
+
+    if [[ ! -f "$wall_dir/default.png" && -n "$seed" ]]; then
+        cp -a "$seed" "$wall_dir/default.png"
+        log_status "Seeded ~/Pictures/Wallpapers/default.png"
+    fi
+}
+_hyprgruv_seed_wallpaper_dir
 
 log_success "Configuration files applied"
 log_status "Backup saved to: $BACKUP_DIR"

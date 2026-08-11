@@ -107,7 +107,8 @@ def _dir_has_wallpapers(directory: Path) -> bool:
         return False
 
 
-def resolve_wallpaper_dir(theme: str) -> Path | None:
+def _theme_folder_name(theme: str) -> str:
+    """Map theme id → wallpaper_folder from registry (or built-in aliases)."""
     folder = theme
     if REGISTRY_FILE.is_file():
         try:
@@ -123,20 +124,68 @@ def resolve_wallpaper_dir(theme: str) -> Path | None:
     folder_map = {"nord-darker": "nord"}
     if theme in folder_map and folder == theme:
         folder = folder_map[theme]
+    return folder
 
-    candidates: list[Path] = []
-    for root in (
+
+# Filename tokens used by the flat HyprGruv wallpaper library
+# (~/Pictures/Wallpapers/*_gruvbox-Dark_mode.png, *_custom-forest-night.png, …).
+# Used when ~/themed-wallpapers/<theme>/ is not present.
+THEME_FILE_PATTERNS: dict[str, tuple[str, ...]] = {
+    "gruvbox-dark": (r"gruvbox",),
+    "coast-gruv": (r"coast-gruv", r"custom-coast-gruv"),
+    "warm-stone": (r"warm-stone", r"custom-warm-stone"),
+    "forest-night": (r"forest-night", r"custom-forest-night"),
+    "nord-darker": (r"nord", r"Polar_Night", r"polar.night"),
+    "catppuccin": (r"catppuccin", r"mocha"),
+    "everforest-dark": (r"everforest",),
+    "noir": (r"noir", r"custom-noir"),
+    "e-ink": (r"e-ink", r"eink", r"e_ink"),
+}
+
+
+def _themed_collection_candidates(folder: str) -> list[Path]:
+    """User-maintained themed collections (not the tiny colorscheme seed dirs)."""
+    roots = (
         HOME / "themed-wallpapers",
+        HOME / "Pictures" / "Wallpapers" / "themed-wallpapers",
+        HOME / "Pictures" / "themed-wallpapers",
         HOME / "Wallpapers" / "themed-wallpapers",
         HOME / "wallpapers" / "themed-wallpapers",
-    ):
-        candidates.append(root / folder)
-    candidates.append(COLORSCHEMES / theme / "wallpapers")
-    if folder != theme:
-        candidates.append(COLORSCHEMES / folder / "wallpapers")
+    )
+    return [root / folder for root in roots]
 
+
+def _seed_wallpaper_candidates(theme: str, folder: str) -> list[Path]:
+    seeds = [COLORSCHEMES / theme / "wallpapers"]
+    if folder != theme:
+        seeds.append(COLORSCHEMES / folder / "wallpapers")
+    return seeds
+
+
+def resolve_wallpaper_dir(theme: str) -> Path | None:
+    """Best directory for a theme (themed collection → waypaper library → seeds)."""
+    folder = _theme_folder_name(theme)
+
+    # 1) Dedicated themed collection dirs (desktop layout)
     seen: set[Path] = set()
-    for candidate in candidates:
+    for candidate in _themed_collection_candidates(folder):
+        try:
+            resolved = candidate.resolve()
+        except OSError:
+            continue
+        if resolved in seen or not resolved.is_dir():
+            continue
+        seen.add(resolved)
+        if _dir_has_wallpapers(resolved):
+            return resolved
+
+    # 2) Flat waypaper library (install / laptop: ~/Pictures/Wallpapers)
+    waypaper = resolve_waypaper_folder()
+    if waypaper is not None and _dir_has_wallpapers(waypaper):
+        return waypaper
+
+    # 3) Bundled colorscheme seed images (few previews shipped in the repo)
+    for candidate in _seed_wallpaper_candidates(theme, folder):
         try:
             resolved = candidate.resolve()
         except OSError:
@@ -174,9 +223,76 @@ def list_wallpapers(directory: Path, *, include_subfolders: bool = False) -> lis
     )
 
 
+def list_wallpapers_for_theme(theme: str) -> list[str]:
+    """Wallpapers for Super+W theme → picker.
+
+    Prefers ~/themed-wallpapers/<folder>/ when present. Otherwise uses the
+    waypaper library (~/Pictures/Wallpapers), filtered by theme filename
+    tokens from the HyprGruv wallpaper repo. Falls back to colorscheme seeds.
+    """
+    folder = _theme_folder_name(theme)
+
+    for candidate in _themed_collection_candidates(folder):
+        try:
+            resolved = candidate.resolve()
+        except OSError:
+            continue
+        if resolved.is_dir() and _dir_has_wallpapers(resolved):
+            # Real themed collection — do not mix in the flat library.
+            return list_wallpapers(resolved)
+
+    waypaper = resolve_waypaper_folder()
+    if waypaper is not None:
+        # Include subfolders so a future themed layout under the waypaper root works.
+        all_images = list_wallpapers(waypaper, include_subfolders=True)
+        if all_images:
+
+            def _filter(patterns: list[str]) -> list[str]:
+                if not patterns:
+                    return []
+                compiled = [re.compile(p, re.IGNORECASE) for p in patterns]
+                return [
+                    path
+                    for path in all_images
+                    if any(rx.search(Path(path).name) for rx in compiled)
+                ]
+
+            # Prefer theme-id tokens (coast-gruv, warm-stone, …) before the
+            # registry wallpaper_folder alias (often a parent like gruvbox-dark).
+            theme_patterns = list(THEME_FILE_PATTERNS.get(theme, ()))
+            filtered = _filter(theme_patterns)
+            if filtered:
+                return filtered
+
+            folder_patterns: list[str] = []
+            if folder:
+                folder_patterns.append(re.escape(folder))
+                # folder "nord" / "gruvbox-dark" also covered by THEME_FILE_PATTERNS
+                # of the parent theme when present.
+                parent_patterns = THEME_FILE_PATTERNS.get(folder, ())
+                folder_patterns.extend(parent_patterns)
+            filtered = _filter(folder_patterns)
+            if filtered:
+                return filtered
+
+            # No filename tags matched — show full library rather than 4 seeds
+            return all_images
+
+    for candidate in _seed_wallpaper_candidates(theme, folder):
+        try:
+            resolved = candidate.resolve()
+        except OSError:
+            continue
+        if resolved.is_dir() and _dir_has_wallpapers(resolved):
+            return list_wallpapers(resolved)
+
+    return []
+
+
 def resolve_waypaper_folder() -> Path | None:
     """Waypaper wallpaper root from ~/.config/waypaper/config.ini (folder key)."""
-    folder = HOME / "Wallpapers"
+    # Default matches install seed path (not the legacy ~/Wallpapers).
+    folder = HOME / "Pictures" / "Wallpapers"
     if WAYPAPER_CONFIG.is_file():
         for line in WAYPAPER_CONFIG.read_text(encoding="utf-8").splitlines():
             line = line.strip()
@@ -185,7 +301,11 @@ def resolve_waypaper_folder() -> Path | None:
             raw = line.split("=", 1)[1].strip()
             folder = Path(raw).expanduser()
             break
-    return folder if folder.is_dir() else None
+    if folder.is_dir():
+        return folder
+    # Legacy fallback
+    legacy = HOME / "Wallpapers"
+    return legacy if legacy.is_dir() else None
 
 
 def random_waypaper_preview() -> str | None:

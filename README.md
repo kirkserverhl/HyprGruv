@@ -39,6 +39,7 @@ Suggested options (adjust to taste):
 |---------|----------------|
 | Mirrors | US or your region |
 | Disk | btrfs or ext4, compression on, no separate `/home` unless you want it |
+| **Encryption (LUKS)** | **Enable at the installer’s disk/partition step** (before the OS is written). Laptops: strongly recommended. See [assets/README/LUKS.md](assets/README/LUKS.md). |
 | Swap | enabled |
 | Bootloader | grub |
 | Profile | Desktop → Hyprland, polkit enabled |
@@ -47,7 +48,9 @@ Suggested options (adjust to taste):
 | Extra packages | `git` (firefox is installed later by Hyprgruv) |
 | Timezone | your locale |
 
-When finished, exit the installer and reboot. Remove the USB when powered off.
+**LUKS is not configured by Hyprgruv.** Full-disk encryption must be turned on in EndeavourOS Calamares / `archinstall` / manual `cryptsetup` **during partitioning**. Installing unencrypted and “adding LUKS later” is effectively a reinstall. Outline: [assets/README/LUKS.md](assets/README/LUKS.md).
+
+When finished, exit the installer and reboot (unlock LUKS if enabled). Remove the USB when powered off.
 
 ## Step 3: First login and run Hyprgruv
 

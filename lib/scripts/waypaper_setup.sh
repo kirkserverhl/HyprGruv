@@ -70,11 +70,54 @@ install_wallpaper_packages() {
   log_success "waypaper, waypaper-engine, and awww installed"
 }
 
+# Wallpaper library must be a real directory under $HOME — never a symlink
+# into ~/.hyprgruv (stow + download would pollute the git working tree).
 ensure_wallpaper_dir() {
-  mkdir -p "$WALLPAPER_DIR"
-  local stowed_default="$HYPR_DIR/home/Pictures/Wallpapers/default.png"
-  if [[ ! -f "$WALLPAPER_DIR/default.png" && -f "$stowed_default" ]]; then
-    cp -a "$stowed_default" "$WALLPAPER_DIR/default.png"
+  local seed=""
+  local candidate
+  for candidate in \
+    "$HYPR_DIR/assets/wallpapers/default.png" \
+    "$HYPR_DIR/home/Pictures/Wallpapers/default.png" \
+    "$HYPR_DIR/home/.config/settings/default_wp.png"; do
+    [[ -f "$candidate" ]] || continue
+    seed="$candidate"
+    break
+  done
+
+  # Convert stow symlink → real directory, preserving any already-downloaded images.
+  if [[ -L "$WALLPAPER_DIR" ]]; then
+    local link_target real_target tmp
+    link_target="$(readlink -f "$WALLPAPER_DIR" 2>/dev/null || true)"
+    if [[ -n "$link_target" && "$link_target" == "$HYPR_DIR"* ]]; then
+      log_status "Wallpaper dir is a stow symlink into the repo — converting to a real directory"
+      tmp="$(mktemp -d "${TMPDIR:-/tmp}/hyprgruv-wallpapers.XXXXXX")"
+      # Copy contents out of the repo tree first (bulk wallpapers may live there).
+      if [[ -d "$link_target" ]]; then
+        find "$link_target" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
+          -exec cp -a {} "$tmp/" \; 2>/dev/null || true
+      fi
+      rm -f "$WALLPAPER_DIR"
+      mkdir -p "$WALLPAPER_DIR"
+      if compgen -G "$tmp/*" >/dev/null 2>&1; then
+        cp -a "$tmp"/. "$WALLPAPER_DIR"/
+      fi
+      rm -rf "$tmp"
+      log_success "Migrated wallpapers to real directory: $WALLPAPER_DIR"
+    else
+      # Symlink elsewhere — replace with real dir and copy through if possible.
+      tmp="$(mktemp -d "${TMPDIR:-/tmp}/hyprgruv-wallpapers.XXXXXX")"
+      [[ -d "$WALLPAPER_DIR" ]] && cp -a "$WALLPAPER_DIR"/. "$tmp"/ 2>/dev/null || true
+      rm -f "$WALLPAPER_DIR"
+      mkdir -p "$WALLPAPER_DIR"
+      [[ -d "$tmp" ]] && cp -a "$tmp"/. "$WALLPAPER_DIR"/ 2>/dev/null || true
+      rm -rf "$tmp"
+    fi
+  else
+    mkdir -p "$WALLPAPER_DIR"
+  fi
+
+  if [[ ! -f "$WALLPAPER_DIR/default.png" && -n "$seed" ]]; then
+    cp -a "$seed" "$WALLPAPER_DIR/default.png"
     log_status "Seeded default wallpaper into $WALLPAPER_DIR"
   fi
 }

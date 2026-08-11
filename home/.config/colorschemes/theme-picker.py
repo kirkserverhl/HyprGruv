@@ -366,12 +366,16 @@ def build_theme_entries() -> list[ThemeEntry]:
         theme_dir = COLORSCHEMES / theme_id
         if not theme_dir.is_dir():
             continue
-        wp_dir = resolve_wallpaper_dir(theme_id)
         preview_path = None
-        if wp_dir:
-            images = list_wallpapers(wp_dir)
-            if images:
-                preview_path = random.choice(images)
+        try:
+            from wallpaper_picker_support import list_wallpapers_for_theme
+
+            images = list_wallpapers_for_theme(theme_id)
+        except Exception:
+            wp_dir = resolve_wallpaper_dir(theme_id)
+            images = list_wallpapers(wp_dir) if wp_dir else []
+        if images:
+            preview_path = random.choice(images)
         labels = load_registry_labels()
         label = labels.get(theme_id, theme_id.replace("-", " ").title())
         entries.append(ThemeEntry(theme_id=theme_id, label=label, preview_path=preview_path))

@@ -106,6 +106,8 @@ USED_WALLPAPER="$WALLPAPER"
 # This step requires no root privileges.
 # ------------------------------------------------------------------
 DEFAULT_WP_PNG="$HOME/.config/settings/default_wp.png"
+# Stable path under the wallpaper library (install seed + tools that look here).
+LIBRARY_DEFAULT_PNG="$HOME/Pictures/Wallpapers/default.png"
 if command -v magick >/dev/null 2>&1; then
     magick "$WALLPAPER" -strip -interlace none -quality 92 "$DEFAULT_WP_PNG" 2>/dev/null \
         || cp -f "$WALLPAPER" "$DEFAULT_WP_PNG"
@@ -114,10 +116,24 @@ else
 fi
 chmod 644 "$DEFAULT_WP_PNG" 2>/dev/null || true
 echo ":: Updated canonical default (for SDDM etc.): $DEFAULT_WP_PNG"
+
+# Mirror into the wallpaper library so SDDM/hyprlock helpers and install seeds stay aligned.
+mkdir -p "$(dirname "$LIBRARY_DEFAULT_PNG")" 2>/dev/null || true
+if [[ -d "$(dirname "$LIBRARY_DEFAULT_PNG")" ]]; then
+    cp -f "$DEFAULT_WP_PNG" "$LIBRARY_DEFAULT_PNG" 2>/dev/null \
+        || cp -f "$WALLPAPER" "$LIBRARY_DEFAULT_PNG" 2>/dev/null || true
+    chmod 644 "$LIBRARY_DEFAULT_PNG" 2>/dev/null || true
+fi
+
+# Hyprlock profile path: stable file (not a dangling path into a deleted wallpaper).
+mkdir -p "$HOME/.config/hypr/hyprlock" 2>/dev/null || true
+ln -sfn "$DEFAULT_WP_PNG" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+
 # Optional: also keep the convenience sourcable script in sync if needed (it just points at the png)
 source "$HOME/.config/settings/default_wp.sh" 2>/dev/null || true
 
-# SDDM first — don't wait for matugen/color work to finish.
+# SDDM sugar-candy: copy wallpaper into theme dir + sync theme.conf colors/fonts.
+# Runs early — do not wait for matugen/palette work.
 "$HOME/.config/hyprgruv/scripts/update-sddm-wallpaper.sh" "$WALLPAPER" || true
 
 # ------------------- Wallpaper Effects -------------------

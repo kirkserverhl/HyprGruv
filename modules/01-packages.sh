@@ -332,6 +332,8 @@ sleep 0.2
 
 hyprgruv_require_cmd yay
 hyprgruv_require_pkg hyprland
+# Rofi is required for launchers, palette pickers, and repo-update prompts.
+hyprgruv_require_cmd rofi
 
 # Opening wallpaper + first matugen palette.
 # On a fresh install, hypr configs are not stowed yet — install.sh runs

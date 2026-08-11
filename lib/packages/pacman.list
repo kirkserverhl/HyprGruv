@@ -35,6 +35,11 @@ tmux
 hyprland
 hyprland-protocols
 cmake
+# hyprpm header/plugin build deps (also optional deps of hyprland)
+glaze
+meson
+ninja
+cpio
 hyprpicker
 hyprcursor
 hyprsunset
@@ -101,6 +106,9 @@ gvfs
 gvfs-mtp
 udiskie
 sddm
+# App launcher / dmenu (keybinds, palette pickers, repo-update-check)
+rofi
+rofi-calc
 firefox
 handlr-regex
 xdg-utils

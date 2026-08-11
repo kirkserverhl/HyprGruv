@@ -510,15 +510,19 @@ def main() -> int:
         print("No theme specified", file=sys.stderr)
         return 1
 
-    wallpaper_dir = resolve_wallpaper_dir(theme)
-    if not wallpaper_dir:
-        print(f"No wallpaper directory for {theme}", file=sys.stderr)
+    from wallpaper_picker_support import list_wallpapers_for_theme
+
+    images = list_wallpapers_for_theme(theme)
+    if not images:
+        # Legacy path: directory-only resolution (themed dirs / seeds)
+        wallpaper_dir = resolve_wallpaper_dir(theme)
+        if wallpaper_dir:
+            images = list_wallpapers(wallpaper_dir)
+    if not images:
+        print(f"No wallpapers for theme {theme}", file=sys.stderr)
         return 1
 
-    images = list_wallpapers(wallpaper_dir)
-    if not images:
-        print(f"No wallpapers in {wallpaper_dir}", file=sys.stderr)
-        return 1
+    wallpaper_dir = Path(images[0]).parent
 
     # Wayland app_id comes from prgname; must match Hyprland window rules.
     GLib.set_prgname("waypaper")
