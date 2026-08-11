@@ -1,12 +1,61 @@
 #!/usr/bin/env bash
 # Shared helpers for Waybar ↔ Hyprbars ↔ off cycling.
+#
+# Hyprbars path: HyprGruv builds from kirkserverhl/hyprplug →
+#   /var/cache/hyprpm/$USER/hyprplug/hyprbars.so
+# Upstream/default hyprland-plugins layout is a fallback only.
+# Wrong path → unload/load no-ops → cycle shows both bars or stuck hyprbars.
 
 STATE_DIR="${XDG_STATE_HOME:-${HOME}/.local/state}/waybar"
 BAR_MODE_FILE="${BAR_MODE_FILE:-$STATE_DIR/bar_mode}"
-HYPRBARS="${HYPRBARS:-/var/cache/hyprpm/${USER}/hyprland-plugins/hyprbars.so}"
+CACHE_ROOT="/var/cache/hyprpm/${USER:-$(id -un)}"
+
+# Resolve hyprbars.so once (override with HYPRBARS=... if needed).
+resolve_hyprbars_so() {
+    local candidate
+    if [[ -n "${HYPRBARS:-}" && -f "$HYPRBARS" ]]; then
+        printf '%s\n' "$HYPRBARS"
+        return 0
+    fi
+    for candidate in \
+        "$CACHE_ROOT/hyprplug/hyprbars.so" \
+        "$CACHE_ROOT/hyprland-plugins/hyprbars.so" \
+        "$CACHE_ROOT/hyprbars/hyprbars.so"
+    do
+        if [[ -f "$candidate" ]]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+    # Last resort: any hyprbars.so under this user's hyprpm cache
+    while IFS= read -r candidate; do
+        [[ -n "$candidate" && -f "$candidate" ]] || continue
+        printf '%s\n' "$candidate"
+        return 0
+    done < <(find "$CACHE_ROOT" -maxdepth 3 -type f -name 'hyprbars.so' 2>/dev/null)
+    return 1
+}
+
+HYPRBARS="$(resolve_hyprbars_so 2>/dev/null || true)"
 
 hyprbars_loaded() {
     hyprctl plugin list 2>/dev/null | grep -q "Plugin hyprbars"
+}
+
+# All known .so paths to try on unload (plugin was loaded with one of these).
+hyprbars_so_candidates() {
+    local c seen=""
+    for c in \
+        "$HYPRBARS" \
+        "$CACHE_ROOT/hyprplug/hyprbars.so" \
+        "$CACHE_ROOT/hyprland-plugins/hyprbars.so" \
+        "$CACHE_ROOT/hyprbars/hyprbars.so"
+    do
+        [[ -n "$c" && -f "$c" ]] || continue
+        [[ " $seen " == *" $c "* ]] && continue
+        printf '%s\n' "$c"
+        seen+=" $c"
+    done
 }
 
 _waybar_pids() {
@@ -91,29 +140,56 @@ stop_waybar() {
 }
 
 unload_hyprbars() {
+    local so attempt
     hyprbars_loaded || return 0
-    hyprctl eval 'reset_hyprbars_buttons()' >/dev/null 2>&1 || true
-    hyprctl plugin unload "$HYPRBARS" >/dev/null 2>&1 || true
-    sleep 0.2
-    if hyprbars_loaded; then
-        hyprctl plugin unload "$HYPRBARS" >/dev/null 2>&1 || true
+    hyprctl eval 'if type(reset_hyprbars_buttons) == "function" then reset_hyprbars_buttons() end' \
+        >/dev/null 2>&1 || true
+
+    for attempt in 1 2; do
+        hyprbars_loaded || return 0
+        while IFS= read -r so; do
+            [[ -n "$so" ]] || continue
+            hyprctl plugin unload "$so" >/dev/null 2>&1 || true
+        done < <(hyprbars_so_candidates)
         sleep 0.2
+    done
+
+    if hyprbars_loaded; then
+        echo "unload_hyprbars: plugin still loaded after unload attempts" >&2
+        return 1
     fi
+    return 0
 }
 
 load_hyprbars() {
-    hyprctl eval 'reset_hyprbars_buttons()' >/dev/null 2>&1 || true
+    local so
+    hyprctl eval 'if type(reset_hyprbars_buttons) == "function" then reset_hyprbars_buttons() end' \
+        >/dev/null 2>&1 || true
+
+    # Drop any already-loaded instance so buttons re-register cleanly
     if hyprbars_loaded; then
-        hyprctl plugin unload "$HYPRBARS" >/dev/null 2>&1 || true
-        sleep 0.2
+        unload_hyprbars || true
+        sleep 0.15
     fi
-    if [[ ! -f "$HYPRBARS" ]]; then
-        echo "hyprbars plugin not found: $HYPRBARS" >&2
+
+    so="$(resolve_hyprbars_so 2>/dev/null || true)"
+    if [[ -z "$so" || ! -f "$so" ]]; then
+        echo "hyprbars plugin not found under $CACHE_ROOT (expected hyprplug/hyprbars.so)" >&2
         return 1
     fi
-    hyprctl plugin load "$HYPRBARS" >/dev/null 2>&1 || return 1
+    HYPRBARS="$so"
+
+    if ! hyprctl plugin load "$HYPRBARS" >/dev/null 2>&1; then
+        echo "hyprctl plugin load failed: $HYPRBARS" >&2
+        return 1
+    fi
     sleep 0.15
-    hyprctl eval 'reapply_hyprbars()' >/dev/null 2>&1 || true
+    if ! hyprbars_loaded; then
+        echo "hyprbars failed to appear in plugin list after load" >&2
+        return 1
+    fi
+    hyprctl eval 'if type(reapply_hyprbars) == "function" then reapply_hyprbars() end' \
+        >/dev/null 2>&1 || true
 }
 
 start_waybar() {
@@ -154,28 +230,36 @@ apply_bar_mode() {
     local mode="$1"
     local notify="${NOTIFY:-notify-send}"
     local label
+    local prev
 
     mkdir -p "$STATE_DIR"
+    prev="$(read_bar_mode)"
 
     case "$mode" in
         waybar)
+            # Persist first so start_waybar / launch.sh see the intended mode
             echo "waybar" >"$BAR_MODE_FILE"
-            unload_hyprbars
+            unload_hyprbars || true
             stop_waybar || true
             start_waybar
+            if hyprbars_loaded; then
+                [[ "$notify" == ":" ]] || $notify "Bar" "Waybar on, but hyprbars still loaded" -u critical -t 4000
+            fi
             label="Waybar only"
             ;;
         hyprbars)
             echo "hyprbars" >"$BAR_MODE_FILE"
             if ! stop_waybar; then
                 if waybar_d_state; then
-                    [[ "$notify" == ":" ]] || $notify "Bar" "Waybar stuck (disk sleep) — log out/in to clear. Hyprbars loaded." -u critical -t 6000
+                    [[ "$notify" == ":" ]] || $notify "Bar" "Waybar stuck (disk sleep) — log out/in to clear." -u critical -t 6000
                 else
                     [[ "$notify" == ":" ]] || $notify "Bar" "Waybar still visible — try: killall -9 waybar" -u critical -t 5000
                 fi
             fi
             if ! load_hyprbars; then
-                [[ "$notify" == ":" ]] || $notify "Bar" "Hyprbars failed to load — check hyprpm" -u critical -t 4000
+                # Roll back mode so Alt+W does not get stuck on a failed state
+                echo "$prev" >"$BAR_MODE_FILE"
+                [[ "$notify" == ":" ]] || $notify "Bar" "Hyprbars failed to load — run: hyprpm reload" -u critical -t 5000
                 return 1
             fi
             label="Hyprbars only"
@@ -183,7 +267,10 @@ apply_bar_mode() {
         off)
             echo "off" >"$BAR_MODE_FILE"
             stop_waybar || true
-            unload_hyprbars
+            if ! unload_hyprbars; then
+                [[ "$notify" == ":" ]] || $notify "Bar" "Could not unload hyprbars — check plugin path" -u critical -t 5000
+                return 1
+            fi
             label="Hidden"
             ;;
         *)
