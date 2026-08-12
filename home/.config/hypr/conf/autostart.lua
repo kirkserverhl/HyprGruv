@@ -64,6 +64,9 @@ hl.on("hyprland.start", function()
 	-- Workspace monitor setup script
 	hl.exec_cmd(SCRIPTS .. "/monitor-workspaces.sh")
 
+	-- HyprLab work-dock layout (no-op on desktop). Delayed so hyprctl sees DP-*.
+	hl.exec_cmd("sleep 1 && " .. SCRIPTS .. "/apply-laptop-monitors.sh")
+
 	-- First-login welcome: background package sync + HyprGruv Settings (opt-out via menu checkbox).
 	-- Manual re-run: bash ~/.config/hyprgruv/scripts/hyprgruv-welcome.sh
 	-- Re-enable after opt-out: rm ~/.local/state/hyprgruv-settings/welcome-disabled
@@ -108,6 +111,7 @@ hl.exec_cmd("hyprsunset --temperature 9000")
 hl.on("config.reloaded", function()
 	hl.exec_cmd("~/.config/hypr/hyprctl/hyprctl.sh")
 	hl.exec_cmd(SCRIPTS .. "/apply-hypr-blur.sh")
+	hl.exec_cmd(SCRIPTS .. "/apply-laptop-monitors.sh")
 end)
 
 -- One-time things that were plain "exec" (not exec-once) in original main file
