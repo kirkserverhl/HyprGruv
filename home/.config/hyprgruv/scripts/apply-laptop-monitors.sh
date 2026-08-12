@@ -85,14 +85,42 @@ already_solo() {
     ' <<<"$json" >/dev/null 2>&1
 }
 
+# Rule uses desc: (stable). Move uses the connector name (hl.dsp.workspace.move).
+pin_ws() {
+    local id="$1" desc="$2" name="$3"
+    hyprctl eval "hl.workspace_rule({ workspace = ${id}, monitor = [[${desc}]], persistent = true })" >/dev/null
+    hyprctl dispatch "hl.dsp.workspace.move({ workspace = ${id}, monitor = [[${name}]] })" >/dev/null 2>&1 || true
+}
+
+# 2 persistent workspaces per output (desktop rule), left-to-right: 1-2, 3-4, …
+apply_two_per_monitor() {
+    local i=0 name desc a b
+    while IFS=$'\t' read -r name desc; do
+        [[ -n "$name" ]] || continue
+        a=$((i * 2 + 1))
+        b=$((i * 2 + 2))
+        pin_ws "$a" "desc:${desc}" "$name"
+        pin_ws "$b" "desc:${desc}" "$name"
+        i=$((i + 1))
+    done < <(jq -r 'sort_by(.x) | .[] | "\(.name)\t\(.description)"' <<<"$json")
+}
+
 if [[ "$dock_present" == "true" ]]; then
     if ! already_docked; then
         # Dock first (left), laptop second (right). Never the reverse.
         apply_monitor "$WORK_DESC" "$DOCK_MODE" "$DOCK_POS" "$DOCK_SCALE"
         apply_monitor "$LAPTOP_DESC" "$LAPTOP_MODE" "$LAPTOP_DOCKED_POS" "$LAPTOP_SCALE"
+        json="$(hyprctl monitors -j 2>/dev/null || true)"
     fi
+    apply_two_per_monitor
 else
     if ! already_solo; then
         apply_monitor "$LAPTOP_DESC" "$LAPTOP_MODE" "$LAPTOP_SOLO_POS" "$LAPTOP_SCALE"
     fi
+    laptop_name="$(jq -r '
+        [.[] | select((.description // "") | test("LG Display 0x061F"))]
+        | first | .name // "eDP-1"
+    ' <<<"$json")"
+    pin_ws 1 "$LAPTOP_DESC" "$laptop_name"
+    pin_ws 2 "$LAPTOP_DESC" "$laptop_name"
 fi
