@@ -2,6 +2,7 @@
 //   [1] [2] …extras… [+] [scratchpad] [notification]
 // Media is NOT in this strip — place custom/media on the LEFT panel in each theme.
 // Custom workspace buttons so clicks work on Hyprland 0.55+ Lua.
+// Per-bar filter: ws-btn.sh only shows IDs on WAYBAR_OUTPUT_NAME (this monitor).
 {
   "group/workspaces": {
     "orientation": "horizontal",

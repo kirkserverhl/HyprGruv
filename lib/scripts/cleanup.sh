@@ -124,6 +124,8 @@ sudo_cmd() {
 
 bytes_human() {
     local b="${1:-0}"
+    # Guard non-numeric / empty (e.g. arithmetic fell through)
+    [[ "$b" =~ ^-?[0-9]+$ ]] || b=0
     if command -v numfmt >/dev/null 2>&1; then
         numfmt --to=iec --suffix=B "$b" 2>/dev/null || echo "${b}B"
     else
@@ -132,12 +134,18 @@ bytes_human() {
 }
 
 dir_size() {
-    local d="$1"
+    local d="$1" size=""
     [[ -d "$d" ]] || {
         echo 0
-        return
+        return 0
     }
-    du -sb "$d" 2>/dev/null | awk '{print $1}'
+    # du exits non-zero when some subdirs are unreadable (common in ~/.cache/yay
+    # after root-owned makepkg trees). With set -o pipefail that would abort the
+    # whole script — capture size best-effort and always succeed.
+    size="$(du -sb "$d" 2>/dev/null | awk '{print $1}' || true)"
+    [[ "$size" =~ ^[0-9]+$ ]] || size=0
+    printf '%s\n' "$size"
+    return 0
 }
 
 # ── UI ───────────────────────────────────────────────────────────────────────
@@ -179,10 +187,22 @@ if [[ -d "$AUR_CACHE" ]]; then
     before="$(dir_size "$AUR_CACHE")"
     log_status "Cleaning user $AUR_HELPER cache ($(bytes_human "$before")) → $AUR_CACHE"
     if [[ $DRY_RUN -eq 0 ]]; then
-        # Remove package build trees; keep the cache root
-        find "$AUR_CACHE" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
+        # Remove package build trees; keep the cache root.
+        # User-owned entries first; root-owned leftovers need sudo (optional).
+        find "$AUR_CACHE" -mindepth 1 -maxdepth 1 -user "$(id -u)" -exec rm -rf {} + 2>/dev/null || true
+        find "$AUR_CACHE" -mindepth 1 -maxdepth 1 ! -user "$(id -u)" -exec rm -rf {} + 2>/dev/null || true
+        # Still something left (root-owned dirs common after yay as root once)?
+        leftovers="$(find "$AUR_CACHE" -mindepth 1 -maxdepth 1 2>/dev/null | wc -l | tr -d ' ')"
+        if [[ "${leftovers:-0}" -gt 0 ]] && has_sudo_tty; then
+            log_status "  removing $leftovers leftover entr$( [[ $leftovers -eq 1 ]] && echo y || echo ies ) (may need sudo)…"
+            sudo_cmd find "$AUR_CACHE" -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
+        elif [[ "${leftovers:-0}" -gt 0 ]]; then
+            log_warning "  $leftovers entr$( [[ $leftovers -eq 1 ]] && echo y || echo ies ) left (root-owned? re-run in a terminal with sudo)"
+        fi
         after="$(dir_size "$AUR_CACHE")"
-        log_success "  freed ~$(bytes_human "$((before - after))")"
+        freed=$((before - after))
+        [[ $freed -lt 0 ]] && freed=0
+        log_success "  freed ~$(bytes_human "$freed")"
         DID_ANY=1
     else
         log_status "[dry-run] would clear $AUR_CACHE"
@@ -214,8 +234,10 @@ clean_pacman_pkg_cache() {
         return 0
     fi
 
-    if ! sudo_cmd paccache -rk2; then
-        local rc=$?
+    # Capture rc before any other command — `if ! cmd; then rc=$?` is always 0
+    local rc=0
+    sudo_cmd paccache -rk2 || rc=$?
+    if [[ $rc -ne 0 ]]; then
         if [[ $rc -eq 2 ]]; then
             log_warning "  skipped — need sudo in a real terminal (or: sudo paccache -rk2)"
             return 2

@@ -9,8 +9,9 @@
 --
 -- Keybinds (do not steal these in keybinds.lua):
 --   Alt+Tab / Alt+` / Alt+Down  → overview (all workspaces)
---   Super+Down                  → same (laptop-friendly)
 --   Alt+Shift+`                 → current workspace only
+-- Super+Down is intentionally NOT bound here — keybinds.lua uses Super+arrows
+-- for focus/resize/move navigation (same as Super+hjkl).
 -- Window cycle is Super+Alt+Tab in keybinds.lua.
 
 local function mission_control_toggle()
@@ -65,14 +66,12 @@ hl.on("hyprland.start", function()
 end)
 
 local mod = "ALT"
-local mainMod = "SUPER"
 
 -- Mission Control: all monitors / all workspaces
+-- (Super+Down left free for Super+arrow focus nav in keybinds.lua)
 hl.bind(mod .. " + Tab", mission_control_toggle) -- #window #mission Mission Control (all)
 hl.bind(mod .. " + grave", mission_control_toggle) -- #window #mission Mission Control (all)
 hl.bind(mod .. " + down", mission_control_toggle) -- #window #mission Mission Control (all)
--- Laptop-friendly: Super+Down also opens overview
-hl.bind(mainMod .. " + down", mission_control_toggle) -- #window #mission Mission Control (all)
 
 -- Current workspace only
 hl.bind(mod .. " + SHIFT + grave", mission_control_current_workspace) -- #window #mission Mission Control (workspace)
