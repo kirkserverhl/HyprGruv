@@ -62,3 +62,8 @@ hl.env("FILEMANAGER", SCRIPTS .. "/filemanager.sh")
 
 -- Misc from other places
 hl.env("XDG_MENU_PREFIX", "plasma-")
+
+-- HyprGruv is dark-only. Pin Grok (and any tool that reads these) so a
+-- portal flicker or headless/SSH hop cannot flip the TUI to GrokDay.
+hl.env("GROK_APPEARANCE", "dark")
+hl.env("LC_GROK_APPEARANCE", "dark")

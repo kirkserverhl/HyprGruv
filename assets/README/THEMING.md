@@ -98,11 +98,16 @@ Firefox theming is matugen-only (`templates/firefox-colors.css` and per-site `us
 
 ## GTK / Qt appearance
 
-- GTK theme: `adw-gtk3` (dark/light follows matugen mode)
-- Icons: Papirus (set in install / stow)
-- Qt: `qt5ct` / `qt6ct` with matugen color files; Kvantum `matugen` scheme for some apps
+HyprGruv is **dark-only** on every machine. Light GTK/Qt/Grok appearance is treated as a regression and re-forced on login and Super+W.
 
-Run `~/.config/hyprgruv/scripts/gtk.sh` if you need to re-apply GTK settings manually.
+- GTK theme: dark slot for the active colorscheme (`Gruvbox-Dark`, `Catppuccin-Dark`, …), never `*-Light`
+- `gsettings` `color-scheme=prefer-dark`, `gtk-application-prefer-dark-theme=true`, `Gtk/ApplicationPreferDarkTheme=1`
+- GTK2 `~/.gtkrc-2.0` is rewritten by `apply-desktop-assets.sh` (stops nwg-look / Plasma Breeze from leaving light file pickers)
+- Icons: Papirus-Dark / theme slot
+- Qt: `qt5ct` / `qt6ct` with matugen color files; Kvantum `matugen` scheme
+- Grok: `GROK_APPEARANCE=dark` + `theme = groknight` unless a custom dark theme is already set
+
+Run `~/.config/hyprgruv/scripts/apply-desktop-assets.sh` (or `gtk.sh`) to re-apply.
 
 ## Plymouth / boot splash
 

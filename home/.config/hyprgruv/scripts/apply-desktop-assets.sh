@@ -80,6 +80,41 @@ apply_gsettings() {
     gsettings set "$schema" cursor-theme "$CURSOR_THEME" 2>/dev/null || true
 }
 
+# GTK2 (and nwg-look) read ~/.gtkrc-2.0. A leftover Breeze write from Plasma/nwg-look
+# is how file pickers and older apps flip back to light.
+write_gtkrc2() {
+    local font="Noto Sans,  10"
+    if [[ -f "$GTK3_SETTINGS" ]]; then
+        font=$(grep -E '^gtk-font-name=' "$GTK3_SETTINGS" | sed 's/^gtk-font-name=//' | tr -d '"' | head -1)
+        [[ -n "$font" ]] || font="Noto Sans,  10"
+    fi
+    cat >"${HOME}/.gtkrc-2.0" <<EOF
+# Written by apply-desktop-assets.sh — hyprgruv is dark-only.
+# nwg-look may overwrite this; login / Super+W re-applies.
+gtk-enable-animations=1
+gtk-primary-button-warps-slider=1
+gtk-cursor-blink-time=1000
+gtk-cursor-blink=1
+gtk-sound-theme-name="ocean"
+gtk-theme-name="${GTK_THEME}"
+gtk-icon-theme-name="${ICON_THEME}"
+gtk-font-name="${font}"
+gtk-cursor-theme-name="${CURSOR_THEME}"
+gtk-cursor-theme-size=${CURSOR_SIZE}
+gtk-toolbar-style=3
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=1
+gtk-menu-images=1
+gtk-enable-event-sounds=1
+gtk-enable-input-feedback-sounds=0
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle="hintslight"
+gtk-xft-rgba="rgb"
+gtk-application-prefer-dark-theme=1
+EOF
+}
+
 apply_hypr_cursor() {
     command -v hyprctl >/dev/null 2>&1 || return 0
     mkdir -p "$(dirname "$CURSOR_CONF")"
@@ -119,6 +154,7 @@ Net/ThemeName "${gtk_theme}"
 Net/IconThemeName "${icon_theme}"
 Gtk/CursorThemeName "${cursor_theme}"
 Gtk/CursorThemeSize ${cursor_size}
+Gtk/ApplicationPreferDarkTheme 1
 Net/EnableEventSounds 1
 EnableInputFeedbackSounds 0
 Xft/Antialias 1
@@ -170,6 +206,7 @@ for setting in gtk-theme-name gtk-icon-theme-name gtk-cursor-theme-name gtk-curs
 done
 update_gtk3_setting gtk-application-prefer-dark-theme "true"
 update_gtk4_setting gtk-application-prefer-dark-theme "true"
+write_gtkrc2
 
 update_qtct_icon_theme "$QT5CT_CONF" "$ICON_THEME"
 update_qtct_icon_theme "$QT6CT_CONF" "$ICON_THEME"

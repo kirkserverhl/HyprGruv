@@ -107,7 +107,8 @@ require("conf.layerrules")
 -- exec-once already handled in autostart.lua via hl.on("hyprland.start"...
 
 -- Some direct lines that were at the very end of hyprland.conf
--- hl.exec_cmd('gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"') -- for GTK4 apps
+-- Dark-only: libadwaita / portal / GTK4 follow this on every config load.
+hl.exec_cmd('gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"')
 -- hl.exec_cmd(SCRIPTS .. "/konsole_wal.sh")
 -- hl.exec_cmd("kded5")
 -- hl.exec_cmd("/usr/lib/org_kde_powerdevil")

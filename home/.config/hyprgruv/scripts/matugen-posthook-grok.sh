@@ -116,4 +116,39 @@ fi
 
 [[ -s "$GROK_THEME" ]] || exit 0
 
+# HyprGruv is dark-only. Never leave Grok on auto/light (GrokDay).
+GROK_CFG="${HOME}/.grok/config.toml"
+if [[ -f "$GROK_CFG" ]]; then
+    python3 - "$GROK_CFG" <<'PY' 2>/dev/null || true
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text(encoding="utf-8")
+light_or_auto = {
+    "",
+    "auto",
+    "system",
+    "light",
+    "day",
+    "grokday",
+    "grok-day",
+}
+
+def theme_value(src: str) -> str:
+    m = re.search(r'(?im)^theme\s*=\s*["\']?([^"\'\n#]+)', src)
+    return (m.group(1).strip() if m else "").lower()
+
+if "[ui]" not in text:
+    text = text.rstrip() + "\n\n[ui]\ntheme = \"groknight\"\n"
+elif theme_value(text) in light_or_auto:
+    if re.search(r'(?im)^theme\s*=', text):
+        text = re.sub(r'(?im)^theme\s*=\s*.*$', 'theme = "groknight"', text, count=1)
+    else:
+        text = re.sub(r'(?m)^\[ui\]\s*$', '[ui]\ntheme = "groknight"', text, count=1)
+path.write_text(text if text.endswith("\n") else text + "\n", encoding="utf-8")
+PY
+fi
+
 touch "$GROK_THEME" 2>/dev/null || true

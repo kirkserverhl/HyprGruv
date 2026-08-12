@@ -5,6 +5,7 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-08-12T17:00:18-04:00 | HyprLab | deploy | to-source | Force dark-only: GTK2 gtkrc was Breeze (light leak). apply-desktop-assets now rewrites gtkrc-2.0 + xsettingsd PreferDarkTheme; hyprland.lua restores gsettings prefer-dark; GROK_APPEARANCE=dark + groknight; Chrome/Electron WebContentsForceDark. | [2026-08-12T210018Z-HyprLab.md](entries/2026-08-12T210018Z-HyprLab.md) |
 | 2026-08-12T16:39:23-04:00 | HyprLab | deploy | to-source | HyprLab: close 3px dock gap (laptop 2307→2304) so Super+arrow can cross LG→internal; enable window_direction_monitor_fallback. | [2026-08-12T203923Z-HyprLab.md](entries/2026-08-12T203923Z-HyprLab.md) |
 | 2026-08-12T16:31:37-04:00 | HyprLab | deploy | to-source | HyprLab docked: 2 workspaces per monitor (dock 1-2, panel 3-4). Super+Tab cycles the pair on the focused screen. | [2026-08-12T203137Z-HyprLab.md](entries/2026-08-12T203137Z-HyprLab.md) |
 | 2026-08-12T16:26:50-04:00 | HyprLab | deploy | to-source | HyprLab: stop work-dock flip — LG stays left, laptop right. Dropped Lua auto/get_monitors race; apply via hyprctl eval after dock is visible. | [2026-08-12T202650Z-HyprLab.md](entries/2026-08-12T202650Z-HyprLab.md) |
