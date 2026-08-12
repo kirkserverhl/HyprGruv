@@ -4,7 +4,7 @@
 #
 # When the work-dock LG FULL HD (serial 103MXTC4F409) is present:
 #   LG LEFT   1920x1080@60     0x0      scale 0.833333
-#   eDP RIGHT 1920x1080@60.02  2307x281 scale 1.2
+#   eDP RIGHT 1920x1080@60.02  2304x281 scale 1.2  (flush: 1920/0.833333)
 #
 # The previous Lua hook flipped this pair: on monitor.added / reload it
 # queried monitors before the dock was in the list, assumed "undocked",
@@ -25,7 +25,7 @@ DOCK_POS="0x0"
 DOCK_SCALE="0.833333"
 
 LAPTOP_MODE="1920x1080@60.02"
-LAPTOP_DOCKED_POS="2307x281"
+LAPTOP_DOCKED_POS="2304x281"
 LAPTOP_SOLO_POS="0x0"
 LAPTOP_SCALE="1.2"
 
@@ -73,7 +73,7 @@ already_docked() {
             | .x == 0 and .y == 0)
         and
         (map(select((.description // "") | test("LG Display 0x061F"))) | first
-            | .x == 2307 and .y == 281)
+            | .x == 2304 and .y == 281)
     ' <<<"$json" >/dev/null 2>&1
 }
 

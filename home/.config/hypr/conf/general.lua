@@ -47,6 +47,9 @@ hl.config({
 		workspace_back_and_forth = true,
 		allow_workspace_cycles = true,
 		pass_mouse_when_bound = false,
+		-- Super+arrow / Super+hjkl: if no window in that direction, jump to
+		-- the next monitor. Needs the outputs flush (no pixel gap).
+		window_direction_monitor_fallback = true,
 	},
 
 	misc = {

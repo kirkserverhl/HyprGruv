@@ -58,7 +58,8 @@ elseif mode == "laptop" then
 	hl.monitor({
 		output = "desc:LG Display 0x061F",
 		mode = "1920x1080@60.02",
-		position = "2307x281",
+		-- 1920/0.833333 = 2304. Must sit flush or Super+arrow cannot cross.
+		position = "2304x281",
 		scale = 1.2,
 	})
 end
