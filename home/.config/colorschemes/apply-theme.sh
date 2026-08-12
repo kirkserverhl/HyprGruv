@@ -77,7 +77,8 @@ if [[ -n "$WALLPAPER" && -f "$WALLPAPER" ]]; then
         mon=$(tr -d '[:space:]' <"$HOME/.config/colorschemes/.wallpaper-monitor")
         [[ -z "$mon" ]] && mon="all"
     fi
-    bash "$SCRIPT_DIR/awww-wallpaper.sh" "$WALLPAPER" "$mon" >/dev/null 2>&1 || true
+    # Display + persist last_wallpaper/default_wp/waypaper so login restore matches.
+    AWWW_PERSIST=1 bash "$SCRIPT_DIR/awww-wallpaper.sh" "$WALLPAPER" "$mon" >/dev/null 2>&1 || true
 fi
 
 # --- GTK / Qt / KDE / icons / cursor (standard per theme) ---
@@ -174,9 +175,14 @@ if [[ -f "$SCRIPTS/colors.sh" ]]; then
     fi
 fi
 
-# SDDM greeter colors in background (can be slow; never block Super+W)
+# SDDM greeter wallpaper + colors in background (never block Super+W).
+# Pass the wallpaper explicitly — waypaper config may be stale/broken.
 if [[ -x "$SCRIPTS/update-sddm-wallpaper.sh" ]]; then
-    (bash "$SCRIPTS/update-sddm-wallpaper.sh" >/dev/null 2>&1 || true) &
+    if [[ -n "${WALLPAPER:-}" && -f "$WALLPAPER" ]]; then
+        (bash "$SCRIPTS/update-sddm-wallpaper.sh" "$WALLPAPER" >/dev/null 2>&1 || true) &
+    else
+        (bash "$SCRIPTS/update-sddm-wallpaper.sh" >/dev/null 2>&1 || true) &
+    fi
 fi
 
 hyprctl eval 'reapply_hyprbars()' 2>/dev/null || true

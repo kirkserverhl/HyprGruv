@@ -159,17 +159,16 @@ hl.bind(mainMod .. " + F",            hl.dsp.window.fullscreen()) -- #window Ful
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G",            toggle_gaps)
 hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
--- Super+Tab: cycle only occupied workspaces (skip empty / persistent blanks)
--- Super+Shift+Tab: open next free workspace (new empty desktop)
--- Note: Hyprland's r+1 includes empty slots on the monitor — not what we want for Tab.
-hl.bind(mainMod .. " + Tab",          hl.dsp.exec_cmd(SCRIPTS .. "/workspace-cycle.sh next")) -- #window Next occupied workspace
-hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "emptyn" })) -- #window New/empty workspace
+-- Super+Tab / Super+Shift+Tab: cycle workspaces on the *current monitor only* (m±1).
+-- Does not jump across monitors (unlike the global occupied-cycle script).
+hl.bind(mainMod .. " + Tab",          hl.dsp.focus({ workspace = "m+1" })) -- #window Next workspace on this monitor
+hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" })) -- #window Prev workspace on this monitor
 -- Also: Super+Ctrl+Space = first empty; Super+Shift+E = move window to empty
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" })) -- #window First empty workspace
 hl.bind(mainMod .. " + SHIFT + E",    hl.dsp.window.move({ workspace = "empty" })) -- #window Move to empty workspace
--- Equal/minus: same occupied cycle as Tab (handy on laptop)
-hl.bind(mainMod .. " + equal",        hl.dsp.exec_cmd(SCRIPTS .. "/workspace-cycle.sh next")) -- #window Next occupied workspace
-hl.bind(mainMod .. " + minus",        hl.dsp.exec_cmd(SCRIPTS .. "/workspace-cycle.sh prev")) -- #window Prev occupied workspace
+-- Equal/minus: same monitor-local cycle (handy on laptop)
+hl.bind(mainMod .. " + equal",        hl.dsp.focus({ workspace = "m+1" })) -- #window Next workspace on this monitor
+hl.bind(mainMod .. " + minus",        hl.dsp.focus({ workspace = "m-1" })) -- #window Prev workspace on this monitor
 
 for i = 1, 9 do
     -- Super+N: focus (creates WS if needed). Empty non-persistent WS drop when left empty.
@@ -232,8 +231,8 @@ local function open_waybar_layout_switcher()
 	hl.exec_cmd("bash " .. WAYBAR_LAYOUT)
 end
 hl.bind(mainMod .. " + " .. altMod .. " + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
--- Exception to bare-Ctrl rule: Ctrl+W → waybar layout (close-tab unused; muscle memory)
-hl.bind("CTRL + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
+-- Alt+Shift+W: waybar layout/theme picker (Ctrl+W left free for apps — Chrome close-tab, etc.)
+hl.bind(altMod .. " + SHIFT + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
 hl.bind(altMod .. " + SHIFT + S",    hl.dsp.layout("swapsplit"))
 
 -- Window cycle: Super+Alt+Tab (NOT bare Alt+Tab — that is Mission Control / hymission)

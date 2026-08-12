@@ -108,6 +108,7 @@ USED_WALLPAPER="$WALLPAPER"
 DEFAULT_WP_PNG="$HOME/.config/settings/default_wp.png"
 # Stable path under the wallpaper library (install seed + tools that look here).
 LIBRARY_DEFAULT_PNG="$HOME/Pictures/Wallpapers/default.png"
+WAYPAPER_INI="$HOME/.config/waypaper/config.ini"
 if command -v magick >/dev/null 2>&1; then
     magick "$WALLPAPER" -strip -interlace none -quality 92 "$DEFAULT_WP_PNG" 2>/dev/null \
         || cp -f "$WALLPAPER" "$DEFAULT_WP_PNG"
@@ -118,11 +119,25 @@ chmod 644 "$DEFAULT_WP_PNG" 2>/dev/null || true
 echo ":: Updated canonical default (for SDDM etc.): $DEFAULT_WP_PNG"
 
 # Mirror into the wallpaper library so SDDM/hyprlock helpers and install seeds stay aligned.
+# Replace broken stow seed symlink with a real file.
 mkdir -p "$(dirname "$LIBRARY_DEFAULT_PNG")" 2>/dev/null || true
 if [[ -d "$(dirname "$LIBRARY_DEFAULT_PNG")" ]]; then
+    if [[ -L "$LIBRARY_DEFAULT_PNG" ]]; then
+        rm -f "$LIBRARY_DEFAULT_PNG" 2>/dev/null || true
+    fi
     cp -f "$DEFAULT_WP_PNG" "$LIBRARY_DEFAULT_PNG" 2>/dev/null \
         || cp -f "$WALLPAPER" "$LIBRARY_DEFAULT_PNG" 2>/dev/null || true
     chmod 644 "$LIBRARY_DEFAULT_PNG" 2>/dev/null || true
+fi
+
+# Keep waypaper config.ini in sync so --restore / SDDM fallbacks match.
+if [[ -f "$WAYPAPER_INI" ]]; then
+    if grep -q '^wallpaper[[:space:]]*=' "$WAYPAPER_INI" 2>/dev/null; then
+        sed -i "s|^wallpaper[[:space:]]*=.*|wallpaper = $WALLPAPER|" "$WAYPAPER_INI"
+    else
+        printf '\nwallpaper = %s\n' "$WALLPAPER" >>"$WAYPAPER_INI"
+    fi
+    echo ":: Updated waypaper config wallpaper path"
 fi
 
 # Hyprlock profile path: stable file (not a dangling path into a deleted wallpaper).

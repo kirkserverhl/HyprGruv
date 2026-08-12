@@ -148,17 +148,21 @@ read_waypaper_wallpaper() {
     expand_path "$line"
 }
 
-# --- Resolve source wallpaper (waypaper config is the source of truth) ---
+# --- Resolve source wallpaper ---
+# Prefer explicit path, then last_wallpaper (theme switcher / waypaper), then
+# waypaper config only if that file actually exists, then settings/default.
 if [ -n "${1:-}" ] && [ "$1" != "--setup" ]; then
     SOURCE=$(expand_path "$1")
-elif wp=$(read_waypaper_wallpaper); then
-    SOURCE="$wp"
 elif [ -f "$USER_HOME/.config/last_wallpaper.txt" ]; then
-    SOURCE=$(expand_path "$(cat "$USER_HOME/.config/last_wallpaper.txt" | tr -d '\n\r')")
+    SOURCE=$(expand_path "$(tr -d '\n\r' <"$USER_HOME/.config/last_wallpaper.txt")")
 elif [ -f "$USER_HOME/.config/settings/default" ]; then
-    SOURCE=$(expand_path "$(cat "$USER_HOME/.config/settings/default" | tr -d '\n\r')")
+    SOURCE=$(expand_path "$(tr -d '\n\r' <"$USER_HOME/.config/settings/default")")
+elif wp=$(read_waypaper_wallpaper) && [ -f "$wp" ]; then
+    SOURCE="$wp"
+elif [ -f "$USER_HOME/.config/settings/default_wp.png" ]; then
+    SOURCE="$USER_HOME/.config/settings/default_wp.png"
 else
-    echo "No wallpaper source available (looked in $USER_HOME/.config/waypaper/config.ini)" >&2
+    echo "No wallpaper source available (last_wallpaper / waypaper / default_wp)" >&2
     notify-send "SDDM Wallpaper" "Failed: no current wallpaper in cache" -u critical 2>/dev/null || true
     exit 1
 fi

@@ -97,12 +97,14 @@ wait_for_hyprland() {
 plugins_loaded() {
     local list
     list="$(hyprctl plugin list 2>/dev/null || true)"
-    # Require both HyprGruv defaults when their .so exists
-    if [[ -f "$HYPRBARS_SO" ]] && ! grep -q 'Plugin hyprbars' <<<"$list"; then
-        return 1
-    fi
+    # hymission is always desired when built. hyprbars is bar-mode-dependent
+    # (waybar/off unload it after reload) — do not require it here.
     if [[ -f "$HYMISSION_SO" ]] && ! grep -q 'Plugin hymission' <<<"$list"; then
         return 1
+    fi
+    # hyprbars-only installs: success if hyprbars loaded when hymission absent
+    if [[ -f "$HYPRBARS_SO" ]] && [[ ! -f "$HYMISSION_SO" ]]; then
+        grep -q 'Plugin hyprbars' <<<"$list" || return 1
     fi
     # If neither .so exists yet, treat as not loaded
     if [[ ! -f "$HYPRBARS_SO" && ! -f "$HYMISSION_SO" ]]; then
@@ -177,23 +179,29 @@ run_update() {
 }
 
 reapply_plugin_ui() {
-    # Plugins often load after the first config pass (buttons register only when
-    # hl.plugin.hyprbars exists). Do NOT call reset_hyprbars_buttons here — that only
-    # clears the Lua flag, not the plugin's button list, so reapply would double to 6.
-    # reapply_hyprbars() is idempotent for buttons (skips if already registered).
-    # Autostart already runs sync-bar-mode — do not call apply-bar-mode here.
-    if hyprctl plugin list 2>/dev/null | grep -q 'Plugin hyprbars'; then
-        log "reapply hyprbars config (buttons only if not yet registered)"
-        hyprctl eval 'if type(reapply_hyprbars) == "function" then reapply_hyprbars() end' \
-            >/dev/null 2>&1 || true
-    fi
-    # hymission options + binds already registered; re-apply plugin table after late load
+    # Plugins often load after the first config pass. hyprpm reload always loads
+    # enabled plugins (including hyprbars) — that races with autostart's early
+    # waybar launch and used to leave BOTH bars visible.
+    #
+    # Safe to call apply-bar-mode here: hyprpm only runs on hyprland.start (not
+    # config.reloaded), so unload → config reload cannot re-trigger this script.
+    # apply-bar-mode is exclusive: waybar | hyprbars | off — never both.
     if hyprctl plugin list 2>/dev/null | grep -q 'Plugin hymission'; then
         log "reapply hymission config"
         hyprctl eval 'if type(reapply_hymission) == "function" then reapply_hymission() end' \
             >/dev/null 2>&1 || true
     else
         log "hymission not in plugin list after reload"
+    fi
+
+    if [[ -x "$SCRIPTS/apply-bar-mode.sh" ]]; then
+        local mode
+        mode=$(tr -d '[:space:]' <"${XDG_STATE_HOME}/waybar/bar_mode" 2>/dev/null || true)
+        [[ -n "$mode" ]] || mode="waybar"
+        log "enforce saved bar mode (${mode})"
+        NOTIFY=: bash "$SCRIPTS/apply-bar-mode.sh" >>"$LOG_FILE" 2>&1 || true
+    else
+        log "apply-bar-mode.sh missing — cannot enforce exclusive bar mode"
     fi
 }
 
