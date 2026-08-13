@@ -1,0 +1,37 @@
+/*
+ * waybar-v1 — compact accent chips; media + workspaces left, clock centered.
+ * Shared modules from layout.jsonc; this file only rearranges them.
+ */
+{
+  "reload_style_on_change": true,
+  "include": ["~/.config/waybar/shared/layout.jsonc"],
+
+  "layer": "top",
+  "position": "top",
+  "margin-top": 16,
+  "margin-bottom": 0,
+  "margin-left": 16,
+  "margin-right": 16,
+  "height": 32,
+  "spacing": 0,
+
+  "modules-left": [
+    "custom/media",
+    "group/workspaces"
+  ],
+  "modules-center": [
+    "group/clock",
+    "hyprland/window"
+  ],
+  "modules-right": [
+    "group/sound",
+    "group/cpu-info",
+    "custom/power"
+  ],
+
+  "hyprland/window": {
+    "format": "{}",
+    "separate-outputs": true,
+    "max-length": 48
+  }
+}

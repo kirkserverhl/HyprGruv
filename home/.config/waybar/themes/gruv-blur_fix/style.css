@@ -1,0 +1,156 @@
+/* gruv-blur — full-width frosted bar; colors from matugen via base.css */
+@import "../../shared/base.css";
+
+* {
+  font-family:
+    "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
+    sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 0;
+}
+
+window#waybar {
+  background-color: alpha(@background, 0.35);
+  color: @on_surface;
+}
+
+.modules-left {
+  padding-left: 14px;
+}
+
+.modules-right {
+  padding-right: 14px;
+}
+
+tooltip {
+  border-radius: 10px;
+  background-color: @surface_variant;
+  border: 1px solid @outline;
+  padding: 12px;
+}
+
+tooltip label {
+  color: @on_surface;
+}
+
+/* --- workspace strip --- */
+#group-workspaces {
+  background: alpha(@background, 0.7);
+  margin: 5px 1px 6px 1px;
+  padding: 0 2px;
+  border-radius: 15px;
+  opacity: 0.9;
+}
+
+#group-workspaces label.module {
+  padding: 0 6px;
+  margin: 4px 3px;
+  min-width: 18px;
+  border-radius: 15px;
+  color: @on_surface;
+  background-color: @surface_variant;
+  opacity: 0.4;
+  transition: all 0.3s ease-in-out;
+}
+
+#group-workspaces label.module.ws.occupied {
+  opacity: 0.75;
+}
+
+#group-workspaces label.module.ws.active {
+  color: @on_primary;
+  background: @primary;
+  min-width: 40px;
+  opacity: 1;
+}
+
+#group-workspaces label.module:hover {
+  color: @on_surface;
+  background: @surface_container_high;
+  opacity: 0.8;
+}
+
+#group-workspaces label.module.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+  opacity: 0;
+  background: transparent;
+}
+
+#group-workspaces #custom-special,
+#group-workspaces #custom-notification,
+#group-workspaces label.module.workspace-add {
+  opacity: 0.85;
+}
+
+#group-workspaces #custom-special.active {
+  color: @on_primary;
+  background: @primary;
+  opacity: 1;
+}
+
+/* --- module islands --- */
+#group-apps,
+#group-settings,
+#group-sound,
+#group-cpu-info,
+#custom-updates,
+#custom-power,
+#group-clock,
+#custom-media,
+#window {
+  background-color: alpha(@surface_variant, 0.85);
+  color: @on_surface;
+  border-radius: 15px;
+  padding: 2px 10px;
+  margin: 8px 12px 8px 0;
+  opacity: 0.9;
+}
+
+#group-apps,
+#group-clock {
+  background-color: alpha(@background, 0.75);
+  border: 3px solid @surface_variant;
+}
+
+#group-apps label.module,
+#group-settings label.module,
+#group-sound label.module,
+#group-cpu-info label.module,
+#group-clock #clock,
+#group-clock #custom-clock-date {
+  background: transparent;
+  color: inherit;
+}
+
+#window {
+  font-weight: normal;
+}
+
+#pulseaudio.muted {
+  background-color: transparent;
+  color: @error;
+}
+
+#custom-updates.yellow {
+  background-color: @tertiary;
+  color: @on_tertiary;
+}
+
+#custom-updates.red {
+  background-color: @error;
+  color: @on_error;
+}
+
+#window.hidden,
+window#waybar.empty #window {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  opacity: 0;
+}

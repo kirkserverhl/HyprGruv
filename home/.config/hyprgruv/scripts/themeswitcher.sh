@@ -3,8 +3,17 @@
 
 THEMES_DIR="$HOME/.config/waybar/themes"
 
-# Get themes
-themes=($(find "$THEMES_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "assets" -exec basename {} \; | sort))
+# Get themes (skip spacer strip + legacy dump; only folders with a config)
+mapfile -t themes < <(
+  find "$THEMES_DIR" -mindepth 1 -maxdepth 1 -type d \
+    ! -name assets ! -name spacer ! -name waybar_legacy_reference_for_fix \
+    -printf '%f\n' 2>/dev/null \
+    | while read -r name; do
+        if [[ -f "$THEMES_DIR/$name/config.jsonc" || -f "$THEMES_DIR/$name/config" ]]; then
+          printf '%s\n' "$name"
+        fi
+      done | sort
+)
 
 if [ ${#themes[@]} -eq 0 ]; then
     notify-send "Error" "No themes found!"

@@ -1,0 +1,33 @@
+/*
+ * gruv — rounded ML4W-style islands.
+ * Shared modules from layout.jsonc; this file only rearranges them.
+ */
+{
+  "reload_style_on_change": true,
+  "include": ["~/.config/waybar/shared/layout.jsonc"],
+
+  "layer": "top",
+  "position": "top",
+  "margin-top": 14,
+  "margin-bottom": 0,
+  "margin-left": 14,
+  "margin-right": 14,
+  "height": 42,
+  "spacing": 0,
+
+  "modules-left": [
+    "group/apps",
+    "group/settings",
+    "custom/media"
+  ],
+  "modules-center": [
+    "group/workspaces"
+  ],
+  "modules-right": [
+    "custom/updates",
+    "group/sound",
+    "group/cpu-info",
+    "custom/power",
+    "group/clock"
+  ]
+}

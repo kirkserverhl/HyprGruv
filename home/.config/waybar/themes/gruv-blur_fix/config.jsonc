@@ -1,0 +1,42 @@
+/*
+ * gruv-blur — edge-to-edge bar with a translucent wash.
+ * Shared modules from layout.jsonc; this file only rearranges them.
+ */
+{
+  "reload_style_on_change": true,
+  "include": ["~/.config/waybar/shared/layout.jsonc"],
+
+  "layer": "top",
+  "position": "top",
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "height": 42,
+  "spacing": 0,
+
+  "modules-left": [
+    "group/apps",
+    "group/settings",
+    "custom/media",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "group/workspaces"
+  ],
+  "modules-right": [
+    "custom/updates",
+    "group/sound",
+    "group/cpu-info",
+    "custom/power",
+    "group/clock"
+  ],
+
+  "hyprland/window": {
+    "format": "{class}",
+    "separate-outputs": true,
+    "icon": true,
+    "icon-size": 18,
+    "max-length": 48
+  }
+}

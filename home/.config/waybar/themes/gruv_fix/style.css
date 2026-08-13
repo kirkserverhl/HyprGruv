@@ -1,0 +1,145 @@
+/* gruv — rounded floating islands; colors from matugen via base.css */
+@import "../../shared/base.css";
+
+* {
+  font-family:
+    "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
+    sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: @on_surface;
+}
+
+tooltip {
+  border-radius: 10px;
+  background-color: @surface_variant;
+  border: 1px solid @outline;
+  padding: 12px;
+}
+
+tooltip label {
+  color: @on_surface;
+}
+
+/* --- workspace strip --- */
+#group-workspaces {
+  background: @background;
+  margin: 2px 1px 3px 1px;
+  padding: 0 2px;
+  border-radius: 15px;
+  opacity: 0.9;
+}
+
+#group-workspaces label.module {
+  padding: 0 6px;
+  margin: 4px 3px;
+  min-width: 18px;
+  border-radius: 15px;
+  color: @on_surface;
+  background-color: @surface_variant;
+  opacity: 0.45;
+  transition: all 0.3s ease-in-out;
+}
+
+#group-workspaces label.module.ws.occupied {
+  opacity: 0.75;
+}
+
+#group-workspaces label.module.ws.active {
+  color: @on_primary;
+  background: @primary;
+  min-width: 40px;
+  opacity: 1;
+}
+
+#group-workspaces label.module:hover {
+  color: @on_surface;
+  background: @surface_container_high;
+  opacity: 0.85;
+}
+
+#group-workspaces label.module.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+  opacity: 0;
+  background: transparent;
+}
+
+#group-workspaces #custom-special,
+#group-workspaces #custom-notification,
+#group-workspaces label.module.workspace-add {
+  opacity: 0.85;
+}
+
+#group-workspaces #custom-special.active {
+  color: @on_primary;
+  background: @primary;
+  opacity: 1;
+}
+
+/* --- module islands --- */
+#group-apps,
+#group-settings,
+#group-sound,
+#group-cpu-info,
+#custom-updates,
+#custom-power,
+#group-clock,
+#custom-media,
+#window {
+  background-color: @surface_variant;
+  color: @on_surface;
+  border-radius: 15px;
+  padding: 0 10px;
+  margin: 5px 8px 5px 0;
+  opacity: 0.9;
+}
+
+#group-apps,
+#custom-appmenu,
+#group-clock {
+  background-color: @background;
+  border: 3px solid @surface_variant;
+}
+
+#group-apps label.module,
+#group-settings label.module,
+#group-sound label.module,
+#group-cpu-info label.module,
+#group-clock #clock,
+#group-clock #custom-clock-date {
+  background: transparent;
+  color: inherit;
+}
+
+#pulseaudio.muted {
+  background-color: transparent;
+  color: @error;
+}
+
+#custom-updates.yellow {
+  background-color: @tertiary;
+  color: @on_tertiary;
+}
+
+#custom-updates.red {
+  background-color: @error;
+  color: @on_error;
+}
+
+#window.hidden,
+window#waybar.empty #window {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  opacity: 0;
+}

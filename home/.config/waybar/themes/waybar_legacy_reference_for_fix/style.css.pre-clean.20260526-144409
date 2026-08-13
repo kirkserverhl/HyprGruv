@@ -1,0 +1,39 @@
+/*
+ * Root waybar style.css — clean entrypoint
+ *
+ * This file is what gets loaded for:
+ *   - Plain `waybar` launches (your toggle-waybar.sh, $mod+W, autostart, etc.)
+ *   - Any setup that doesn't go through the themes/ launcher
+ *
+ * Philosophy after moving off ML4W:
+ *   - All rich module styling lives in freshstart.css (the preserved "current good" style).
+ *   - This root file is a thin, clean wrapper that guarantees matugen colors + the full styling.
+ *   - Individual visual themes (in themes/<name>/) do the same import pattern so everything stays consistent.
+ */
+
+/* ============================================
+ * Matugen dynamic colors (wallpaper-driven)
+ * This must come first so @primary, @surface, etc. are defined.
+ * ============================================ */
+@import "colors/matugen.css";
+
+/* ============================================
+ * The complete preserved styling
+ * (all workspaces, groups, custom modules, hover states, etc.)
+ * This is the file we saved as freshstart.css from your working config.
+ * ============================================ */
+@import "freshstart.css";
+
+/*
+ * ============================================
+ * ROOT-LEVEL OVERRIDES (optional)
+ * ============================================
+ *
+ * Only put things here that should affect plain waybar launches
+ * but NOT the themes (or put them in freshstart.css if they should be shared).
+ *
+ * Example:
+ * window#waybar {
+ *     margin-top: 4px;   /* different top margin for plain launches */
+ * }
+ */

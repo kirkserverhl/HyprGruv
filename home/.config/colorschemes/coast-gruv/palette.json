@@ -1,7 +1,7 @@
 {
   "version": 1,
   "theme": "coast-gruv",
-  "source": "seed-gruvbox-dark",
+  "source": "exported-from-css",
   "base16": {
     "base00": "#1d2021",
     "base01": "#282828",
@@ -16,8 +16,8 @@
     "base0A": "#d79921",
     "base0B": "#98971a",
     "base0C": "#689d6a",
-    "base0D": "#d65d0e",
+    "base0D": "#d79921",
     "base0E": "#458588",
-    "base0F": "#d65d0e"
+    "base0F": "#d79921"
   }
 }

@@ -1,0 +1,136 @@
+/* waybar-v1 — compact accent chips; colors from matugen via base.css */
+@import "../../shared/base.css";
+
+* {
+  font-family:
+    "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
+    sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: @on_surface;
+}
+
+.modules-left,
+.modules-right {
+  margin: 0 8px;
+}
+
+tooltip {
+  background: @background;
+  border: 1px solid @outline;
+  border-radius: 6px;
+}
+
+tooltip label {
+  color: @on_surface;
+}
+
+/* --- workspace strip --- */
+#group-workspaces {
+  background-color: transparent;
+}
+
+#group-workspaces label.module {
+  background-color: @primary;
+  color: @on_primary;
+  padding: 0 7px;
+  margin: 0 2px;
+  min-width: 18px;
+  border-radius: 2px;
+  transition: all 200ms ease-in-out;
+}
+
+#group-workspaces label.module.ws.empty {
+  opacity: 0.55;
+}
+
+#group-workspaces label.module.ws.active {
+  background-color: @surface_bright;
+  color: @on_surface;
+  padding: 0 15px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+
+#group-workspaces label.module:hover {
+  color: @background;
+  background-color: @on_secondary_container;
+}
+
+#group-workspaces label.module.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+  opacity: 0;
+  background: transparent;
+}
+
+#group-workspaces #custom-special,
+#group-workspaces #custom-notification {
+  background-color: @primary;
+  color: @on_primary;
+}
+
+#group-workspaces #custom-special.active {
+  background-color: @surface_bright;
+  color: @on_surface;
+  border-radius: 7px;
+}
+
+/* --- module chips --- */
+#group-sound,
+#group-cpu-info,
+#group-apps,
+#group-settings,
+#custom-updates,
+#custom-power,
+#group-clock,
+#custom-media,
+#window {
+  border-radius: 3px;
+  background-color: @primary;
+  color: @on_primary;
+  margin: 0 5px;
+  padding: 0 11px;
+}
+
+#group-clock {
+  font-weight: 500;
+  padding: 0 7px;
+}
+
+#group-apps label.module,
+#group-settings label.module,
+#group-sound label.module,
+#group-cpu-info label.module,
+#group-clock #clock,
+#group-clock #custom-clock-date {
+  background: transparent;
+  color: inherit;
+}
+
+#window {
+  background: transparent;
+  color: @on_surface;
+  padding: 0 8px;
+}
+
+#pulseaudio.muted {
+  color: @error;
+}
+
+#window.hidden,
+window#waybar.empty #window {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  opacity: 0;
+}

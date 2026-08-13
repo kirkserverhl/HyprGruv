@@ -42,7 +42,7 @@ fi
 
 # Exact-name match only — never match this script (waybar-layout-switcher)
 mapfile -t LAYOUTS < <(
-  find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name spacer -printf '%f\n' 2>/dev/null \
+  find "$LAYOUTS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name spacer ! -name waybar_legacy_reference_for_fix -printf '%f\n' 2>/dev/null \
     | while read -r name; do
         if [[ -f "$LAYOUTS_DIR/$name/config.jsonc" || -f "$LAYOUTS_DIR/$name/config" ]]; then
           printf '%s\n' "$name"
