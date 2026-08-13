@@ -5,6 +5,9 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-08-13T16:30:58-04:00 | HyprLab | deploy | to-source | HyprLab work LG (103MXTC4F409): scale 1.2. Laptop moves to 1600x0 so the pair stays flush. | [2026-08-13T203058Z-HyprLab.md](entries/2026-08-13T203058Z-HyprLab.md) |
+| 2026-08-13T16:29:52-04:00 | HyprLab | deploy | to-source | HyprLab work-dock: both screens were stacked at 0x0 (cursor on both). Listener was bound to dead /tmp/hypr socket. Re-pinned LG left 0x0 / laptop 2304x281, fixed socket path, stop early-undock slam, Lua monitor.added backup. | [2026-08-13T202952Z-HyprLab.md](entries/2026-08-13T202952Z-HyprLab.md) |
+| 2026-08-13T14:18:08-04:00 | HyprLab | deploy | to-source | F-keys not assigned distribution-wide; laptop Fn-lock so F1-F12 work without holding Fn | [2026-08-13T181808Z-HyprLab.md](entries/2026-08-13T181808Z-HyprLab.md) |
 | 2026-08-12T23:42:25-04:00 | HyprGruv | source | to-deploy | HyprGruv: persist current 4-wide desk layout as the permanent desktop profile (24CN65 0x59 vertical \| FULL HD 900x59 \| LG Monitor 2501x59 \| TV 4102x0). Laptop branch untouched. | [2026-08-13T034225Z-HyprGruv.md](entries/2026-08-13T034225Z-HyprGruv.md) |
 | 2026-08-12T17:00:18-04:00 | HyprLab | deploy | to-source | Force dark-only: GTK2 gtkrc was Breeze (light leak). apply-desktop-assets now rewrites gtkrc-2.0 + xsettingsd PreferDarkTheme; hyprland.lua restores gsettings prefer-dark; GROK_APPEARANCE=dark + groknight; Chrome/Electron WebContentsForceDark. | [2026-08-12T210018Z-HyprLab.md](entries/2026-08-12T210018Z-HyprLab.md) |
 | 2026-08-12T16:39:23-04:00 | HyprLab | deploy | to-source | HyprLab: close 3px dock gap (laptop 2307→2304) so Super+arrow can cross LG→internal; enable window_direction_monitor_fallback. | [2026-08-12T203923Z-HyprLab.md](entries/2026-08-12T203923Z-HyprLab.md) |
