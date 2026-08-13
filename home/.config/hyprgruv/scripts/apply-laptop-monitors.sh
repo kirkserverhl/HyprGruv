@@ -38,7 +38,10 @@ is_laptop_profile() {
     [[ "$mode" == "laptop" || "$machine" == "laptop" ]]
 }
 
-is_laptop_profile || exit 0
+# Desktop uses the same login/hotplug/reload hooks; pack whatever is plugged in.
+if ! is_laptop_profile; then
+    exec "$SCRIPTS/apply-desktop-monitors.sh"
+fi
 
 command -v hyprctl >/dev/null 2>&1 || exit 0
 command -v jq >/dev/null 2>&1 || exit 0

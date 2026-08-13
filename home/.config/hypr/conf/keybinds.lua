@@ -215,6 +215,7 @@ hl.bind(altMod .. " + R", hl.dsp.exec_cmd("hyprctl reload; hyprctl notify 0 2000
 hl.bind(altMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd(SCRIPTS .. "/base16-palette.sh"))
 hl.bind(altMod .. " + M",     hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
+hl.bind(mainMod .. " + " .. altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-tv-mode.sh")) -- #display TV desk 120Hz ↔ video 4K
 hl.bind(altMod .. " + N",     hl.dsp.exec_cmd("~/.local/bin/night-mode.sh"))
 
 -- Window alt-actions
