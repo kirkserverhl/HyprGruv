@@ -296,3 +296,17 @@ export PATH="$HOME/.grok/bin:$PATH"
 fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
+
+# Collapse kitty padding while Grok's TUI is running.
+grok() {
+  local fit="$HOME/.config/kitty/kittens/grok-fit.sh"
+  local bin="$HOME/.grok/bin/grok"
+  if [[ -n "${KITTY_PID:-}" && -x "$fit" && -x "$bin" ]]; then
+    "$fit" on
+    "$bin" "$@"
+    local st=$?
+    "$fit" off
+    return $st
+  fi
+  command grok "$@"
+}
