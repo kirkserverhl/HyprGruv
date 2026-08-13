@@ -2,6 +2,7 @@
 # Blitz mode — WORK-focus toggle (not device profile).
 # Laptop/desktop decoration baselines come from apply-machine-profile.sh.
 # Blitz: strip blur/animations/gaps for deep work; reload restores profile.
+# Keyboard: Super+G runs blitz-mode.sh directly (no separate gap toggle).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

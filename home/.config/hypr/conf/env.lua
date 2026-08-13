@@ -1,13 +1,16 @@
 -- conf/env.lua
--- Converted from conf/environments/default.conf + direct env lines
--- GPU / VA-API vars come from apply-machine-profile.sh (settings/*) when present.
+-- Shared toolkit / session env for every machine.
+-- VA-API (LIBVA_DRIVER_NAME) is the only hardware-specific var: it comes from
+-- apply-machine-profile.sh → ~/.config/settings/libva_driver.sh.
+-- Do not set NVIDIA/WLR leftovers here (__GLX_*, WLR_*, GBM_*) — they leak
+-- onto Intel/AMD and Hyprland 0.49+ (Aquamarine) ignores WLR_*.
 
 local settings = require("conf.settings")
 
--- Hyprland / Wayland
+-- Hyprland / Wayland (X11 fallbacks where the toolkit uses them)
 hl.env("GDK_BACKEND", "wayland,x11")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-hl.env("SDL_VIDEODRIVER", "wayland")
+hl.env("SDL_VIDEODRIVER", "wayland,x11")
 hl.env("CLUTTER_BACKEND", "wayland")
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_TYPE", "wayland")
@@ -17,22 +20,19 @@ hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 -- QT apps
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
--- GPU / video decode (profile- or hardware-aware defaults)
--- Written by apply-machine-profile.sh → ~/.config/settings/libva_driver.sh etc.
-local libva = settings.read("libva_driver", "")
-local no_hw = settings.read("wlr_no_hw_cursors", "")
-local gpu = settings.read("gpu_vendor", "")
+-- Firefox / Electron: prefer Wayland without hard-failing on X11
+hl.env("MOZ_ENABLE_WAYLAND", "1")
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
+-- GPU / video decode — profile-written only. Never infer nvidia/hybrid here.
+local libva = settings.read("libva_driver", "")
 if libva == nil or libva == "" then
-	-- Fallback before first profile apply: prefer common iGPU drivers by crude path probes
-	if gpu == "nvidia" or gpu == "hybrid-nvidia" then
-		libva = "nvidia"
-	elseif gpu == "amd" then
+	local gpu = settings.read("gpu_vendor", "")
+	if gpu == "amd" then
 		libva = "radeonsi"
 	elseif gpu == "intel" then
 		libva = "iHD"
 	else
-		-- Leave unset rather than force a wrong vendor (was hard-coded radeonsi)
 		libva = nil
 	end
 end
@@ -40,18 +40,6 @@ end
 if libva and libva ~= "" then
 	hl.env("LIBVA_DRIVER_NAME", libva)
 end
-
-if no_hw == "1" or no_hw == "true" or gpu == "nvidia" or gpu == "hybrid-nvidia" then
-	hl.env("WLR_NO_HARDWARE_CURSORS", "1")
-end
-
--- NVIDIA session (only when profile says so — avoid breaking Intel/AMD)
-if libva == "nvidia" then
-	hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
-end
-
--- Uncomment only for severe rendering problems
--- hl.env("WLR_RENDERER_ALLOW_SOFTWARE", "1")
 
 -- From main hyprland.conf
 local SCRIPTS = require("conf.scripts_path").get()

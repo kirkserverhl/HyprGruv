@@ -1,0 +1,43 @@
+/* Config editor — same chrome as waybar-layout-switcher / config-compact */
+
+configuration {
+    modi:                "drun,run,filebrowser,keys";
+    show-icons:          true;
+    icon-theme:          "Gruvbox Plus Dark";
+    display-drun:        "APPS";
+    display-run:         "RUN";
+    display-filebrowser: "FILES";
+    display-window:      "WINDOW";
+    scroll-method:       1;
+    drun-display-format: "{name}";
+    window-format:       "{w}  {c}  {t}";
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
+
+window {
+    width:    600px;
+    y-offset: 65px;
+    location: north;
+    anchor:   north;
+}
+
+mainbox {
+    children: ["listbox"];
+}
+
+listbox {
+    children: ["inputbar", "message", "listview"];
+}
+
+listview {
+    lines:        14;
+    fixed-height: true;
+    cycle:        false;
+    dynamic:      false;
+}
+
+element-icon {
+    size: 32px;
+}

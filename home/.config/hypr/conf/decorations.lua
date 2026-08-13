@@ -9,8 +9,8 @@ local is_laptop = settings.is_laptop()
 --             no inactive transparency, no cinematic screen shader.
 --   Desktop — richer blur/shadows when AC + dGPU is typical.
 --
--- Blitz mode (hyprgruv-settings → Blitz) is work-focus: turns blur/anim/gaps
--- OFF at runtime via blitz-mode.sh; it is NOT a machine profile.
+-- Blitz mode (Super+G, or hyprgruv-settings → Blitz) is work-focus: turns
+-- blur/anim/gaps OFF at runtime via blitz-mode.sh; it is NOT a machine profile.
 --
 -- Runtime override: apply-hypr-blur.sh (state hypr-blur.conf / settings UI).
 -- ---------------------------------------------------------------------------

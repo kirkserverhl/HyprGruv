@@ -219,6 +219,16 @@ hl.window_rule({
     size = {1000, 700},
 })
 
+-- GPU Screen Recorder overlay (gsr-ui — Alt+Z)
+hl.window_rule({
+    name = "gpu-screen-recorder-overlay",
+    match = { class = "^(gpu-screen-recorder|gsr-ui|Gsr-ui)$" },
+    float = true,
+    pin = true,
+    fullscreen = true,
+    border_size = 0,
+})
+
 -- Basic cmatrix (F5): fullscreen on the focused monitor
 hl.window_rule({
     name = "cmatrix",

@@ -1,0 +1,12 @@
+[Unit]
+Description=Poll system thresholds for sticky SwayNC critical alerts
+
+[Timer]
+OnBootSec=90s
+OnActiveSec=20s
+OnUnitActiveSec=45s
+Persistent=true
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target

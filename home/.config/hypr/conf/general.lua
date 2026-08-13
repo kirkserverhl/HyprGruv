@@ -70,6 +70,8 @@ hl.config({
 	ecosystem = {
 		no_update_news = true, -- was ecosystem:no_update_news
 		no_donation_nag = true,
+		-- Rules live in conf/permissions.lua. Restart Hyprland to apply.
+		enforce_permissions = true,
 	},
 
 	xwayland = {

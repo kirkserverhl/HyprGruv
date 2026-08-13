@@ -3,13 +3,12 @@
 # HyprLab / laptop-profile only.
 #
 # When the work-dock LG FULL HD (serial 103MXTC4F409) is present:
-#   LG LEFT   1920x1080@60     0x0      scale 0.833333
-#   eDP RIGHT 1920x1080@60.02  2304x281 scale 1.2  (flush: 1920/0.833333)
+#   LG LEFT   1920x1080@60     0x0    scale 1.2
+#   eDP RIGHT 1920x1080@60.02  1600x0 scale 1.2  (flush: 1920/1.2)
 #
-# The previous Lua hook flipped this pair: on monitor.added / reload it
-# queried monitors before the dock was in the list, assumed "undocked",
-# and slammed the laptop to 0x0. Never move the built-in panel to 0x0
-# unless that serial is confirmed absent.
+# Never move the built-in panel to 0x0 from a single early snapshot.
+# Login/hotplug often lists eDP first; slamming it to 0x0 then lets the
+# dock land on top of it (cursor drawn on both screens).
 
 set -euo pipefail
 
@@ -22,14 +21,20 @@ LAPTOP_DESC="desc:LG Display 0x061F"
 
 DOCK_MODE="1920x1080@60.00"
 DOCK_POS="0x0"
-DOCK_SCALE="0.833333"
+DOCK_SCALE="1.2"
 
 LAPTOP_MODE="1920x1080@60.02"
-LAPTOP_DOCKED_POS="2304x281"
+LAPTOP_DOCKED_POS="1600x0"
 LAPTOP_SOLO_POS="0x0"
 LAPTOP_SCALE="1.2"
 
-LOCK_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-laptop-monitors.lock"
+LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-laptop-monitors.lock"
+LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/laptop-monitors.log"
+
+log() {
+    mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
+    printf '%s %s\n' "$(date -Iseconds)" "$*" >>"$LOG" 2>/dev/null || true
+}
 
 is_laptop_profile() {
     local mode machine
@@ -46,23 +51,68 @@ fi
 command -v hyprctl >/dev/null 2>&1 || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 
-# Serialize overlapping start/hotplug/reload calls.
-if command -v mkdir >/dev/null 2>&1; then
-    if ! mkdir "$LOCK_DIR" 2>/dev/null; then
-        exit 0
-    fi
-    trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
+# Serialize overlapping start/hotplug/reload calls. Wait; do not drop.
+exec 9>"$LOCK_FILE"
+if ! flock -w 12 9; then
+    log "lock timeout; skip"
+    exit 0
 fi
 
-json="$(hyprctl monitors -j 2>/dev/null || true)"
-[[ -n "$json" && "$json" != "null" ]] || exit 0
+json=""
+dock_present="false"
 
-dock_present="$(jq -r --arg s "$WORK_SERIAL" '
-    any(.[];
-        (.serial // "") == $s
-        or ((.description // "") | contains($s))
-    )
-' <<<"$json")"
+refresh_json() {
+    json="$(hyprctl monitors -j 2>/dev/null || true)"
+}
+
+dock_in_json() {
+    jq -r --arg s "$WORK_SERIAL" '
+        any(.[];
+            (.serial // "") == $s
+            or ((.description // "") | contains($s))
+        )
+    ' <<<"$json"
+}
+
+# DP/HDMI already enumerated, or more than the built-in — dock is attaching.
+has_external() {
+    jq -e '
+        any(.[];
+            (.name // "" | test("^(DP-|HDMI-|DVI-)"))
+            or ((.description // "") | test("LG Electronics"))
+        )
+        or (length > 1)
+    ' <<<"$json" >/dev/null 2>&1
+}
+
+# Poll before concluding "undocked". A 1s login snapshot is not proof.
+wait_for_stable() {
+    local i dock
+    for i in $(seq 1 12); do
+        refresh_json
+        if [[ -z "$json" || "$json" == "null" ]]; then
+            sleep 0.35
+            continue
+        fi
+        dock="$(dock_in_json)"
+        if [[ "$dock" == "true" ]]; then
+            dock_present=true
+            return 0
+        fi
+        if has_external; then
+            sleep 0.4
+            continue
+        fi
+        # Only the built-in so far. Give login a few extra looks.
+        if (( i < 5 )); then
+            sleep 0.35
+            continue
+        fi
+        dock_present=false
+        return 0
+    done
+    dock_present=false
+}
 
 # Lua config ignores `hyprctl keyword monitor` ("use eval").
 apply_monitor() {
@@ -76,7 +126,7 @@ already_docked() {
             | .x == 0 and .y == 0)
         and
         (map(select((.description // "") | test("LG Display 0x061F"))) | first
-            | .x == 2304 and .y == 281)
+            | .x == 1600 and .y == 0)
     ' <<<"$json" >/dev/null 2>&1
 }
 
@@ -108,22 +158,36 @@ apply_two_per_monitor() {
     done < <(jq -r 'sort_by(.x) | .[] | "\(.name)\t\(.description)"' <<<"$json")
 }
 
+wait_for_stable
+[[ -n "$json" && "$json" != "null" ]] || exit 0
+
 if [[ "$dock_present" == "true" ]]; then
     if ! already_docked; then
+        log "pin docked: LG ${DOCK_POS} + laptop ${LAPTOP_DOCKED_POS}"
         # Dock first (left), laptop second (right). Never the reverse.
         apply_monitor "$WORK_DESC" "$DOCK_MODE" "$DOCK_POS" "$DOCK_SCALE"
         apply_monitor "$LAPTOP_DESC" "$LAPTOP_MODE" "$LAPTOP_DOCKED_POS" "$LAPTOP_SCALE"
-        json="$(hyprctl monitors -j 2>/dev/null || true)"
+        refresh_json
     fi
     apply_two_per_monitor
-else
-    if ! already_solo; then
-        apply_monitor "$LAPTOP_DESC" "$LAPTOP_MODE" "$LAPTOP_SOLO_POS" "$LAPTOP_SCALE"
-    fi
-    laptop_name="$(jq -r '
-        [.[] | select((.description // "") | test("LG Display 0x061F"))]
-        | first | .name // "eDP-1"
-    ' <<<"$json")"
-    pin_ws 1 "$LAPTOP_DESC" "$laptop_name"
-    pin_ws 2 "$LAPTOP_DESC" "$laptop_name"
+    exit 0
 fi
+
+# Still more than the built-in, but not the known work serial — do not
+# collapse the laptop onto 0x0 (that is what stacked the cursors).
+if jq -e 'length > 1' <<<"$json" >/dev/null 2>&1; then
+    log "multiple outputs, work serial absent; leave geometry"
+    apply_two_per_monitor
+    exit 0
+fi
+
+if ! already_solo; then
+    log "pin solo laptop ${LAPTOP_SOLO_POS}"
+    apply_monitor "$LAPTOP_DESC" "$LAPTOP_MODE" "$LAPTOP_SOLO_POS" "$LAPTOP_SCALE"
+fi
+laptop_name="$(jq -r '
+    [.[] | select((.description // "") | test("LG Display 0x061F"))]
+    | first | .name // "eDP-1"
+' <<<"$json")"
+pin_ws 1 "$LAPTOP_DESC" "$laptop_name"
+pin_ws 2 "$LAPTOP_DESC" "$laptop_name"

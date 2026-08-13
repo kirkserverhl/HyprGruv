@@ -5,10 +5,10 @@
 waypaper-git
 waypaper-engine
 atuin
-aylurs-gtk-shell-git
 aphototoollibre
 brave-bin
 # SDDM greeter + Hyprland cursor theme (CursorTheme=Bibata-Modern-Classic-Gruvbox)
+# Held in ~/.config/yay/pacman.conf IgnorePkg — AUR pkgver flips every -Syu (rebuild loop).
 bibata-cursor-gruvbox-git
 cbonsai-git
 dipc

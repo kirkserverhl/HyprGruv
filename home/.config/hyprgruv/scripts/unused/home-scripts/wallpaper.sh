@@ -14,7 +14,7 @@
 #
 # If you are on an ancient build that still needs this exact script,
 # you can still run it manually, but it may cause conflicts
-# (especially AGS reloads and waybar launch logic).
+# with current waybar launch logic.
 # ===================================================================
 
 #                _ _
@@ -160,11 +160,3 @@ echo "* { current-image: url(\"$blurredwallpaper\", height); }" > "$rasifile"
 echo ":: Generate new cached wallpaper square-$wallpaperfilename"
 magick $tmpwallpaper -gravity Center -extent 1:1 $squarewallpaper
 cp $squarewallpaper $generatedversions/square-$wallpaperfilename.png
-
-# -----------------------------------------------------
-# Reload AGS
-# -----------------------------------------------------
-
-ags quit &
-sleep 0.2
-ags run &

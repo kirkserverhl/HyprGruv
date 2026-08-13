@@ -1,0 +1,43 @@
+# system-critical-alert — thresholds for sticky SwayNC alerts
+# Sourced as bash. Uncomment / edit any value. Units: °C, percent.
+
+# CPU (coretemp Package id 0 / k10temp)
+# CPU_TEMP_CRIT=90
+# CPU_TEMP_CLEAR=80
+
+# NVMe composite
+# NVME_TEMP_CRIT=80
+# NVME_TEMP_CLEAR=70
+
+# GPU (nvidia-smi or amdgpu/i915 hwmon) — ignored if no sensor
+# GPU_TEMP_CRIT=90
+# GPU_TEMP_CLEAR=80
+
+# Disk used percent. Same block device is only alerted once.
+# DISK_CRIT_PCT=90
+# DISK_CLEAR_PCT=85
+# DISK_MOUNTS="/ /home /boot/efi"
+
+# Memory: alert when MemAvailable is at or below this percent of MemTotal
+# MEM_AVAIL_CRIT_PCT=8
+# MEM_AVAIL_CLEAR_PCT=12
+
+# Battery: alert when at or below this percent (discharging only by default)
+# BATTERY_CRIT_PCT=8
+# BATTERY_CLEAR_PCT=15
+# BATTERY_ONLY_DISCHARGING=1
+
+# Failed systemd units (system by default; user units are often noisy)
+# CHECK_FAILED_UNITS=1
+# CHECK_USER_UNITS=0
+
+# Toggle individual checks (1/0)
+# CHECK_CPU_TEMP=1
+# CHECK_NVME_TEMP=1
+# CHECK_GPU_TEMP=1
+# CHECK_DISK=1
+# CHECK_MEMORY=1
+# CHECK_BATTERY=1
+
+# PLAY_SOUND=1
+# DAEMON_INTERVAL=45

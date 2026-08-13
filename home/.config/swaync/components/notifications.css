@@ -39,11 +39,24 @@
   border-radius: 12px;
 }
 
+@keyframes critical-pulse {
+  0% {
+    border-color: @urgent;
+  }
+  50% {
+    border-color: alpha(@urgent, 0.45);
+  }
+  100% {
+    border-color: @urgent;
+  }
+}
+
 .floating-notifications.background
   .notification-row
   .notification-background
   .notification.critical {
   border: 2px solid @urgent;
+  animation: critical-pulse 1.6s ease-in-out infinite;
 }
 
 .floating-notifications.background

@@ -29,9 +29,10 @@ warn() {
 # shellcheck source=apply-mimeapps.sh
 source "$SCRIPT_DIR/apply-mimeapps.sh"
 
-log "Installing MIME handler packages (handlr, Zathura, xdg-utils)..."
+log "Installing MIME handler packages (handlr, Zathura, LibreOffice, Ark, sqlitebrowser)..."
 sudo pacman -S --needed --noconfirm \
-    handlr-regex zathura zathura-pdf-mupdf xdg-utils libreoffice-fresh
+    handlr-regex zathura zathura-pdf-mupdf xdg-utils libreoffice-fresh \
+    ark sqlitebrowser shared-mime-info || warn "some MIME handler packages failed to install"
 
 if command -v yay >/dev/null 2>&1 && ! pacman -Q aphototoollibre &>/dev/null; then
     log "Installing aphototoollibre (image handler from mimeapps.list)..."
@@ -61,9 +62,29 @@ fi
 # Empty per-user mimeapps overrides shadow ~/.config/mimeapps.list and break xdg-open
 # for Electron apps (Obsidian, etc.) — links fail silently.
 LOCAL_MIMEAPPS="$HOME/.local/share/applications/mimeapps.list"
-if [[ -f "$LOCAL_MIMEAPPS" ]] && [[ ! -s "$LOCAL_MIMEAPPS" || ! grep -q '=' "$LOCAL_MIMEAPPS" 2>/dev/null ]]; then
+if [[ -f "$LOCAL_MIMEAPPS" ]] && { [[ ! -s "$LOCAL_MIMEAPPS" ]] || ! grep -q '=' "$LOCAL_MIMEAPPS" 2>/dev/null; }; then
     log "Removing empty mimeapps override: $LOCAL_MIMEAPPS"
     rm -f "$LOCAL_MIMEAPPS"
+fi
+
+SQLITE_BIN="$HYPR_DIR/home/.local/bin/hyprgruv-sqlite"
+if [[ -f "$SQLITE_BIN" ]]; then
+    chmod +x "$SQLITE_BIN"
+    mkdir -p "$HOME/.local/bin"
+    if [[ ! -e "$HOME/.local/bin/hyprgruv-sqlite" ]]; then
+        install -m 0755 "$SQLITE_BIN" "$HOME/.local/bin/hyprgruv-sqlite"
+    fi
+fi
+
+MIME_SRC="$HYPR_DIR/home/.local/share/mime/packages/hyprgruv-sqlite.xml"
+MIME_DST="$HOME/.local/share/mime/packages/hyprgruv-sqlite.xml"
+if [[ -f "$MIME_SRC" ]]; then
+    log "Registering SQLite globs (*.db, *.sqlite)..."
+    mkdir -p "$(dirname "$MIME_DST")"
+    install -m 0644 "$MIME_SRC" "$MIME_DST"
+    if command -v update-mime-database >/dev/null 2>&1; then
+        update-mime-database "$HOME/.local/share/mime" 2>/dev/null || true
+    fi
 fi
 
 if command -v update-desktop-database >/dev/null 2>&1; then
@@ -71,7 +92,7 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 MIMEAPPS="${XDG_CONFIG_HOME:-$HOME/.config}/mimeapps.list"
-log "Applying MIME defaults from $MIMEAPPS"
+log "Applying MIME defaults from $MIMEAPPS via handlr"
 apply_mimeapps_file "$MIMEAPPS"
 
 log "PDF handler: $(xdg-mime query default application/pdf)"

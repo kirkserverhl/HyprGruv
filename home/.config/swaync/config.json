@@ -21,12 +21,29 @@
 
   "timeout": 4,
   "timeout-low": 2,
-  "timeout-critical": 6,
+  "timeout-critical": 0,
 
   "fit-to-screen": true,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
   "script-fail-notify": true,
+
+  "scripts": {
+    "system-critical-ack": {
+      "exec": "bash -c 'exec \"$HOME/.hyprgruv/lib/scripts/system-critical-alert.sh\" --ack'",
+      "app-name": "System",
+      "urgency": "Critical",
+      "run-on": "action"
+    }
+  },
+
+  "notification-visibility": {
+    "system-critical": {
+      "app-name": "System",
+      "urgency": "Critical",
+      "state": "enabled"
+    }
+  },
 
   "widgets": [
     "label",

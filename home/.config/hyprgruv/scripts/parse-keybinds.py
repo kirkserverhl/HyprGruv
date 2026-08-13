@@ -78,6 +78,8 @@ def humanize_command(cmd: str) -> str:
         "dev-workspace.sh": "Open dev tmux workspace",
         "hyprshot.sh": "Screenshot menu",
         "quickshot.sh": "Quick screenshot to clipboard",
+        "gpu-screen-recorder.sh": "GPU Screen Recorder overlay",
+        "gsr-ui-cli": "GPU Screen Recorder overlay",
         "cliphist.sh": "Clipboard history",
         "launch-wlogout.sh": "Power menu",
         "waypaper": "Wallpaper picker",
@@ -333,6 +335,14 @@ def main() -> int:
                 continue
             seen.add(entry)
             lines.append(entry)
+
+    # F1–F12 are never bound in the Super/Alt stack — per-keyboard maps only.
+    note = (
+        "[FUNCTION KEYS] F1–F12  →  "
+        "not assigned distribution-wide (per-keyboard layout only)  ·  #help"
+    )
+    if note not in seen:
+        lines.append(note)
 
     lines.sort(key=lambda s: s.lower())
     sys.stdout.write("\n".join(lines))

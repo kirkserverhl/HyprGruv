@@ -20,6 +20,11 @@
 --     Script delays briefly so Super is released (avoids cccc/vvvv storms).
 --     Terminals: primary-selection copy + Ctrl+Shift paste (text only).
 --     (link is Super+Shift+U so Super+Shift+K stays resize-up)
+--
+--   F1–F12 (none)    → not assigned distribution-wide
+--                      No Super/Alt/global F-row binds. Each keyboard layout
+--                      owns the row (see FUNCTION KEYS). Laptop Fn-lock is on
+--                      so F1–F12 fire without holding Fn (fn-lock.sh).
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- Backup: keybinds.lua.bak-pre-stack-YYYYMMDD next to this file
 --
@@ -33,22 +38,8 @@ local MAC     = SCRIPTS .. "/mac-shortcut.sh"
 local mainMod = "SUPER"
 local altMod  = "ALT"
 -- ── helpers ───────────────────────────────────────────────────────────────────
-
-local gap_mode = "normal"
-local GAP_PRESETS = {
-    normal  = { gaps_in = 10, gaps_out = 14 },
-    minimal = { gaps_in = 2,  gaps_out = 5  },
-}
-
-local function toggle_gaps()
-    gap_mode = (gap_mode == "normal") and "minimal" or "normal"
-    local g = GAP_PRESETS[gap_mode]
-    hl.config({ general = { gaps_in = g.gaps_in, gaps_out = g.gaps_out } })
-    hl.exec_cmd(string.format(
-        "hyprctl notify 1 1400 0 'Gaps: %s (in:%d out:%d)'",
-        gap_mode, g.gaps_in, g.gaps_out
-    ))
-end
+-- Gaps are not a standalone toggle. Super+G is Blitz (work focus); zero gaps
+-- live only inside blitz-mode.sh. Profile defaults stay in conf/general.lua.
 
 -- hyprctl keyword does not work with the Lua config parser (0.55+); use hl.config.
 -- Layout modes: dwindle (default tiling) ↔ scrolling (column / research).
@@ -157,7 +148,7 @@ hl.bind(mainMod .. " + S",            hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh
 hl.bind(mainMod .. " + SHIFT + S",    hl.dsp.window.move({ workspace = "special:scratchpad" })) -- #window Move to scratchpad
 hl.bind(mainMod .. " + F",            hl.dsp.window.fullscreen()) -- #window Fullscreen (was CTRL+F — that stole Find)
 hl.bind(mainMod .. " + P",            hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + G",            toggle_gaps)
+hl.bind(mainMod .. " + G",            hl.dsp.exec_cmd(SCRIPTS .. "/blitz-mode.sh")) -- #settings #work Toggle Blitz (work focus)
 hl.bind(mainMod .. " + W",            hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
 -- Super+Tab / Super+Shift+Tab: cycle workspaces on the *current monitor only* (m±1).
 -- Does not jump across monitors (unlike the global occupied-cycle script).
@@ -213,6 +204,8 @@ hl.bind(altMod .. " + R", hl.dsp.exec_cmd("hyprctl reload; hyprctl notify 0 2000
 
 -- Screenshots / theme / monitors
 hl.bind(altMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
+-- GSR's own Alt+Z is not parsed by rofi-keybinds; Hyprland owns the chord.
+hl.bind(altMod .. " + Z", hl.dsp.exec_cmd(SCRIPTS .. "/gpu-screen-recorder.sh")) -- #screenshot #record GPU Screen Recorder overlay
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd(SCRIPTS .. "/base16-palette.sh"))
 hl.bind(altMod .. " + M",     hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
 hl.bind(mainMod .. " + " .. altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-tv-mode.sh")) -- #display TV desk 120Hz ↔ video 4K
@@ -234,6 +227,12 @@ end
 hl.bind(mainMod .. " + " .. altMod .. " + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
 -- Alt+Shift+W: waybar layout/theme picker (Ctrl+W left free for apps — Chrome close-tab, etc.)
 hl.bind(altMod .. " + SHIFT + W", open_waybar_layout_switcher) -- #theme #waybar Select waybar layout
+-- Super+Alt+E: edit rice / XDG configs (same rofi chrome as the waybar layout picker)
+local CONFIG_EDIT = (os.getenv("HOME") or "") .. "/.local/bin/config-edit"
+local function open_config_edit()
+	hl.exec_cmd("bash " .. CONFIG_EDIT)
+end
+hl.bind(mainMod .. " + " .. altMod .. " + E", open_config_edit) -- #editor #config Edit rice configs
 hl.bind(altMod .. " + SHIFT + S",    hl.dsp.layout("swapsplit"))
 
 -- Window cycle: Super+Alt+Tab (NOT bare Alt+Tab — that is Mission Control / hymission)
@@ -249,8 +248,9 @@ hl.bind(mainMod .. " + " .. altMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("hyprctl
 --   Super+, / .        pan view along the column tape
 --   Alt+, / .          cycle column width (explicit_column_widths)
 --   Super+Alt+, / .    swap column with neighbor
---   Alt+Z              promote window to its own column
+--   Super+Alt+Z        promote window to its own column
 --   Alt+Shift+Z        consume into previous column (stack)
+--   Alt+Z              GPU Screen Recorder overlay (see Screenshots)
 --   Alt+Shift+F        fit active column into view
 hl.bind(altMod .. " + J",            toggle_column_layout) -- #layout #column Toggle columns (research)
 hl.bind(altMod .. " + SHIFT + J",    set_layout("dwindle", "dwindle (tiling)")) -- #layout Force dwindle tiling
@@ -258,7 +258,7 @@ hl.bind(altMod .. " + comma",        hl.dsp.layout("colresize -conf")) -- #layou
 hl.bind(altMod .. " + period",       hl.dsp.layout("colresize +conf")) -- #layout #column Wider column width
 hl.bind(mainMod .. " + " .. altMod .. " + comma",  hl.dsp.layout("swapcol l")) -- #layout #column Swap column left
 hl.bind(mainMod .. " + " .. altMod .. " + period", hl.dsp.layout("swapcol r")) -- #layout #column Swap column right
-hl.bind(altMod .. " + Z",            hl.dsp.layout("promote")) -- #layout #column Promote to own column
+hl.bind(mainMod .. " + " .. altMod .. " + Z", hl.dsp.layout("promote")) -- #layout #column Promote to own column
 hl.bind(altMod .. " + SHIFT + Z",    hl.dsp.layout("consume")) -- #layout #column Stack into previous column
 hl.bind(altMod .. " + SHIFT + F",    hl.dsp.layout("fit_into_view")) -- #layout #column Fit column into view
 
@@ -311,10 +311,11 @@ hl.bind(mainMod .. " + SHIFT + I", mac("italic")) -- #mac Italic
 hl.bind(mainMod .. " + SHIFT + U", mac("link")) -- #mac Cmd+K → link (was Super+Shift+K)
 
 -- ═══════════════════════════════════════════════════════════════════════════════
--- FUNCTION KEYS — per-keyboard (match each board's F-row legends)
--- Hyprland device-specific binds: only the listed keyboards trigger each map.
--- FN note: firmware chooses whether bare F-row is F1–F12 or XF86 media keys.
--- Laptop map binds both so either FN layer works; external boards keep own maps.
+-- FUNCTION KEYS — not assigned distribution-wide
+-- F1–F12 have no Super/Alt/global binds so each keyboard layout can own the row.
+-- Maps below are device-specific (`hyprctl devices`). Laptop login runs
+-- fn-lock.sh so the F-row is F1–F12 without holding Fn. XF86 binds stay as
+-- fallback if firmware is still in media-key mode (Fn held, or Fn-lock off).
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Device name lists from `hyprctl devices` (include all HID interfaces per board)

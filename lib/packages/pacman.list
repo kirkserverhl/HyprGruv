@@ -49,6 +49,8 @@ hyprtoolkit
 grim
 slurp
 wl-clipboard
+# ShadowPlay-style overlay (Alt+Z). Pulls gpu-screen-recorder + notification.
+gpu-screen-recorder-ui
 # Virtual keyboard for Mac Cmd bridge (Super+C/V/X/Z → Ctrl+* via mac-shortcut.sh)
 wtype
 brightnessctl
@@ -122,6 +124,9 @@ xdg-utils
 zathura
 zathura-pdf-mupdf
 libreoffice-fresh
+ark
+sqlitebrowser
+shared-mime-info
 timeshift
 noto-fonts
 ttf-dejavu

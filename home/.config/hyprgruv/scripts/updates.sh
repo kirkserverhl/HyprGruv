@@ -24,6 +24,26 @@ aur_helper="$(cat ~/.config/hyprgruv/scripts/aur.sh 2>/dev/null \
   || cat ~/.config/settings/aur.sh 2>/dev/null \
   || echo yay)"
 
+# Held AUR packages (yay IgnorePkg). Do not count them as pending updates.
+read_ignore_pkgs() {
+    local conf="${HOME}/.config/yay/pacman.conf"
+    [[ -f "$conf" ]] || return 0
+    awk '
+        /^[[:space:]]*IgnorePkg[[:space:]]*=/ {
+            sub(/^[^=]*=/, "")
+            n = split($0, a, /[[:space:]]+/)
+            for (i = 1; i <= n; i++) if (a[i] != "") print a[i]
+        }
+    ' "$conf"
+}
+
+filter_ignored_updates() {
+    local ignore
+    ignore="$(read_ignore_pkgs | paste -sd'|' -)"
+    [[ -z "$ignore" ]] && cat && return 0
+    grep -Ev "^(${ignore}) " || true
+}
+
 # -----------------------------------------------------
 # Compute counts (shared by both modes)
 # -----------------------------------------------------
@@ -39,7 +59,7 @@ arch)
         updates_arch=$(echo "$updates_list_arch" | wc -l)
     fi
 
-    updates_list_aur=$($aur_helper -Qu --aur 2>/dev/null || true)
+    updates_list_aur=$($aur_helper -Qu --aur 2>/dev/null | filter_ignored_updates || true)
     if [[ -n "$updates_list_aur" ]]; then
         updates_aur=$(echo "$updates_list_aur" | wc -l)
     fi

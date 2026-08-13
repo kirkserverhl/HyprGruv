@@ -119,6 +119,7 @@ menu_settings() {
         local choice
         choice=$(rofi_pick "Settings" \
             "Settings|settings-configure|setup" \
+            "Edit Configs|accessories-text-editor|setup" \
             "SSH / GitHub|network-server|ssh" \
             "Blur|blur|blur" \
             "Blitz|flash|blitz" \
@@ -129,6 +130,9 @@ menu_settings() {
         case "$choice" in
             Settings)
                 exec "$SCRIPT_DIR/settings-run-setup.sh"
+                ;;
+            "Edit Configs")
+                exec "$HOME/.local/bin/config-edit"
                 ;;
             "SSH / GitHub")
                 exec "$SCRIPT_DIR/settings-ssh.sh"

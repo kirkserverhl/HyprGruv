@@ -1,0 +1,100 @@
+# config-edit.ignore — gitignore-style skip list for the config picker
+#
+# Applied to top-level names under $XDG_CONFIG_HOME (~/.config) and to
+# relative paths when browsing a directory.
+#
+# Syntax (gitignore subset):
+#   # comment
+#   name          match that basename anywhere
+#   name/         directories only
+#   *.db          globs
+#   !keep-me      un-ignore a previous match (last match wins)
+#
+# User extras (appended after this file):  ~/.config/.configignore
+
+# ── Browser profiles / caches (not rice files) ──────────────────────────────
+# The rice CSS overlays live in chrome/ and brave/ — those stay visible.
+google-chrome/
+BraveSoftware/
+chromium/
+mozilla/
+firefox/
+
+# ── Session, runtime, caches ────────────────────────────────────────────────
+dconf/
+pulse/
+session/
+systemd/
+go/
+pnpm/
+libaccounts-glib/
+thefuck/
+yay/
+xfce4/
+obs-studio/
+qBittorrent/
+aphototoollibre/
+base16-everything/
+
+# ── KDE / Plasma leftovers (this session is Hyprland) ───────────────────────
+kactivitymanagerdrc
+kactivitymanagerd-statsrc
+kconf_updaterc
+kded5rc
+kded6rc
+kdedefaults/
+ksmserverrc
+ktimezonedrc
+kwinrc
+kwinrulesrc
+kwinoutputconfig.json
+kglobalshortcutsrc
+kcminputrc
+kdeglobals
+powerdevilrc
+powermanagementprofilesrc
+plasma-localerc
+plasma-org.kde.plasma.desktop-appletsrc
+plasmashellrc
+baloofilerc
+bluedevilglobalrc
+Trolltech.conf
+Kvantum Managerrc
+QtProject/
+QtProject.conf
+
+# ── Generated / machine-local noise ─────────────────────────────────────────
+last_wallpaper.txt
+terminal-sequences
+pavucontrol.ini
+pavucontrol/
+user-dirs.dirs
+user-dirs.locale
+fish_variables
+gtkrc
+gtkrc-2.0
+gtk-2.0/
+plymouth/
+hyprlua/
+hyprgruv-settings/
+colorschemes-v2/
+xarchiver/
+reflector-simple-free-params.txt
+*.db
+*.db-*
+*.lock
+error.log
+
+# ── Browser / Electron internals if a dir is opened ─────────────────────────
+Cache/
+CachedData/
+Code Cache/
+GPUCache/
+Local Storage/
+Session Storage/
+blob_storage/
+Crash Reports/
+GrShaderCache/
+ShaderCache/
+dictionaries/
+Crashpad/

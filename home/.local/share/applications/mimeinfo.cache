@@ -1,0 +1,4 @@
+[MIME Cache]
+application/vnd.sqlite3=hyprgruv-sqlite.desktop;
+application/x-sqlite3=hyprgruv-sqlite.desktop;
+x-scheme-handler/obsidian=obsidian.desktop;

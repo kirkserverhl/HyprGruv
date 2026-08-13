@@ -142,6 +142,21 @@ detect_gpu_vendor() {
     echo generic
 }
 
+detect_igpu_libva() {
+    # Hybrid systems: pick the iGPU VA-API driver. Empty if none found.
+    local lines
+    lines="$(lspci 2>/dev/null | grep -iE 'vga compatible|3d controller|display controller' || true)"
+    if echo "$lines" | grep -qi intel; then
+        echo iHD
+        return
+    fi
+    if echo "$lines" | grep -qiE 'amd |radeon|advanced micro devices'; then
+        echo radeonsi
+        return
+    fi
+    echo ""
+}
+
 write_setting() {
     local name="$1"
     local value="$2"
@@ -316,26 +331,27 @@ apply_profile_values() {
     local dpms_timeout=960
     local suspend_timeout=0
     local libva=""
-    local no_hw_cursors=0
     local want_deploy=0
     local want_lid=0
 
+    # VA-API only. Never write WLR_NO_HARDWARE_CURSORS / __GLX_VENDOR_* —
+    # those are obsolete (Aquamarine) or leak onto the wrong GPU.
+    # Hybrid: decode on the iGPU (battery + OBS). Dedicated NVIDIA: nvidia.
     case "$gpu" in
-    nvidia | hybrid-nvidia)
+    nvidia)
         libva=nvidia
-        no_hw_cursors=1
+        ;;
+    hybrid-nvidia)
+        libva="$(detect_igpu_libva)"
         ;;
     amd)
         libva=radeonsi
-        no_hw_cursors=0
         ;;
     intel)
         libva=iHD
-        no_hw_cursors=0
         ;;
     *)
         libva=""
-        no_hw_cursors=0
         ;;
     esac
 
@@ -395,7 +411,8 @@ apply_profile_values() {
     write_setting animations_enabled "$animations_enabled"
     write_setting gpu_vendor "$gpu"
     write_setting libva_driver "${libva:-}"
-    write_setting wlr_no_hw_cursors "$no_hw_cursors"
+    # Always 0: overwrite any leftover NVIDIA/WLR force from older profiles.
+    write_setting wlr_no_hw_cursors 0
     write_setting shadow_enabled "$shadow_enabled"
     write_setting blur_passes "$blur_passes"
     write_setting blur_size "$blur_size"
@@ -411,7 +428,7 @@ apply_profile_values() {
 MACHINE=$machine
 GPU_VENDOR=$gpu
 LIBVA_DRIVER=$libva
-WLR_NO_HW_CURSORS=$no_hw_cursors
+WLR_NO_HW_CURSORS=0
 NATURAL_SCROLL=$natural_scroll
 TOUCHPAD_TAP=$touchpad_tap
 TOUCHPAD_DWT=$touchpad_dwt
@@ -432,6 +449,7 @@ EOF
     write_blur_conf "$blur_size" "$blur_passes"
     apply_deploy_marker "$want_deploy"
     apply_lid_policy "$want_lid"
+    apply_fn_lock "$machine"
     ensure_power_stack "$machine" "$gpu"
     ensure_laptop_fingerprint "$machine"
     ensure_git_sync_role "$machine" "$want_deploy"
@@ -668,6 +686,37 @@ apply_deploy_marker() {
     fi
 }
 
+apply_fn_lock() {
+    # F1–F12 are not assigned distribution-wide. On IdeaPad/Yoga, turn Fn-lock
+    # on so the F-row emits F1–F12 without holding Fn. No-op on other machines.
+    local machine="$1"
+    local fnlock_script="${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv/scripts/fn-lock.sh"
+    local udev_src="$HYPR_DIR/lib/udev/99-hyprgruv-fnlock.rules"
+    local udev_dst="/etc/udev/rules.d/99-hyprgruv-fnlock.rules"
+
+    if [[ "$machine" != "laptop" ]]; then
+        return 0
+    fi
+
+    if [[ -x "$fnlock_script" ]]; then
+        bash "$fnlock_script" || true
+    fi
+
+    if [[ ! -f "$udev_src" ]]; then
+        return 0
+    fi
+    if ! command -v sudo >/dev/null 2>&1; then
+        return 0
+    fi
+    if ! sudo -n true 2>/dev/null; then
+        log_status "Fn-lock udev rule skipped (needs passwordless sudo); login script still sets it"
+        return 0
+    fi
+    if sudo install -m 644 "$udev_src" "$udev_dst"; then
+        log_status "Installed $udev_dst (F-row = F1–F12 without Fn)"
+    fi
+}
+
 apply_lid_policy() {
     local want="$1"
     if [[ "$want" == "1" ]]; then
@@ -751,10 +800,10 @@ ensure_power_stack() {
         fi
     fi
 
-    # Hybrid NVIDIA laptop hint only (do not force install — needs reboot/kernel match)
+    # Hybrid NVIDIA laptop hint only (do not force install or NVIDIA env)
     if [[ "$machine" == "laptop" && "$gpu" == "hybrid-nvidia" ]]; then
         log_status "Hybrid NVIDIA detected. Optional later: nvidia + nvidia-utils + supergfxctl (not auto-installed)."
-        log_status "When using NVIDIA as primary, set libva via re-run after driver install."
+        log_status "VA-API stays on the iGPU. Do not set __GLX_VENDOR_LIBRARY_NAME or WLR_NO_HARDWARE_CURSORS."
     fi
 }
 
@@ -805,6 +854,19 @@ ensure_git_sync_role() {
         log_status "Enabled git-eod-remind.timer (boot + 12h catch-up)"
     else
         log_warning "Could not enable git-eod-remind.timer (reload user systemd after session login)"
+    fi
+    if systemctl --user enable --now system-critical-alert.timer 2>/dev/null; then
+        log_status "Enabled system-critical-alert.timer (sticky SwayNC threshold alerts)"
+    else
+        log_warning "Could not enable system-critical-alert.timer"
+    fi
+    if systemctl --user enable gpu-screen-recorder-ui.service 2>/dev/null; then
+        log_status "Enabled gpu-screen-recorder-ui.service (Alt+Z overlay)"
+        if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+            systemctl --user start gpu-screen-recorder-ui.service 2>/dev/null || true
+        fi
+    else
+        log_warning "Could not enable gpu-screen-recorder-ui.service"
     fi
     # Deploy machines: also poll origin for hyprgruv commits (rofi menu)
     if [[ "$role" == "deploy" || "$want_deploy" == "1" ]]; then

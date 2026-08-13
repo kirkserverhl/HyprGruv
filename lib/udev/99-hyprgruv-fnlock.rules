@@ -1,0 +1,3 @@
+# HyprGruv: IdeaPad/Yoga Fn-lock on so F1–F12 emit without holding Fn.
+# F-keys are not assigned distribution-wide; per-keyboard maps own the row.
+ACTION=="add", SUBSYSTEM=="leds", KERNEL=="platform::fnlock", ATTR{brightness}="1"

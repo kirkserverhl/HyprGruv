@@ -1,0 +1,16 @@
+[Unit]
+Description=GPU Screen Recorder overlay (gsr-ui)
+Documentation=https://git.dec05eba.com/gpu-screen-recorder-ui/about/
+After=hyprland-session.target graphical-session.target
+PartOf=hyprland-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+ConditionPathExists=/usr/bin/gsr-ui
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/gsr-ui
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=hyprland-session.target

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=SQLite
+Comment=Open SQLite databases (DB Browser if installed, otherwise sqlite3)
+TryExec=sqlite3
+Exec=hyprgruv-sqlite %f
+Icon=application-vnd.sqlite3
+Terminal=false
+StartupNotify=false
+Categories=Development;Database;Utility;
+MimeType=application/vnd.sqlite3;application/x-sqlite3;

@@ -136,6 +136,9 @@ git-eod
 # Deploy laptop
 git-eod-pull
 git-eod-pull --hyprgruv-full   # pull + packages + restow for hyprgruv only
+
+# Same command on both machines: updates → role-aware git → cleanup
+wambam
 ```
 
 Defaults: **source** follows `hyprgruv`, `notes`, `Wallpapers`, `soundsbored` (if listed as `default_source=follow`). **deploy** only follows `hyprgruv` so laptops stay lean (debloat wallpapers / skip projects until you `git-sync follow`).
@@ -183,7 +186,7 @@ lib/packages/new.list      # potential optional packages (not auto-installed by 
 
 `01-packages.sh` also installs a small hardcoded core set (Hyprland, pipewire, kitty, thunar, mpv, etc.) before syncing the manifest lists.
 
-**Required AUR highlight:** `aylurs-gtk-shell-git` (AGS) is in `aur.list` and retried in `ESSENTIAL_CHECK`. The dotfiles ship `~/.config/ags/` (power menu, display switcher, sidebar). Waybar remains the primary bar, but AGS must be installed for those layer-shell widgets — including the power menu in `~/.config/ags/power-menu.js`. Keybinds and waybar still launch `wlogout` via `launch-wlogout.sh`; both packages are installed.
+The power menu is **wlogout** only (`launch-wlogout.sh`): Super+Ctrl+Q, Ctrl+Alt+Delete, and the waybar `custom/power` button all use that same launcher. Aylur's Gtk Shell (AGS) is not installed and is not part of this rice.
 
 ### Potential packages (for review)
 
@@ -207,6 +210,7 @@ bash ~/.hyprgruv/sync-packages.sh --new-only
 | `hypremoji` / `smile` | Emoji picker removed from default install and keybinds |
 | `ghostty-git`, `ghostty-shell-integration-git`, `ghostty-terminfo-git` | Use official `ghostty` via setup defaults wizard instead |
 | `tmux-resurrect`, `tmux-resurrect-git` | Flaky AUR build; dropped from auto-install |
+| `aylurs-gtk-shell-git` (AGS) | Unused leftover; power menu is wlogout. Archived elsewhere; QML is the planned replacement |
 | `tmuxai` | Removed from auto-install |
 | `ttf-jetbrains-mono`, `ttf-jetbrains-mono-nerd` | Not used; Agave / ShureTechMono / HeavyData are defaults |
 | `ttf-nerd-fonts-symbols` | Redundant — full nerd fonts below already include icon glyphs |
@@ -241,10 +245,11 @@ bash ~/.hyprgruv/sync-packages.sh promote <package> --to aur
 
 Stowed configs:
 
-- `~/.config/mimeapps.list` — default apps (nvim for text, Zathura for PDF, LibreOffice for Office, Brave for URLs)
+- `~/.config/mimeapps.list` — default apps (nvim for text/markdown/SQL, Zathura for PDF, LibreOffice for Office, mpv for audio/video, Ark for archives/ISOs, KFontView for fonts, Brave for HTML/SVG/URLs)
 - `~/.local/bin/xdg-open` — uses `handlr` when installed, otherwise `/usr/bin/xdg-open`
+- `~/.local/share/mime/packages/hyprgruv-sqlite.xml` — maps `*.db` / `*.sqlite` to `application/vnd.sqlite3`
 
-Packages: `handlr-regex`, `zathura`, `zathura-pdf-mupdf`, `xdg-utils`, `libreoffice-fresh`, `aphototoollibre` (AUR), `brave-bin` (AUR).
+Packages: `handlr-regex`, `zathura`, `zathura-pdf-mupdf`, `xdg-utils`, `libreoffice-fresh`, `ark`, `sqlitebrowser`, `shared-mime-info`, `aphototoollibre` (AUR), `brave-bin` (AUR). SQLite files open in DB Browser when installed, otherwise `sqlite3` in the default terminal.
 
 Applied automatically during the setup wizard (`setup-mime-handlers.sh` in `03-setup.sh`). Re-apply after stow or MIME edits:
 
@@ -283,7 +288,9 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 - Move windows: `Win + Left Mouse` (works before and after install)
 - Close windows during install: `Win + C` (after install: `Win + Q`)
-- Full keybind list after install: `Win + K` or type `keybinds` in a terminal
+- Full keybind list after install: `Alt + K` or type `keybinds` in a terminal
+- Screen recording: `Alt + Z` opens the GPU Screen Recorder overlay (`gpu-screen-recorder-ui` in `pacman.list`)
+- F1–F12 are not assigned distribution-wide (each keyboard layout owns them). Laptops enable Fn-lock so the F-row is F1–F12 without holding Fn.
 
 ## Post-installation
 

@@ -166,6 +166,8 @@ alias fail='faillock --reset'
 alias cleanup='~/.hyprgruv/lib/scripts/cleanup.sh'
 alias doom='~/.config/hyprgruv/scripts/unused/home-scripts/doom.sh'
 alias updates='~/.config/hyprgruv/scripts/installupdates.sh'
+# Role-aware EOD slam: updates → git-eod (source) or git-eod-pull (deploy) → cleanup
+alias wambam='~/.hyprgruv/lib/scripts/wambam.sh'
 
 # =====================================================
 # Functions

@@ -1,0 +1,13 @@
+[Unit]
+Description=Check system thresholds and send sticky SwayNC alerts
+After=hyprland-session.target graphical-session.target
+PartOf=hyprland-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=oneshot
+Environment=HYPRGRUV_DIR=%h/.hyprgruv
+ExecStart=%h/.hyprgruv/lib/scripts/system-critical-alert.sh
+
+[Install]
+WantedBy=timers.target

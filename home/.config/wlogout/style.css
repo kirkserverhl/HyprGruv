@@ -1,22 +1,21 @@
 /*
-          _                         _    
-__      _| | ___   __ _  ___  _   _| |_  
-\ \ /\ / / |/ _ \ / _` |/ _ \| | | | __| 
- \ V  V /| | (_) | (_| | (_) | |_| | |_  
-  \_/\_/ |_|\___/ \__, |\___/ \__,_|\__| 
-                  |___/                  
- 
------------------------------------------------------ 
+          _                         _
+__      _| | ___   __ _  ___  _   _| |_
+\ \ /\ / / |/ _ \ / _` |/ _ \| | | | __|
+ \ V  V /| | (_) | (_| | (_) | |_| | |_
+  \_/\_/ |_|\___/ \__, |\___/ \__,_|\__|
+                  |___/
+
+-----------------------------------------------------
+ Icon sits in the upper half of each card; the action
+ label is shifted below it. Card size itself is chosen
+ per-monitor by launch-wlogout.sh — keep these rules
+ relative (%, em) so 720p and 4K stay readable.
+-----------------------------------------------------
 */
 
-/* -----------------------------------------------------
- * Import Matugen colors 
- * ----------------------------------------------------- */
 @import "colors.css";
 
-/* -----------------------------------------------------
- * General 
- * ----------------------------------------------------- */
 * {
   font-family:
     "HeavyData Nerd Font", "Fira Sans Semibold", FontAwesome, Roboto, Helvetica,
@@ -31,49 +30,46 @@ window {
      - Very dark + low opacity tint over the heavily blurred desktop.
      - This + the strong layerrule blur creates the "frosted security film" effect.
   */
-  background-color: rgba(12, 12, 12, 0.55);
-  font-size: 13pt;
-  color: #cdd6f4;
+  background-color: alpha(@background, 0.55);
+  font-size: 14pt;
+  color: @foreground;
 }
 
 button {
-  /* Compact Rofi-style buttons */
-  min-width: 130px;
-  min-height: 130px;
+  /* Taller min-height + height-relative glyph so the label band stays free.
+     wlogout already yaligns the GtkLabel at 0.9 (near the bottom). */
+  min-width: 140px;
+  min-height: 190px;
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: 38%;
-  background-color: rgba(25, 25, 25, 0.78);
+  background-position: center 10%;
+  background-size: auto 42%;
+  background-color: alpha(@surface_container, 0.82);
   border-radius: 18px;
-  border: 0px;
-  margin: 8px;
+  border: none;
+  margin: 0;
+  padding: 12px 14px 18px;
+  color: @foreground;
+  text-shadow: 0 1px 3px alpha(@shadow, 0.8);
 }
 
 button:focus {
-  background-size: 42%;
-  border: 2px solid #89b4fa;
+  background-size: auto 46%;
+  border: 2px solid @accent;
   border-radius: 18px;
 }
 
 button:hover {
-  background-color: rgba(55, 55, 55, 0.92);
-  background-size: 42%;
+  background-color: alpha(@surface_container_high, 0.92);
+  background-size: auto 46%;
   transition: all 0.15s ease;
-  box-shadow: 0 0 0 3px rgba(137, 180, 250, 0.3);
+  box-shadow: 0 0 0 3px alpha(@accent, 0.3);
 }
 
-/* Adjust the size of the icon or content inside the button */
-button span {
-  font-size: 1.2em; /* Increase the font size */
+button label {
+  font-size: 1.05em;
+  padding: 0 8px 2px;
 }
 
-/* 
------------------------------------------------------ 
-Buttons
------------------------------------------------------ 
-*/
-
-/* Individual icon buttons — size controlled above in the general button rule */
 #lock {
   background-image: image(url("icons/lock.png"));
 }
@@ -91,22 +87,4 @@ Buttons
 }
 #shutdown {
   background-image: image(url("icons/shutdown.png"));
-}
-
-#hibernate {
-  margin: 10px;
-  border-radius: 20px;
-  background-image: image(url("icons/hibernate.png"));
-}
-
-#shutdown {
-  margin: 10px;
-  border-radius: 20px;
-  background-image: image(url("icons/shutdown.png"));
-}
-
-#reboot {
-  margin: 10px;
-  border-radius: 20px;
-  background-image: image(url("icons/reboot.png"));
 }

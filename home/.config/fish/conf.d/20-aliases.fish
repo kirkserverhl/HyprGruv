@@ -72,6 +72,8 @@ abbr --add fail 'faillock --reset'
 abbr --add cleanup '~/.hyprgruv/lib/scripts/cleanup.sh'
 abbr --add doom '~/.config/hyprgruv/scripts/unused/home-scripts/doom.sh'
 abbr --add updates '~/.config/hyprgruv/scripts/installupdates.sh'
+# Role-aware EOD slam: updates → git-eod (source) or git-eod-pull (deploy) → cleanup
+abbr --add wambam '~/.hyprgruv/lib/scripts/wambam.sh'
 
 abbr --add whatismyip 'whatsmyip'
 

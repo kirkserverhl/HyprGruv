@@ -662,7 +662,9 @@ Common keybinds:
   Win + Q             Close Window
   Win + SPACE         App launcher (all apps)
   Alt + SPACE         Favorites launcher
+  Alt + Z             GPU Screen Recorder overlay
   Win + CTRL + Q      Logout
+  F1–F12              not assigned (per-keyboard layout only)
 
 Full keybinds: Win + K  or type 'keybinds' in a terminal
 EOF

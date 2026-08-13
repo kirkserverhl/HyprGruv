@@ -3,8 +3,9 @@
 #
 # Device profile (apply-machine-profile laptop|desktop) sets baseline blur/shadow.
 # Blitz goes further for deep work: kill animations, blur, shadows, gaps.
+# Gaps are only zeroed here — there is no standalone Super+G gap toggle.
 #
-# Toggle: run again, or hyprctl reload to restore config baseline.
+# Toggle: Super+G, run again, or hyprctl reload to restore config baseline.
 set -euo pipefail
 
 # Hyprland 0.5x+ reports animations:enabled as int 0/1

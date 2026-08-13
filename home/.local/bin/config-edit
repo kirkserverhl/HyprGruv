@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec "$HOME/.config/hyprgruv/scripts/config-edit.sh" "$@"

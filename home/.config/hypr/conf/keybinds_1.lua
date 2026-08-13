@@ -7,32 +7,6 @@ local SCRIPTS = os.getenv("HOME") .. "/.config/hyprgruv/scripts"
 local mainMod = "SUPER"
 local mod     = "ALT"
 
--- Gap toggle state + presets (SUPER + G)
--- State resets on `hyprctl reload` (which is usually what you want).
--- Keep the "normal" values in sync with conf/general.lua.
-local gap_mode = "normal"
-
-local GAP_PRESETS = {
-    normal  = { gaps_in = 10, gaps_out = 14 },
-    minimal = { gaps_in = 2,  gaps_out = 5  },
-}
-
-local function toggle_gaps()
-    gap_mode = (gap_mode == "normal") and "minimal" or "normal"
-    local g = GAP_PRESETS[gap_mode]
-
-    hl.dsp.exec_cmd(string.format(
-        "hyprctl --batch 'keyword general:gaps_in %d; keyword general:gaps_out %d'",
-        g.gaps_in, g.gaps_out
-    ))
-
-    -- Use hyprctl notify (more reliable than notify-send from Lua callbacks)
-    hl.dsp.exec_cmd(string.format(
-        "hyprctl notify 1 1400 0 'Gaps: switched to %s (in:%d out:%d)'",
-        gap_mode, g.gaps_in, g.gaps_out
-    ))
-end
-
 -- Mouse
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
@@ -205,7 +179,7 @@ hl.bind(mainMod .. " + J",       hl.dsp.exec_cmd("hyprctl keyword general:layout
 hl.bind(mainMod .. " + SHIFT + J", hl.dsp.exec_cmd("hyprctl keyword general:layout master"))
 
 -- Gaps toggle (normal <-> very minimal)
-hl.bind(mainMod .. " + G", toggle_gaps)
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(SCRIPTS .. "/blitz-mode.sh")) -- #settings #work Toggle Blitz (work focus)
 
 -- Master/scrolling layout messages
 hl.bind(mod .. " + Z",           hl.dsp.layout("addmaster"))

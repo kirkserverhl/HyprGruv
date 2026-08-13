@@ -72,13 +72,13 @@ elseif mode == "laptop" then
 		output = "desc:LG Electronics LG FULL HD 103MXTC4F409",
 		mode = "1920x1080@60.00",
 		position = "0x0",
-		scale = 0.833333,
+		scale = 1.2,
 	})
 	hl.monitor({
 		output = "desc:LG Display 0x061F",
 		mode = "1920x1080@60.02",
-		-- 1920/0.833333 = 2304. Must sit flush or Super+arrow cannot cross.
-		position = "2304x281",
+		-- 1920/1.2 = 1600. Same scale/height as the dock, so y=0 and flush.
+		position = "1600x0",
 		scale = 1.2,
 	})
 end

@@ -37,7 +37,7 @@ elif [ $? -eq 130 ]; then
 else
     echo
     echo ":: Update canceled." | lsd-print
-    exit
+    exit 1
 fi
 
 # Check if platform is supported
@@ -73,6 +73,19 @@ arch)
             echo ":: Snapshot skipped." | lsd-print
         fi
         echo
+    fi
+
+    # Held AUR packages (see ~/.config/yay/pacman.conf IgnorePkg) stay installed
+    # but are skipped so rebuild-loop -git packages do not re-download every -Syu.
+    if [[ -f "$HOME/.config/yay/pacman.conf" ]]; then
+        held=$(awk '/^[[:space:]]*IgnorePkg[[:space:]]*=/ {
+            sub(/^[^=]*=/, "")
+            print
+        }' "$HOME/.config/yay/pacman.conf" | xargs)
+        if [[ -n "$held" ]]; then
+            echo ":: Skipping held packages: $held" | lsd-print
+            echo
+        fi
     fi
 
     $aur_helper

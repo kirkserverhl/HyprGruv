@@ -51,6 +51,13 @@ require("conf.monitors")
 -------------------------------
 require("conf.env")
 
+---------------------
+---- PERMISSIONS ----
+---------------------
+-- Android-like compositor permissions (screencopy, plugin, …).
+-- Not hot-reloaded — restart Hyprland after changing conf/permissions.lua.
+require("conf.permissions")
+
 ---------------
 ---- INPUT ----
 ---------------

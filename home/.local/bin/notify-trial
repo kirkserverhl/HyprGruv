@@ -40,7 +40,7 @@ case "$cmd" in
         sleep 0.3
         notify-send           "Test" "Normal priority (8s timeout)"
         sleep 0.3
-        notify-send -u critical "Test" "Critical priority (sticky)"
+        notify-send -u critical "Test" "Critical priority (stays until clicked)"
         ;;
     ""|-h|--help|help)
         usage
