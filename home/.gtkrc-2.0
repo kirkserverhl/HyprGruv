@@ -1,16 +1,14 @@
+# Written by apply-desktop-assets.sh — hyprgruv is dark-only.
+# nwg-look may overwrite this; login / Super+W re-applies.
 gtk-enable-animations=1
 gtk-primary-button-warps-slider=1
 gtk-cursor-blink-time=1000
 gtk-cursor-blink=1
 gtk-sound-theme-name="ocean"
-# DO NOT EDIT! This file will be overwritten by nwg-look.
-# Any customization should be done in ~/.gtkrc-2.0.mine instead.
-
-gtk-theme-name="adw-gtk3-dark"
+gtk-theme-name="Gruvbox-Dark"
 gtk-icon-theme-name="Gruvbox-Plus-Dark"
-gtk-application-prefer-dark-theme=1
 gtk-font-name="Agave Nerd Font Propo, 12.5"
-gtk-cursor-theme-name="breeze_cursors"
+gtk-cursor-theme-name="Bibata-Modern-Classic-Gruvbox"
 gtk-cursor-theme-size=24
 gtk-toolbar-style=3
 gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
@@ -22,3 +20,4 @@ gtk-xft-antialias=1
 gtk-xft-hinting=1
 gtk-xft-hintstyle="hintslight"
 gtk-xft-rgba="rgb"
+gtk-application-prefer-dark-theme=1
