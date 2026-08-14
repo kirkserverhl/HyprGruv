@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GTK theme picker — same shell as wallpaper-picker (Waypaper float/blur)."""
+"""GTK theme picker — waypaper chrome, meridian-style left/right wheel."""
 
 from __future__ import annotations
 
@@ -20,20 +20,16 @@ from wallpaper_picker_support import (
     CELL_BORDER,
     CELL_INSET,
     COLORSCHEMES,
-    GRID_COLUMNS,
     GRID_GAP,
     LABEL_SLOT,
     PANEL_PADDING,
     RESIZE_DEBOUNCE_MS,
-    SCROLLBAR_RESERVE,
     THUMB_ASPECT_H,
     THUMB_ASPECT_W,
-    THEME_LABELS,
     load_registry_labels,
     WAYPAPER_MODE,
     ThemeEntry,
     cover_pixbuf,
-    init_waypaper_window,
     list_wallpapers,
     load_active_themes,
     load_stylesheet,
@@ -46,11 +42,18 @@ from wallpaper_picker_support import (
 )
 
 CACHE_DIR = Path.home() / ".cache" / "colorschemes-theme-thumbs"
+# One-row wheel: show this many cards at once, pan for the rest.
+# Avoids the 3×N square that scrunches the last row when theme count is 6 vs 9.
+VISIBLE_CARDS = 4
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 420
+SCROLLBAR_RESERVE = 8
+THEME_PICKER_CLASS = "theme-picker"
 
 
 class ThemePicker(Gtk.Window):
     def __init__(self, themes: list[ThemeEntry]) -> None:
-        super().__init__(title="Waypaper")
+        super().__init__(title="Select Theme")
         self.themes = themes
         self.selected_index = 0
         self.result: str | None = None
@@ -63,7 +66,7 @@ class ThemePicker(Gtk.Window):
         self._pending_cell_width = 0
         self._pending_cell_height = 0
 
-        self.set_default_size(820, 600)
+        self.set_default_size(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.set_position(Gtk.WindowPosition.CENTER)
         self._enable_transparency()
         self.connect("delete-event", self._on_cancel)
@@ -75,10 +78,20 @@ class ThemePicker(Gtk.Window):
 
     def _theme_label_css(self) -> bytes:
         return b"""
+        .theme-picker-header {
+            color: #cbc7b5;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 0 2px 8px 2px;
+        }
         .theme-cell-label {
             color: #dde4e3;
             font-weight: 600;
             padding: 2px 0 0 0;
+        }
+        scrollbar.horizontal slider {
+            min-height: 6px;
+            border-radius: 4px;
         }
         """
 
@@ -104,25 +117,37 @@ class ThemePicker(Gtk.Window):
         content.set_margin_bottom(PANEL_PADDING)
         self.main_box.pack_start(content, True, True, 0)
 
+        header = Gtk.Label(label="Select Theme")
+        header.set_halign(Gtk.Align.START)
+        header.set_xalign(0.0)
+        header.get_style_context().add_class("theme-picker-header")
+        content.pack_start(header, False, False, 0)
+
         preview_panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         preview_panel.set_name("wallpaper-preview")
         content.pack_start(preview_panel, True, True, 0)
 
         self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
         self.scrolled.set_can_focus(False)
+        self.scrolled.add_events(
+            Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK
+        )
         self.scrolled.connect("size-allocate", self._on_scrolled_allocate)
         self.scrolled.connect("key-press-event", self._on_key_press)
+        self.scrolled.connect("scroll-event", self._on_scroll)
         preview_panel.pack_start(self.scrolled, True, True, 0)
 
-        self.grid_shell = Gtk.Alignment.new(0.5, 0.0, 0.0, 0.0)
+        self.grid_shell = Gtk.Alignment.new(0.0, 0.5, 0.0, 0.0)
         self.grid_shell.set_vexpand(False)
+        self.grid_shell.set_hexpand(False)
         self.grid = Gtk.Grid()
         self.grid.set_column_spacing(GRID_GAP)
-        self.grid.set_row_spacing(GRID_GAP)
-        self.grid.set_valign(Gtk.Align.START)
+        self.grid.set_row_spacing(0)
+        self.grid.set_valign(Gtk.Align.CENTER)
+        self.grid.set_halign(Gtk.Align.START)
         self.grid.set_vexpand(False)
-        self.grid.set_hexpand(True)
+        self.grid.set_hexpand(False)
         self.grid_shell.add(self.grid)
         self.scrolled.add(self.grid_shell)
 
@@ -172,6 +197,7 @@ class ThemePicker(Gtk.Window):
         self.selected_index = 0
         self._update_selection_label()
         self._reload_grid()
+        GLib.idle_add(self._scroll_to_selected)
         return False
 
     def _update_selection_label(self) -> None:
@@ -191,13 +217,13 @@ class ThemePicker(Gtk.Window):
             width = self.get_default_size()[0]
         return max(100, width - SCROLLBAR_RESERVE)
 
-    def _grid_columns(self) -> int:
-        return min(GRID_COLUMNS, max(1, len(self.themes)))
+    def _visible_cards(self) -> int:
+        return min(VISIBLE_CARDS, max(1, len(self.themes)))
 
     def _compute_cell_dimensions(self, viewport_width: int) -> tuple[int, int]:
-        cols = self._grid_columns()
-        inner_w = viewport_width - (PANEL_PADDING * 2) - (GRID_GAP * (cols - 1))
-        width = max(96, inner_w // cols)
+        visible = self._visible_cards()
+        inner_w = viewport_width - (PANEL_PADDING * 2) - (GRID_GAP * (visible - 1))
+        width = max(96, inner_w // visible)
         height = max(54, (width * THUMB_ASPECT_H) // THUMB_ASPECT_W)
         height += LABEL_SLOT
         return width, height
@@ -252,7 +278,6 @@ class ThemePicker(Gtk.Window):
         for child in self.grid.get_children():
             self.grid.remove(child)
 
-        cols = self._grid_columns()
         cell_w = self.cell_width
         cell_h = self.cell_height
         pad = CELL_BORDER + CELL_INSET
@@ -260,7 +285,7 @@ class ThemePicker(Gtk.Window):
         img_h = max(1, cell_h - (pad * 2) - LABEL_SLOT)
 
         for slot, entry in enumerate(self.themes):
-            row, col = divmod(slot, cols)
+            col = slot
             thumb = self.previews[slot] if slot < len(self.previews) else None
 
             cell_frame = Gtk.Frame()
@@ -296,7 +321,7 @@ class ThemePicker(Gtk.Window):
             cell_frame.add(cell_inner)
 
             cell = wrap_clickable_cell(cell_frame, self._on_cell_pressed, entry.theme_id)
-            self.grid.attach(cell, col, row, 1, 1)
+            self.grid.attach(cell, col, 0, 1, 1)
 
         self.grid.show_all()
 
@@ -307,6 +332,36 @@ class ThemePicker(Gtk.Window):
         self.main_box.grab_focus()
         return False
 
+    def _scroll_to_selected(self) -> None:
+        if self.cell_width <= 0 or not self.themes:
+            return
+        adj = self.scrolled.get_hadjustment()
+        page = adj.get_page_size()
+        if page <= 0:
+            return
+        x = self.selected_index * (self.cell_width + GRID_GAP)
+        cell_end = x + self.cell_width
+        value = adj.get_value()
+        if x < value:
+            adj.set_value(x)
+        elif cell_end > value + page:
+            adj.set_value(max(0, cell_end - page))
+
+    def _on_scroll(self, _widget, event) -> bool:
+        adj = self.scrolled.get_hadjustment()
+        step = (self.cell_width + GRID_GAP) if self.cell_width else 80
+        delta = 0.0
+        if event.direction == Gdk.ScrollDirection.SMOOTH:
+            delta = event.delta_x if abs(event.delta_x) > abs(event.delta_y) else event.delta_y
+        elif event.direction in (Gdk.ScrollDirection.RIGHT, Gdk.ScrollDirection.DOWN):
+            delta = 1.0
+        elif event.direction in (Gdk.ScrollDirection.LEFT, Gdk.ScrollDirection.UP):
+            delta = -1.0
+        if not delta:
+            return False
+        adj.set_value(adj.get_value() + delta * step * 0.55)
+        return True
+
     def _move_selection(self, delta: int) -> None:
         if not self.themes:
             return
@@ -314,6 +369,7 @@ class ThemePicker(Gtk.Window):
         self.selected_index = max(0, min(self.selected_index + delta, last))
         self._update_selection_label()
         self._reload_grid()
+        GLib.idle_add(self._scroll_to_selected)
 
     def _apply_selection(self) -> None:
         if not self.themes:
@@ -341,18 +397,17 @@ class ThemePicker(Gtk.Window):
             return True
         if not self.themes:
             return False
-        cols = self._grid_columns()
-        if event.keyval == Gdk.KEY_Left:
+        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Up):
             self._move_selection(-1)
             return True
-        if event.keyval == Gdk.KEY_Right:
+        if event.keyval in (Gdk.KEY_Right, Gdk.KEY_Down):
             self._move_selection(1)
             return True
-        if event.keyval == Gdk.KEY_Up:
-            self._move_selection(-cols)
+        if event.keyval in (Gdk.KEY_Home, Gdk.KEY_KP_Home):
+            self._move_selection(-self.selected_index)
             return True
-        if event.keyval == Gdk.KEY_Down:
-            self._move_selection(cols)
+        if event.keyval in (Gdk.KEY_End, Gdk.KEY_KP_End):
+            self._move_selection(len(self.themes) - 1 - self.selected_index)
             return True
         if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
             self._apply_selection()
@@ -406,7 +461,10 @@ def main() -> int:
         print("No active themes found", file=sys.stderr)
         return 1
 
-    init_waypaper_window(sys.argv)
+    # Own class so Hyprland can float a wide bar without resizing the 3×3 wallpaper picker.
+    GLib.set_prgname(THEME_PICKER_CLASS)
+    Gdk.set_program_class(THEME_PICKER_CLASS)
+    Gtk.init(sys.argv if len(sys.argv) > 1 else None)
     picker = ThemePicker(themes)
     picker.show_all()
     Gtk.main()

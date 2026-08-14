@@ -57,10 +57,13 @@ for line in "${LINES[@]}"; do
     if [[ "$USE_ICONS" -eq 1 ]]; then
         swatch="$SWATCH_DIR/$(printf '%02d' "$i")-${label}.png"
         # Timeout so a stuck magick never blocks the accent UI
+        # Square swatches — names stay in the dmenu text (for matching) but the
+        # theme hides element-text so palettes without a shared Red/Green/Blue
+        # set don't look inconsistent.
         if command -v magick >/dev/null 2>&1; then
-            timeout 1 magick -size 120x72 "xc:${hex}" -alpha off png32:"$swatch" 2>/dev/null || true
+            timeout 1 magick -size 112x112 "xc:${hex}" -alpha off png32:"$swatch" 2>/dev/null || true
         else
-            timeout 1 convert -size 120x72 "xc:${hex}" "$swatch" 2>/dev/null || true
+            timeout 1 convert -size 112x112 "xc:${hex}" "$swatch" 2>/dev/null || true
         fi
         if [[ -f "$swatch" ]]; then
             ROFI_INPUT+="${label}\0icon\x1f${swatch}\n"
@@ -86,8 +89,8 @@ done
 
 rofi_args=(
     -dmenu -i
-    -p "Source color — $THEME"
-    -mesg "Only choice after theme · Esc = theme default · then standard apply"
+    -p ""
+    -mesg "Select Primary Color"
     -theme "$ROFI_THEME"
     -selected-row "$default_row"
     -no-custom

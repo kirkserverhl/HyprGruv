@@ -71,9 +71,18 @@ hl.window_rule({
     center = true,
     size = {820, 600},
 })
+-- Super+W theme chooser: wide left-right wheel (not the 3×3 wallpaper grid).
+hl.window_rule({
+    name = "theme-picker-float",
+    match = { class = "^(theme-picker)$" },
+    float = true,
+    center = true,
+    size = {1200, 420},
+})
 -- 'blur' is not a supported field on hl.window_rule (only no_blur is).
 -- Use hyprctl to apply the classic "blur" windowrule.
 hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(waypaper)$'")
+hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(theme-picker)$'")
 hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(wallpaper-picker\\.py)$'")
 hl.window_rule({
     name = "wallpaper-picker-float",

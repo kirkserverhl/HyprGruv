@@ -1,67 +1,95 @@
-/* Theme accent splotches — labeled primary/source pick for Super+W */
+/* Theme accent splotches — one-row wheel for Super+W.
+   A 2×2 / 4×2 square looks awkward when a theme has 6 vs 7 unique colors.
+   Settings chrome (font/blur/selection); meridian-style single strip. */
 
 configuration {
     show-icons:    true;
     font:          "Agave Nerd Font Propo 13";
     hover-select:  false;
-    scroll-method: 1;
+    scroll-method: 0;
+    cycle:         true;
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
 @import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
-    width: 720px;
+    width:    880px;
+    location: center;
+    anchor:   center;
 }
 
 mainbox {
-    padding:  8px;
+    padding:  12px;
+    spacing:  8px;
     children: ["message", "listview"];
 }
 
+inputbar {
+    enabled: false;
+}
+
+entry {
+    enabled: false;
+}
+
+textbox-prompt-colon {
+    enabled: false;
+}
+
 message {
-    padding: 6px 10px;
+    padding:          0 2px 4px 2px;
+    margin:           0;
+    border:           0;
+    background-color: transparent;
 }
 
 textbox {
-    text-color: @foreground;
+    padding:          0;
+    background-color: transparent;
+    text-color:       @prompt-color;
+    horizontal-align: 0.0;
+    highlight:        none;
 }
 
 listview {
-    columns:       4;
-    fixed-columns: true;
-    lines:         2;
-    spacing:       8px;
-    padding:       6px;
+    layout:        vertical;
+    lines:         1;
+    columns:       8;
+    fixed-columns: false;
+    fixed-height:  true;
+    cycle:         true;
+    dynamic:       true;
+    spacing:       10px;
+    padding:       4px 2px;
     scrollbar:     false;
 }
 
 element {
-    padding: 4px;
-    margin:  0px;
-    border:  0px;
-    orientation: vertical;
-    children: ["element-icon", "element-text"];
-}
-
-element-icon {
-    size:   140px;
-    margin: 0px 0px 4px 0px;
-}
-
-element-text {
-    enabled:     true;
-    horizontal-align: 0.5;
-    text-color:  @foreground;
-    font:        "Agave Nerd Font Propo 12";
+    padding:          6px;
+    margin:           0px;
+    border:           0px;
+    expand:           false;
+    orientation:      vertical;
+    children:         ["element-icon"];
+    border-radius:    12px;
+    background-color: @background-alt;
 }
 
 element selected {
-    background-color: @selected-normal-background;
-    border: 2px solid;
-    border-color: @primary;
+    background-color: @selected;
+    text-color:       @selected-fg;
+    border:           2px solid;
+    border-color:     @primary;
 }
 
-inputbar {
+element-icon {
+    size:             96px;
+    margin:           0px;
+    horizontal-align: 0.5;
+    border-radius:    8px;
+}
+
+element-text {
     enabled: false;
 }

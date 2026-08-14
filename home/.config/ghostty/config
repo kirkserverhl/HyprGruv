@@ -1,0 +1,19 @@
+# Ghostty — font zoom only (rest of the app stays on defaults).
+# Live file: ~/.config/ghostty/config
+#
+# Native Ghostty zoom is Ctrl++ / Ctrl+- / Ctrl+0. Bind both + and =
+# (Shift+= is the + glyph) and add Ctrl+Shift+Backspace to reset, matching
+# kitty. Bare Ctrl+Backspace stays "delete word" in the shell.
+
+# Increase: physical "=" and shifted "+" and keypad plus
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+shift+equal=increase_font_size:1
+keybind = ctrl+shift+plus=increase_font_size:1
+
+# Decrease
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+shift+minus=decrease_font_size:1
+
+# Reset (kitty-style Backspace). Keep default ctrl+0 as well.
+keybind = ctrl+shift+backspace=reset_font_size

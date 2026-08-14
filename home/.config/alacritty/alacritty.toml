@@ -67,9 +67,12 @@ bindings = [
   { key = "Home", mods = "Control|Shift", action = "ScrollToTop" },
   { key = "End", mods = "Control|Shift", action = "ScrollToBottom" },
 
-  # Font size (kitty: kitty_mod+plus/minus/backspace)
+  # Font size: + / - / Backspace (Ctrl+Shift, same as kitty).
+  # Bind Plus AND "=" — Shift+= is "+", and some stacks report the physical equal key.
   { key = "Plus", mods = "Control|Shift", action = "IncreaseFontSize" },
   { key = "=", mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "NumpadAdd", mods = "Control|Shift", action = "IncreaseFontSize" },
   { key = "Minus", mods = "Control|Shift", action = "DecreaseFontSize" },
+  { key = "NumpadSubtract", mods = "Control|Shift", action = "DecreaseFontSize" },
   { key = "Backspace", mods = "Control|Shift", action = "ResetFontSize" },
 ]

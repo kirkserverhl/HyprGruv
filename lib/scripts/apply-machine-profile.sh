@@ -450,6 +450,7 @@ EOF
     apply_deploy_marker "$want_deploy"
     apply_lid_policy "$want_lid"
     apply_fn_lock "$machine"
+    apply_logitech_hidpp_udev
     ensure_power_stack "$machine" "$gpu"
     ensure_laptop_fingerprint "$machine"
     ensure_git_sync_role "$machine" "$want_deploy"
@@ -714,6 +715,28 @@ apply_fn_lock() {
     fi
     if sudo install -m 644 "$udev_src" "$udev_dst"; then
         log_status "Installed $udev_dst (F-row = F1–F12 without Fn)"
+    fi
+}
+
+apply_logitech_hidpp_udev() {
+    # MX Mechanical F3/F4 set the keyboard's own LEDs via HID++ hidraw.
+    local udev_src="$HYPR_DIR/lib/udev/99-hyprgruv-logitech-hidpp.rules"
+    local udev_dst="/etc/udev/rules.d/99-hyprgruv-logitech-hidpp.rules"
+
+    if [[ ! -f "$udev_src" ]]; then
+        return 0
+    fi
+    if ! command -v sudo >/dev/null 2>&1; then
+        return 0
+    fi
+    if ! sudo -n true 2>/dev/null; then
+        log_status "Logitech HID++ udev rule skipped (needs passwordless sudo)"
+        return 0
+    fi
+    if sudo install -m 644 "$udev_src" "$udev_dst"; then
+        log_status "Installed $udev_dst (MX Mechanical keyboard backlight)"
+        sudo udevadm control --reload-rules 2>/dev/null || true
+        sudo udevadm trigger --subsystem-match=hidraw 2>/dev/null || true
     fi
 }
 

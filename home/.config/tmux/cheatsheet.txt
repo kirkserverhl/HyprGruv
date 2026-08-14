@@ -3,6 +3,15 @@ tmux learning cheat sheet (oh-my-tmux)
 
 Prefix = Ctrl-b   (stock tmux — safe when SSH'd without your config)
 
+Hyprland rhyme (prefix stands in for Super — Super never reaches tmux)
+  Super + hjkl / arrows          Ctrl-b  h j k l   or   Ctrl-b  arrows     focus
+  Super + Shift + hjkl / arrows  Ctrl-b  H J K L   or   Ctrl-b  Shift+arrows  resize
+  Super + Ctrl  + hjkl / arrows  Ctrl-b  Ctrl-h/j/k/l  or  Ctrl-b  Ctrl+arrows  move
+  Super + 1-9                    Ctrl-b  1-9                               window
+  Super + F                      Ctrl-b  z                                 zoom
+  Super + Q                      Ctrl-b  x                                 close pane
+  Super + Tab / Shift+Tab        Ctrl-b  n / p                             next/prev window
+
 Sessions
   Ctrl-b d              detach (session keeps running)
   Ctrl-b s              session list (pick with arrows)
@@ -15,17 +24,21 @@ Windows (tabs)
   Ctrl-b c              new window
   Ctrl-b ,              rename window
   Ctrl-b w              window list
-  Ctrl-b n / p          next / previous window
-  Ctrl-b Ctrl-h / Ctrl-l   previous / next window (oh-my-tmux)
+  Ctrl-b n / p          next / previous window (stock — also works on a remote)
+  Ctrl-b 1-9            jump to window N
+  Ctrl-b Tab            last window (oh-my-tmux)
   Ctrl-b &              kill window (confirm)
 
 Panes (splits)
   Ctrl-b -              split horizontal (top / bottom)
   Ctrl-b /              split vertical (left / right)
-  Ctrl + arrows         move between panes (no prefix)
+  Ctrl + arrows         move between panes (no prefix; local kitty only)
   Ctrl-b h j k l        move between panes (vim-style)
+  Ctrl-b arrows         move between panes
   Ctrl-b H J K L        resize pane (Shift + h/j/k/l)
   Ctrl-b Shift+arrows   resize pane (same as H J K L)
+  Ctrl-b Ctrl-h/j/k/l   swap pane with neighbor (same as Super+Ctrl+hjkl)
+  Ctrl-b Ctrl+arrows    swap pane with neighbor
   Ctrl-b x              kill pane (confirm)
   Ctrl-b z              zoom pane (toggle)
   Ctrl-b { }            swap pane with previous / next
@@ -41,7 +54,7 @@ Copy / scroll
   y                     copy selection to tmux buffer + system clipboard
 
 Dev workspace (3-pane template)
-  Alt+Return            new dev-N session in a terminal window
+  Super+Shift+Return    new dev-N session (Hyprland; also Super+Alt+Return)
   Ctrl-b D              new dev-N session (from inside tmux)
   Ctrl-b s              session picker — switch between dev-1, dev-2, …
   Ctrl-b R              reset current dev session to the default layout

@@ -18,7 +18,7 @@ ACCENT_PICKER="$HOME/.config/hyprgruv/scripts/pick-theme-accent.sh"
 
 killall -9 rofi 2>/dev/null || true
 
-# --- theme grid (includes optional Waypaper tile) ---
+# --- theme wheel (includes optional Waypaper tile) ---
 selected=""
 if [[ -f "$THEME_PICKER" ]]; then
     if ! selected=$(python3 "$THEME_PICKER"); then

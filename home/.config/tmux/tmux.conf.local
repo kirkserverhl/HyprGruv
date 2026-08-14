@@ -384,6 +384,14 @@ tmux_conf_urlscan_options="--compact --dedupe"
 # this is the place to override or undo settings
 
 # -- ergonomics (Ctrl-b prefix kept for SSH compatibility) ---------------------
+# Same gesture as Hyprland (~/.config/hypr/conf/keybinds.lua), with prefix
+# standing in for Super. Super never reaches tmux (Hyprland owns it). Alt is
+# also Hypr's. kitty_mod is Ctrl+Shift, so prefix-less Ctrl+Shift is kitty's.
+#   prefix + dir/hjkl        focus   (Super + dir)
+#   prefix + Shift + dir     resize  (Super + Shift + dir)
+#   prefix + Ctrl + dir      move    (Super + Ctrl + dir)
+# prefix+1-9 / n / p / z / x stay stock so a remote host without this file still
+# feels familiar.
 
 # Kitty sends modern key encodings; required for prefix-less Ctrl+arrow pane nav.
 set -g extended-keys on #!important
@@ -394,7 +402,7 @@ bind / split-window -h #!important
 unbind _ #!important
 
 # Fast pane switching without prefix (local-only; does not affect remote tmux).
-# Alt+hjkl is not a tmux convention — use Ctrl+arrows; vim keys stay on Ctrl-b h/j/k/l.
+# Do not use Alt+arrows/hjkl — Hyprland owns Alt+H/J/K/L (htop, layout, …).
 unbind -n M-Left #!important
 unbind -n M-Right #!important
 unbind -n M-Up #!important
@@ -416,12 +424,41 @@ setw -g automatic-rename off #!important
 set -gu prefix2 #!important
 unbind C-a #!important
 
-# Resize panes: prefix + Shift + arrow keys (same step as H/J/K/L below).
-# Replaces the default Shift+arrow bindings that only scroll the terminal viewport.
+# Focus (prefix + arrows / hjkl). hjkl already come from oh-my-tmux; lock both.
+bind -r Left  select-pane -L #!important
+bind -r Right select-pane -R #!important
+bind -r Up    select-pane -U #!important
+bind -r Down  select-pane -D #!important
+bind -r h select-pane -L #!important
+bind -r j select-pane -D #!important
+bind -r k select-pane -U #!important
+bind -r l select-pane -R #!important
+
+# Resize (prefix + Shift + arrows / HJKL). Replaces stock Shift+arrow viewport scroll.
 bind -r S-Up    resize-pane -U 2 #!important
 bind -r S-Down  resize-pane -D 2 #!important
 bind -r S-Left  resize-pane -L 2 #!important
 bind -r S-Right resize-pane -R 2 #!important
+bind -r H resize-pane -L 2 #!important
+bind -r J resize-pane -D 2 #!important
+bind -r K resize-pane -U 2 #!important
+bind -r L resize-pane -R 2 #!important
+
+# Move/swap with the neighbor (prefix + Ctrl + arrows / hjkl).
+# Stock tmux uses prefix+Ctrl+arrows to resize; Shift already owns resize here.
+# Takes C-h/C-l back from oh-my-tmux window next/prev — windows return to n/p.
+bind -r C-Left  if-shell -F '#{pane_at_left}'   '' 'swap-pane -s "{left-of}"'  #!important
+bind -r C-Right if-shell -F '#{pane_at_right}'  '' 'swap-pane -s "{right-of}"' #!important
+bind -r C-Up    if-shell -F '#{pane_at_top}'    '' 'swap-pane -s "{up-of}"'    #!important
+bind -r C-Down  if-shell -F '#{pane_at_bottom}' '' 'swap-pane -s "{down-of}"'  #!important
+bind -r C-h     if-shell -F '#{pane_at_left}'   '' 'swap-pane -s "{left-of}"'  #!important
+bind -r C-j     if-shell -F '#{pane_at_bottom}' '' 'swap-pane -s "{down-of}"'  #!important
+bind -r C-k     if-shell -F '#{pane_at_top}'    '' 'swap-pane -s "{up-of}"'    #!important
+bind -r C-l     if-shell -F '#{pane_at_right}'  '' 'swap-pane -s "{right-of}"' #!important
+
+# Windows: stock n/p (SSH-safe). Super+1-9 ↔ prefix+1-9 is already stock.
+bind -r n next-window #!important
+bind -r p previous-window #!important
 
 # -- matugen (wallpaper-synced colors) -----------------------------------------
 # Defaults used until ~/.config/tmux/generated.conf exists (written by matugen).
