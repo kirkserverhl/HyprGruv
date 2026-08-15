@@ -346,9 +346,13 @@ local KB_LAPTOP = {
 	"sof-hda-dsp-headphone",
 	"video-bus",
 }
-local MOUSE_LOGI_WIRELESS = {
-	"logitech-wireless-mouse-1",
-	"logitech-usb-receiver-mouse",
+-- G502 HERO (wired + Lightspeed): dedicated center button is screenshot in Piper.
+-- Wheel-click screenshot stays the default on every other mouse; these are excluded.
+-- Names from `hyprctl devices` (pointer interfaces only).
+local MOUSE_G502_HERO = {
+	"logitech-g502-1",
+	"logitech-g502-hero-gaming-mouse",
+	"logitech-g502-hero-gaming-mouse-keyboard-1",
 }
 
 local function dev_bind(keys, dispatcher, devices, extra)
@@ -462,10 +466,12 @@ dev_bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"),
 dev_bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_LOGI_MX, { repeating = true }) -- #media #mx Volume up
 dev_bind("XF86EmojiPicker", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX)
 
--- ── Logitech wireless mouse: press scroll wheel = screenshot ─────────────────
+-- ── Scroll-wheel click = screenshot (default mice) ──────────────────────────
 -- mouse:274 = MMB (scroll wheel click). Not mouse=true — that flag is for drag/resize.
+-- inclusive=false: every mouse except G502 HERO. Those have an easier dedicated
+-- screenshot button; their wheel stays free (Piper macros / fullscreen).
 hl.bind("mouse:274", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"), {
-	device = { inclusive = true, list = MOUSE_LOGI_WIRELESS },
+	device = { inclusive = false, list = MOUSE_G502_HERO },
 }) -- #screenshot Middle-click (scroll wheel) region screenshot
 
 -- Mission Control: conf/hymission.lua

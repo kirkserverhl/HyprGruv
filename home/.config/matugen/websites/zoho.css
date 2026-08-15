@@ -1,0 +1,119 @@
+/*
+ * Zoho message bodies: force light text on a dark pane.
+ *
+ * Email HTML is almost always authored as black text. Zoho night mode plus
+ * Chrome WebContentsForceDark invert the chrome/background but often leave
+ * inline color:#000 / color:#333 in place — that is the "dark text" you see.
+ */
+
+html.zohodesk_3_desk,
+html.zohodesk_3_desk body,
+body.hmNightMode,
+.hmNightMode,
+html.zmApp,
+body.zmApp,
+#zm_header,
+#zd-container {
+  color-scheme: dark !important;
+}
+
+iframe[src*="mail" i],
+iframe[src*="viewMail" i],
+iframe[src*="showmail" i],
+iframe[src*="MailView" i],
+iframe[id*="mail" i],
+iframe[id*="thread" i],
+iframe[id*="message" i],
+iframe[class*="mail" i],
+iframe[class*="thread" i],
+iframe[class*="message" i],
+iframe[title*="mail" i],
+iframe[title*="message" i],
+iframe[title*="email" i],
+iframe[srcdoc],
+.KB_Editor_iframe,
+iframe.ze_area,
+iframe.ze_body,
+.ze_body iframe,
+[class*="htmlContent" i],
+[class*="HtmlContent" i],
+[class*="mailContent" i],
+[class*="MailContent" i],
+[class*="mail-content" i],
+[class*="threadContent" i],
+[class*="thread-content" i],
+[class*="thread_content" i],
+[class*="msgContent" i],
+[class*="msg-content" i],
+[class*="messageContent" i],
+[class*="message-body" i],
+[class*="ticketDesc" i],
+[class*="ticket-desc" i],
+[class*="conv-body" i],
+[class*="convBody" i],
+[class*="conversation-body" i],
+[id*="mailContent" i],
+[id*="threadContent" i],
+[id*="htmlContent" i],
+[id*="msgContent" i],
+.zmCMcontent,
+#zm_content,
+#mailDisplay,
+.mailview,
+.mailViewContent,
+.zd_htmlview,
+.zd_desc_cont,
+.ticketthread-content,
+.thread-msg-body,
+div[contenteditable="true"][class*="editor" i],
+div[contenteditable="true"][class*="compose" i],
+div[contenteditable="true"][id*="editor" i],
+.ze_area,
+[class*="editor-body" i] {
+  color-scheme: dark !important;
+  background-color: #1d2021 !important;
+  color: #ebdbb2 !important;
+}
+
+iframe[src*="mail" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+iframe[srcdoc] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[class*="htmlContent" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[class*="mailContent" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[class*="mail-content" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[class*="threadContent" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[class*="msgContent" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[id*="mailContent" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+[id*="htmlContent" i] :is(p, span, div, td, th, li, font, b, i, strong, em),
+.zmCMcontent :is(p, span, div, td, th, li, font, b, i, strong, em),
+#zm_content :is(p, span, div, td, th, li, font, b, i, strong, em),
+.zd_htmlview :is(p, span, div, td, th, li, font, b, i, strong, em),
+.thread-msg-body :is(p, span, div, td, th, li, font, b, i, strong, em) {
+  color: #ebdbb2 !important;
+}
+
+iframe[src*="mail" i] a,
+iframe[srcdoc] a,
+[class*="htmlContent" i] a,
+[class*="mailContent" i] a,
+[class*="mail-content" i] a,
+.zmCMcontent a,
+#zm_content a,
+.zd_htmlview a,
+.thread-msg-body a {
+  color: #83a598 !important;
+}
+
+html.zoho-email-frame,
+html.zoho-email-frame body {
+  color-scheme: dark !important;
+  background-color: #1d2021 !important;
+  color: #ebdbb2 !important;
+}
+
+html.zoho-email-frame :is(p, span, div, td, th, li, font, b, i, strong, em, h1, h2, h3, h4, h5, h6) {
+  color: #ebdbb2 !important;
+}
+
+html.zoho-email-frame a {
+  color: #83a598 !important;
+}
