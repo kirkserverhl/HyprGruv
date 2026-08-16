@@ -79,7 +79,7 @@ def humanize_command(cmd: str) -> str:
         "hyprshot.sh": "Screenshot menu",
         "quickshot.sh": "Quick screenshot to clipboard",
         "gpu-screen-recorder.sh": "GPU Screen Recorder overlay",
-        "window-opacity.sh": "Cycle focused window opacity",
+        "window-opacity.sh": "Cycle window opacity",
         "obsidian.sh": "Open Obsidian",
         "night-mode.sh": "Night light",
         "gsr-ui-cli": "GPU Screen Recorder overlay",
@@ -101,13 +101,18 @@ def humanize_command(cmd: str) -> str:
         base = friendly[name]
         if name in ("brightness.sh", "volume.sh", "window-opacity.sh") and " " in cmd:
             flag = cmd.split(maxsplit=1)[1]
+            flags = flag.split()
+            if name == "window-opacity.sh":
+                darker = "--darker" in flags or "--dark" in flags or "--inc" in flags
+                action = "darker (more opaque)" if darker else "lighter (more transparent)"
+                if "--monitor" in flags or "--all" in flags:
+                    return f"Cycle all workspaces on focused monitor: {action}"
+                return f"Cycle focused window opacity: {action}"
             actions = {
                 "--dec": "decrease",
                 "--inc": "increase",
                 "--toggle": "toggle mute",
                 "--toggle-mic": "toggle mic",
-                "--lighter": "lighter (more transparent)",
-                "--darker": "darker (more opaque)",
             }
             if flag in actions:
                 return f"{base}: {actions[flag]}"

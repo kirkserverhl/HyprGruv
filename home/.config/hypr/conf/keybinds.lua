@@ -126,8 +126,8 @@ hl.bind(mainMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("google-chrome-stable")) -- #launcher Open Chrome
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --lighter")) -- #window Window opacity lighter
-hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --darker")) -- #window Window opacity darker
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --lighter")) -- #window Monitor opacity lighter
+hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --darker")) -- #window Monitor opacity darker
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/soundsbored.sh")) -- #audio #launcher Open soundsbored
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(os.getenv("HOME") .. "/bin/baas-menu")) -- #work #baas #launcher BaaS tech workflows
 -- Screenshot / transcribe: Shift = same capture, OCR to clipboard instead of image.

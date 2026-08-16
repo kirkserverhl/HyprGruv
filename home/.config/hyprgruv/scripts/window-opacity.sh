@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
-# window-opacity.sh — cycle the focused window through 5 even opacity steps.
+# window-opacity.sh — cycle window opacity through 5 even steps.
 #
-# Super+O        lighter (more transparent): 100 → 85 → 70 → 60 → 50 → 100
-# Super+Shift+O  darker  (more opaque):      50 → 60 → 70 → 85 → 100 → 50
+# Super+O        all workspaces on the focused monitor, lighter:
+#                100 → 85 → 70 → 60 → 50 → 100
+# Super+Shift+O  same windows, darker:
+#                50 → 60 → 70 → 85 → 100 → 50
+#
+# Scope is the 2-per-screen workspace pair (plus any extra workspaces
+# currently on that output). Scratchpad is left alone.
+# Omit --monitor to cycle only the focused window.
 #
 #   low    0.50  Hyprland wiki / rice floor (readable with blur; below this
 #                text contrast falls apart)
@@ -12,25 +18,32 @@
 set -euo pipefail
 
 direction="lighter"
-case "${1:-}" in
-    ""|--lighter|--light|--dec) direction="lighter" ;;
-    --darker|--dark|--inc) direction="darker" ;;
-    *)
-        echo "usage: $0 [--lighter|--darker]" >&2
-        exit 2
-        ;;
-esac
+scope="window"
+usage() {
+    echo "usage: $0 [--lighter|--darker] [--monitor]" >&2
+    exit 2
+}
+
+for arg in "$@"; do
+    case "$arg" in
+        --lighter|--light|--dec) direction="lighter" ;;
+        --darker|--dark|--inc) direction="darker" ;;
+        --monitor|--all) scope="monitor" ;;
+        -h|--help) usage ;;
+        *) usage ;;
+    esac
+done
 
 COMMUNITY_LOW="0.50"
 SOLID="1.00"
 KITTY_CONF="${HOME}/.config/kitty/kitty.conf"
 
 notify() {
-    local pct="$1" label="$2"
+    local title="$1" pct="$2" label="$3"
     notify-send -e -u low \
         -h string:x-canonical-private-synchronous:window-opacity \
         -h int:value:"$pct" \
-        "Window opacity" "${pct}%${label}" 2>/dev/null || true
+        "$title" "${pct}%${label}" 2>/dev/null || true
 }
 
 hypr_float() {
@@ -52,9 +65,45 @@ lerp() {
 }
 
 active="$(hyprctl activewindow -j 2>/dev/null || true)"
-if [[ -z "$active" || "$active" == "Invalid" ]] || ! grep -q '"address"' <<<"$active"; then
+has_active=0
+if [[ -n "$active" && "$active" != "Invalid" ]] && grep -q '"address"' <<<"$active"; then
+    has_active=1
+fi
+
+if [[ "$scope" == "window" && "$has_active" -eq 0 ]]; then
     notify-send -e -u low "Window opacity" "No focused window" 2>/dev/null || true
     exit 0
+fi
+
+if [[ "$has_active" -eq 1 ]]; then
+    monitor="$(jq -r '.monitor // empty' <<<"$active")"
+    focus_addr="$(jq -r '.address // empty' <<<"$active")"
+else
+    monitor="$(hyprctl monitors -j 2>/dev/null | jq -r '.[] | select(.focused == true) | .id' | head -n1)"
+    focus_addr=""
+fi
+
+if [[ "$scope" == "monitor" ]]; then
+    if [[ -z "$monitor" ]]; then
+        notify-send -e -u low "Monitor opacity" "No focused monitor" 2>/dev/null || true
+        exit 0
+    fi
+    workspaces="$(hyprctl workspaces -j 2>/dev/null || true)"
+    clients="$(hyprctl clients -j 2>/dev/null || true)"
+    ws_ids="$(jq -c --argjson mon "$monitor" '
+        [ .[] | select(.monitorID == $mon and .id > 0) | .id ]
+    ' <<<"$workspaces")"
+    mapfile -t addrs < <(jq -r --argjson wss "${ws_ids:-[]}" '
+        .[]
+        | select(.mapped == true and .hidden == false and (.workspace.id as $id | $wss | index($id) != null))
+        | .address
+    ' <<<"$clients")
+    if [[ "${#addrs[@]}" -eq 0 ]]; then
+        notify-send -e -u low "Monitor opacity" "No windows on this monitor's workspaces" 2>/dev/null || true
+        exit 0
+    fi
+else
+    addrs=("$focus_addr")
 fi
 
 system="$(hypr_float decoration:active_opacity)"
@@ -82,7 +131,18 @@ LEVELS=(
     "$(awk -v s="$SOLID" 'BEGIN { printf "%.2f", s }')"
 )
 
-current="$(hyprctl getprop activewindow opacity 2>/dev/null || true)"
+# Step from a window that is actually in the target set so a focused
+# scratchpad (or other excluded window) cannot yank the whole screen.
+current_addr="${addrs[0]}"
+if [[ -n "$focus_addr" ]]; then
+    for addr in "${addrs[@]}"; do
+        if [[ "$addr" == "$focus_addr" ]]; then
+            current_addr="$focus_addr"
+            break
+        fi
+    done
+fi
+current="$(hyprctl getprop "address:${current_addr}" opacity 2>/dev/null || true)"
 [[ -n "$current" ]] || current="$SOLID"
 
 idx=0
@@ -104,17 +164,15 @@ else
     next="${LEVELS[$(((idx - 1 + n) % n))]}"
 fi
 
-set_prop() {
-    local prop="$1" value="$2"
-    hyprctl dispatch "hl.dsp.window.set_prop({ prop = \"${prop}\", value = \"${value}\" })" >/dev/null
-}
-
-set_prop opacity "$next"
-set_prop opacity_inactive "$next"
-set_prop opacity_fullscreen "$next"
-set_prop opacity_override 1
-set_prop opacity_inactive_override 1
-set_prop opacity_fullscreen_override 1
+batch=""
+for addr in "${addrs[@]}"; do
+    win="address:${addr}"
+    for prop in opacity opacity_inactive opacity_fullscreen; do
+        batch+="dispatch hl.dsp.window.set_prop({ prop = \"${prop}\", value = \"${next}\", window = \"${win}\" });"
+        batch+="dispatch hl.dsp.window.set_prop({ prop = \"${prop}_override\", value = \"1\", window = \"${win}\" });"
+    done
+done
+hyprctl --batch "${batch%;}" >/dev/null
 
 pct="$(awk -v n="$next" 'BEGIN { printf "%d", n * 100 }')"
 mid_pct="$(awk -v m="$mid" 'BEGIN { printf "%d", m * 100 }')"
@@ -124,4 +182,14 @@ if [[ "$pct" -eq "$mid_pct" ]]; then
 elif [[ "$pct" -eq 100 ]]; then
     label=" · solid"
 fi
-notify "$pct" "$label"
+
+if [[ "$scope" == "monitor" ]]; then
+    count="${#addrs[@]}"
+    if [[ "$count" -eq 1 ]]; then
+        notify "Monitor opacity" "$pct" "${label} · 1 window"
+    else
+        notify "Monitor opacity" "$pct" "${label} · ${count} windows"
+    fi
+else
+    notify "Window opacity" "$pct" "$label"
+fi
