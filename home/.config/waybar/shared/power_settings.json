@@ -2,7 +2,7 @@
   "custom/power": {
     "format": "\udb81\udc25 ",
     "on-click": "~/.config/hyprgruv/scripts/launch-wlogout.sh",
-    "on-right-click": "hypridle",
+    "on-click-right": "hypridle",
     "tooltip-format": "Power Menu\nRight: Idle"
   }
 }

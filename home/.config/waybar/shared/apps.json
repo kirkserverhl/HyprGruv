@@ -22,7 +22,7 @@
     "format": " \udb80\udd4c",
     "on-click": "~/.config/hyprgruv/scripts/hyprshot.sh",
     "on-click-right": "~/.config/hyprgruv/scripts/cliphist.sh",
-    "tooltip-format": "Left: Screenshot\nRight: Clipboard history"
+    "tooltip-format": "Left: Screenshot\nRight: Text clipboard history"
   },
 
   "group/apps": {

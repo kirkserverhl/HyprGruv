@@ -6,6 +6,8 @@
  *
  * Themes include this file and only override bar chrome (height, margins, etc.)
  * and style.css. Module definitions live in shared/*.json; arrangement lives here.
+ * Machine size profile: include ~/.local/state/waybar/bar-chrome.jsonc last
+ * (see ~/.config/settings/bar-sizes.sh).
  *
  * Example theme config.jsonc:
  *   {
@@ -27,6 +29,7 @@
     "~/.config/waybar/shared/cpu_info.json",
     "~/.config/waybar/shared/power_settings.json",
     "~/.config/waybar/shared/clock.json",
+    "~/.config/waybar/shared/weather.json",
   ],
 
   "spacing": 6,

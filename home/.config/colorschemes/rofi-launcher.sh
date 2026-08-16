@@ -51,6 +51,8 @@ if [[ -x "$WALLPAPER_SCRIPT" ]]; then
         exit 1
     fi
     rm -f "$picker_err_file"
+    # Picker opened; empty stdout means Escape / close.
+    [[ -z "$wallpaper" ]] && exit 0
 fi
 
 # --- source / primary color ---

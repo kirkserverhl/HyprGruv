@@ -129,22 +129,19 @@ Path(user_path).parent.mkdir(parents=True, exist_ok=True)
 Path(user_path).write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 PY
 
-    python3 "$GENERATOR" "$theme"
+    python3 "$GENERATOR" --prepare "$theme"
 
     local import_json="$CACHE_DIR/saved-import.json"
-    python3 "$BUILDER" build-base16 "$palette_src" "$wallpaper" "$import_json"
+    # Use the prepared slot palette (includes Super+W source), not the raw source file.
+    python3 "$BUILDER" build-base16 "$dest_palette" "$wallpaper" "$import_json"
 
     if command -v matugen >/dev/null 2>&1; then
-        matugen image "$wallpaper" \
-            --import-json "$import_json" \
-            --source-color-index 0 \
-            --continue-on-error 2>/dev/null || true
+        matugen json "$import_json" --continue-on-error 2>/dev/null || true
     fi
 
-    # Matugen templates overwrite starship/waybar with wallpaper-derived colors.
-    # Themes with spectrum.json use fixed semantic rainbow — restore after matugen.
-    if [[ -f "$theme_dir/spectrum.json" && -f "$GENERATOR" ]]; then
-        python3 "$GENERATOR" "$theme"
+    # Official kitty + theme-fixed starship after matugen. Do not rewrite waybar/hypr/swaync.
+    if [[ -f "$GENERATOR" ]]; then
+        python3 "$GENERATOR" --tailored "$theme"
     fi
 
     if [[ -x "$HOME/.config/hyprgruv/scripts/matugen-posthook-gtk-theme.sh" ]]; then

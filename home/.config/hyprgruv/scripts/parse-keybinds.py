@@ -79,8 +79,11 @@ def humanize_command(cmd: str) -> str:
         "hyprshot.sh": "Screenshot menu",
         "quickshot.sh": "Quick screenshot to clipboard",
         "gpu-screen-recorder.sh": "GPU Screen Recorder overlay",
+        "window-opacity.sh": "Cycle focused window opacity",
+        "obsidian.sh": "Open Obsidian",
+        "night-mode.sh": "Night light",
         "gsr-ui-cli": "GPU Screen Recorder overlay",
-        "cliphist.sh": "Clipboard history",
+        "cliphist.sh": "Text clipboard history",
         "launch-wlogout.sh": "Power menu",
         "waypaper": "Wallpaper picker",
         "brave": "Open Brave",
@@ -93,14 +96,18 @@ def humanize_command(cmd: str) -> str:
     if name in friendly:
         if name == "mac-shortcut.sh" and " " in cmd:
             return f"Mac-style shortcut ({cmd.split(maxsplit=1)[1]})"
+        if name == "cliphist.sh" and "images" in cmd.split()[1:]:
+            return "Screenshot clipboard history"
         base = friendly[name]
-        if name in ("brightness.sh", "volume.sh") and " " in cmd:
+        if name in ("brightness.sh", "volume.sh", "window-opacity.sh") and " " in cmd:
             flag = cmd.split(maxsplit=1)[1]
             actions = {
                 "--dec": "decrease",
                 "--inc": "increase",
                 "--toggle": "toggle mute",
                 "--toggle-mic": "toggle mic",
+                "--lighter": "lighter (more transparent)",
+                "--darker": "darker (more opaque)",
             }
             if flag in actions:
                 return f"{base}: {actions[flag]}"

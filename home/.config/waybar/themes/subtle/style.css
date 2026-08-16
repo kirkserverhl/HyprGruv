@@ -60,6 +60,7 @@ tooltip-label {
 #clock,
 #custom-clock-date,
 #custom-pacman,
+#custom-power,
 #custom-media {
   padding: 0px 5px;
   transition: all 0.3s ease;
@@ -81,6 +82,7 @@ tooltip-label {
 #power-profiles-daemon:hover,
 #custom-weather:hover,
 #custom-media:hover,
+#custom-power:hover,
 #custom-expandleft:hover {
   transition: all 0.3s ease;
   color: @tertiary;

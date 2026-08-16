@@ -97,6 +97,7 @@ home/.config/waybar/colors.css
 home/.config/waybar/colors/colors.css
 home/.config/waybar/colors/matugen.css
 home/.config/waybar/colors/matugen-waybar.css
+home/.config/waybar/colors/starship-rainbow.css
 home/.config/rofi/colors.rasi
 home/.config/wlogout/colors.css
 home/.config/waypaper/colors/matugen.css
@@ -177,4 +178,13 @@ home/.config/settings/wlr_no_hw_cursors.sh
 home/.config/settings/shadow_enabled.sh
 home/.config/settings/blur_passes.sh
 home/.config/settings/blur_size.sh
+home/.config/settings/bar_height.sh
+home/.config/settings/bar_margin_top.sh
+home/.config/settings/bar_margin_x.sh
+home/.config/settings/bar_font_size.sh
+home/.config/settings/bar_font_size_emphasis.sh
+home/.config/settings/bar_font_size_center.sh
+home/.config/settings/bar_text_size.sh
+home/.config/settings/bar_module_min_height.sh
+home/.config/waybar/shared/bar-size.css
 home/.config/hyprgruv/deploy-target

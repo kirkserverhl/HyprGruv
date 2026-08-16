@@ -27,11 +27,29 @@ declare -A ICONS=(
     [ssh]="#94e2d5|⌘"
     [blitz]="#f38ba8|!"
     [hyprsunset]="#eba0ac|☾"
+    [defaults]="#fabd2f|A"
 )
+
+featured_svg=""
+for candidate in \
+    "${HOME}/.icons/Gruvbox-Plus-Dark/apps/scalable/applications-featured.svg" \
+    "${HOME}/.local/share/icons/Gruvbox-Plus-Dark/apps/scalable/applications-featured.svg" \
+    "/usr/share/icons/Gruvbox-Plus-Dark/apps/scalable/applications-featured.svg"; do
+    if [[ -f "$candidate" ]]; then
+        featured_svg="$candidate"
+        break
+    fi
+done
 
 for name in "${!ICONS[@]}"; do
     IFS='|' read -r color glyph <<< "${ICONS[$name]}"
     out="$ICONS_DIR/${name}.png"
+    if [[ "$name" == "defaults" && -n "$featured_svg" ]]; then
+        magick -background none "$featured_svg" -resize 108x108 \
+            -gravity center -extent 128x128 \
+            "$out"
+        continue
+    fi
     magick -size 128x128 xc:none \
         -fill "rgba(25,25,25,0.92)" -draw "roundrectangle 10,10 118,118 20,20" \
         -fill "$color" -font "DejaVu-Sans-Bold" -pointsize 44 \

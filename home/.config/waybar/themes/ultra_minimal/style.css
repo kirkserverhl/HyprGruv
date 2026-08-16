@@ -41,7 +41,8 @@ window#waybar {
 }
 
 #clock,
-#custom-clock-date {
+#custom-clock-date,
+#custom-power {
   background-color: @surface_bright;
   color: @background;
   padding: 2px 10px;

@@ -30,9 +30,11 @@ from wallpaper_picker_support import (
     WAYPAPER_MODE,
     ThemeEntry,
     cover_pixbuf,
+    css_quote_font,
     list_wallpapers,
     load_active_themes,
     load_stylesheet,
+    load_ui_fonts,
     preview_pixbuf_for,
     random_waypaper_preview,
     resolve_wallpaper_dir,
@@ -46,7 +48,7 @@ CACHE_DIR = Path.home() / ".cache" / "colorschemes-theme-thumbs"
 # Avoids the 3×N square that scrunches the last row when theme count is 6 vs 9.
 VISIBLE_CARDS = 4
 WINDOW_WIDTH = 1200
-WINDOW_HEIGHT = 420
+WINDOW_HEIGHT = 320
 SCROLLBAR_RESERVE = 8
 THEME_PICKER_CLASS = "theme-picker"
 
@@ -77,23 +79,41 @@ class ThemePicker(Gtk.Window):
         threading.Thread(target=self._load_previews, daemon=True).start()
 
     def _theme_label_css(self) -> bytes:
-        return b"""
-        .theme-picker-header {
-            color: #cbc7b5;
-            font-weight: 600;
-            font-size: 15px;
-            padding: 0 2px 8px 2px;
-        }
-        .theme-cell-label {
-            color: #dde4e3;
-            font-weight: 600;
+        fonts = load_ui_fonts()
+        family = css_quote_font(fonts["FONT_UI"])
+        menu_pt = fonts["FONT_SIZE_LAUNCHER"]
+        caption_pt = fonts["FONT_SIZE_WAYPAPER_UI"]
+        # Menu chrome matches other rofi launchers (FONT_SIZE_LAUNCHER).
+        # Card names stay a step smaller — identifiers, not system-menu text.
+        return f"""
+        .theme-picker-header {{
+            font-family: {family}, sans-serif;
+            font-size: {menu_pt}pt;
+            font-weight: 500;
+            padding: 0;
+            margin: 0;
+        }}
+        .theme-picker-footer-label,
+        #wallpaper-footer button.footer-control {{
+            font-family: {family}, sans-serif;
+            font-size: {menu_pt}pt;
+            font-weight: 500;
+        }}
+        #wallpaper-footer button.footer-control {{
+            min-height: 36px;
+            padding: 6px 12px;
+        }}
+        .theme-cell-label {{
+            font-family: {family}, sans-serif;
+            font-size: {caption_pt}pt;
+            font-weight: 500;
             padding: 2px 0 0 0;
-        }
-        scrollbar.horizontal slider {
+        }}
+        scrollbar.horizontal slider {{
             min-height: 6px;
             border-radius: 4px;
-        }
-        """
+        }}
+        """.encode()
 
     def _enable_transparency(self) -> None:
         screen = Gdk.Screen.get_default()
@@ -109,7 +129,7 @@ class ThemePicker(Gtk.Window):
         self.main_box.set_name("main-window")
         self.add(self.main_box)
 
-        content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=GRID_GAP)
+        content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         content.set_name("wallpaper-content")
         content.set_margin_start(PANEL_PADDING)
         content.set_margin_end(PANEL_PADDING)
@@ -120,6 +140,10 @@ class ThemePicker(Gtk.Window):
         header = Gtk.Label(label="Select Theme")
         header.set_halign(Gtk.Align.START)
         header.set_xalign(0.0)
+        header.set_margin_start(0)
+        header.set_margin_end(0)
+        header.set_margin_top(0)
+        header.set_margin_bottom(6)
         header.get_style_context().add_class("theme-picker-header")
         content.pack_start(header, False, False, 0)
 
@@ -138,13 +162,13 @@ class ThemePicker(Gtk.Window):
         self.scrolled.connect("scroll-event", self._on_scroll)
         preview_panel.pack_start(self.scrolled, True, True, 0)
 
-        self.grid_shell = Gtk.Alignment.new(0.0, 0.5, 0.0, 0.0)
+        self.grid_shell = Gtk.Alignment.new(0.0, 0.0, 0.0, 0.0)
         self.grid_shell.set_vexpand(False)
         self.grid_shell.set_hexpand(False)
         self.grid = Gtk.Grid()
         self.grid.set_column_spacing(GRID_GAP)
         self.grid.set_row_spacing(0)
-        self.grid.set_valign(Gtk.Align.CENTER)
+        self.grid.set_valign(Gtk.Align.START)
         self.grid.set_halign(Gtk.Align.START)
         self.grid.set_vexpand(False)
         self.grid.set_hexpand(False)
@@ -159,6 +183,7 @@ class ThemePicker(Gtk.Window):
         footer_panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         footer_panel.set_name("wallpaper-footer")
         footer_panel.get_style_context().add_class("bottom-controls")
+        footer_panel.set_margin_top(GRID_GAP)
         content.pack_end(footer_panel, False, False, 0)
 
         footer_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -168,9 +193,10 @@ class ThemePicker(Gtk.Window):
 
         footer = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         self.selection_label = Gtk.Label(label="")
-        self.selection_label.set_size_request(220, -1)
+        self.selection_label.set_size_request(260, -1)
         self.selection_label.set_halign(Gtk.Align.START)
         self.selection_label.set_xalign(0.0)
+        self.selection_label.get_style_context().add_class("theme-picker-footer-label")
         footer.pack_start(self.selection_label, False, False, 0)
 
         continue_btn = uniform_footer_button(Gtk.Button(label="Continue"))
@@ -178,6 +204,7 @@ class ThemePicker(Gtk.Window):
         footer.pack_start(continue_btn, False, False, 0)
 
         self.hint_label = Gtk.Label(label="Enter · choose wallpaper")
+        self.hint_label.get_style_context().add_class("theme-picker-footer-label")
         footer.pack_start(self.hint_label, False, False, 0)
 
         footer_align.add(footer)
@@ -472,7 +499,8 @@ def main() -> int:
     if picker.result:
         print(picker.result)
         return 0
-    return 1
+    # Escape / close — not an error (Super+W treats exit 1 as a crash).
+    return 0
 
 
 if __name__ == "__main__":

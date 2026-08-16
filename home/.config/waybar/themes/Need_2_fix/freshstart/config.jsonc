@@ -1,0 +1,65 @@
+/*
+ * freshstart — Starship rainbow powerline (HyprGruv)
+ *
+ * Left  = starship prompt order:  orange → yellow → aqua → blue
+ * Right = mirrored color order:   blue → aqua → yellow → orange
+ *
+ * Chevrons are Nerd Font powerline glyphs (   / ).
+ * Segment colors come from @color_* in colors/matugen-waybar.css
+ * so wallpaper / preset themes recolor the bar the same way starship does.
+ */
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 5,
+  "margin-bottom": 0,
+  "margin-left": 14,
+  "margin-right": 14,
+  "spacing": 0,
+  "height": 36,
+  "reload_style_on_change": true,
+
+  "include": [
+    "~/.config/waybar/shared/workspaces.json",
+    "~/.config/waybar/shared/layout.jsonc",
+    "~/.config/waybar/themes/freshstart/modules.json",
+    "~/.local/state/waybar/bar-chrome.jsonc"
+  ],
+
+  "modules-left": [
+    "custom/pl-lcap",
+    "group/apps",
+    "custom/pl-l1",
+    "group/settings",
+    "custom/pl-l2",
+    "group/sound",
+    "custom/pl-l3",
+    "custom/media",
+    "custom/pl-lend"
+  ],
+
+  "group/center": {
+    "orientation": "horizontal",
+    "modules": ["group/workspaces"]
+  },
+
+  "modules-center": ["group/center"],
+
+  "modules-right": [
+    "custom/pl-rcap",
+    "custom/updates",
+    "custom/pl-r1",
+    "group/cpu-info",
+    "custom/pl-r2",
+    "custom/power",
+    "custom/pl-r3",
+    "group/clock",
+    "custom/pl-rend"
+  ],
+
+  "group/clock": {
+    "orientation": "horizontal",
+    "tooltip-format": "Left-click clock: show/hide month & date",
+    "modules": ["custom/clock-date", "clock", "custom/weather"]
+  }
+}

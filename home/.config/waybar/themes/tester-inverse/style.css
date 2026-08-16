@@ -1,0 +1,147 @@
+/* tester-inverse — tester layout, inverted ink on the same transparent bar */
+@import "../../shared/base.css";
+
+/*
+ * tester paints @on_surface (light cream) on a clear bar.
+ * This flips every ink slot to the palette's darkest tones so the same
+ * transparent chrome stays readable on light / bright wallpapers.
+ *   @background / @base00  — near-black ink
+ *   @base02                — muted / empty
+ *   @base07                — occupied-but-idle
+ */
+
+* {
+  color: @background;
+}
+
+window#waybar {
+  background: transparent;
+  background-color: transparent;
+  color: @background;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+  background: transparent;
+  color: @background;
+}
+
+label.module,
+#clock,
+#custom-clock-date,
+#group-clock,
+#custom-media,
+#window,
+#tray,
+#battery,
+#pulseaudio,
+#network,
+#bluetooth,
+#cpu,
+#memory,
+#disk,
+#language,
+#backlight,
+#idle_inhibitor,
+#custom-weather,
+#custom-updates,
+#custom-power,
+#custom-settings,
+#custom-waybarthemes,
+#custom-wallpaper,
+#custom-appmenu,
+#custom-browser,
+#custom-fmanager,
+#custom-clip,
+#custom-hyprsunset,
+#custom-special,
+#custom-notification {
+  color: @background;
+  background: transparent;
+}
+
+#custom-clock-date,
+#group-clock #custom-clock-date,
+#group-clock #clock {
+  color: @background;
+  background: transparent;
+}
+
+#custom-media.custom-media-idle {
+  color: @base02;
+  opacity: 0.75;
+}
+
+#group-workspaces label.module {
+  color: @base02;
+  background: transparent;
+}
+
+#group-workspaces label.module.ws.active {
+  color: @background;
+  background: alpha(@accent, 0.28);
+}
+
+#group-workspaces label.module.ws.occupied {
+  color: @base07;
+}
+
+#group-workspaces label.module.ws.empty {
+  color: @base02;
+  opacity: 0.85;
+}
+
+#group-workspaces label.module:hover {
+  color: @on_surface;
+  background: @surface;
+}
+
+#group-workspaces label.module.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0;
+  opacity: 0;
+  background: transparent;
+  color: transparent;
+}
+
+#pulseaudio.muted {
+  color: @error;
+}
+
+#battery.warning:not(.charging) {
+  color: @error;
+}
+
+#battery.critical:not(.charging) {
+  color: @error;
+}
+
+#idle_inhibitor.activated {
+  color: @error;
+}
+
+/* Flame states stay semantic — not inverted */
+#group-workspaces #custom-temp-alert.watch,
+#custom-temp-alert.watch {
+  color: #f0a030;
+}
+#group-workspaces #custom-temp-alert.critical,
+#custom-temp-alert.critical {
+  color: #e23d3d;
+}
+#group-workspaces #custom-temp-alert.recover,
+#custom-temp-alert.recover {
+  color: #4caf6a;
+}
+
+tooltip {
+  background: @on_surface;
+  border: 1px solid @base02;
+}
+
+tooltip label {
+  color: @background;
+}

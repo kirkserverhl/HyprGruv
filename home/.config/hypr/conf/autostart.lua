@@ -57,7 +57,8 @@ hl.on("hyprland.start", function()
 	-- systemd graphical session (portal, polkit units, XDG autostart)
 	start_systemd_session()
 
-	-- Polkit (Hyprland-native agent; single instance via launch script)
+	-- Polkit: hyprpolkitagent only. launch script stops KDE/GNOME leftovers
+	-- (plasma-desktop pulls in polkit-kde-agent; two agents = two dialog styles).
 	start_polkit_agent()
 
 	-- Idle + bar (exclusive: waybar | hyprbars | off — Alt+W cycles, state persists)
@@ -69,8 +70,10 @@ hl.on("hyprland.start", function()
 		'sh -c \'hidle=${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/hypridle.conf; if [ -f "$hidle" ]; then hypridle -c "$hidle" &; else hypridle &; fi; st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
 	)
 
-	-- Clipboard history (images)
-	hl.exec_cmd("wl-paste --type image --watch cliphist store")
+	-- Clipboard history: text and screenshots live in separate cliphist DBs
+	-- so screenshot spam never evicts copied text.
+	hl.exec_cmd('wl-paste --type text --watch cliphist -db-path "$HOME/.cache/cliphist/text.db" store')
+	hl.exec_cmd('wl-paste --type image --watch cliphist -db-path "$HOME/.cache/cliphist/db" store')
 
 	-- Restart wallpaper daemons, then restore canonical default_wp.png on login.
 	hl.exec_cmd("killall -q waypaper-daemon awww-daemon waypaper-engine 2>/dev/null || true")

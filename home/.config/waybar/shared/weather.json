@@ -1,0 +1,14 @@
+{
+  "custom/weather": {
+    "format": "{}",
+    "format-alt": " {alt}",
+    "format-alt-click": "click",
+    "interval": 1800,
+    "return-type": "json",
+    "exec": "$HOME/.config/waybar/scripts/get-weather.sh",
+    "signal": 5,
+    "tooltip": true,
+    "on-click": "$HOME/.config/hyprgruv/scripts/weather-location.sh open",
+    "on-click-right": "$HOME/.config/hyprgruv/scripts/weather-location.sh ask"
+  }
+}

@@ -110,10 +110,9 @@ end
 
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
-hl.bind(altMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(altMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
-hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
+-- Alt+scroll: occupied workspace cycle. Super+scroll is the magnifier (see #zoom).
+hl.bind(altMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" })) -- #window Next occupied workspace
+hl.bind(altMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" })) -- #window Prev occupied workspace
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- MAIN (Super) — daily-driver desktop
@@ -127,11 +126,14 @@ hl.bind(mainMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("google-chrome-stable")) -- #launcher Open Chrome
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/obsidian.sh")) -- #launcher Open Obsidian
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --lighter")) -- #window Window opacity lighter
+hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --darker")) -- #window Window opacity darker
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/soundsbored.sh")) -- #audio #launcher Open soundsbored
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(os.getenv("HOME") .. "/bin/baas-menu")) -- #work #baas #launcher BaaS tech workflows
+-- Screenshot / transcribe: Shift = same capture, OCR to clipboard instead of image.
+-- (Alt is already "the other screenshot tool" — hyprshot menu vs Super quickshot.)
 hl.bind(mainMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh")) -- #screenshot Quick screenshot
-hl.bind(mainMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh")) -- #transcribe text from screenshot
+hl.bind(mainMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh")) -- #transcribe Region OCR (Shift + screenshot)
 
 -- Session / power
 -- Lock on Super+Escape (not Super+L) so Super+H/J/K/L stay pure vim focus
@@ -177,7 +179,8 @@ bind_navigation_stack()
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh last"))
 
 -- Clipboard history (desktop meta — not app paste)
-hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"))
+-- Alt+H screenshots (daily); Alt+Shift+H / Super+Ctrl+C keep system text.
+hl.bind(mainMod .. " + CTRL + C", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh")) -- #clipboard Text clipboard history
 
 -- Misc main
 hl.bind(mainMod .. " + U", hl.dsp.exec_cmd(SCRIPTS .. "/unlockroot.sh"))
@@ -200,13 +203,15 @@ hl.bind(mainMod .. " + SHIFT + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/dev-works
 hl.bind(altMod .. " + R", hl.dsp.exec_cmd("hyprctl reload; hyprctl notify 0 2000 0 'fontsize:13,Hyprland reloaded'"))
 
 -- Screenshots / theme / monitors
-hl.bind(altMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"))
+hl.bind(altMod .. " + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh")) -- #screenshot Screenshot menu
+hl.bind(altMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh")) -- #transcribe Region OCR (Shift + screenshot)
 -- GSR's own Alt+Z is not parsed by rofi-keybinds; Hyprland owns the chord.
 hl.bind(altMod .. " + Z", hl.dsp.exec_cmd(SCRIPTS .. "/gpu-screen-recorder.sh")) -- #screenshot #record GPU Screen Recorder overlay
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd(SCRIPTS .. "/base16-palette.sh"))
 hl.bind(altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
 hl.bind(mainMod .. " + " .. altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-tv-mode.sh")) -- #display TV desk 120Hz ↔ video 4K
-hl.bind(altMod .. " + N", hl.dsp.exec_cmd("~/.local/bin/night-mode.sh"))
+hl.bind(altMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/obsidian.sh")) -- #launcher #notes Open Obsidian
+hl.bind(mainMod .. " + " .. altMod .. " + N", hl.dsp.exec_cmd("~/.local/bin/night-mode.sh")) -- #display Night light
 
 -- Window alt-actions
 hl.bind(altMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
@@ -260,10 +265,12 @@ hl.bind(altMod .. " + SHIFT + Z", hl.dsp.layout("consume")) -- #layout #column S
 hl.bind(altMod .. " + SHIFT + F", hl.dsp.layout("fit_into_view")) -- #layout #column Fit column into view
 
 -- Power tools
-hl.bind(altMod .. " + H", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh htop"))
+hl.bind(altMod .. " + H", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh images")) -- #clipboard Screenshot clipboard history
+hl.bind(altMod .. " + SHIFT + H", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh")) -- #clipboard Text clipboard history
+hl.bind(mainMod .. " + " .. altMod .. " + H", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh htop")) -- #monitor htop
 hl.bind(altMod .. " + SHIFT + T", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh bpytop"))
 hl.bind(altMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
-hl.bind(altMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"))
+hl.bind(altMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh")) -- #calc Calculator
 hl.bind(mainMod .. " + " .. altMod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/software.sh"))
 
 -- Notifications (alt = full menu)
@@ -271,14 +278,17 @@ hl.bind(altMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh menu"))
 hl.bind(altMod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh close-all"))
 hl.bind(altMod .. " + SUPER + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh toggle-pause"))
 
--- Accessibility zoom (screen magnifier around cursor — not app content zoom)
--- Same trio as terminals: + / - / Backspace. Bind equal AND plus because
--- Alt+Shift+= (the + glyph) is a different key than Alt+=.
+-- Accessibility zoom (screen magnifier — entire output, not app content zoom)
+-- Super+scroll: zoom with the cursor locked to the center of the view
+-- (cursor:zoom_rigid). Alt+= / - / Backspace stay as the keyboard trio.
+-- Bind equal AND plus because Alt+Shift+= (the + glyph) is a different key.
 local ZOOM_IN =
 	"hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 1.1}')"
 local ZOOM_OUT =
 	"hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 0.9}')"
 local ZOOM_RST = "hyprctl -q keyword cursor:zoom_factor 1"
+hl.bind(mainMod .. " + mouse_up", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Super+scroll up magnify (cursor-centered)
+hl.bind(mainMod .. " + mouse_down", hl.dsp.exec_cmd(ZOOM_OUT)) -- #zoom Super+scroll down demagnify
 hl.bind(altMod .. " + equal", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Magnify
 hl.bind(altMod .. " + plus", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Magnify (shifted +)
 hl.bind(altMod .. " + SHIFT + equal", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Magnify (Shift+=)
@@ -354,6 +364,11 @@ local MOUSE_G502_HERO = {
 	"logitech-g502-hero-gaming-mouse",
 	"logitech-g502-hero-gaming-mouse-keyboard-1",
 }
+-- Piper key remaps (Print, etc.) come out this HID keyboard, not the pointer.
+local KB_G502 = {
+	"logitech-g502-hero-gaming-mouse-keyboard",
+	"logitech-g502-hero-gaming-mouse-keyboard-1",
+}
 
 local function dev_bind(keys, dispatcher, devices, extra)
 	local opts = {
@@ -387,9 +402,9 @@ dev_bind("F10", hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.co
 dev_bind("F11", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"), KB_LAPTOP) -- #launcher #laptop Applications
 dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh"), KB_LAPTOP) -- #calc #laptop Calculator
 
-dev_bind("INSERT", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"), KB_LAPTOP) -- #clipboard #laptop Clipboard history
+dev_bind("INSERT", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh"), KB_LAPTOP) -- #clipboard #laptop Text clipboard history
 dev_bind("PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LAPTOP) -- #screenshot #laptop Screenshot menu
-dev_bind("SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LAPTOP) -- #screenshot #laptop Screenshot menu
+dev_bind("SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LAPTOP) -- #transcribe #laptop Region OCR (Shift + screenshot)
 -- DELETE intentionally unbound on laptop so editors keep native delete
 
 -- XF86 keys (what many IdeaPads emit without holding FN). Same actions as F-row above
@@ -445,7 +460,7 @@ dev_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --inc"), KB_LOGI
 dev_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx #wip Transcribe (placeholder)
 dev_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX) -- #emoji #mx Emoji picker
 dev_bind("F7", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LOGI_MX) -- #screenshot #mx Screenshot menu
-dev_bind("SHIFT + F7", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx OCR region
+dev_bind("SHIFT + F7", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (Shift + screenshot)
 dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX) -- #media #mx Mute mic
 dev_bind("F9", hl.dsp.exec_cmd("playerctl previous"), KB_LOGI_MX) -- #media #mx Previous track
 dev_bind("F10", hl.dsp.exec_cmd("playerctl play-pause"), KB_LOGI_MX) -- #media #mx Play/Pause
@@ -456,7 +471,7 @@ dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), KB_LOGI_MX) -
 dev_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_LOGI_MX, { repeating = true })
 dev_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LOGI_MX, { repeating = true })
 dev_bind("PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LOGI_MX) -- #screenshot #mx
-dev_bind("SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx
+dev_bind("SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (Shift + screenshot)
 dev_bind("XF86AudioMicMute", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX)
 dev_bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), KB_LOGI_MX)
 dev_bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), KB_LOGI_MX)
@@ -473,5 +488,13 @@ dev_bind("XF86EmojiPicker", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LO
 hl.bind("mouse:274", hl.dsp.exec_cmd(SCRIPTS .. "/quickshot.sh"), {
 	device = { inclusive = false, list = MOUSE_G502_HERO },
 }) -- #screenshot Middle-click (scroll wheel) region screenshot
+hl.bind("SHIFT + mouse:274", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), {
+	device = { inclusive = false, list = MOUSE_G502_HERO },
+}) -- #transcribe Shift+middle-click region OCR
+
+-- G502 dedicated screenshot button: Piper emits Print on the mouse's keyboard HID.
+-- Shift+that button → same OCR path as every other screenshot bind.
+dev_bind("PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_G502) -- #screenshot #g502 Dedicated button
+dev_bind("SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_G502) -- #transcribe #g502 Region OCR (Shift + screenshot)
 
 -- Mission Control: conf/hymission.lua

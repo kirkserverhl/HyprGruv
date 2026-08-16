@@ -29,7 +29,8 @@
       "custom/ws-20",
       "custom/workspace-add",
       "custom/special",
-      "custom/notification"
+      "custom/notification",
+      "custom/temp-alert"
     ]
   },
   "custom/ws-1": {
@@ -217,6 +218,15 @@
     "on-click-right": "$HOME/.config/hyprgruv/scripts/swaync.sh right",
     "interval": 10,
     "tooltip": true
+  },
+  "custom/temp-alert": {
+    "exec": "$HOME/.config/waybar/scripts/temp-alert.sh",
+    "return-type": "json",
+    "format": "{}",
+    "interval": 5,
+    "hide-empty-text": true,
+    "tooltip": true,
+    "on-click": "auto-cpufreq-gtk"
   },
   "custom/media": {
     "format": "{}",

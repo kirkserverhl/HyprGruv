@@ -1,7 +1,9 @@
 {
   "include": [
     "~/.config/waybar/shared/workspaces.json",
-    "~/.config/waybar/shared/clock.json"
+    "~/.config/waybar/shared/clock.json",
+    "~/.config/waybar/shared/power_settings.json",
+    "~/.local/state/waybar/bar-chrome.jsonc"
   ],
 
   "layer": "top",
@@ -9,7 +11,7 @@
   // media on left; workspaces → + → scratchpad → notification after launcher
   "modules-left": ["custom/launcher", "custom/media", "group/workspaces"],
   "modules-center": [],
-  "modules-right": ["pulseaudio", "network", "battery", "group/clock"],
+  "modules-right": ["pulseaudio", "network", "battery", "group/clock", "custom/power"],
 
   "custom/launcher": {
     "format": "",

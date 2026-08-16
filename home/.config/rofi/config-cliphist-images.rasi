@@ -1,0 +1,44 @@
+/* Screenshot clipboard history — launcher-matched, with thumbs */
+
+configuration {
+    modi:                "drun,run";
+    show-icons:          true;
+    icon-theme:          "kora";
+    display-drun:        "APPS";
+    display-run:         "RUN";
+    drun-display-format: "{name}";
+    window-format:       "{w} · {c} · {t}";
+}
+
+@import "~/.config/rofi/shared/standard.rasi"
+@import "~/.config/rofi/shared/launcher-chrome.rasi"
+
+window {
+    width:    520px;
+    x-offset: -14px;
+    y-offset: 65px;
+    location: northeast;
+    anchor:   northeast;
+}
+
+mainbox {
+    children: ["listbox"];
+}
+
+listbox {
+    children: ["inputbar", "message", "listview"];
+}
+
+listview {
+    lines:        8;
+    fixed-height: true;
+}
+
+element {
+    padding: 6px 10px;
+}
+
+element-icon {
+    size:   72px;
+    margin: 0 12px 0 0;
+}

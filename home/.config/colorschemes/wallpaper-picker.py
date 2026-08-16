@@ -535,7 +535,8 @@ def main() -> int:
     if picker.result:
         print(picker.result)
         return 0
-    return 1
+    # Escape / close — not an error (caller aborts silently).
+    return 0
 
 
 if __name__ == "__main__":

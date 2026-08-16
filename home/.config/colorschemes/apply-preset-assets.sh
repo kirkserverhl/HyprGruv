@@ -80,10 +80,7 @@ if [[ -n "$WALLPAPER" && -f "$WALLPAPER" && -f "$BUILDER" ]] && command -v matug
     IMPORT_JSON="$CACHE_DIR/saved-import.json"
     python3 "$BUILDER" build-base16 "$PALETTE_JSON" "$WALLPAPER" "$IMPORT_JSON" 2>/dev/null || true
     if [[ -f "$IMPORT_JSON" ]]; then
-        matugen image "$WALLPAPER" \
-            --import-json "$IMPORT_JSON" \
-            --source-color-index 0 \
-            --continue-on-error 2>/dev/null || true
+        matugen json "$IMPORT_JSON" --continue-on-error 2>/dev/null || true
     fi
 fi
 

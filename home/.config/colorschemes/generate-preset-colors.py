@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Generate matugen output files from static preset palette CSS (Gruvbox, Nord, etc.)."""
+"""Prepare Super+W theme palettes and restore tailored apps after matugen.
+
+Matugen (`matugen json <import>`) distributes colors to every template.
+This module only: overlays the Super+W source accent, writes palette.json,
+and restores official kitty / starship files that should not be flattened.
+"""
 
 from __future__ import annotations
 
@@ -588,15 +593,93 @@ inactive_border_color {s["base02"]}
     out.write_text(content, encoding="utf-8")
 
 
-def write_all_outputs(slots: dict[str, str], theme: str) -> None:
-    write_waybar(slots, theme)
-    write_hypr(slots, theme)
-    write_nvim(slots, theme)
-    # Theme-fixed starship only (source color does not rewrite the prompt)
+def write_kitty_tailored(theme: str) -> bool:
+    """Replace live kitty include with the official theme file when the slot has one.
+
+    Personal themes without colorschemes/<theme>/kitty/ keep the matugen template.
+    """
+    slot = COLORSCHEMES / theme / "kitty" / "colors.conf"
+    if not slot.is_file():
+        return False
+    text = slot.read_text(encoding="utf-8")
+    match = re.search(r"include\s+custom/(\S+\.conf)", text)
+    if match:
+        src = HOME / ".config/kitty/colors/custom" / match.group(1)
+    else:
+        src = slot
+    dest = HOME / ".config/kitty/colors/custom/matugen.conf"
+    if not src.is_file():
+        return False
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+    return True
+
+
+def overlay_user_accent(theme: str, slots: dict[str, str]) -> dict[str, str]:
+    """Keep theme surfaces; set primary + source (base0D/base0F) from user-accent."""
+    slots = normalize_slot_keys(slots)
+    accent_path = COLORSCHEMES / theme / "user-accent"
+    if not accent_path.is_file():
+        return slots
+    saved = accent_path.read_text(encoding="utf-8").strip().lower()
+    if not saved.startswith("#"):
+        saved = f"#{saved}"
+    if len(saved) != 7:
+        return slots
+    slots["base0D"] = saved
+    slots["base0F"] = saved
+    return slots
+
+
+def prepare_theme_palette(theme: str) -> dict[str, str]:
+    """Resolve the slot palette, overlay Super+W source, persist palette.json."""
+    slots = overlay_user_accent(theme, resolve_theme_slots(theme))
+    export_palette_json(theme, slots, force=True)
+    return slots
+
+
+# Official Neovim colorschemes already on this install (lazy/).
+# Other Super+W themes fall back to mini.base16 from the slot palette.
+NVIM_COLORSCHEMES = {
+    "catppuccin": "catppuccin-mocha",
+    "gruvbox-dark": "gruvbox",
+    "coast-gruv": "gruvbox",
+    "warm-stone": "gruvbox",
+}
+
+
+def write_nvim_tailored(slots: dict[str, str], theme: str) -> None:
+    """Prefer a real colorscheme plugin; otherwise paint mini.base16 from the slot."""
+    colorscheme = NVIM_COLORSCHEMES.get(theme)
+    if not colorscheme:
+        write_nvim(slots, theme)
+        return
+    content = f"""-- Super+W official Neovim theme: {theme} → {colorscheme}
+-- Do not replace with matugen mini.base16; that file is a Waypaper fallback.
+
+vim.o.termguicolors = true
+local ok = pcall(vim.cmd.colorscheme, "{colorscheme}")
+if not ok then
+  vim.notify("colorscheme {colorscheme} not found — install the plugin", vim.log.levels.WARN)
+end
+"""
+    out = HOME / ".config/nvim/lua/matugen-theme.lua"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(content, encoding="utf-8")
+
+
+def write_tailored_overrides(slots: dict[str, str], theme: str) -> None:
+    """Apps that ship official themes — applied after matugen distributes the rest."""
     write_starship(slots, theme)
-    write_rofi(slots, theme)
-    write_mpv(slots, theme)
-    write_kitty(slots, theme)
+    write_kitty_tailored(theme)
+    write_nvim_tailored(slots, theme)
+    # Hyprland template often skips on `matugen json` (hex_stripped); write slots directly.
+    write_hypr(slots, theme)
+
+
+def write_all_outputs(slots: dict[str, str], theme: str) -> None:
+    # Matugen --import-json is the distributor. This only restores tailored apps.
+    write_tailored_overrides(slots, theme)
 
 
 
@@ -665,7 +748,7 @@ def apply_source_accent(theme: str, hex_color: str) -> dict[str, str]:
     source_file.write_text(hex_color + "\n", encoding="utf-8")
     export_palette_json(theme, slots, force=True)
 
-    write_all_outputs(slots, theme)
+    write_tailored_overrides(slots, theme)
     return slots
 
 
@@ -674,6 +757,8 @@ def main() -> int:
         print(
             "Usage:\n"
             "  generate-preset-colors.py <theme-name>\n"
+            "  generate-preset-colors.py --prepare <theme-name>\n"
+            "  generate-preset-colors.py --tailored <theme-name>\n"
             "  generate-preset-colors.py --list-accents <theme-name>\n"
             "  generate-preset-colors.py --apply-accent <theme-name> <#hex>",
             file=sys.stderr,
@@ -701,20 +786,29 @@ def main() -> int:
         print(f"Accent applied for {theme}: primary/source = {slots['base0D']}")
         return 0
 
-    theme = sys.argv[1].strip()
-    slots = resolve_theme_slots(theme)
-    # Super+W accent must survive canonical rebuilds (apply-static / apply-theme)
-    accent_path = COLORSCHEMES / theme / "user-accent"
-    if accent_path.is_file():
-        saved = accent_path.read_text(encoding="utf-8").strip().lower()
-        if not saved.startswith("#"):
-            saved = f"#{saved}"
-        if len(saved) == 7:
-            slots["base0D"] = saved
-            slots["base0F"] = saved
-            export_palette_json(theme, slots, force=True)
+    if sys.argv[1] == "--prepare":
+        if len(sys.argv) < 3:
+            print("Usage: generate-preset-colors.py --prepare <theme>", file=sys.stderr)
+            return 1
+        theme = sys.argv[2].strip()
+        slots = prepare_theme_palette(theme)
+        print(f"Palette prepared for {theme}")
+        print(f"  accent (primary): {slots['base0D']}")
+        return 0
 
-    write_all_outputs(slots, theme)
+    if sys.argv[1] == "--tailored":
+        if len(sys.argv) < 3:
+            print("Usage: generate-preset-colors.py --tailored <theme>", file=sys.stderr)
+            return 1
+        theme = sys.argv[2].strip()
+        slots = prepare_theme_palette(theme)
+        write_tailored_overrides(slots, theme)
+        print(f"Tailored overrides applied for {theme}")
+        return 0
+
+    theme = sys.argv[1].strip()
+    slots = prepare_theme_palette(theme)
+    write_tailored_overrides(slots, theme)
     print(f"Preset colors applied for {theme}")
     print(f"  accent (primary): {slots['base0D']}")
     return 0

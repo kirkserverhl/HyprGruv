@@ -1,0 +1,324 @@
+/*
+ * Starship rainbow powerline.
+ *
+ * Left  (prompt):      orange  yellow  aqua  blue 
+ * Right (mirrored):    blue  aqua  yellow  orange 
+ *
+ * Colors are @color_* (same names as starship-rainbow.toml).
+ * ~/.config/waybar/colors/starship-rainbow.css is generated from the
+ * active starship palette so theme switches recolor the bar.
+ * Separators use a mono Nerd Font so the glyphs tile without gaps.
+ */
+
+@import "../../colors/starship-rainbow.css";
+
+/* ------------------------------------------------------------------ */
+/* Kill shared/base.css gaps on the two chains                        */
+/* ------------------------------------------------------------------ */
+
+.modules-left,
+.modules-right {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+
+.modules-left > widget,
+.modules-right > widget {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.modules-left label.module,
+.modules-right label.module {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Powerline glyphs                                                    */
+/* ------------------------------------------------------------------ */
+
+#custom-pl-lcap,
+#custom-pl-l1,
+#custom-pl-l2,
+#custom-pl-l3,
+#custom-pl-lend,
+#custom-pl-rcap,
+#custom-pl-r1,
+#custom-pl-r2,
+#custom-pl-r3,
+#custom-pl-rend,
+#custom-pl-lcap label,
+#custom-pl-l1 label,
+#custom-pl-l2 label,
+#custom-pl-l3 label,
+#custom-pl-lend label,
+#custom-pl-rcap label,
+#custom-pl-r1 label,
+#custom-pl-r2 label,
+#custom-pl-r3 label,
+#custom-pl-rend label {
+  font-family: "Agave Nerd Font Mono", "JetBrainsMono Nerd Font Mono",
+    "Symbols Nerd Font", monospace;
+  font-size: 24px;
+  font-weight: normal;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 6px -2px;
+  border: none;
+  border-radius: 0;
+}
+
+/* Left cap  — orange into wallpaper */
+#custom-pl-lcap,
+#custom-pl-lcap label {
+  color: @color_orange;
+  background: transparent;
+  background-color: transparent;
+}
+
+/* orange  yellow */
+#custom-pl-l1,
+#custom-pl-l1 label {
+  color: @color_orange;
+  background-color: @color_yellow;
+}
+
+/* yellow  aqua */
+#custom-pl-l2,
+#custom-pl-l2 label {
+  color: @color_yellow;
+  background-color: @color_aqua;
+}
+
+/* aqua  blue */
+#custom-pl-l3,
+#custom-pl-l3 label {
+  color: @color_aqua;
+  background-color: @color_blue;
+}
+
+/* Left end  — blue into wallpaper */
+#custom-pl-lend,
+#custom-pl-lend label {
+  color: @color_blue;
+  background: transparent;
+  background-color: transparent;
+}
+
+/* Right cap  — blue into wallpaper */
+#custom-pl-rcap,
+#custom-pl-rcap label {
+  color: @color_blue;
+  background: transparent;
+  background-color: transparent;
+}
+
+/* blue  aqua  (triangle is aqua, cell is blue) */
+#custom-pl-r1,
+#custom-pl-r1 label {
+  color: @color_aqua;
+  background-color: @color_blue;
+}
+
+/* aqua  yellow */
+#custom-pl-r2,
+#custom-pl-r2 label {
+  color: @color_yellow;
+  background-color: @color_aqua;
+}
+
+/* yellow  orange */
+#custom-pl-r3,
+#custom-pl-r3 label {
+  color: @color_orange;
+  background-color: @color_yellow;
+}
+
+/* Right end  — orange into wallpaper */
+#custom-pl-rend,
+#custom-pl-rend label {
+  color: @color_orange;
+  background: transparent;
+  background-color: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* Segment fills — paint the group AND every child (GTK groups often   */
+/* do not draw their own background). Cream text like starship.        */
+/* ------------------------------------------------------------------ */
+
+#group-apps,
+#group-apps > box,
+#group-apps #custom-appmenu,
+#group-apps #custom-browser,
+#group-apps #custom-fmanager,
+#group-apps #custom-clip,
+#group-apps #custom-hypridle,
+#group-clock,
+#group-clock > box,
+#group-clock #clock,
+#group-clock #custom-clock-date,
+#group-clock #custom-weather {
+  background-color: @color_orange;
+  color: @color_fg0;
+}
+
+#group-settings,
+#group-settings > box,
+#group-settings #custom-settings,
+#group-settings #custom-waybarthemes,
+#group-settings #custom-wallpaper,
+#group-settings #custom-hyprsunset,
+#custom-power {
+  background-color: @color_yellow;
+  color: @color_fg0;
+}
+
+#group-sound,
+#group-sound > box,
+#group-sound #pulseaudio,
+#group-sound #bluetooth,
+#group-cpu-info,
+#group-cpu-info > box,
+#group-cpu-info #cpu,
+#group-cpu-info #memory,
+#group-cpu-info #power-profiles-daemon,
+#group-cpu-info #network {
+  background-color: @color_aqua;
+  color: @color_fg0;
+}
+
+#custom-media,
+#custom-updates {
+  background-color: @color_blue;
+  color: @color_fg0;
+}
+
+#group-apps,
+#group-settings,
+#group-sound,
+#group-cpu-info,
+#group-clock,
+#custom-media,
+#custom-updates,
+#custom-power {
+  border: none;
+  border-radius: 0;
+  margin: 6px 0;
+  padding: 0 10px;
+  opacity: 1;
+}
+
+#group-apps label,
+#group-apps label.module,
+#group-settings label,
+#group-settings label.module,
+#group-sound label,
+#group-sound label.module,
+#group-cpu-info label,
+#group-cpu-info label.module,
+#group-clock label,
+#group-clock label.module,
+#custom-media label,
+#custom-media label.module,
+#custom-updates label,
+#custom-updates label.module,
+#custom-power label,
+#custom-power label.module {
+  margin: 0;
+  padding: 0 6px;
+  background: transparent;
+  background-color: transparent;
+  color: @color_fg0;
+  border: none;
+  border-radius: 0;
+}
+
+#group-apps widget,
+#group-settings widget,
+#group-sound widget,
+#group-cpu-info widget,
+#group-clock widget {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+#group-apps > box,
+#group-settings > box,
+#group-sound > box,
+#group-cpu-info > box,
+#group-clock > box {
+  margin: 0;
+  padding: 0;
+}
+
+/* Drawer children stay in-segment when they expand */
+#group-apps widget.not-apps,
+#group-settings widget.not-settings,
+#group-sound widget.not-sound,
+#group-cpu-info widget.not-cpu {
+  margin: 0;
+  padding: 0;
+}
+
+#group-apps:hover widget.not-apps,
+#group-settings:hover widget.not-settings,
+#group-sound:hover widget.not-sound,
+#group-cpu-info:hover widget.not-cpu {
+  margin: 0;
+  padding: 0 6px;
+}
+
+/* ------------------------------------------------------------------ */
+/* States                                                              */
+/* ------------------------------------------------------------------ */
+
+#pulseaudio.muted,
+#pulseaudio.muted label,
+#group-sound #pulseaudio.muted,
+#group-sound #pulseaudio.muted label {
+  color: @color_red;
+}
+
+#custom-updates.red,
+#custom-updates.red label {
+  color: @color_red;
+}
+
+#custom-updates.yellow,
+#custom-updates.yellow label {
+  color: @color_yellow;
+}
+
+#custom-media.custom-media-idle,
+#custom-media.custom-media-idle label {
+  opacity: 0.85;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hover — lighten the icon, do not break the chevron                  */
+/* ------------------------------------------------------------------ */
+
+#group-apps label.module:hover,
+#group-settings label.module:hover,
+#group-sound label.module:hover,
+#group-cpu-info label.module:hover,
+#group-clock label.module:hover,
+#custom-media:hover,
+#custom-media:hover label,
+#custom-updates:hover,
+#custom-updates:hover label,
+#custom-power:hover,
+#custom-power:hover label {
+  color: @color_bg1;
+  background: transparent;
+}

@@ -9,7 +9,7 @@
  * ----------------------------------------------------- 
 */
 
-/* --- Shared base (waypaper colors, 16px font, spacing) --- */
+/* --- Shared base (waypaper colors, bar-size font) + starship chain --- */
 @import "../../shared/base.css";
 @import "pill-rainbow.css";
 
@@ -42,7 +42,7 @@ window#waybar {
   font-family:
     "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
     sans-serif;
-  font-size: 18px;
+  /* font-size: bar-size.css (emphasis on freshstart) */
   font-weight: bold;
   border: none;
   border-radius: 0px;
@@ -167,7 +167,7 @@ window#waybar {
   margin: 1px 3px 1px 0;
 }
 
-/* Center — one font size up from side pills (18px → 20px) */
+/* Center — one font size up from side pills */
 .modules-center,
 .modules-center *,
 #group-center,
@@ -177,7 +177,7 @@ window#waybar {
 #custom-special,
 #custom-special label,
 #custom-special label.module {
-  font-size: 20px;
+  /* font-size comes from bar-size.css (center) */
 }
 
 /* -----------------------------------------------------
@@ -497,4 +497,46 @@ window#waybar.empty #window {
 /* --- shared custom workspace strip (group/workspaces) --- */
 #group-workspaces label.module.hidden {
   margin: 0; padding: 0; min-width: 0; font-size: 0; opacity: 0;
+}
+
+/* Last-win fills. Use the `background` shorthand so we beat
+ * shared/base.css `background: transparent` on #clock. */
+#group-apps,
+#group-apps #custom-appmenu,
+#group-apps #custom-browser,
+#group-apps #custom-fmanager,
+#group-apps #custom-clip,
+#group-clock,
+#clock,
+#custom-clock-date,
+#custom-weather {
+  background: @color_orange;
+  color: @color_fg0;
+}
+
+#group-settings,
+#group-settings #custom-settings,
+#group-settings #custom-waybarthemes,
+#group-settings #custom-wallpaper,
+#group-settings #custom-hyprsunset,
+#custom-power {
+  background: @color_yellow;
+  color: @color_fg0;
+}
+
+#group-sound,
+#group-sound #pulseaudio,
+#group-sound #bluetooth,
+#group-cpu-info,
+#cpu,
+#memory,
+#network {
+  background: @color_aqua;
+  color: @color_fg0;
+}
+
+#custom-media,
+#custom-updates {
+  background: @color_blue;
+  color: @color_fg0;
 }

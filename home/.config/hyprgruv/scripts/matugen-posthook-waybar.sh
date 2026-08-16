@@ -22,6 +22,10 @@ WAYBAR_ACTIVE="${WAYBAR_DIR}/colors.css"
 WAYBAR_BASE="${WAYBAR_DIR}/shared/base.css"
 WAYBAR_STYLE="${WAYBAR_DIR}/style.css"
 
+if [[ -x "${WAYBAR_DIR}/scripts/sync-starship-colors.sh" ]]; then
+    "${WAYBAR_DIR}/scripts/sync-starship-colors.sh" || true
+fi
+
 if [[ -f "$WAYBAR_COLORS" ]]; then
     cp -f "$WAYBAR_COLORS" "$WAYBAR_ACTIVE" 2>/dev/null || true
     touch "$WAYBAR_COLORS" "$WAYBAR_BASE" 2>/dev/null || true

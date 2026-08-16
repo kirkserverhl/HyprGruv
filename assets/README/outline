@@ -13,6 +13,7 @@ hyprgruv/
 │   └── scripts/               # Setup helpers invoked by modules
 │       ├── post_reboot_setup.sh
 │       ├── waypaper_setup.sh
+│       ├── cache-wallpapers.sh
 │       ├── default_wp.sh
 │       ├── sync-packages.sh
 │       ├── sddm_candy_install.sh

@@ -1,7 +1,11 @@
 {
   "include": [
     "~/.config/waybar/shared/workspaces.json",
-    "~/.config/waybar/shared/clock.json"
+    "~/.config/waybar/shared/clock.json",
+    "~/.config/waybar/shared/weather.json",
+    "~/.config/waybar/shared/updates.json",
+    "~/.config/waybar/shared/power_settings.json",
+    "~/.local/state/waybar/bar-chrome.jsonc"
   ],
 
   "layer": "top",
@@ -15,16 +19,8 @@
     "group/workspaces",
     "power-profiles-daemon"
   ],
-  "modules-right": ["custom/pacman", "pulseaudio", "network", "battery", "group/clock"],
+  "modules-right": ["custom/pacman", "pulseaudio", "network", "battery", "group/clock", "custom/power"],
 
-
-  "custom/weather": {
-    "exec": "${HOME}/.config/waybar/scripts/ge-weather.sh Bangalore+India",
-    "return-type": "json",
-    "format": "{}",
-    "tooltip": true,
-    "interval": 3600
-  },
 
   "custom/notification": {
     "format": "{}",
@@ -53,15 +49,6 @@
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
     "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null" // Script in resources/custom_modules folder
-  },
-
-  "custom/pacman": {
-    "format": "󰅢  {}",
-    "interval": "once",
-    "exec": "checkupdates | wc -l",
-    "on-click": "update-system",
-    "signal": 8,
-    "tooltip-format": "{} updates available"
   },
 
   "battery": {

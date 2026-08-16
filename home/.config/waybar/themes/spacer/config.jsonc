@@ -4,7 +4,10 @@
 {
   "reload_style_on_change": true,
   "exclusive": true,
-  "include": ["~/.config/waybar/shared/bar-chrome.jsonc"],
+  "include": [
+    "~/.config/waybar/shared/bar-chrome.jsonc",
+    "~/.local/state/waybar/bar-chrome.jsonc"
+  ],
   "spacing": 0,
   "modules-left": [],
   "modules-center": [],

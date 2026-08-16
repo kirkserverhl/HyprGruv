@@ -4,7 +4,6 @@
 
 configuration {
     show-icons:    true;
-    font:          "Agave Nerd Font Propo 13";
     hover-select:  false;
     scroll-method: 0;
     cycle:         true;
@@ -38,7 +37,7 @@ textbox-prompt-colon {
 }
 
 message {
-    padding:          0 2px 4px 2px;
+    padding:          0 0 6px 0;
     margin:           0;
     border:           0;
     background-color: transparent;
@@ -47,7 +46,7 @@ message {
 textbox {
     padding:          0;
     background-color: transparent;
-    text-color:       @prompt-color;
+    text-color:       @foreground;
     horizontal-align: 0.0;
     highlight:        none;
 }

@@ -8,6 +8,7 @@ configuration {
     display-run:         "RUN";
     drun-display-format: "{name}";
     window-format:       "{w} · {c} · {t}";
+    markup-rows:         true;
 }
 
 @import "~/.config/rofi/shared/standard.rasi"
@@ -28,6 +29,14 @@ mainbox {
 
 listbox {
     children: ["listview"];
+}
+
+inputbar {
+    enabled: false;
+}
+
+entry {
+    enabled: false;
 }
 
 listview {

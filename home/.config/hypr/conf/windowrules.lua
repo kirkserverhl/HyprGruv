@@ -77,7 +77,7 @@ hl.window_rule({
     match = { class = "^(theme-picker)$" },
     float = true,
     center = true,
-    size = {1200, 420},
+    size = {1200, 320},
 })
 -- 'blur' is not a supported field on hl.window_rule (only no_blur is).
 -- Use hyprctl to apply the classic "blur" windowrule.
@@ -110,6 +110,23 @@ hl.window_rule({
     size = {900, 650},
 })
 hl.window_rule({ name = "nemo-float",      match = { class = "^(nemo)$" },       float = true })
+
+-- Thunar rename dialogs: same process/class as the file manager, so match title.
+-- Single-file Rename "foo" and Bulk Rename would otherwise tile and reshuffle the layout.
+hl.window_rule({
+    name = "thunar-rename",
+    match = { class = "^(thunar)$", title = "^Rename " },
+    float = true,
+    center = true,
+    size = {420, 180},
+})
+hl.window_rule({
+    name = "thunar-bulk-rename",
+    match = { class = "^(thunar)$", title = "^Bulk Rename" },
+    float = true,
+    center = true,
+    size = {800, 550},
+})
 -- Removed: This was too broad and made every kitty window float.
 -- The original only floated specific kitty instances (htop, yazi, etc.) via title rules below.
 -- hl.window_rule({ name = "kitty-float", match = { class = "^(kitty)$" }, float = true })

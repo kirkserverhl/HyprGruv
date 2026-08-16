@@ -4,17 +4,19 @@
  *
  * Colors: matugen palette via colors/matugen-waybar.css
  *          (GTK mirror of colors/matugen.css)
- * Font:   16px Agave Nerd Font Propo
+ * Font:   size from bar-size.css (desktop 16px / laptop 12px)
+ *         see ~/.config/settings/bar-sizes.sh
  * Spacing: even gaps between top-level groups; wider gaps inside drawer groups when expanded
  */
 
 @import "../colors/matugen-waybar.css";
+@import "bar-size.css";
 
 * {
   font-family:
     "Agave Nerd Font Propo", "DM Sans", "JetBrainsMono Nerd Font Propo",
     sans-serif;
-  font-size: 16px;
+  /* font-size comes from bar-size.css (machine profile). */
   font-weight: normal;
   color: @on_surface;
   border: none;
@@ -170,8 +172,23 @@ label.module {
 
 /* Scratchpad + notification sit after + in the same strip */
 #group-workspaces #custom-special,
-#group-workspaces #custom-notification {
+#group-workspaces #custom-notification,
+#group-workspaces #custom-temp-alert {
   min-width: 18px;
+}
+
+/* Flame: hidden until warm; sits to the right of the bell */
+#group-workspaces #custom-temp-alert.watch,
+#custom-temp-alert.watch {
+  color: #f0a030;
+}
+#group-workspaces #custom-temp-alert.critical,
+#custom-temp-alert.critical {
+  color: #e23d3d;
+}
+#group-workspaces #custom-temp-alert.recover,
+#custom-temp-alert.recover {
+  color: #4caf6a;
 }
 
 /* Hide unused workspace slots (ws-3… when empty) */

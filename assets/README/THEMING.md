@@ -54,6 +54,13 @@ During install:
 
 1. `default_wp.sh` runs after stow (opening wallpaper + first palette)
 2. `waypaper_setup.sh` in the setup wizard installs the waypaper stack and can seed `~/Pictures/Wallpapers`
+3. Optional (default No): pre-generate waypaper thumbnails so the picker stays snappy. Skip on low disk/CPU. Re-run later with:
+
+```bash
+bash ~/.hyprgruv/lib/scripts/cache-wallpapers.sh
+```
+
+Thumbs live in `~/.cache/waypaper` (one 240px PNG per image, keyed by real path). Pressing `r` in waypaper wipes them.
 
 Change wallpaper anytime with **waypaper** (GUI) or:
 
@@ -141,7 +148,7 @@ Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruv
 
 | Surface | How colors apply |
 |---------|------------------|
-| gum (install, setup, upkeep) | `common.sh` → `colors.sh` → `gum_apply_matugen_theme` (gruvbox default; live if set) |
+| gum (install, setup, upkeep) | matugen `templates.gum` → `~/.cache/matugen/gum.env`; Super+W / `matugen-posthook-gum.sh` rebuilds from live hypr via `colors.sh --gum --refresh` |
 | toilet headers | **graffiti** font system-wide (`header.sh`); **lsd-print** if installed, else gum/`COLOR_PRIMARY` |
 | SDDM Sugar Candy | Asset defaults = gruvbox; `update-sddm-wallpaper.sh` overwrites from live palette |
 | Shell cache | `~/.cache/matugen/colors.sh` regenerated on load / theme ensure |
@@ -167,6 +174,7 @@ If a deploy machine suddenly shows another host’s palette (e.g. noir/nord afte
 | Grey / washed-out palette | Re-pick source color in `palette.sh` or `rofi-palette.sh` |
 | Deploy looks like source palette after pull | Live outputs were committed historically; `git-eod-pull` + `ensure-local-palette.sh`, or re-apply theme |
 | waypaper search picks wrong image | Ensure `~/waypaper_fixed_app.py` exists (patched wrapper in `~/.local/bin/waypaper`) |
+| waypaper rebuilds previews every launch | Do not press `r` / refresh (that deletes `~/.cache/waypaper`); re-warm with `cache-wallpapers.sh` |
 
 ## Adding a new themed app
 

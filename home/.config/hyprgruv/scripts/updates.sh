@@ -98,8 +98,13 @@ emit_waybar_json() {
 emit_popup_view() {
     # --- Load your existing helpers for consistent look ---
     source "$HOME/.config/hyprgruv/scripts/header.sh" 2>/dev/null || true
-    source "$HOME/.config/hyprgruv/scripts/colors.sh" 2>/dev/null || true
-    gum_apply_matugen_theme 2>/dev/null || true
+    source "$HOME/.config/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true
+    if declare -F gum_apply_matugen_theme >/dev/null 2>&1; then
+        gum_apply_matugen_theme 2>/dev/null || true
+    elif [[ -f "$HOME/.cache/matugen/gum.env" ]]; then
+        # shellcheck source=/dev/null
+        source "$HOME/.cache/matugen/gum.env"
+    fi
 
     # Try to use lsd-print if present, otherwise plain echo
     print_line() {

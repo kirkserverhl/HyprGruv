@@ -121,12 +121,11 @@ if [[ ! -f "$CURRENT_THEME_FILE" ]] || [[ -z "$(tr -d '[:space:]' <"$CURRENT_THE
 fi
 
 # Refresh gum/toilet shell cache + SDDM greeter colors from live palette.
-if [[ -f "$HOME_CFG/hyprgruv/scripts/colors.sh" ]]; then
+if [[ -x "$HOME_CFG/hyprgruv/scripts/matugen-posthook-gum.sh" || -f "$HOME_CFG/hyprgruv/scripts/matugen-posthook-gum.sh" ]]; then
+    bash "$HOME_CFG/hyprgruv/scripts/matugen-posthook-gum.sh" 2>/dev/null || true
+elif [[ -f "$HOME_CFG/hyprgruv/scripts/colors.sh" ]]; then
     # shellcheck source=/dev/null
-    source "$HOME_CFG/hyprgruv/scripts/colors.sh" --gum 2>/dev/null || true
-    if declare -F write_matugen_shell_color_cache >/dev/null 2>&1; then
-        write_matugen_shell_color_cache 2>/dev/null || true
-    fi
+    source "$HOME_CFG/hyprgruv/scripts/colors.sh" --gum --refresh 2>/dev/null || true
 fi
 if [[ -x "$HOME_CFG/hyprgruv/scripts/update-sddm-wallpaper.sh" || -f "$HOME_CFG/hyprgruv/scripts/update-sddm-wallpaper.sh" ]]; then
     bash "$HOME_CFG/hyprgruv/scripts/update-sddm-wallpaper.sh" 2>/dev/null \

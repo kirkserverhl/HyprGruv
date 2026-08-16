@@ -119,17 +119,22 @@ menu_settings() {
         local choice
         choice=$(rofi_pick "Settings" \
             "Settings|settings-configure|setup" \
+            "Default Apps|preferences-desktop-default-applications|defaults" \
             "Edit Configs|accessories-text-editor|setup" \
             "SSH / GitHub|network-server|ssh" \
             "Blur|blur|blur" \
             "Blitz|flash|blitz" \
             "Hyprsunset|brightnesssettings|hyprsunset" \
+            "Weather|weather-few-clouds|weather" \
             "Back|gtk-go-back-ltr|back")
         [[ -z "${choice:-}" ]] && return 0
 
         case "$choice" in
             Settings)
                 exec "$SCRIPT_DIR/settings-run-setup.sh"
+                ;;
+            "Default Apps")
+                exec "$SCRIPT_DIR/settings-default-apps.sh"
                 ;;
             "Edit Configs")
                 exec "$HOME/.local/bin/config-edit"
@@ -145,6 +150,9 @@ menu_settings() {
                 ;;
             Hyprsunset)
                 exec "$SCRIPT_DIR/settings-hyprsunset.sh"
+                ;;
+            Weather)
+                exec "$SCRIPT_DIR/weather-location.sh" ask
                 ;;
             Back) return 0 ;;
         esac
@@ -170,7 +178,7 @@ menu_system() {
                 run_bg "Packages Sync" "bash '$HYPRGRUV_DIR/sync-packages.sh' sync"
                 ;;
             Updates)
-                exec "$SCRIPT_DIR/installupdates.sh"
+                exec kitty --class hypr-updates -e "$SCRIPT_DIR/installupdates.sh"
                 ;;
             Cleanup)
                 run_bg "Cleanup" "bash '$HYPRGRUV_DIR/lib/scripts/cleanup.sh'"

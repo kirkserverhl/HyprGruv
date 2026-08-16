@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Region OCR → clipboard (tesseract). Used by Shift+F7 on MX Mechanical
-# and Super+Shift+Print.
+# Region OCR → clipboard (tesseract).
+# Shift + any screenshot bind (Print / F7 / middle-click / G502 Print).
 set -euo pipefail
 
 if ! command -v grim >/dev/null || ! command -v slurp >/dev/null || ! command -v tesseract >/dev/null; then

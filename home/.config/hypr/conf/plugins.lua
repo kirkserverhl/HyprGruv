@@ -6,6 +6,7 @@
 -- in the same plugin session without a config reload = 6 buttons.
 -- Never reset the Lua flag and re-add without unloading the plugin first.
 
+local settings = require("conf.settings")
 local SCRIPTS = require("conf.scripts_path").get()
 
 local TOGGLE_SIZE = SCRIPTS .. "/hyprbars-toggle-size.sh"
@@ -50,15 +51,16 @@ local function apply_hyprbars()
 	package.loaded["colors.init"] = nil
 	local colors = require("colors.init").load()
 
+	local bar = settings.bar_sizes()
 	hl.config({
 		plugin = {
 			hyprbars = {
-				-- Match waybar shared/bar-chrome.jsonc height (32)
-				bar_height = 32,
+				-- Canonical height from settings/bar-sizes.sh (desktop 32 / laptop 24)
+				bar_height = bar.height,
 				bar_color = "rgba(00000000)",
 				bar_blur = false,
 				bar_title_enabled = true,
-				bar_text_size = 14,
+				bar_text_size = bar.hyprbars_text,
 				bar_text_font = "Agave Nerd Font Propo",
 				bar_text_align = "center",
 				bar_buttons_alignment = "left",
@@ -82,8 +84,14 @@ function reset_hyprbars_buttons()
 end
 
 -- Safe to call anytime: updates bar config; adds the 3 buttons only once per load.
+-- Hyprbars cannot recolor existing buttons — Super+W must `hyprctl reload` first
+-- so the plugin clears them, then this re-adds with the new palette.
 function reapply_hyprbars()
+	package.loaded["colors.init"] = nil
 	apply_hyprbars()
+	if type(apply_borders) == "function" then
+		apply_borders()
+	end
 end
 
 apply_hyprbars()

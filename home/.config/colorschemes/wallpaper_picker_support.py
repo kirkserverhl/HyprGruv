@@ -28,6 +28,7 @@ COLORSCHEMES = (HOME / ".config/colorschemes").resolve()
 STYLE_FILE = HOME / ".config/waypaper/style.css"
 MATUGEN_CONF = HOME / ".config/hypr/colors/custom/matugen.conf"
 ACTIVE_THEMES_FILE = COLORSCHEMES / "active-themes"
+FONTS_SH = HOME / ".config/settings/fonts.sh"
 
 GRID_COLUMNS = 3
 GRID_GAP = 10
@@ -66,6 +67,34 @@ class ThemeEntry:
     theme_id: str
     label: str
     preview_path: str | None
+
+
+def load_ui_fonts() -> dict[str, str]:
+    """FONT_UI + launcher/submenu sizes from ~/.config/settings/fonts.sh."""
+    fonts = {
+        "FONT_UI": "Agave Nerd Font Propo",
+        "FONT_SIZE_LAUNCHER": "16",
+        "FONT_SIZE_WAYPAPER_UI": "11",
+    }
+    if not FONTS_SH.is_file():
+        return fonts
+    try:
+        text = FONTS_SH.read_text(encoding="utf-8")
+    except OSError:
+        return fonts
+    for key in fonts:
+        match = re.search(
+            rf'^[ \t]*export[ \t]+{re.escape(key)}=(?:"([^"]+)"|(\S+))',
+            text,
+            re.MULTILINE,
+        )
+        if match:
+            fonts[key] = match.group(1) or match.group(2)
+    return fonts
+
+
+def css_quote_font(family: str) -> str:
+    return '"' + family.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
 def load_registry_labels() -> dict[str, str]:

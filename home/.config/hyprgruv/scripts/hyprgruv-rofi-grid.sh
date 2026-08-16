@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Shared square-grid rofi picker for HyprGruv Settings menus.
 
+# shellcheck source=/dev/null
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/hyprgruv-rofi-mnemonics.sh"
+
 hyprgruv_rofi_grid_dims() {
     local n=$1
     local cols=2
@@ -79,15 +82,17 @@ hyprgruv_rofi_resolve_icon() {
 }
 
 # hyprgruv_rofi_pick PROMPT "label|icon|id" ...
+# Prints the original label (no pango). Letter keys select that row.
 hyprgruv_rofi_pick() {
     local prompt="$1"
     shift
     local n=$#
     local cols lines width cell=132
-    local input="" chosen=""
+    local input="" chosen="" rc=0
     local icons_dir="${HYPRGRUV_ICONS_DIR:-$HOME/.config/hyprgruv-settings/icons}"
     local rofi_config="${HYPRGRUV_ROFI_CONFIG:-$HOME/.config/rofi/config-settings.rasi}"
     local icon_theme
+    local -a labels=() icons=() fallbacks=()
     icon_theme=$(hyprgruv_rofi_icon_theme)
 
     if ! command -v rofi >/dev/null 2>&1; then
@@ -98,23 +103,31 @@ hyprgruv_rofi_pick() {
     read -r cols lines < <(hyprgruv_rofi_grid_dims "$n")
     width=$(( cols * cell + 56 ))
 
+    local entry label icon fallback_id resolved_icon i
     for entry in "$@"; do
-        local label icon fallback_id resolved_icon
         IFS='|' read -r label icon fallback_id <<< "$entry"
-        resolved_icon=$(hyprgruv_rofi_resolve_icon "$icon" "$fallback_id" "$icons_dir" "$icon_theme")
-        input+="${label}\0icon\x1f${resolved_icon}\n"
+        labels+=("$label")
+        icons+=("$icon")
+        fallbacks+=("$fallback_id")
     done
 
-    if ! chosen=$(
+    hyprgruv_rofi_assign_mnemonics "${labels[@]}"
+    hyprgruv_rofi_bind_mnemonics
+
+    for i in "${!labels[@]}"; do
+        resolved_icon=$(hyprgruv_rofi_resolve_icon "${icons[$i]}" "${fallbacks[$i]}" "$icons_dir" "$icon_theme")
+        input+="${HYPRGRUV_ROFI_MARKUP[$i]}\0icon\x1f${resolved_icon}\n"
+    done
+
+    chosen=$(
         printf '%b' "$input" | rofi -dmenu -i -show-icons \
             -icon-theme "$icon_theme" \
             -config "$rofi_config" \
             -p "$prompt" \
             -theme-str "window { width: ${width}px; } listview { columns: ${cols}; lines: ${lines}; }" \
+            "${HYPRGRUV_ROFI_KB_ARGS[@]}" \
             2>/dev/null
-    ); then
-        return 1
-    fi
+    ) || rc=$?
 
-    printf '%s' "$chosen"
+    hyprgruv_rofi_choice_from_exit "$rc" "$chosen" "${labels[@]}"
 }

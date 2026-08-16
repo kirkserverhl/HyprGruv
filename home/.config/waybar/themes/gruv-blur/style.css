@@ -82,6 +82,7 @@ tooltip label {
 
 #group-workspaces #custom-special,
 #group-workspaces #custom-notification,
+#group-workspaces #custom-temp-alert,
 #group-workspaces label.module.workspace-add {
   opacity: 0.85;
 }

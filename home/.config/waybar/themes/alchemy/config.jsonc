@@ -2,6 +2,10 @@
   "include": [
     "~/.config/waybar/shared/workspaces.json",
     "~/.config/waybar/shared/clock.json",
+    "~/.config/waybar/shared/weather.json",
+    "~/.config/waybar/shared/updates.json",
+    "~/.config/waybar/shared/power_settings.json",
+    "~/.local/state/waybar/bar-chrome.jsonc"
   ],
 
   "layer": "top",
@@ -18,8 +22,15 @@
     "battery",
     "network",
     "power-profiles-daemon",
-    "group/clock",
+    "group/clock-power",
   ],
+
+  // Own group name so shared/base.css #group-clock rules do not strip the pill.
+  "group/clock-power": {
+    "orientation": "horizontal",
+    "spacing": 0,
+    "modules": ["custom/clock-date", "clock", "custom/power"]
+  },
   "height": 40,
 
   "custom/notification": {
@@ -36,16 +47,6 @@
     "format": "",
     "on-click": "~/.config/hyprgruv/scripts/rofi-full.sh",
     "tooltip-format": "All apps",
-  },
-
-  "custom/pacman": {
-    "format": "  {}",
-    "interval": "once",
-    "exec": "checkupdates | wc -l",
-    "on-click": "bash home/$USER/.config/hyprgruv/scripts/updates.sh",
-    "on-click-right": "$HOME/.config/hyprgruv/scripts/software.sh",
-    "signal": 8,
-    "tooltip-format": "{} updates available",
   },
 
   "custom/media": {
@@ -108,14 +109,6 @@
     "device": "intel_backlight",
     "format": "{icon}   {percent}%",
     "format-icons": ["󰃞", "󰃟", "󰃠"],
-  },
-
-  "custom/weather": {
-    "exec": "${HOME}/.config/waybar/scripts/get-weather.sh",
-    "return-type": "json",
-    "format": "{}",
-    "tooltip": true,
-    "interval": 3600,
   },
 
   "power-profiles-daemon": {

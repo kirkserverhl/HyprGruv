@@ -455,6 +455,12 @@ EOF
     ensure_laptop_fingerprint "$machine"
     ensure_git_sync_role "$machine" "$want_deploy"
 
+    local bar_size_apply="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/apply-bar-size-profile.sh"
+    if [[ -x "$bar_size_apply" ]]; then
+        BAR_SIZE_MACHINE="$machine" bash "$bar_size_apply" >/dev/null 2>&1 \
+            || log_warning "apply-bar-size-profile.sh failed"
+    fi
+
     log_success "Machine profile applied: $machine (GPU=$gpu, libva=${libva:-none})"
     log_status "State: $PROFILE_ENV"
     log_status "Hypridle: $HYPRIDLE_OUT"

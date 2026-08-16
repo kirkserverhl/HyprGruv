@@ -78,4 +78,44 @@ function M.is_laptop()
 	return M.machine() == "laptop"
 end
 
+--- Parse ~/.config/settings/bar-sizes.sh for this machine.
+--- Returns a table with height, margin_top, margin_x, font_size,
+--- font_emphasis, font_center, hyprbars_text, module_min_height.
+function M.bar_sizes()
+	local prefix = M.is_laptop() and "LAPTOP_" or "DESKTOP_"
+	local sizes = {
+		height = M.is_laptop() and 24 or 32,
+		margin_top = M.is_laptop() and 4 or 5,
+		margin_x = M.is_laptop() and 10 or 14,
+		font_size = M.is_laptop() and 12 or 16,
+		font_emphasis = M.is_laptop() and 14 or 18,
+		font_center = M.is_laptop() and 15 or 20,
+		hyprbars_text = M.is_laptop() and 11 or 14,
+		module_min_height = M.is_laptop() and 20 or 28,
+	}
+	local home = os.getenv("HOME") or ""
+	local file = io.open(home .. "/.config/settings/bar-sizes.sh", "r")
+	if not file then
+		return sizes
+	end
+	local key_map = {
+		BAR_HEIGHT = "height",
+		BAR_MARGIN_TOP = "margin_top",
+		BAR_MARGIN_X = "margin_x",
+		FONT_SIZE = "font_size",
+		FONT_SIZE_EMPHASIS = "font_emphasis",
+		FONT_SIZE_CENTER = "font_center",
+		HYPRBARS_TEXT = "hyprbars_text",
+		MODULE_MIN_HEIGHT = "module_min_height",
+	}
+	for line in file:lines() do
+		local key, val = line:match("^%s*" .. prefix .. "([A-Z_]+)%s*=%s*([%d%.]+)")
+		if key and val and key_map[key] then
+			sizes[key_map[key]] = tonumber(val) or sizes[key_map[key]]
+		end
+	end
+	file:close()
+	return sizes
+end
+
 return M

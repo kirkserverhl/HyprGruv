@@ -10,6 +10,16 @@ Single source of truth: **`~/.config/settings/fonts.sh`**
 | `FONT_UI`    | Agave Nerd Font Propo           | Waybar, Rofi menus, GTK, app chrome            |
 | `FONT_HEADER`| HeavyData Nerd Font             | SDDM login, Hyprlock big elements, Wlogout    |
 
+## Waybar / Hyprbars size (laptop vs desktop)
+
+Bar **height** and **font-size** are not in `fonts.sh`. They live in:
+
+```
+~/.config/settings/bar-sizes.sh
+```
+
+`LAPTOP_*` values are placeholders to tune on HyprLab. Desktop numbers match the current 32" LG bar. Apply with `~/.config/waybar/scripts/launch.sh` (or `apply-bar-size-profile.sh` + `hyprctl reload` for Hyprbars).
+
 ## How to Change Fonts
 
 1. Edit only this file:

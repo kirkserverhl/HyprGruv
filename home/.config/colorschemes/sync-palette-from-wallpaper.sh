@@ -38,17 +38,16 @@ echo "wallpaper" >"$CACHE_DIR/color-mode"
 
 python3 "$BUILDER" export-theme "$WALLPAPER" "$THEME" "$PALETTE_JSON"
 
-python3 "$GENERATOR" "$THEME"
+python3 "$GENERATOR" --prepare "$THEME"
 
-# Matugen import drives kitty/swaync/etc. from the same wal base16 (no Material You expansion).
+# Matugen import drives swaync/waybar/hypr/etc. from the same base16 (no Material You expansion).
 IMPORT_JSON="$CACHE_DIR/wal-import.json"
 python3 "$BUILDER" build "$WALLPAPER" "$IMPORT_JSON" spectrum-scale
 if command -v matugen >/dev/null 2>&1; then
-    matugen image "$WALLPAPER" \
-        --import-json "$IMPORT_JSON" \
-        --source-color-index 0 \
-        --continue-on-error 2>/dev/null || true
+    matugen json "$IMPORT_JSON" --continue-on-error 2>/dev/null || true
 fi
+
+python3 "$GENERATOR" --tailored "$THEME"
 
 jq -n \
     --arg wp "$WALLPAPER" \

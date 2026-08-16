@@ -167,10 +167,10 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 
 | Step | Script | What it does |
 |------|--------|--------------|
-| Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, initial theme |
+| Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, optional waypaper preview cache, initial theme |
 | System | `03-setup.sh` | Hyprpm plugins; MIME handlers (handlr, Zathura, nvim/LibreOffice defaults); enables SDDM + Sugar Candy theme; VM GRUB tweaks |
 | Interactive | `04-config.sh` | Optional: machine profile, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
-| Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/wezterm/foot/…), browser, and editor; offers to install if missing |
+| Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/wezterm/foot/…), browser, and editor; offers to install if missing. Re-run anytime from **HyprGruv Settings → Default Apps** |
 
 Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.
 
@@ -245,7 +245,7 @@ bash ~/.hyprgruv/sync-packages.sh promote <package> --to aur
 
 Stowed configs:
 
-- `~/.config/mimeapps.list` — default apps (nvim for text/markdown/SQL, Zathura for PDF, LibreOffice for Office, mpv for audio/video, Ark for archives/ISOs, KFontView for fonts, Brave for HTML/SVG/URLs)
+- `~/.config/mimeapps.list` — default apps (nvim for text/markdown/SQL, Zathura for PDF, LibreOffice for Office, mpv for audio/video, Ark for archives/ISOs, KFontView for fonts; HTML/HTTP handlers come from **HyprGruv Settings → Default Apps**)
 - `~/.local/bin/xdg-open` — uses `handlr` when installed, otherwise `/usr/bin/xdg-open`
 - `~/.local/share/mime/packages/hyprgruv-sqlite.xml` — maps `*.db` / `*.sqlite` to `application/vnd.sqlite3`
 

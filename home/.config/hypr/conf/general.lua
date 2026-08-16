@@ -63,6 +63,12 @@ hl.config({
 		mouse_move_enables_dpms = true,
 	},
 
+	-- Super+scroll magnifier (see keybinds #zoom). Rigid = cursor stays at
+	-- the center of the zoomed view as you move the mouse.
+	cursor = {
+		zoom_rigid = true,
+	},
+
 	debug = {
 		vfr = false, -- sync to monitor refresh; reduces tearing
 	},
@@ -80,9 +86,9 @@ hl.config({
 })
 
 -- Dynamic border colors (matugen aware).
--- Borders must be re-applied on config.reloaded because the initial hl.config
--- above no longer bakes in colors at module parse time.
-local function apply_borders()
+-- Global so Super+W can `hyprctl eval 'apply_borders()'` after writing colors.
+function apply_borders()
+	package.loaded["colors.init"] = nil
 	local colors = require("colors.init").load()
 	-- Active = Super+W source/primary. Inactive = theme secondary (base0E), not grey.
 	hl.config({
@@ -101,7 +107,6 @@ local function apply_borders()
 		},
 	})
 end
-
 
 hl.on("hyprland.start", apply_borders)
 hl.on("config.reloaded", apply_borders)

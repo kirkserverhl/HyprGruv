@@ -1,0 +1,4 @@
+[Desktop Entry]
+# Override /etc/xdg/autostart/polkit-kde-authentication-agent-1.desktop.
+# plasma-desktop pulls in polkit-kde-agent; Hyprland uses hyprpolkitagent only.
+Hidden=true

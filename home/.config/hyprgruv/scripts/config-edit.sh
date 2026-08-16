@@ -146,7 +146,8 @@ build_pinned() {
     "$CFG/rofi/config-configs.rasi" \
     "$CFG/rofi/config-themes.rasi" \
     "$CFG/rofi/config-settings.rasi" \
-    "$CFG/rofi/config-cliphist.rasi"
+    "$CFG/rofi/config-cliphist.rasi" \
+    "$CFG/rofi/config-cliphist-images.rasi"
 
   pin "Yazi" "$CFG/yazi/yazi.toml" \
     "$CFG/yazi/keymap.toml" \

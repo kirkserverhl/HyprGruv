@@ -45,6 +45,12 @@ input_path = "~/.config/matugen/templates/hyprland-colors.conf"
 output_path = "~/.config/hypr/colors/custom/matugen.conf"
 post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-hyprland.sh"
 
+# gum has no theme file — GUM_* env cache so installupdates / upkeep match the system
+[templates.gum]
+input_path = "~/.config/matugen/templates/gum.env"
+output_path = "~/.cache/matugen/gum.env"
+post_hook = "~/.config/hyprgruv/scripts/matugen-posthook-gum.sh"
+
 # Dedicated colors for hyprlock (clean separation from main Hyprland colors)
 
 [templates.starship_rainbow]

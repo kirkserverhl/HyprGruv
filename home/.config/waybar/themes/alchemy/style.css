@@ -94,11 +94,57 @@ window#waybar {
 #tray,
 #custom-launcher,
 #custom-notification,
-#power-profiles-daemon {
+#custom-power,
+#power-profiles-daemon,
+#clock-power,
+#group-clock-power {
   color: @accent;
   background-color: @surface_container;
   padding: 0 15px 0 15px;
   margin: 0 0 0 12px;
+  border-radius: 50px;
+  font-weight: bold;
+}
+
+/*
+ * Waybar IDs group/clock-power as #clock-power (not #group-clock-power).
+ * Clock and power keep the same fill/color as volume; inner corners are
+ * squared so the two labels read as one capsule.
+ */
+#clock-power,
+#group-clock-power {
+  padding: 0;
+}
+
+#clock-power #clock,
+#clock-power #custom-clock-date,
+#clock-power #custom-power,
+#group-clock-power #clock,
+#group-clock-power #custom-clock-date,
+#group-clock-power #custom-power {
+  color: @accent;
+  background-color: @surface_container;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 8px;
+}
+
+#clock-power #clock,
+#clock-power #custom-clock-date,
+#group-clock-power #clock,
+#group-clock-power #custom-clock-date {
+  padding-left: 15px;
+  padding-right: 6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#clock-power #custom-power,
+#group-clock-power #custom-power {
+  padding-left: 8px;
+  padding-right: 15px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 #window.hidden {

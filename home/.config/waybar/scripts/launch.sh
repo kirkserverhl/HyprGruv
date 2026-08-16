@@ -12,7 +12,7 @@ fi
 # Waybar launcher — respects the last layout chosen via waybar-layout-switcher (CTRL+W).
 # Falls back to "subtle" if no saved layout or the saved one is invalid.
 # Available themes: alchemy, subtle, ultra_minimal, velvetline, freshstart, tester,
-#   gruv_fix, gruv-modern_fix, gruv-blur_fix, waybar-v1_fix
+#   tester-inverse, gruv_fix, gruv-modern_fix, gruv-blur_fix, waybar-v1_fix
 
 STATE_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/waybar/last_layout"
 LAYOUTS_DIR="$HOME/.config/waybar/themes"
@@ -38,6 +38,16 @@ done
 if [[ -z "$cfg" ]]; then
     echo "No config found for theme '$chosen', falling back to subtle" >&2
     cfg="$LAYOUTS_DIR/subtle/config.jsonc"
+fi
+
+# Laptop/desktop bar geometry + font-size (desktop numbers stay as they are).
+if [[ -x "$WAYBAR_DIR/scripts/apply-bar-size-profile.sh" ]]; then
+    "$WAYBAR_DIR/scripts/apply-bar-size-profile.sh" "$cfg" || true
+fi
+
+# Keep freshstart rainbow slots in lockstep with the active starship palette.
+if [[ -x "$WAYBAR_DIR/scripts/sync-starship-colors.sh" ]]; then
+    "$WAYBAR_DIR/scripts/sync-starship-colors.sh" || true
 fi
 
 css="$waybar_config_dir/style.css"

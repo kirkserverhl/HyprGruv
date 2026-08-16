@@ -6,16 +6,20 @@
 #   • If the user selected a theme / matugen is live → follow that palette
 #
 # Prefer order (first hit wins):
-#   1. ~/.cache/matugen/colors.sh                 (shell cache from last apply)
-#   2. ~/.config/hypr/colors/custom/matugen.conf  (live matugen / preset roles)
-#   3. ~/.cache/matugen/current.json
+#   1. ~/.config/hypr/colors/custom/matugen.conf  (live matugen / Super+W preset)
+#   2. ~/.cache/matugen/current.json
+#   3. ~/.cache/matugen/colors.sh                 (derived cache — never authoritative)
 #   4. lib/defaults/gruvbox-colors.sh             (default)
 #
 # Usage:
 #   source ~/.config/hyprgruv/scripts/colors.sh
-#   source ~/.config/hyprgruv/scripts/colors.sh --gum   # also export GUM_* theme
+#   source ~/.config/hyprgruv/scripts/colors.sh --gum       # also export GUM_* theme
+#   source ~/.config/hyprgruv/scripts/colors.sh --gum --refresh
 #
 # Safe to source multiple times. Does not use set -e.
+#
+# --refresh / HYPRGRUV_COLORS_SKIP_CACHE=1 skips the derived cache (used by
+# matugen-posthook-gum.sh after theme apply).
 
 MATUGEN_HYPR_CONF="${HOME}/.config/hypr/colors/custom/matugen.conf"
 MATUGEN_HYPR_CONF_REPO="${HYPRGRUV_DIR:-${HYPR_DIR:-$HOME/.hyprgruv}}/home/.config/hypr/colors/custom/matugen.conf"
@@ -52,6 +56,19 @@ COLOR_BG=""
 COLOR_FG=""
 COLOR_TEXT=""
 HYPRGRUV_COLOR_SOURCE=""
+
+_hyprgruv_colors_apply_gum=0
+_hyprgruv_colors_refresh=0
+for _hyprgruv_colors_arg in "$@"; do
+    case "$_hyprgruv_colors_arg" in
+        --gum | gum) _hyprgruv_colors_apply_gum=1 ;;
+        --refresh | --force) _hyprgruv_colors_refresh=1 ;;
+    esac
+done
+unset _hyprgruv_colors_arg
+if [[ "${HYPRGRUV_COLORS_SKIP_CACHE:-}" == "1" ]]; then
+    _hyprgruv_colors_refresh=1
+fi
 
 # -----------------------------------------------------------------------------
 _hex_from_rgba_token() {
@@ -159,14 +176,28 @@ _load_from_hypr_conf() {
 _load_from_json() {
     [[ -f "$MATUGEN_JSON" ]] || return 1
     command -v jq >/dev/null 2>&1 || return 1
-    if ! jq -e '.colors.default' "$MATUGEN_JSON" >/dev/null 2>&1; then
+    if ! jq -e '.colors | type == "object"' "$MATUGEN_JSON" >/dev/null 2>&1; then
         return 1
     fi
 
     local colors
+    # Accept both shapes:
+    #   .colors.default.primary.hex          (older cache)
+    #   .colors.primary.default.color        (current matugen --json)
+    #   .colors.primary.hex / "#rrggbb"
     colors=$(jq -r '
-        .colors.default | to_entries[] |
-        "\(.key) \(.value.hex // .value)"
+        def hexify:
+            if type == "string" then
+                if startswith("#") and (length == 7) then .
+                elif test("^[0-9a-fA-F]{6}$") then "#\(.)"
+                else empty end
+            elif type == "object" then
+                (.hex // .color // .default.hex // .default.color
+                 // .dark.hex // .dark.color // empty) | hexify
+            else empty end;
+        (.colors.default // .colors) | to_entries[] |
+        select(.key | test("^(dark|light|default)$") | not) |
+        "\(.key) \(.value | hexify)"
     ' "$MATUGEN_JSON" 2>/dev/null) || return 1
 
     local name hex count=0
@@ -290,11 +321,13 @@ load_matugen_colors() {
     MATUGEN_COLORS=()
     HYPRGRUV_COLOR_SOURCE=""
 
-    if _load_from_cache_shell; then
-        :
-    elif _load_from_hypr_conf; then
+    # Live hypr roles are the source of truth after Super+W / matugen.
+    # The shell cache is a derived artifact and must not pin an old palette.
+    if _load_from_hypr_conf; then
         :
     elif _load_from_json; then
+        :
+    elif [[ "${_hyprgruv_colors_refresh:-0}" -eq 0 ]] && _load_from_cache_shell; then
         :
     else
         _load_gruvbox_defaults
@@ -302,9 +335,9 @@ load_matugen_colors() {
 
     _promote_color_vars
 
-    # Keep shell cache in sync when we resolved from hypr/json (not when we
-    # just re-read the cache itself — still refresh to fill new keys).
-    write_matugen_shell_color_cache 2>/dev/null || true
+    if [[ "${HYPRGRUV_COLOR_SOURCE}" != "cache" ]]; then
+        write_matugen_shell_color_cache 2>/dev/null || true
+    fi
 }
 
 # Gum theming — install, upkeep, and interactive scripts
@@ -315,6 +348,7 @@ gum_apply_matugen_theme() {
     fi
 
     export GUM_CONFIRM_PROMPT="? "
+    export GUM_CONFIRM_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
     export GUM_CONFIRM_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
     export GUM_CONFIRM_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
     export GUM_CONFIRM_UNSELECTED_BACKGROUND="${COLOR_SURFACE_CONTAINER}"
@@ -323,12 +357,14 @@ gum_apply_matugen_theme() {
     export GUM_INPUT_CURSOR_FOREGROUND="${COLOR_PRIMARY}"
     export GUM_INPUT_PROMPT_FOREGROUND="${COLOR_PRIMARY}"
     export GUM_INPUT_PLACEHOLDER_FOREGROUND="${COLOR_ON_SURFACE_VARIANT}"
+    export GUM_INPUT_HEADER_FOREGROUND="${COLOR_PRIMARY}"
 
     export GUM_CHOOSE_CURSOR_FOREGROUND="${COLOR_ON_PRIMARY}"
     export GUM_CHOOSE_CURSOR_BACKGROUND="${COLOR_PRIMARY}"
     export GUM_CHOOSE_SELECTED_FOREGROUND="${COLOR_ON_PRIMARY}"
     export GUM_CHOOSE_SELECTED_BACKGROUND="${COLOR_PRIMARY}"
     export GUM_CHOOSE_ITEM_FOREGROUND="${COLOR_ON_SURFACE}"
+    export GUM_CHOOSE_HEADER_FOREGROUND="${COLOR_PRIMARY}"
     export GUM_CHOOSE_CURSOR_PREFIX="› "
     export GUM_CHOOSE_SELECTED_PREFIX="✓ "
     export GUM_CHOOSE_UNSELECTED_PREFIX="  "
@@ -351,11 +387,24 @@ gum_use_matugen() {
     gum_apply_matugen_theme
 }
 
+# Persist GUM_* so scripts / subprocesses can `source ~/.cache/matugen/gum.env`
+write_gum_env_cache() {
+    gum_apply_matugen_theme
+    mkdir -p "$MATUGEN_CACHE_DIR" 2>/dev/null || return 0
+    {
+        echo "#!/usr/bin/env bash"
+        echo "# Generated by hyprgruv colors.sh — source before gum commands"
+        echo "# source: ${HYPRGRUV_COLOR_SOURCE:-unknown}"
+        env | grep -E '^GUM_[A-Z0-9_]+=' | sort | sed 's/^/export /'
+    } >"${MATUGEN_CACHE_DIR}/gum.env"
+}
+
 # Alias for clarity in new call sites
 hyprgruv_apply_cli_theme() { gum_use_matugen; }
 
 load_matugen_colors
 
-if [[ "${1:-}" == "--gum" || "${1:-}" == "gum" ]]; then
+if [[ "${_hyprgruv_colors_apply_gum:-0}" -eq 1 ]]; then
     gum_apply_matugen_theme
+    write_gum_env_cache 2>/dev/null || true
 fi

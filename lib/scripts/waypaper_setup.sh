@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# waypaper_setup.sh — install waypaper stack, optional wallpaper repo, initial matugen theme
+# waypaper_setup.sh — install waypaper stack, optional wallpaper repo,
+# optional waypaper preview cache, initial matugen theme
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -196,6 +197,21 @@ apply_initial_wallpaper() {
   fi
 }
 
+offer_preview_cache() {
+  local cache_script="$HYPR_DIR/lib/scripts/cache-wallpapers.sh"
+  if [[ ! -f "$cache_script" ]]; then
+    log_warning "cache-wallpapers.sh not found — skip preview cache"
+    return 0
+  fi
+  echo ""
+  log_status "Optional: pre-cache waypaper previews (faster picker; uses some disk)"
+  # --nested: no second banner. Confirm defaults to No (skip on low disk/CPU).
+  # CACHE_WALLPAPERS=1/--yes forces the warm; CACHE_WALLPAPERS=0 skips.
+  if ! bash "$cache_script" --nested; then
+    log_warning "Preview cache step finished with warnings (waypaper setup continues)"
+  fi
+}
+
 # --- Main ---
 install_wallpaper_packages || exit 1
 ensure_wallpaper_dir
@@ -207,14 +223,17 @@ echo ""
 read -rp "Press Enter to download Wallpapers, or q to quit wallpaper setup: " choice
 
 if [[ "${choice,,}" == "q" ]]; then
-  log_status "Wallpaper setup skipped (packages remain installed)."
-  declare -F mark_completed >/dev/null 2>&1 && mark_completed "Wallpaper setup"
+  log_status "Wallpaper repo download skipped (packages remain installed)."
   declare -F save_choice >/dev/null 2>&1 && save_choice "wallpaper_repo_downloaded" "skipped"
+  offer_preview_cache
+  declare -F mark_completed >/dev/null 2>&1 && mark_completed "Wallpaper setup"
+  log_success "Wallpaper setup complete"
   exit 0
 fi
 
 download_wallpaper_repo || true
 apply_initial_wallpaper
+offer_preview_cache
 
 declare -F mark_completed >/dev/null 2>&1 && mark_completed "Wallpaper setup"
 declare -F save_choice >/dev/null 2>&1 && save_choice "wallpaper_repo_downloaded" "yes"

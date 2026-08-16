@@ -39,6 +39,13 @@ if [[ "${1:-}" == "--classic" || "${ROFI_CALC_CLASSIC:-}" == "1" ]]; then
     launch_classic
 fi
 
+# Button taps re-exec this script. A fresh launch (no --resume) starts blank.
+if [[ "${1:-}" == "--resume" ]]; then
+    shift
+else
+    write_expr ""
+fi
+
 if ! command -v qalc >/dev/null 2>&1; then
     notify-send "Calculator" "qalc is required for the numpad calculator." -u critical 2>/dev/null || true
     exit 1
@@ -110,7 +117,7 @@ choice=$(
 
 if ! is_keypad_choice "$choice"; then
     write_expr "$choice"
-    exec "$0"
+    exec "$0" --resume
 fi
 
 action=$(map_choice "$choice")
@@ -140,4 +147,4 @@ case "$action" in
         ;;
 esac
 
-exec "$0"
+exec "$0" --resume

@@ -26,11 +26,15 @@ end
 -- plugin (default: ASK)
 -- Load a .so into the compositor. Match the loader binary and/or the .so path.
 -- Do not allow hyprctl globally: `hyprctl plugin load /tmp/evil.so` would work.
--- Super+R / bar-mode still work because the hyprplug path is allowlisted below.
+-- Super+R / bar-mode still work because hyprbars.so is allowlisted below.
 -- =============================================================================
 
--- Hyprplug (hyprbars). Covers hyprpm reload and `hyprctl plugin load` of this path.
-permit(hyprpm_cache .. "/hyprplug/.*\\.so", "plugin", "allow")
+-- hyprbars. Match the .so path (not hyprctl): the plugin dialog has no
+-- "always allow" — Allow is cached by hyprctl PID, which exits immediately.
+-- Theme apply (`hyprctl reload`) and bar-mode (`hyprctl plugin load`) then
+-- prompt again unless this rule matches. Live cache is still
+-- hyprland-plugins/; hyprplug/ is the intended hyprpm pin.
+permit(hyprpm_cache .. "/.*/hyprbars\\.so", "plugin", "allow")
 
 -- hymission is a separate repo, already enabled in this session.
 -- Leave this allow so login / hyprpm reload does not prompt for it.
