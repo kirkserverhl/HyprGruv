@@ -1,31 +1,31 @@
 # Managed by reload-yazi-theme.sh — do not edit by hand.
-# Super+W / apply-theme → flavor + folder/status overrides for theme: nord-darker
+# Super+W / apply-theme → flavor + folder/status overrides for theme: gruvbox-dark
 
 [flavor]
-dark  = "nord"
-light = "nord"
+dark  = "gruvbox-dark"
+light = "gruvbox-dark"
 
 # --- folder name + icon color (visible theme switch) ---
 # Do not replace [filetype] wholesale — that would wipe flavor mime colors.
 [mgr]
-cwd = { fg = "#88C0D0" }
-border_style = { fg = "#4C566A" }
+cwd = { fg = "#83a598" }
+border_style = { fg = "#665c54" }
 
 [icon]
 # Tint every directory icon (and name via icon fg) to the theme accent
 prepend_conds = [
-  { if = "dir", text = "󰉋", fg = "#81A1C1" },
+  { if = "dir", text = "󰉋", fg = "#83a598" },
 ]
 
 # --- bottom status line (mode segment) ---
 [mode]
-normal_main = { fg = "#2E3440", bg = "#8FBCBB", bold = true }
-normal_alt  = { fg = "#8FBCBB", bg = "#3B4252" }
-select_main = { fg = "#2E3440", bg = "#88C0D0", bold = true }
-select_alt  = { fg = "#8FBCBB", bg = "#3B4252" }
-unset_main  = { fg = "#2E3440", bg = "#81A1C1", bold = true }
-unset_alt   = { fg = "#8FBCBB", bg = "#3B4252" }
+normal_main = { fg = "#282828", bg = "#a89984", bold = true }
+normal_alt  = { fg = "#a89984", bg = "#504945" }
+select_main = { fg = "#282828", bg = "#fe8019", bold = true }
+select_alt  = { fg = "#a89984", bg = "#504945" }
+unset_main  = { fg = "#282828", bg = "#83a598", bold = true }
+unset_alt   = { fg = "#a89984", bg = "#504945" }
 
 [tabs]
-active   = { fg = "#2E3440", bg = "#8FBCBB", bold = true }
-inactive = { fg = "#8FBCBB", bg = "#3B4252" }
+active   = { fg = "#282828", bg = "#a89984", bold = true }
+inactive = { fg = "#a89984", bg = "#504945" }
