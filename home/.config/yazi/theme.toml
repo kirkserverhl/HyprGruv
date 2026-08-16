@@ -1,31 +1,31 @@
 # Managed by reload-yazi-theme.sh — do not edit by hand.
-# Super+W / apply-theme → flavor + folder/status overrides for theme: catppuccin
+# Super+W / apply-theme → flavor + folder/status overrides for theme: everforest-dark
 
 [flavor]
-dark  = "catppuccin-mocha"
-light = "catppuccin-mocha"
+dark  = "everforest-medium"
+light = "everforest-medium"
 
 # --- folder name + icon color (visible theme switch) ---
 # Do not replace [filetype] wholesale — that would wipe flavor mime colors.
 [mgr]
-cwd = { fg = "#94e2d5" }
-border_style = { fg = "#7f849c" }
+cwd = { fg = "#7fbbb3" }
+border_style = { fg = "#4f585e" }
 
 [icon]
 # Tint every directory icon (and name via icon fg) to the theme accent
 prepend_conds = [
-  { if = "dir", text = "󰉋", fg = "#89b4fa" },
+  { if = "dir", text = "󰉋", fg = "#7fbbb3" },
 ]
 
 # --- bottom status line (mode segment) ---
 [mode]
-normal_main = { fg = "#1e1e2e", bg = "#89b4fa", bold = true }
-normal_alt  = { fg = "#89b4fa", bg = "#313244" }
-select_main = { fg = "#1e1e2e", bg = "#94e2d5", bold = true }
-select_alt  = { fg = "#89b4fa", bg = "#313244" }
-unset_main  = { fg = "#1e1e2e", bg = "#89b4fa", bold = true }
-unset_alt   = { fg = "#89b4fa", bg = "#313244" }
+normal_main = { fg = "#3d484d", bg = "#a7c080", bold = true }
+normal_alt  = { fg = "#7fbbb3", bg = "#4f585e" }
+select_main = { fg = "#3d484d", bg = "#e67e80", bold = true }
+select_alt  = { fg = "#7fbbb3", bg = "#4f585e" }
+unset_main  = { fg = "#3d484d", bg = "#7fbbb3", bold = true }
+unset_alt   = { fg = "#7fbbb3", bg = "#4f585e" }
 
 [tabs]
-active   = { fg = "#1e1e2e", bg = "#89b4fa", bold = true }
-inactive = { fg = "#89b4fa", bg = "#313244" }
+active   = { fg = "#3d484d", bg = "#a7c080", bold = true }
+inactive = { fg = "#7fbbb3", bg = "#4f585e" }

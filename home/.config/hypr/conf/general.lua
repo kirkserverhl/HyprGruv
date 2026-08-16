@@ -50,6 +50,8 @@ hl.config({
 		-- Super+arrow / Super+hjkl: if no window in that direction, jump to
 		-- the next monitor. Needs the outputs flush (no pixel gap).
 		window_direction_monitor_fallback = true,
+		-- Default 300ms swallows extra wheel ticks; Super+scroll zoom needs them.
+		scroll_event_delay = 50,
 	},
 
 	misc = {

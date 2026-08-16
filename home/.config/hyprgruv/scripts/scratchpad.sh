@@ -8,6 +8,7 @@
 #   scratchpad.sh hide      # close if visible
 #
 # Gestures (laptop): 3-finger swipe up → show, down → hide (gestures.lua)
+# Super+Tab hide-if-focused is a native Lua bind in conf/keybinds.lua.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

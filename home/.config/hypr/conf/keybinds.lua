@@ -149,9 +149,18 @@ hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen()) -- #window Fullscreen (wa
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(SCRIPTS .. "/blitz-mode.sh")) -- #settings #work Toggle Blitz (work focus)
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
--- Super+Tab / Super+Shift+Tab: cycle workspaces on the *current monitor only* (m±1).
--- Does not jump across monitors (unlike the global occupied-cycle script).
-hl.bind(mainMod .. " + Tab", hl.dsp.focus({ workspace = "m+1" })) -- #window Next workspace on this monitor
+-- Super+Tab: hide special:scratchpad if it is the focused overlay, otherwise
+-- next workspace on this monitor (m+1). Instant Lua — no script, no undo
+-- delay (Super+S brings the scratchpad back). Super+Shift+Tab is always prev.
+local function super_tab()
+	local special = hl.get_active_special_workspace()
+	if special ~= nil and special.name == "special:scratchpad" then
+		hl.dispatch(hl.dsp.workspace.toggle_special("scratchpad"))
+		return
+	end
+	hl.dispatch(hl.dsp.focus({ workspace = "m+1" }))
+end
+hl.bind(mainMod .. " + Tab", super_tab) -- #window Next workspace (hide scratchpad if focused)
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" })) -- #window Prev workspace on this monitor
 -- Also: Super+Ctrl+Space = first empty; Super+Shift+E = move window to empty
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" })) -- #window First empty workspace
@@ -282,21 +291,42 @@ hl.bind(altMod .. " + SUPER + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh 
 -- Super+scroll: zoom with the cursor locked to the center of the view
 -- (cursor:zoom_rigid). Alt+= / - / Backspace stay as the keyboard trio.
 -- Bind equal AND plus because Alt+Shift+= (the + glyph) is a different key.
-local ZOOM_IN =
-	"hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 1.1}')"
-local ZOOM_OUT =
-	"hyprctl -q keyword cursor:zoom_factor $(hyprctl getoption cursor:zoom_factor | awk '/^float.*/ {print $2 * 0.9}')"
-local ZOOM_RST = "hyprctl -q keyword cursor:zoom_factor 1"
-hl.bind(mainMod .. " + mouse_up", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Super+scroll up magnify (cursor-centered)
-hl.bind(mainMod .. " + mouse_down", hl.dsp.exec_cmd(ZOOM_OUT)) -- #zoom Super+scroll down demagnify
-hl.bind(altMod .. " + equal", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Magnify
-hl.bind(altMod .. " + plus", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Magnify (shifted +)
-hl.bind(altMod .. " + SHIFT + equal", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Magnify (Shift+=)
-hl.bind(altMod .. " + minus", hl.dsp.exec_cmd(ZOOM_OUT)) -- #zoom Demagnify
-hl.bind(altMod .. " + backspace", hl.dsp.exec_cmd(ZOOM_RST)) -- #zoom Reset magnifier
--- Ctrl + scroll wheel: same magnifier (steals Ctrl+scroll from apps — browsers/terminals)
-hl.bind("CTRL + mouse_up", hl.dsp.exec_cmd(ZOOM_IN)) -- #zoom Ctrl+scroll up magnify
-hl.bind("CTRL + mouse_down", hl.dsp.exec_cmd(ZOOM_OUT)) -- #zoom Ctrl+scroll down demagnify
+--
+-- Lua parser: hyprctl keyword is a no-op ("Use eval"). Set via hl.config.
+local ZOOM_MIN, ZOOM_MAX, ZOOM_STEP = 1.0, 8.0, 1.2
+
+local function current_zoom()
+	local z = hl.get_config("cursor.zoom_factor")
+	if type(z) ~= "number" then
+		z = 1.0
+	end
+	return z
+end
+
+local function set_zoom(factor)
+	local z = math.max(ZOOM_MIN, math.min(factor, ZOOM_MAX))
+	hl.config({ cursor = { zoom_factor = z, zoom_rigid = true } })
+end
+
+local function zoom_in()
+	set_zoom(current_zoom() * ZOOM_STEP)
+end
+
+local function zoom_out()
+	set_zoom(current_zoom() / ZOOM_STEP)
+end
+
+local function zoom_rst()
+	set_zoom(1.0)
+end
+
+hl.bind(mainMod .. " + mouse_up", zoom_in) -- #zoom Super+scroll up magnify (cursor-centered)
+hl.bind(mainMod .. " + mouse_down", zoom_out) -- #zoom Super+scroll down demagnify
+hl.bind(altMod .. " + equal", zoom_in) -- #zoom Magnify
+hl.bind(altMod .. " + plus", zoom_in) -- #zoom Magnify (shifted +)
+hl.bind(altMod .. " + SHIFT + equal", zoom_in) -- #zoom Magnify (Shift+=)
+hl.bind(altMod .. " + minus", zoom_out) -- #zoom Demagnify
+hl.bind(altMod .. " + backspace", zoom_rst) -- #zoom Reset magnifier
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- DESKTOP META (was under bare CTRL — that steals native app shortcuts)

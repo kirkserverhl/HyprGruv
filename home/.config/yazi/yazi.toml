@@ -33,7 +33,8 @@ max_height = 1200
 [plugin]
 # Plugin settings
 prepend_previewers = [
-  # Add custom previewers here if needed
+  # Paint #hex / rgb() literals with their actual color in the preview pane
+  { url = "*.{yml,yaml}", run = "hex-swatch" },
 ]
 
 append_previewers = [
