@@ -89,6 +89,18 @@ Losing the LUKS passphrase = disk contents are unrecoverable. Store it offline (
 
 ---
 
+## Snapshots on an encrypted root
+
+Hyprgruv does not turn LUKS on or off. After you have booted the unlocked system, **Settings → System → Snapshots** (or `lib/scripts/snapshots.sh`) can set up Timeshift + grub-btrfs.
+
+- Timeshift Btrfs snapshots live **inside** the unlocked volume. They are encrypted at rest when the machine is off.
+- GRUB snapshot entries inherit the same `rd.luks.uuid=` / `cryptdevice=` line as a normal boot. Unlock, then pick the snapshot.
+- An extra disk used as an off-disk replica is a **copy of unlocked data**. If that disk is plaintext, it is not protected by root LUKS. The wizard offers LUKS+Btrfs on the backup disk, or you can skip the replica.
+
+See the Snapshots subsection in the main [README](../../README.md).
+
+---
+
 ## After reinstall checklist (Hyprgruv laptop)
 
 - [ ] LUKS unlock works on cold boot  
@@ -96,6 +108,7 @@ Losing the LUKS passphrase = disk contents are unrecoverable. Store it offline (
 - [ ] `./install.sh` completed; rofi / waypaper / wallpaper library path OK  
 - [ ] SSH key / GitHub access if you need private repos  
 - [ ] Machine profile at install (Laptop vs Desktop) — touchpad, idle, lid, power  
+- [ ] Snapshots wizard if you want Timeshift + GRUB entries / off-disk replica (LUKS-aware)  
 - [ ] Re-run anytime: `bash ~/.hyprgruv/lib/scripts/apply-machine-profile.sh --prompt`  
 
 

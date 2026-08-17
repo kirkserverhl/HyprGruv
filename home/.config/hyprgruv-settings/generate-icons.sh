@@ -28,6 +28,7 @@ declare -A ICONS=(
     [blitz]="#f38ba8|!"
     [hyprsunset]="#eba0ac|☾"
     [defaults]="#fabd2f|A"
+    [snapshots]="#d3869b|S"
 )
 
 featured_svg=""

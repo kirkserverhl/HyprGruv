@@ -169,10 +169,32 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 |------|--------|--------------|
 | Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, optional waypaper preview cache, initial theme |
 | System | `03-setup.sh` | Hyprpm plugins; MIME handlers (handlr, Zathura, nvim/LibreOffice defaults); enables SDDM + Sugar Candy theme; VM GRUB tweaks |
-| Interactive | `04-config.sh` | Optional: machine profile, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, cleanup |
+| Interactive | `04-config.sh` | Optional: machine profile, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, snapshots, cleanup |
 | Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/wezterm/foot/…), browser, and editor; offers to install if missing. Re-run anytime from **HyprGruv Settings → Default Apps** |
 
 Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.
+
+### Snapshots (Timeshift + optional off-disk replica)
+
+The setup wizard can walk through snapshots the same way it does SSH / shell / zram (`lib/scripts/snapshots.sh`). Re-run later from **HyprGruv Settings → System → Snapshots**.
+
+| Layer | What | Notes |
+|-------|------|--------|
+| 1 — local | Timeshift on the root Btrfs volume + `timeshift-autosnap` + `grub-btrfs` | Instant rollback. GRUB submenu via `grub-btrfsd --timeshift-auto` (not `/.snapshots` — that path is Snapper). |
+| 2 — extra disk | `btrbk` incremental `send`/`receive` to a separate SSD (e.g. Kingston at `/mnt/backup-ssd`) | Timeshift **cannot** target another disk in Btrfs mode. The extra disk is a replica, not the Timeshift store. |
+| 3 — NAS | Weekly rsync of the replica when `/mnt/nas` is mounted | Optional. Does not replace a file-level home backup. |
+
+Root **LUKS** is detected, not enabled. Local snapshots stay inside the unlocked volume. If root is encrypted, the wizard warns before writing a plaintext replica and can LUKS-format the backup disk instead. Backup / NAS fstab lines always use `nofail` so a missing disk cannot drop boot to emergency.
+
+ext4 roots skip grub-btrfs and use Timeshift rsync (+ rsync to the extra disk).
+
+```bash
+bash ~/.hyprgruv/lib/scripts/snapshots.sh
+# Non-interactive:
+SNAPSHOTS_SETUP=local bash ~/.hyprgruv/lib/scripts/snapshots.sh
+SNAPSHOTS_SETUP=full BACKUP_DISK=/dev/sda1 bash ~/.hyprgruv/lib/scripts/snapshots.sh
+SNAPSHOTS_SETUP=skip  # installer automation
+```
 
 ## Package lists (canonical source)
 

@@ -63,6 +63,18 @@ arch)
 
     if [[ $(_isInstalledAUR "timeshift") == "0" ]]; then
         echo
+        if [[ -f /etc/hyprgruv/snapshots.env ]]; then
+            # shellcheck source=/dev/null
+            source /etc/hyprgruv/snapshots.env
+            if [[ "${HYPRGRUV_LAYER2:-0}" == "1" ]]; then
+                if findmnt "${HYPRGRUV_BACKUP_MOUNT:-/mnt/backup-ssd}" >/dev/null 2>&1; then
+                    echo ":: Off-disk replica will run after this upgrade (${HYPRGRUV_BACKUP_MOUNT})" | lsd-print
+                else
+                    echo ":: Off-disk replica configured but ${HYPRGRUV_BACKUP_MOUNT:-/mnt/backup-ssd} is not mounted" | lsd-print
+                fi
+                echo
+            fi
+        fi
         if gum confirm "DO YOU WANT TO CREATE A SNAPSHOT?"; then
             echo
             c=$(gum input --placeholder "Enter a comment for the snapshot...")

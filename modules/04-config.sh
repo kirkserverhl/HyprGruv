@@ -50,7 +50,7 @@ run_step() {
     # Do NOT wrap in gum spin here. These sub-scripts (shell.sh, grub.sh, etc.)
     # are interactive (gum choose/confirm, GUI tools, read prompts, etc.).
     # Wrapping them in gum spin breaks TTY / nested gum input and causes apparent stalls/hangs.
-    if [[ "$title" == "Shell Configuration" ]]; then
+    if [[ "$title" == "Shell Configuration" || "$title" == "Snapshots" ]]; then
         HYPRGRUV_FROM_CONFIG=1 hyprgruv_run_interactive "$path" "${HYPRGRUV_LOGFILE:-}"
     else
         bash "$path" "${extra_args[@]}"
@@ -177,6 +177,21 @@ if _confirm "  💾   Set up zram compressed swap?"; then
     fi
 else
     _section_handoff "Zram setup skipped" status
+fi
+
+# ---------------------- Snapshots ---------------------------
+hyprgruv_section_intro "Snapshots"
+if _confirm "  📸   Set up Btrfs snapshots / Timeshift / off-disk replica?"; then
+    script="$SCRIPTS_DIR/snapshots.sh"
+    if [[ -f "$script" ]]; then
+        run_step "$script" "Snapshots" || log_warning "Snapshot setup finished with warnings"
+        _section_handoff "Snapshots completed"
+    else
+        log_error "Script not found: $script"
+        exit 1
+    fi
+else
+    _section_handoff "Snapshot setup skipped" status
 fi
 
 mark_completed "Interactive config"

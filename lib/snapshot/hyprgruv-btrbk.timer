@@ -1,0 +1,10 @@
+[Unit]
+Description=Hyprgruv btrbk off-disk replica
+
+[Timer]
+OnCalendar=__ON_CALENDAR__
+Persistent=true
+RandomizedDelaySec=15m
+
+[Install]
+WantedBy=timers.target

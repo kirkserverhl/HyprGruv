@@ -1,0 +1,15 @@
+[Unit]
+Description=Hyprgruv rsync backup to extra disk (non-btrfs target)
+After=local-fs.target
+ConditionPathIsMountPoint=__BACKUP_MOUNT__
+
+[Service]
+Type=oneshot
+Nice=10
+IOSchedulingClass=idle
+ExecStart=/usr/bin/mkdir -p __BACKUP_MOUNT__/rsync-root
+ExecStart=/usr/bin/rsync -aHAX --delete --info=stats2 \
+  --exclude=/dev --exclude=/proc --exclude=/sys --exclude=/tmp \
+  --exclude=/run --exclude=/mnt --exclude=/media --exclude=/lost+found \
+  --exclude=/var/cache --exclude=/var/log --exclude=/swapfile \
+  / __BACKUP_MOUNT__/rsync-root/

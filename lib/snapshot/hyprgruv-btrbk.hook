@@ -1,0 +1,13 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Type = Package
+Target = *
+
+[Action]
+Description = Hyprgruv: replicate snapshots to backup disk (btrbk)
+When = PostTransaction
+Depends = btrbk
+Exec = /usr/bin/systemctl start --no-block hyprgruv-btrbk.service
+AbortOnFail = No
+NeedsTargets = No

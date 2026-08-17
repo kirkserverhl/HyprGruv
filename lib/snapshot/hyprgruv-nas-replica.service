@@ -1,0 +1,13 @@
+[Unit]
+Description=Hyprgruv rsync of off-disk snapshots to NAS
+After=local-fs.target network-online.target
+Wants=network-online.target
+ConditionPathIsMountPoint=__BACKUP_MOUNT__
+ConditionPathIsMountPoint=__NAS_MOUNT__
+
+[Service]
+Type=oneshot
+Nice=10
+IOSchedulingClass=idle
+ExecStart=/usr/bin/mkdir -p __NAS_DEST__
+ExecStart=/usr/bin/rsync -aH --delete --info=stats2 __BTRBK_TARGET__/ __NAS_DEST__/

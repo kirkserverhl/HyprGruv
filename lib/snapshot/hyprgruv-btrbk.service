@@ -1,0 +1,13 @@
+[Unit]
+Description=Hyprgruv btrbk send/receive to backup disk
+Documentation=man:btrbk(1)
+After=local-fs.target
+ConditionPathExists=/etc/btrbk/hyprgruv.conf
+ConditionPathIsMountPoint=__BACKUP_MOUNT__
+ConditionPathIsMountPoint=__BTRFS_ROOT__
+
+[Service]
+Type=oneshot
+Nice=10
+IOSchedulingClass=idle
+ExecStart=/usr/bin/btrbk -c /etc/btrbk/hyprgruv.conf run

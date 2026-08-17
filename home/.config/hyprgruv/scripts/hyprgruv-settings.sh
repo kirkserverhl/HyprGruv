@@ -166,6 +166,7 @@ menu_system() {
             "Laptop / PC|computer-laptop|laptop" \
             "Packages Sync|package-x-generic|packages" \
             "Updates|software-update|updates" \
+            "Snapshots|drive-harddisk|snapshots" \
             "Cleanup|document-cleanup|cleanup" \
             "Back|gtk-go-back-ltr|back")
         [[ -z "${choice:-}" ]] && return 0
@@ -179,6 +180,9 @@ menu_system() {
                 ;;
             Updates)
                 exec kitty --class hypr-updates -e "$SCRIPT_DIR/installupdates.sh"
+                ;;
+            Snapshots)
+                exec "$SCRIPT_DIR/settings-snapshots.sh"
                 ;;
             Cleanup)
                 run_bg "Cleanup" "bash '$HYPRGRUV_DIR/lib/scripts/cleanup.sh'"
