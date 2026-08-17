@@ -219,13 +219,17 @@ resolve_gtk_theme() {
 
     case "$family" in
     catppuccin)
-        pick_existing_gtk_theme "$slot_name" Catppuccin-Dark Gruvbox-Dark adw-gtk3-dark
+        pick_existing_gtk_theme "$slot_name" Catppuccin-Dark \
+            Catppuccin-Mocha-Standard-Blue-Dark Catppuccin-Mocha-Standard-Dark \
+            Gruvbox-Dark adw-gtk3-dark
         ;;
     nord-darker)
-        pick_existing_gtk_theme "$slot_name" Nordic-darker Nordic-darker-v40 Gruvbox-Dark adw-gtk3-dark
+        pick_existing_gtk_theme "$slot_name" Nordic-darker Nordic Nordic-darker-v40 \
+            Gruvbox-Dark adw-gtk3-dark
         ;;
     everforest-dark)
-        pick_existing_gtk_theme "$slot_name" Everforest-Dark Gruvbox-Dark adw-gtk3-dark
+        pick_existing_gtk_theme "$slot_name" Everforest-Dark Everforest-Dark-B \
+            Everforest-Dark-BL Gruvbox-Dark adw-gtk3-dark
         ;;
     noir)
         pick_existing_gtk_theme "$slot_name" Graphite-Dark-compact Gruvbox-Dark adw-gtk3-dark

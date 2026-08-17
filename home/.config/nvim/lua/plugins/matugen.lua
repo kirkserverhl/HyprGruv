@@ -11,11 +11,17 @@ return {
     priority = 1000, -- load very early so colors are set before UI plugins
     config = function()
       local function refresh_ui()
-        -- mini.base16 sets highlights directly (no ColorScheme event), but lualine's
-        -- "auto" theme snapshots colors at setup — re-run it after palette changes.
+        -- Re-apply lualine without wiping LazyVim's config. Official colorschemes
+        -- fire ColorScheme; mini.base16 does not, so we always refresh the bar.
         vim.schedule(function()
           if package.loaded["lualine"] then
-            pcall(require("lualine").setup)
+            local ll = require("lualine")
+            local ok, cfg = pcall(ll.get_config)
+            if ok and cfg then
+              pcall(ll.setup, cfg)
+            else
+              pcall(ll.setup)
+            end
           end
           pcall(vim.cmd.doautocmd, "ColorScheme")
           pcall(vim.cmd.redrawstatus)

@@ -2,8 +2,8 @@
 """Prepare Super+W theme palettes and write official (tailored) app configs.
 
 Super+W applies these official files *before* leftover matugen so starship,
-kitty, and neovim never flash a generated palette and then get overwritten.
-Matugen leftover still paints waybar / swaync / rofi / gtk colors / …
+kitty, neovim, waybar, swaync, and rofi never flash a generated palette.
+Matugen leftover still paints hyprlock / firefox / bat / btop / Qt colors / …
 """
 
 from __future__ import annotations
@@ -201,9 +201,12 @@ def write_waybar(slots: dict[str, str], theme: str) -> None:
 @define-color tertiary_fixed {s['base0A']};
 @define-color tertiary_fixed_dim {s['base0A']};
 """
-    out = HOME / ".config/waybar/colors/matugen-waybar.css"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(content, encoding="utf-8")
+    for out in (
+        HOME / ".config/waybar/colors/matugen-waybar.css",
+        HOME / ".config/wlogout/colors.css",
+    ):
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(content, encoding="utf-8")
 
 
 def write_hypr(slots: dict[str, str], theme: str) -> None:
@@ -300,7 +303,7 @@ vim.api.nvim_set_hl(0, "DiagnosticWarn", {{ fg = "{s['base0A']}" }})
 vim.api.nvim_set_hl(0, "DiagnosticInfo", {{ fg = "{s['base0D']}" }})
 vim.api.nvim_set_hl(0, "DiagnosticHint", {{ fg = "{s['base0C']}" }})
 
-pcall(function() require("lualine").setup() end)
+{_lualine_lua("auto")}
 """
     out = HOME / ".config/nvim/lua/matugen-theme.lua"
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -650,7 +653,32 @@ NVIM_COLORSCHEMES = {
     "gruvbox-dark": "gruvbox",
     "coast-gruv": "gruvbox",
     "warm-stone": "gruvbox",
+    "everforest-dark": "everforest",
+    "forest-night": "everforest",
+    "nord-darker": "nord",
 }
+
+# lualine theme name for each :colorscheme (plugin-provided, not "auto").
+NVIM_LUALINE_THEMES = {
+    "catppuccin-mocha": "catppuccin",
+    "gruvbox": "gruvbox",
+    "everforest": "everforest",
+    "nord": "nord",
+}
+
+
+def _lualine_lua(theme_name: str) -> str:
+    return f"""pcall(function()
+  local ll = require("lualine")
+  local ok, cfg = pcall(ll.get_config)
+  if not ok or not cfg then
+    ll.setup({{ options = {{ theme = "{theme_name}" }} }})
+    return
+  end
+  cfg.options = cfg.options or {{}}
+  cfg.options.theme = "{theme_name}"
+  ll.setup(cfg)
+end)"""
 
 
 def write_nvim_tailored(slots: dict[str, str], theme: str) -> None:
@@ -659,6 +687,7 @@ def write_nvim_tailored(slots: dict[str, str], theme: str) -> None:
     if not colorscheme:
         write_nvim(slots, theme)
         return
+    lualine = NVIM_LUALINE_THEMES.get(colorscheme, "auto")
     content = f"""-- Super+W official Neovim theme: {theme} → {colorscheme}
 -- Do not replace with matugen mini.base16; that file is a Waypaper fallback.
 
@@ -667,10 +696,47 @@ local ok = pcall(vim.cmd.colorscheme, "{colorscheme}")
 if not ok then
   vim.notify("colorscheme {colorscheme} not found — install the plugin", vim.log.levels.WARN)
 end
+{_lualine_lua(lualine)}
 """
     out = HOME / ".config/nvim/lua/matugen-theme.lua"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(content, encoding="utf-8")
+
+
+def write_swaync_tailored(slots: dict[str, str], theme: str) -> None:
+    """Copy official swaync custom CSS (bg0/fg/red). Fallback: map slot palette."""
+    asset = resolve_asset(theme)
+    dest = HOME / ".config/swaync/matugen/colors.css"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    src = HOME / ".config/swaync/colors/custom" / f"{asset}.css"
+    if src.is_file():
+        dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+        return
+    s = {k.lower(): v for k, v in slots.items()}
+    dest.write_text(
+        f"""/* Super+W official SwayNC palette: {theme} (no leftover matugen roles) */
+@define-color bg0 {s.get("base00", "#1d2021")};
+@define-color bg1 {s.get("base01", "#282828")};
+@define-color bg2 {s.get("base02", "#3c3836")};
+@define-color bg3 {s.get("base01", "#282828")};
+@define-color bg4 {s.get("base03", "#665c54")};
+
+@define-color fg {s.get("base05", "#ebdbb2")};
+
+@define-color red {s.get("base08", "#cc241d")};
+@define-color orange {s.get("base0f", "#d65d0e")};
+@define-color yellow {s.get("base0a", "#d79921")};
+@define-color green {s.get("base0b", "#98971a")};
+@define-color aqua {s.get("base0c", "#689d6a")};
+@define-color blue {s.get("base0e", "#458588")};
+@define-color purple {s.get("base09", "#b16286")};
+
+@define-color grey0 {s.get("base04", "#928374")};
+@define-color grey1 {s.get("base04", "#928374")};
+@define-color grey2 {s.get("base03", "#665c54")};
+""",
+        encoding="utf-8",
+    )
 
 
 def write_tailored_overrides(slots: dict[str, str], theme: str) -> None:
@@ -680,6 +746,10 @@ def write_tailored_overrides(slots: dict[str, str], theme: str) -> None:
     write_nvim_tailored(slots, theme)
     # Hyprland template often skips on `matugen json` (hex_stripped); write slots directly.
     write_hypr(slots, theme)
+    # Official palettes mapped to the rice CSS contract (not leftover Material You roles).
+    write_waybar(slots, theme)
+    write_rofi(slots, theme)
+    write_swaync_tailored(slots, theme)
 
 
 def write_all_outputs(slots: dict[str, str], theme: str) -> None:

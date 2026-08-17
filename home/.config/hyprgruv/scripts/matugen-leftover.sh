@@ -7,6 +7,9 @@
 #   neovim            → official colorscheme or slot mini.base16
 #   hyprland          → generate-preset-colors write_hypr
 #   obsidian          → obsidian-theme.sh community cssTheme
+#   waybar / wlogout  → official palette mapped to rice CSS contract
+#   swaync-colors     → swaync/colors/custom/<theme>.css
+#   rofi              → write_rofi from official palette.json
 #
 # Waypaper / `matugen image` still uses the full ~/.config/matugen/config.toml.
 #
@@ -36,7 +39,7 @@ if [[ ! -f "$SRC" ]]; then
     return 0 2>/dev/null || exit 0
 fi
 
-SKIP=(starship_rainbow neovim hyprland obsidian)
+SKIP=(starship_rainbow neovim hyprland obsidian waybar wlogout swaync-colors swaync rofi)
 
 # Official kitty slot (same rule as write_kitty_tailored).
 if [[ -n "$THEME" ]]; then

@@ -2,8 +2,8 @@
 """Drop named [templates.<id>] sections from a matugen config.toml.
 
 Used by Super+W so matugen never writes apps that already have an official
-preset (starship, kitty, neovim, hyprland, obsidian). Waypaper / free
-wallpaper still uses the full config.
+preset (starship, kitty, neovim, hyprland, obsidian, waybar, swaync, rofi,
+wlogout). Waypaper / free wallpaper still uses the full config.
 """
 
 from __future__ import annotations

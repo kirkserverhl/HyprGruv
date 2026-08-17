@@ -18,6 +18,11 @@ lsd-print-git
 displaylink
 google-chrome
 gruvbox-gtk-theme-git
+# Official GTK packs so Super+W does not fall back to Gruvbox-Dark
+# (Fausto-Korpsvart → Everforest-Dark / Catppuccin-Dark; EliverLara → Nordic-darker)
+everforest-gtk-theme-git
+catppuccin-gtk-theme-git
+nordic-theme
 hyprshot
 hypremoji
 nerdfetch

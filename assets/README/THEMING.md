@@ -15,11 +15,19 @@ Install and deploy pull never run `matugen image`.
 ```
 Theme + wallpaper + source accent
         ↓
-Official GTK / icons / kitty / starship / nvim / yazi / obsidian
+Official GTK / icons / kitty / starship / nvim+lualine / yazi / obsidian
+Waybar / SwayNC / Rofi / wlogout / Vesktop (designed files, not photo extract)
         ↓
-Leftover matugen json (waybar, swaync, rofi, gtk colors, …)
-        — starship/kitty/nvim/hypr/obsidian templates are skipped
+Leftover matugen json (hyprlock, firefox, bat, btop, Qt colors, …)
+        — official templates are skipped
 ```
+
+**Ready families** (human-designed packs): Gruvbox, Catppuccin, Nord, Everforest.
+Noir keeps its existing tailored kitty/GTK/icons. Personal dipc slots
+(`coast-gruv`, `forest-night`, `warm-stone`) stay palette-mapped leftover.
+
+Do **not** vendor a theme file for every package. Airline / NvChad `chadrc` /
+Spicetify are out of scope (LazyVim uses lualine; Spicetify Themes dir is empty).
 
 Starship used to paint a generated palette and then snap to the theme preset.
 Official files are written first so that flash does not happen.
@@ -128,11 +136,12 @@ Firefox theming is matugen-only (`templates/firefox-colors.css` and per-site `us
 
 HyprGruv is **dark-only** on every machine. Light GTK/Qt/Grok appearance is treated as a regression and re-forced on login and Super+W.
 
-- GTK theme: dark slot for the active colorscheme (`Gruvbox-Dark`, `Catppuccin-Dark`, …), never `*-Light`
+- GTK theme: dark slot for the active colorscheme (`Gruvbox-Dark`, `Catppuccin-Dark`, `Nordic-darker`, `Everforest-Dark`), never `*-Light`
+- Packages: `gruvbox-gtk-theme-git`, `catppuccin-gtk-theme-git`, `everforest-gtk-theme-git`, `nordic-theme` (without these, Super+W falls back to Gruvbox-Dark)
 - `gsettings` `color-scheme=prefer-dark`, `gtk-application-prefer-dark-theme=true`, `Gtk/ApplicationPreferDarkTheme=1`
 - GTK2 `~/.gtkrc-2.0` is rewritten by `apply-desktop-assets.sh` (stops nwg-look / Plasma Breeze from leaving light file pickers)
-- Icons: Papirus-Dark / theme slot
-- Qt: `qt5ct` / `qt6ct` with matugen color files; Kvantum `matugen` scheme
+- Icons: Gruvbox-Plus-Dark / Everforest-Dark / Zafiro-Nord / Papirus-Dark
+- Qt: leftover matugen color files unless a named Kvantum theme exists; KDE Plasma look-and-feel is not a Hyprland goal
 - Grok: `GROK_APPEARANCE=dark` + `theme = groknight` unless a custom dark theme is already set
 
 Run `~/.config/hyprgruv/scripts/apply-desktop-assets.sh` (or `gtk.sh`) to re-apply.
@@ -163,7 +172,10 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 | Live palette files already present | Follow system until next explicit theme apply. |
 | Nothing chosen yet | **gruvbox-dark**. |
 
-Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruvbox`.
+Neovim: Super+W writes `lua/matugen-theme.lua` as an official `:colorscheme`
+(`gruvbox`, `catppuccin-mocha`, `nord`, `everforest`) plus the matching
+**lualine** theme. Other slots (noir, personal dipc) use mini.base16 from the
+palette. NvChad `chadrc.lua` stubs are not applied.
 
 **CLI / install / greeter (same policy):**
 

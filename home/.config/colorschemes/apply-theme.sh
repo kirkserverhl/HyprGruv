@@ -3,34 +3,36 @@
 # that have no official theme file.
 #
 # Flow: theme + wallpaper + source accent → official presets (starship,
-# kitty, nvim, hypr, yazi, obsidian, vscodium) → leftover matugen json
-# (waybar, swaync, rofi, …) → reload leftover hooks only.
-# Do not let matugen paint starship/kitty/nvim first — they flash then get
-# overwritten by --tailored.
+# kitty, nvim, hypr, yazi, obsidian, vscodium, vesktop, waybar/swaync/rofi)
+# → leftover matugen json (hyprlock, firefox, bat, …) → reload leftover only.
+# Do not let matugen paint official apps first — they flash then get overwritten.
 #
 # ── Named theme / official config (do NOT need matugen output) ──────────
 # Super+W already points these at a real theme. A posthook/reload is enough.
 #
 #   GTK 3/4 + gtkrc-2     apply-desktop-assets   Gruvbox-Dark / Catppuccin-Dark / Nordic-darker / Everforest-Dark / Graphite-Dark-compact
-#   Icons                 apply-desktop-assets   Gruvbox-Plus-Dark / Papirus / Zafiro-Nord / GreyStone / …
+#   Icons                 apply-desktop-assets   Gruvbox-Plus-Dark / Papirus / Zafiro-Nord / Everforest-Dark / GreyStone / …
 #   Cursors               apply-desktop-assets   Bibata-Gruvbox / Nordzy / …
 #   KDE look-and-feel     apply-desktop-assets   named Plasma LNF (not Matugen.colors)
 #   Kitty                 --tailored             official *.conf (catppuccin-mocha, nord, everforest-dark, …)
 #   Starship              --tailored             colorschemes/<theme>/starship-rainbow.toml
+#   Neovim                --tailored             :colorscheme + lualine (gruvbox / mocha / nord / everforest)
+#   Waybar / wlogout      --tailored             official palette → rice CSS contract
+#   SwayNC                --tailored             colors/custom/<theme>.css
+#   Rofi                  --tailored             write_rofi from official palette.json
 #   Yazi                  reload-yazi-theme      flavor (catppuccin-mocha, nord, everforest-medium, gruvbox-dark)
 #   VSCodium              slot vscodium-theme    "Catppuccin Mocha", "Nord Wave", "Everforest Dark", …
 #   Obsidian              obsidian-theme.sh      community cssTheme (Catppuccin, Obsidian Nord, …)
+#   Vesktop               slot discord/          current.theme.css → vesktop/themes/
 #
-# ── Slot files that exist but Super+W does not apply yet ────────────────
-#   discord/current.theme.css   spicetify-theme   nvim/lua/chadrc.lua
-#   (nvim today reloads matugen-theme.lua, not the slot chadrc)
+# ── Slot files that exist but Super+W does not apply ────────────────
+#   spicetify-theme   nvim/lua/chadrc.lua (dead NvChad stub — do not apply)
 #
 # ── Matugen leftover only (no official theme, or must follow source) ─
-#   SwayNC/Overwatch   Waybar   Hyprlock   Rofi   Wlogout
-#   Firefox / pywalfox / chrome user CSS
+#   Hyprlock   Firefox / pywalfox / chrome user CSS
 #   bat  btop  cava  tmux  alacritty  mpv  grok  gum
 #   qt5ct/qt6ct colors   Kvantum   qBittorrent   pacseek   pavucontrol
-#   terminal OSC sequences
+#   GTK 3/4 colors.css overlay   terminal OSC sequences
 #   Hyprland colors come from --tailored (write_hypr), not the matugen template
 #
 # Env:
@@ -151,7 +153,7 @@ if ! python3 "$GENERATOR" --prepare "$THEME"; then
 fi
 
 # Official presets FIRST so starship/kitty/nvim never flash a matugen palette.
-echo -e "${CYAN}-> Official starship / kitty / neovim / hypr...${NC}"
+echo -e "${CYAN}-> Official starship / kitty / neovim / hypr / waybar / swaync / rofi...${NC}"
 python3 "$GENERATOR" --tailored "$THEME" || true
 if [[ -x "$SCRIPTS/matugen-posthook-starship.sh" || -f "$SCRIPTS/matugen-posthook-starship.sh" ]]; then
     bash "$SCRIPTS/matugen-posthook-starship.sh" 2>/dev/null || true
@@ -217,6 +219,15 @@ fi
 if [[ -x "$SCRIPTS/obsidian-theme.sh" ]]; then
     echo -e "${CYAN}-> Obsidian theme...${NC}"
     "$SCRIPTS/obsidian-theme.sh" "$THEME" 2>/dev/null || true
+fi
+
+# --- Vesktop (Discord) official Midnight skin ---
+DISCORD_SLOT="$THEME_DIR/discord/current.theme.css"
+VESKTOP_THEME="$HOME/.config/vesktop/themes/current.theme.css"
+if [[ -f "$DISCORD_SLOT" ]]; then
+    echo -e "${CYAN}-> Vesktop theme...${NC}"
+    mkdir -p "$(dirname "$VESKTOP_THEME")"
+    cp -f "$DISCORD_SLOT" "$VESKTOP_THEME"
 fi
 
 # Leftover apps only (waybar, swaync, rofi, gtk colors, …). Skips starship/kitty/nvim.
