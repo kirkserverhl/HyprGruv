@@ -897,6 +897,14 @@ ensure_git_sync_role() {
     else
         log_warning "Could not enable gpu-screen-recorder-ui.service"
     fi
+    if systemctl --user enable bluetooth-session.service 2>/dev/null; then
+        log_status "Enabled bluetooth-session.service (unblock + start bluetoothd on Hyprland login)"
+        if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+            systemctl --user start bluetooth-session.service 2>/dev/null || true
+        fi
+    else
+        log_warning "Could not enable bluetooth-session.service"
+    fi
     # Deploy machines: also poll origin for hyprgruv commits (rofi menu)
     if [[ "$role" == "deploy" || "$want_deploy" == "1" ]]; then
         if systemctl --user enable --now hyprgruv-update-check.timer 2>/dev/null; then

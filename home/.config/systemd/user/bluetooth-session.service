@@ -1,0 +1,12 @@
+[Unit]
+Description=Start Bluetooth when Hyprland starts
+After=hyprland-session.target
+PartOf=hyprland-session.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=%h/.config/hyprgruv/scripts/start-bluetooth.sh
+
+[Install]
+WantedBy=hyprland-session.target

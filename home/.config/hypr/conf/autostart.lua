@@ -115,6 +115,9 @@ hl.on("hyprland.start", function()
 	-- GPU Screen Recorder overlay (Alt+Z). Unit is a no-op until the package is installed.
 	hl.exec_cmd("systemctl --user start gpu-screen-recorder-ui.service")
 
+	-- Bluetooth: unblock radio, start bluetoothd, power the adapter, reconnect paired devices.
+	hl.exec_cmd("systemctl --user start bluetooth-session.service")
+
 	-- Notification daemon (SwayNC)
 	hl.exec_cmd(SCRIPTS .. "/notify-autostart.sh")
 
