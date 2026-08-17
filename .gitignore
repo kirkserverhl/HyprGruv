@@ -8,6 +8,28 @@ assets/user_choices.txt
 home/Pictures/Wallpapers/**
 !home/Pictures/Wallpapers/.gitkeep
 
+# shared-mime-info generated cache (update-mime-database after stow)
+home/.local/share/mime/**
+!home/.local/share/mime/packages/
+!home/.local/share/mime/packages/**
+
+# desktop-file-utils generated cache
+home/.local/share/applications/mimeinfo.cache
+
+# Icon theme caches (gtk-update-icon-cache on first login)
+home/.icons/**/icon-theme.cache
+home/.local/share/icons/**/icon-theme.cache
+
+# Python bytecode (regenerated; do not ship host .pyc)
+**/__pycache__/
+**/*.pyc
+
+# First-boot leftovers
+home/.bashrc.bak.*
+
+# Pulse cookie is machine-local auth — never share via git-eod
+home/.config/pulse/cookie
+
 # Install logs (local only)
 assets/logs/
 
@@ -68,7 +90,8 @@ home/.config/swaync/colors/colors.css
 # active palette (noir/nord/etc.) to every deploy machine.
 # Preset *seeds* stay tracked under home/.config/colorschemes/<theme>/.
 # Templates stay tracked under home/.config/matugen/templates/.
-# After pull, git-eod-pull runs ensure-local-palette.sh (gruvbox or last theme).
+# After pull, git-eod-pull runs ensure-local-palette.sh only if live files
+# are missing (copy shipped gruvbox defaults — never re-apply over a live theme).
 # ---------------------------------------------------------------------------
 
 # matugen active palette state

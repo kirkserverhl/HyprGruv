@@ -1,19 +1,39 @@
 # HyprGruv Theming
 
-HyprGruv uses **matugen** as the primary theming engine. Wallpaper changes drive Material You palettes across the desktop.
+HyprGruv ships **static named themes** (Gruvbox, Catppuccin, Nord, Everforest, …).
+The install default is **gruvbox-dark** plus the Arch/Gruvbox stripes wallpaper
+(`gruvbox_stripes_arch.png`, source `#689d6a`). Those files are copied once at
+install — they are **not** regenerated on `git pull` / `git-eod-pull`.
+
+**Matugen** is optional after install (Waypaper tile, Super+W “matugen” path).
+Install and deploy pull never run `matugen image`.
 
 ## How it works
 
+**Normal theme switch (Super+W)** — official presets first, leftover matugen after:
+
 ```
-Wallpaper change (waypaper / awww)
+Theme + wallpaper + source accent
+        ↓
+Official GTK / icons / kitty / starship / nvim / yazi / obsidian
+        ↓
+Leftover matugen json (waybar, swaync, rofi, gtk colors, …)
+        — starship/kitty/nvim/hypr/obsidian templates are skipped
+```
+
+Starship used to paint a generated palette and then snap to the theme preset.
+Official files are written first so that flash does not happen.
+
+**Optional matugen (Waypaper / free wallpaper)**
+
+```
+Wallpaper change (waypaper)
         ↓
 set_wallpaper.sh  (waypaper post-command)
         ↓
 apply-matugen-auto.sh  (optional rofi source-color picker)
         ↓
 matugen image <wallpaper>  →  templates in ~/.config/matugen/config.toml
-        ↓
-Generated colors land in app config paths; post-hooks reload where possible
 ```
 
 **Config:** `~/.config/matugen/config.toml`  
@@ -52,7 +72,7 @@ Some apps need a manual reload after theme updates (Firefox: restart; Qt apps: r
 
 During install:
 
-1. `default_wp.sh` runs after stow (opening wallpaper + first palette)
+1. `default_wp.sh` copies `lib/defaults/gruvbox-dark/` (wallpaper + source color + live configs). No matugen.
 2. `waypaper_setup.sh` in the setup wizard installs the waypaper stack and can seed `~/Pictures/Wallpapers`
 3. Optional (default No): pre-generate waypaper thumbnails so the picker stays snappy. Skip on low disk/CPU. Re-run later with:
 
@@ -68,7 +88,8 @@ Change wallpaper anytime with **waypaper** (GUI) or:
 waypaper --wallpaper /path/to/image.png --apply
 ```
 
-The waypaper post-command runs `set_wallpaper.sh`, which triggers matugen.
+The waypaper post-command runs `set_wallpaper.sh`. Theme-folder wallpapers keep
+the static preset; only free wallpapers (or the Super+W matugen tile) run matugen.
 
 ## Choosing palettes manually
 
@@ -128,7 +149,7 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 ## Machine-local palettes (git-eod / dual-device)
 
-**Active** matugen outputs (starship, nvim, gtk, waybar, hypr, `user-palette.json`, …) are **gitignored** and must not be committed. They are regenerated per machine from wallpapers or static presets under `~/.config/colorschemes/<theme>/`.
+**Active** palette outputs (starship, nvim, gtk, waybar, hypr, `user-palette.json`, …) are **gitignored** and must not be committed. First install copies them from `lib/defaults/gruvbox-dark/live/`. After that they stay machine-local. Super+W rewrites them from `~/.config/colorschemes/<theme>/`; matugen is opt-in.
 
 ### Default vs chosen (system) theme
 
@@ -136,7 +157,7 @@ Plymouth themes under `~/.config/plymouth/matugen/` can be regenerated with:
 
 | Entry point | Behavior |
 |-------------|----------|
-| **Super+W** | Pick a **theme** → sorted **themed wallpapers** → **source color** → static apply. Optional grid tile **Waypaper · all / matugen** only if you want free wallpapers or matugen/pywal. |
+| **Super+W** | Pick a **theme** → sorted **themed wallpapers** → **source color** → official presets first (starship, kitty, nvim, …), then leftover matugen. Optional grid tile **Waypaper · all / matugen** only if you want free wallpapers or matugen/pywal. |
 | **Waypaper** (tile or standalone) | All wallpapers + matugen/pywal (`set_wallpaper` posthook). Not used for normal theme switches. |
 | **themed-wallpapers / theme folder** | Static preset for the Super+W theme (no matugen re-extract). |
 | Live palette files already present | Follow system until next explicit theme apply. |
@@ -157,7 +178,7 @@ Neovim: loads `lua/matugen-theme.lua` when present; otherwise `:colorscheme gruv
 | Role | Behavior |
 |------|----------|
 | Source `git-eod` | Does not stage live palette files (ignored). Do not force-add them. |
-| Deploy `git-eod-pull` | After a hyprgruv pull, runs `ensure-local-palette.sh` with the policy above. |
+| Deploy `git-eod-pull` | After a hyprgruv pull, runs `ensure-local-palette.sh` only if live files are **missing**. Does not re-apply the shipped default over an existing theme. |
 | Manual restore | `THEME_SWITCHER_APPLY=1 ~/.config/colorschemes/apply-theme.sh gruvbox-dark` |
 | Manual switch | Super+W / `apply-theme.sh <name>` — updates `.current-theme` and live outputs. |
 

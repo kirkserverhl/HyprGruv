@@ -309,11 +309,87 @@ gum_confirm_prompt() {
 
 gum_choose_prompt() {
     gum_apply_matugen_theme 2>/dev/null || true
-    if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
-        gum choose "$@" </dev/tty >/dev/tty
+    # gum draws the TUI on the terminal; the chosen value must stay on
+    # stdout so callers can capture it. Never redirect stdout to /dev/tty.
+    if _hyprgruv_has_tty && ! [[ -t 0 ]]; then
+        gum choose "$@" </dev/tty
     else
         gum choose "$@"
     fi
+}
+
+# Write helper text where the user can see it, even when stdout is captured.
+hyprgruv_tty_echo() {
+    if _hyprgruv_has_tty; then
+        printf '%s\n' "$@" >/dev/tty
+    else
+        printf '%s\n' "$@" >&2
+    fi
+}
+
+# Single-choice menu. Always prints a numbered list to the TTY, then prefers
+# gum, then "Choose one [1-N]". One option only — not a comma-separated list.
+# The selected string is the only thing written to stdout.
+hyprgruv_pick() {
+    local header="$1"
+    shift
+    local -a opts=("$@")
+    local n="${#opts[@]}"
+    local i choice="" gum_status=0 reply=""
+
+    if ((n == 0)); then
+        return 1
+    fi
+
+    hyprgruv_tty_echo ""
+    hyprgruv_tty_echo "  $header"
+    hyprgruv_tty_echo ""
+    for i in "${!opts[@]}"; do
+        hyprgruv_tty_echo "  $((i + 1))) ${opts[$i]}"
+    done
+    hyprgruv_tty_echo ""
+    hyprgruv_tty_echo "  Pick one number (1-${n}). One option only — not a comma-separated list."
+    hyprgruv_tty_echo ""
+
+    stty sane </dev/tty 2>/dev/null || stty sane 2>/dev/null || true
+
+    if command -v gum >/dev/null 2>&1; then
+        local _errexit=0
+        [[ $- == *e* ]] && _errexit=1
+        set +e
+        choice="$(gum_choose_prompt \
+            --header "$header  (↑↓ then Enter — pick one)" \
+            --height "$((n + 2))" \
+            "${opts[@]}")"
+        gum_status=$?
+        ((_errexit)) && set -e
+    fi
+    choice="${choice//$'\r'/}"
+    choice="${choice#"${choice%%[![:space:]]*}"}"
+    choice="${choice%"${choice##*[![:space:]]}"}"
+
+    if [[ $gum_status -eq 0 && -n "$choice" ]]; then
+        printf '%s\n' "$choice"
+        return 0
+    fi
+
+    if _hyprgruv_has_tty; then
+        read -rp "  Choose one [1-${n}]: " reply </dev/tty
+    else
+        read -rp "  Choose one [1-${n}]: " reply
+    fi
+    reply="${reply#"${reply%%[![:space:]]*}"}"
+    reply="${reply%"${reply##*[![:space:]]}"}"
+    reply="${reply%\)}"
+    if [[ "$reply" == *,* || "$reply" == *$'\t'* || "$reply" == *' '* ]]; then
+        hyprgruv_tty_echo "  Multiple values are not supported — enter a single number."
+        return 1
+    fi
+    if [[ "$reply" =~ ^[0-9]+$ ]] && ((reply >= 1 && reply <= n)); then
+        printf '%s\n' "${opts[reply - 1]}"
+        return 0
+    fi
+    return 1
 }
 
 hyprgruv_section_transition() {

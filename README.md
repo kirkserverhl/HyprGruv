@@ -79,7 +79,7 @@ The installer runs in one pass. On a graphical session (e.g. EndeavourOS KDE), t
 | 2 | `01-packages.sh` | Installs yay, optional Chaotic-AUR, core Hyprland stack, then `lib/packages/pacman.list` + `aur.list` |
 | 3 | `02-stow.sh` | Stows `home/` configs into `$HOME` (with timestamped backup) |
 | 4 | `apply-machine-profile.sh` | **Laptop vs desktop** prompt — touchpad, idle, blur, GPU env, monitors mode, lid, power-profiles-daemon, deploy-target |
-| 5 | `default_wp.sh` | Opening wallpaper + first matugen palette (skipped with `SKIP_WALLPAPER=1`) |
+| 5 | `default_wp.sh` | Opening wallpaper + shipped gruvbox-dark configs (no matugen; skipped with `SKIP_WALLPAPER=1`) |
 | 6 | `post_reboot_setup.sh` | Full setup wizard (modules 03–05) when `SKIP_SETUP_WIZARD` is unset |
 | 7 | Final sync | `yay -Syu` or `pacman -Syu` |
 | 8 | Reboot | Skipped when a graphical session is detected (`WAYLAND_DISPLAY` / `DISPLAY` set) |
@@ -286,7 +286,7 @@ bash ~/.hyprgruv/lib/scripts/setup-mime-handlers.sh
 | `FORCE=1` | Re-run completed modules |
 | `RESET_STATE=1` | Clear install state and start fresh |
 | `SKIP_PACKAGES=1` | Skip `01-packages.sh` (configs only) |
-| `SKIP_WALLPAPER=1` | Skip opening wallpaper / matugen step |
+| `SKIP_WALLPAPER=1` | Skip opening wallpaper / default theme seed |
 | `SKIP_SETUP_WIZARD=1` | Skip modules 03–05 during install |
 | `SKIP_REBOOT=1` | Never reboot at end of install |
 | `FORCE_REBOOT=1` | Reboot even in a graphical session |

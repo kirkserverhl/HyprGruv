@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# ensure-local-palette.sh — machine-local live matugen outputs
+# ensure-local-palette.sh — machine-local live theme outputs
 #
 # Policy:
 #   1. If live palette files already exist → leave them (follow current system).
-#   2. Else if the user has chosen a theme (.current-theme) → re-apply that.
-#   3. Else → default to gruvbox-dark and record it as .current-theme.
+#      git-eod-pull must never re-apply the shipped default over a live theme.
+#   2. Else if the user has chosen a theme (.current-theme) → re-apply that
+#      via the static seed / apply-theme (no wallpaper extract).
+#   3. Else → copy shipped gruvbox-dark defaults (lib/defaults/gruvbox-dark/).
 #
 # Live outputs are gitignored so git-eod cannot ship another machine's palette.
 # Called from git-eod-pull after a successful hyprgruv pull.
@@ -31,7 +33,7 @@ while [[ $# -gt 0 ]]; do
         shift 2
         ;;
     -h | --help)
-        sed -n '2,16p' "$0"
+        sed -n '2,18p' "$0"
         exit 0
         ;;
     *)
@@ -46,6 +48,8 @@ MARKER_NVIM="$HOME_CFG/nvim/lua/matugen-theme.lua"
 MARKER_SHIP="$HOME_CFG/starship/matugen-rainbow.toml"
 CURRENT_THEME_FILE="$HOME_CFG/colorschemes/.current-theme"
 APPLY="$HOME_CFG/colorschemes/apply-theme.sh"
+HYPR_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+SEED="$HYPR_DIR/lib/scripts/seed-default-theme.sh"
 DEFAULT_THEME="gruvbox-dark"
 
 palette_present() {
@@ -85,13 +89,25 @@ resolve_theme() {
 }
 
 if [[ $FORCE -eq 0 ]] && palette_present; then
-    # Live system palette already on this machine (matugen or last apply) — keep it.
+    # Live system palette already on this machine — keep it. Never re-seed on pull.
     exit 0
 fi
 
 theme="$(resolve_theme)"
 
+# First-boot / missing markers: copy shipped files. Do not run matugen.
+if [[ "$theme" == "$DEFAULT_THEME" && -f "$SEED" && $FORCE -eq 0 ]]; then
+    echo "ensure-local-palette: seeding shipped $DEFAULT_THEME defaults (no matugen)"
+    bash "$SEED" || exit 1
+    exit 0
+fi
+
 if [[ ! -f "$APPLY" ]]; then
+    if [[ -f "$SEED" ]]; then
+        echo "ensure-local-palette: apply-theme missing — seeding $DEFAULT_THEME"
+        bash "$SEED" ${FORCE:+--force} || exit 1
+        exit 0
+    fi
     echo "ensure-local-palette: missing $APPLY" >&2
     exit 1
 fi
@@ -103,24 +119,27 @@ else
 fi
 
 # THEME_SWITCHER_APPLY skips .active-config override so the named preset wins.
+# --force / non-default theme: apply-theme may use matugen json if installed.
 export THEME_SWITCHER_APPLY=1
 if ! bash "$APPLY" "$theme"; then
     if [[ "$theme" != "$DEFAULT_THEME" ]]; then
-        echo "ensure-local-palette: '$theme' failed — defaulting to $DEFAULT_THEME" >&2
-        bash "$APPLY" "$DEFAULT_THEME"
+        echo "ensure-local-palette: '$theme' failed — seeding $DEFAULT_THEME" >&2
+        if [[ -f "$SEED" ]]; then
+            bash "$SEED" --force || bash "$APPLY" "$DEFAULT_THEME"
+        else
+            bash "$APPLY" "$DEFAULT_THEME"
+        fi
         theme="$DEFAULT_THEME"
     else
         exit 1
     fi
 fi
 
-# Persist default so later pulls "follow system" instead of re-deciding blindly.
 mkdir -p "$(dirname "$CURRENT_THEME_FILE")"
 if [[ ! -f "$CURRENT_THEME_FILE" ]] || [[ -z "$(tr -d '[:space:]' <"$CURRENT_THEME_FILE" 2>/dev/null || true)" ]]; then
     printf '%s\n' "$theme" >"$CURRENT_THEME_FILE"
 fi
 
-# Refresh gum/toilet shell cache + SDDM greeter colors from live palette.
 if [[ -x "$HOME_CFG/hyprgruv/scripts/matugen-posthook-gum.sh" || -f "$HOME_CFG/hyprgruv/scripts/matugen-posthook-gum.sh" ]]; then
     bash "$HOME_CFG/hyprgruv/scripts/matugen-posthook-gum.sh" 2>/dev/null || true
 elif [[ -f "$HOME_CFG/hyprgruv/scripts/colors.sh" ]]; then

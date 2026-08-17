@@ -72,6 +72,7 @@ pipewire-jack
 pavucontrol
 cava
 swaync
+# Optional post-install theming (Waypaper / Super+W matugen tile). Install does not run it.
 matugen
 pastel
 uv

@@ -89,46 +89,7 @@ confirm() {
 }
 
 pick() {
-    local header="$1"
-    shift
-    local choice=""
-    local gum_status=0
-
-    stty sane 2>/dev/null || true
-    if command -v gum >/dev/null 2>&1; then
-        set +e
-        choice="$(gum_choose_prompt --header "$header" "$@")"
-        gum_status=$?
-        set -e
-    fi
-    choice="${choice//$'\r'/}"
-    choice="${choice#"${choice%%[![:space:]]*}"}"
-    choice="${choice%"${choice##*[![:space:]]}"}"
-
-    if [[ $gum_status -eq 0 && -n "$choice" ]]; then
-        printf '%s\n' "$choice"
-        return 0
-    fi
-
-    echo ""
-    echo "  $header"
-    local -a opts=("$@")
-    local i
-    for i in "${!opts[@]}"; do
-        echo "  $((i + 1))) ${opts[$i]}"
-    done
-    echo ""
-    local reply=""
-    if _hyprgruv_has_tty; then
-        read -rp "Choose [1-${#opts[@]}]: " reply </dev/tty
-    else
-        read -rp "Choose [1-${#opts[@]}]: " reply
-    fi
-    if [[ "$reply" =~ ^[0-9]+$ ]] && ((reply >= 1 && reply <= ${#opts[@]})); then
-        printf '%s\n' "${opts[reply - 1]}"
-        return 0
-    fi
-    return 1
+    hyprgruv_pick "$@"
 }
 
 ask_text() {
@@ -137,8 +98,8 @@ ask_text() {
     local reply=""
     if command -v gum >/dev/null 2>&1; then
         set +e
-        if _hyprgruv_has_tty && ! [[ -t 1 ]]; then
-            reply="$(gum input --prompt "$prompt " --value "$default" </dev/tty >/dev/tty)"
+        if _hyprgruv_has_tty && ! [[ -t 0 ]]; then
+            reply="$(gum input --prompt "$prompt " --value "$default" </dev/tty)"
         else
             reply="$(gum input --prompt "$prompt " --value "$default")"
         fi
@@ -182,7 +143,12 @@ device_uuid() {
 
 device_fstype() {
     local dev="$1"
-    lsblk -no FSTYPE "$dev" 2>/dev/null | awk 'NF{print; exit}'
+    local fs=""
+    fs="$(lsblk -no FSTYPE "$dev" 2>/dev/null | awk 'NF && $1 != "crypto_LUKS" {print; exit}')"
+    if [[ -z "$fs" ]]; then
+        fs="$(blkid -s TYPE -o value "$dev" 2>/dev/null | awk 'NF{print; exit}')"
+    fi
+    printf '%s\n' "$fs"
 }
 
 fstab_has_uuid() {
@@ -556,6 +522,10 @@ choose_backup_disk() {
 
     labels+=("Enter device path…")
     labels+=("Skip")
+
+    hyprgruv_tty_echo ""
+    hyprgruv_tty_echo "  Extra-disk replica (not the Timeshift / GRUB disk)."
+    hyprgruv_tty_echo "  Choose ONE partition for the off-disk copy."
     local choice
     choice="$(pick "Backup disk:" "${labels[@]}")" || return 1
     case "$choice" in
@@ -564,9 +534,20 @@ choose_backup_disk() {
             ask_text "Device path:" "/dev/sda1"
             ;;
         *)
-            printf '%s\n' "${choice%% *}"
+            backup_dev_from_choice "$choice"
             ;;
     esac
+}
+
+backup_dev_from_choice() {
+    local raw="$1"
+    local token=""
+    token="$(printf '%s\n' "$raw" | grep -oE '/dev/[^[:space:]]+' | head -1 || true)"
+    if [[ -z "$token" ]]; then
+        log_error "Could not read a /dev/… path from: $raw"
+        return 1
+    fi
+    printf '%s\n' "$token"
 }
 
 is_root_backing() {
@@ -605,12 +586,25 @@ prepare_backup_disk() {
         return 0
     fi
 
+    if [[ -z "$fstype" || "$fstype" == "crypto_LUKS" ]]; then
+        # lsblk often misses a filesystem when a stale signature is also present.
+        local probe=""
+        probe="$(sudo blkid -s TYPE -o value "$dev" 2>/dev/null | awk 'NF{print; exit}')"
+        [[ -n "$probe" && "$probe" != "crypto_LUKS" ]] && fstype="$probe"
+    fi
+
     if [[ -n "$fstype" && "$fstype" != "crypto_LUKS" ]]; then
         sudo mkdir -p "$BACKUP_MOUNT"
         sudo mount "$dev" "$BACKUP_MOUNT"
         log_success "Mounted $dev → $BACKUP_MOUNT ($fstype)"
         ensure_backup_fstab "$dev" "$fstype" ""
         return 0
+    fi
+
+    if sudo wipefs -n "$dev" 2>/dev/null | grep -qiE 'btrfs|ext[234]|xfs|ntfs|vfat|exfat|f2fs'; then
+        log_error "$dev has a filesystem signature lsblk missed — refusing to format (data would be lost)"
+        sudo wipefs -n "$dev" || true
+        return 1
     fi
 
     local do_format=0
@@ -935,15 +929,15 @@ detect_root
 detect_luks
 print_detection
 
-echo "Three optional layers:"
-echo "  1. Local Timeshift snapshots (same disk, instant rollback"
+echo "Three optional layers (Yes/No for each next — this is not a 1-3 menu):"
+echo "  • Local Timeshift snapshots (same disk, instant rollback"
 if root_is_btrfs; then
     echo "     + GRUB menu via grub-btrfs --timeshift-auto)"
 else
     echo "     — rsync mode on ${ROOT_FSTYPE}, no GRUB snapshot menu)"
 fi
-echo "  2. Layered replica on a separate disk (btrfs send/receive, or rsync)"
-echo "  3. Weekly copy of that replica to a NAS mount"
+echo "  • Extra-disk replica on a separate drive (btrfs send/receive, or rsync)"
+echo "  • Weekly copy of that replica to a NAS mount"
 echo ""
 if [[ "$ROOT_LUKS" -eq 1 ]]; then
     log_warning "Root is encrypted. Local snapshots stay inside the unlocked volume."

@@ -302,7 +302,7 @@ fi
 est_h="$(bytes_human "$EST_BYTES")"
 echo ""
 echo "Pre-generating $MISSES thumbnail(s) uses about $est_h in $CACHE_DIR."
-echo "This only speeds up the waypaper picker — theme apply still runs matugen."
+echo "This only speeds up the waypaper picker — theme apply uses the static preset (matugen only for free wallpapers)."
 if [[ $YES -eq 0 ]]; then
   echo "Skip if disk or CPU is tight. Re-run later:"
   echo "  bash $SCRIPT_DIR/cache-wallpapers.sh"

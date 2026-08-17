@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "wallpaper": "~/Pictures/Wallpapers/gruvbox_stripes_arch.png",
+  "source": "shipped-default",
+  "base16": {
+    "base00": "#1d2021",
+    "base01": "#282828",
+    "base02": "#3c3836",
+    "base03": "#7c6f64",
+    "base04": "#928374",
+    "base05": "#ebdbb2",
+    "base06": "#3c3836",
+    "base07": "#665c54",
+    "base08": "#cc241d",
+    "base09": "#b16286",
+    "base0a": "#d79921",
+    "base0b": "#98971a",
+    "base0c": "#689d6a",
+    "base0d": "#689d6a",
+    "base0e": "#458588",
+    "base0f": "#689d6a"
+  }
+}

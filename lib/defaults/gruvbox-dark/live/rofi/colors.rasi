@@ -1,0 +1,70 @@
+* {
+    /* Base16 palette */
+    base00: #1d2021;
+    base01: #282828;
+    base02: #3c3836;
+    base03: #7c6f64;
+    base04: #928374;
+    base05: #ebdbb2;
+    base06: #3c3836;
+    base07: #665c54;
+    base08: #cc241d;
+    base09: #b16286;
+    base0A: #d79921;
+    base0B: #689d6a;
+    base0C: #689d6a;
+    base0D: #689d6a;
+    base0E: #458588;
+    base0F: #689d6a;
+
+    /* Panel chrome — matches waypaper/style.css (alpha 0.9 window, 0.85 entry, live blur) */
+    surface-alpha: #1d2021e6;
+    entry-surface: #282828d9;
+    primary-hover: #689d6a26;
+
+    primary: #689d6a;
+    primary-fixed: #689d6a;
+    primary-fixed-dim: #689d6a;
+    on-primary: #1d2021;
+    on-primary-fixed: #1d2021;
+    on-primary-fixed-variant: #689d6a;
+    primary-container: #689d6a;
+    on-primary-container: #ebdbb2;
+    secondary: #458588;
+    secondary-fixed: #458588;
+    secondary-fixed-dim: #458588;
+    on-secondary: #1d2021;
+    on-secondary-fixed: #1d2021;
+    on-secondary-fixed-variant: #458588;
+    secondary-container: #3c3836;
+    on-secondary-container: #ebdbb2;
+    tertiary: #b16286;
+    tertiary-fixed: #d79921;
+    tertiary-fixed-dim: #b16286;
+    on-tertiary: #1d2021;
+    on-tertiary-fixed: #1d2021;
+    on-tertiary-fixed-variant: #689d6a;
+    tertiary-container: #d79921;
+    on-tertiary-container: #1d2021;
+    error: #cc241d;
+    on-error: #1d2021;
+    error-container: #cc241d;
+    on-error-container: #1d2021;
+    surface: #1d2021;
+    on-surface: #ebdbb2;
+    on-surface-variant: #928374;
+    outline: #928374;
+    outline-variant: #7c6f64;
+    shadow: #1d2021;
+    scrim: #1d2021;
+    inverse-surface: #665c54;
+    inverse-on-surface: #3c3836;
+    inverse-primary: #458588;
+    surface-dim: #1d2021;
+    surface-bright: #665c54;
+    surface-container-lowest: #1d2021;
+    surface-container-low: #282828;
+    surface-container: #3c3836;
+    surface-container-high: #282828;
+    surface-container-highest: #7c6f64;
+}

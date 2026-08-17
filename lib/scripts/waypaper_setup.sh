@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # waypaper_setup.sh — install waypaper stack, optional wallpaper repo,
-# optional waypaper preview cache, initial matugen theme
+# optional waypaper preview cache, seed shipped gruvbox defaults (no matugen)
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -77,7 +77,9 @@ ensure_wallpaper_dir() {
   local seed=""
   local candidate
   for candidate in \
+    "$HYPR_DIR/assets/wallpapers/gruvbox_stripes_arch.png" \
     "$HYPR_DIR/assets/wallpapers/default.png" \
+    "$HYPR_DIR/home/.config/colorschemes/gruvbox-dark/wallpapers/gruvbox_stripes_arch.png" \
     "$HYPR_DIR/home/Pictures/Wallpapers/default.png" \
     "$HYPR_DIR/home/.config/settings/default_wp.png"; do
     [[ -f "$candidate" ]] || continue
@@ -117,9 +119,14 @@ ensure_wallpaper_dir() {
     mkdir -p "$WALLPAPER_DIR"
   fi
 
-  if [[ ! -f "$WALLPAPER_DIR/default.png" && -n "$seed" ]]; then
-    cp -a "$seed" "$WALLPAPER_DIR/default.png"
-    log_status "Seeded default wallpaper into $WALLPAPER_DIR"
+  if [[ -n "$seed" ]]; then
+    if [[ ! -f "$WALLPAPER_DIR/gruvbox_stripes_arch.png" ]]; then
+      cp -a "$seed" "$WALLPAPER_DIR/gruvbox_stripes_arch.png"
+    fi
+    if [[ ! -f "$WALLPAPER_DIR/default.png" ]]; then
+      cp -a "$seed" "$WALLPAPER_DIR/default.png"
+      log_status "Seeded default wallpaper into $WALLPAPER_DIR"
+    fi
   fi
 }
 
@@ -174,24 +181,28 @@ apply_initial_wallpaper() {
     default_wp="$(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) | head -1)"
   fi
   [[ -n "${default_wp:-}" && -f "$default_wp" ]] || {
-    log_warning "No wallpaper found in $WALLPAPER_DIR — skip initial matugen/theming"
+    log_warning "No wallpaper found in $WALLPAPER_DIR — skip initial theme seed"
     return 0
   }
 
   ensure_wallpaper_daemon
 
+  if [[ -f "$HYPR_DIR/lib/scripts/seed-default-theme.sh" ]]; then
+    log_status "Applying shipped gruvbox-dark wallpaper and static theme (no matugen)…"
+    bash "$HYPR_DIR/lib/scripts/seed-default-theme.sh" --wallpaper \
+      || log_warning "seed-default-theme.sh finished with warnings"
+    return 0
+  fi
+
   if [[ -f "$HYPR_DIR/lib/scripts/default_wp.sh" ]]; then
-    log_status "Applying initial wallpaper and generating matugen theme…"
+    log_status "Applying initial wallpaper from shipped defaults…"
     SKIP_WALLPAPER=0 bash "$HYPR_DIR/lib/scripts/default_wp.sh" || log_warning "default_wp.sh finished with warnings"
     return 0
   fi
 
   log_status "Applying wallpaper: $(basename "$default_wp")"
-  if command -v matugen >/dev/null 2>&1; then
-    matugen image "$default_wp" || log_warning "matugen exited non-zero"
-  fi
   if command -v waypaper >/dev/null 2>&1; then
-    waypaper --wallpaper "$default_wp" --apply >/dev/null 2>&1 \
+    SET_WALLPAPER_SKIP_PALETTE=1 waypaper --wallpaper "$default_wp" --apply >/dev/null 2>&1 \
       || waypaper --wallpaper "$default_wp" >/dev/null 2>&1 \
       || log_warning "waypaper could not apply wallpaper"
   fi

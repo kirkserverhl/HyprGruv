@@ -168,19 +168,18 @@ fi
 sleep 1
 
 # ============================================================
-# Opening wallpaper + first matugen palette (before reboot)
-# Runs after stow so set_wallpaper.sh, matugen templates, and
-# waypaper config are in place.
+# Opening wallpaper + shipped gruvbox-dark configs (before reboot)
+# Copies pre-rendered defaults — does not run matugen.
 # ============================================================
 if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
     display_header "Opening Wallpaper"
-    log_status "Applying opening wallpaper and default matugen theme…"
+    log_status "Applying opening wallpaper and shipped gruvbox-dark theme…"
     set +e
     bash "$HYPR_DIR/lib/scripts/default_wp.sh"
     wp_exit=$?
     set -e
     if [[ $wp_exit -eq 0 ]]; then
-        log_success "Opening wallpaper and matugen theme applied"
+        log_success "Opening wallpaper and gruvbox-dark defaults applied"
         mark_completed "Opening wallpaper"
     else
         hyprgruv_strict_abort "default_wp.sh failed (exit $wp_exit)"

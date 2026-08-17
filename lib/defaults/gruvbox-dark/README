@@ -1,0 +1,19 @@
+# Shipped Gruvbox default (install seed)
+
+This directory is the **first-boot** theme: wallpaper, source color, and
+pre-rendered app configs. Install copies these into machine-local paths.
+`git-eod-pull` does **not** re-apply them once a live palette exists.
+
+| File | Role |
+|------|------|
+| `wallpaper.name` | `gruvbox_stripes_arch.png` (Arch logo / Gruvbox stripes) |
+| `source-color` / `user-accent` | `#689d6a` |
+| `palette.json` | Canonical gruvbox-dark base16 |
+| `live/` | Gitignored app outputs (waybar, kitty, gtk, qt, …) |
+
+Wallpaper pixels live in `assets/wallpapers/` (same image as
+`default.png` and the theme-slot copy under
+`home/.config/colorschemes/gruvbox-dark/wallpapers/`).
+
+Matugen is optional after install (Waypaper / Super+W). Do not run it
+from `install.sh` or `git-eod-pull`.

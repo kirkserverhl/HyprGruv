@@ -107,8 +107,7 @@ declare -a ORDERED_SCRIPTS=(
     "setup-mime-handlers.sh|Configure MIME handlers and file openers"
 )
 
-# Support skipping the wallpaper step (waypaper + matugen can hang or block
-# when there is no running Wayland compositor / awww yet during
+# Support skipping the wallpaper step (awww may not be up during
 # the text-mode install phase). Use on laptop / test runs:
 #   SKIP_WALLPAPER=1 ./install.sh
 # The step can be run manually later from inside Hyprland:
@@ -122,7 +121,7 @@ for entry in "${ORDERED_SCRIPTS[@]}"; do
 
     # Skip wallpaper step if requested (avoids hangs with waypaper in non-graphical context)
     if [[ "$script_name" == "default_wp.sh" && "${SKIP_WALLPAPER:-0}" == "1" ]]; then
-        log_warning "SKIP_WALLPAPER=1 — skipping default wallpaper / matugen step"
+        log_warning "SKIP_WALLPAPER=1 — skipping default wallpaper / theme seed"
         continue
     fi
 

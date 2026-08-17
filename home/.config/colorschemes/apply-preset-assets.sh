@@ -76,11 +76,19 @@ fi
 
 echo "saved" >"$CACHE_DIR/color-mode"
 
+if [[ -f "$GENERATOR" ]]; then
+    python3 "$GENERATOR" --tailored "$THEME" 2>/dev/null || true
+fi
 if [[ -n "$WALLPAPER" && -f "$WALLPAPER" && -f "$BUILDER" ]] && command -v matugen >/dev/null 2>&1; then
     IMPORT_JSON="$CACHE_DIR/saved-import.json"
+    leftover="$HOME/.config/hyprgruv/scripts/matugen-leftover.sh"
     python3 "$BUILDER" build-base16 "$PALETTE_JSON" "$WALLPAPER" "$IMPORT_JSON" 2>/dev/null || true
     if [[ -f "$IMPORT_JSON" ]]; then
-        matugen json "$IMPORT_JSON" --continue-on-error 2>/dev/null || true
+        if [[ -f "$leftover" ]]; then
+            bash "$leftover" "$IMPORT_JSON" "$THEME" || true
+        else
+            matugen json "$IMPORT_JSON" --continue-on-error 2>/dev/null || true
+        fi
     fi
 fi
 

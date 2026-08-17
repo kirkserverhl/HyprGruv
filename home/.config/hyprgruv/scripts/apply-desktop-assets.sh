@@ -117,6 +117,12 @@ EOF
 
 apply_hypr_cursor() {
     command -v hyprctl >/dev/null 2>&1 || return 0
+    local ensure="${HOME}/.hyprgruv/lib/scripts/ensure-hypr-config.sh"
+    [[ -f "$ensure" ]] && bash "$ensure" 2>/dev/null || true
+    # Never mkdir a shadow ~/.config/hypr — that hides hyprland.lua.
+    if [[ ! -f "${HOME}/.config/hypr/hyprland.lua" ]]; then
+        return 0
+    fi
     mkdir -p "$(dirname "$CURSOR_CONF")"
     printf 'exec-once = hyprctl setcursor %s %s\n' "$CURSOR_THEME" "$CURSOR_SIZE" >"$CURSOR_CONF"
     hyprctl setcursor "$CURSOR_THEME" "$CURSOR_SIZE" 2>/dev/null || true

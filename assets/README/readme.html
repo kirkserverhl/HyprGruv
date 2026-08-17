@@ -111,7 +111,7 @@ cd ~/.hyprgruv
     <tr><td>1</td><td><code>00-preflight.sh</code></td><td>Arch prep, keyring, multilib</td></tr>
     <tr><td>2</td><td><code>01-packages.sh</code></td><td>yay, optional Chaotic-AUR, core stack + manifest lists</td></tr>
     <tr><td>3</td><td><code>02-stow.sh</code></td><td>Stow <code>home/</code> configs into <code>$HOME</code></td></tr>
-    <tr><td>4</td><td><code>default_wp.sh</code></td><td>Opening wallpaper + matugen palette</td></tr>
+    <tr><td>4</td><td><code>default_wp.sh</code></td><td>Opening wallpaper + shipped gruvbox-dark defaults</td></tr>
     <tr><td>5</td><td><code>post_reboot_setup.sh</code></td><td>Setup wizard (03–05)</td></tr>
     <tr><td>6</td><td>Final sync</td><td><code>yay -Syu</code> or <code>pacman -Syu</code></td></tr>
     <tr><td>7</td><td>Reboot</td><td>Skipped when a graphical session is detected</td></tr>
@@ -157,8 +157,8 @@ bash ~/.hyprgruv/sync-packages.sh</pre>
   </ul>
 
   <h2>Theming</h2>
-  <p>Wallpaper-driven colors via <strong>matugen</strong>. See <a href="THEMING.md">THEMING.md</a> for Firefox setup, manual palette pickers, and troubleshooting.</p>
-  <p>Firefox one-time: enable <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> in <code>about:config</code>, fix your profile path in <code>~/.config/matugen/config.toml</code>, then change wallpaper once.</p>
+  <p>Default theme is shipped <strong>gruvbox-dark</strong> (static files + Arch/Gruvbox wallpaper). <strong>Matugen</strong> is optional after install. See <a href="THEMING.md">THEMING.md</a>.</p>
+  <p>Firefox one-time: enable <code>toolkit.legacyUserProfileCustomizations.stylesheets</code> in <code>about:config</code>, fix your profile path in <code>~/.config/matugen/config.toml</code>, then change wallpaper or run Super+W.</p>
 
   <h2>Post-installation</h2>
   <p>Log out and select Hyprland at SDDM. If anything was skipped:</p>

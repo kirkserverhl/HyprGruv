@@ -205,18 +205,28 @@ fi
 # If you really want a symlink, set LINK_TO somewhere valid, e.g.:
 # ln -sfn "$HOME/.config/pacseek/config.toml" "$HOME/.config/pacseek/pacseek"
 
-# 3) starship.toml — matugen rainbow theme (updated by matugen on wallpaper change)
+# 3) starship.toml — live rainbow file (gitignored). Seed from shipped gruvbox
+# defaults; do not require matugen. Later Super+W / matugen may rewrite it.
 mkdir -p "$HOME/.config/starship"
 STARSHIP_THEME="matugen-rainbow.toml"
-if [[ -f "$HOME/.config/starship/$STARSHIP_THEME" ]]; then
+STARSHIP_SEED=""
+for STARSHIP_SEED in \
+    "$HOME/.config/starship/$STARSHIP_THEME" \
+    "$HYPR_DIR/lib/defaults/gruvbox-dark/live/starship/$STARSHIP_THEME" \
+    "$REPO_DIR/$PKG_DIR/.config/colorschemes/gruvbox-dark/starship-rainbow.toml" \
+    "$REPO_DIR/$PKG_DIR/.config/starship/$STARSHIP_THEME"
+do
+    [[ -f "$STARSHIP_SEED" ]] || continue
+    if [[ "$STARSHIP_SEED" != "$HOME/.config/starship/$STARSHIP_THEME" ]]; then
+        cp -a "$STARSHIP_SEED" "$HOME/.config/starship/$STARSHIP_THEME"
+    fi
     ln -sfn "$HOME/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship.toml"
     log_status "Linked: ~/.config/starship.toml -> ~/.config/starship/$STARSHIP_THEME"
-elif [[ -f "$REPO_DIR/$PKG_DIR/.config/starship/$STARSHIP_THEME" ]]; then
-    cp -a "$REPO_DIR/$PKG_DIR/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship/$STARSHIP_THEME"
-    ln -sfn "$HOME/.config/starship/$STARSHIP_THEME" "$HOME/.config/starship.toml"
-    log_status "Installed and linked starship theme: $STARSHIP_THEME"
-else
-    hyprgruv_strict_abort "starship theme $STARSHIP_THEME not found in $HOME or repo"
+    STARSHIP_SEED="ok"
+    break
+done
+if [[ "$STARSHIP_SEED" != "ok" ]]; then
+    hyprgruv_strict_abort "starship theme $STARSHIP_THEME not found in $HOME, lib/defaults, or repo"
 fi
 
 hyprgruv_require_cmd stow
@@ -231,7 +241,9 @@ _hyprgruv_seed_wallpaper_dir() {
     local seed=""
     local c
     for c in \
+        "$HYPR_DIR/assets/wallpapers/gruvbox_stripes_arch.png" \
         "$HYPR_DIR/assets/wallpapers/default.png" \
+        "$HYPR_DIR/home/.config/colorschemes/gruvbox-dark/wallpapers/gruvbox_stripes_arch.png" \
         "$HYPR_DIR/home/Pictures/Wallpapers/default.png" \
         "$HYPR_DIR/home/.config/settings/default_wp.png"; do
         [[ -f "$c" ]] || continue
@@ -263,9 +275,14 @@ _hyprgruv_seed_wallpaper_dir() {
         mkdir -p "$wall_dir"
     fi
 
-    if [[ ! -f "$wall_dir/default.png" && -n "$seed" ]]; then
-        cp -a "$seed" "$wall_dir/default.png"
-        log_status "Seeded ~/Pictures/Wallpapers/default.png"
+    if [[ -n "$seed" ]]; then
+        if [[ ! -f "$wall_dir/gruvbox_stripes_arch.png" ]]; then
+            cp -a "$seed" "$wall_dir/gruvbox_stripes_arch.png"
+        fi
+        if [[ ! -f "$wall_dir/default.png" ]]; then
+            cp -a "$seed" "$wall_dir/default.png"
+            log_status "Seeded ~/Pictures/Wallpapers/default.png"
+        fi
     fi
 }
 _hyprgruv_seed_wallpaper_dir

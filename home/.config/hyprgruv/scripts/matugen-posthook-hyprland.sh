@@ -14,4 +14,15 @@ if [[ -f "$PENDING_RUN" && -f "$HYPR_COLORS" ]]; then
     fi
 fi
 
+# Super+W reloads once at the end of apply-theme.sh. A mid-apply reload
+# races the Lua loader ("cannot open …/hyprland.lua").
+if [[ "${THEME_SWITCHER_APPLY:-0}" == "1" || "${RELOAD_SKIP_PRESETS:-0}" == "1" ]]; then
+    exit 0
+fi
+
+if [[ ! -f "${HOME}/.config/hypr/hyprland.lua" ]]; then
+    echo "[hyprland posthook] skip reload — hyprland.lua missing" >&2
+    exit 0
+fi
+
 timeout 3 hyprctl reload 2>/dev/null || true

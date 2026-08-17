@@ -62,10 +62,14 @@ if [[ "${AWWW_PERSIST:-0}" == "1" ]]; then
         fi
     fi
 
-    mkdir -p "$HOME/.config/hypr/hyprlock" 2>/dev/null || true
-    ln -sfn "$DEFAULT_WP_PNG" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+    if [[ -f "$HOME/.config/hypr/hyprland.lua" ]]; then
+        mkdir -p "$HOME/.config/hypr/hyprlock" 2>/dev/null || true
+        ln -sfn "$DEFAULT_WP_PNG" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+    fi
 else
-    ln -sf "$WALLPAPER" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+    if [[ -f "$HOME/.config/hypr/hyprland.lua" ]]; then
+        ln -sf "$WALLPAPER" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+    fi
 fi
 
 printf '%s\n' "$WALLPAPER"

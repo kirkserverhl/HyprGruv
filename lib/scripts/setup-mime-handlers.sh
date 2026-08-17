@@ -51,10 +51,28 @@ if [[ -d "$ICON_DIR" ]]; then
         -delete 2>/dev/null || true
 fi
 
+# After stow, ~/.local/{bin,share/mime} often resolve into the repo tree.
+# GNU install refuses to copy a file onto itself ("are the same file").
+same_path() {
+    local a b
+    a="$(readlink -f "$1" 2>/dev/null || true)"
+    b="$(readlink -f "$2" 2>/dev/null || true)"
+    [[ -n "$a" && -n "$b" && "$a" == "$b" ]]
+}
+
+install_unless_same() {
+    local mode="$1" src="$2" dst="$3"
+    mkdir -p "$(dirname "$dst")"
+    if same_path "$src" "$dst"; then
+        return 0
+    fi
+    install -m "$mode" "$src" "$dst"
+}
+
 XDG_OPEN="$HOME/.local/bin/xdg-open"
 if [[ ! -x "$XDG_OPEN" && -f "$HYPR_DIR/home/.local/bin/xdg-open" ]]; then
-    mkdir -p "$HOME/.local/bin"
-    install -m 0755 "$HYPR_DIR/home/.local/bin/xdg-open" "$XDG_OPEN"
+    install_unless_same 0755 "$HYPR_DIR/home/.local/bin/xdg-open" "$XDG_OPEN"
+    chmod +x "$XDG_OPEN" 2>/dev/null || true
 elif [[ -f "$XDG_OPEN" ]]; then
     chmod +x "$XDG_OPEN"
 fi
@@ -72,7 +90,7 @@ if [[ -f "$SQLITE_BIN" ]]; then
     chmod +x "$SQLITE_BIN"
     mkdir -p "$HOME/.local/bin"
     if [[ ! -e "$HOME/.local/bin/hyprgruv-sqlite" ]]; then
-        install -m 0755 "$SQLITE_BIN" "$HOME/.local/bin/hyprgruv-sqlite"
+        install_unless_same 0755 "$SQLITE_BIN" "$HOME/.local/bin/hyprgruv-sqlite"
     fi
 fi
 
@@ -81,7 +99,11 @@ MIME_DST="$HOME/.local/share/mime/packages/hyprgruv-sqlite.xml"
 if [[ -f "$MIME_SRC" ]]; then
     log "Registering SQLite globs (*.db, *.sqlite)..."
     mkdir -p "$(dirname "$MIME_DST")"
-    install -m 0644 "$MIME_SRC" "$MIME_DST"
+    if same_path "$MIME_SRC" "$MIME_DST"; then
+        log "SQLite MIME package already deployed via stow — skipping copy"
+    else
+        install -m 0644 "$MIME_SRC" "$MIME_DST"
+    fi
     if command -v update-mime-database >/dev/null 2>&1; then
         update-mime-database "$HOME/.local/share/mime" 2>/dev/null || true
     fi

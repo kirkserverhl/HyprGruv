@@ -15,9 +15,8 @@
 # For dotfiles (hyprgruv etc.):
 #   Keep this .sh (and optionally a seed default_wp.png) in your repo at
 #   home/.config/settings/default_wp.sh
-#   The live .png is usually .gitignore'd because it changes often and is large.
-#   On a fresh deploy you can either let the first wallpaper change populate it,
-#   or copy a "seed" image you commit as default_wp.png.seed or similar.
+#   The live .png is .gitignore'd (changes per machine). Install seeds it from
+#   assets/wallpapers/gruvbox_stripes_arch.png — not re-applied on git pull.
 
 DEFAULT_WALLPAPER="$HOME/.config/settings/default_wp.png"
 

@@ -40,14 +40,19 @@ python3 "$BUILDER" export-theme "$WALLPAPER" "$THEME" "$PALETTE_JSON"
 
 python3 "$GENERATOR" --prepare "$THEME"
 
-# Matugen import drives swaync/waybar/hypr/etc. from the same base16 (no Material You expansion).
-IMPORT_JSON="$CACHE_DIR/wal-import.json"
-python3 "$BUILDER" build "$WALLPAPER" "$IMPORT_JSON" spectrum-scale
-if command -v matugen >/dev/null 2>&1; then
-    matugen json "$IMPORT_JSON" --continue-on-error 2>/dev/null || true
-fi
-
+# Official presets first (starship/kitty/nvim/hypr). Leftover matugen after.
 python3 "$GENERATOR" --tailored "$THEME"
+
+IMPORT_JSON="$CACHE_DIR/wal-import.json"
+leftover="$HOME/.config/hyprgruv/scripts/matugen-leftover.sh"
+python3 "$BUILDER" build "$WALLPAPER" "$IMPORT_JSON" spectrum-scale
+if command -v matugen >/dev/null 2>&1 && [[ -f "$IMPORT_JSON" ]]; then
+    if [[ -f "$leftover" ]]; then
+        bash "$leftover" "$IMPORT_JSON" "$THEME" || true
+    else
+        matugen json "$IMPORT_JSON" --continue-on-error 2>/dev/null || true
+    fi
+fi
 
 jq -n \
     --arg wp "$WALLPAPER" \

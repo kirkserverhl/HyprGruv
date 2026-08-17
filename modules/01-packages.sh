@@ -335,16 +335,10 @@ hyprgruv_require_pkg hyprland
 # Rofi is required for launchers, palette pickers, and repo-update prompts.
 hyprgruv_require_cmd rofi
 
-# Opening wallpaper + first matugen palette.
-# On a fresh install, hypr configs are not stowed yet — install.sh runs
-# default_wp.sh after stow, immediately before reboot.
+# Opening wallpaper + shipped gruvbox defaults run after stow (install.sh).
+# Packages step only notes the deferral — do not run matugen here.
 if [[ "${SKIP_WALLPAPER:-0}" != "1" ]]; then
-    if [[ -x "$HOME/.config/hyprgruv/scripts/set_wallpaper.sh" ]]; then
-        log_status "Applying opening wallpaper and default matugen theme…"
-        bash "$HYPR_DIR/lib/scripts/default_wp.sh" || hyprgruv_strict_abort "default_wp.sh failed during packages step"
-    else
-        log_status "Opening wallpaper deferred until after stow (install.sh, before reboot)"
-    fi
+    log_status "Opening wallpaper deferred until after stow (shipped gruvbox-dark seed)"
 else
     log_status "SKIP_WALLPAPER=1 — skipping opening wallpaper step"
 fi

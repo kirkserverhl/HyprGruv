@@ -2,8 +2,11 @@
 # Super+W theme apply — named theme configs first; matugen only for apps
 # that have no official theme file.
 #
-# Flow: theme + wallpaper + source accent → named-theme switches →
-# matugen json for the leftover apps → reload hooks.
+# Flow: theme + wallpaper + source accent → official presets (starship,
+# kitty, nvim, hypr, yazi, obsidian, vscodium) → leftover matugen json
+# (waybar, swaync, rofi, …) → reload leftover hooks only.
+# Do not let matugen paint starship/kitty/nvim first — they flash then get
+# overwritten by --tailored.
 #
 # ── Named theme / official config (do NOT need matugen output) ──────────
 # Super+W already points these at a real theme. A posthook/reload is enough.
@@ -22,12 +25,13 @@
 #   discord/current.theme.css   spicetify-theme   nvim/lua/chadrc.lua
 #   (nvim today reloads matugen-theme.lua, not the slot chadrc)
 #
-# ── Matugen output still required (no official theme, or must follow source) ─
-#   SwayNC/Overwatch   Waybar   Hyprland colors + hyprlock   Rofi   Wlogout
+# ── Matugen leftover only (no official theme, or must follow source) ─
+#   SwayNC/Overwatch   Waybar   Hyprlock   Rofi   Wlogout
 #   Firefox / pywalfox / chrome user CSS
 #   bat  btop  cava  tmux  alacritty  mpv  grok  gum
 #   qt5ct/qt6ct colors   Kvantum   qBittorrent   pacseek   pavucontrol
 #   terminal OSC sequences
+#   Hyprland colors come from --tailored (write_hypr), not the matugen template
 #
 # Env:
 #   THEME_SWITCHER_APPLY=1  (always set here — use theme slot palette)
@@ -71,6 +75,13 @@ echo "preset:$THEME" >"$CACHE_DIR/yazi-icon-mode"
 echo "saved" >"$CACHE_DIR/color-mode"
 touch "$HOME/.config/colorschemes/.use-preset-colors"
 
+ENSURE_HYPR="${HYPR_DIR:-$HOME/.hyprgruv}/lib/scripts/ensure-hypr-config.sh"
+if [[ -f "$ENSURE_HYPR" ]]; then
+    bash "$ENSURE_HYPR" 2>/dev/null || true
+elif [[ -f "$HOME/.hyprgruv/lib/scripts/ensure-hypr-config.sh" ]]; then
+    bash "$HOME/.hyprgruv/lib/scripts/ensure-hypr-config.sh" 2>/dev/null || true
+fi
+
 echo -e "${GREEN}Applying standard theme: $THEME${NC}"
 
 # --- wallpaper display only (no palette extract) ---
@@ -86,13 +97,27 @@ else
     if [[ -n "$SAVED" && -f "$SAVED" ]]; then
         WALLPAPER="$SAVED"
     else
+        DEFAULT_WP_NAME=""
+        [[ -f "$THEME_DIR/default-wallpaper" ]] && \
+            DEFAULT_WP_NAME=$(tr -d '[:space:]' <"$THEME_DIR/default-wallpaper")
         WDIR="$(resolve_wallpaper_dir "$THEME" 2>/dev/null || true)"
-        if [[ -n "$WDIR" && -d "$WDIR" ]]; then
+        if [[ -n "$DEFAULT_WP_NAME" ]]; then
+            for candidate in \
+                "$HOME/Pictures/Wallpapers/$DEFAULT_WP_NAME" \
+                "$THEME_DIR/wallpapers/$DEFAULT_WP_NAME" \
+                "${WDIR:-}/$DEFAULT_WP_NAME"
+            do
+                [[ -n "$candidate" && -f "$candidate" ]] || continue
+                WALLPAPER="$candidate"
+                break
+            done
+        fi
+        if [[ -z "$WALLPAPER" && -n "$WDIR" && -d "$WDIR" ]]; then
             WALLPAPER=$(find "$WDIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) | sort | head -n1)
-            if [[ -n "$WALLPAPER" ]]; then
-                sed -i "/^$THEME:/d" "$WALLPAPER_STATE"
-                echo "$THEME:$WALLPAPER" >>"$WALLPAPER_STATE"
-            fi
+        fi
+        if [[ -n "$WALLPAPER" ]]; then
+            sed -i "/^$THEME:/d" "$WALLPAPER_STATE"
+            echo "$THEME:$WALLPAPER" >>"$WALLPAPER_STATE"
         fi
     fi
 fi
@@ -112,7 +137,7 @@ if [[ -x "$SCRIPTS/apply-desktop-assets.sh" ]]; then
     "$SCRIPTS/apply-desktop-assets.sh" "$THEME" 2>/dev/null || true
 fi
 
-# --- slot palette + Super+W source → matugen import (all templates) ---
+# --- slot palette + Super+W source ---
 echo -e "${CYAN}-> Static palette + source color...${NC}"
 if [[ ! -f "$GENERATOR" ]]; then
     echo -e "${YELLOW}   Missing $GENERATOR${NC}"
@@ -123,6 +148,19 @@ if ! python3 "$GENERATOR" --prepare "$THEME"; then
     echo -e "${YELLOW}   Palette prepare failed for $THEME${NC}"
     notify-send "Theme Error" "Palette prepare failed: $THEME" -u critical
     exit 1
+fi
+
+# Official presets FIRST so starship/kitty/nvim never flash a matugen palette.
+echo -e "${CYAN}-> Official starship / kitty / neovim / hypr...${NC}"
+python3 "$GENERATOR" --tailored "$THEME" || true
+if [[ -x "$SCRIPTS/matugen-posthook-starship.sh" || -f "$SCRIPTS/matugen-posthook-starship.sh" ]]; then
+    bash "$SCRIPTS/matugen-posthook-starship.sh" 2>/dev/null || true
+fi
+if [[ -x "$SCRIPTS/reload-kitty-colors.sh" || -f "$SCRIPTS/reload-kitty-colors.sh" ]]; then
+    bash "$SCRIPTS/reload-kitty-colors.sh" 2>/dev/null || true
+fi
+if [[ -x "$SCRIPTS/reload-nvim-theme.sh" || -f "$SCRIPTS/reload-nvim-theme.sh" ]]; then
+    bash "$SCRIPTS/reload-nvim-theme.sh" 2>/dev/null || true
 fi
 
 # User-palette mirror for tools that read matugen user-palette.json
@@ -159,32 +197,6 @@ jq -n \
         theme: $theme
     }' >"$CACHE_DIR/pending-run.json" 2>/dev/null || true
 
-# --- matugen distributes the prepared palette to every template ---
-if [[ -z "${WALLPAPER:-}" || ! -f "$WALLPAPER" ]]; then
-    for f in "$HOME/.config/last_wallpaper.txt" "$HOME/.config/settings/default"; do
-        if [[ -f "$f" ]]; then
-            WALLPAPER=$(tr -d '\n' <"$f")
-            [[ -n "$WALLPAPER" && -f "$WALLPAPER" ]] && break
-        fi
-    done
-fi
-if [[ -n "${WALLPAPER:-}" && -f "$WALLPAPER" && -f "$BUILDER" ]] && command -v matugen >/dev/null 2>&1; then
-    echo -e "${CYAN}-> Matugen import (swaync, waybar, hypr, rofi, …)...${NC}"
-    IMPORT_JSON="$CACHE_DIR/saved-import.json"
-    if python3 "$BUILDER" build-base16 "$THEME_DIR/palette.json" "$WALLPAPER" "$IMPORT_JSON"; then
-        # json = distribute this palette; do not re-extract from the wallpaper.
-        matugen json "$IMPORT_JSON" --continue-on-error || true
-    else
-        echo -e "${YELLOW}   Import JSON failed — templates not refreshed${NC}"
-    fi
-else
-    echo -e "${YELLOW}   Skipping matugen import (need wallpaper + matugen)${NC}"
-fi
-
-# Official kitty / starship / neovim after matugen so they are not flattened.
-echo -e "${CYAN}-> Tailored kitty / starship / neovim...${NC}"
-python3 "$GENERATOR" --tailored "$THEME" || true
-
 # --- VSCodium standard theme name from slot ---
 if [[ -f "$THEME_DIR/vscodium-theme" ]]; then
     VSCODIUM_THEME=$(tr -d '\n' <"$THEME_DIR/vscodium-theme")
@@ -207,17 +219,42 @@ if [[ -x "$SCRIPTS/obsidian-theme.sh" ]]; then
     "$SCRIPTS/obsidian-theme.sh" "$THEME" 2>/dev/null || true
 fi
 
-# --- hot-reload visible surfaces (includes swaync / Overwatch) ---
-echo -e "${CYAN}-> Reloading waybar, hypr, kitty, swaync...${NC}"
+# Leftover apps only (waybar, swaync, rofi, gtk colors, …). Skips starship/kitty/nvim.
+if [[ -z "${WALLPAPER:-}" || ! -f "$WALLPAPER" ]]; then
+    for f in "$HOME/.config/last_wallpaper.txt" "$HOME/.config/settings/default"; do
+        if [[ -f "$f" ]]; then
+            WALLPAPER=$(tr -d '\n' <"$f")
+            [[ -n "$WALLPAPER" && -f "$WALLPAPER" ]] && break
+        fi
+    done
+fi
+LEFTOVER="$SCRIPTS/matugen-leftover.sh"
+if [[ -n "${WALLPAPER:-}" && -f "$WALLPAPER" && -f "$BUILDER" ]] && command -v matugen >/dev/null 2>&1; then
+    echo -e "${CYAN}-> Leftover matugen (waybar, swaync, rofi, …)...${NC}"
+    IMPORT_JSON="$CACHE_DIR/saved-import.json"
+    if python3 "$BUILDER" build-base16 "$THEME_DIR/palette.json" "$WALLPAPER" "$IMPORT_JSON"; then
+        if [[ -f "$LEFTOVER" ]]; then
+            bash "$LEFTOVER" "$IMPORT_JSON" "$THEME" || true
+        else
+            matugen json "$IMPORT_JSON" --continue-on-error || true
+        fi
+    else
+        echo -e "${YELLOW}   Import JSON failed — leftover templates not refreshed${NC}"
+    fi
+else
+    echo -e "${YELLOW}   Skipping leftover matugen (need wallpaper + matugen)${NC}"
+fi
+
+# --- hot-reload leftover surfaces (do not re-touch official presets) ---
+echo -e "${CYAN}-> Reloading waybar, hypr, swaync...${NC}"
+export RELOAD_SKIP_PRESETS=1
 if [[ -x "$SCRIPTS/reload-matugen-visible.sh" ]]; then
     "$SCRIPTS/reload-matugen-visible.sh" 2>/dev/null || true
 else
-    for hook in hyprland waybar starship terminal swaync gum; do
+    for hook in hyprland waybar terminal swaync gum; do
         [[ -x "$SCRIPTS/matugen-posthook-${hook}.sh" ]] && \
             "$SCRIPTS/matugen-posthook-${hook}.sh" 2>/dev/null || true
     done
-    [[ -x "$SCRIPTS/reload-nvim-theme.sh" ]] && \
-        "$SCRIPTS/reload-nvim-theme.sh" 2>/dev/null || true
 fi
 
 # SDDM greeter wallpaper + colors in background (never block Super+W).
@@ -245,7 +282,11 @@ fi
 # (the three titlebar "quarters") pick up the new palette. hyprbars can
 # only add_button — a reload clears the old ones first.
 echo -e "${CYAN}-> Hyprland borders + hyprbars...${NC}"
-timeout 8 hyprctl reload >/dev/null 2>&1 || true
+if [[ -f "$HOME/.config/hypr/hyprland.lua" ]]; then
+    timeout 8 hyprctl reload >/dev/null 2>&1 || true
+else
+    echo -e "${YELLOW}   skip hyprctl reload — $HOME/.config/hypr/hyprland.lua missing${NC}"
+fi
 hyprctl eval 'apply_borders()' >/dev/null 2>&1 || true
 hyprctl eval 'reapply_hyprbars()' >/dev/null 2>&1 || true
 if [[ -n "$ACCENT" ]]; then

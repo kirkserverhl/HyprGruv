@@ -25,7 +25,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILDER="$HOME/.config/hyprgruv/scripts/palette-build-import.py"
 GENERATOR="$SCRIPT_DIR/generate-preset-colors.py"
 RELOAD="$HOME/.config/hyprgruv/scripts/reload-matugen-visible.sh"
-DEFAULT_WP="$HOME/Pictures/Wallpapers/gruvbox_image46.png"
+DEFAULT_WP="$HOME/Pictures/Wallpapers/gruvbox_stripes_arch.png"
 
 mkdir -p "$CONFIG_DIR" "$CACHE_DIR"
 
@@ -131,17 +131,20 @@ PY
 
     python3 "$GENERATOR" --prepare "$theme"
 
-    local import_json="$CACHE_DIR/saved-import.json"
-    # Use the prepared slot palette (includes Super+W source), not the raw source file.
-    python3 "$BUILDER" build-base16 "$dest_palette" "$wallpaper" "$import_json"
-
-    if command -v matugen >/dev/null 2>&1; then
-        matugen json "$import_json" --continue-on-error 2>/dev/null || true
-    fi
-
-    # Official kitty + theme-fixed starship after matugen. Do not rewrite waybar/hypr/swaync.
+    # Official starship/kitty/nvim/hypr first — do not let matugen flash those.
     if [[ -f "$GENERATOR" ]]; then
         python3 "$GENERATOR" --tailored "$theme"
+    fi
+
+    local import_json="$CACHE_DIR/saved-import.json"
+    leftover="$HOME/.config/hyprgruv/scripts/matugen-leftover.sh"
+    python3 "$BUILDER" build-base16 "$dest_palette" "$wallpaper" "$import_json"
+    if command -v matugen >/dev/null 2>&1 && [[ -f "$import_json" ]]; then
+        if [[ -f "$leftover" ]]; then
+            bash "$leftover" "$import_json" "$theme" || true
+        else
+            matugen json "$import_json" --continue-on-error 2>/dev/null || true
+        fi
     fi
 
     if [[ -x "$HOME/.config/hyprgruv/scripts/matugen-posthook-gtk-theme.sh" ]]; then

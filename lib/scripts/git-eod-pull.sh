@@ -162,12 +162,13 @@ pull_repo() {
             if [[ $stashed -eq 1 ]]; then
                 log_status "$name — stash kept (git -C $path stash list)"
             fi
-            # Live matugen outputs are machine-local (gitignored). Re-seed only
-            # when markers are missing: follow .current-theme if chosen, else gruvbox.
+            # Live palette files are machine-local (gitignored). Seed shipped
+            # gruvbox defaults only when markers are missing — never re-apply
+            # the install default over an existing theme on pull.
             if [[ "$name" == "hyprgruv" ]]; then
                 local ensure="$HYPR_DIR/lib/scripts/ensure-local-palette.sh"
                 if [[ -f "$ensure" ]]; then
-                    log_status "$name — ensure local palette (chosen theme, else gruvbox default)"
+                    log_status "$name — ensure local palette if missing (do not re-apply on pull)"
                     bash "$ensure" || log_warning "$name — ensure-local-palette failed (run apply-theme.sh manually)"
                 fi
             fi

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Prepare Super+W theme palettes and restore tailored apps after matugen.
+"""Prepare Super+W theme palettes and write official (tailored) app configs.
 
-Matugen (`matugen json <import>`) distributes colors to every template.
-This module only: overlays the Super+W source accent, writes palette.json,
-and restores official kitty / starship files that should not be flattened.
+Super+W applies these official files *before* leftover matugen so starship,
+kitty, and neovim never flash a generated palette and then get overwritten.
+Matugen leftover still paints waybar / swaync / rofi / gtk colors / …
 """
 
 from __future__ import annotations
@@ -248,7 +248,12 @@ def write_hypr(slots: dict[str, str], theme: str) -> None:
         ]
     )
 
-    out = HOME / ".config/hypr/colors/custom/matugen.conf"
+    hypr_root = HOME / ".config/hypr"
+    if not (hypr_root / "hyprland.lua").is_file():
+        repo = Path(os.environ.get("HYPR_DIR", str(HOME / ".hyprgruv"))) / "home/.config/hypr"
+        if (repo / "hyprland.lua").is_file():
+            hypr_root = repo
+    out = hypr_root / "colors/custom/matugen.conf"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -669,7 +674,7 @@ end
 
 
 def write_tailored_overrides(slots: dict[str, str], theme: str) -> None:
-    """Apps that ship official themes — applied after matugen distributes the rest."""
+    """Apps that ship official themes — write before leftover matugen."""
     write_starship(slots, theme)
     write_kitty_tailored(theme)
     write_nvim_tailored(slots, theme)
@@ -680,6 +685,17 @@ def write_tailored_overrides(slots: dict[str, str], theme: str) -> None:
 def write_all_outputs(slots: dict[str, str], theme: str) -> None:
     # Matugen --import-json is the distributor. This only restores tailored apps.
     write_tailored_overrides(slots, theme)
+
+
+def seed_static_outputs(theme: str) -> dict[str, str]:
+    """Write live files from the shipped palette — no matugen, no wallpaper extract."""
+    slots = prepare_theme_palette(theme)
+    write_waybar(slots, theme)
+    write_hypr(slots, theme)
+    write_rofi(slots, theme)
+    write_mpv(slots, theme)
+    write_tailored_overrides(slots, theme)
+    return slots
 
 
 
@@ -759,6 +775,7 @@ def main() -> int:
             "  generate-preset-colors.py <theme-name>\n"
             "  generate-preset-colors.py --prepare <theme-name>\n"
             "  generate-preset-colors.py --tailored <theme-name>\n"
+            "  generate-preset-colors.py --seed <theme-name>\n"
             "  generate-preset-colors.py --list-accents <theme-name>\n"
             "  generate-preset-colors.py --apply-accent <theme-name> <#hex>",
             file=sys.stderr,
@@ -804,6 +821,16 @@ def main() -> int:
         slots = prepare_theme_palette(theme)
         write_tailored_overrides(slots, theme)
         print(f"Tailored overrides applied for {theme}")
+        return 0
+
+    if sys.argv[1] == "--seed":
+        if len(sys.argv) < 3:
+            print("Usage: generate-preset-colors.py --seed <theme>", file=sys.stderr)
+            return 1
+        theme = sys.argv[2].strip()
+        slots = seed_static_outputs(theme)
+        print(f"Static seed written for {theme}")
+        print(f"  accent (primary): {slots['base0D']}")
         return 0
 
     theme = sys.argv[1].strip()

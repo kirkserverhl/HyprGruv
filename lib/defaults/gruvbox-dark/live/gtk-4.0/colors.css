@@ -1,0 +1,38 @@
+/*
+ * GTK Colors — Base16 (Material You → base00–base0f)
+ */
+
+@define-color base00 #1d2021;
+@define-color base01 #282828;
+@define-color base02 #3c3836;
+@define-color base03 #7c6f64;
+@define-color base04 #928374;
+@define-color base05 #ebdbb2;
+@define-color base06 #3c3836;
+@define-color base07 #665c54;
+@define-color base08 #cc241d;
+@define-color base09 #b16286;
+@define-color base0A #d79921;
+@define-color base0B #689d6a;
+@define-color base0C #689d6a;
+@define-color base0D #689d6a;
+@define-color base0E #458588;
+@define-color base0F #689d6a;
+
+@define-color accent_color @base0D;
+@define-color accent_fg_color @base00;
+@define-color accent_bg_color @base0D;
+@define-color window_bg_color @base00;
+@define-color window_fg_color @base05;
+@define-color headerbar_bg_color @base01;
+@define-color headerbar_fg_color @base05;
+@define-color popover_bg_color @base01;
+@define-color popover_fg_color @base05;
+@define-color view_bg_color @base00;
+@define-color view_fg_color @base05;
+@define-color card_bg_color @base01;
+@define-color card_fg_color @base05;
+@define-color sidebar_bg_color @window_bg_color;
+@define-color sidebar_fg_color @window_fg_color;
+@define-color sidebar_border_color @base03;
+@define-color sidebar_backdrop_color @base00;
