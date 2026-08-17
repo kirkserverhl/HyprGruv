@@ -59,7 +59,7 @@ if [[ "${FORCE:-0}" != "1" && "${RE_RUN:-0}" != "1" ]]; then
         log_warning "To force a full re-test (re-run packages + reach stow):  FORCE=1 ./install.sh"
         log_warning "To reach/re-test stow *without* re-doing the heavy package step: SKIP_PACKAGES=1 FORCE=1 ./install.sh"
         log_warning "For a completely clean state this run: RESET_STATE=1 FORCE=1 ./install.sh"
-        log_warning "To re-run post-reboot wizard: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
+        log_warning "To re-run post-reboot wizard after install: setup"
         echo ""
         sleep 1.5
     fi
@@ -206,10 +206,10 @@ if [[ "${SKIP_SETUP_WIZARD:-0}" != "1" ]]; then
     else
         hyprgruv_strict_abort "Setup wizard failed (exit $wizard_exit)"
         log_warning "Setup wizard finished with errors (exit $wizard_exit)"
-        log_status "Retry: FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh"
+        log_status "Retry: setup   (or FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh)"
     fi
 else
-    log_warning "SKIP_SETUP_WIZARD=1 — wizard skipped (run manually: bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh)"
+    log_warning "SKIP_SETUP_WIZARD=1 — wizard skipped (run manually: setup)"
 fi
 sleep 1
 
@@ -257,8 +257,8 @@ do_install_exit() {
 Next: log out of your current session, then at SDDM select the Hyprland session.
 HyprGruv will sync packages and open Settings on first login.
 
-If anything was skipped later:
-  FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+If anything was skipped later, type:
+  setup
 
 EOF
     log_success "Done — log out and pick Hyprland at SDDM when ready."

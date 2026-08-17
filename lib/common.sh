@@ -762,8 +762,8 @@ EOF
     *)
         cat <<'EOF'
 
-Re-run this wizard any time:
-  FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+Re-run this wizard any time (bash, zsh, or fish):
+  setup
 
 On first Hyprland login, HyprGruv syncs packages in the background and opens Settings.
 Uncheck "Don't show welcome on startup" in Settings to skip future welcomes.

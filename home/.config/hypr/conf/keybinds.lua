@@ -126,6 +126,7 @@ hl.bind(mainMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("google-chrome-stable")) -- #launcher Open Chrome
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh")) -- #emoji HyprEmoji (any keyboard)
 hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --lighter")) -- #window Monitor opacity lighter
 hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --darker")) -- #window Monitor opacity darker
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/soundsbored.sh")) -- #audio #launcher Open soundsbored
@@ -290,16 +291,17 @@ hl.bind(altMod .. " + SUPER + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh 
 -- Accessibility zoom (screen magnifier — entire output, not app content zoom)
 -- Super+scroll: zoom with the cursor locked to the center of the view
 -- (cursor:zoom_rigid). Alt+= / - / Backspace stay as the keyboard trio.
+-- Super+Backspace also resets so a Super+scroll zoom-in is escapable
+-- without hunting for Alt.
 -- Bind equal AND plus because Alt+Shift+= (the + glyph) is a different key.
 -- Super+Shift+scroll is the same magnifier so an extra Shift still works.
 --
 -- Lua parser: hyprctl keyword is a no-op ("Use eval"). Set via hl.config.
--- Coalesce wheel ticks: stack the factor, apply once after ~90ms of quiet.
+-- Apply immediately. A reused oneshot debounce timer fired once after the
+-- first zoom-in burst and then never applied zoom-out (stuck magnifier).
+-- binds:scroll_event_delay already coalesces extra wheel ticks.
 -- A leftover 1.01 still crops the outputs, so snap anything under 1.05 to 1.0.
 local ZOOM_MIN, ZOOM_MAX, ZOOM_STEP, ZOOM_SNAP = 1.0, 8.0, 1.2, 1.05
-local ZOOM_DEBOUNCE_MS = 90
-
-local pending_zoom = nil
 
 local function live_zoom()
 	local z = hl.get_config("cursor.zoom_factor")
@@ -307,13 +309,6 @@ local function live_zoom()
 		z = 1.0
 	end
 	return z
-end
-
-local function current_zoom()
-	if type(pending_zoom) == "number" then
-		return pending_zoom
-	end
-	return live_zoom()
 end
 
 local function clamp_zoom(factor)
@@ -324,37 +319,20 @@ local function clamp_zoom(factor)
 	return z
 end
 
-local function apply_pending_zoom()
-	if type(pending_zoom) ~= "number" then
-		return
-	end
-	local z = clamp_zoom(pending_zoom)
-	pending_zoom = nil
-	hl.config({ cursor = { zoom_factor = z, zoom_rigid = true } })
-end
-
-local zoom_timer = hl.timer(apply_pending_zoom, { timeout = ZOOM_DEBOUNCE_MS, type = "oneshot" })
-zoom_timer:set_enabled(false)
-
-local function request_zoom(factor)
-	pending_zoom = factor
-	zoom_timer:set_enabled(false)
-	zoom_timer:set_timeout(ZOOM_DEBOUNCE_MS)
-	zoom_timer:set_enabled(true)
+local function set_zoom(factor)
+	hl.config({ cursor = { zoom_factor = clamp_zoom(factor), zoom_rigid = true } })
 end
 
 local function zoom_in()
-	request_zoom(current_zoom() * ZOOM_STEP)
+	set_zoom(live_zoom() * ZOOM_STEP)
 end
 
 local function zoom_out()
-	request_zoom(current_zoom() / ZOOM_STEP)
+	set_zoom(live_zoom() / ZOOM_STEP)
 end
 
 local function zoom_rst()
-	pending_zoom = nil
-	zoom_timer:set_enabled(false)
-	hl.config({ cursor = { zoom_factor = 1.0, zoom_rigid = true } })
+	set_zoom(1.0)
 end
 
 hl.bind(mainMod .. " + mouse_up", zoom_in) -- #zoom Super+scroll up magnify (cursor-centered)
@@ -366,6 +344,7 @@ hl.bind(altMod .. " + plus", zoom_in) -- #zoom Magnify (shifted +)
 hl.bind(altMod .. " + SHIFT + equal", zoom_in) -- #zoom Magnify (Shift+=)
 hl.bind(altMod .. " + minus", zoom_out) -- #zoom Demagnify
 hl.bind(altMod .. " + backspace", zoom_rst) -- #zoom Reset magnifier
+hl.bind(mainMod .. " + backspace", zoom_rst) -- #zoom Reset magnifier
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- DESKTOP META (was under bare CTRL — that steals native app shortcuts)
@@ -404,7 +383,11 @@ hl.bind(mainMod .. " + SHIFT + U", mac("link")) -- #mac Cmd+K → link (was Supe
 -- fallback if firmware is still in media-key mode (Fn held, or Fn-lock off).
 -- ═══════════════════════════════════════════════════════════════════════════════
 
--- Device name lists from `hyprctl devices` (include all HID interfaces per board)
+-- Device name lists from `hyprctl devices` (include all HID interfaces per board).
+-- Three stations stay plugged in at once (HP kit, MX Mechanical, laptop).
+-- F-row binds are inclusive to one board so the other two keep their own decals.
+-- GPU Screen Recorder must use "don't grab devices" (enable_hotkeys_no_grab):
+-- --all remaps every key through gsr-ui-virtual-keyboard and these filters miss.
 local KB_HP = {
 	"chicony-hp-wireless-keyboard-mouse-kit",
 	"chicony-hp-wireless-keyboard-mouse-kit-consumer-control",
@@ -414,9 +397,12 @@ local KB_HP = {
 local KB_LOGI_MX = {
 	"logitech-mechanical-keyboard-logitech-mechanical-keyboard",
 	"logitech-mechanical-keyboard-logitech-mechanical-keyboard-keyboard",
+	"logitech-mechanical-keyboard-logitech-mechanical-keyboard-keyboard-1",
 	"logitech-usb-receiver",
+	"logitech-usb-receiver-1",
 	"logitech-usb-receiver-system-control",
 	"logitech-usb-receiver-consumer-control",
+	"logitech-usb-receiver-consumer-control-1",
 }
 -- HyprLab / IdeaPad built-in (main AT keyboard + vendor extra buttons)
 local KB_LAPTOP = {
@@ -442,6 +428,7 @@ local KB_G502 = {
 local function dev_bind(keys, dispatcher, devices, extra)
 	local opts = {
 		locked = true,
+		allow_input_capture = true,
 		device = { inclusive = true, list = devices },
 	}
 	if extra then
@@ -518,19 +505,23 @@ dev_bind("F11", hl.dsp.exec_cmd("pavucontrol"), KB_HP) -- #audio Audio mixer
 dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"), KB_HP) -- #settings Hyprland / HyprGruv settings
 
 -- ── Logitech MX Mechanical (Bolt wireless + USB cable) ──────────────────────
--- F1 screen- · F2 screen+ · F3 kbd- · F4 kbd+ · F5 transcribe (placeholder)
--- F6 emoji · F7 screenshot · Shift+F7 OCR · F8 mic mute
+-- Decals: F1 screen- · F2 screen+ · F3 kbd- · F4 kbd+ · F5 transcribe
+-- F6 emoji · F7 screenshot · F8 mic mute (includes RingCentral)
 -- F9 prev · F10 play/pause · F11 next · F12 mute
--- Two keys right of F12 (before Home/PgUp): vol- / vol+
+-- Two keys right of F12 (lightbulb then the next one): vol- / vol+
 dev_bind("F1", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_LOGI_MX, { repeating = true }) -- #display #mx Screen brightness down
 dev_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LOGI_MX, { repeating = true }) -- #display #mx Screen brightness up
 dev_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --dec"), KB_LOGI_MX) -- #mx Keyboard light down
 dev_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --inc"), KB_LOGI_MX) -- #mx Keyboard light up
-dev_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx #wip Transcribe (placeholder)
-dev_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX) -- #emoji #mx Emoji picker
+dev_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (screenshot transcribe)
+dev_bind(
+	"F6",
+	hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"),
+	KB_LOGI_MX
+) -- #emoji #mx Emoji picker
 dev_bind("F7", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LOGI_MX) -- #screenshot #mx Screenshot menu
 dev_bind("SHIFT + F7", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (Shift + screenshot)
-dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX) -- #media #mx Mute mic
+dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX) -- #media #mx Mute mic (RingCentral + default source)
 dev_bind("F9", hl.dsp.exec_cmd("playerctl previous"), KB_LOGI_MX) -- #media #mx Previous track
 dev_bind("F10", hl.dsp.exec_cmd("playerctl play-pause"), KB_LOGI_MX) -- #media #mx Play/Pause
 dev_bind("F11", hl.dsp.exec_cmd("playerctl next"), KB_LOGI_MX) -- #media #mx Next track
@@ -539,6 +530,8 @@ dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), KB_LOGI_MX) -
 -- Media-layer / dedicated keys (fn-lock off, or the two keys right of F12)
 dev_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_LOGI_MX, { repeating = true })
 dev_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LOGI_MX, { repeating = true })
+dev_bind("XF86KbdBrightnessDown", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --dec"), KB_LOGI_MX)
+dev_bind("XF86KbdBrightnessUp", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --inc"), KB_LOGI_MX)
 dev_bind("PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LOGI_MX) -- #screenshot #mx
 dev_bind("SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (Shift + screenshot)
 dev_bind("XF86AudioMicMute", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX)
@@ -549,6 +542,10 @@ dev_bind("XF86AudioMute", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), KB_
 dev_bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_LOGI_MX, { repeating = true }) -- #media #mx Volume down
 dev_bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_LOGI_MX, { repeating = true }) -- #media #mx Volume up
 dev_bind("XF86EmojiPicker", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX)
+-- Extra keys right of F12: firmware may send volume, F13/F14, or a lightbulb toggle
+dev_bind("F13", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_LOGI_MX, { repeating = true }) -- #media #mx Volume down (key right of F12)
+dev_bind("F14", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_LOGI_MX, { repeating = true }) -- #media #mx Volume up (second key right of F12)
+dev_bind("XF86KbdLightOnOff", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_LOGI_MX, { repeating = true }) -- #media #mx Lightbulb key → volume down
 
 -- ── Scroll-wheel click = screenshot (default mice) ──────────────────────────
 -- mouse:274 = MMB (scroll wheel click). Not mouse=true — that flag is for drag/resize.

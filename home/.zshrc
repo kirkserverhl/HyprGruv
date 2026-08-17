@@ -65,15 +65,19 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # =====================================================
 # Hyprgruv deployment (desktop → git → laptop)
+# Keep this block in sync with ~/.bashrc and fish/conf.d/20-aliases.fish
 # =====================================================
 alias hgpkg='bash ~/.hyprgruv/sync-packages.sh'
 alias hgadd='bash ~/.hyprgruv/sync-packages.sh add'
 alias hgdeploy='bash ~/.hyprgruv/lib/scripts/repo-sync-deploy.sh --full'
 alias hgupdates='bash ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt'
+alias setup='FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh'
 
 # =====================================================
 # Aliases
 # =====================================================
+alias grep='grep --color=auto'
+
 if command -v bat >/dev/null; then
   export BAT_THEME="Matugen"
   alias cat='bat -pp'

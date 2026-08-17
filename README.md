@@ -159,7 +159,13 @@ Lives under `docs/device-sync/` (append-only `entries/`, plus `LATEST.md` / `IND
 
 ### Setup wizard (`post_reboot_setup.sh`)
 
-Can also be run manually after login:
+After stow, every shipped shell (bash, zsh, fish) has a `setup` alias that re-runs the wizard with `FORCE=1`. Use it on first login or any time you want to change shell, default apps, GRUB, snapshots, etc.:
+
+```bash
+setup
+```
+
+That is the same as:
 
 ```bash
 FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
@@ -221,6 +227,7 @@ bash ~/.hyprgruv/sync-packages.sh --new-only
 | Package | Repo | Notes |
 |---------|------|-------|
 | `aphototoollibre` | AUR | Installed via `aur.list` / `setup-mime-handlers.sh` for image MIME types |
+| `hypremoji` | AUR | MX F6 / `emojipicker.sh` — GTK4 emoji picker for Hyprland |
 | `easyeffects` | official | PipeWire audio effects |
 | `qt6-virtualkeyboard` | official | SDDM Sugar Candy on-screen keyboard |
 
@@ -229,7 +236,7 @@ bash ~/.hyprgruv/sync-packages.sh --new-only
 | Item | Reason |
 |------|--------|
 | `overskride` | Use `blueman-manager` (waybar Bluetooth click) instead |
-| `hypremoji` / `smile` | Emoji picker removed from default install and keybinds |
+| `smile` | Replaced by `hypremoji` (in `aur.list`) |
 | `ghostty-git`, `ghostty-shell-integration-git`, `ghostty-terminfo-git` | Use official `ghostty` via setup defaults wizard instead |
 | `tmux-resurrect`, `tmux-resurrect-git` | Flaky AUR build; dropped from auto-install |
 | `aylurs-gtk-shell-git` (AGS) | Unused leftover; power menu is wlogout. Archived elsewhere; QML is the planned replacement |
@@ -302,7 +309,9 @@ SKIP_PACKAGES=1 FORCE=1 ./install.sh
 # Clean state, full re-run
 RESET_STATE=1 FORCE=1 ./install.sh
 
-# Re-run wizard only
+# Re-run wizard only (after install, from any shipped shell)
+setup
+# or:
 FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 ```
 
@@ -323,10 +332,10 @@ After a successful run you should have:
 - Matugen-driven theming tied to wallpaper changes
 - Optional extras from the interactive wizard (Atuin, zram, GRUB theme, …)
 
-If anything was skipped, re-run the wizard:
+If anything was skipped, re-run the wizard from bash, zsh, or fish:
 
 ```bash
-FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
+setup
 ```
 
 Legacy paths like `~/.dotfiles/install.sh` are no longer used.

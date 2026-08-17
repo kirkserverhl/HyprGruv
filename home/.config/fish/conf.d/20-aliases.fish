@@ -1,10 +1,13 @@
-# Abbreviations (mirrors ~/.zshrc)
+# Abbreviations (keep in sync with ~/.zshrc and ~/.bashrc)
 
 # Hyprgruv deployment (desktop → git → laptop)
 abbr --add hgpkg 'bash ~/.hyprgruv/sync-packages.sh'
 abbr --add hgadd 'bash ~/.hyprgruv/sync-packages.sh add'
 abbr --add hgdeploy 'bash ~/.hyprgruv/lib/scripts/repo-sync-deploy.sh --full'
 abbr --add hgupdates 'bash ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt'
+abbr --add setup 'FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh'
+
+abbr --add grep 'grep --color=auto'
 
 # bat / pager (BAT_THEME lives in 10-environment.fish)
 if command -v bat >/dev/null

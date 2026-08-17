@@ -48,11 +48,13 @@ shopt -s histappend histverify checkwinsize
 
 # =====================================================
 # Hyprgruv deployment (desktop → git → laptop)
+# Keep this block in sync with ~/.zshrc and fish/conf.d/20-aliases.fish
 # =====================================================
 alias hgpkg='bash ~/.hyprgruv/sync-packages.sh'
 alias hgadd='bash ~/.hyprgruv/sync-packages.sh add'
 alias hgdeploy='bash ~/.hyprgruv/lib/scripts/repo-sync-deploy.sh --full'
 alias hgupdates='bash ~/.hyprgruv/lib/scripts/repo-update-check.sh --prompt'
+alias setup='FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh'
 
 # =====================================================
 # Aliases
@@ -87,6 +89,15 @@ alias bd='cd "$OLDPWD"'
 
 # General
 alias rmd='/bin/rm -rfv'
+cheater() {
+  local cheat="${HOME}/.config/tmux/cheatsheet.txt"
+  [[ -f "$cheat" ]] || { echo "No cheat sheet: $cheat" >&2; return 1; }
+  if command -v bat >/dev/null; then
+    PAGER=cat bat --paging=never --decorations=never "$cheat"
+  else
+    cat "$cheat"
+  fi
+}
 alias hypr='$EDITOR ~/.config/hypr/'
 alias hyprstow='$HOME/bin/migrate-config-to-stow'
 alias c='clear && $SHELL'
@@ -121,8 +132,10 @@ alias hyprerror='hyprctl configerrors'
 alias unlock='~/.config/hyprgruv/scripts/unlockroot.sh'
 alias fail='faillock --reset'
 alias cleanup='~/.hyprgruv/lib/scripts/cleanup.sh'
-alias doom='~/scripts/doom.sh'
+alias doom='~/.config/hyprgruv/scripts/unused/home-scripts/doom.sh'
 alias updates='~/.config/hyprgruv/scripts/installupdates.sh'
+# Role-aware EOD slam: updates → git-eod (source) or git-eod-pull (deploy) → cleanup
+alias wambam='~/.hyprgruv/lib/scripts/wambam.sh'
 
 # =====================================================
 # Functions
