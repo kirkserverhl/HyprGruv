@@ -9,6 +9,9 @@
 #   24CN65 vertical 0x59 | LG FULL HD 900x59 | LG Monitor 2501x59 | LG TV 4102x0
 # When some panels are unplugged, pack the rest flush at 0x0 so nothing is
 # left stranded at the full-row coordinates.
+# Exception: the 24CN65 lives on DisplayLink and flaps. If it vanished less
+# than CN65_GRACE_SEC ago, keep the full-row coordinates so the other three
+# do not jump left.
 
 set -euo pipefail
 
@@ -18,6 +21,8 @@ READ_SETTING="$SCRIPTS/read-setting.sh"
 source "$SCRIPTS/tv-mode-common.sh"
 
 LOCK_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-desktop-monitors.lock"
+CN65_SEEN="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-24cn65-seen"
+CN65_GRACE_SEC=10
 
 is_desktop_profile() {
     local mode machine
@@ -90,8 +95,25 @@ done
 
 [[ "$present_count" -gt 0 ]] || exit 0
 
+now="$(date +%s)"
+cn65_present="${present_mask[0]:-0}"
+if [[ "$cn65_present" -eq 1 ]]; then
+    printf '%s\n' "$now" >"$CN65_SEEN"
+fi
+
+# DisplayLink drop: keep the 900px portrait slot for a few seconds.
+cn65_expected=false
+if [[ "$cn65_present" -eq 1 ]]; then
+    cn65_expected=true
+elif [[ -f "$CN65_SEEN" ]]; then
+    last="$(tr -d '[:space:]' <"$CN65_SEEN" 2>/dev/null || true)"
+    if [[ "$last" =~ ^[0-9]+$ ]] && (( now - last < CN65_GRACE_SEC )); then
+        cn65_expected=true
+    fi
+fi
+
 positions=()
-if [[ "$present_count" -eq ${#SPECS[@]} ]]; then
+if [[ "$present_count" -eq ${#SPECS[@]} ]] || $cn65_expected; then
     positions=("${FULL_POS[@]}")
 else
     x=0

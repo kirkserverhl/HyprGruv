@@ -291,11 +291,17 @@ hl.bind(altMod .. " + SUPER + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh 
 -- Super+scroll: zoom with the cursor locked to the center of the view
 -- (cursor:zoom_rigid). Alt+= / - / Backspace stay as the keyboard trio.
 -- Bind equal AND plus because Alt+Shift+= (the + glyph) is a different key.
+-- Super+Shift+scroll is the same magnifier so an extra Shift still works.
 --
 -- Lua parser: hyprctl keyword is a no-op ("Use eval"). Set via hl.config.
-local ZOOM_MIN, ZOOM_MAX, ZOOM_STEP = 1.0, 8.0, 1.2
+-- Coalesce wheel ticks: stack the factor, apply once after ~90ms of quiet.
+-- A leftover 1.01 still crops the outputs, so snap anything under 1.05 to 1.0.
+local ZOOM_MIN, ZOOM_MAX, ZOOM_STEP, ZOOM_SNAP = 1.0, 8.0, 1.2, 1.05
+local ZOOM_DEBOUNCE_MS = 90
 
-local function current_zoom()
+local pending_zoom = nil
+
+local function live_zoom()
 	local z = hl.get_config("cursor.zoom_factor")
 	if type(z) ~= "number" then
 		z = 1.0
@@ -303,25 +309,58 @@ local function current_zoom()
 	return z
 end
 
-local function set_zoom(factor)
+local function current_zoom()
+	if type(pending_zoom) == "number" then
+		return pending_zoom
+	end
+	return live_zoom()
+end
+
+local function clamp_zoom(factor)
 	local z = math.max(ZOOM_MIN, math.min(factor, ZOOM_MAX))
+	if z < ZOOM_SNAP then
+		z = 1.0
+	end
+	return z
+end
+
+local function apply_pending_zoom()
+	if type(pending_zoom) ~= "number" then
+		return
+	end
+	local z = clamp_zoom(pending_zoom)
+	pending_zoom = nil
 	hl.config({ cursor = { zoom_factor = z, zoom_rigid = true } })
 end
 
+local zoom_timer = hl.timer(apply_pending_zoom, { timeout = ZOOM_DEBOUNCE_MS, type = "oneshot" })
+zoom_timer:set_enabled(false)
+
+local function request_zoom(factor)
+	pending_zoom = factor
+	zoom_timer:set_enabled(false)
+	zoom_timer:set_timeout(ZOOM_DEBOUNCE_MS)
+	zoom_timer:set_enabled(true)
+end
+
 local function zoom_in()
-	set_zoom(current_zoom() * ZOOM_STEP)
+	request_zoom(current_zoom() * ZOOM_STEP)
 end
 
 local function zoom_out()
-	set_zoom(current_zoom() / ZOOM_STEP)
+	request_zoom(current_zoom() / ZOOM_STEP)
 end
 
 local function zoom_rst()
-	set_zoom(1.0)
+	pending_zoom = nil
+	zoom_timer:set_enabled(false)
+	hl.config({ cursor = { zoom_factor = 1.0, zoom_rigid = true } })
 end
 
 hl.bind(mainMod .. " + mouse_up", zoom_in) -- #zoom Super+scroll up magnify (cursor-centered)
 hl.bind(mainMod .. " + mouse_down", zoom_out) -- #zoom Super+scroll down demagnify
+hl.bind(mainMod .. " + SHIFT + mouse_up", zoom_in) -- #zoom Super+Shift+scroll up magnify
+hl.bind(mainMod .. " + SHIFT + mouse_down", zoom_out) -- #zoom Super+Shift+scroll down demagnify
 hl.bind(altMod .. " + equal", zoom_in) -- #zoom Magnify
 hl.bind(altMod .. " + plus", zoom_in) -- #zoom Magnify (shifted +)
 hl.bind(altMod .. " + SHIFT + equal", zoom_in) -- #zoom Magnify (Shift+=)

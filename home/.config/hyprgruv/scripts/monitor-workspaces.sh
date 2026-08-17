@@ -7,6 +7,9 @@
 SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APPLY_LAPTOP="$SCRIPTS/apply-laptop-monitors.sh"
 LOG="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/laptop-monitors.log"
+DEBOUNCE_SEC=2
+DEBOUNCE_PID_FILE="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-monitor-apply.pid"
+CN65_SEEN="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-24cn65-seen"
 
 log() {
     mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
@@ -32,12 +35,32 @@ find_socket2() {
 }
 
 apply_laptop_layout() {
-    # Wait until hyprctl sees the new set. A too-early apply used to treat
-    # the dock as missing and slam the laptop to 0x0 (cursors on both).
-    sleep 1.2
+    # Debounce already waited for a quiet window; do not sleep again here.
     if [[ -x "$APPLY_LAPTOP" ]]; then
         "$APPLY_LAPTOP" || true
     fi
+}
+
+cancel_scheduled_apply() {
+    local pid
+    if [[ -f "$DEBOUNCE_PID_FILE" ]]; then
+        pid="$(tr -d '[:space:]' <"$DEBOUNCE_PID_FILE" 2>/dev/null || true)"
+        rm -f "$DEBOUNCE_PID_FILE"
+        if [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null; then
+            kill "$pid" 2>/dev/null || true
+        fi
+    fi
+}
+
+# One apply after DEBOUNCE_SEC of no add/remove events.
+schedule_apply() {
+    cancel_scheduled_apply
+    (
+        sleep "$DEBOUNCE_SEC"
+        rm -f "$DEBOUNCE_PID_FILE"
+        reassign_workspaces
+    ) &
+    echo $! >"$DEBOUNCE_PID_FILE"
 }
 
 reassign_workspaces() {
@@ -78,7 +101,12 @@ while true; do
     socat - "UNIX-CONNECT:${sock}" | while read -r line; do
         if [[ $line == monitoradded* ]] || [[ $line == monitorremoved* ]]; then
             log "event $line"
-            reassign_workspaces
+            # Stamp last-seen on add so apply-desktop grace works even if
+            # debounce never ran while the 24CN65 was still connected.
+            if [[ $line == monitoradded* && $line == *24CN65* ]]; then
+                date +%s >"$CN65_SEEN" 2>/dev/null || true
+            fi
+            schedule_apply
         fi
     done
     log "monitor-workspaces: socket closed; reconnect"

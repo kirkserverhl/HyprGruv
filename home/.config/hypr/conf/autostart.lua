@@ -147,12 +147,34 @@ end)
 
 -- Hotplug pin. Script-only — do not query hl.get_monitors() here
 -- (that race parked the laptop at 0x0 and stacked the cursors).
-hl.on("monitor.added", function()
-	hl.exec_cmd("sleep 1.2 && " .. SCRIPTS .. "/apply-laptop-monitors.sh")
+-- One apply after 2s of quiet so a DisplayLink flap does not re-pack the row
+-- on every add/remove.
+local MONITOR_APPLY_MS = 2000
+local monitor_apply_timer = hl.timer(function()
+	hl.exec_cmd(SCRIPTS .. "/apply-laptop-monitors.sh")
+end, { timeout = MONITOR_APPLY_MS, type = "oneshot" })
+monitor_apply_timer:set_enabled(false)
+
+local CN65_SEEN = (os.getenv("XDG_RUNTIME_DIR") or "/tmp") .. "/hyprgruv-24cn65-seen"
+
+local function stamp_cn65_seen(mon)
+	local desc = mon and mon.description or ""
+	if desc:find("24CN65", 1, true) then
+		hl.exec_cmd(string.format("date +%%s >%q", CN65_SEEN))
+	end
+end
+
+local function schedule_monitor_apply()
+	monitor_apply_timer:set_enabled(false)
+	monitor_apply_timer:set_timeout(MONITOR_APPLY_MS)
+	monitor_apply_timer:set_enabled(true)
+end
+
+hl.on("monitor.added", function(mon)
+	stamp_cn65_seen(mon)
+	schedule_monitor_apply()
 end)
-hl.on("monitor.removed", function()
-	hl.exec_cmd("sleep 0.8 && " .. SCRIPTS .. "/apply-laptop-monitors.sh")
-end)
+hl.on("monitor.removed", schedule_monitor_apply)
 
 -- One-time things that were plain "exec" (not exec-once) in original main file
 -- moved to main hyprland.lua
