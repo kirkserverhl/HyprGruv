@@ -77,8 +77,8 @@ complete -c grok -n "__fish_grok_needs_command" -l restore-code -d 'Restore the 
 complete -c grok -n "__fish_grok_needs_command" -l no-plan -d 'Disable plan mode'
 complete -c grok -n "__fish_grok_needs_command" -l no-subagents -d 'Disable subagent spawning'
 complete -c grok -n "__fish_grok_needs_command" -l no-ask-user -d 'Disable structured question prompts from the agent'
-complete -c grok -n "__fish_grok_needs_command" -l experimental-memory -d 'Enable cross-session memory'
-complete -c grok -n "__fish_grok_needs_command" -l no-memory -d 'Disable cross-session memory for this session'
+complete -c grok -n "__fish_grok_needs_command" -l experimental-memory -d 'Legacy compatibility flag for enabling cross-session memory'
+complete -c grok -n "__fish_grok_needs_command" -l no-memory -d 'Legacy compatibility flag for disabling cross-session memory'
 complete -c grok -n "__fish_grok_needs_command" -l disable-web-search -d 'Disable web search and web fetch tools'
 complete -c grok -n "__fish_grok_needs_command" -l no-wait-for-background -d 'Exit as soon as the first agent turn ends, without waiting for pending background bash/monitor tasks or background subagents (headless only). Default for all `grok -p` runs is to wait (up to `--background-wait-timeout`) so eval harnesses see full task completion. Use this for fast scripts that only need the first turn\'s text. Does not wait for server-side auto-wake output or persistent monitors (those hit the timeout)'
 complete -c grok -n "__fish_grok_needs_command" -l terminal -d 'Enable terminal support for the agent'
@@ -489,7 +489,7 @@ complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_
 complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "ls" -d 'List tracked worktrees'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "show" -d 'Show details for a specific worktree'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "rm" -d 'Remove worktrees'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "gc" -d 'Garbage-collect orphaned/stale worktrees'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "gc" -d 'Remove expired worktrees, keeping any whose work would not survive'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "db" -d 'Database maintenance'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and not __fish_seen_subcommand_from list ls show rm gc db help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from list" -l repo -r
@@ -518,11 +518,11 @@ complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subc
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from rm" -l dry-run
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from rm" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from rm" -s h -l help -d 'Print help'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l max-age -r
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l max-age -d 'Expire worktrees idle longer than this, e.g. `7d`. Without it, nothing expires' -r
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`' -r -F
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l debug-file -d 'Write debug logs to FILE' -r -F
-complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l dry-run
-complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -s f -l force
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l dry-run -d 'Report what would be removed without removing it'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -s f -l force -d 'Skip the live-process and protected-path guards. This does not override the safety check; use `grok worktree rm` for that'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -l debug -d 'Enable debug logging'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from gc" -s h -l help -d 'Print help'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from db" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`' -r -F
@@ -536,7 +536,7 @@ complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subc
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "list" -d 'List tracked worktrees'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "show" -d 'Show details for a specific worktree'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "rm" -d 'Remove worktrees'
-complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "gc" -d 'Garbage-collect orphaned/stale worktrees'
+complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "gc" -d 'Remove expired worktrees, keeping any whose work would not survive'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "db" -d 'Database maintenance'
 complete -c grok -n "__fish_grok_using_subcommand worktree; and __fish_seen_subcommand_from help" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c grok -n "__fish_grok_using_subcommand du" -l leader-socket -d 'Use a custom leader socket path instead of the default `~/.grok/leader.sock`' -r -F
@@ -675,7 +675,7 @@ complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcomma
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "list" -d 'List tracked worktrees'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "show" -d 'Show details for a specific worktree'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "rm" -d 'Remove worktrees'
-complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "gc" -d 'Garbage-collect orphaned/stale worktrees'
+complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "gc" -d 'Remove expired worktrees, keeping any whose work would not survive'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from worktree" -f -a "db" -d 'Database maintenance'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from workspace" -f -a "start" -d 'Start (or update) the workspace→hub exposure'
 complete -c grok -n "__fish_grok_using_subcommand help; and __fish_seen_subcommand_from workspace" -f -a "pause" -d 'Drain and disconnect from the hub, keeping the exposure warm'
