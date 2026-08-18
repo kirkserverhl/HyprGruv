@@ -25,6 +25,9 @@
 --                      No Super/Alt/global F-row binds. Each keyboard layout
 --                      owns the row (see FUNCTION KEYS). Laptop Fn-lock is on
 --                      so F1–F12 fire without holding Fn (fn-lock.sh).
+--   Shift+Fn / Super+Fn → bypass: send the bare F-key to the focused app
+--                      (kew views, vim, htop). Hardware binds stay on bare Fn.
+--                      Exceptions: Super+F8/F9 laptop KB light; Shift+F7 MX OCR.
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- Backup: keybinds.lua.bak-pre-stack-YYYYMMDD next to this file
 --
@@ -147,7 +150,7 @@ hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh toggle")) -- #window Scratchpad toggle
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpad" })) -- #window Move to scratchpad
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen()) -- #window Fullscreen (was CTRL+F — that stole Find)
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a")) -- #picker Color picker
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(SCRIPTS .. "/blitz-mode.sh")) -- #settings #work Toggle Blitz (work focus)
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
 -- Super+Tab: hide special:scratchpad if it is the focused overlay, otherwise
@@ -226,6 +229,60 @@ hl.bind(mainMod .. " + " .. altMod .. " + N", hl.dsp.exec_cmd("~/.local/bin/nigh
 -- Window alt-actions
 hl.bind(altMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(altMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
+-- Alt+P: jump to the most recently used float on this workspace (raise it).
+-- Alt+Shift+P: tab to the next float when several are open.
+local function floating_windows_here()
+	local ws = hl.get_active_workspace()
+	local floats = hl.get_windows({
+		floating = true,
+		mapped = true,
+		workspace = ws,
+	}) or {}
+	local visible = {}
+	for _, w in ipairs(floats) do
+		if w.hidden ~= true then
+			visible[#visible + 1] = w
+		end
+	end
+	return visible
+end
+
+local function focus_floating()
+	local floats = floating_windows_here()
+	if #floats == 0 then
+		hl.exec_cmd("hyprctl notify 0 1400 0 'No floating window'")
+		return
+	end
+	local active = hl.get_active_window()
+	if active ~= nil and active.floating then
+		hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
+		return
+	end
+	table.sort(floats, function(a, b)
+		return (a.focus_history_id or 99) < (b.focus_history_id or 99)
+	end)
+	local target = floats[1]
+	hl.dispatch(hl.dsp.focus({ window = target }))
+	hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = target }))
+end
+
+local function cycle_floating()
+	local floats = floating_windows_here()
+	if #floats == 0 then
+		hl.exec_cmd("hyprctl notify 0 1400 0 'No floating window'")
+		return
+	end
+	if #floats == 1 then
+		hl.dispatch(hl.dsp.focus({ window = floats[1] }))
+		hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top", window = floats[1] }))
+		return
+	end
+	hl.dispatch(hl.dsp.window.cycle_next({ floating = true }))
+	hl.dispatch(hl.dsp.window.alter_zorder({ mode = "top" }))
+end
+
+hl.bind(altMod .. " + P", focus_floating) -- #window Focus floating window
+hl.bind(altMod .. " + SHIFT + P", cycle_floating) -- #window Cycle floating windows
 hl.bind(altMod .. " + L", hl.dsp.exec_cmd("hyprlock -c ~/.config/hypr/hyprlock/hyprlock.conf"))
 -- Alt+W: cycle Waybar only → Hyprbars only → hidden (lua callback — more reliable than exec_cmd alone)
 hl.bind(altMod .. " + W", function()
@@ -279,7 +336,6 @@ hl.bind(altMod .. " + H", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh images")) -- 
 hl.bind(altMod .. " + SHIFT + H", hl.dsp.exec_cmd(SCRIPTS .. "/cliphist.sh")) -- #clipboard Text clipboard history
 hl.bind(mainMod .. " + " .. altMod .. " + H", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh htop")) -- #monitor htop
 hl.bind(altMod .. " + SHIFT + T", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh bpytop"))
-hl.bind(altMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a"))
 hl.bind(altMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/rofi_calc.sh")) -- #calc Calculator
 hl.bind(mainMod .. " + " .. altMod .. " + P", hl.dsp.exec_cmd(SCRIPTS .. "/software.sh"))
 
@@ -381,6 +437,11 @@ hl.bind(mainMod .. " + SHIFT + U", mac("link")) -- #mac Cmd+K → link (was Supe
 -- Maps below are device-specific (`hyprctl devices`). Laptop login runs
 -- fn-lock.sh so the F-row is F1–F12 without holding Fn. XF86 binds stay as
 -- fallback if firmware is still in media-key mode (Fn held, or Fn-lock off).
+--
+-- Bypass (kew layouts, vim, htop, …): Shift+Fn or Super+Fn injects the bare
+-- F-key into the focused window via send_shortcut. Not `pass` — that would
+-- forward the modifier too, and kew wants F2 not Shift+F2 / Super+F2.
+-- Shift+F7 stays OCR on MX Mechanical. Super+F8/F9 stay laptop KB backlight.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Device name lists from `hyprctl devices` (include all HID interfaces per board).
@@ -438,6 +499,30 @@ local function dev_bind(keys, dispatcher, devices, extra)
 	end
 	hl.bind(keys, dispatcher, opts)
 end
+
+-- Send a bare F-key to the focused window (no currently-held Shift/Super).
+local function pass_fkey(n)
+	return hl.dsp.send_shortcut({ mods = "", key = "F" .. n })
+end
+
+-- Shift+Fn / Super+Fn: bypass the hardware F-row. Skip chords already owned:
+--   Shift+F7  → MX Mechanical region OCR (bound in the MX block)
+--   Super+F8/F9 → laptop keyboard backlight (bound in the laptop block)
+for i = 1, 12 do
+	if i ~= 7 then
+		hl.bind("SHIFT + F" .. i, pass_fkey(i)) -- #fn Pass F-key to focused app
+	end
+	if i ~= 8 and i ~= 9 then
+		hl.bind(mainMod .. " + F" .. i, pass_fkey(i)) -- #fn Pass F-key to focused app
+	end
+end
+-- Boards that do not use the reserved chords still get a full F1–F12 bypass.
+dev_bind("SHIFT + F7", pass_fkey(7), KB_LAPTOP) -- #fn Pass F7 to focused app
+dev_bind("SHIFT + F7", pass_fkey(7), KB_HP) -- #fn Pass F7 to focused app
+dev_bind(mainMod .. " + F8", pass_fkey(8), KB_HP) -- #fn Pass F8 to focused app
+dev_bind(mainMod .. " + F8", pass_fkey(8), KB_LOGI_MX) -- #fn Pass F8 to focused app
+dev_bind(mainMod .. " + F9", pass_fkey(9), KB_HP) -- #fn Pass F9 to focused app
+dev_bind(mainMod .. " + F9", pass_fkey(9), KB_LOGI_MX) -- #fn Pass F9 to focused app
 
 -- ── HyprLab laptop (IdeaPad) ─────────────────────────────────────────────────
 -- F1 mute · F2 vol- · F3 vol+ · F4 mic mute (under consideration)

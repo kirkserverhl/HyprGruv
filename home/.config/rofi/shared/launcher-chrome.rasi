@@ -5,8 +5,9 @@
      • window @surface-alpha (90% surface_container_lowest)
      • search field @entry-surface (85% surface_container_low)
      • selection @primary / @on-primary (waypaper button hover)
-   Hyprland layerrule blur shows through — no pre-rendered wallpaper.
-   Import after shared/standard.rasi; override window width/location per launcher.
+   Hyprland blurs whatever is behind the panel (no outer halo — that reads as
+   a second border). Import after shared/standard.rasi; override window
+   width/location per launcher.
    Mouse bindings: shared/mouse.rasi (single-click for all launcher menus).
 ============================================================================= */
 

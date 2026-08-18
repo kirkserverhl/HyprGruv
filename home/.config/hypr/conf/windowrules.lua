@@ -79,6 +79,17 @@ hl.window_rule({
     center = true,
     size = {1200, 320},
 })
+-- Super+W source-color: pinned fullscreen wallpaper so hyprpicker can sample it.
+-- Dedicated special:sourcepick (not the work scratchpad) + pin so focus steal
+-- does not hide the image.
+hl.window_rule({
+    name = "theme-source-picker",
+    match = { class = "^(theme-source-picker)$" },
+    float = true,
+    fullscreen = true,
+    pin = true,
+    border_size = 0,
+})
 -- 'blur' is not a supported field on hl.window_rule (only no_blur is).
 -- Use hyprctl to apply the classic "blur" windowrule.
 hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(waypaper)$'")

@@ -771,32 +771,154 @@ def seed_static_outputs(theme: str) -> dict[str, str]:
 
 
 
-# Accent swatches shown in Super+W source-color picker (theme-native, not wallpaper).
-ACCENT_SLOTS: list[tuple[str, str]] = [
-    ("base08", "Red"),
-    ("base09", "Purple"),
-    ("base0A", "Yellow"),
-    ("base0B", "Green"),
-    ("base0C", "Aqua"),
-    ("base0D", "Orange"),
-    ("base0E", "Blue"),
+# Super+W source-color splotches — hexes from colorschemes/<theme>/palette.json.
+ACCENT_SLOT_ORDER = [
+    "base08",
+    "base09",
+    "base0A",
+    "base0B",
+    "base0C",
+    "base0D",
+    "base0E",
+    "base0F",
 ]
+
+DEFAULT_ACCENT_LABELS = {
+    "base08": "Red",
+    "base09": "Purple",
+    "base0A": "Yellow",
+    "base0B": "Green",
+    "base0C": "Aqua",
+    "base0D": "Primary",
+    "base0E": "Blue",
+    "base0F": "Source",
+}
+
+THEME_ACCENT_LABELS: dict[str, dict[str, str]] = {
+    "catppuccin": {
+        "base08": "Red",
+        "base09": "Mauve",
+        "base0A": "Yellow",
+        "base0B": "Green",
+        "base0C": "Teal",
+        "base0D": "Mauve",
+        "base0E": "Blue",
+        "base0F": "Peach",
+    },
+    "gruvbox-dark": {
+        "base08": "Red",
+        "base09": "Purple",
+        "base0A": "Yellow",
+        "base0B": "Green",
+        "base0C": "Aqua",
+        "base0D": "Orange",
+        "base0E": "Blue",
+        "base0F": "Orange",
+    },
+    "nord-darker": {
+        "base08": "Red",
+        "base09": "Purple",
+        "base0A": "Yellow",
+        "base0B": "Green",
+        "base0C": "Frost",
+        "base0D": "Blue",
+        "base0E": "Blue",
+        "base0F": "Orange",
+    },
+    "everforest-dark": {
+        "base08": "Red",
+        "base09": "Purple",
+        "base0A": "Yellow",
+        "base0B": "Green",
+        "base0C": "Aqua",
+        "base0D": "Green",
+        "base0E": "Teal",
+        "base0F": "Orange",
+    },
+    "noir": {
+        "base08": "Rose",
+        "base09": "Lilac",
+        "base0A": "Sand",
+        "base0B": "Sage",
+        "base0C": "Teal",
+        "base0D": "Grey",
+        "base0E": "Steel",
+        "base0F": "Stone",
+    },
+}
+
+ACCENT_LABEL_ALIASES = {
+    "coast-gruv": "gruvbox-dark",
+    "warm-stone": "gruvbox-dark",
+    "forest-night": "everforest-dark",
+    "nord": "nord-darker",
+}
+
+
+def accent_labels_for(theme: str) -> dict[str, str]:
+    key = ACCENT_LABEL_ALIASES.get(theme, theme)
+    labels = dict(DEFAULT_ACCENT_LABELS)
+    labels.update(THEME_ACCENT_LABELS.get(key, {}))
+    return labels
+
+
+def _valid_hex(value: object) -> str | None:
+    if not isinstance(value, str):
+        return None
+    hx = value.strip().lower()
+    if not hx.startswith("#"):
+        hx = f"#{hx}"
+    if len(hx) != 7 or any(ch not in "0123456789abcdef" for ch in hx[1:]):
+        return None
+    return hx
+
+
+def load_accent_slots_from_palette(theme: str) -> dict[str, str]:
+    """Read accent hexes from palette.json only (no CSS rebuild, no user-accent)."""
+    slots = load_palette_json(theme) or {}
+    out: dict[str, str] = {}
+    for key in ACCENT_SLOT_ORDER:
+        hx = _valid_hex(slots.get(key.lower()))
+        if hx:
+            out[key.lower()] = hx
+    return out
 
 
 def list_theme_accents(theme: str) -> list[dict[str, str]]:
-    """Return unique accent options from the theme's fixed base16 palette."""
-    slots = resolve_theme_slots(theme)
+    """Unique source-color splotches from ~/.config/colorschemes/<theme>/palette.json."""
+    slots = load_accent_slots_from_palette(theme)
+    if len(slots) < 3:
+        # Personal / incomplete slots: fill missing keys from the resolver,
+        # but do not export or overwrite palette.json.
+        try:
+            fallback = resolve_theme_slots(theme)
+        except FileNotFoundError:
+            fallback = {}
+        for key in ACCENT_SLOT_ORDER:
+            lk = key.lower()
+            if lk in slots:
+                continue
+            hx = _valid_hex(fallback.get(lk) or fallback.get(key))
+            if hx:
+                slots[lk] = hx
+
+    labels = accent_labels_for(theme)
+    default_hex = slots.get("base0d")
     seen: set[str] = set()
     out: list[dict[str, str]] = []
-    for key, label in ACCENT_SLOTS:
-        hexv = slots.get(key.lower()) or slots.get(key)
-        if not hexv:
-            continue
-        hx = hexv.lower()
-        if hx in seen:
+    for key in ACCENT_SLOT_ORDER:
+        hx = slots.get(key.lower())
+        if not hx or hx in seen:
             continue
         seen.add(hx)
-        out.append({"slot": key.lower(), "label": label, "hex": hx})
+        out.append(
+            {
+                "slot": key.lower(),
+                "label": labels.get(key, DEFAULT_ACCENT_LABELS.get(key, key)),
+                "hex": hx,
+                "default": bool(default_hex and hx == default_hex),
+            }
+        )
     return out
 
 

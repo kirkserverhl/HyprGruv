@@ -57,7 +57,7 @@ fi
 
 # --- source / primary color ---
 if [[ -x "$ACCENT_PICKER" ]]; then
-    if accent=$(bash "$ACCENT_PICKER" "$selected"); then
+    if accent=$(bash "$ACCENT_PICKER" "$selected" "${wallpaper:-}"); then
         notify-send -e -u low -t 1800 "Theme" "$selected · source $accent" 2>/dev/null || true
     else
         rm -f "$THEME_DIR/$selected/user-accent" 2>/dev/null || true

@@ -13,7 +13,7 @@ configuration {
 @import "~/.config/rofi/shared/launcher-chrome.rasi"
 
 window {
-    width:    880px;
+    width:    1180px;
     location: center;
     anchor:   center;
 }
@@ -54,7 +54,7 @@ textbox {
 listview {
     layout:        vertical;
     lines:         1;
-    columns:       8;
+    columns:       9;
     fixed-columns: false;
     fixed-height:  true;
     cycle:         true;

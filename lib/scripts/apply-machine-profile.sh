@@ -666,7 +666,7 @@ decoration_contrast=${contrast}
 decoration_vibrancy=${vibrancy}
 
 layer_rofi_blur=1
-layer_rofi_ignore_alpha=0.2
+layer_rofi_ignore_alpha=0.10
 layer_waypaper_blur=1
 layer_waypaper_ignore_alpha=0.10
 layer_wlogout_blur=1
