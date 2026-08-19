@@ -1,0 +1,38 @@
+#!no-check
+unmap! y
+unmap b
+unmap O
+unmap T
+unmap N
+
+# f: default hints, plus SPA rows on Zoho / Steam TPN / IPOS (custom elements, closed shadow).
+# Those pages rarely use <a href>, so Vimium C's default detector never marks the rows.
+map f LinkHints.activate closedShadow=true clickable="zoho.com##lyte-tr,lyte-td,lyte-button,lyte-link,lyte-nav-item,lyte-drop-button,lyte-exptable-tr,lyte-menu-item,[data-zcqa],[role=row],[role=gridcell],[role=option],[role=tab],[role=menuitem],[data-id];dvmms.com##a,button,input,tr,td,[onclick],[data-toggle];ipospays.com##a,button,mat-row,mat-button,.mat-row,.mat-list-item,[ng-click],[ng-href],[role=button],[role=row],[role=menuitem],tr,[data-action],.clickable"
+
+# Work shortcuts
+map Ia autoOpen keyword="iaccess"
+map In autoOpen keyword="Instore"
+map Z autoOpen keyword="Zoho"
+map Go autoOpen keyword="Google"
+map St autoOpen keyword="SteamTPN"
+map Ip autoOpen keyword="IPOS"
+map Pb autoOpen keyword="PBG"
+map Px autoOpen keyword="PAX"
+map Mo autoOpen keyword="OPEN"
+map Mh autoOpen keyword="HOLD"
+map Al autoOpen keyword="ALL"
+map Kb autoOpen keyword="KB"
+map Kp autoOpen keyword="KEEP"
+map Nt autoOpen keyword="TIX"
+map Tk autoOpen keyword="TEK"
+map Ec autoOpen keyword="Econnections"
+map Mv autoOpen keyword="Maverick"
+map Tb autoOpen keyword="Blaze"
+map Ai autoOpen keyword="Grok"
+map Cl autoOpen keyword="Cliq"
+map Ci autoOpen keyword="Gusto"
+map Em autoOpen keyword="Emoji"
+map Ot autoOpen keyword="OTP"
+map Yt autoOpen keyword="YouTube"
+map Mm autoOpen keyword="MergeMine"
+map Mt autoOpen keyword="MergeTech"

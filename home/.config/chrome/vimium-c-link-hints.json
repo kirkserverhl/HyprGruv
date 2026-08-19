@@ -1,0 +1,10 @@
+{
+	"name": "Vimium C",
+	"time": 1755630000000,
+	"environment": {
+		"extension": "2.12.2",
+		"platform": "linux",
+		"chromium": 151
+	},
+	"keyMappings": "#!no-check\nunmap! y\nunmap b\nunmap O\nunmap T\nunmap N\n\n# f: default hints, plus SPA rows on Zoho / Steam TPN / IPOS (custom elements, closed shadow).\n# Those pages rarely use <a href>, so Vimium C's default detector never marks the rows.\nmap f LinkHints.activate closedShadow=true clickable=\"zoho.com##lyte-tr,lyte-td,lyte-button,lyte-link,lyte-nav-item,lyte-drop-button,lyte-exptable-tr,lyte-menu-item,[data-zcqa],[role=row],[role=gridcell],[role=option],[role=tab],[role=menuitem],[data-id];dvmms.com##a,button,input,tr,td,[onclick],[data-toggle];ipospays.com##a,button,mat-row,mat-button,.mat-row,.mat-list-item,[ng-click],[ng-href],[role=button],[role=row],[role=menuitem],tr,[data-action],.clickable\"\n\n# Work shortcuts\nmap Ia autoOpen keyword=\"iaccess\"\nmap In autoOpen keyword=\"Instore\"\nmap Z autoOpen keyword=\"Zoho\"\nmap Go autoOpen keyword=\"Google\"\nmap St autoOpen keyword=\"SteamTPN\"\nmap Ip autoOpen keyword=\"IPOS\"\nmap Pb autoOpen keyword=\"PBG\"\nmap Px autoOpen keyword=\"PAX\"\nmap Mo autoOpen keyword=\"OPEN\"\nmap Mh autoOpen keyword=\"HOLD\"\nmap Al autoOpen keyword=\"ALL\"\nmap Kb autoOpen keyword=\"KB\"\nmap Kp autoOpen keyword=\"KEEP\"\nmap Nt autoOpen keyword=\"TIX\"\nmap Tk autoOpen keyword=\"TEK\"\nmap Ec autoOpen keyword=\"Econnections\"\nmap Mv autoOpen keyword=\"Maverick\"\nmap Tb autoOpen keyword=\"Blaze\"\nmap Ai autoOpen keyword=\"Grok\"\nmap Cl autoOpen keyword=\"Cliq\"\nmap Ci autoOpen keyword=\"Gusto\"\nmap Em autoOpen keyword=\"Emoji\"\nmap Ot autoOpen keyword=\"OTP\"\nmap Yt autoOpen keyword=\"YouTube\"\nmap Mm autoOpen keyword=\"MergeMine\"\nmap Mt autoOpen keyword=\"MergeTech\"\n"
+}

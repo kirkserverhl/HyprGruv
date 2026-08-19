@@ -1,0 +1,14 @@
+# Vimium C link hints (HyprGruv)
+#
+# Default `f` only hints <a href> / <button>. Zoho Desk, Steam TPN (dvmms.com),
+# and IPOS use custom rows and closed shadow DOM, so ticket/terminal rows never
+# get numbers. Custom key mappings add those hosts as extra clickable targets.
+#
+# Apply on each machine (Chrome stores this in the profile, not on disk):
+# 1. chrome-extension://hfjbmagddngcpeloejdejnfgbamkjaeg/pages/options.html
+# 2. Import Settings → ~/.config/chrome/vimium-c-link-hints.json
+#    or paste vimium-c-key-mappings.txt into Custom key mappings (replace all)
+# 3. Save, then reload the Zoho / Steam / IPOS tab
+#
+# filterLinkHints is on (numbers). Type row text or the number, then Enter.
+# If the list is still blank, the grid is in an iframe: gf then f.
