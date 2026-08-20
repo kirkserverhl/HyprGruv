@@ -5,6 +5,7 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-08-20T16:37:44-04:00 | HyprLab | deploy | to-source | soundsbored wrapper probes HyprLab ~/Projects and main ~/BaaS_ISO; temporary laptop→main push | [2026-08-20T203744Z-HyprLab.md](entries/2026-08-20T203744Z-HyprLab.md) |
 | 2026-08-14T03:12:37-04:00 | HyprGruv | source | to-deploy | HyprGruv: remap MX Mechanical F-row to the physical icons (screen/kbd/transcribe/emoji/shot/mic/media/mute + vol keys right of F12). Binds now match Logi Bolt device names, not the old wired HID name. | [2026-08-14T071237Z-HyprGruv.md](entries/2026-08-14T071237Z-HyprGruv.md) |
 | 2026-08-13T16:38:55-04:00 | HyprLab | deploy | to-source | HyprLab batch: drop AGS (wlogout-only power menu), Super+G=Blitz, Alt+Z GPU Screen Recorder + permissions, Super+Alt+E config-edit, Fn-lock F-row, work-dock LG 1.2 / laptop 1600x0 + hotplug pin, system-critical-alert, wambam, MIME/sqlite, hybrid iGPU VA-API (no WLR/NVIDIA cursor env). | [2026-08-13T203855Z-HyprLab.md](entries/2026-08-13T203855Z-HyprLab.md) |
 | 2026-08-13T16:30:58-04:00 | HyprLab | deploy | to-source | HyprLab work LG (103MXTC4F409): scale 1.2. Laptop moves to 1600x0 so the pair stays flush. | [2026-08-13T203058Z-HyprLab.md](entries/2026-08-13T203058Z-HyprLab.md) |
