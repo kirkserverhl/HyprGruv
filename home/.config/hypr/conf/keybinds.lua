@@ -6,7 +6,10 @@
 --   Alt  (alt)       → the *other* option (2nd browser, power tools)
 --   Super+Alt+Return → dev tmux workspace (not bare Alt+Return — kew owns Alt+Enter)
 --   Ctrl (apps)      → NEVER bind bare Ctrl+letter globally — apps own Find/Print/Save…
---                      Only OK with Super/Alt chorded: Super+Ctrl+H (move), Ctrl+Alt+Del
+--                      Only OK with Super/Alt chorded: Super+Ctrl+H (move), Super+Ctrl+F (fullscreen),
+--                      Ctrl+Alt+Del
+--                      Exception (Mac Accessibility Zoom): Ctrl + scroll / +/- / Backspace
+--                      magnifies the whole monitor. App zoom is Super (Cmd) + scroll / +/-.
 --   Ctrl-b (tmux)    → panes/sessions (see ~/.config/tmux/cheatsheet.txt)
 --   (none)           → vim / shell typing
 --
@@ -113,7 +116,8 @@ end
 
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
--- Alt+scroll: occupied workspace cycle. Super+scroll is the magnifier (see #zoom).
+-- Alt+scroll: occupied workspace cycle. Zoom mouse is Mac-mirrored (see #zoom):
+-- Super+scroll = focused app (Cmd+scroll); Ctrl+scroll = whole monitor.
 hl.bind(altMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" })) -- #window Next occupied workspace
 hl.bind(altMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" })) -- #window Prev occupied workspace
 
@@ -150,6 +154,8 @@ hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd(SCRIPTS .. "/launch-wlogout.sh"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd(SCRIPTS .. "/scratchpad.sh toggle")) -- #window Scratchpad toggle
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratchpad" })) -- #window Move to scratchpad
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen()) -- #window Fullscreen (was CTRL+F — that stole Find)
+-- Mac Control+Command+F. Super+F stays; this chord does not steal Ctrl+F (Find).
+hl.bind(mainMod .. " + CTRL + F", hl.dsp.window.fullscreen()) -- #window #mac Fullscreen (Mac Ctrl+Cmd+F)
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a")) -- #picker Color picker
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(SCRIPTS .. "/blitz-mode.sh")) -- #settings #work Toggle Blitz (work focus)
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
@@ -169,9 +175,7 @@ hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.focus({ workspace = "m-1" })) -- #wi
 -- Also: Super+Ctrl+Space = first empty; Super+Shift+E = move window to empty
 hl.bind(mainMod .. " + CTRL + SPACE", hl.dsp.focus({ workspace = "empty" })) -- #window First empty workspace
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.window.move({ workspace = "empty" })) -- #window Move to empty workspace
--- Equal/minus: same monitor-local cycle (handy on laptop)
-hl.bind(mainMod .. " + equal", hl.dsp.focus({ workspace = "m+1" })) -- #window Next workspace on this monitor
-hl.bind(mainMod .. " + minus", hl.dsp.focus({ workspace = "m-1" })) -- #window Prev workspace on this monitor
+-- Super +/- is app zoom (Cmd +/-). Workspace cycle: Super+Tab / Super+N / Alt+scroll.
 
 for i = 1, 9 do
 	-- Super+N: focus (creates WS if needed). Empty non-persistent WS drop when left empty.
@@ -344,13 +348,12 @@ hl.bind(altMod .. " + D", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh menu"))
 hl.bind(altMod .. " + CTRL + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh close-all"))
 hl.bind(altMod .. " + SUPER + A", hl.dsp.exec_cmd(SCRIPTS .. "/notifications.sh toggle-pause"))
 
--- Accessibility zoom (screen magnifier — entire output, not app content zoom)
--- Super+scroll: zoom with the cursor locked to the center of the view
--- (cursor:zoom_rigid). Alt+= / - / Backspace stay as the keyboard trio.
--- Super+Backspace also resets so a Super+scroll zoom-in is escapable
--- without hunting for Alt.
--- Bind equal AND plus because Alt+Shift+= (the + glyph) is a different key.
--- Super+Shift+scroll is the same magnifier so an extra Shift still works.
+-- Zoom, mirrored from macOS (Super ≈ Cmd):
+--   Super + scroll / +/- / 0   = zoom the focused app     (Mac Cmd+scroll / Cmd+/- / Cmd+0)
+--   Ctrl  + scroll / +/-       = zoom the entire monitor  (Mac Control+scroll Accessibility)
+--   Super+Alt + +/-            = same monitor magnifier   (Mac Option-Command-= / -)
+-- Bind equal AND plus because Shift+= (the + glyph) is a different key.
+-- Extra Shift on scroll still zooms so a held Shift does not steal the wheel.
 --
 -- Lua parser: hyprctl keyword is a no-op ("Use eval"). Set via hl.config.
 -- Apply immediately. A reused oneshot debounce timer fired once after the
@@ -391,16 +394,90 @@ local function zoom_rst()
 	set_zoom(1.0)
 end
 
-hl.bind(mainMod .. " + mouse_up", zoom_in) -- #zoom Super+scroll up magnify (cursor-centered)
-hl.bind(mainMod .. " + mouse_down", zoom_out) -- #zoom Super+scroll down demagnify
-hl.bind(mainMod .. " + SHIFT + mouse_up", zoom_in) -- #zoom Super+Shift+scroll up magnify
-hl.bind(mainMod .. " + SHIFT + mouse_down", zoom_out) -- #zoom Super+Shift+scroll down demagnify
-hl.bind(altMod .. " + equal", zoom_in) -- #zoom Magnify
-hl.bind(altMod .. " + plus", zoom_in) -- #zoom Magnify (shifted +)
-hl.bind(altMod .. " + SHIFT + equal", zoom_in) -- #zoom Magnify (Shift+=)
-hl.bind(altMod .. " + minus", zoom_out) -- #zoom Demagnify
-hl.bind(altMod .. " + backspace", zoom_rst) -- #zoom Reset magnifier
-hl.bind(mainMod .. " + backspace", zoom_rst) -- #zoom Reset magnifier
+-- App/window zoom: inject the focused app's own zoom chord (Ctrl +/- / 0).
+-- Kitty already maps Ctrl+equal/minus; reset is Ctrl+Shift+Backspace there
+-- and Ctrl+0 in browsers / most GUI apps.
+local TERMINAL_CLASSES = {
+	kitty = true,
+	Alacritty = true,
+	alacritty = true,
+	["wezterm-gui"] = true,
+	foot = true,
+	["org.wezfurlong.wezterm"] = true,
+	ghostty = true,
+	["com.mitchellh.ghostty"] = true,
+}
+
+-- send_shortcut only presses the key. Super+scroll / Super+= then leaves
+-- `=` held; after Super is released the compositor key-repeats it as =====.
+-- send_key_state lets us press and release the chord ourselves.
+local function send_app(mods, key)
+	hl.dispatch(hl.dsp.send_key_state({ state = "down", mods = mods, key = key }))
+	hl.dispatch(hl.dsp.send_key_state({ state = "up", mods = mods, key = key }))
+	hl.dispatch(hl.dsp.send_key_state({ state = "up", mods = "", key = key }))
+end
+
+local function app_zoom_in()
+	send_app("CTRL", "equal")
+end
+
+local function app_zoom_out()
+	send_app("CTRL", "minus")
+end
+
+local function app_zoom_rst()
+	local w = hl.get_active_window()
+	local class = (w and w.class) or ""
+	if TERMINAL_CLASSES[class] then
+		send_app("CTRL SHIFT", "backspace")
+		return
+	end
+	send_app("CTRL", "0")
+end
+
+-- Super ≈ Cmd: app/window zoom (browsers, kitty font, etc.)
+hl.bind(mainMod .. " + mouse_up", app_zoom_in) -- #zoom Super+scroll app zoom in (Mac Cmd+scroll)
+hl.bind(mainMod .. " + mouse_down", app_zoom_out) -- #zoom Super+scroll app zoom out
+hl.bind(mainMod .. " + SHIFT + mouse_up", app_zoom_in) -- #zoom Super+Shift+scroll app zoom in
+hl.bind(mainMod .. " + SHIFT + mouse_down", app_zoom_out) -- #zoom Super+Shift+scroll app zoom out
+hl.bind(mainMod .. " + equal", app_zoom_in, { repeating = true }) -- #zoom Super+= app zoom in (Mac Cmd+=)
+hl.bind(mainMod .. " + plus", app_zoom_in, { repeating = true }) -- #zoom Super++ app zoom in
+hl.bind(mainMod .. " + SHIFT + equal", app_zoom_in, { repeating = true }) -- #zoom Super+Shift+= app zoom in
+hl.bind(mainMod .. " + minus", app_zoom_out, { repeating = true }) -- #zoom Super+- app zoom out (Mac Cmd+-)
+hl.bind(mainMod .. " + KP_Add", app_zoom_in, { repeating = true }) -- #zoom Super+numpad+ app zoom in
+hl.bind(mainMod .. " + KP_Subtract", app_zoom_out, { repeating = true }) -- #zoom Super+numpad- app zoom out
+hl.bind(mainMod .. " + 0", app_zoom_rst) -- #zoom Super+0 reset app zoom (Mac Cmd+0)
+hl.bind(mainMod .. " + backspace", app_zoom_rst) -- #zoom Super+Backspace reset app zoom
+-- If Super is released first, force the printable key up so it cannot repeat.
+local function release_typed(key)
+	return function()
+		hl.dispatch(hl.dsp.send_key_state({ state = "up", mods = "", key = key }))
+	end
+end
+hl.bind(mainMod .. " + equal", release_typed("equal"), { release = true })
+hl.bind(mainMod .. " + plus", release_typed("plus"), { release = true })
+hl.bind(mainMod .. " + minus", release_typed("minus"), { release = true })
+hl.bind(mainMod .. " + 0", release_typed("0"), { release = true })
+
+-- Ctrl = Mac Control: whole-monitor Accessibility magnifier
+hl.bind("CTRL + mouse_up", zoom_in) -- #zoom Ctrl+scroll up magnify monitor (Mac Control+scroll)
+hl.bind("CTRL + mouse_down", zoom_out) -- #zoom Ctrl+scroll down demagnify monitor
+hl.bind("CTRL + SHIFT + mouse_up", zoom_in) -- #zoom Ctrl+Shift+scroll up magnify monitor
+hl.bind("CTRL + SHIFT + mouse_down", zoom_out) -- #zoom Ctrl+Shift+scroll down demagnify monitor
+hl.bind("CTRL + equal", zoom_in, { repeating = true }) -- #zoom Ctrl+= monitor magnify
+hl.bind("CTRL + plus", zoom_in, { repeating = true }) -- #zoom Ctrl++ monitor magnify
+hl.bind("CTRL + SHIFT + equal", zoom_in, { repeating = true }) -- #zoom Ctrl+Shift+= monitor magnify
+hl.bind("CTRL + minus", zoom_out, { repeating = true }) -- #zoom Ctrl+- monitor demagnify
+hl.bind("CTRL + KP_Add", zoom_in, { repeating = true }) -- #zoom Ctrl+numpad+ monitor magnify
+hl.bind("CTRL + KP_Subtract", zoom_out, { repeating = true }) -- #zoom Ctrl+numpad- monitor demagnify
+hl.bind("CTRL + backspace", zoom_rst) -- #zoom Ctrl+Backspace reset monitor magnifier
+
+-- Super+Alt = Mac Option-Command keyboard for screen zoom
+hl.bind(mainMod .. " + " .. altMod .. " + equal", zoom_in, { repeating = true }) -- #zoom Super+Alt+= monitor magnify (Mac Opt+Cmd+=)
+hl.bind(mainMod .. " + " .. altMod .. " + plus", zoom_in, { repeating = true }) -- #zoom Super+Alt++ monitor magnify
+hl.bind(mainMod .. " + " .. altMod .. " + SHIFT + equal", zoom_in, { repeating = true }) -- #zoom Super+Alt+Shift+= monitor magnify
+hl.bind(mainMod .. " + " .. altMod .. " + minus", zoom_out, { repeating = true }) -- #zoom Super+Alt+- monitor demagnify (Mac Opt+Cmd+-)
+hl.bind(mainMod .. " + " .. altMod .. " + backspace", zoom_rst) -- #zoom Super+Alt+Backspace reset monitor magnifier
 
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- DESKTOP META (was under bare CTRL — that steals native app shortcuts)
@@ -408,7 +485,7 @@ hl.bind(mainMod .. " + backspace", zoom_rst) -- #zoom Reset magnifier
 -- Desktop actions live on Super / Alt only.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
--- Fullscreen moved to Super+F (see MAIN section above).
+-- Fullscreen: Super+F and Super+Ctrl+F (Mac Ctrl+Cmd+F). Bare Ctrl+F stays Find.
 -- Palette: was CTRL+P (Print in every app) → Super+Shift+C
 hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd(SCRIPTS .. "/palette.sh")) -- #theme Color palette picker
 -- Keybind cheatsheet: was also CTRL+SPACE (IME / IDE autocomplete conflict) — Alt+K only

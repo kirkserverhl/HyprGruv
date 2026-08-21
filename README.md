@@ -330,6 +330,7 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 - Close windows during install: `Win + C` (after install: `Win + Q`)
 - Full keybind list after install: `Alt + K` or type `keybinds` in a terminal
 - Screen recording: `Alt + Z` opens the GPU Screen Recorder overlay (`gpu-screen-recorder-ui` in `pacman.list`)
+- Region OCR: `Shift` + any screenshot bind copies text (`tesseract` + `tesseract-data-eng` in `pacman.list`)
 - F1–F12 are not assigned distribution-wide (each keyboard layout owns them). Laptops enable Fn-lock so the F-row is F1–F12 without holding Fn.
 
 ## Post-installation

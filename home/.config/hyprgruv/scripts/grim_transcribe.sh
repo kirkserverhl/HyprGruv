@@ -8,7 +8,12 @@ if ! command -v grim >/dev/null || ! command -v slurp >/dev/null || ! command -v
 	exit 1
 fi
 
-text="$(grim -g "$(slurp)" - | tesseract stdin stdout 2>/dev/null || true)"
+if [[ ! -f /usr/share/tessdata/eng.traineddata ]]; then
+	notify-send -e -u critical "Transcribe" "Install tesseract-data-eng (English OCR data is missing)"
+	exit 1
+fi
+
+text="$(grim -g "$(slurp)" - | tesseract stdin stdout -l eng 2>/dev/null || true)"
 text="${text%"${text##*[![:space:]]}"}"
 if [[ -z "$text" ]]; then
 	notify-send -e -u low "Transcribe" "No text found"

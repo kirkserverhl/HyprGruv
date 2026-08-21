@@ -51,6 +51,11 @@ hyprtoolkit
 grim
 slurp
 wl-clipboard
+# Shift+screenshot OCR (grim_transcribe.sh). tesseract is also pulled by
+# libmupdf; without tesseract-data-eng, pacman resolves tessdata to
+# tesseract-data-afr and region transcribe fails (defaults to -l eng).
+tesseract
+tesseract-data-eng
 # ShadowPlay-style overlay (Alt+Z). Pulls gpu-screen-recorder + notification.
 gpu-screen-recorder-ui
 # Virtual keyboard for Mac Cmd bridge (Super+C/V/X/Z → Ctrl+* via mac-shortcut.sh)

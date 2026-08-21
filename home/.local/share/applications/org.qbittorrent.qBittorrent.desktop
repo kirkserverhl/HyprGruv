@@ -1,0 +1,14 @@
+[Desktop Entry]
+Categories=Network;FileTransfer;P2P;Qt;
+Exec=/home/kirk/.local/bin/qbittorrent-vpn %U
+GenericName=BitTorrent client
+Comment=Download and share files over BitTorrent (requires Surfshark)
+Icon=qbittorrent
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
+Name=qBittorrent
+Terminal=false
+Type=Application
+StartupNotify=false
+StartupWMClass=qbittorrent
+Keywords=bittorrent;torrent;magnet;download;p2p;
+SingleMainWindow=true

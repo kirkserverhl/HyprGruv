@@ -244,6 +244,15 @@ fi
 sudo pacman -S --needed --noconfirm "${OFFICIAL_RESOLVABLE[@]}" \
     || hyprgruv_strict_abort "Official manifest package install failed"
 
+# Shift+screenshot OCR (grim_transcribe.sh) needs English traineddata.
+# tesseract is also a libmupdf dep; without an explicit language pack,
+# pacman satisfies tessdata with tesseract-data-afr and OCR copies nothing.
+if ! pacman -Qq tesseract-data-eng &>/dev/null || [[ ! -f /usr/share/tessdata/eng.traineddata ]]; then
+    log_status "Installing tesseract English OCR data (Shift+screenshot transcribe)"
+    sudo pacman -S --needed --noconfirm tesseract tesseract-data-eng \
+        || hyprgruv_strict_abort "tesseract-data-eng install failed"
+fi
+
 # Rust AUR builds need an active default toolchain *before* yay.
 if command -v rustup >/dev/null 2>&1; then
     log_status "Setting rustup default toolchain to stable (for Rust AUR builds)…"
@@ -334,6 +343,9 @@ hyprgruv_require_cmd yay
 hyprgruv_require_pkg hyprland
 # Rofi is required for launchers, palette pickers, and repo-update prompts.
 hyprgruv_require_cmd rofi
+# Region OCR for every Shift+screenshot bind.
+hyprgruv_require_cmd tesseract
+hyprgruv_require_pkg tesseract-data-eng
 
 # Opening wallpaper + shipped gruvbox defaults run after stow (install.sh).
 # Packages step only notes the deferral — do not run matugen here.

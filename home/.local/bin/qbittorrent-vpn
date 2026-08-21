@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Start qBittorrent only when Surfshark WireGuard is up.
+# qBittorrent is also bound to surfshark_wg in its config; this check
+# covers the case where the interface is missing at launch.
+set -euo pipefail
+
+IFACE="${QBIT_VPN_IFACE:-surfshark_wg}"
+QBIT="${QBIT_BIN:-/usr/bin/qbittorrent}"
+
+vpn_up() {
+  ip -4 -o addr show dev "$IFACE" 2>/dev/null | grep -q ' inet '
+}
+
+if ! vpn_up; then
+  msg="Surfshark is not connected (${IFACE} has no IPv4). Connect the VPN, then open qBittorrent."
+  if command -v notify-send >/dev/null 2>&1; then
+    notify-send -u critical "qBittorrent" "$msg"
+  fi
+  printf '%s\n' "$msg" >&2
+  exit 1
+fi
+
+exec "$QBIT" "$@"
