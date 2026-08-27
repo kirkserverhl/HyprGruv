@@ -146,6 +146,16 @@ hl.window_rule({
 
 -- Note: soundsbored rofi is layer-shell on Wayland (even with -normal-window),
 -- so window rules cannot place it. Corner placement is in config-soundsbored.rasi.
+-- Playback uses mpv --vo=null --wayland-app-id=soundsbored (no window). If a
+-- window still appears, keep it off the tiling layout.
+hl.window_rule({
+    name = "soundsbored-mpv",
+    match = { class = "^(soundsbored)$" },
+    float = true,
+    no_initial_focus = true,
+    no_anim = true,
+    border_size = 0,
+})
 hl.window_rule({ name = "rofi-float",      match = { class = "^(rofi|Rofi)$" },  float = true })
 -- These two are also quite broad. Comment them out if you want normal alacritty/ghostty to tile.
 -- hl.window_rule({ name = "alacritty-float", match = { class = "^(alacritty)$" },  float = true })
