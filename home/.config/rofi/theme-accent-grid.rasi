@@ -1,6 +1,8 @@
 /* Theme accent splotches — one-row wheel for Super+W.
    A 2×2 / 4×2 square looks awkward when a theme has 6 vs 7 unique colors.
-   Settings chrome (font/blur/selection); meridian-style single strip. */
+   Settings chrome (font/blur/selection); meridian-style single strip.
+   Matte fill comes from launcher-chrome mainbox (@surface-alpha) — do not
+   set mainbox transparent here or the panel punches through to the wallpaper. */
 
 configuration {
     show-icons:    true;
@@ -40,12 +42,12 @@ message {
     padding:          0 0 6px 0;
     margin:           0;
     border:           0;
-    background-color: transparent;
+    background-color: @surface-alpha;
 }
 
 textbox {
     padding:          0;
-    background-color: transparent;
+    background-color: @surface-alpha;
     text-color:       @foreground;
     horizontal-align: 0.0;
     highlight:        none;

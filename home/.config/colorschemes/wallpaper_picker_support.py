@@ -458,6 +458,9 @@ def wrap_clickable_cell(
     """Wrap a grid cell so clicks on images/labels reach the handler (GTK3)."""
     event_box = Gtk.EventBox()
     event_box.get_style_context().add_class("clickable-cell")
+    # Default EventBox has its own GdkWindow, which paints an opaque layer
+    # over the matte #main-window fill and kills Hyprland blur in the cell.
+    event_box.set_visible_window(False)
     event_box.add(cell)
     event_box.connect("button-press-event", handler, *user_data)
     event_box.connect("enter-notify-event", _cell_enter)
@@ -494,7 +497,18 @@ def selection_border_colors() -> tuple[str, str]:
 def thumb_css_overrides() -> bytes:
     primary, secondary = selection_border_colors()
     field_bg, field_fg, field_border, field_hover_bg = _footer_chrome_tokens()
+    window_bg = "alpha(#1d2021, 0.9)"
+    if STYLE_FILE.is_file():
+        try:
+            window_bg = _gtk_rule_properties(
+                STYLE_FILE.read_text(encoding="utf-8"), "window"
+            ).get("background-color", window_bg)
+        except OSError:
+            pass
     return f"""
+    #main-window {{
+        background-color: {window_bg};
+    }}
     #wallpaper-content {{
         padding: 0;
         margin: 0;

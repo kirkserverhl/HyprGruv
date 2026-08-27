@@ -13,6 +13,14 @@ scrolledwindow {
     border: none;
 }
 
+/* Covering child: GTK app-paintable windows often skip painting `window`, and
+   `box { background-color: transparent }` would punch through. #main-window
+   is the fill used by waypaper + Super+W pickers (theme-picker / wallpaper). */
+#main-window {
+    background-color: alpha({{colors.surface_container_lowest.dark.hex}}, 0.9);
+    color: {{colors.on_surface.dark.hex}};
+}
+
 /* All action buttons — top row, bottom row, slideshow */
 button,
 togglebutton {

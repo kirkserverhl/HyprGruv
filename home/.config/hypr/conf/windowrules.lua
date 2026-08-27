@@ -70,14 +70,17 @@ hl.window_rule({
     float = true,
     center = true,
     size = {820, 600},
+    xray = true,
 })
 -- Super+W theme chooser: wide left-right wheel (not the 3×3 wallpaper grid).
+-- xray: blur the wallpaper (same matte as waypaper), not tiled windows under it.
 hl.window_rule({
     name = "theme-picker-float",
     match = { class = "^(theme-picker)$" },
     float = true,
     center = true,
     size = {1200, 320},
+    xray = true,
 })
 -- Super+W source-color: pinned fullscreen wallpaper so hyprpicker can sample it.
 -- Dedicated special:sourcepick (not the work scratchpad) + pin so focus steal
@@ -90,17 +93,15 @@ hl.window_rule({
     pin = true,
     border_size = 0,
 })
--- 'blur' is not a supported field on hl.window_rule (only no_blur is).
--- Use hyprctl to apply the classic "blur" windowrule.
-hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(waypaper)$'")
-hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(theme-picker)$'")
-hl.exec_cmd("hyprctl keyword windowrulev2 'blur,class:^(wallpaper-picker\\.py)$'")
+-- Hyprland 0.55+ has no windowrule `blur` (only no_blur). Transparent pixels
+-- pick up decoration.blur when ignore_opacity is true (decorations.lua).
 hl.window_rule({
     name = "wallpaper-picker-float",
     match = { class = "^(wallpaper-picker\\.py)$", title = "^Waypaper$" },
     float = true,
     center = true,
     size = {820, 600},
+    xray = true,
 })
 
 -- GTK Settings (nwg-look)

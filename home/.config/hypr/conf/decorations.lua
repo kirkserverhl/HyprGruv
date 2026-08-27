@@ -39,7 +39,9 @@ local decorations = {
 		enabled = true,
 		size = blur_size,
 		passes = blur_passes,
-		ignore_opacity = false,
+		-- true (Hyprland default): blur uses surface pixel alpha, not window
+		-- opacity. Needed for waypaper / Super+W GTK pickers (RGBA visual).
+		ignore_opacity = true,
 		contrast = is_laptop and 0.75 or 0.8,
 		vibrancy = is_laptop and 0.15 or 0.2,
 		xray = false,

@@ -1,13 +1,18 @@
 /* =============================================================================
    Waypaper-matched panel chrome (rofi launchers)
    =============================================================================
-   Same matugen surface transparency and blur treatment as waypaper/theme-picker:
-     • window @surface-alpha (90% surface_container_lowest)
+   Same matugen surface as waypaper/theme-picker:
+     • window + mainbox @surface-alpha (90% surface_container_lowest)
      • search field @entry-surface (85% surface_container_low)
      • selection @primary / @on-primary (waypaper button hover)
-   Hyprland blurs whatever is behind the panel (no outer halo — that reads as
-   a second border). Import after shared/standard.rasi; override window
-   width/location per launcher.
+
+   Rofi paints widget backgrounds with SOURCE (replace), not OVER. A transparent
+   mainbox therefore wipes the window fill — Hyprland then sees alpha 0, and
+   layer ignore_alpha skips blur. The matte fill must live on mainbox (the
+   covering layer), not only on window.
+
+   Hyprland blurs whatever is behind the panel (xray in layerrules.lua).
+   Import after shared/standard.rasi; override window width/location per launcher.
    Mouse bindings: shared/mouse.rasi (single-click for all launcher menus).
 ============================================================================= */
 
@@ -19,7 +24,6 @@ configuration {
 }
 
 * {
-    background:        @surface-alpha;
     foreground:        @on-surface;
     color11:           @primary;
     selected:          @primary;
@@ -37,6 +41,7 @@ window {
     border-color:     @outline;
     border-radius:    14px;
     background-color: @surface-alpha;
+    background:       @surface-alpha;
     transparency:     "real";
     cursor:           "default";
     enabled:          true;
@@ -48,7 +53,13 @@ mainbox {
     spacing:          0px;
     margin:           0px;
     padding:          10px;
-    background-color: transparent;
+    background-color: @surface-alpha;
+    background:       @surface-alpha;
+}
+
+listbox {
+    background-color: @surface-alpha;
+    background:       @surface-alpha;
 }
 
 inputbar {
@@ -92,7 +103,8 @@ listview {
     spacing:          4px;
     padding:          6px;
     margin:           0px;
-    background-color: transparent;
+    background-color: @surface-alpha;
+    background:       @surface-alpha;
     border:           0px;
 }
 
@@ -101,7 +113,8 @@ element {
     padding:          10px 12px;
     margin:           2px 0px;
     cursor:           pointer;
-    background-color: transparent;
+    background-color: @surface-alpha;
+    background:       @surface-alpha;
     border-radius:    6px;
     border:           @border-width;
     border-color:     transparent;
@@ -113,7 +126,8 @@ element normal.active,
 element alternate.normal,
 element alternate.urgent,
 element alternate.active {
-    background-color: transparent;
+    background-color: @surface-alpha;
+    background:       @surface-alpha;
     text-color:       @foreground;
 }
 
@@ -144,7 +158,7 @@ element-text {
 }
 
 message {
-    background-color: transparent;
+    background-color: @surface-alpha;
     border:           0px;
     margin:           8px 0px 0px 0px;
     padding:          0px;
@@ -156,14 +170,14 @@ textbox {
     padding:          12px;
     margin:           0px;
     border-radius:    8px;
-    background-color: transparent;
+    background-color: @surface-alpha;
     text-color:       @foreground;
 }
 
 error-message {
     padding:          12px;
     border-radius:    14px;
-    background-color: transparent;
+    background-color: @surface-alpha;
     text-color:       @foreground;
 }
 
