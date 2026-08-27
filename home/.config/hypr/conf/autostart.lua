@@ -65,9 +65,10 @@ hl.on("hyprland.start", function()
 	-- Early waybar for snappy login when last mode was waybar; hyprpm-reload.sh
 	-- re-enforces the saved mode after plugins load (hyprpm always loads hyprbars
 	-- when enabled, so the final apply-bar-mode pass is what prevents both bars).
-	-- Prefer machine-local hypridle from apply-machine-profile.sh when present.
+	-- Idle daemon (systemd unit; launch-hypridle.sh if the unit is missing).
+	hl.exec_cmd("systemctl --user start hyprgruv-idle.service || " .. SCRIPTS .. "/launch-hypridle.sh")
 	hl.exec_cmd(
-		'sh -c \'hidle=${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/hypridle.conf; if [ -f "$hidle" ]; then hypridle -c "$hidle" &; else hypridle &; fi; st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
+		'sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
 	)
 
 	-- Clipboard history: text and screenshots live in separate cliphist DBs

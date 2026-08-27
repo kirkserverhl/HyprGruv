@@ -201,6 +201,12 @@ home/.config/settings/wlr_no_hw_cursors.sh
 home/.config/settings/shadow_enabled.sh
 home/.config/settings/blur_passes.sh
 home/.config/settings/blur_size.sh
+home/.config/settings/hypridle_hyprlock_timeout.sh
+home/.config/settings/hypridle_dpms_timeout.sh
+home/.config/settings/hypridle_suspend_timeout.sh
+home/.config/settings/hypridle_dim_timeout.sh
+home/.config/settings/hypridle_sleep_action.sh
+home/.config/settings/lid_grace_sec.sh
 home/.config/settings/bar_height.sh
 home/.config/settings/bar_margin_top.sh
 home/.config/settings/bar_margin_x.sh

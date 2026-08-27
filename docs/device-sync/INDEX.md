@@ -5,6 +5,7 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-08-27T16:39:20-04:00 | HyprLab | deploy | to-source | Laptop staged idle: dim/lock/DPMS/hibernate + 5m lid grace; hypridle systemd unit; temporary HyprLab push | [2026-08-27T203920Z-HyprLab.md](entries/2026-08-27T203920Z-HyprLab.md) |
 | 2026-08-27T16:27:31-04:00 | HyprLab | deploy | to-source | Super+W theme-switcher rofi: matte/blur stacked like waypaper; temporary HyprLab push | [2026-08-27T202731Z-HyprLab.md](entries/2026-08-27T202731Z-HyprLab.md) |
 | 2026-08-20T16:37:44-04:00 | HyprLab | deploy | to-source | soundsbored wrapper probes HyprLab ~/Projects and main ~/BaaS_ISO; temporary laptop→main push | [2026-08-20T203744Z-HyprLab.md](entries/2026-08-20T203744Z-HyprLab.md) |
 | 2026-08-14T03:12:37-04:00 | HyprGruv | source | to-deploy | HyprGruv: remap MX Mechanical F-row to the physical icons (screen/kbd/transcribe/emoji/shot/mic/media/mute + vol keys right of F12). Binds now match Logi Bolt device names, not the old wired HID name. | [2026-08-14T071237Z-HyprGruv.md](entries/2026-08-14T071237Z-HyprGruv.md) |

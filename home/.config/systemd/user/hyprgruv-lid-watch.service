@@ -1,0 +1,14 @@
+[Unit]
+Description=Hyprgruv laptop lid grace then lock+hibernate
+After=hyprland-session.target
+PartOf=hyprland-session.target
+ConditionPathExists=/proc/acpi/button/lid
+
+[Service]
+Type=simple
+ExecStart=%h/.config/hyprgruv/scripts/lid-watch.sh
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=hyprland-session.target

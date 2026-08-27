@@ -16,9 +16,18 @@ if [[ "$1" == "status" ]]; then
     fi
 fi
 if [[ "$1" == "toggle" ]]; then
+    LAUNCH="$HOME/.config/hyprgruv/scripts/launch-hypridle.sh"
     if pgrep -x "$SERVICE" >/dev/null ;then
-        killall hypridle
+        if [[ -x "$LAUNCH" ]]; then
+            "$LAUNCH" --stop
+        else
+            killall hypridle
+        fi
     else
-        hypridle
+        if [[ -x "$LAUNCH" ]]; then
+            "$LAUNCH"
+        else
+            hypridle
+        fi
     fi
 fi

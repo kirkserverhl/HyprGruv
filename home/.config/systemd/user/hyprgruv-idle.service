@@ -1,0 +1,13 @@
+[Unit]
+Description=Hyprgruv hypridle (profile timeouts)
+After=hyprland-session.target
+PartOf=hyprland-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.config/hyprgruv/scripts/launch-hypridle.sh --foreground
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=hyprland-session.target
