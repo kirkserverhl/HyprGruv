@@ -228,6 +228,9 @@ bash ~/.hyprgruv/sync-packages.sh --new-only
 |---------|------|-------|
 | `aphototoollibre` | AUR | Installed via `aur.list` / `setup-mime-handlers.sh` for image MIME types |
 | `hypremoji` | AUR | MX F6 / `emojipicker.sh` — GTK4 emoji picker for Hyprland |
+| `kew` | official | Terminal music player; `kew_setup.sh` sets library to `~/Music` |
+| `network-manager-applet` | official | `nm-applet --indicator` tray (wifi/VPN) |
+| `kdegraphics-thumbnailers` | official | Image/PDF/RAW thumbs (with `ffmpegthumbs`) so files show previews |
 | `easyeffects` | official | PipeWire audio effects |
 | `qt6-virtualkeyboard` | official | SDDM Sugar Candy on-screen keyboard |
 

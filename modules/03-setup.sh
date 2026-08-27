@@ -105,6 +105,7 @@ declare -a ORDERED_SCRIPTS=(
     # pane-base-index 1 is available for Super+Alt+Return dev-workspace layout.
     "oh_my_tmux.sh|Install Oh My Tmux (gpakosz/.tmux)"
     "setup-mime-handlers.sh|Configure MIME handlers and file openers"
+    "kew_setup.sh|Point kew at ~/Music"
 )
 
 # Support skipping the wallpaper step (awww may not be up during

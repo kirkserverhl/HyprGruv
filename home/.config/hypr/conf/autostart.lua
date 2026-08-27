@@ -113,6 +113,9 @@ hl.on("hyprland.start", function()
 	-- Auto-mount
 	hl.exec_cmd("udiskie")
 
+	-- NetworkManager tray (wifi/VPN). Harmless if the current waybar theme has no tray.
+	hl.exec_cmd("sh -c 'pgrep -x nm-applet >/dev/null || nm-applet --indicator'")
+
 	-- GPU Screen Recorder overlay (Alt+Z). Unit is a no-op until the package is installed.
 	hl.exec_cmd("systemctl --user start gpu-screen-recorder-ui.service")
 

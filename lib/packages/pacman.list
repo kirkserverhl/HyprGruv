@@ -10,6 +10,8 @@ openssh
 rustup
 networkmanager
 nm-connection-editor
+# Tray applet (wifi/VPN menu). Autostart: nm-applet --indicator
+network-manager-applet
 bash
 zsh
 eza
@@ -107,6 +109,9 @@ powerdevil
 mupdf-tools
 ffmpeg
 ffmpegthumbs
+# Image/PDF/RAW thumbs (with ffmpegthumbs) so files show colored previews, not generic icons
+kdegraphics-thumbnailers
+webp-pixbuf-loader
 thunar
 thunar-volman
 thunar-archive-plugin
@@ -139,6 +144,8 @@ ttf-sharetech-mono-nerd
 otf-font-awesome
 mpv
 media-player-info
+# Terminal music player — library path seeded to ~/Music by lib/scripts/kew_setup.sh
+kew
 piper
 obsidian
 awww
