@@ -109,6 +109,12 @@ MACHINE_TYPE=desktop ./install.sh
 
 State lives under `~/.local/state/hyprgruv/` (not committed). Settings mirrors are gitignored under `home/.config/settings/`.
 
+The interactive wizard (`04-config.sh`) can **list audio outputs, play a test tone, and save the default sink**. Re-run anytime:
+
+```bash
+bash ~/.hyprgruv/lib/scripts/audio-setup.sh
+```
+
 ### Reciprocal git sync (`git-eod` / `git-eod-pull`)
 
 After machine profile, each host gets a **role** and a **follow list** (which repos to care about):

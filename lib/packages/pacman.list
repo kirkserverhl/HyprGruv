@@ -72,6 +72,8 @@ pipewire-pulse
 pipewire-alsa
 pipewire-jack
 pavucontrol
+# Test tones for audio-setup.sh (install wizard + re-run)
+sound-theme-freedesktop
 cava
 swaync
 # Optional post-install theming (Waypaper / Super+W matugen tile). Install does not run it.

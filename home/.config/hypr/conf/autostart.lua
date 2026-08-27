@@ -113,6 +113,9 @@ hl.on("hyprland.start", function()
 	-- Auto-mount
 	hl.exec_cmd("udiskie")
 
+	-- Re-apply saved PipeWire default sink (audio-setup.sh) if that node is present.
+	hl.exec_cmd(SCRIPTS .. "/audio-setup.sh --apply")
+
 	-- NetworkManager tray (wifi/VPN). Harmless if the current waybar theme has no tray.
 	hl.exec_cmd("sh -c 'pgrep -x nm-applet >/dev/null || nm-applet --indicator'")
 

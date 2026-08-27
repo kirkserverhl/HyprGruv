@@ -5,6 +5,7 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-08-27T17:02:11-04:00 | HyprLab | deploy | to-source | Install wizard: detect audio sinks, play a test, persist default output | [2026-08-27T210211Z-HyprLab.md](entries/2026-08-27T210211Z-HyprLab.md) |
 | 2026-08-27T16:51:45-04:00 | HyprLab | deploy | to-source | Add kew, nm-applet, file thumbnailers to install lists; kew ~/Music setup | [2026-08-27T205145Z-HyprLab.md](entries/2026-08-27T205145Z-HyprLab.md) |
 | 2026-08-27T16:39:20-04:00 | HyprLab | deploy | to-source | Laptop staged idle: dim/lock/DPMS/hibernate + 5m lid grace; hypridle systemd unit; temporary HyprLab push | [2026-08-27T203920Z-HyprLab.md](entries/2026-08-27T203920Z-HyprLab.md) |
 | 2026-08-27T16:27:31-04:00 | HyprLab | deploy | to-source | Super+W theme-switcher rofi: matte/blur stacked like waypaper; temporary HyprLab push | [2026-08-27T202731Z-HyprLab.md](entries/2026-08-27T202731Z-HyprLab.md) |

@@ -179,6 +179,21 @@ else
     _section_handoff "Zram setup skipped" status
 fi
 
+# ---------------------- Sound output ------------------------
+hyprgruv_section_intro "Sound output"
+if _confirm "  🔊   Check sound devices, play a test, and pick the default output?"; then
+    script="$SCRIPTS_DIR/audio-setup.sh"
+    if [[ -f "$script" ]]; then
+        run_step "$script" "Sound output"
+        _section_handoff "Sound output completed"
+    else
+        log_error "Script not found: $script"
+        exit 1
+    fi
+else
+    _section_handoff "Sound output skipped" status
+fi
+
 # ---------------------- Snapshots ---------------------------
 hyprgruv_section_intro "Snapshots"
 if _confirm "  📸   Set up Btrfs snapshots / Timeshift / off-disk replica?"; then

@@ -207,6 +207,8 @@ home/.config/settings/hypridle_suspend_timeout.sh
 home/.config/settings/hypridle_dim_timeout.sh
 home/.config/settings/hypridle_sleep_action.sh
 home/.config/settings/lid_grace_sec.sh
+home/.config/settings/audio_sink.sh
+home/.config/wireplumber/wireplumber.conf.d/51-hyprgruv-default-sink.conf
 home/.config/settings/bar_height.sh
 home/.config/settings/bar_margin_top.sh
 home/.config/settings/bar_margin_x.sh
