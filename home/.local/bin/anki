@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Anki 26.08 + Qt 6.11 does not map a window on this Hyprland session when
+# it runs native Wayland with OpenGL/Vulkan (process stays up, no toplevel;
+# a second launch is a no-op because of the single-instance lock).
+# XWayland + Anki's software RHI is the combination that actually appears.
+set -euo pipefail
+
+export QT_QPA_PLATFORM=xcb
+export QTWEBENGINE_CHROMIUM_FLAGS="${QTWEBENGINE_CHROMIUM_FLAGS:---disable-gpu --disable-gpu-compositing}"
+
+driver_file="${HOME}/.local/share/Anki2/gldriver6"
+mkdir -p "${HOME}/.local/share/Anki2"
+if [[ ! -f "$driver_file" ]] || [[ "$(tr -d '[:space:]' < "$driver_file")" == "vulkan" ]]; then
+  printf 'software' > "$driver_file"
+fi
+
+exec /usr/bin/anki "$@"
