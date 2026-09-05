@@ -50,7 +50,7 @@ hl.config({
 		-- Super+arrow / Super+hjkl: if no window in that direction, jump to
 		-- the next monitor. Needs the outputs flush (no pixel gap).
 		window_direction_monitor_fallback = true,
-		-- Default 300ms swallows extra wheel ticks; Ctrl+scroll monitor zoom needs them.
+		-- Default 300ms swallows extra wheel ticks; Super+scroll monitor zoom needs them.
 		scroll_event_delay = 50,
 	},
 
@@ -65,7 +65,7 @@ hl.config({
 		mouse_move_enables_dpms = true,
 	},
 
-	-- Ctrl+scroll magnifier (see keybinds #zoom). Rigid = cursor stays at
+	-- Super+scroll magnifier (see keybinds #zoom). Rigid = cursor stays at
 	-- the center of the zoomed view as you move the mouse.
 	cursor = {
 		zoom_rigid = true,
