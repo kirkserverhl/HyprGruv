@@ -4,7 +4,7 @@
 [mgr]
 # Pane widths: [parent, current, preview] as proportions of total width.
 # Default is [1, 4, 3] — middle pane is very wide, leaving empty space before preview.
-ratio = [ 2, 2, 5 ]
+ratio = [2, 2, 5]
 
 # Show hidden files (dotfiles) by default
 show_hidden = true
@@ -20,25 +20,32 @@ linemode = "none"
 show_symlink = true
 
 # Mouse
-mouse_events = [ "click", "scroll" ]
+mouse_events = ["click", "scroll"]
 
 [preview]
 # Image preview settings
-max_width  = 1200
+max_width = 1200
 max_height = 1200
 
 [opener]
 # You can customize openers here if needed
 
-[plugin]
+#[plugin]
 # Plugin settings
+#prepend_previewers = [
+#  # Paint #hex / rgb() literals with their actual color in the preview pane
+#  { url = "*.{yml,yaml}", run = "hex-swatch" },
+#]
+
+[plugin]
 prepend_previewers = [
-  # Paint #hex / rgb() literals with their actual color in the preview pane
-  { url = "*.{yml,yaml}", run = "hex-swatch" },
+    # palette / theme files
+    { url = "palette.json", run = "hexcolor" },
+    { url = "*.{json,css,scss,sass,less,toml,yml,yaml,conf}", run = "hexcolor" },
 ]
 
 append_previewers = [
-  # ...
+    # ...
 ]
 
 [input]
