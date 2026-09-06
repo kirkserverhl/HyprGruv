@@ -30,8 +30,8 @@
 
 window {
   background-color: var(--bg-col);
-  border-radius: 10px;
-  padding: 12px 0px 0px 0px;
+  border-radius: 14px;
+  padding: 14px 0px 0px 0px;
 }
 
 .generic-btn{
@@ -73,11 +73,14 @@ window {
   100% { border: 1px solid transparent; }
 }
 
+/* Search field = calculator display (Alt+C textbox: padding 12/14, radius 10). */
 entry {
   background-color: var(--btn-list-col);
   color: {{colors.on_surface.dark.hex}};
   border-radius: 10px;
-  padding: 0 15px;
+  padding: 12px 14px;
+  min-height: 44px;
+  font-size: 16px;
 }
 
 .focused.active {

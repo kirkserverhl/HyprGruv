@@ -100,6 +100,8 @@ require("conf.hymission")
 ---- KEYBINDINGS ----
 ---------------------
 require("conf.keybinds")
+-- Dynamite Quickshell trial binds (Super+Alt). Comment out to disable.
+require("conf.dynamite")
 
 --------------------------------
 ---- WINDOW / LAYER RULES ----

@@ -70,23 +70,74 @@ Item {
             }
         }
 
-        indicator: Button {
-                id: usernameIcon
-                width: selectUser.height * 0.8
-                height: parent.height
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: selectUser.height * 0.125
-                icon.height: parent.height * 0.25
-                icon.width: parent.height * 0.25
-                enabled: false
-                icon.color: root.palette.text
-                icon.source: Qt.resolvedUrl("../Assets/User.svgz")
+        contentItem: Item { }
+
+        indicator: Item {
+            id: usernameIcon
+            width: selectUser.height * 0.8
+            height: width
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: selectUser.height * 0.1
+
+            property color iconColor: root.palette.text
+            property url modelIcon: {
+                var idx = selectUser.currentIndex
+                if (idx < 0)
+                    return ""
+                var ic = userModel.data(userModel.index(idx, 0), Qt.UserRole + 4)
+                if (ic && String(ic).length > 0 && String(ic) !== "undefined")
+                    return ic
+                return ""
+            }
+
+            Image {
+                id: avatarImage
+                anchors.fill: parent
+                source: Qt.resolvedUrl("../Assets/user-face.png")
+                fillMode: Image.PreserveAspectCrop
+                asynchronous: true
+                mipmap: true
+                visible: false
+                onStatusChanged: {
+                    if (status !== Image.Error)
+                        return
+                    if (source === Qt.resolvedUrl("../Assets/user-face.png") && usernameIcon.modelIcon !== "")
+                        source = usernameIcon.modelIcon
+                    else
+                        source = Qt.resolvedUrl("../Assets/User.svgz")
+                }
+            }
+
+            Rectangle {
+                id: avatarMask
+                anchors.fill: parent
+                radius: width / 2
+                visible: false
+            }
+
+            OpacityMask {
+                anchors.fill: parent
+                source: avatarImage
+                maskSource: avatarMask
+                z: 0
+            }
+
+            Rectangle {
+                id: avatarRing
+                anchors.fill: parent
+                radius: width / 2
+                color: "transparent"
+                border.width: 2
+                border.color: usernameIcon.iconColor
+                z: 1
+            }
         }
 
         background: Rectangle {
             color: "transparent"
             border.color: "transparent"
+            radius: width / 2
         }
 
         popup: Popup {
@@ -130,7 +181,7 @@ Item {
                 when: selectUser.down
                 PropertyChanges {
                     target: usernameIcon
-                    icon.color: Qt.lighter(root.palette.highlight, 1.1)
+                    iconColor: Qt.lighter(root.palette.highlight, 1.1)
                 }
             },
             State {
@@ -138,7 +189,7 @@ Item {
                 when: selectUser.hovered
                 PropertyChanges {
                     target: usernameIcon
-                    icon.color: Qt.lighter(root.palette.highlight, 1.2)
+                    iconColor: Qt.lighter(root.palette.highlight, 1.2)
                 }
             },
             State {
@@ -146,7 +197,7 @@ Item {
                 when: selectUser.visualFocus
                 PropertyChanges {
                     target: usernameIcon
-                    icon.color: root.palette.highlight
+                    iconColor: root.palette.highlight
                 }
             }
         ]
@@ -154,7 +205,7 @@ Item {
         transitions: [
             Transition {
                 PropertyAnimation {
-                    properties: "color, border.color, icon.color"
+                    properties: "color, border.color, iconColor"
                     duration: 150
                 }
             }

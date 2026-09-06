@@ -161,75 +161,20 @@ hl.window_rule({ name = "rofi-float",      match = { class = "^(rofi|Rofi)$" }, 
 -- hl.window_rule({ name = "alacritty-float", match = { class = "^(alacritty)$" },  float = true })
 -- hl.window_rule({ name = "ghostty-float",   match = { class = "^(ghostty)$" },    float = true })
 
--- HyprEmoji (MX F6). 342×340 is six emoji columns at the app's default
--- cell size (official default_width 284 is five). Category-nav CSS sets
--- min-width:0 so GTK will accept that width. persistent_size off so a
--- reinstall does not restore Hyprland's 640×340 float default.
-local HYPREMOJI_W, HYPREMOJI_H = 342, 340
-local HYPREMOJI_SEL = "class:^dev.musagy.hypremoji$"
-
-local function is_hypremoji(w)
-    if w == nil then
-        return false
-    end
-    local cls = w.class or w.initial_class or ""
-    local title = w.title or w.initial_title or ""
-    return title == "HyprEmoji" or cls:find("hypremoji", 1, true)
-end
-
-local function place_hypremoji()
-    local mon = hl.get_active_monitor()
-    if mon == nil then
-        return
-    end
-    local x = mon.x + math.floor(mon.width * 0.75 - HYPREMOJI_W / 2)
-    local y = mon.y + math.floor(mon.height * 0.25 - HYPREMOJI_H / 2)
-    local dim = HYPREMOJI_W .. " " .. HYPREMOJI_H
-    hl.dispatch(hl.dsp.window.float({ action = "on", window = HYPREMOJI_SEL }))
-    hl.dispatch(hl.dsp.window.pin({ action = "on", window = HYPREMOJI_SEL }))
-    hl.dispatch(hl.dsp.window.set_prop({ prop = "min_size", value = dim, window = HYPREMOJI_SEL }))
-    hl.dispatch(hl.dsp.window.set_prop({ prop = "max_size", value = dim, window = HYPREMOJI_SEL }))
-    hl.dispatch(hl.dsp.window.resize({
-        x = HYPREMOJI_W,
-        y = HYPREMOJI_H,
-        relative = false,
-        window = HYPREMOJI_SEL,
-    }))
-    hl.dispatch(hl.dsp.window.move({
-        x = x,
-        y = y,
-        relative = false,
-        window = HYPREMOJI_SEL,
-    }))
-end
-
+-- HyprEmoji (Super+E / MX F6). Centered like Alt+C calculator, same
+-- 520px height as config-calc-pad.rasi. Width stays at Hyprland's 640
+-- float default — GTK will not shrink this window below that (the 9-wide
+-- category row), so requesting 460 only produced the old 640×340 strip.
+-- Do not lock min/max size or dispatch a delayed move.
 hl.window_rule({
     name = "hypremoji-float",
-    match = { title = "^(HyprEmoji)$" },
-    float = true,
-    pin = true,
-    persistent_size = false,
-    min_size = {HYPREMOJI_W, HYPREMOJI_H},
-    max_size = {HYPREMOJI_W, HYPREMOJI_H},
-    size = {HYPREMOJI_W, HYPREMOJI_H},
-})
-hl.window_rule({
-    name = "hypremoji-float-class",
     match = { class = "^(dev\\.musagy\\.hypremoji)$" },
     float = true,
+    center = true,
     pin = true,
     persistent_size = false,
-    min_size = {HYPREMOJI_W, HYPREMOJI_H},
-    max_size = {HYPREMOJI_W, HYPREMOJI_H},
-    size = {HYPREMOJI_W, HYPREMOJI_H},
+    size = {640, 520},
 })
-
-hl.on("window.open", function(w)
-    if not is_hypremoji(w) then
-        return
-    end
-    hl.timer(place_hypremoji, { timeout = 200, type = "oneshot" })
-end)
 
 -- Hyprland share picker
 hl.window_rule({

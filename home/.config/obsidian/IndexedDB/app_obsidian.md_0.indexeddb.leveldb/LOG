@@ -1,0 +1,45 @@
+2026/09/06-03:45:50.716 2eac4f Reusing MANIFEST /home/kirk/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/06-03:45:50.716 2eac4f Recovering log #65
+2026/09/06-03:45:50.719 2eac4f Reusing old log /home/kirk/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/000065.log 
+2026/09/06-03:59:59.801 2eac4d Level-0 table #70: started
+2026/09/06-03:59:59.817 2eac4d Level-0 table #70: 1230685 bytes OK
+2026/09/06-03:59:59.822 2eac4d Delete type=0 #65
+2026/09/06-04:01:22.343 2eac4d Compacting 1@1 + 1@2 files
+2026/09/06-04:01:22.393 2eac4d Generated table #71@1: 4953 keys, 2120366 bytes
+2026/09/06-04:01:22.394 2eac4d Compacted 1@1 + 1@2 files => 2120366 bytes
+2026/09/06-04:01:22.397 2eac4d compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/09/06-04:01:22.398 2eac4d Delete type=2 #67
+2026/09/06-04:01:22.398 2eac4d Delete type=2 #70
+2026/09/06-04:06:39.696 2eac4f Level-0 table #73: started
+2026/09/06-04:06:39.711 2eac4f Level-0 table #73: 1075065 bytes OK
+2026/09/06-04:06:39.716 2eac4f Delete type=0 #69
+2026/09/06-04:08:23.045 2eac4d Compacting 1@1 + 1@2 files
+2026/09/06-04:08:23.131 2eac4d Generated table #74@1: 4951 keys, 2095644 bytes
+2026/09/06-04:08:23.131 2eac4d Compacted 1@1 + 1@2 files => 2095644 bytes
+2026/09/06-04:08:23.135 2eac4d compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/09/06-04:08:23.135 2eac4d Delete type=2 #71
+2026/09/06-04:08:23.135 2eac4d Delete type=2 #73
+2026/09/06-04:15:51.545 2eac4f Level-0 table #76: started
+2026/09/06-04:15:51.557 2eac4f Level-0 table #76: 860048 bytes OK
+2026/09/06-04:15:51.561 2eac4f Delete type=0 #72
+2026/09/06-04:23:14.724 2eac4f Compacting 1@1 + 1@2 files
+2026/09/06-04:23:14.768 2eac4f Generated table #77@1: 4552 keys, 2156629 bytes
+2026/09/06-04:23:14.774 2eac4f Generated table #78@1: 613 keys, 95218 bytes
+2026/09/06-04:23:14.774 2eac4f Compacted 1@1 + 1@2 files => 2251847 bytes
+2026/09/06-04:23:14.777 2eac4f compacted to: files[ 0 0 2 0 0 0 0 ]
+2026/09/06-04:23:14.778 2eac4f Delete type=2 #74
+2026/09/06-04:23:14.778 2eac4f Delete type=2 #76
+2026/09/06-04:25:46.743 2eac4f Level-0 table #80: started
+2026/09/06-04:25:46.766 2eac4f Level-0 table #80: 903817 bytes OK
+2026/09/06-04:25:46.772 2eac4f Delete type=0 #75
+2026/09/06-04:25:57.581 2eac4d Compacting 1@1 + 2@2 files
+2026/09/06-04:25:57.620 2eac4d Generated table #81@1: 4433 keys, 2153503 bytes
+2026/09/06-04:25:57.625 2eac4d Generated table #82@1: 606 keys, 88448 bytes
+2026/09/06-04:25:57.625 2eac4d Compacted 1@1 + 2@2 files => 2241951 bytes
+2026/09/06-04:25:57.629 2eac4d compacted to: files[ 0 0 2 0 0 0 0 ]
+2026/09/06-04:25:57.629 2eac4d Delete type=2 #77
+2026/09/06-04:25:57.629 2eac4d Delete type=2 #78
+2026/09/06-04:25:57.630 2eac4d Delete type=2 #80
+2026/09/06-04:35:51.546 2eac4f Level-0 table #84: started
+2026/09/06-04:35:51.607 2eac4f Level-0 table #84: 932341 bytes OK
+2026/09/06-04:35:51.611 2eac4f Delete type=0 #79

@@ -82,7 +82,7 @@ Pane {
             height: parent.height
             color: "black"
             opacity: config.DimBackgroundImage
-            z: 1
+            z: 2
         }
 
         Rectangle {
@@ -92,7 +92,7 @@ Pane {
             color: root.palette.window
             visible: config.HaveFormBackground == "true" ? true : false
             opacity: config.PartialBlur == "true" ? 0.3 : 1
-            z: 1
+            z: 2
         }
 
         LoginForm {
@@ -104,7 +104,7 @@ Pane {
             anchors.left: config.FormPosition == "left" ? parent.left : undefined
             anchors.right: config.FormPosition == "right" ? parent.right : undefined
             virtualKeyboardActive: virtualKeyboard.state == "visible" ? true : false
-            z: 1
+            z: 3
         }
 
         Button {
@@ -114,7 +114,7 @@ Pane {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: implicitHeight
             anchors.horizontalCenter: form.horizontalCenter
-            z: 1
+            z: 3
             contentItem: Text {
                 text: config.TranslateVirtualKeyboardButton || "Virtual Keyboard"
                 color: parent.visualFocus ? palette.highlight : palette.text
@@ -133,7 +133,7 @@ Pane {
             property bool keyboardActive: item ? item.active : false
             onKeyboardActiveChanged: keyboardActive ? state = "visible" : state = "hidden"
             width: parent.width
-            z: 1
+            z: 3
             function switchState() { state = state == "hidden" ? "visible" : "hidden" }
             states: [
                 State {
@@ -240,6 +240,7 @@ Pane {
             cache: true
             clip: true
             mipmap: true
+            z: -1
         }
 
         MouseArea {
@@ -256,6 +257,7 @@ Pane {
             anchors.centerIn: form
             sourceRect: Qt.rect(x,y,width,height)
             visible: config.FullBlur == "true" || config.PartialBlur == "true" ? true : false
+            z: 1
         }
 
         GaussianBlur {
@@ -269,6 +271,7 @@ Pane {
             cached: true
             anchors.centerIn: config.FullBlur == "true" ? parent : form
             visible: config.FullBlur == "true" || config.PartialBlur == "true" ? true : false
+            z: 1
         }
     }
 }

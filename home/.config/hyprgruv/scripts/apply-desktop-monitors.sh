@@ -12,6 +12,9 @@
 # Exception: the 24CN65 lives on DisplayLink and flaps. If it vanished less
 # than CN65_GRACE_SEC ago, keep the full-row coordinates so the other three
 # do not jump left.
+#
+# Movie night (tv_mode=video, Super+Alt+M): desk panels disabled, TV 4K at 0x0.
+# Hotplug/reload must not turn the desk back on while that setting is set.
 
 set -euo pipefail
 
@@ -24,14 +27,7 @@ LOCK_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-desktop-monitors.lock"
 CN65_SEEN="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-24cn65-seen"
 CN65_GRACE_SEC=10
 
-is_desktop_profile() {
-    local mode machine
-    mode="$("$READ_SETTING" monitors_mode "")"
-    machine="$("$READ_SETTING" machine "")"
-    [[ "$mode" == "desktop" || "$machine" == "desktop" ]]
-}
-
-is_desktop_profile || exit 0
+tv_is_desktop_profile || exit 0
 
 command -v hyprctl >/dev/null 2>&1 || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
@@ -43,7 +39,8 @@ if command -v mkdir >/dev/null 2>&1; then
     trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
 fi
 
-json="$(hyprctl monitors -j 2>/dev/null || true)"
+# `monitors all` includes Hyprland-disabled outputs so we can re-enable them.
+json="$(hyprctl monitors all -j 2>/dev/null || true)"
 [[ -n "$json" && "$json" != "null" ]] || exit 0
 
 # Lua config ignores `hyprctl keyword monitor` ("use eval").
@@ -53,15 +50,68 @@ apply_monitor() {
         tv_mode_eval "$mode" "$position" "$scale" >/dev/null
         return
     fi
-    if [[ "$transform" != "0" ]]; then
-        hyprctl eval "hl.monitor({ output = [[${output}]], mode = [[${mode}]], position = [[${position}]], scale = ${scale}, transform = ${transform} })" >/dev/null
-    else
-        hyprctl eval "hl.monitor({ output = [[${output}]], mode = [[${mode}]], position = [[${position}]], scale = ${scale} })" >/dev/null
-    fi
+    tv_desk_eval "$output" "$mode" "$position" "$scale" "$transform" >/dev/null
 }
 
 tv_mode_spec
 
+monitor_hit() {
+    local desc="$1"
+    jq -r --arg d "$desc" 'any(.[]; (.description // "") | contains($d))' <<<"$json"
+}
+
+# --- movie night: desk off, TV 4K only ---------------------------------------
+if [[ "$TV_MODE" == "video" ]]; then
+    if ! tv_connected; then
+        exit 0
+    fi
+
+    already_ok=true
+    for spec in "${DESK_SPECS[@]}"; do
+        IFS='|' read -r desc _ <<<"$spec"
+        if [[ "$(monitor_hit "$desc")" == "true" ]]; then
+            if ! jq -e --arg d "$desc" '
+                map(select((.description // "") | contains($d))) | first
+                | .disabled == true
+            ' <<<"$json" >/dev/null 2>&1; then
+                already_ok=false
+                break
+            fi
+        fi
+    done
+    if $already_ok; then
+        mw="${TV_RES%%x*}"
+        mr="${TV_RES##*@}"
+        mr="${mr%%.*}"
+        px="${TV_POS%x*}"
+        py="${TV_POS#*x}"
+        if ! jq -e --arg d "$TV_DESC_MATCH" --argjson x "$px" --argjson y "$py" \
+            --argjson s "$TV_SCALE" --argjson w "$mw" --argjson r "$mr" '
+            map(select((.description // "") | contains($d))) | first
+            | .disabled != true
+              and .x == $x and .y == $y
+              and ((.scale - $s) | fabs) < 0.001
+              and .width == $w
+              and ((.refreshRate - $r) | fabs) < 1.5
+        ' <<<"$json" >/dev/null 2>&1; then
+            already_ok=false
+        fi
+    fi
+
+    if $already_ok; then
+        exit 0
+    fi
+
+    # Drop the desk CRTCs first. 4K HDMI on this APU fails if the three
+    # 1080p panels are still scanning out — the TV goes black.
+    tv_desk_disable
+    sleep 0.25
+    tv_mode_eval "$TV_RES" "$TV_POS" "$TV_SCALE" >/dev/null
+    tv_focus
+    exit 0
+fi
+
+# --- desk: 4-wide row --------------------------------------------------------
 # desc-substring, mode, scale, transform, logical_w
 # Logical width is what the next monitor must sit after (flush).
 SPECS=(
@@ -82,10 +132,7 @@ present_mask=()
 present_count=0
 for spec in "${SPECS[@]}"; do
     IFS='|' read -r desc _rest <<<"$spec"
-    hit="$(jq -r --arg d "$desc" '
-        any(.[]; (.description // "") | contains($d))
-    ' <<<"$json")"
-    if [[ "$hit" == "true" ]]; then
+    if [[ "$(monitor_hit "$desc")" == "true" ]]; then
         present_mask+=(1)
         present_count=$((present_count + 1))
     else
@@ -143,7 +190,8 @@ for spec in "${SPECS[@]}"; do
         mr="${mr%%.*}"
         if ! jq -e --arg d "$desc" --argjson x "$px" --argjson y "$py" --argjson s "$scale" --argjson t "$transform" --argjson w "$mw" --argjson r "$mr" '
             map(select((.description // "") | contains($d))) | first
-            | .x == $x and .y == $y
+            | .disabled != true
+              and .x == $x and .y == $y
               and ((.scale - $s) | fabs) < 0.001
               and ((.transform // 0) == $t)
               and .width == $w
@@ -158,6 +206,14 @@ done
 
 if $already_ok; then
     exit 0
+fi
+
+# If we are coming back from movie night the TV is still 4K. Drop it to
+# 1080p120 *before* lighting the desk, or the APU drops HDMI again.
+if [[ "$(monitor_hit "$TV_DESC_MATCH")" == "true" ]]; then
+    tv_idx=$((${#SPECS[@]} - 1))
+    tv_mode_eval "$TV_RES" "${positions[$tv_idx]}" "$TV_SCALE" >/dev/null
+    sleep 0.15
 fi
 
 i=0

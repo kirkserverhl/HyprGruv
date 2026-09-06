@@ -16,50 +16,71 @@ if mode == "desktop" then
 	-- Match on description — connector names move when cables are swapped.
 	-- apply-desktop-monitors.sh re-pins this same geometry on login/hotplug.
 
-	hl.monitor({
-		output = "desc:LG Electronics 24CN65",
-		mode = "1920x1080@60.00",
-		position = "0x59",
-		scale = 1.2,
-		transform = 1, -- vertical / rotated 90°
-	})
-
-	hl.monitor({
-		output = "desc:LG Electronics LG FULL HD",
-		mode = "1920x1080@60.00",
-		position = "900x59",
-		scale = 1.2,
-	})
-
-	hl.monitor({
-		output = "desc:LG Electronics LG Monitor",
-		mode = "1920x1080@60.00",
-		position = "2501x59",
-		scale = 1.2,
-	})
-
-	-- LG TV (DP→HDMI): two profiles, same 1920x1080 logical size.
-	--   monitor  1920x1080@120 scale 1  — desk / Super+Alt+M
-	--   video    3840x2160@30  scale 2  — watching
+	-- LG TV (DP→HDMI): Super+Alt+M toggles tv_mode.
+	--   monitor  4-wide desk, TV 1920x1080@120 on the right
+	--   video    desk panels off, TV 3840x2160@60 at 0x0 (movie night)
 	-- Never send 4096x2160 (DCI) — 16:9 TVs show side bars + vertical squash.
 	-- Force SDR so the TV does not flip into a cinema picture mode.
+	-- 4K while the desk is still scanning out blanks the TV on this APU.
 	local tv_profile = settings.read("tv_mode", "monitor")
-	local tv_res, tv_scale
+
 	if tv_profile == "video" then
-		tv_res, tv_scale = "3840x2160@30.00", 2
+		hl.monitor({
+			output = "desc:LG Electronics 24CN65",
+			disabled = true,
+		})
+		hl.monitor({
+			output = "desc:LG Electronics LG FULL HD",
+			disabled = true,
+		})
+		hl.monitor({
+			output = "desc:LG Electronics LG Monitor",
+			disabled = true,
+		})
+		hl.monitor({
+			output = "desc:LG Electronics LG TV",
+			mode = "3840x2160@60.00",
+			position = "0x0",
+			scale = 1,
+			cm = "srgb",
+			bitdepth = 8,
+			supports_hdr = -1,
+			supports_wide_color = -1,
+		})
 	else
-		tv_res, tv_scale = "1920x1080@120.00", 1
+		hl.monitor({
+			output = "desc:LG Electronics 24CN65",
+			mode = "1920x1080@60.00",
+			position = "0x59",
+			scale = 1.2,
+			transform = 1, -- vertical / rotated 90°
+		})
+
+		hl.monitor({
+			output = "desc:LG Electronics LG FULL HD",
+			mode = "1920x1080@60.00",
+			position = "900x59",
+			scale = 1.2,
+		})
+
+		hl.monitor({
+			output = "desc:LG Electronics LG Monitor",
+			mode = "1920x1080@60.00",
+			position = "2501x59",
+			scale = 1.2,
+		})
+
+		hl.monitor({
+			output = "desc:LG Electronics LG TV",
+			mode = "1920x1080@120.00",
+			position = "4102x0",
+			scale = 1,
+			cm = "srgb",
+			bitdepth = 8,
+			supports_hdr = -1,
+			supports_wide_color = -1,
+		})
 	end
-	hl.monitor({
-		output = "desc:LG Electronics LG TV",
-		mode = tv_res,
-		position = "4102x0",
-		scale = tv_scale,
-		cm = "srgb",
-		bitdepth = 8,
-		supports_hdr = -1,
-		supports_wide_color = -1,
-	})
 elseif mode == "laptop" then
 	-- HyprLab + work dock only. Serial-matched so the home desktop LG FULL HD
 	-- (same model, different panel) never picks this up.

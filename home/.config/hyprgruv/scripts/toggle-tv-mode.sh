@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
-# toggle-tv-mode.sh — flip the LG TV between desk (1080p120) and video (4K30).
+# toggle-tv-mode.sh — Super+Alt+M
+#
+#   monitor  4-wide desk, TV 1080p120 on the right
+#   video    desk panels off, TV 4K60 only (movie night — use the laptop)
 #
 # Usage:
 #   toggle-tv-mode.sh            # toggle
 #   toggle-tv-mode.sh monitor    # desk / low-lag
-#   toggle-tv-mode.sh video      # 4K for watching
+#   toggle-tv-mode.sh video      # movie night
 set -euo pipefail
 
 SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 READ_SETTING="$SCRIPTS/read-setting.sh"
 # shellcheck source=tv-mode-common.sh
 source "$SCRIPTS/tv-mode-common.sh"
+
+if ! tv_is_desktop_profile; then
+    notify-send -u low "TV mode" "Desktop profile only"
+    exit 0
+fi
 
 LOCK_DIR="${XDG_RUNTIME_DIR:-/tmp}/hyprgruv-tv-mode.lock"
 if ! mkdir "$LOCK_DIR" 2>/dev/null; then
@@ -28,7 +36,7 @@ case "$arg" in
             next="video"
         fi
         ;;
-    monitor|video|4k|uhd|cinema)
+    monitor|video|4k|uhd|cinema|movie)
         next="$(tv_mode_normalize "$arg")"
         ;;
     *)
@@ -37,19 +45,21 @@ case "$arg" in
         ;;
 esac
 
+if [[ "$next" == "video" ]] && ! tv_connected; then
+    notify-send -u critical "TV mode" "LG TV not connected — leaving the desk on"
+    exit 1
+fi
+
 tv_mode_write "$next"
 tv_mode_spec
 
-# Keep the TV flush to the right of whatever is currently left of it.
-pos="$(hyprctl monitors -j 2>/dev/null | jq -r --arg d "$TV_DESC_MATCH" '
-    [.[] | select((.description // "") | contains($d))] | first
-    | if . == null then "1600x0" else "\(.x)x\(.y)" end
-')"
-[[ -n "$pos" && "$pos" != "null" ]] || pos="1600x0"
-
-if ! tv_mode_eval "$TV_RES" "$pos" "$TV_SCALE" >/dev/null; then
+if ! "$SCRIPTS/apply-desktop-monitors.sh"; then
     notify-send -u critical "TV mode" "Failed to apply ${TV_LABEL}"
     exit 1
+fi
+
+if [[ "$next" == "video" ]]; then
+    tv_focus
 fi
 
 notify-send -e -u low "TV mode" "${TV_LABEL}"

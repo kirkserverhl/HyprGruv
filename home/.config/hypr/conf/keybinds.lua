@@ -226,7 +226,7 @@ hl.bind(altMod .. " + SHIFT + PRINT", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcri
 hl.bind(altMod .. " + Z", hl.dsp.exec_cmd(SCRIPTS .. "/gpu-screen-recorder.sh")) -- #screenshot #record GPU Screen Recorder overlay
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd(SCRIPTS .. "/base16-palette.sh"))
 hl.bind(altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"))
-hl.bind(mainMod .. " + " .. altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-tv-mode.sh")) -- #display TV desk 120Hz ↔ video 4K
+hl.bind(mainMod .. " + " .. altMod .. " + M", hl.dsp.exec_cmd(SCRIPTS .. "/toggle-tv-mode.sh")) -- #display Movie night: TV 4K only / desk 4-wide
 hl.bind(altMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/obsidian.sh")) -- #launcher #notes Open Obsidian
 hl.bind(mainMod .. " + " .. altMod .. " + N", hl.dsp.exec_cmd("~/.local/bin/night-mode.sh")) -- #display Night light
 
