@@ -134,8 +134,8 @@ hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("google-chrome-stable")) -- #launcher
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh")) -- #emoji HyprEmoji (any keyboard)
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --lighter")) -- #window Monitor opacity lighter
-hl.bind(mainMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --darker")) -- #window Monitor opacity darker
+hl.bind(altMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --lighter")) -- #window Monitor opacity lighter
+hl.bind(altMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --darker")) -- #window Monitor opacity darker
 hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(SCRIPTS .. "/soundsbored.sh")) -- #audio #launcher Open soundsbored
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(os.getenv("HOME") .. "/bin/baas-menu")) -- #work #baas #launcher BaaS tech workflows
 -- Screenshot / transcribe: Shift = same capture, OCR to clipboard instead of image.
@@ -158,6 +158,10 @@ hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen()) -- #window Fullscreen (wa
 hl.bind(mainMod .. " + CTRL + F", hl.dsp.window.fullscreen()) -- #window #mac Fullscreen (Mac Ctrl+Cmd+F)
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("hyprpicker -a")) -- #picker Color picker
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(SCRIPTS .. "/blitz-mode.sh")) -- #settings #work Toggle Blitz (work focus)
+-- CALL desk: Super+Alt so it is not a single-mod accident on a live call.
+-- Pads A1/A2 on the MPK are the real trigger; these are the keyboard fallback.
+hl.bind(mainMod .. " + " .. altMod .. " + C", hl.dsp.exec_cmd(SCRIPTS .. "/call-mode.sh call")) -- #work CALL even workspaces + notes
+hl.bind(mainMod .. " + " .. altMod .. " + SHIFT + C", hl.dsp.exec_cmd(SCRIPTS .. "/call-mode.sh end")) -- #work END CALL restore workspaces
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(SCRIPTS .. "/theme-switcher-launch.sh")) -- #theme Theme → wallpaper → source → apply
 -- Super+Tab: hide special:scratchpad if it is the focused overlay, otherwise
 -- next workspace on this monitor (m+1). Instant Lua — no script, no undo
@@ -670,11 +674,7 @@ dev_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LOGI_MX, {
 dev_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --dec"), KB_LOGI_MX) -- #mx Keyboard light down
 dev_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --inc"), KB_LOGI_MX) -- #mx Keyboard light up
 dev_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (screenshot transcribe)
-dev_bind(
-	"F6",
-	hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"),
-	KB_LOGI_MX
-) -- #emoji #mx Emoji picker
+dev_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX) -- #emoji #mx Emoji picker
 dev_bind("F7", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LOGI_MX) -- #screenshot #mx Screenshot menu
 dev_bind("SHIFT + F7", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (Shift + screenshot)
 dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX) -- #media #mx Mute mic (RingCentral + default source)

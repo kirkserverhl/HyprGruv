@@ -9,6 +9,13 @@ local float_utils = {
     size = {900, 700},
 }
 
+-- CALL notes editor — even workspace on the vertical (4), or 2 if 4 is missing.
+hl.window_rule({
+    name = "call-notes",
+    match = { class = "^(call-notes)$" },
+    workspace = 4,
+})
+
 -- pavucontrol dropdown (waybar volume left-click)
 hl.window_rule({
     name = "pavucontrol-dropdown",

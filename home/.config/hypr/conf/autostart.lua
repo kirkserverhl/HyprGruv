@@ -62,13 +62,14 @@ hl.on("hyprland.start", function()
 	start_polkit_agent()
 
 	-- Idle + bar (exclusive: waybar | hyprbars | off — Alt+W cycles, state persists)
-	-- Early waybar for snappy login when last mode was waybar; hyprpm-reload.sh
-	-- re-enforces the saved mode after plugins load (hyprpm always loads hyprbars
-	-- when enabled, so the final apply-bar-mode pass is what prevents both bars).
-	-- Idle daemon (systemd unit; launch-hypridle.sh if the unit is missing).
+	-- Early waybar for snappy login when last mode was waybar.
+	-- Do NOT call sync-bar-mode here: it raced hyprpm-reload (~0.6s vs plugin
+	-- load), hyprctl-loaded hyprbars before the .so was valid, and popped
+	-- "run: hyprpm reload" even though autostart already runs hyprpm-reload.sh.
+	-- hyprpm-reload.sh applies the saved bar mode after plugins are loaded.
 	hl.exec_cmd("systemctl --user start hyprgruv-idle.service || " .. SCRIPTS .. "/launch-hypridle.sh")
 	hl.exec_cmd(
-		'sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi; sleep 0.6; ' .. SCRIPTS .. '/sync-bar-mode.sh\''
+		'sh -c \'st=${XDG_STATE_HOME:-$HOME/.local/state}/waybar; m=$(tr -d "[:space:]" <"$st/bar_mode" 2>/dev/null); if [ "$m" = "waybar" ] || [ -z "$m" ]; then ~/.config/waybar/scripts/launch.sh; fi\''
 	)
 
 	-- Clipboard history: text and screenshots live in separate cliphist DBs
@@ -115,6 +116,9 @@ hl.on("hyprland.start", function()
 
 	-- Re-apply saved PipeWire default sink (audio-setup.sh) if that node is present.
 	hl.exec_cmd(SCRIPTS .. "/audio-setup.sh --apply")
+
+	-- MPK mini play pads → call-mode.sh (background; reconnects if replugged).
+	hl.exec_cmd(SCRIPTS .. "/mpk-listen.sh start")
 
 	-- NetworkManager tray (wifi/VPN). Harmless if the current waybar theme has no tray.
 	hl.exec_cmd("sh -c 'pgrep -x nm-applet >/dev/null || nm-applet --indicator'")

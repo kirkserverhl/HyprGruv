@@ -16,6 +16,14 @@ cleanup_lock() {
 }
 
 # Ignore overlapping toggles (key repeat / double-tap races).
+# A hung previous toggle (hyprpm enable/disable) used to leave this dir forever
+# so later Alt+W presses exited immediately and looked like a dead bind.
+if [[ -d "$LOCK_DIR" ]]; then
+    lock_age=$(( $(date +%s) - $(stat -c %Y "$LOCK_DIR" 2>/dev/null || echo 0) ))
+    if (( lock_age > 3 )); then
+        rmdir "$LOCK_DIR" 2>/dev/null || rm -rf "$LOCK_DIR" 2>/dev/null || true
+    fi
+fi
 if ! mkdir "$LOCK_DIR" 2>/dev/null; then
     exit 0
 fi

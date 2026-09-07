@@ -21,7 +21,9 @@ XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 
 STATE_DIR="$XDG_STATE_HOME/hyprgruv"
 LOG_FILE="$STATE_DIR/hyprpm-reload.log"
+LOCK_FILE="$STATE_DIR/hyprpm-reload.lock"
 GUARD_FILE="$XDG_STATE_HOME/waybar/bar_mode_guard"
+BAR_MODE_FILE="${XDG_STATE_HOME}/waybar/bar_mode"
 CACHE_ROOT="/var/cache/hyprpm/${USER_NAME}"
 # Cache dir = [repository].name from https://github.com/kirkserverhl/hyprplug
 HYPRBARS_SO="$CACHE_ROOT/hyprplug/hyprbars.so"
@@ -35,6 +37,10 @@ mkdir -p "$STATE_DIR"
 if [[ -f "$LOG_FILE" ]] && [[ "$(wc -c <"$LOG_FILE" 2>/dev/null || echo 0)" -gt 200000 ]]; then
     mv -f "$LOG_FILE" "${LOG_FILE}.old" 2>/dev/null || true
 fi
+
+touch "$LOCK_FILE"
+clear_lock() { rm -f "$LOCK_FILE"; }
+trap clear_lock EXIT
 
 log() {
     printf '%s %s\n' "$(date -Iseconds)" "$*" >>"$LOG_FILE"
@@ -118,6 +124,30 @@ needs_rebuild() {
     grep -qiE \
         'outdated headers|headers (corrupted|missing|version mismatch)|ABI is mismatched|Please run hyprpm update|Failed to load plugins|headers are not up-to-date' \
         <<<"$text"
+}
+
+# hyprpm reload loads every *enabled* plugin. hyprbars is enabled in the
+# plugin list even when bar mode is waybar — a failed load then notifies
+# "run: hyprpm reload" on every login. Keep hyprpm in sync with bar mode.
+# Never call `hyprpm enable/disable` — they hang here ("Failed to write plugin state").
+# Edit hyprplug/state.toml so `hyprpm reload` only auto-loads hyprbars in hyprbars mode.
+sync_hyprbars_enabled() {
+    local mode want state="${CACHE_ROOT}/hyprplug/state.toml"
+    mode=$(tr -d '[:space:]' <"$BAR_MODE_FILE" 2>/dev/null || true)
+    [[ -n "$mode" ]] || mode="waybar"
+    if [[ "$mode" == "hyprbars" ]]; then
+        want=true
+    else
+        want=false
+    fi
+    if [[ -f "$state" && -w "$state" ]]; then
+        if [[ "$want" == true ]]; then
+            sed -i 's/^enabled = false$/enabled = true/' "$state"
+        else
+            sed -i 's/^enabled = true$/enabled = false/' "$state"
+        fi
+        log "bar mode ${mode} — hyprplug state.toml enabled=${want}"
+    fi
 }
 
 run_reload() {
@@ -215,6 +245,8 @@ if ! wait_for_hyprland; then
 fi
 log "Hyprland ready (sig=${HYPRLAND_INSTANCE_SIGNATURE})"
 
+sync_hyprbars_enabled
+
 # First login after install: fetch/build if cache empty.
 # Bootstrap needs sudo for headers; set askpass first (no TTY at graphical login).
 if [[ ! -f "$HYPRBARS_SO" && -x "$HYPRPM_BOOTSTRAP" ]]; then
@@ -228,6 +260,8 @@ if [[ ! -f "$HYPRBARS_SO" && -x "$HYPRPM_BOOTSTRAP" ]]; then
         # No TTY: bootstrap will use SUDO_ASKPASS; hyprpm output goes to log only.
         HYPRPM_QUIET=1 bash "$HYPRPM_BOOTSTRAP" --quiet >>"$LOG_FILE" 2>&1 || true
     fi
+    # Bootstrap re-enables hyprbars; restore bar-mode sync before reload.
+    sync_hyprbars_enabled
 fi
 
 if run_reload; then

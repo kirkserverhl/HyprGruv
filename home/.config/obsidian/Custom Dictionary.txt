@@ -19,6 +19,7 @@ DvPayLite
 DvStore
 EMV
 F1
+Factor4
 Fiserv
 HHMMSS
 HubClient
@@ -67,4 +68,4 @@ txn
 vcode
 webhook
 webhooks
-checksum_v1 = 26da1c315eb727bd20fbe41e7c7e0dce
+checksum_v1 = 1a5f2fd5cb02dcbb1705e972c566253b

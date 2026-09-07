@@ -50,6 +50,7 @@ Z9
 api.accept.blue
 aurapp241022
 auth.net
+bc
 eConnections
 factor4
 https
@@ -66,4 +67,4 @@ txn
 vcode
 webhook
 webhooks
-checksum_v1 = f63bffdf631e35276f1fe05ee8ba0fef
+checksum_v1 = 26da1c315eb727bd20fbe41e7c7e0dce

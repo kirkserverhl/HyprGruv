@@ -66,6 +66,12 @@ end
 # Matugen palette output
 abbr --add palette '~/.config/hyprgruv/scripts/palette.sh'
 
+# MPK pads / CALL desk (scripts are bash; fish just execs the shebang)
+abbr --add mpk-smoke '~/.config/hyprgruv/scripts/mpk-smoke.sh'
+abbr --add mpk-dump '~/.config/hyprgruv/scripts/mpk-smoke.sh dump'
+abbr --add mpk-status '~/.config/hyprgruv/scripts/mpk-smoke.sh status'
+abbr --add mpk-listen '~/.config/hyprgruv/scripts/mpk-listen.sh'
+
 # Errors
 abbr --add hyprerror 'hyprctl configerrors'
 

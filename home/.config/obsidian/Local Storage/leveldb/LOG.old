@@ -1,3 +1,6 @@
-2026/09/05-22:29:30.830 188808 Reusing MANIFEST /home/kirk/.config/obsidian/Local Storage/leveldb/MANIFEST-000001
-2026/09/05-22:29:30.836 188808 Recovering log #3
-2026/09/05-22:29:30.837 188808 Reusing old log /home/kirk/.config/obsidian/Local Storage/leveldb/000003.log 
+2026/09/07-04:38:57.106 b2b56 Reusing MANIFEST /home/kirk/.config/obsidian/Local Storage/leveldb/MANIFEST-000001
+2026/09/07-04:38:57.110 b2b56 Recovering log #3
+2026/09/07-04:38:57.110 b2b56 Reusing old log /home/kirk/.config/obsidian/Local Storage/leveldb/000003.log 
+2026/09/07-04:53:30.749 b2b3d Level-0 table #5: started
+2026/09/07-04:53:30.808 b2b3d Level-0 table #5: 10535 bytes OK
+2026/09/07-04:53:30.813 b2b3d Delete type=0 #3

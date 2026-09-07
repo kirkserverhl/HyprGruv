@@ -42,6 +42,12 @@ hyprbars_loaded() {
     hyprctl plugin list 2>/dev/null | grep -q "Plugin hyprbars"
 }
 
+# Do not call `hyprpm enable/disable` here. On this machine those hang /
+# fail to write state, which froze Alt+W behind toggle.lock.d.
+# Exclusive modes are hyprctl plugin load/unload + waybar start/stop.
+# Login (hyprpm-reload.sh) edits hyprplug/state.toml so hyprpm reload
+# does not auto-load hyprbars while Waybar/off is selected.
+
 # All known .so paths to try on unload (plugin was loaded with one of these).
 hyprbars_so_candidates() {
     local c seen=""
@@ -180,8 +186,12 @@ load_hyprbars() {
     HYPRBARS="$so"
 
     if ! hyprctl plugin load "$HYPRBARS" >/dev/null 2>&1; then
-        echo "hyprctl plugin load failed: $HYPRBARS" >&2
-        return 1
+        # hyprctl can time out while Hyprland still finishes PLUGIN_INIT
+        sleep 0.4
+        if ! hyprbars_loaded; then
+            echo "hyprctl plugin load failed: $HYPRBARS" >&2
+            return 1
+        fi
     fi
     sleep 0.15
     if ! hyprbars_loaded; then
@@ -259,7 +269,7 @@ apply_bar_mode() {
             if ! load_hyprbars; then
                 # Roll back mode so Alt+W does not get stuck on a failed state
                 echo "$prev" >"$BAR_MODE_FILE"
-                [[ "$notify" == ":" ]] || $notify "Bar" "Hyprbars failed to load — run: hyprpm reload" -u critical -t 5000
+                [[ "$notify" == ":" ]] || $notify "Bar" "Hyprbars failed to load" -u critical -t 5000
                 return 1
             fi
             label="Hyprbars only"
