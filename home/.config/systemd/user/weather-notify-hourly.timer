@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly calm weather digest for SwayNC
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

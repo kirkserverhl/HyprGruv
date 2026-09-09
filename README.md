@@ -151,6 +151,10 @@ Defaults: **source** follows `hyprgruv`, `notes`, `Wallpapers`, `soundsbored` (i
 
 Timer: `git-eod-remind.timer` (every 24h) — role-aware SwayNC nudge.
 
+Weather (SwayNC): `weather-notify.timer` (every 15 min — precipitation + NWS alerts) and `weather-notify-hourly.timer` (on-the-hour digest). Enabled with the machine profile; location follows Waybar/hyprlock unless pinned in `~/.config/weather-notify/config`.
+
+Zoho (SwayNC): `zoho-notify-quiet.timer` mutes Zoho toasts Sunday 17:00–Wednesday 11:00 America/New_York. Override the window in `~/.config/zoho-notify-quiet/config`.
+
 ### Cross-device handoff index
 
 When two machines (or two Grok sessions) share one rice, log intent in-repo:

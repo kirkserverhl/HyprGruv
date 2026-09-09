@@ -1,0 +1,12 @@
+[Unit]
+Description=Check precipitation and NWS alerts for SwayNC
+
+[Timer]
+# Script comment: precip every ~15 min; alerts ride along (seen-IDs prevent spam).
+OnBootSec=2min
+OnUnitActiveSec=15min
+Persistent=true
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

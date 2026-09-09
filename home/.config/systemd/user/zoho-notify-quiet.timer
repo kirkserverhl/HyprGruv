@@ -1,0 +1,14 @@
+[Unit]
+Description=Toggle Zoho SwayNC mute at quiet-hour boundaries
+
+[Timer]
+# Exact edges, plus boot/login and a catch-up so sleep/hibernate still works.
+OnCalendar=Sun *-*-* 17:00:00
+OnCalendar=Wed *-*-* 11:00:00
+OnBootSec=45s
+OnUnitActiveSec=15min
+Persistent=true
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

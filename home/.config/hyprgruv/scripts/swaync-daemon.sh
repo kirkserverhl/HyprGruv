@@ -18,6 +18,15 @@ export GSETTINGS_SCHEMA_DIR
 GSETTINGS_SCHEMA_DIR="$(IFS=:; echo "${schema_dirs[*]}")"
 export XDG_CONFIG_DIRS="${root}/etc/xdg:${XDG_CONFIG_DIRS:-/etc/xdg}"
 
+# Generated config (Zoho quiet hours) lives under state/; CSS/icons stay in the repo.
+if [[ -x "$HOME/.hyprgruv/lib/scripts/zoho-notify-quiet.sh" ]]; then
+    bash "$HOME/.hyprgruv/lib/scripts/zoho-notify-quiet.sh" --apply >/dev/null 2>&1 || true
+fi
+runtime_root="${XDG_STATE_HOME:-$HOME/.local/state}/hyprgruv/swaync-xdg"
+if [[ -f "$runtime_root/swaync/config.json" ]]; then
+    export XDG_CONFIG_HOME="$runtime_root"
+fi
+
 if [[ -x /usr/bin/swaync ]]; then
     exec /usr/bin/swaync "$@"
 fi

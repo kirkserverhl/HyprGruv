@@ -1,0 +1,13 @@
+# zoho-notify-quiet — sourced as bash. Uncomment / edit any value.
+# Window is weekly in QUIET_TZ. date +%u: 1=Monday … 7=Sunday.
+
+# QUIET_TZ=America/New_York
+# QUIET_START_DOW=7
+# QUIET_START_HOUR=17
+# QUIET_START_MIN=0
+# QUIET_END_DOW=3
+# QUIET_END_HOUR=11
+# QUIET_END_MIN=0
+
+# ignored = never show; muted = no popup, still listed in the control center
+# QUIET_STATE=ignored

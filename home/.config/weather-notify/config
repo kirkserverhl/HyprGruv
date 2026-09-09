@@ -1,0 +1,18 @@
+# weather-notify — sourced as bash. Uncomment / edit any value.
+#
+# By default, coords follow ~/.config/hyprgruv/scripts/weather-location.sh
+# (same city as Waybar / hyprlock). Set PIN_LOCATION=1 to lock LAT/LON here.
+
+# PIN_LOCATION=1
+# LAT=35.8515
+# LON=-78.6314
+# LOCATION_NAME="Raleigh, NC"
+
+# UNITS=us
+# FORECAST_HOURS=3
+# MIN_PRECIP_NOW=0.01
+# MIN_PRECIP_FORECAST=0.01
+# MIN_PRECIP_PROB=40
+# SEVERE_SEVERITIES="Extreme,Severe,Moderate"
+# PRECIP_EXPIRE_MS=12000
+# HOURLY_EXPIRE_MS=10000

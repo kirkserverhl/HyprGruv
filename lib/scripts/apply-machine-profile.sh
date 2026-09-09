@@ -925,6 +925,17 @@ ensure_git_sync_role() {
     else
         log_warning "Could not enable system-critical-alert.timer"
     fi
+    if systemctl --user enable --now weather-notify.timer weather-notify-hourly.timer 2>/dev/null; then
+        log_status "Enabled weather-notify timers (SwayNC precip/alerts + hourly digest)"
+    else
+        log_warning "Could not enable weather-notify timers"
+    fi
+    if systemctl --user enable --now zoho-notify-quiet.timer 2>/dev/null; then
+        log_status "Enabled zoho-notify-quiet.timer (SwayNC mute Sun 17:00–Wed 11:00 Eastern)"
+        bash "$HYPR_DIR/lib/scripts/zoho-notify-quiet.sh" --apply 2>/dev/null || true
+    else
+        log_warning "Could not enable zoho-notify-quiet.timer"
+    fi
     if systemctl --user enable gpu-screen-recorder-ui.service 2>/dev/null; then
         log_status "Enabled gpu-screen-recorder-ui.service (Alt+Z overlay)"
         if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then

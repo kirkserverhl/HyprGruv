@@ -10,6 +10,9 @@
 # Periodic backups (independent of this script):
 #   git-eod-remind.timer              (both roles)
 #   hyprgruv-update-check.timer       (deploy only)
+#   weather-notify.timer              (both roles; precip + NWS)
+#   weather-notify-hourly.timer       (both roles; on-the-hour digest)
+#   zoho-notify-quiet.timer           (both roles; Sun 17:00–Wed 11:00 Eastern)
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -36,6 +39,13 @@ wait_for_network() {
 ensure_timers() {
     # Both roles: daily / boot catch-up for dirty-or-behind followed repos
     systemctl --user enable --now git-eod-remind.timer 2>/dev/null || true
+
+    # Both roles: SwayNC weather (precip/alerts every 15m, calm digest on the hour)
+    systemctl --user enable --now weather-notify.timer weather-notify-hourly.timer 2>/dev/null || true
+
+    # Both roles: mute Zoho toasts Sun 17:00 → Wed 11:00 Eastern
+    systemctl --user enable --now zoho-notify-quiet.timer 2>/dev/null || true
+    bash "$HYPR_DIR/lib/scripts/zoho-notify-quiet.sh" --apply 2>/dev/null || true
 
     # Deploy only: periodic hyprgruv remote update checks
     if [[ "${GIT_SYNC_ROLE:-}" == "deploy" ]] || [[ -f "$STATE_DIR/deploy-target" ]]; then

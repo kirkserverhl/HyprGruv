@@ -133,6 +133,7 @@ hl.bind(mainMod .. " + KP_Enter", hl.dsp.exec_cmd(SCRIPTS .. "/terminal.sh"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("google-chrome-stable")) -- #launcher Open Chrome
 hl.bind(mainMod .. " + Y", hl.dsp.exec_cmd(SCRIPTS .. "/yazi.sh")) -- #files Open file manager (yazi)
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(SCRIPTS .. "/editor-terminal.sh")) -- #editor Open editor
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/obsidian.sh new")) -- #launcher #notes New Obsidian note
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh")) -- #emoji HyprEmoji (any keyboard)
 hl.bind(altMod .. " + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --lighter")) -- #window Monitor opacity lighter
 hl.bind(altMod .. " + SHIFT + O", hl.dsp.exec_cmd(SCRIPTS .. "/window-opacity.sh --monitor --darker")) -- #window Monitor opacity darker

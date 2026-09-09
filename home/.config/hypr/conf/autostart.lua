@@ -108,7 +108,7 @@ hl.on("hyprland.start", function()
 	-- Role-aware login sync (both machines):
 	--   deploy → rofi hyprgruv pull when behind + notify on followed repos
 	--   source → notify when dirty repos need git-eod
-	-- Also enables git-eod-remind.timer / hyprgruv-update-check.timer as backups.
+	-- Also enables git-eod-remind / weather-notify / zoho-notify-quiet / hyprgruv-update-check timers as backups.
 	hl.exec_cmd("sleep 40 && ~/.hyprgruv/lib/scripts/login-sync-prompt.sh &")
 
 	-- Auto-mount

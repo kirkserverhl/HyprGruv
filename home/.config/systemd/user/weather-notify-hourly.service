@@ -1,0 +1,13 @@
+[Unit]
+Description=SwayNC hourly weather digest
+After=hyprland-session.target graphical-session.target network-online.target
+PartOf=hyprland-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=oneshot
+Environment=HYPRGRUV_DIR=%h/.hyprgruv
+ExecStart=%h/.hyprgruv/lib/scripts/weather-notify.sh hourly
+
+[Install]
+WantedBy=timers.target

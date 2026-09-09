@@ -34,6 +34,21 @@
       "app-name": "System",
       "urgency": "Critical",
       "run-on": "action"
+    },
+    "zoho-quiet-app": {
+      "exec": "bash -c 'exec \"$HOME/.hyprgruv/lib/scripts/zoho-notify-quiet.sh\" --on-receive'",
+      "app-name": ".*[Zz][Oo][Hh][Oo].*",
+      "run-on": "receive"
+    },
+    "zoho-quiet-summary": {
+      "exec": "bash -c 'exec \"$HOME/.hyprgruv/lib/scripts/zoho-notify-quiet.sh\" --on-receive'",
+      "summary": ".*[Zz][Oo][Hh][Oo].*",
+      "run-on": "receive"
+    },
+    "zoho-quiet-body": {
+      "exec": "bash -c 'exec \"$HOME/.hyprgruv/lib/scripts/zoho-notify-quiet.sh\" --on-receive'",
+      "body": ".*[Zz][Oo][Hh][Oo].*",
+      "run-on": "receive"
     }
   },
 
@@ -42,6 +57,22 @@
       "app-name": "System",
       "urgency": "Critical",
       "state": "enabled"
+    },
+    "zoho-quiet-app": {
+      "state": "enabled",
+      "app-name": ".*[Zz][Oo][Hh][Oo].*"
+    },
+    "zoho-quiet-desktop": {
+      "state": "enabled",
+      "desktop-entry": ".*[Zz][Oo][Hh][Oo].*"
+    },
+    "zoho-quiet-summary": {
+      "state": "enabled",
+      "summary": ".*[Zz][Oo][Hh][Oo].*"
+    },
+    "zoho-quiet-body": {
+      "state": "enabled",
+      "body": ".*[Zz][Oo][Hh][Oo].*"
     }
   },
 

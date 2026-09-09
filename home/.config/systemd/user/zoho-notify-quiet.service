@@ -1,0 +1,14 @@
+[Unit]
+Description=Apply Zoho SwayNC quiet hours (Sun 17:00–Wed 11:00 Eastern)
+After=hyprland-session.target graphical-session.target
+PartOf=hyprland-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=oneshot
+Environment=HYPRGRUV_DIR=%h/.hyprgruv
+Environment=TZ=America/New_York
+ExecStart=%h/.hyprgruv/lib/scripts/zoho-notify-quiet.sh --apply
+
+[Install]
+WantedBy=timers.target
