@@ -139,7 +139,10 @@ apply_hyprlock_conf() {
 }
 
 force_blur_refresh() {
-    hyprctl dispatch focuscurrentorlast >/dev/null 2>&1 || true
+    # Lua config (0.55+): hyprlang dispatcher names compile as
+    # `return hl.dispatch(focuscurrentorlast)` and pop a config error overlay.
+    hyprctl dispatch 'hl.dsp.force_renderer_reload()' >/dev/null 2>&1 || \
+        hyprctl dispatch 'hl.dsp.focus({ last = true })' >/dev/null 2>&1 || true
 }
 
 apply_hypr_blur() {

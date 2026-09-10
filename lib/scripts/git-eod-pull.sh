@@ -171,6 +171,16 @@ pull_repo() {
                     log_status "$name — ensure local palette if missing (do not re-apply on pull)"
                     bash "$ensure" || log_warning "$name — ensure-local-palette failed (run apply-theme.sh manually)"
                 fi
+                # git checkout rewrites hyprland.lua in place. Hyprland's watcher can
+                # fire mid-replace and overlay "cannot open …/hypr/hyprland.lua".
+                local hypr_ensure="$HYPR_DIR/lib/scripts/ensure-hypr-config.sh"
+                if [[ -f "$hypr_ensure" ]]; then
+                    bash "$hypr_ensure" 2>/dev/null || true
+                fi
+                if command -v hyprctl >/dev/null 2>&1; then
+                    sleep 0.4
+                    hyprctl reload >/dev/null 2>&1 || true
+                fi
             fi
             return 0
         fi

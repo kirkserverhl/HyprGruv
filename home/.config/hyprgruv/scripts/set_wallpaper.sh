@@ -141,8 +141,14 @@ if [[ -f "$WAYPAPER_INI" ]]; then
 fi
 
 # Hyprlock profile path: stable file (not a dangling path into a deleted wallpaper).
-mkdir -p "$HOME/.config/hypr/hyprlock" 2>/dev/null || true
-ln -sfn "$DEFAULT_WP_PNG" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+# Never mkdir a shadow ~/.config/hypr — that hides hyprland.lua and Hyprland
+# reloads with "cannot open …/hypr/hyprland.lua".
+ensure_hypr="${HOME}/.hyprgruv/lib/scripts/ensure-hypr-config.sh"
+[[ -f "$ensure_hypr" ]] && bash "$ensure_hypr" 2>/dev/null || true
+if [[ -f "$HOME/.config/hypr/hyprland.lua" ]]; then
+    mkdir -p "$HOME/.config/hypr/hyprlock" 2>/dev/null || true
+    ln -sfn "$DEFAULT_WP_PNG" "$HOME/.config/hypr/hyprlock/wallpaper" 2>/dev/null || true
+fi
 
 # Optional: also keep the convenience sourcable script in sync if needed (it just points at the png)
 source "$HOME/.config/settings/default_wp.sh" 2>/dev/null || true

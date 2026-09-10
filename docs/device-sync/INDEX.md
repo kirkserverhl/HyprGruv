@@ -5,6 +5,7 @@ Newest first. Full protocol: [README.md](README.md).
 
 | When (UTC) | Host | Role | Direction | Summary | File |
 |------------|------|------|-----------|---------|------|
+| 2026-09-10T10:20:26-04:00 | HyprLab | deploy | to-source | fix hyprland.lua reload: flush Lua require cache, Lua blur dispatch, no shadow ~/.config/hypr, reload after git-eod-pull | [2026-09-10T142026Z-HyprLab.md](entries/2026-09-10T142026Z-HyprLab.md) |
 | 2026-08-27T17:06:58-04:00 | HyprLab | deploy | to-source | soundsbored: headless mpv playback so clips do not retile the layout | [2026-08-27T210658Z-HyprLab.md](entries/2026-08-27T210658Z-HyprLab.md) |
 | 2026-08-27T17:02:11-04:00 | HyprLab | deploy | to-source | Install wizard: detect audio sinks, play a test, persist default output | [2026-08-27T210211Z-HyprLab.md](entries/2026-08-27T210211Z-HyprLab.md) |
 | 2026-08-27T16:51:45-04:00 | HyprLab | deploy | to-source | Add kew, nm-applet, file thumbnailers to install lists; kew ~/Music setup | [2026-08-27T205145Z-HyprLab.md](entries/2026-08-27T205145Z-HyprLab.md) |

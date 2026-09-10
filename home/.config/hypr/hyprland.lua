@@ -24,10 +24,15 @@ end
 package.path = config_dir .. "?.lua;" .. config_dir .. "?/init.lua;" .. package.path
 -- =============================================
 
--- Force fresh colors module on every evaluation (including hyprctl reload).
--- Without this, Lua's require cache would make matugen color updates invisible
--- until a full Hyprland restart.
-package.loaded["colors.init"] = nil
+-- Config evaluation (reload, hyprpm plugin load/unload) wipes binds + hl.config.
+-- require() cache would skip conf/*.lua so Super binds never re-register, and
+-- a mid-write git checkout can leave the loader with a missing hyprland.lua.
+-- Login hyprpm-reload + apply-bar-mode (waybar unloads hyprbars) hits this path.
+for loaded_name in pairs(package.loaded) do
+    if loaded_name == "colors" or loaded_name == "colors.init" or loaded_name:match("^conf%.") then
+        package.loaded[loaded_name] = nil
+    end
+end
 
 -- Load colors early (same order as original) — now guaranteed fresh on reloads
 local _ = require("colors.init").load()  -- result unused here; modules that need it call load() themselves
