@@ -185,10 +185,21 @@ FORCE=1 bash ~/.hyprgruv/lib/scripts/post_reboot_setup.sh
 |------|--------|--------------|
 | Wallpaper | `waypaper_setup.sh` | Installs waypaper stack, optional wallpaper repo download, optional waypaper preview cache, initial theme |
 | System | `03-setup.sh` | Hyprpm plugins; MIME handlers (handlr, Zathura, nvim/LibreOffice defaults); enables SDDM + Sugar Candy theme; VM GRUB tweaks |
-| Interactive | `04-config.sh` | Optional: machine profile, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram, snapshots, cleanup |
+| Interactive | `04-config.sh` | Optional: machine profile, GRUB theme, shell/zsh, Atuin, Pacseek, SSH key, zram (8 GiB cap + `page-cluster=0`), snapshots, cleanup |
 | Defaults | `05-setup_defaults.sh` | Choose default terminal (kitty/alacritty/wezterm/foot/…), browser, and editor; offers to install if missing. Re-run anytime from **HyprGruv Settings → Default Apps** |
 
 Monitor layout is **not** part of the installer. Configure displays in Hyprland with `save-monitor-layout.sh`, `monitor-rofi.sh`, or by editing `~/.config/hypr/conf/monitors.lua`.
+
+### Zram
+
+The setup wizard configures systemd `zram-generator` (`lib/scripts/zram.sh`). HyprGruv default (64 GB host):
+
+| File | Setting |
+|------|---------|
+| `/etc/systemd/zram-generator.conf` | `zram-size = min(ram / 2, 8192)` (8 GiB cap), zstd, priority 100 |
+| `/etc/sysctl.d/99-zram.conf` | `vm.page-cluster = 0` |
+
+Leave zswap off (`zswap.enabled=0` on the kernel cmdline). Hibernate still needs a **disk** swap file/partition ≥ RAM; zram does not survive power-off. Full notes: [assets/README/outline](assets/README/outline).
 
 ### Snapshots (Timeshift + optional off-disk replica)
 

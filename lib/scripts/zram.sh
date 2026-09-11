@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 # zram.sh — optional guided zram-generator setup
+#
+# HyprGruv default (see assets/README/outline):
+#   zram-size = min(ram / 2, 8192)   # 8 GiB cap
+#   compression-algorithm = zstd
+#   /etc/sysctl.d/99-zram.conf → vm.page-cluster = 0
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -38,6 +43,7 @@ gum_apply_matugen_theme
 display_header "ZRam"
 
 ZRAM_CONF="/etc/systemd/zram-generator.conf"
+SYSCTL_CONF="/etc/sysctl.d/99-zram.conf"
 
 echo ""
 echo "Zram compresses a slice of RAM and uses it as swap."
@@ -77,14 +83,18 @@ fi
 echo ""
 log_status "Step 2/4 — Choose zram size"
 size_choice=$(gum choose \
-    "Half of RAM (recommended)" \
+    "min(ram/2, 8192) — cap at 8 GiB (recommended)" \
+    "Half of RAM (uncapped)" \
     "Quarter of RAM (conservative)" \
     "min(ram/2, 4096) — cap at 4 GiB" \
     "Cancel" \
     --header "Zram size:")
 
 case "$size_choice" in
-"Half of RAM (recommended)")
+"min(ram/2, 8192) — cap at 8 GiB (recommended)")
+    ZRAM_SIZE="min(ram / 2, 8192)"
+    ;;
+"Half of RAM (uncapped)")
     ZRAM_SIZE="ram / 2"
     ;;
 "Quarter of RAM (conservative)")
@@ -110,9 +120,12 @@ lz4) COMPRESSION="lz4" ;;
     ;;
 esac
 
-log_status "Step 3/4 — Write $ZRAM_CONF"
+log_status "Step 3/4 — Write $ZRAM_CONF and $SYSCTL_CONF"
 if [[ -f "$ZRAM_CONF" ]]; then
     sudo cp -a "$ZRAM_CONF" "${ZRAM_CONF}.bak.$(date +%Y%m%d_%H%M%S)"
+fi
+if [[ -f "$SYSCTL_CONF" ]]; then
+    sudo cp -a "$SYSCTL_CONF" "${SYSCTL_CONF}.bak.$(date +%Y%m%d_%H%M%S)"
 fi
 
 sudo tee "$ZRAM_CONF" >/dev/null <<EOF
@@ -122,6 +135,13 @@ zram-size = ${ZRAM_SIZE}
 compression-algorithm = ${COMPRESSION}
 swap-priority = 100
 EOF
+
+sudo tee "$SYSCTL_CONF" >/dev/null <<'EOF'
+# zram: swap one page at a time (disk-oriented clustering is wasteful)
+vm.page-cluster = 0
+EOF
+
+sudo sysctl -p "$SYSCTL_CONF" >/dev/null
 
 log_success "Config written"
 

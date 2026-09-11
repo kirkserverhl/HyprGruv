@@ -19,6 +19,7 @@ hyprgruv/
 │       ├── sddm_candy_install.sh
 │       ├── grub.sh
 │       ├── shell.sh
+│       ├── zram.sh            # zram-generator + page-cluster=0
 │       └── …
 ├── modules/
 │   ├── 00-preflight.sh        # Arch prep, keyring, multilib
@@ -34,3 +35,24 @@ Install flow:
   install.sh → 00 → 01 → 02 → default_wp.sh → post_reboot_setup.sh → sync → reboot?
 
 post_reboot_setup.sh → waypaper_setup → 03 → 04 → 05
+
+Zram (04-config → lib/scripts/zram.sh)
+  HyprGruv default (64 GB host, 2026-09-10): cap compressed swap at 8 GiB.
+  ram / 2 auto-grows with RAM and is too large above ~16 GB (filling zram
+  can eat 8–16 GiB of real RAM for compressed pages).
+
+  /etc/systemd/zram-generator.conf
+    [zram0]
+    zram-size = min(ram / 2, 8192)
+    compression-algorithm = zstd
+    swap-priority = 100
+
+  /etc/sysctl.d/99-zram.conf
+    vm.page-cluster = 0          # single-page swap; 3 is for disk
+
+  Notes:
+    - zswap stays off (kernel cmdline zswap.enabled=0). Do not stack zswap on zram.
+    - No disk swap on the live host. Hibernate needs a disk swap file/partition ≥ RAM;
+      zram does not survive power-off.
+    - Verify: zramctl && swapon --show && sysctl vm.page-cluster
+    - Wizard still offers uncapped ram/2, ram/4, and a 4 GiB cap.
