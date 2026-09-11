@@ -19,6 +19,7 @@ DvPayLite
 DvStore
 EMV
 F1
+Factor4
 Fiserv
 HHMMSS
 HubClient
@@ -46,6 +47,7 @@ WIFI
 Webhook
 Webhooks
 Z11
+Z6
 Z9
 api.accept.blue
 aurapp241022
@@ -67,4 +69,4 @@ txn
 vcode
 webhook
 webhooks
-checksum_v1 = 26da1c315eb727bd20fbe41e7c7e0dce
+checksum_v1 = e65df9ada4c1d299d35ff87904ec33fa
