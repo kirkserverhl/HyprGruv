@@ -20,9 +20,11 @@ is_laptop() {
     if [[ -r /sys/class/dmi/id/chassis_type ]]; then
         chassis=$(< /sys/class/dmi/id/chassis_type)
         case "$chassis" in
-            8|9|10|14) return 0 ;;
+            8|9|10|11|14|30|31|32) return 0 ;;
+            3|4|5|6|7|13|15|16|24|34|35|36) return 1 ;;
         esac
     fi
+    # System pack only — ignore Logitech HID++ mouse/keyboard cells.
     [[ -d /sys/class/power_supply/BAT0 || -d /sys/class/power_supply/BAT1 ]]
 }
 

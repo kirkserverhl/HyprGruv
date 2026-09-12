@@ -77,8 +77,47 @@ mkdir -p "$STATE_DIR" "$SETTINGS_DIR"
 # ---------------------------------------------------------------------------
 # Detection / I/O helpers
 # ---------------------------------------------------------------------------
+# SMBIOS chassis_type → laptop|desktop|"" (unknown). Mini PC is 35.
+dmi_chassis_class() {
+    local t
+    t="$(tr -d '[:space:]' </sys/class/dmi/id/chassis_type 2>/dev/null || true)"
+    case "$t" in
+    8 | 9 | 10 | 11 | 14 | 30 | 31 | 32) echo laptop ;;
+    3 | 4 | 5 | 6 | 7 | 13 | 15 | 16 | 17 | 23 | 24 | 28 | 29 | 34 | 35 | 36) echo desktop ;;
+    esac
+}
+
+# True only for a system pack (laptop battery). Logitech HID++ mouse/keyboard
+# cells are type=Battery but scope=Device — those must not flip a desktop.
+has_system_battery() {
+    local dir scope name
+    for dir in /sys/class/power_supply/*; do
+        [[ -d "$dir" ]] || continue
+        [[ -f "$dir/type" ]] || continue
+        grep -qx Battery "$dir/type" 2>/dev/null || continue
+        name="$(basename "$dir")"
+        if [[ -r "$dir/scope" ]]; then
+            scope="$(tr -d '[:space:]' <"$dir/scope")"
+            [[ "$scope" == "System" ]] || continue
+        else
+            [[ "$name" == BAT* || "$name" == battery ]] || continue
+        fi
+        return 0
+    done
+    return 1
+}
+
+# "Chassis: desktop 🖥️" → desktop (emoji/junk after the first word).
+hostnamectl_chassis() {
+    hostnamectl 2>/dev/null | awk -F': ' '/^[[:space:]]*Chassis:/ {
+        split($2, a, /[[:space:]]+/)
+        print tolower(a[1])
+        exit
+    }'
+}
+
 detect_machine_type() {
-    local chassis bat
+    local chassis class
     if [[ -n "${MACHINE_TYPE:-}" ]]; then
         echo "${MACHINE_TYPE}"
         return
@@ -100,21 +139,28 @@ detect_machine_type() {
         fi
     fi
 
-    chassis="$(hostnamectl 2>/dev/null | awk -F': ' '/Chassis/ {print tolower($2); exit}')"
+    class="$(dmi_chassis_class)"
+    if [[ "$class" == "laptop" || "$class" == "desktop" ]]; then
+        echo "$class"
+        return
+    fi
+
+    chassis="$(hostnamectl_chassis)"
     case "$chassis" in
-    laptop | convertible | portable | handset)
+    laptop | convertible | portable | handset | tablet)
         echo laptop
+        return
+        ;;
+    desktop | server | vm | container)
+        echo desktop
         return
         ;;
     esac
 
-    for bat in /sys/class/power_supply/*/type; do
-        [[ -f "$bat" ]] || continue
-        if grep -qx Battery "$bat" 2>/dev/null; then
-            echo laptop
-            return
-        fi
-    done
+    if has_system_battery; then
+        echo laptop
+        return
+    fi
 
     echo desktop
 }
@@ -185,18 +231,21 @@ bool_norm() {
 # Interactive prompt
 # ---------------------------------------------------------------------------
 hardware_guess_machine() {
-    local c bat
-    c="$(hostnamectl 2>/dev/null | awk -F': ' '/Chassis/ {print tolower($2); exit}')"
+    local class c
+    class="$(dmi_chassis_class)"
+    if [[ "$class" == "laptop" || "$class" == "desktop" ]]; then
+        echo "$class"
+        return
+    fi
+    c="$(hostnamectl_chassis)"
     case "$c" in
-    laptop | convertible | portable | handset) echo laptop; return ;;
+    laptop | convertible | portable | handset | tablet) echo laptop; return ;;
+    desktop | server | vm | container) echo desktop; return ;;
     esac
-    for bat in /sys/class/power_supply/*/type; do
-        [[ -f "$bat" ]] || continue
-        if grep -qx Battery "$bat" 2>/dev/null; then
-            echo laptop
-            return
-        fi
-    done
+    if has_system_battery; then
+        echo laptop
+        return
+    fi
     echo desktop
 }
 
@@ -327,10 +376,10 @@ apply_profile_values() {
     local blur_passes=3
     local blur_size=10
     local shadow_enabled=true
-    local lock_timeout=840
-    local dpms_timeout=900
-    local suspend_timeout=1500
-    local dim_timeout=780
+    local lock_timeout=0
+    local dpms_timeout=0
+    local suspend_timeout=0
+    local dim_timeout=0
     local sleep_action=suspend
     local lid_grace=0
     local libva=""
@@ -394,11 +443,12 @@ apply_profile_values() {
         blur_passes=3
         blur_size=10
         shadow_enabled=true
-        # 13m dim, 14m lock, 15m monitor off, 25m suspend (home desktop)
-        dim_timeout=780
-        lock_timeout=840
-        dpms_timeout=900
-        suspend_timeout=1500
+        # Desktop stays on: no dim, lock screen, DPMS, or sleep from idle.
+        # Manual lock / wlogout power still work. Laptop keeps its own chain.
+        dim_timeout=0
+        lock_timeout=0
+        dpms_timeout=0
+        suspend_timeout=0
         sleep_action=suspend
         lid_grace=0
         want_deploy="${HYPRGRUV_DEPLOY_TARGET:-0}"
@@ -529,29 +579,43 @@ listener {
 EOF
     fi
 
-    cat >>"$HYPRIDLE_OUT" <<EOF
+    if [[ "${lock_t}" -gt 0 ]] 2>/dev/null; then
+        cat >>"$HYPRIDLE_OUT" <<EOF
 # Screen lock
 listener {
     timeout = ${lock_t}
     on-timeout = loginctl lock-session
 }
 
+EOF
+    fi
+
+    if [[ "${dpms_t}" -gt 0 ]] 2>/dev/null; then
+        cat >>"$HYPRIDLE_OUT" <<EOF
 # Display power off
 listener {
     timeout = ${dpms_t}
     on-timeout = hyprctl dispatch dpms off
     on-resume = hyprctl dispatch dpms on
 }
+
 EOF
+    fi
 
     if [[ "${susp_t}" -gt 0 ]] 2>/dev/null; then
         cat >>"$HYPRIDLE_OUT" <<EOF
-
 # ${sleep_action} — lock already handled by before_sleep_cmd / hyprgruv-sleep.sh
 listener {
     timeout = ${susp_t}
     on-timeout = bash ${sleep_sh} ${sleep_action}
 }
+EOF
+    fi
+
+    if ! [[ "${dim_t}" -gt 0 || "${lock_t}" -gt 0 || "${dpms_t}" -gt 0 || "${susp_t}" -gt 0 ]] 2>/dev/null; then
+        cat >>"$HYPRIDLE_OUT" <<EOF
+# No idle listeners — this machine stays on.
+# Manual lock (lock_cmd) and before_sleep_cmd still run if you lock or sleep yourself.
 EOF
     fi
 }
@@ -874,6 +938,11 @@ restart_hypridle() {
     local launch="${XDG_CONFIG_HOME:-$HOME/.config}/hyprgruv/scripts/launch-hypridle.sh"
     local unit_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
     local idle_unit="hyprgruv-idle.service"
+
+    # Drop leftover autostart hypridle so the unit can own ScreenSaver.
+    systemctl --user stop "$idle_unit" 2>/dev/null || true
+    pkill -x hypridle 2>/dev/null || true
+    sleep 0.15
 
     ensure_user_unit "$idle_unit"
     if [[ -f "$unit_dir/$idle_unit" || -L "$unit_dir/$idle_unit" ]]; then

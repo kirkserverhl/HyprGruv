@@ -53,12 +53,13 @@ start_background() {
         echo "hypridle not installed" >&2
         return 1
     }
+    # Always drop strays (autostart leftover) before the unit claims ScreenSaver.
+    pkill -x hypridle 2>/dev/null || true
+    sleep 0.15
     if systemctl --user list-unit-files "$UNIT" &>/dev/null; then
         systemctl --user start "$UNIT"
         return
     fi
-    pkill -x hypridle 2>/dev/null || true
-    sleep 0.15
     if conf="$(conf_path)"; then
         "$bin" -c "$conf" &
     else

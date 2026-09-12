@@ -93,7 +93,7 @@ After stow, the installer asks whether this machine is a **laptop** or **desktop
 | Touchpad | natural scroll off | natural scroll (prompt), tap-to-click, disable-while-typing, lower scroll factor |
 | Gestures | optional | 3-finger workspace swipe |
 | Monitors | multi-head `desc:` layout | preferred + auto only |
-| Blur / idle | dim 13m → lock 14m → DPMS 15m → suspend 25m | lighter blur; dim 4m → lock 5m → DPMS 6m → hibernate 15m |
+| Blur / idle | no idle lock / DPMS / suspend (always on) | lighter blur; dim 4m → lock 5m → DPMS 6m → hibernate 15m |
 | Lid | no logind drop-in | 5 min unlocked grace (screens off), then lock + hibernate; desk dock with an external display stays on |
 | Power | `power-profiles-daemon` | same + deploy-target for repo update checks |
 | GPU env | detected (AMD/Intel/NVIDIA) | same — no hard-coded vendor |
