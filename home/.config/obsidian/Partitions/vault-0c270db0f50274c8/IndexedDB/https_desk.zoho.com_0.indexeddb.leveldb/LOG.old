@@ -1,0 +1,24 @@
+2026/09/15-22:40:53.862 2c7dab Reusing MANIFEST /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_desk.zoho.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/15-22:40:53.862 2c7dab Recovering log #174
+2026/09/15-22:40:53.862 2c7dab Reusing old log /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_desk.zoho.com_0.indexeddb.leveldb/000174.log 
+2026/09/15-22:40:53.862 2c7dab Delete type=2 #173
+2026/09/15-22:40:53.877 2c7f30 Manual compaction at level-0 from '\x00K\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00L\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/09/15-22:41:27.816 2c7dad Level-0 table #179: started
+2026/09/15-22:41:27.819 2c7dad Level-0 table #179: 2077 bytes OK
+2026/09/15-22:41:27.823 2c7dad Delete type=0 #174
+2026/09/15-22:41:27.824 2c7dad Manual compaction at level-0 from (begin) .. (end); will stop at '\x00K\x01\x02\x01\x03\x00k\x00e\x00y' @ 6660 : 1
+2026/09/15-22:41:27.824 2c7dad Compacting 1@0 + 1@1 files
+2026/09/15-22:41:27.826 2c7dad Generated table #180@0: 73 keys, 1461 bytes
+2026/09/15-22:41:27.826 2c7dad Compacted 1@0 + 1@1 files => 1461 bytes
+2026/09/15-22:41:27.830 2c7dad compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/09/15-22:41:27.831 2c7dad Delete type=2 #176
+2026/09/15-22:41:27.831 2c7dad Delete type=2 #179
+2026/09/15-22:41:27.831 2c7dad Manual compaction at level-0 from '\x00K\x01\x02\x01\x03\x00k\x00e\x00y' @ 6660 : 1 .. (end); will stop at (end)
+2026/09/15-22:41:27.831 2c7dad Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x04\x01\x02\x01\x08\x00n\x00o\x00O\x00f\x00T\x00a\x00b\x00s' @ 6558 : 1
+2026/09/15-22:41:27.831 2c7dad Compacting 1@1 + 1@2 files
+2026/09/15-22:41:27.834 2c7dad Generated table #181@1: 53 keys, 1531 bytes
+2026/09/15-22:41:27.834 2c7dad Compacted 1@1 + 1@2 files => 1531 bytes
+2026/09/15-22:41:27.838 2c7dad compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/09/15-22:41:27.838 2c7dad Delete type=2 #59
+2026/09/15-22:41:27.839 2c7dad Delete type=2 #180
+2026/09/15-22:41:27.839 2c7dad Manual compaction at level-1 from '\x00\x04\x01\x02\x01\x08\x00n\x00o\x00O\x00f\x00T\x00a\x00b\x00s' @ 6558 : 1 .. (end); will stop at (end)

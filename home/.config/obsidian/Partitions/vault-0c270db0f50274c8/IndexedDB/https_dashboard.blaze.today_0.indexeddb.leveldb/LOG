@@ -1,0 +1,6 @@
+2026/09/16-02:11:20.721 16aa4f Creating DB /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_dashboard.blaze.today_0.indexeddb.leveldb since it was missing.
+2026/09/16-02:11:20.727 16aa4f Reusing MANIFEST /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_dashboard.blaze.today_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/16-02:11:20.826 16aafa Level-0 table #5: started
+2026/09/16-02:11:20.830 16aafa Level-0 table #5: 1285 bytes OK
+2026/09/16-02:11:20.836 16aafa Delete type=0 #3
+2026/09/16-02:11:20.836 16aa52 Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)

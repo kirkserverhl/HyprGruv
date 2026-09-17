@@ -31,6 +31,9 @@
 --   Shift+Fn / Super+Fn → bypass: send the bare F-key to the focused app
 --                      (kew views, vim, htop). Hardware binds stay on bare Fn.
 --                      Exceptions: Super+F8/F9 laptop KB light; Shift+F7 MX OCR.
+--   kew focused        → F2–F6 pass through (playlist / library / track /
+--                      search / help). Mouse-clicking kew's footer switches
+--                      views the same way; without this, F-keys cannot get back.
 -- ═══════════════════════════════════════════════════════════════════════════════
 -- Backup: keybinds.lua.bak-pre-stack-YYYYMMDD next to this file
 --
@@ -518,6 +521,9 @@ hl.bind(mainMod .. " + SHIFT + U", mac("link")) -- #mac Cmd+K → link (was Supe
 -- F-key into the focused window via send_shortcut. Not `pass` — that would
 -- forward the modifier too, and kew wants F2 not Shift+F2 / Super+F2.
 -- Shift+F7 stays OCR on MX Mechanical. Super+F8/F9 stay laptop KB backlight.
+--
+-- kew (title starts with "kew"): F2–F6 are view keys. Bare F2–F6 skip the
+-- hardware action and go to the TUI so a footer click is not a dead end.
 -- ═══════════════════════════════════════════════════════════════════════════════
 
 -- Device name lists from `hyprctl devices` (include all HID interfaces per board).
@@ -581,6 +587,34 @@ local function pass_fkey(n)
 	return hl.dsp.send_shortcut({ mods = "", key = "F" .. n })
 end
 
+-- kew window title is "kew" or "kew - <track>". Class stays kitty unless
+-- launched with --class kew. F2–F6 only — F9–F11 stay playerctl/media.
+local function kew_wants_views()
+	local w = hl.get_active_window()
+	if not w then
+		return false
+	end
+	local title = (w.title or ""):lower()
+	local class = (w.class or ""):lower()
+	return title:find("^kew") ~= nil or class == "kew"
+end
+
+-- Run the hardware dispatcher, or let the F-key reach kew.
+local function hardware_or_kew(dispatcher)
+	return function()
+		if kew_wants_views() then
+			return { ok = false }
+		end
+		hl.dispatch(dispatcher)
+	end
+end
+
+local function viewkey_bind(keys, dispatcher, devices, extra)
+	extra = extra or {}
+	extra.auto_consuming = true
+	dev_bind(keys, hardware_or_kew(dispatcher), devices, extra)
+end
+
 -- Shift+Fn / Super+Fn: bypass the hardware F-row. Skip chords already owned:
 --   Shift+F7  → MX Mechanical region OCR (bound in the MX block)
 --   Super+F8/F9 → laptop keyboard backlight (bound in the laptop block)
@@ -606,12 +640,12 @@ dev_bind(mainMod .. " + F9", pass_fkey(9), KB_LOGI_MX) -- #fn Pass F9 to focused
 -- F9 settings · F10 lock · F11 apps · F12 calc
 -- Insert clipboard · Print screenshot rofi · Delete stays native (typing)
 dev_bind("F1", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), KB_LAPTOP) -- #media #laptop Mute
-dev_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_LAPTOP, { repeating = true }) -- #media #laptop Volume down
-dev_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_LAPTOP, { repeating = true }) -- #media #laptop Volume up
+viewkey_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_LAPTOP, { repeating = true }) -- #media #laptop Volume down (kew: playlist)
+viewkey_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_LAPTOP, { repeating = true }) -- #media #laptop Volume up (kew: library)
 -- F4 mic mute — under consideration (bound; remove if it fights firmware)
-dev_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LAPTOP) -- #media #laptop #wip Mute mic
-dev_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_LAPTOP, { repeating = true }) -- #display #laptop Brightness down
-dev_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LAPTOP, { repeating = true }) -- #display #laptop Brightness up
+viewkey_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LAPTOP) -- #media #laptop #wip Mute mic (kew: track)
+viewkey_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_LAPTOP, { repeating = true }) -- #display #laptop Brightness down (kew: search)
+viewkey_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LAPTOP, { repeating = true }) -- #display #laptop Brightness up (kew: help)
 dev_bind("F7", hl.dsp.exec_cmd(SCRIPTS .. "/monitor-rofi.sh"), KB_LAPTOP) -- #display #laptop Display layouts
 dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/airplane-mode.sh"), KB_LAPTOP) -- #network #laptop Airplane mode
 dev_bind("F9", hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"), KB_LAPTOP) -- #settings #laptop HyprGruv settings
@@ -653,11 +687,11 @@ dev_bind(mainMod .. " + F9", hl.dsp.exec_cmd("brightnessctl -d platform::kbd_bac
 -- F1 mute · F2 vol- · F3 vol+ · F4 prev · F5 pause · F6 next
 -- F7 bright- · F8 bright+ · F9 search · F10 Mission Control · F11 audio · F12 settings
 dev_bind("F1", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle"), KB_HP) -- #media Mute
-dev_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_HP, { repeating = true }) -- #media Volume down
-dev_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_HP, { repeating = true }) -- #media Volume up
-dev_bind("F4", hl.dsp.exec_cmd("playerctl previous"), KB_HP) -- #media Previous track
-dev_bind("F5", hl.dsp.exec_cmd("playerctl play-pause"), KB_HP) -- #media Play/Pause
-dev_bind("F6", hl.dsp.exec_cmd("playerctl next"), KB_HP) -- #media Next track
+viewkey_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --dec"), KB_HP, { repeating = true }) -- #media Volume down (kew: playlist)
+viewkey_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --inc"), KB_HP, { repeating = true }) -- #media Volume up (kew: library)
+viewkey_bind("F4", hl.dsp.exec_cmd("playerctl previous"), KB_HP) -- #media Previous track (kew: track)
+viewkey_bind("F5", hl.dsp.exec_cmd("playerctl play-pause"), KB_HP) -- #media Play/Pause (kew: search)
+viewkey_bind("F6", hl.dsp.exec_cmd("playerctl next"), KB_HP) -- #media Next track (kew: help)
 dev_bind("F7", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_HP, { repeating = true }) -- #display Brightness down
 dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_HP, { repeating = true }) -- #display Brightness up
 dev_bind("F9", hl.dsp.exec_cmd(SCRIPTS .. "/rofi-full.sh"), KB_HP) -- #launcher Search apps
@@ -671,11 +705,11 @@ dev_bind("F12", hl.dsp.exec_cmd(SCRIPTS .. "/hyprgruv-settings.sh"), KB_HP) -- #
 -- F9 prev · F10 play/pause · F11 next · F12 mute
 -- Two keys right of F12 (lightbulb then the next one): vol- / vol+
 dev_bind("F1", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --dec"), KB_LOGI_MX, { repeating = true }) -- #display #mx Screen brightness down
-dev_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LOGI_MX, { repeating = true }) -- #display #mx Screen brightness up
-dev_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --dec"), KB_LOGI_MX) -- #mx Keyboard light down
-dev_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --inc"), KB_LOGI_MX) -- #mx Keyboard light up
-dev_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (screenshot transcribe)
-dev_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX) -- #emoji #mx Emoji picker
+viewkey_bind("F2", hl.dsp.exec_cmd(SCRIPTS .. "/brightness.sh --inc"), KB_LOGI_MX, { repeating = true }) -- #display #mx Screen brightness up (kew: playlist)
+viewkey_bind("F3", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --dec"), KB_LOGI_MX) -- #mx Keyboard light down (kew: library)
+viewkey_bind("F4", hl.dsp.exec_cmd(SCRIPTS .. "/mx-kbd-backlight.sh --inc"), KB_LOGI_MX) -- #mx Keyboard light up (kew: track)
+viewkey_bind("F5", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (kew: search)
+viewkey_bind("F6", hl.dsp.exec_cmd(SCRIPTS .. "/emojipicker.sh"), KB_LOGI_MX) -- #emoji #mx Emoji picker (kew: help)
 dev_bind("F7", hl.dsp.exec_cmd(SCRIPTS .. "/hyprshot.sh"), KB_LOGI_MX) -- #screenshot #mx Screenshot menu
 dev_bind("SHIFT + F7", hl.dsp.exec_cmd(SCRIPTS .. "/grim_transcribe.sh"), KB_LOGI_MX) -- #transcribe #mx Region OCR (Shift + screenshot)
 dev_bind("F8", hl.dsp.exec_cmd(SCRIPTS .. "/volume.sh --toggle-mic"), KB_LOGI_MX) -- #media #mx Mute mic (RingCentral + default source)

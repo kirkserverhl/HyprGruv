@@ -1,0 +1,14 @@
+2026/09/14-14:26:16.396 b0ca9 Reusing MANIFEST /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_phonebridge.zoho.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/14-14:26:16.396 b0ca9 Recovering log #128
+2026/09/14-14:26:16.396 b0ca9 Reusing old log /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_phonebridge.zoho.com_0.indexeddb.leveldb/000128.log 
+2026/09/14-14:26:16.396 b0ca9 Delete type=2 #126
+2026/09/14-14:26:16.467 b0ca9 Level-0 table #133: started
+2026/09/14-14:26:16.470 b0ca9 Level-0 table #133: 1512 bytes OK
+2026/09/14-14:26:16.474 b0ca9 Delete type=0 #128
+2026/09/14-14:26:16.474 b0ca9 Manual compaction at level-0 from '\x00"\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00#\x00\x00\x00' @ 0 : 0; will stop at '\x00"\x01\x02\x01\x03\x00k\x00e\x00y' @ 2985 : 1
+2026/09/14-14:26:16.474 b0ca9 Compacting 1@0 + 1@1 files
+2026/09/14-14:26:16.477 b0ca9 Generated table #134@0: 30 keys, 690 bytes
+2026/09/14-14:26:16.477 b0ca9 Compacted 1@0 + 1@1 files => 690 bytes
+2026/09/14-14:26:16.481 b0ca9 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/09/14-14:26:16.481 b0ca9 Delete type=2 #133
+2026/09/14-14:26:16.481 b0ca9 Manual compaction at level-0 from '\x00"\x01\x02\x01\x03\x00k\x00e\x00y' @ 2985 : 1 .. '\x00#\x00\x00\x00' @ 0 : 0; will stop at (end)

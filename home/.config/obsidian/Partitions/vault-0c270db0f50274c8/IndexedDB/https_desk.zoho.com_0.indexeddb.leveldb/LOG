@@ -1,0 +1,8 @@
+2026/09/16-01:06:53.645 300d27 Reusing MANIFEST /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_desk.zoho.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/16-01:06:53.645 300d27 Recovering log #178
+2026/09/16-01:06:53.645 300d27 Reusing old log /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_desk.zoho.com_0.indexeddb.leveldb/000178.log 
+2026/09/16-01:06:53.820 300d27 Level-0 table #184: started
+2026/09/16-01:06:53.823 300d27 Level-0 table #184: 1240 bytes OK
+2026/09/16-01:06:53.827 300d27 Delete type=0 #178
+2026/09/16-01:06:53.828 300d27 Manual compaction at level-0 from '\x00L\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00M\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/09/16-01:06:56.400 300d27 Manual compaction at level-0 from '\x00M\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00N\x00\x00\x00' @ 0 : 0; will stop at (end)

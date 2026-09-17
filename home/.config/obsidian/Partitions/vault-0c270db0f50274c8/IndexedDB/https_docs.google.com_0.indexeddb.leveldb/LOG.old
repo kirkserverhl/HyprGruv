@@ -1,0 +1,7 @@
+2026/09/12-01:20:48.086 31bf95 Reusing MANIFEST /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_docs.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/12-01:20:48.086 31bf95 Recovering log #3
+2026/09/12-01:20:48.087 31bf95 Reusing old log /home/kirk/.config/obsidian/Partitions/vault-0c270db0f50274c8/IndexedDB/https_docs.google.com_0.indexeddb.leveldb/000003.log 
+2026/09/12-01:58:11.290 31bf95 Level-0 table #5: started
+2026/09/12-01:58:11.293 31bf95 Level-0 table #5: 8420 bytes OK
+2026/09/12-01:58:11.298 31bf95 Delete type=0 #3
+2026/09/12-01:58:11.298 31bf95 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

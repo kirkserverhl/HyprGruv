@@ -1,3 +1,77 @@
-2026/09/09-12:52:51.430 33e25c Reusing MANIFEST /home/kirk/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/MANIFEST-000001
-2026/09/09-12:52:51.430 33e25c Recovering log #170
-2026/09/09-12:52:51.451 33e25c Reusing old log /home/kirk/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/000170.log 
+2026/09/16-20:44:06.098 2b0885 Reusing MANIFEST /home/kirk/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/16-20:44:06.099 2b0885 Recovering log #2061
+2026/09/16-20:44:06.106 2b0885 Reusing old log /home/kirk/.config/obsidian/IndexedDB/app_obsidian.md_0.indexeddb.leveldb/002061.log 
+2026/09/16-20:44:11.105 2b0888 Level-0 table #2075: started
+2026/09/16-20:44:11.123 2b0888 Level-0 table #2075: 1143416 bytes OK
+2026/09/16-20:44:11.128 2b0888 Delete type=0 #2061
+2026/09/16-20:44:11.159 2b09c7 Compacting 1@1 + 10@2 files
+2026/09/16-20:44:11.206 2b09c7 Generated table #2076@1: 7702 keys, 2135458 bytes
+2026/09/16-20:44:11.252 2b09c7 Generated table #2077@1: 6695 keys, 2165536 bytes
+2026/09/16-20:44:11.294 2b09c7 Generated table #2078@1: 7787 keys, 2170395 bytes
+2026/09/16-20:44:11.330 2b09c7 Generated table #2079@1: 2393 keys, 2126236 bytes
+2026/09/16-20:44:11.365 2b09c7 Generated table #2080@1: 2579 keys, 2122068 bytes
+2026/09/16-20:44:11.392 2b09c7 Generated table #2081@1: 1653 keys, 2116653 bytes
+2026/09/16-20:44:11.424 2b09c7 Generated table #2082@1: 10642 keys, 2129130 bytes
+2026/09/16-20:44:11.478 2b09c7 Generated table #2083@1: 24094 keys, 2200483 bytes
+2026/09/16-20:44:11.527 2b09c7 Generated table #2084@1: 4764 keys, 2166419 bytes
+2026/09/16-20:44:11.551 2b09c7 Generated table #2085@1: 3481 keys, 929972 bytes
+2026/09/16-20:44:11.551 2b09c7 Compacted 1@1 + 10@2 files => 20262350 bytes
+2026/09/16-20:44:11.555 2b09c7 compacted to: files[ 0 0 10 0 0 0 0 ]
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2063
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2064
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2065
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2066
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2067
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2068
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2069
+2026/09/16-20:44:11.556 2b09c7 Delete type=2 #2070
+2026/09/16-20:44:11.557 2b09c7 Delete type=2 #2071
+2026/09/16-20:44:11.557 2b09c7 Delete type=2 #2072
+2026/09/16-20:44:11.557 2b09c7 Delete type=2 #2075
+2026/09/16-20:44:11.945 2b0888 Level-0 table #2087: started
+2026/09/16-20:44:11.966 2b0888 Level-0 table #2087: 1258181 bytes OK
+2026/09/16-20:44:11.971 2b0888 Delete type=0 #2074
+2026/09/16-20:44:12.120 2b09c7 Compacting 1@1 + 10@2 files
+2026/09/16-20:44:12.172 2b09c7 Generated table #2088@1: 7669 keys, 2133291 bytes
+2026/09/16-20:44:12.218 2b09c7 Generated table #2089@1: 6728 keys, 2170559 bytes
+2026/09/16-20:44:12.259 2b09c7 Generated table #2090@1: 7787 keys, 2170395 bytes
+2026/09/16-20:44:12.295 2b09c7 Generated table #2091@1: 2393 keys, 2126236 bytes
+2026/09/16-20:44:12.327 2b09c7 Generated table #2092@1: 2579 keys, 2122068 bytes
+2026/09/16-20:44:12.352 2b09c7 Generated table #2093@1: 1653 keys, 2116653 bytes
+2026/09/16-20:44:12.382 2b09c7 Generated table #2094@1: 10642 keys, 2129130 bytes
+2026/09/16-20:44:12.426 2b09c7 Generated table #2095@1: 24094 keys, 2200483 bytes
+2026/09/16-20:44:12.468 2b09c7 Generated table #2096@1: 4763 keys, 2165801 bytes
+2026/09/16-20:44:12.487 2b09c7 Generated table #2097@1: 3480 keys, 931761 bytes
+2026/09/16-20:44:12.487 2b09c7 Compacted 1@1 + 10@2 files => 20266377 bytes
+2026/09/16-20:44:12.491 2b09c7 compacted to: files[ 0 0 10 0 0 0 0 ]
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2076
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2077
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2078
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2079
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2080
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2081
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2082
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2083
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2084
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2085
+2026/09/16-20:44:12.492 2b09c7 Delete type=2 #2087
+2026/09/16-20:44:39.063 2b0885 Level-0 table #2099: started
+2026/09/16-20:44:39.076 2b0885 Level-0 table #2099: 881801 bytes OK
+2026/09/16-20:44:39.080 2b0885 Delete type=0 #2086
+2026/09/16-20:44:39.081 2b0885 Manual compaction at level-0 from '\x00#\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00$\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/09/16-20:44:39.081 2b0885 Manual compaction at level-1 from '\x00#\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00$\x00\x00\x00' @ 0 : 0; will stop at '\x00%\x01\x03\x01$\x00f\x00i\x00l\x00e\x00:\x00z\x00z\x00z\x00z\x00z\x00_\x00a\x00d\x00m\x00i\x00n\x00/\x00K\x00B\x00 \x00g\x00a\x00p\x00 \x00c\x00h\x00e\x00c\x00k\x00l\x00i\x00s\x00t\x00.\x00m\x00d' @ 2048234 : 0
+2026/09/16-20:44:39.081 2b0885 Compacting 1@1 + 10@2 files
+2026/09/16-20:44:39.119 2b0885 Generated table #2100@1: 7699 keys, 2134965 bytes
+2026/09/16-20:44:39.159 2b0885 Generated table #2101@1: 6695 keys, 2165536 bytes
+2026/09/16-20:44:39.199 2b0885 Generated table #2102@1: 7787 keys, 2170395 bytes
+2026/09/16-20:44:39.233 2b0885 Generated table #2103@1: 2393 keys, 2126236 bytes
+2026/09/16-20:44:39.265 2b0885 Generated table #2104@1: 2579 keys, 2122068 bytes
+2026/09/16-20:44:39.291 2b0885 Generated table #2105@1: 1653 keys, 2116653 bytes
+2026/09/16-20:44:39.321 2b0885 Generated table #2106@1: 10580 keys, 2127499 bytes
+2026/09/16-20:44:39.365 2b0885 Generated table #2107@1: 24155 keys, 2199031 bytes
+2026/09/16-20:44:39.407 2b0885 Generated table #2108@1: 4752 keys, 2167070 bytes
+2026/09/16-20:44:39.426 2b0885 Generated table #2109@1: 3454 keys, 921352 bytes
+2026/09/16-20:44:39.426 2b0885 Compacted 1@1 + 10@2 files => 20250805 bytes
+2026/09/16-20:44:39.430 2b0885 compacted to: files[ 0 0 10 0 0 0 0 ]
+2026/09/16-20:44:39.431 2b0885 Delete type=2 #2099
+2026/09/16-20:44:39.431 2b0885 Manual compaction at level-1 from '\x00%\x01\x03\x01$\x00f\x00i\x00l\x00e\x00:\x00z\x00z\x00z\x00z\x00z\x00_\x00a\x00d\x00m\x00i\x00n\x00/\x00K\x00B\x00 \x00g\x00a\x00p\x00 \x00c\x00h\x00e\x00c\x00k\x00l\x00i\x00s\x00t\x00.\x00m\x00d' @ 2048234 : 0 .. '\x00$\x00\x00\x00' @ 0 : 0; will stop at (end)

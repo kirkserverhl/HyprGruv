@@ -1,0 +1,7 @@
+2026/09/14-16:21:12.000 b0ca9 Reusing MANIFEST /home/kirk/.config/obsidian/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/09/14-16:21:12.000 b0ca9 Recovering log #3
+2026/09/14-16:21:12.010 b0ca9 Reusing old log /home/kirk/.config/obsidian/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/000003.log 
+2026/09/14-16:21:45.382 b0cab Level-0 table #5: started
+2026/09/14-16:21:45.396 b0cab Level-0 table #5: 1502620 bytes OK
+2026/09/14-16:21:45.401 b0cab Delete type=0 #3
+2026/09/14-16:21:45.402 b0cab Manual compaction at level-0 from (begin) .. (end); will stop at (end)
